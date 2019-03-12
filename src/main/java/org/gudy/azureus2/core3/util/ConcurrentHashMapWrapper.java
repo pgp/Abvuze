@@ -38,7 +38,7 @@ ConcurrentHashMapWrapper<S,T>
 	private final S	S_NULL = (S)NULL;
 	private final T	T_NULL = (T)NULL;
 	
-	private final ConcurrentHashMap<S,T>	map;
+	private final Map<S,T>	map;
 	
 	public 
 	ConcurrentHashMapWrapper(
