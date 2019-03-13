@@ -92,26 +92,24 @@ UpdateJarPatcher
 		}
 		
 			// write any new entries
-		
-		Iterator	it = patch_entries.keySet().iterator();
-		
-		while( it.hasNext()){
-			
-			String	name = (String)it.next();
-			
-			if ( name.equalsIgnoreCase( MANIFEST_NAME )){
-				
-				manifest_found = true;
-			}
-		
-			log.log( "patch - add: " + name);
-		
-			InputStream	eis = (InputStream)patch_entries.get(name);
-			
-			JarEntry os_entry = new JarEntry(name);
-			
-			writeEntry( jos, os_entry, eis );			
-		}
+
+        for (Object o : patch_entries.keySet()) {
+
+            String name = (String) o;
+
+            if (name.equalsIgnoreCase(MANIFEST_NAME)) {
+
+                manifest_found = true;
+            }
+
+            log.log("patch - add: " + name);
+
+            InputStream eis = (InputStream) patch_entries.get(name);
+
+            JarEntry os_entry = new JarEntry(name);
+
+            writeEntry(jos, os_entry, eis);
+        }
 		
 		if ( !manifest_found ){
 			

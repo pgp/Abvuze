@@ -27,13 +27,13 @@ package com.aelitis.azureus.core.proxy;
 public interface 
 AEProxy 
 {
-	public int
+	int
 	getPort();
 	
-	public void
+	void
 	setAllowExternalConnections(
-		boolean	permit );
+            boolean permit);
 	
-	public void
+	void
 	destroy();
 }

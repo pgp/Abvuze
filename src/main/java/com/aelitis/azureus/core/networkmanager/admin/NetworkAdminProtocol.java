@@ -25,40 +25,40 @@ import java.net.InetAddress;
 public interface 
 NetworkAdminProtocol
 {
-	public static final int	PT_HTTP		= 1;
-	public static final int	PT_TCP		= 2;
-	public static final int	PT_UDP		= 3;
+	int	PT_HTTP		= 1;
+	int	PT_TCP		= 2;
+	int	PT_UDP		= 3;
 	
-	public int
+	int
 	getType();
 	
-	public int 
+	int
 	getPort();
 	
-	public String
+	String
 	getTypeString();
 	
-	public InetAddress
+	InetAddress
 	test(
-		NetworkAdminNetworkInterfaceAddress	address )
+            NetworkAdminNetworkInterfaceAddress address)
 	
 		throws NetworkAdminException;
 	
-	public InetAddress
+	InetAddress
 	test(
-		NetworkAdminNetworkInterfaceAddress	address,
-		NetworkAdminProgressListener		listener )
+            NetworkAdminNetworkInterfaceAddress address,
+            NetworkAdminProgressListener listener)
 	
 		throws NetworkAdminException;
 	
-	public InetAddress
+	InetAddress
 	test(
-		NetworkAdminNetworkInterfaceAddress	address,
-		boolean								upnp_map,
-		NetworkAdminProgressListener		listener )
+            NetworkAdminNetworkInterfaceAddress address,
+            boolean upnp_map,
+            NetworkAdminProgressListener listener)
 	
 		throws NetworkAdminException;
 	
-	public String
+	String
 	getName();
 }

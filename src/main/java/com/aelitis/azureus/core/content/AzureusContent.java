@@ -25,6 +25,6 @@ import org.gudy.azureus2.plugins.torrent.Torrent;
 public interface 
 AzureusContent 
 {
-	public Torrent
+	Torrent
 	getTorrent();
 }

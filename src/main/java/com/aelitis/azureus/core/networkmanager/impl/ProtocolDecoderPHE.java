@@ -214,40 +214,40 @@ ProtocolDecoderPHE
 	addSecretsSupport(
 		byte[][]		secrets )
 	{
-		for (int i=0;i<secrets.length;i++){
-			
-			SHA1Hasher hasher = new SHA1Hasher();
-	   		
-	   		hasher.update( REQ2_IV );
-	   		hasher.update( secrets[i] );
-	   		
-	   		byte[]	encoded = hasher.getDigest();
-			                  	
-			synchronized( global_shared_secrets ){
-				
-				global_shared_secrets.put( new HashWrapper( encoded ), secrets[i] );
-			}
-		}
+        for (byte[] secret : secrets) {
+
+            SHA1Hasher hasher = new SHA1Hasher();
+
+            hasher.update(REQ2_IV);
+            hasher.update(secret);
+
+            byte[] encoded = hasher.getDigest();
+
+            synchronized (global_shared_secrets) {
+
+                global_shared_secrets.put(new HashWrapper(encoded), secret);
+            }
+        }
 	}
 	
 	public static void
 	removeSecretsSupport(
 		byte[][]		secrets )
 	{
-		for (int i=0;i<secrets.length;i++){
+        for (byte[] secret : secrets) {
 
-			SHA1Hasher hasher = new SHA1Hasher();
-	   		
-	   		hasher.update( REQ2_IV );
-	   		hasher.update( secrets[i] );
-	   		
-	   		byte[]	encoded = hasher.getDigest();
-			                  	
-			synchronized( global_shared_secrets ){
-				
-				global_shared_secrets.remove( new HashWrapper( encoded ));
-			}
-		}
+            SHA1Hasher hasher = new SHA1Hasher();
+
+            hasher.update(REQ2_IV);
+            hasher.update(secret);
+
+            byte[] encoded = hasher.getDigest();
+
+            synchronized (global_shared_secrets) {
+
+                global_shared_secrets.remove(new HashWrapper(encoded));
+            }
+        }
 	}
 	
 	// private static final byte SUPPORTED_PROTOCOLS = (byte)((aes_ok?CRYPTO_AES:0) | CRYPTO_RC4 | CRYPTO_XOR | CRYPTO_PLAIN );
@@ -270,23 +270,28 @@ ProtocolDecoderPHE
 	    				 }
 	    				 
 	    				 String	min	= COConfigurationManager.getStringParameter( "network.transport.encrypted.min_level");
-	    				 
-	    				 if ( min.equals( "XOR" )){
-	    					 
-	    					 MIN_CRYPTO	= CRYPTO_XOR | CRYPTO_RC4 | CRYPTO_AES;
-	    					 
-	    				 }else if ( min.equals( "RC4" )){
-	    					 
-	    					 MIN_CRYPTO	= CRYPTO_RC4 | CRYPTO_AES;
-	    					 
-	    				 }else if ( min.equals( "AES" )){
-	    					
-	    					 MIN_CRYPTO	= CRYPTO_AES;
-	    					 
-	    				 }else{
-	    					 
-	    					 MIN_CRYPTO	= CRYPTO_PLAIN | CRYPTO_XOR | CRYPTO_RC4 | CRYPTO_AES;
-	    				 } 
+
+                         switch (min) {
+                             case "XOR":
+
+                                 MIN_CRYPTO = CRYPTO_XOR | CRYPTO_RC4 | CRYPTO_AES;
+
+                                 break;
+                             case "RC4":
+
+                                 MIN_CRYPTO = CRYPTO_RC4 | CRYPTO_AES;
+
+                                 break;
+                             case "AES":
+
+                                 MIN_CRYPTO = CRYPTO_AES;
+
+                                 break;
+                             default:
+
+                                 MIN_CRYPTO = CRYPTO_PLAIN | CRYPTO_XOR | CRYPTO_RC4 | CRYPTO_AES;
+                                 break;
+                         }
 	    				 
 	    				 MIN_CRYPTO = (byte)(MIN_CRYPTO & SUPPORTED_PROTOCOLS);
 	    			 }
@@ -1056,8 +1061,8 @@ ProtocolDecoderPHE
 								
 								throw( new IOException( 
 										"No crypto protocol in common: mine = " + 
-											Integer.toHexString((byte)my_supported_protocols) + ", theirs = " +
-											Integer.toHexString((byte)other_supported_protocols)));
+											Integer.toHexString(my_supported_protocols) + ", theirs = " +
+											Integer.toHexString(other_supported_protocols)));
 				
 							}
 													
@@ -1279,8 +1284,8 @@ ProtocolDecoderPHE
 								
 								throw( new IOException( 
 										"Selected protocol has nothing in common: mine = " + 
-											Integer.toHexString((byte)my_supported_protocols) + ", theirs = " +
-											Integer.toHexString((byte)selected_protocol)));
+											Integer.toHexString(my_supported_protocols) + ", theirs = " +
+											Integer.toHexString(selected_protocol)));
 				
 							}
 													

@@ -22,13 +22,13 @@ package org.gudy.azureus2.plugins.update;
 public interface 
 UpdateManagerDecisionListener 
 {
-	public static final int	DT_STRING_ARRAY_TO_STRING		= 0;
+	int	DT_STRING_ARRAY_TO_STRING		= 0;
 	
-	public Object
+	Object
 	decide(
-		Update		update,
-		int			decision_type,
-		String		decision_name,
-		String		decision_description,
-		Object		decision_data );
+            Update update,
+            int decision_type,
+            String decision_name,
+            String decision_description,
+            Object decision_data);
 }

@@ -31,6 +31,6 @@ import java.util.Map;
  */
 public interface MdiEntryCreationListener2
 {
-	public MdiEntry createMDiEntry(MultipleDocumentInterface mdi, String id,
-			Object datasource, Map<?, ?> params);
+	MdiEntry createMDiEntry(MultipleDocumentInterface mdi, String id,
+                            Object datasource, Map<?, ?> params);
 }

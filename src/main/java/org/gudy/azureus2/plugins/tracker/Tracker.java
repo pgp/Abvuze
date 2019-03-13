@@ -37,46 +37,46 @@ public interface
 Tracker 
 	extends TrackerWebContext
 {   
-	public static final int	PR_HTTP			= 1;
-	public static final int	PR_HTTPS		= 2;
+	int	PR_HTTP			= 1;
+	int	PR_HTTPS		= 2;
 	
 		// properties for passing as, well, properties
 	
-	public static final String	PR_NON_BLOCKING		= "nonblocking";		// Boolean
+	String	PR_NON_BLOCKING		= "nonblocking";		// Boolean
 	
 	
-	public TrackerTorrent
+	TrackerTorrent
 	host(
-		Torrent		torrent,
-		boolean		persistent )
+            Torrent torrent,
+            boolean persistent)
 		
 		throws TrackerException;
 	
-	public TrackerTorrent
+	TrackerTorrent
 	host(
-		Torrent		torrent,
-		boolean		persistent,
-		boolean		passive )
+            Torrent torrent,
+            boolean persistent,
+            boolean passive)
 		
 		throws TrackerException;
 	
-	public TrackerTorrent
+	TrackerTorrent
 	publish(
-		Torrent		torrent )
+            Torrent torrent)
 		
 		throws TrackerException;
 
-	public TrackerTorrent
+	TrackerTorrent
 	getTorrent(
-		Torrent		torrent );
+            Torrent torrent);
 	
-    public TrackerTorrent[]
+    TrackerTorrent[]
     getTorrents();
         
-    public TrackerWebContext
+    TrackerWebContext
     createWebContext(
-    	int		port,
-		int		protocol )
+            int port,
+            int protocol)
     
     	throws TrackerException;
     
@@ -88,12 +88,12 @@ Tracker
     	 * @return
     	 * @throws TrackerException
     	 */
-    
-    public TrackerWebContext
+
+        TrackerWebContext
     createWebContext(
-    	String	name,
-    	int		port,
-		int		protocol )
+                String name,
+                int port,
+                int protocol)
     
     	throws TrackerException;
     
@@ -106,31 +106,31 @@ Tracker
     	 * @return
     	 * @throws TrackerException
     	 */
-    
-    public TrackerWebContext
+
+        TrackerWebContext
     createWebContext(
-    	String		name,
-    	int			port,
-		int			protocol,
-		InetAddress	bind_ip )
+                String name,
+                int port,
+                int protocol,
+                InetAddress bind_ip)
     
     	throws TrackerException;
     
-    public TrackerWebContext
+    TrackerWebContext
     createWebContext(
-    	String					name,
-    	int						port,
-		int						protocol,
-		InetAddress				bind_ip,
-		Map<String,Object>		properties )
+            String name,
+            int port,
+            int protocol,
+            InetAddress bind_ip,
+            Map<String, Object> properties)
     
     	throws TrackerException;
     
-    public void
+    void
     addListener(
-   		TrackerListener		listener );
+            TrackerListener listener);
     
-    public void
+    void
     removeListener(
-   		TrackerListener		listener );
+            TrackerListener listener);
 }

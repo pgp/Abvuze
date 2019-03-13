@@ -149,9 +149,9 @@ public class AZHandshake implements AZMessage {
   
   public int getType() {  return Message.TYPE_PROTOCOL_PAYLOAD;  }
     
-  public byte getVersion() { return version; };
+  public byte getVersion() { return version; }
 
-  public String getDescription() {
+    public String getDescription() {
     if( description == null ) {
       String msgs_desc = "";
       for( int i=0; i < avail_ids.length; i++ ) {
@@ -186,15 +186,15 @@ public class AZHandshake implements AZMessage {
 				payload_map.put("reconn", reconnectID.getBytes());
 			payload_map.put("client", client);
 			payload_map.put("version", client_version);
-			payload_map.put("tcp_port", new Long(tcp_port));
-			payload_map.put("udp_port", new Long(udp_port));
-			payload_map.put("udp2_port", new Long(udp_non_data_port));
-			payload_map.put("handshake_type", new Long(handshake_type));
-			payload_map.put("upload_only", new Long(uploadOnly ? 1L : 0L));
+			payload_map.put("tcp_port", (long) tcp_port);
+			payload_map.put("udp_port", (long) udp_port);
+			payload_map.put("udp2_port", (long) udp_non_data_port);
+			payload_map.put("handshake_type", (long) handshake_type);
+			payload_map.put("upload_only", uploadOnly ? 1L : 0L);
 			if(ipv6 != null)
 				payload_map.put("ipv6", ipv6.getAddress());
 			if ( md_size > 0 ){
-				payload_map.put("mds", new Long(md_size));
+				payload_map.put("mds", (long) md_size);
 			}
 			//available message list
 			List message_list = new ArrayList();
@@ -245,12 +245,12 @@ public class AZHandshake implements AZMessage {
 
     Long tcp_lport = (Long)root.get( "tcp_port" );
     if( tcp_lport == null ) {  //old handshake
-      tcp_lport = new Long( 0 );
+      tcp_lport = 0L;
     }
 
     Long udp_lport = (Long)root.get( "udp_port" );
     if( udp_lport == null ) {  //old handshake
-      udp_lport = new Long( 0 );
+      udp_lport = 0L;
     }
 
     Long udp2_lport = (Long)root.get( "udp2_port" );
@@ -260,7 +260,7 @@ public class AZHandshake implements AZMessage {
     
     Long h_type = (Long)root.get( "handshake_type" );
     if( h_type == null ) {  //only 2307+ send type
-    	h_type = new Long( HANDSHAKE_TYPE_PLAIN );
+    	h_type = (long) HANDSHAKE_TYPE_PLAIN;
     }
     
     InetAddress ipv6 = null;
@@ -287,24 +287,24 @@ public class AZHandshake implements AZMessage {
 
     int pos = 0;
 
-    for (Iterator i = raw_msgs.iterator(); i.hasNext();) {
-      Map msg = (Map) i.next();
+      for (Object raw_msg : raw_msgs) {
+          Map msg = (Map) raw_msg;
 
-      byte[] mid = (byte[]) msg.get("id");
-      if (mid == null)  throw new MessageException("mid == null");
-      ids[pos] = new String(mid);
+          byte[] mid = (byte[]) msg.get("id");
+          if (mid == null) throw new MessageException("mid == null");
+          ids[pos] = new String(mid);
 
-      byte[] ver = (byte[]) msg.get("ver");
-      if (ver == null)  throw new MessageException("ver == null");
-      
-      if (ver.length != 1)  throw new MessageException("ver.length != 1");
-      vers[pos] = ver[0];
+          byte[] ver = (byte[]) msg.get("ver");
+          if (ver == null) throw new MessageException("ver == null");
 
-      pos++;
-    }
+          if (ver.length != 1) throw new MessageException("ver.length != 1");
+          vers[pos] = ver[0];
+
+          pos++;
+      }
     
     Long ulOnly = (Long)root.get("upload_only");
-    boolean uploadOnly = ulOnly != null && ulOnly.longValue() > 0L ? true : false;
+    boolean uploadOnly = ulOnly != null && ulOnly > 0L ? true : false;
 
     if ( name.equals( Constants.AZUREUS_PROTOCOL_NAME_PRE_4813 )){
     	name = Constants.AZUREUS_PROTOCOL_NAME;

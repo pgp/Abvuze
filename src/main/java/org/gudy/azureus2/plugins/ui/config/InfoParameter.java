@@ -28,10 +28,10 @@ public interface
 InfoParameter 
 	extends Parameter
 {
-	public String
+	String
 	getValue();
 	
-	public void
+	void
 	setValue(
-		String		str );
+            String str);
 }

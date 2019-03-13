@@ -84,81 +84,79 @@ TRHostConfigImpl
 		
 				return;
 		 	}
-		 
-		 	Iterator  iter = torrents.iterator();
-		 
-		 	while (iter.hasNext()) {
-		 	
-		   		Map t_map = (Map) iter.next();
-		   
-		   		Long	persistent_l = (Long)t_map.get("persistent");
-		   		
-		   		boolean	persistent =  persistent_l==null || persistent_l.longValue() == 1;
-	
-		   		Long	passive_l = (Long)t_map.get("passive");
-		   		
-		   		boolean	passive =  passive_l!=null && passive_l.longValue() == 1;
 
-		   		Long	dateadded_l = (Long)t_map.get("dateadded");
+            for (Object torrent1 : torrents) {
 
-		   		long	date_added = dateadded_l==null?SystemTime.getCurrentTime():dateadded_l.longValue();
-		   		
-				byte[]	hash = (byte[])t_map.get("hash");
+                Map t_map = (Map) torrent1;
 
-		   		if ( persistent ){	
-			 
-				 	int	state = ((Long)t_map.get("status")).intValue();				 	
-				 	
-				 	if ( state == TRHostTorrent.TS_FAILED ){
-				 		
-				 		state = TRHostTorrent.TS_STOPPED;
-				 	}
-				 	
-				 	TOTorrent	torrent = finder.lookupTorrent( hash );
-				 	
-					if ( torrent == null && passive ){
-						
-						byte[]	file_b = (byte[])t_map.get( "torrent_file" );
-					
-						if ( file_b != null ){
-							
-							try{
-								File	file = new File( new String( file_b, Constants.BYTE_ENCODING ));
-								
-								torrent = TorrentUtils.readFromFile( file, true, true );
-								
-							}catch( Throwable e ){
-								// torrent might have been deleted, don't barf out errors
-								// Debug.printStackTrace( e );
-							}
-						}
-					}
-					
-				 	if ( torrent != null ){
-				 		
-				 		TRHostTorrent	ht = host.addTorrent( torrent, state, true, passive, date_added );
-				 		
-				 		if ( ht instanceof TRHostTorrentHostImpl ){
-				 			
-				 			TRHostTorrentHostImpl	hth = (TRHostTorrentHostImpl)ht;
-				 			
-				 			recoverStats( hth, t_map );
-				 		}
-				 	
-				 	}else{
-						
-						if ( COConfigurationManager.getBooleanParameter( "Tracker Public Enable")){
-			 		
-				 			host.addExternalTorrent( hash, state, date_added );
-						}
-				 	}
-		   		}else{
-		   			
-		   				// store stats for later
-		   			
-		   			saved_stats.put( new HashWrapper( hash ), t_map );
-		   		}
-		   	}
+                Long persistent_l = (Long) t_map.get("persistent");
+
+                boolean persistent = persistent_l == null || persistent_l == 1;
+
+                Long passive_l = (Long) t_map.get("passive");
+
+                boolean passive = passive_l != null && passive_l == 1;
+
+                Long dateadded_l = (Long) t_map.get("dateadded");
+
+                long date_added = dateadded_l == null ? SystemTime.getCurrentTime() : dateadded_l;
+
+                byte[] hash = (byte[]) t_map.get("hash");
+
+                if (persistent) {
+
+                    int state = ((Long) t_map.get("status")).intValue();
+
+                    if (state == TRHostTorrent.TS_FAILED) {
+
+                        state = TRHostTorrent.TS_STOPPED;
+                    }
+
+                    TOTorrent torrent = finder.lookupTorrent(hash);
+
+                    if (torrent == null && passive) {
+
+                        byte[] file_b = (byte[]) t_map.get("torrent_file");
+
+                        if (file_b != null) {
+
+                            try {
+                                File file = new File(new String(file_b, Constants.BYTE_ENCODING));
+
+                                torrent = TorrentUtils.readFromFile(file, true, true);
+
+                            } catch (Throwable e) {
+                                // torrent might have been deleted, don't barf out errors
+                                // Debug.printStackTrace( e );
+                            }
+                        }
+                    }
+
+                    if (torrent != null) {
+
+                        TRHostTorrent ht = host.addTorrent(torrent, state, true, passive, date_added);
+
+                        if (ht instanceof TRHostTorrentHostImpl) {
+
+                            TRHostTorrentHostImpl hth = (TRHostTorrentHostImpl) ht;
+
+                            recoverStats(hth, t_map);
+                        }
+
+                    } else {
+
+                        if (COConfigurationManager.getBooleanParameter("Tracker Public Enable")) {
+
+                            host.addExternalTorrent(hash, state, date_added);
+                        }
+                    }
+                } else {
+
+                    // store stats for later
+
+                    saved_stats.put(new HashWrapper(hash), t_map);
+                }
+            }
 		 	
 	   	}catch (Exception e) {
 		 
@@ -214,28 +212,28 @@ TRHostConfigImpl
 	 	
    		Long	dateadded_l = (Long)t_map.get("dateadded");
 
-   		long	date_added = dateadded_l==null?SystemTime.getCurrentTime():dateadded_l.longValue();
+   		long	date_added = dateadded_l==null?SystemTime.getCurrentTime(): dateadded_l;
 
 	 	Map	s_map	= (Map)t_map.get( "stats" );
 	 	
 	 	if ( s_map != null ){
 	 	
-	 		completed 	= ((Long)s_map.get( "completed")).longValue();
-	 		announces	= ((Long)s_map.get( "announces")).longValue();
-	 		total_up	= ((Long)s_map.get( "uploaded")).longValue();
-	 		total_down	= ((Long)s_map.get( "downloaded")).longValue();
+	 		completed 	= (Long) s_map.get("completed");
+	 		announces	= (Long) s_map.get("announces");
+	 		total_up	= (Long) s_map.get("uploaded");
+	 		total_down	= (Long) s_map.get("downloaded");
 	 		
 	 		Long	scrapes_l = (Long)s_map.get( "scrapes" );
 	 		if ( scrapes_l != null ){		 			
-	 			scrapes	= scrapes_l.longValue();
+	 			scrapes	= scrapes_l;
 	 		}
 	 		Long	bytes_in_l = (Long)s_map.get( "bytesin" );
 	 		if ( bytes_in_l != null ){		 			
-	 			bytes_in	= bytes_in_l.longValue();
+	 			bytes_in	= bytes_in_l;
 	 		}
 	 		Long	bytes_out_l = (Long)s_map.get( "bytesout" );
 	 		if ( bytes_out_l != null ){		 			
-	 			bytes_out	= bytes_out_l.longValue();
+	 			bytes_out	= bytes_out_l;
 	 		}
 	 	}
 	 	
@@ -256,11 +254,11 @@ TRHostConfigImpl
 			if ( saved_stats_to_delete.size() > 0 ){
 			
 				Map	saved_stats_copy = new HashMap( saved_stats );
-				
-				for (int i=0;i<saved_stats_to_delete.size();i++){
-					
-					saved_stats_copy.remove( saved_stats_to_delete.get(i));
-				}
+
+                for (Object o : saved_stats_to_delete) {
+
+                    saved_stats_copy.remove(o);
+                }
 								
 				saved_stats_to_delete.clear();
 				
@@ -282,113 +280,113 @@ TRHostConfigImpl
 			   	List	stats_entries = new ArrayList();
 			   	
 			   	Set	added = new HashSet();
-			   			   	
-			   	for (int i = 0; i < torrents.length; i++){
-			   	
-			  	 	try{
-			  
-						TRHostTorrent torrent = (TRHostTorrent)torrents[i];
-						
-						added.add( torrent.getTorrent().getHashWrapper());
-						
-						StringBuffer	stats_entry = new StringBuffer(2048);
-						
-						byte[]	hash 		= torrent.getTorrent().getHash();
-						byte[]	name		= torrent.getTorrent().getName();
-						int		status 		= torrent.getStatus();
-						long	completed	= torrent.getCompletedCount();
-						long	announces	= torrent.getAnnounceCount();
-						long	scrapes		= torrent.getScrapeCount();
-						long	uploaded	= torrent.getTotalUploaded();
-						long	downloaded	= torrent.getTotalDownloaded();
-						long	bytes_in	= torrent.getTotalBytesIn();
-						long	bytes_out	= torrent.getTotalBytesOut();
-						long	date_added	= torrent.getDateAdded();
-											
-						int	seed_count 		= torrent.getSeedCount();
-						int non_seed_count	= torrent.getLeecherCount();
-											
-					
-						Map t_map = new HashMap();
-					
-						t_map.put("persistent",new Long(torrent.isPersistent()?1:0));
-						t_map.put("passive",new Long(torrent.isPassive()?1:0));
-						
-						if ( torrent.isPassive()){
-							
-							try{
-								String	file = TorrentUtils.getTorrentFileName( torrent.getTorrent());
-								
-								t_map.put( "torrent_file", file.getBytes( Constants.BYTE_ENCODING ));
-								
-							}catch( Throwable e ){
-								
-								Debug.printStackTrace(e);
-							}
-						}
-						
-						t_map.put("hash", hash );
-						t_map.put("dateadded", new Long(date_added));
-						t_map.put("status", new Long(status ));
-		
-						list.add(t_map);
-					
-						Map	s_map = new HashMap();
-					
-						t_map.put( "stats", s_map );
-					
-						s_map.put( "completed", new Long(completed));
-						s_map.put( "announces", new Long(announces));
-						s_map.put( "scrapes", new Long(scrapes));
-						s_map.put( "uploaded", new Long(uploaded));
-						s_map.put( "downloaded", new Long(downloaded));
-						s_map.put( "bytesin", new Long(bytes_in));
-						s_map.put( "bytesout", new Long(bytes_out));
-	
-						
-						stats_entry.append( new String(name, Constants.DEFAULT_ENCODING ));
-						stats_entry.append(",");
-						stats_entry.append( ByteFormatter.nicePrint(hash,true));
-						stats_entry.append(",");
-						stats_entry.append(status);
-						stats_entry.append(",");
-						stats_entry.append(seed_count);
-						stats_entry.append(",");
-						stats_entry.append(non_seed_count);
-						stats_entry.append(",");
-						stats_entry.append(completed);
-						stats_entry.append(",");
-						stats_entry.append(announces);
-						stats_entry.append(",");
-						stats_entry.append(scrapes);
-						stats_entry.append(",");
-						stats_entry.append(DisplayFormatters.formatByteCountToKiBEtc(uploaded));
-						stats_entry.append(",");
-						stats_entry.append(DisplayFormatters.formatByteCountToKiBEtc(downloaded));
-						stats_entry.append(",");
-						stats_entry.append(DisplayFormatters.formatByteCountToKiBEtcPerSec(torrent.getAverageUploaded()));
-						stats_entry.append(",");
-						stats_entry.append(DisplayFormatters.formatByteCountToKiBEtcPerSec(torrent.getAverageDownloaded()));
-						stats_entry.append(",");
-						stats_entry.append(DisplayFormatters.formatByteCountToKiBEtc( torrent.getTotalLeft()));
-						stats_entry.append(",");
-						stats_entry.append(DisplayFormatters.formatByteCountToKiBEtc( bytes_in ));
-						stats_entry.append(",");
-						stats_entry.append(DisplayFormatters.formatByteCountToKiBEtc( bytes_out ));
-						stats_entry.append(",");
-						stats_entry.append(DisplayFormatters.formatByteCountToKiBEtcPerSec(torrent.getAverageBytesIn()));
-						stats_entry.append(",");
-						stats_entry.append(DisplayFormatters.formatByteCountToKiBEtcPerSec(torrent.getAverageBytesOut()));
-						
-						stats_entry.append( "\r\n");
-						
-						stats_entries.add( stats_entry );
-					 	
-			  	 	}catch( TOTorrentException e ){
-			  	 		
-			  	 		Debug.printStackTrace( e );
-			  	 	}
-			   	}
+
+                for (TRHostTorrent torrent1 : torrents) {
+
+                    try {
+
+                        TRHostTorrent torrent = torrent1;
+
+                        added.add(torrent.getTorrent().getHashWrapper());
+
+                        StringBuffer stats_entry = new StringBuffer(2048);
+
+                        byte[] hash = torrent.getTorrent().getHash();
+                        byte[] name = torrent.getTorrent().getName();
+                        int status = torrent.getStatus();
+                        long completed = torrent.getCompletedCount();
+                        long announces = torrent.getAnnounceCount();
+                        long scrapes = torrent.getScrapeCount();
+                        long uploaded = torrent.getTotalUploaded();
+                        long downloaded = torrent.getTotalDownloaded();
+                        long bytes_in = torrent.getTotalBytesIn();
+                        long bytes_out = torrent.getTotalBytesOut();
+                        long date_added = torrent.getDateAdded();
+
+                        int seed_count = torrent.getSeedCount();
+                        int non_seed_count = torrent.getLeecherCount();
+
+
+                        Map t_map = new HashMap();
+
+                        t_map.put("persistent", (long) (torrent.isPersistent() ? 1 : 0));
+                        t_map.put("passive", (long) (torrent.isPassive() ? 1 : 0));
+
+                        if (torrent.isPassive()) {
+
+                            try {
+                                String file = TorrentUtils.getTorrentFileName(torrent.getTorrent());
+
+                                t_map.put("torrent_file", file.getBytes(Constants.BYTE_ENCODING));
+
+                            } catch (Throwable e) {
+
+                                Debug.printStackTrace(e);
+                            }
+                        }
+
+                        t_map.put("hash", hash);
+                        t_map.put("dateadded", date_added);
+                        t_map.put("status", (long) status);
+
+                        list.add(t_map);
+
+                        Map s_map = new HashMap();
+
+                        t_map.put("stats", s_map);
+
+                        s_map.put("completed", completed);
+                        s_map.put("announces", announces);
+                        s_map.put("scrapes", scrapes);
+                        s_map.put("uploaded", uploaded);
+                        s_map.put("downloaded", downloaded);
+                        s_map.put("bytesin", bytes_in);
+                        s_map.put("bytesout", bytes_out);
+
+
+                        stats_entry.append(new String(name, Constants.DEFAULT_ENCODING));
+                        stats_entry.append(",");
+                        stats_entry.append(ByteFormatter.nicePrint(hash, true));
+                        stats_entry.append(",");
+                        stats_entry.append(status);
+                        stats_entry.append(",");
+                        stats_entry.append(seed_count);
+                        stats_entry.append(",");
+                        stats_entry.append(non_seed_count);
+                        stats_entry.append(",");
+                        stats_entry.append(completed);
+                        stats_entry.append(",");
+                        stats_entry.append(announces);
+                        stats_entry.append(",");
+                        stats_entry.append(scrapes);
+                        stats_entry.append(",");
+                        stats_entry.append(DisplayFormatters.formatByteCountToKiBEtc(uploaded));
+                        stats_entry.append(",");
+                        stats_entry.append(DisplayFormatters.formatByteCountToKiBEtc(downloaded));
+                        stats_entry.append(",");
+                        stats_entry.append(DisplayFormatters.formatByteCountToKiBEtcPerSec(torrent.getAverageUploaded()));
+                        stats_entry.append(",");
+                        stats_entry.append(DisplayFormatters.formatByteCountToKiBEtcPerSec(torrent.getAverageDownloaded()));
+                        stats_entry.append(",");
+                        stats_entry.append(DisplayFormatters.formatByteCountToKiBEtc(torrent.getTotalLeft()));
+                        stats_entry.append(",");
+                        stats_entry.append(DisplayFormatters.formatByteCountToKiBEtc(bytes_in));
+                        stats_entry.append(",");
+                        stats_entry.append(DisplayFormatters.formatByteCountToKiBEtc(bytes_out));
+                        stats_entry.append(",");
+                        stats_entry.append(DisplayFormatters.formatByteCountToKiBEtcPerSec(torrent.getAverageBytesIn()));
+                        stats_entry.append(",");
+                        stats_entry.append(DisplayFormatters.formatByteCountToKiBEtcPerSec(torrent.getAverageBytesOut()));
+
+                        stats_entry.append("\r\n");
+
+                        stats_entries.add(stats_entry);
+
+                    } catch (TOTorrentException e) {
+
+                        Debug.printStackTrace(e);
+                    }
+                }
 			   
 			   		// now save any non-recovered stats for a while in case the torrent
 			   		// gets re-added in the near future
@@ -412,12 +410,12 @@ TRHostConfigImpl
 			   		
 			   		if ( backup == null ){
 			   			
-			   			backup	= new Long( now );
+			   			backup	= now;
 			   			
 			   			t_map.put( "backup_time", backup );
 			   		}
 			   		
-			   		if ( now - backup.longValue() < BACKUP_RETENTION_PERIOD ){
+			   		if ( now - backup < BACKUP_RETENTION_PERIOD ){
 			   		
 			   			list.add( t_map );
 			   		
@@ -450,40 +448,24 @@ TRHostConfigImpl
 				   		
 					   	try{
 					   		String timeStamp = "["+new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").format(new Date())+"] ";
-					   		
-					   		PrintWriter	pw = null;
-					   		
-					   		File	file_name = new File( log_dir.concat(File.separator).concat(LOG_FILE_NAME) );
-					   		
-					   		try{		
-					   			
-					   			pw = new PrintWriter(new FileWriter( file_name, true ));
-					   
-					   			for (int i=0;i<stats_entries.size();i++){
-					   				
-					   				StringBuffer	stats_entry = (StringBuffer)stats_entries.get(i);
-					   				
-					   				String str = timeStamp + stats_entry.toString();
-					   					
-					   				pw.print( str );
-					   			}
-					   			
-					   		}catch( Throwable e ){
-					   			
-					   			Debug.printStackTrace( e );
-					   			
-					   		}finally{
-					   			
-					   			if ( pw != null ){
-					   				
-					   				try{
-					   					
-					   					pw.close();
-					   					
-					   				}catch( Throwable e ){
-					   				}
-					   			}
-					   		}
+
+                            File	file_name = new File( log_dir.concat(File.separator).concat(LOG_FILE_NAME) );
+                            try (PrintWriter pw = new PrintWriter(new FileWriter(file_name, true))) {
+
+                                for (Object stats_entry1 : stats_entries) {
+
+                                    StringBuffer stats_entry = (StringBuffer) stats_entry1;
+
+                                    String str = timeStamp + stats_entry.toString();
+
+                                    pw.print(str);
+                                }
+
+                            } catch (Throwable e) {
+
+                                Debug.printStackTrace(e);
+
+                            }
 					   	}catch( Throwable e ){
 					   		Debug.printStackTrace( e );
 					   	}

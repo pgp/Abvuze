@@ -27,7 +27,7 @@ package com.aelitis.azureus.plugins.upnp;
 public interface 
 UPnPMappingManagerListener 
 {
-	public void
+	void
 	mappingAdded(
-		UPnPMapping	mapping );
+            UPnPMapping mapping);
 }

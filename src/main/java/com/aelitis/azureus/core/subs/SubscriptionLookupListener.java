@@ -23,18 +23,18 @@ package com.aelitis.azureus.core.subs;
 public interface 
 SubscriptionLookupListener 
 {
-	public void
+	void
 	found(
-		byte[]					hash,
-		Subscription			subscription );
+            byte[] hash,
+            Subscription subscription);
 	
-	public void
+	void
 	complete(
-		byte[]					hash,
-		Subscription[]			subscriptions );
+            byte[] hash,
+            Subscription[] subscriptions);
 	
-	public void
+	void
 	failed(
-		byte[]					hash,
-		SubscriptionException	error );
+            byte[] hash,
+            SubscriptionException error);
 }

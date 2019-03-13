@@ -286,12 +286,12 @@ DiskManagerFileInfoDelegate
 			
 			private String		user_agent;
 
-			private int			max_read_chunk = 128*1024;;
+			private int			max_read_chunk = 128*1024;
 
-			private volatile boolean	cancelled;
+            private volatile boolean	cancelled;
 			
 			
-			private CopyOnWriteList<DiskManagerListener>		listeners = new CopyOnWriteList<DiskManagerListener>();
+			private CopyOnWriteList<DiskManagerListener>		listeners = new CopyOnWriteList<>();
 			
 			private
 			request()

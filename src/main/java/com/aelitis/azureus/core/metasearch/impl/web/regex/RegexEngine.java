@@ -291,217 +291,217 @@ RegexEngine
 						}
 						
 						String searchQuery = null;
-						
-						for(int i = 0 ; i < searchParameters.length ; i++) {
-							if(searchParameters[i].getMatchPattern().equals("s")) {
-								searchQuery = searchParameters[i].getValue();
-							}
-						}
+
+                        for (SearchParameter searchParameter : searchParameters) {
+                            if (searchParameter.getMatchPattern().equals("s")) {
+                                searchQuery = searchParameter.getValue();
+                            }
+                        }
 						
 						
 						FieldMapping[] mappings = getMappings();
 	
 						try{						
-							List<WebResult> results = new ArrayList<WebResult>();
-								
-							for ( int pat_num=0;pat_num<patterns.length;pat_num++){
-								
-									// only try subsequent patterns if all previous have failed to 
-									// find results
-								
-								if ( results.size() > 0 ){
-									
-									break;
-								}
-								
-								Pattern pattern = patterns[pat_num];
-								
-								Matcher m = pattern.matcher( page );
-									
-								while( m.find()){
-									
-									if ( max_matches >= 0 ){
-										if ( --max_matches < 0 ){
-											break;
-										}
-									}
-									
-									
-									String[]	groups = new String[m.groupCount()];
-									
-									for (int i=0;i<groups.length;i++){
-										
-										groups[i] = m.group(i+1);
-									}
-									
-									
-									if ( listener != null ){
+							List<WebResult> results = new ArrayList<>();
 
-										listener.matchFound( RegexEngine.this, groups );
-									}
-									
-									debugLog( "Found match:" );
-									
-									WebResult result = new WebResult(RegexEngine.this,getRootPage(),getBasePage(),getDateParser(),searchQuery);
-									
-									int	fields_matched = 0;
-									
-									for(int i = 0 ; i < mappings.length ; i++) {
-										String fieldFrom = mappings[i].getName();
-										
-										String fieldContent = null;
-										Matcher matcher = patternVariable.matcher(fieldFrom);
-										if (matcher.find()) {
-											fieldContent = fieldFrom;
-											do {
-												String key = matcher.group();
-												key = key.substring(2, key.length() - 1);
-												String[] keys = key.split(",", -1);
-												try {
-													int groupNo = Integer.parseInt(keys[0]);
-													
-													// Default: Replace ${1} with groups[0] 
-													String replaceWith = groups[groupNo-1];
+                            for (Pattern pattern1 : patterns) {
 
-													if (keys.length > 1) {
-  													String[] commands = keys[1].split("\\+");
-  													int keyPos = 2;
-  													for (String command : commands) {
-  														try {
-    														if (DEBUG_MAPPINGS) {
-    															System.out.println("command " + command);
-    														}
-    														if (command.equals("replace")) {
-    															if (keyPos + 2 > keys.length) {
-    	  														if (DEBUG_MAPPINGS) {
-    	  															System.out.println("not enough keys. have " + keys.length + "; need " + (keyPos + 3));
-    	  														}
-    																break;
-    															}
-    															String simpleReplace = keys[keyPos];
-    															keyPos++;
-    															String simpleReplacement = keys[keyPos];
-    															keyPos++;
-    															
-    															replaceWith = replaceWith.replaceAll(simpleReplace, simpleReplacement); 
-    														} else if (command.equals("ucase")) {
-    															replaceWith = replaceWith.toUpperCase();
-    														} else if (command.equals("lcase")) {
-    															replaceWith = replaceWith.toLowerCase();
-    														} else if (command.equals("urldecode")) {
-    															replaceWith = UrlUtils.decode(replaceWith);
-    														}
-    														if (DEBUG_MAPPINGS) {
-    															System.out.println("replaceWith now " + replaceWith);
-    														}
-  														} catch (Exception e) {
-    														if (DEBUG_MAPPINGS) {
-    															System.out.println(e.toString());
-    														}
-  														}
-  													}
-													}
-													
-													fieldContent = fieldContent.replaceFirst(variablePattern,
-															replaceWith);
-													
-												} catch (Exception e) {
-													
-												}
-											} while (matcher.find());
-										} else {
-											try {
-												int groupNo = Integer.parseInt(fieldFrom);
-												fieldContent = groups[groupNo-1];
-											} catch(Exception e) {
-												//In "Debug/Test" mode, we should fire an exception / notification
-											}
-										}
-										
-										if (fieldContent != null) {
-											
-											int fieldTo = mappings[i].getField();
-											
-											debugLog( "    " + fieldTo + "=" + fieldContent );
-											
-											fields_matched++;
-											
-											switch(fieldTo) {
-												case FIELD_NAME :
-													result.setNameFromHTML(fieldContent);
-													break;
-												case FIELD_SIZE :
-													result.setSizeFromHTML(fieldContent);
-													break;
-												case FIELD_PEERS :
-													result.setNbPeersFromHTML(fieldContent);
-													break;
-												case FIELD_SEEDS :
-													result.setNbSeedsFromHTML(fieldContent);
-													break;
-												case FIELD_CATEGORY :
-													result.setCategoryFromHTML(fieldContent);
-													break;
-												case FIELD_DATE :
-													result.setPublishedDateFromHTML(fieldContent);
-													break;
-												case FIELD_CDPLINK :
-													result.setCDPLink(fieldContent);
-													break;
-												case FIELD_TORRENTLINK :
-													result.setTorrentLink(fieldContent);
-													break;
-												case FIELD_PLAYLINK :
-													result.setPlayLink(fieldContent);
-													break;
-												case FIELD_DOWNLOADBTNLINK :
-													result.setDownloadButtonLink(fieldContent);
-													break;
-												case FIELD_COMMENTS :
-													result.setCommentsFromHTML(fieldContent);
-													break;
-												case FIELD_VOTES :
-													result.setVotesFromHTML(fieldContent);
-													break;
-												case FIELD_SUPERSEEDS :
-													result.setNbSuperSeedsFromHTML(fieldContent);
-													break;
-												case FIELD_PRIVATE :
-													result.setPrivateFromHTML(fieldContent);
-													break;
-												case FIELD_DRMKEY :
-													result.setDrmKey(fieldContent);
-													break;
-												case FIELD_VOTES_DOWN :
-													result.setVotesDownFromHTML(fieldContent);
-													break;
-												case FIELD_HASH :
-													result.setHash(fieldContent);
-													break;
-												default:
-													fields_matched--;
-													break;
-											}
-										}
-									}
-									
-										// ignore "matches" that don't actually populate any fields 
-									
-									if ( fields_matched > 0 ){
+                                // only try subsequent patterns if all previous have failed to
+                                // find results
 
-										if (result.getHash() == null) {
-											String downloadLink = result.getDownloadLink();
-											String possibleMagnet = UrlUtils.parseTextForMagnets(downloadLink);
-											byte[] hash = UrlUtils.getHashFromMagnetURI(possibleMagnet);
-											if (hash != null) {
-												result.setHash(ByteFormatter.nicePrint(hash, true));
-											}
-										}
-										
-										results.add(result);
-									}
-								}
-							}
+                                if (results.size() > 0) {
+
+                                    break;
+                                }
+
+                                Pattern pattern = pattern1;
+
+                                Matcher m = pattern.matcher(page);
+
+                                while (m.find()) {
+
+                                    if (max_matches >= 0) {
+                                        if (--max_matches < 0) {
+                                            break;
+                                        }
+                                    }
+
+
+                                    String[] groups = new String[m.groupCount()];
+
+                                    for (int i = 0; i < groups.length; i++) {
+
+                                        groups[i] = m.group(i + 1);
+                                    }
+
+
+                                    if (listener != null) {
+
+                                        listener.matchFound(RegexEngine.this, groups);
+                                    }
+
+                                    debugLog("Found match:");
+
+                                    WebResult result = new WebResult(RegexEngine.this, getRootPage(), getBasePage(), getDateParser(), searchQuery);
+
+                                    int fields_matched = 0;
+
+                                    for (FieldMapping mapping : mappings) {
+                                        String fieldFrom = mapping.getName();
+
+                                        String fieldContent = null;
+                                        Matcher matcher = patternVariable.matcher(fieldFrom);
+                                        if (matcher.find()) {
+                                            fieldContent = fieldFrom;
+                                            do {
+                                                String key = matcher.group();
+                                                key = key.substring(2, key.length() - 1);
+                                                String[] keys = key.split(",", -1);
+                                                try {
+                                                    int groupNo = Integer.parseInt(keys[0]);
+
+                                                    // Default: Replace ${1} with groups[0]
+                                                    String replaceWith = groups[groupNo - 1];
+
+                                                    if (keys.length > 1) {
+                                                        String[] commands = keys[1].split("\\+");
+                                                        int keyPos = 2;
+                                                        for (String command : commands) {
+                                                            try {
+                                                                if (DEBUG_MAPPINGS) {
+                                                                    System.out.println("command " + command);
+                                                                }
+                                                                if (command.equals("replace")) {
+                                                                    if (keyPos + 2 > keys.length) {
+                                                                        if (DEBUG_MAPPINGS) {
+                                                                            System.out.println("not enough keys. have " + keys.length + "; need " + (keyPos + 3));
+                                                                        }
+                                                                        break;
+                                                                    }
+                                                                    String simpleReplace = keys[keyPos];
+                                                                    keyPos++;
+                                                                    String simpleReplacement = keys[keyPos];
+                                                                    keyPos++;
+
+                                                                    replaceWith = replaceWith.replaceAll(simpleReplace, simpleReplacement);
+                                                                } else if (command.equals("ucase")) {
+                                                                    replaceWith = replaceWith.toUpperCase();
+                                                                } else if (command.equals("lcase")) {
+                                                                    replaceWith = replaceWith.toLowerCase();
+                                                                } else if (command.equals("urldecode")) {
+                                                                    replaceWith = UrlUtils.decode(replaceWith);
+                                                                }
+                                                                if (DEBUG_MAPPINGS) {
+                                                                    System.out.println("replaceWith now " + replaceWith);
+                                                                }
+                                                            } catch (Exception e) {
+                                                                if (DEBUG_MAPPINGS) {
+                                                                    System.out.println(e.toString());
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+
+                                                    fieldContent = fieldContent.replaceFirst(variablePattern,
+                                                            replaceWith);
+
+                                                } catch (Exception e) {
+
+                                                }
+                                            } while (matcher.find());
+                                        } else {
+                                            try {
+                                                int groupNo = Integer.parseInt(fieldFrom);
+                                                fieldContent = groups[groupNo - 1];
+                                            } catch (Exception e) {
+                                                //In "Debug/Test" mode, we should fire an exception / notification
+                                            }
+                                        }
+
+                                        if (fieldContent != null) {
+
+                                            int fieldTo = mapping.getField();
+
+                                            debugLog("    " + fieldTo + "=" + fieldContent);
+
+                                            fields_matched++;
+
+                                            switch (fieldTo) {
+                                                case FIELD_NAME:
+                                                    result.setNameFromHTML(fieldContent);
+                                                    break;
+                                                case FIELD_SIZE:
+                                                    result.setSizeFromHTML(fieldContent);
+                                                    break;
+                                                case FIELD_PEERS:
+                                                    result.setNbPeersFromHTML(fieldContent);
+                                                    break;
+                                                case FIELD_SEEDS:
+                                                    result.setNbSeedsFromHTML(fieldContent);
+                                                    break;
+                                                case FIELD_CATEGORY:
+                                                    result.setCategoryFromHTML(fieldContent);
+                                                    break;
+                                                case FIELD_DATE:
+                                                    result.setPublishedDateFromHTML(fieldContent);
+                                                    break;
+                                                case FIELD_CDPLINK:
+                                                    result.setCDPLink(fieldContent);
+                                                    break;
+                                                case FIELD_TORRENTLINK:
+                                                    result.setTorrentLink(fieldContent);
+                                                    break;
+                                                case FIELD_PLAYLINK:
+                                                    result.setPlayLink(fieldContent);
+                                                    break;
+                                                case FIELD_DOWNLOADBTNLINK:
+                                                    result.setDownloadButtonLink(fieldContent);
+                                                    break;
+                                                case FIELD_COMMENTS:
+                                                    result.setCommentsFromHTML(fieldContent);
+                                                    break;
+                                                case FIELD_VOTES:
+                                                    result.setVotesFromHTML(fieldContent);
+                                                    break;
+                                                case FIELD_SUPERSEEDS:
+                                                    result.setNbSuperSeedsFromHTML(fieldContent);
+                                                    break;
+                                                case FIELD_PRIVATE:
+                                                    result.setPrivateFromHTML(fieldContent);
+                                                    break;
+                                                case FIELD_DRMKEY:
+                                                    result.setDrmKey(fieldContent);
+                                                    break;
+                                                case FIELD_VOTES_DOWN:
+                                                    result.setVotesDownFromHTML(fieldContent);
+                                                    break;
+                                                case FIELD_HASH:
+                                                    result.setHash(fieldContent);
+                                                    break;
+                                                default:
+                                                    fields_matched--;
+                                                    break;
+                                            }
+                                        }
+                                    }
+
+                                    // ignore "matches" that don't actually populate any fields
+
+                                    if (fields_matched > 0) {
+
+                                        if (result.getHash() == null) {
+                                            String downloadLink = result.getDownloadLink();
+                                            String possibleMagnet = UrlUtils.parseTextForMagnets(downloadLink);
+                                            byte[] hash = UrlUtils.getHashFromMagnetURI(possibleMagnet);
+                                            if (hash != null) {
+                                                result.setHash(ByteFormatter.nicePrint(hash, true));
+                                            }
+                                        }
+
+                                        results.add(result);
+                                    }
+                                }
+                            }
 							
 								// hack - if no results and redirected to https and auth required then
 								// assume we need to log in...
@@ -515,7 +515,7 @@ RegexEngine
 								}
 							}
 							
-							return (Result[]) results.toArray(new Result[results.size()]);
+							return results.toArray(new Result[0]);
 							
 						}catch (Throwable e){
 							

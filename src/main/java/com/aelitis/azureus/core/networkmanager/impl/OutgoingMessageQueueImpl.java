@@ -42,7 +42,7 @@ public class
 OutgoingMessageQueueImpl
 	implements OutgoingMessageQueue
 {
-  private final LinkedList<RawMessage> 		queue		= new LinkedList<RawMessage>();
+  private final LinkedList<RawMessage> 		queue		= new LinkedList<>();
   private final AEMonitor	queue_mon	= new AEMonitor( "OutgoingMessageQueue:queue" );
 
   private final ArrayList delayed_notifications = new ArrayList();
@@ -64,7 +64,7 @@ OutgoingMessageQueueImpl
     
   private static final boolean TRACE_HISTORY = false;  //TODO
   private static final int MAX_HISTORY_TRACES = 30;
-  private final LinkedList<RawMessage> prev_sent = new LinkedList<RawMessage>();
+  private final LinkedList<RawMessage> prev_sent = new LinkedList<>();
   
   private boolean	trace;
   
@@ -210,11 +210,11 @@ OutgoingMessageQueueImpl
     //do message add notifications
     boolean allowed = true;
     ArrayList list_ref = listeners;
-    
-    for( int i=0; i < list_ref.size(); i++ ) {
-      MessageQueueListener listener = (MessageQueueListener)list_ref.get( i );
-      allowed = allowed && listener.messageAdded( message );
-    }
+
+      for (Object o1 : list_ref) {
+          MessageQueueListener listener = (MessageQueueListener) o1;
+          allowed = allowed && listener.messageAdded(message);
+      }
     
     if( !allowed ) {  //message addition not allowed
       //LGLogger.log( "Message [" +message.getDescription()+ "] not allowed for queueing, message addition skipped." );
@@ -226,69 +226,64 @@ OutgoingMessageQueueImpl
     RawMessage[] rmesgs = stream_encoder.encodeMessage( message );
     
     if( destroyed ) {  //queue is shutdown, drop any added messages
-      for (int i=0;i<rmesgs.length;i++){
-    	  rmesgs[i].destroy();
-      }
+        for (RawMessage rmesg : rmesgs) {
+            rmesg.destroy();
+        }
       return;
     }
-    
-    for (int i=0;i<rmesgs.length;i++){
-    	
-    	RawMessage rmesg = rmesgs[i];
-    	
-	    removeMessagesOfType( rmesg.messagesToRemove(), manual_listener_notify );
-	    
-	    try{
-	      queue_mon.enter();
-	    
-	      int pos = 0;
-	      for( Iterator<RawMessage> it = queue.iterator(); it.hasNext(); ) {
-	        RawMessage msg = it.next();
-	        if( rmesg.getPriority() > msg.getPriority() 
-	          && msg.getRawData()[0].position(DirectByteBuffer.SS_NET) == 0 ) {  //but don't insert in front of a half-sent message
-	          break;
-	        }
-	        pos++;
-	      }
-	      if( rmesg.isNoDelay() ) {
-	        urgent_message = rmesg;
-	      }
-	      queue.add( pos, rmesg );
-	      
-	      DirectByteBuffer[] payload = rmesg.getRawData();
-	      int	remaining = 0;
-	      for( int j=0; j < payload.length; j++ ) {
-	    	  remaining += payload[j].remaining(DirectByteBuffer.SS_NET);
-	      }
-	      total_size += remaining;
-	      if ( rmesg.getType() == Message.TYPE_DATA_PAYLOAD ){
-	    	  total_data_size += remaining;
-	      }
-	    }finally{
-	      queue_mon.exit();
-	    }
-	    
-	    if( manual_listener_notify ) {  //register listener event for later, manual notification
-	      NotificationItem item = new NotificationItem( NotificationItem.MESSAGE_ADDED );
-	      item.message = rmesg;
-	      try {
-	        delayed_notifications_mon.enter();
-	        
-	        delayed_notifications.add( item );
-	      }
-	      finally {
-	        delayed_notifications_mon.exit();
-	      }
-	    }
-	    else { //do listener notification now
-	      ArrayList listeners_ref = listeners;
-	    
-	      for( int j=0; j < listeners_ref.size(); j++ ) {
-	        MessageQueueListener listener = (MessageQueueListener)listeners_ref.get( j );
-	        listener.messageQueued( rmesg.getBaseMessage() );
-	      }
-	    }
-    }
+
+      for (RawMessage rmesg : rmesgs) {
+
+          removeMessagesOfType(rmesg.messagesToRemove(), manual_listener_notify);
+
+          try {
+              queue_mon.enter();
+
+              int pos = 0;
+              for (RawMessage msg : queue) {
+                  if (rmesg.getPriority() > msg.getPriority()
+                          && msg.getRawData()[0].position(DirectByteBuffer.SS_NET) == 0) {  //but don't insert in front of a half-sent message
+                      break;
+                  }
+                  pos++;
+              }
+              if (rmesg.isNoDelay()) {
+                  urgent_message = rmesg;
+              }
+              queue.add(pos, rmesg);
+
+              DirectByteBuffer[] payload = rmesg.getRawData();
+              int remaining = 0;
+              for (DirectByteBuffer directByteBuffer : payload) {
+                  remaining += directByteBuffer.remaining(DirectByteBuffer.SS_NET);
+              }
+              total_size += remaining;
+              if (rmesg.getType() == Message.TYPE_DATA_PAYLOAD) {
+                  total_data_size += remaining;
+              }
+          } finally {
+              queue_mon.exit();
+          }
+
+          if (manual_listener_notify) {  //register listener event for later, manual notification
+              NotificationItem item = new NotificationItem(NotificationItem.MESSAGE_ADDED);
+              item.message = rmesg;
+              try {
+                  delayed_notifications_mon.enter();
+
+                  delayed_notifications.add(item);
+              } finally {
+                  delayed_notifications_mon.exit();
+              }
+          } else { //do listener notification now
+              ArrayList listeners_ref = listeners;
+
+              for (Object o : listeners_ref) {
+                  MessageQueueListener listener = (MessageQueueListener) o;
+                  listener.messageQueued(rmesg.getBaseMessage());
+              }
+          }
+      }
   }
   
 
@@ -313,44 +308,42 @@ OutgoingMessageQueueImpl
     
       for( Iterator<RawMessage> i = queue.iterator(); i.hasNext(); ) {
         RawMessage msg = i.next();
-        
-        for( int t=0; t < message_types.length; t++ ) {
-          boolean same_type = message_types[t].getID().equals( msg.getID() );
-          
-          if( same_type && msg.getRawData()[0].position(DirectByteBuffer.SS_NET) == 0 ) {   //dont remove a half-sent message
-            if( msg == urgent_message ) urgent_message = null;
-            
-            DirectByteBuffer[] payload = msg.getRawData();
-            int remaining = 0;
-            for( int x=0; x < payload.length; x++ ) {
-            	remaining += payload[x].remaining(DirectByteBuffer.SS_NET);
-            }
-            total_size -= remaining;
-            if ( msg.getType() == Message.TYPE_DATA_PAYLOAD ){
-            	total_data_size -= remaining;
-            }
-            if( manual_listener_notify ) {
-              NotificationItem item = new NotificationItem( NotificationItem.MESSAGE_REMOVED );
-              item.message = msg;
-              try {
-                delayed_notifications_mon.enter();
-                
-                delayed_notifications.add( item );
+
+          for (Message message_type : message_types) {
+              boolean same_type = message_type.getID().equals(msg.getID());
+
+              if (same_type && msg.getRawData()[0].position(DirectByteBuffer.SS_NET) == 0) {   //dont remove a half-sent message
+                  if (msg == urgent_message) urgent_message = null;
+
+                  DirectByteBuffer[] payload = msg.getRawData();
+                  int remaining = 0;
+                  for (DirectByteBuffer directByteBuffer : payload) {
+                      remaining += directByteBuffer.remaining(DirectByteBuffer.SS_NET);
+                  }
+                  total_size -= remaining;
+                  if (msg.getType() == Message.TYPE_DATA_PAYLOAD) {
+                      total_data_size -= remaining;
+                  }
+                  if (manual_listener_notify) {
+                      NotificationItem item = new NotificationItem(NotificationItem.MESSAGE_REMOVED);
+                      item.message = msg;
+                      try {
+                          delayed_notifications_mon.enter();
+
+                          delayed_notifications.add(item);
+                      } finally {
+                          delayed_notifications_mon.exit();
+                      }
+                  } else {
+                      if (messages_removed == null) {
+                          messages_removed = new ArrayList<>();
+                      }
+                      messages_removed.add(msg);
+                  }
+                  i.remove();
+                  break;
               }
-              finally {
-                delayed_notifications_mon.exit();
-              }
-            }
-            else {
-              if ( messages_removed == null ){
-              	messages_removed = new ArrayList<RawMessage>();
-              }
-              messages_removed.add( msg );
-            }
-        		i.remove();
-            break;
-        	}
-        }
+          }
       }
       
       if ( queue.isEmpty()){
@@ -363,16 +356,14 @@ OutgoingMessageQueueImpl
     if( !manual_listener_notify && messages_removed != null ) {
       //do listener notifications now
       ArrayList listeners_ref = listeners;
-        
-      for( int x=0; x < messages_removed.size(); x++ ) {
-        RawMessage msg = messages_removed.get( x );
-        
-        for( int i=0; i < listeners_ref.size(); i++ ) {
-          MessageQueueListener listener = (MessageQueueListener)listeners_ref.get( i );
-          listener.messageRemoved( msg.getBaseMessage() );
+
+        for (RawMessage msg : messages_removed) {
+            for (Object o : listeners_ref) {
+                MessageQueueListener listener = (MessageQueueListener) o;
+                listener.messageRemoved(msg.getBaseMessage());
+            }
+            msg.destroy();
         }
-        msg.destroy();
-      }
     }
   }
   
@@ -400,29 +391,27 @@ OutgoingMessageQueueImpl
     try{
       queue_mon.enter();
 
-      for( Iterator<RawMessage> it = queue.iterator(); it.hasNext(); ) {
-        RawMessage raw = it.next();
-        
-        if( message.equals( raw.getBaseMessage() ) ) {
-          if( raw.getRawData()[0].position(DirectByteBuffer.SS_NET) == 0 ) {  //dont remove a half-sent message
-            if( raw == urgent_message ) urgent_message = null;  
-            
-            DirectByteBuffer[] payload = raw.getRawData();
-            int remaining = 0;
-            for( int x=0; x < payload.length; x++ ) {
-            	remaining += payload[x].remaining(DirectByteBuffer.SS_NET);
+        for (RawMessage raw : queue) {
+            if (message.equals(raw.getBaseMessage())) {
+                if (raw.getRawData()[0].position(DirectByteBuffer.SS_NET) == 0) {  //dont remove a half-sent message
+                    if (raw == urgent_message) urgent_message = null;
+
+                    DirectByteBuffer[] payload = raw.getRawData();
+                    int remaining = 0;
+                    for (DirectByteBuffer directByteBuffer : payload) {
+                        remaining += directByteBuffer.remaining(DirectByteBuffer.SS_NET);
+                    }
+                    total_size -= remaining;
+                    if (raw.getType() == Message.TYPE_DATA_PAYLOAD) {
+                        total_data_size -= remaining;
+                    }
+                    queue.remove(raw);
+                    msg_removed = raw;
+                }
+
+                break;
             }
-            total_size -= remaining;
-            if ( raw.getType() == Message.TYPE_DATA_PAYLOAD ){
-            	total_data_size -= remaining;
-            }
-            queue.remove( raw );
-            msg_removed = raw;
-          }
-          
-          break;
         }
-      }
       
       if ( queue.isEmpty()){
     	  percent_complete = -1;
@@ -447,11 +436,11 @@ OutgoingMessageQueueImpl
       }
       else {   //do listener notification now
         ArrayList listeners_ref = listeners;
-      
-        for( int i=0; i < listeners_ref.size(); i++ ) {
-          MessageQueueListener listener = (MessageQueueListener)listeners_ref.get( i );
-          listener.messageRemoved( msg_removed.getBaseMessage() );
-        }
+
+          for (Object o : listeners_ref) {
+              MessageQueueListener listener = (MessageQueueListener) o;
+              listener.messageRemoved(msg_removed.getBaseMessage());
+          }
         msg_removed.destroy();
       }
       return true;
@@ -533,57 +522,55 @@ OutgoingMessageQueueImpl
 			  int total_to_write				= 0;
 			  
 outer:
-			  for( Iterator<RawMessage> i = queue.iterator(); i.hasNext(); ){
-				  
-				  RawMessage	message = i.next();
-				  
-				  boolean msg_is_free = message.getType() == Message.TYPE_PROTOCOL_PAYLOAD && protocol_is_free;
-				  
-				  DirectByteBuffer[] payloads = message.getRawData();
+for (RawMessage message : queue) {
 
-				  for( int x=0; x < payloads.length; x++ ){
-					  
-					  ByteBuffer buff = payloads[x].getBuffer( DirectByteBuffer.SS_NET );
-					  
-					  raw_buffers[buffer_count] = buff;
-					  
-					  orig_positions[buffer_count] = buff.position();
-					  
-					  buffer_count++;
+    boolean msg_is_free = message.getType() == Message.TYPE_PROTOCOL_PAYLOAD && protocol_is_free;
 
-					  int rem = buff.remaining();
-					  
-					  total_to_write += rem;
-					  
-					  if ( !msg_is_free ){
-						  
-						  total_sofar_excluding_free += rem;
-						  
-						  if ( total_sofar_excluding_free >= max_bytes ){
-							  
-							  break outer;
-						  }
-					  }	
-					  
-					  if ( buffer_count == buffer_limit ) {
-							
-						  int	new_buffer_limit	= buffer_limit * 2;
-						  
-						  ByteBuffer[] 	new_raw_buffers 	= new ByteBuffer[new_buffer_limit];
-						  int[]		 	new_orig_positions	= new int[new_buffer_limit];
-						  
-						  System.arraycopy( raw_buffers, 0, new_raw_buffers, 0, buffer_limit );
-						  System.arraycopy( orig_positions, 0, new_orig_positions, 0, buffer_limit );
-						  
-						  raw_buffers 		= new_raw_buffers;
-						  orig_positions	= new_orig_positions;
-						  
-						  buffer_limit 		= new_buffer_limit;
-					  }
-				  }
-			  }
+    DirectByteBuffer[] payloads = message.getRawData();
 
-			  ByteBuffer last_buff = (ByteBuffer)raw_buffers[buffer_count - 1 ];
+    for (DirectByteBuffer payload : payloads) {
+
+        ByteBuffer buff = payload.getBuffer(DirectByteBuffer.SS_NET);
+
+        raw_buffers[buffer_count] = buff;
+
+        orig_positions[buffer_count] = buff.position();
+
+        buffer_count++;
+
+        int rem = buff.remaining();
+
+        total_to_write += rem;
+
+        if (!msg_is_free) {
+
+            total_sofar_excluding_free += rem;
+
+            if (total_sofar_excluding_free >= max_bytes) {
+
+                break outer;
+            }
+        }
+
+        if (buffer_count == buffer_limit) {
+
+            int new_buffer_limit = buffer_limit * 2;
+
+            ByteBuffer[] new_raw_buffers = new ByteBuffer[new_buffer_limit];
+            int[] new_orig_positions = new int[new_buffer_limit];
+
+            System.arraycopy(raw_buffers, 0, new_raw_buffers, 0, buffer_limit);
+            System.arraycopy(orig_positions, 0, new_orig_positions, 0, buffer_limit);
+
+            raw_buffers = new_raw_buffers;
+            orig_positions = new_orig_positions;
+
+            buffer_limit = new_buffer_limit;
+        }
+    }
+}
+
+			  ByteBuffer last_buff = raw_buffers[buffer_count - 1 ];
 			  
 			  int orig_last_limit = last_buff.limit();
 			  
@@ -677,7 +664,7 @@ outer:
 						  }
 						  else {
 							  if( messages_sent == null ) {
-								  messages_sent = new ArrayList<RawMessage>();
+								  messages_sent = new ArrayList<>();
 							  }
 							  messages_sent.add( msg );
 						  }
@@ -744,15 +731,13 @@ outer:
 
 				  if ( messages_sent != null ){
 
-					  for( int x=0; x < messages_sent.size(); x++ ) {
-						  RawMessage msg = messages_sent.get( x );
+                      for (RawMessage msg : messages_sent) {
+                          listener.messageSent(msg.getBaseMessage());
 
-						  listener.messageSent( msg.getBaseMessage() );
-
-						  if( i == num_listeners - 1 ) {  //the last listener notification, so destroy
-							  msg.destroy();
-						  }
-					  }
+                          if (i == num_listeners - 1) {  //the last listener notification, so destroy
+                              msg.destroy();
+                          }
+                      }
 				  }
 			  }
 		  }
@@ -794,10 +779,10 @@ outer:
 	    
 	  ArrayList list_ref = listeners;
 
-	  for( int i=0; i < list_ref.size(); i++ ) {
-		 MessageQueueListener listener = (MessageQueueListener)list_ref.get( i );
-		 listener.flush();
-	  }
+      for (Object o : list_ref) {
+          MessageQueueListener listener = (MessageQueueListener) o;
+          listener.flush();
+      }
   }
   public boolean
   isDestroyed()
@@ -822,52 +807,52 @@ outer:
     }
     
     ArrayList listeners_ref = listeners;
-    
-    for( int j=0; j < notifications_copy.size(); j++ ) {  //for each notification
-      NotificationItem item = (NotificationItem)notifications_copy.get( j );
 
-      switch( item.type ) {
-        case NotificationItem.MESSAGE_ADDED:
-          for( int i=0; i < listeners_ref.size(); i++ ) {  //for each listener
-            MessageQueueListener listener = (MessageQueueListener)listeners_ref.get( i );
-            listener.messageQueued( item.message.getBaseMessage() );
+      for (Object o5 : notifications_copy) {  //for each notification
+          NotificationItem item = (NotificationItem) o5;
+
+          switch (item.type) {
+              case NotificationItem.MESSAGE_ADDED:
+                  for (Object o4 : listeners_ref) {  //for each listener
+                      MessageQueueListener listener = (MessageQueueListener) o4;
+                      listener.messageQueued(item.message.getBaseMessage());
+                  }
+                  break;
+
+              case NotificationItem.MESSAGE_REMOVED:
+                  for (Object o3 : listeners_ref) {  //for each listener
+                      MessageQueueListener listener = (MessageQueueListener) o3;
+                      listener.messageRemoved(item.message.getBaseMessage());
+                  }
+                  item.message.destroy();
+                  break;
+
+              case NotificationItem.MESSAGE_SENT:
+                  for (Object o2 : listeners_ref) {  //for each listener
+                      MessageQueueListener listener = (MessageQueueListener) o2;
+                      listener.messageSent(item.message.getBaseMessage());
+                  }
+                  item.message.destroy();
+                  break;
+
+              case NotificationItem.PROTOCOL_BYTES_SENT:
+                  for (Object o1 : listeners_ref) {  //for each listener
+                      MessageQueueListener listener = (MessageQueueListener) o1;
+                      listener.protocolBytesSent(item.byte_count);
+                  }
+                  break;
+
+              case NotificationItem.DATA_BYTES_SENT:
+                  for (Object o : listeners_ref) {  //for each listener
+                      MessageQueueListener listener = (MessageQueueListener) o;
+                      listener.dataBytesSent(item.byte_count);
+                  }
+                  break;
+
+              default:
+                  Debug.out("NotificationItem.type unknown :" + item.type);
           }
-          break;
-          
-        case NotificationItem.MESSAGE_REMOVED:
-          for( int i=0; i < listeners_ref.size(); i++ ) {  //for each listener
-            MessageQueueListener listener = (MessageQueueListener)listeners_ref.get( i );
-            listener.messageRemoved( item.message.getBaseMessage() );
-          }
-          item.message.destroy();
-          break;
-          
-        case NotificationItem.MESSAGE_SENT:
-          for( int i=0; i < listeners_ref.size(); i++ ) {  //for each listener
-            MessageQueueListener listener = (MessageQueueListener)listeners_ref.get( i );
-            listener.messageSent( item.message.getBaseMessage() );
-          }
-          item.message.destroy();
-          break;
-          
-        case NotificationItem.PROTOCOL_BYTES_SENT:
-          for( int i=0; i < listeners_ref.size(); i++ ) {  //for each listener
-            MessageQueueListener listener = (MessageQueueListener)listeners_ref.get( i );
-            listener.protocolBytesSent( item.byte_count );
-          }
-          break;
-          
-        case NotificationItem.DATA_BYTES_SENT:
-          for( int i=0; i < listeners_ref.size(); i++ ) {  //for each listener
-            MessageQueueListener listener = (MessageQueueListener)listeners_ref.get( i );
-            listener.dataBytesSent( item.byte_count );
-          }
-          break;
-          
-        default:
-          Debug.out( "NotificationItem.type unknown :" + item.type );
       }
-    }
   }
   
   
@@ -890,43 +875,40 @@ outer:
       
       
       int i=0;
-    	
-    	for( Iterator<RawMessage> it = prev_sent.iterator(); it.hasNext(); ) {
-    		RawMessage raw = it.next();
-        trace.append("[#h").append(i).append("]: ")
-             .append(raw.getID())
-             .append(" [")
-             .append(raw.getDescription())
-             .append("]")
-             .append("\n" );
-        i++;
-    	}      
+
+        for (RawMessage raw : prev_sent) {
+            trace.append("[#h").append(i).append("]: ")
+                    .append(raw.getID())
+                    .append(" [")
+                    .append(raw.getDescription())
+                    .append("]")
+                    .append("\n");
+            i++;
+        }
       
       
 
       int position = queue.size() - 1;
 
-      for( Iterator<RawMessage> it = queue.iterator(); it.hasNext(); ) {
-        RawMessage raw = it.next();
-        
-        int pos = raw.getRawData()[0].position(DirectByteBuffer.SS_NET);
-        int length = raw.getRawData()[0].limit( DirectByteBuffer.SS_NET );
-        
-        trace.append( "[#")
-             .append(position)
-             .append(" ")
-             .append(pos)
-             .append(":")
-             .append(length)
-             .append("]: ")
-             .append(raw.getID())
-             .append(" [")
-             .append(raw.getDescription())
-             .append("]")
-             .append("\n" );
-        
-        position--;
-      }
+        for (RawMessage raw : queue) {
+            int pos = raw.getRawData()[0].position(DirectByteBuffer.SS_NET);
+            int length = raw.getRawData()[0].limit(DirectByteBuffer.SS_NET);
+
+            trace.append("[#")
+                    .append(position)
+                    .append(" ")
+                    .append(pos)
+                    .append(":")
+                    .append(length)
+                    .append("]: ")
+                    .append(raw.getID())
+                    .append(" [")
+                    .append(raw.getDescription())
+                    .append("]")
+                    .append("\n");
+
+            position--;
+        }
     }
   	finally{
       queue_mon.exit();
@@ -977,22 +959,21 @@ outer:
 
     DirectByteBuffer[] buffs = message.getData();
     int size = 0;
-    for( int i=0; i < buffs.length; i++ ) {
-      size += buffs[i].remaining( DirectByteBuffer.SS_NET );
-    }
-    
-    for( int i=0; i < listeners_ref.size(); i++ ) {
-      MessageQueueListener listener = (MessageQueueListener)listeners_ref.get( i );
+      for (DirectByteBuffer buff : buffs) {
+          size += buff.remaining(DirectByteBuffer.SS_NET);
+      }
 
-      listener.messageSent( message );
-      
-      if( message.getType() == Message.TYPE_DATA_PAYLOAD ) {
-        listener.dataBytesSent( size );
+      for (Object o : listeners_ref) {
+          MessageQueueListener listener = (MessageQueueListener) o;
+
+          listener.messageSent(message);
+
+          if (message.getType() == Message.TYPE_DATA_PAYLOAD) {
+              listener.dataBytesSent(size);
+          } else {
+              listener.protocolBytesSent(size);
+          }
       }
-      else {
-        listener.protocolBytesSent( size );
-      }
-    }
     
     //System.out.println( "notifiedOfExternallySentMessage:: [" +message.getID()+ "] size=" +size );
     

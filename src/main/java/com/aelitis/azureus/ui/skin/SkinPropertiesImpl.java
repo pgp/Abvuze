@@ -85,9 +85,9 @@ public class SkinPropertiesImpl
 		String sFiles = rb.getString("skin.include", null);
 		if (sFiles != null) {
 			String[] sFilesArray = sFiles.split(",");
-			for (int i = 0; i < sFilesArray.length; i++) {
-				String sFile = (sFilesArray[i].startsWith("/")
-						? sFilesArray[i].substring(1) : skinPath + sFilesArray[i]);
+			for (String s : sFilesArray) {
+				String sFile = (s.startsWith("/")
+						? s.substring(1) : skinPath + s);
 				sFile = sFile.replaceAll("/", ".");
 				try {
 					ResourceBundle subBundle = ResourceBundle.getBundle(sFile,
@@ -115,9 +115,9 @@ public class SkinPropertiesImpl
 				if (sFiles != null && skinPath != null) {
 	  			
 					String[] sFilesArray = Constants.PAT_SPLIT_COMMA.split(sFiles);
-					for (int i = 0; i < sFilesArray.length; i++) {
-						String sFile = (sFilesArray[i].startsWith("/")
-								? sFilesArray[i].substring(1) : skinPath + sFilesArray[i]);
+					for (String s : sFilesArray) {
+						String sFile = (s.startsWith("/")
+								? s.substring(1) : skinPath + s);
 						sFile = sFile.replaceAll("/", ".");
 						try {
 							ResourceBundle incBundle = ResourceBundle.getBundle(sFile,
@@ -326,11 +326,11 @@ public class SkinPropertiesImpl
 	}
 
 	public String getStringValue(String name, String def) {
-		return getStringValue(name, (String[]) null, def);
+		return getStringValue(name, null, def);
 	}
 
 	public String[] getStringArray(String name) {
-		return getStringArray(name, (String[]) null);
+		return getStringArray(name, null);
 	}
 
 	public String[] getStringArray(String name, String[] params) {

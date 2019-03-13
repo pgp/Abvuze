@@ -25,7 +25,7 @@ import com.aelitis.azureus.plugins.dht.DHTPluginContact;
 public interface 
 DHTPluginImplAdapter 
 {
-	public void
+	void
 	localContactChanged(
-		DHTPluginContact	contact );
+            DHTPluginContact contact);
 }

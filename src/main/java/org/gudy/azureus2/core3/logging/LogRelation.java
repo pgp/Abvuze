@@ -70,20 +70,20 @@ public class LogRelation {
 				return this;
 	
 			// Check if any of the objects are of c
-			for (int i = 0; i < queryObjects.length; i++) {
-				if (c.isInstance(queryObjects[i]))
-					return queryObjects[i];
-			}
+            for (Object queryObject1 : queryObjects) {
+                if (c.isInstance(queryObject1))
+                    return queryObject1;
+            }
 	
 			// Query each object that is LogRelation 
-			for (int i = 0; i < queryObjects.length; i++) {
-				if (queryObjects[i] instanceof LogRelation) {
-					Object obj = ((LogRelation) queryObjects[i]).queryForClass(c,
-							((LogRelation) queryObjects[i]).getQueryableInterfaces());
-					if (obj != null)
-						return obj;
-				}
-			}
+            for (Object queryObject : queryObjects) {
+                if (queryObject instanceof LogRelation) {
+                    Object obj = ((LogRelation) queryObject).queryForClass(c,
+                            ((LogRelation) queryObject).getQueryableInterfaces());
+                    if (obj != null)
+                        return obj;
+                }
+            }
 
 			return null;
 		} finally {

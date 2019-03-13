@@ -54,9 +54,9 @@ public class BTHave implements BTMessage {
   
   public int getType() {  return Message.TYPE_PROTOCOL_PAYLOAD;  }
     
-  public byte getVersion() { return version; };
+  public byte getVersion() { return version; }
 
-  public String getDescription() {
+    public String getDescription() {
     if( description == null ) {
       description = BTMessage.ID_BT_HAVE + " piece #" + piece_number;
     }

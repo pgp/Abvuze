@@ -48,7 +48,7 @@ PieceMapperImpl
 	
 	private final int				last_piece_length;
 	
-	protected final ArrayList<fileInfo> btFileList = new ArrayList<fileInfo>();
+	protected final ArrayList<fileInfo> btFileList = new ArrayList<>();
 
 	
 	public
@@ -110,11 +110,11 @@ PieceMapperImpl
 		char	separator = File.separatorChar;
 				
 		 //for each file
-         
-		for (int i = 0; i < torrent_files.length; i++) {
-        	
-			buildFileLookupTable(torrent_files[i], locale_decoder, separator);
-		}
+
+        for (TOTorrentFile torrent_file : torrent_files) {
+
+            buildFileLookupTable(torrent_file, locale_decoder, separator);
+        }
 	}
 
 	/**
@@ -181,7 +181,7 @@ PieceMapperImpl
 			
 				// optimise for the single file case
 			
-			return( new DMPieceMapSimple( torrent, ((fileInfo)btFileList.get(0)).getFileInfo()));
+			return( new DMPieceMapSimple( torrent, btFileList.get(0).getFileInfo()));
 			
 		}else{
 			int piece_length	= (int)torrent.getPieceLength();
@@ -212,10 +212,10 @@ PieceMapperImpl
 			long fileOffset = 0;
 			int currentFile = 0;
 			for (int i = 0;(1 == piece_count && i < piece_count) || i < piece_count - 1; i++) {
-				ArrayList<PieceMapEntryImpl> pieceToFileList = new ArrayList<PieceMapEntryImpl>();
+				ArrayList<PieceMapEntryImpl> pieceToFileList = new ArrayList<>();
 				int usedSpace = 0;
 				while (modified_piece_length > usedSpace) {
-					fileInfo tempFile = (fileInfo)btFileList.get(currentFile);
+					fileInfo tempFile = btFileList.get(currentFile);
 					long length = tempFile.getLength();
 	
 					//get the available space
@@ -275,7 +275,7 @@ PieceMapperImpl
 		int 			current_file, 
 		long 			file_offset )
 	{
-		ArrayList<PieceMapEntryImpl> piece_to_file_list = new ArrayList<PieceMapEntryImpl>();
+		ArrayList<PieceMapEntryImpl> piece_to_file_list = new ArrayList<>();
 
 		for ( int i=current_file;i<file_list.size();i++){
 			

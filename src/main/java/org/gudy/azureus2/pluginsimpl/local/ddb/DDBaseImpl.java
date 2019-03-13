@@ -61,7 +61,7 @@ DDBaseImpl
 	
 	protected static AEMonitor		class_mon	= new AEMonitor( "DDBaseImpl:class");
 
-	private Map<HashWrapper,DistributedDatabaseTransferHandler>			transfer_map = new HashMap<HashWrapper,DistributedDatabaseTransferHandler>();
+	private Map<HashWrapper,DistributedDatabaseTransferHandler>			transfer_map = new HashMap<>();
 		
 	public static DDBaseImpl
 	getSingleton(
@@ -82,13 +82,13 @@ DDBaseImpl
 		return( singleton );
 	}
 	
-	private static Map<DHTPluginInterface,DistributedDatabase> dht_pi_map = new HashMap<DHTPluginInterface, DistributedDatabase>();
+	private static Map<DHTPluginInterface,DistributedDatabase> dht_pi_map = new HashMap<>();
 	
 	public static List<DistributedDatabase>
 	getDDBs(
 		Download		download )
 	{
-		List<DistributedDatabase>	result = new ArrayList<DistributedDatabase>();
+		List<DistributedDatabase>	result = new ArrayList<>();
 		
 		String[] networks = PluginCoreUtils.unwrap( download ).getDownloadState().getNetworks();
 					
@@ -105,7 +105,7 @@ DDBaseImpl
 				
 			}else{
 				
-				Map<String,Object>	options = new HashMap<String, Object>();
+				Map<String,Object>	options = new HashMap<>();
 				
 				options.put( AEProxyFactory.DP_DOWNLOAD, download );
 				
@@ -150,7 +150,7 @@ DDBaseImpl
 		String[]			networks,
 		Map<String,Object>	_options )
 	{
-		List<DistributedDatabase>	result = new ArrayList<DistributedDatabase>();
+		List<DistributedDatabase>	result = new ArrayList<>();
 							
 		for ( String net: networks ){
 			
@@ -165,7 +165,7 @@ DDBaseImpl
 				
 			}else{
 				
-				Map<String,Object>	options = new HashMap<String, Object>();
+				Map<String,Object>	options = new HashMap<>();
 				
 				options.put( AEProxyFactory.DP_NETWORKS, networks );
 				
@@ -210,7 +210,7 @@ DDBaseImpl
 	private DHTPluginInterface				dht_use_accessor;
 		
 
-	private CopyOnWriteList<DistributedDatabaseListener>	listeners = new CopyOnWriteList<DistributedDatabaseListener>();
+	private CopyOnWriteList<DistributedDatabaseListener>	listeners = new CopyOnWriteList<>();
 	
 	protected
 	DDBaseImpl(
@@ -536,19 +536,19 @@ DDBaseImpl
 	write(
 		final DistributedDatabaseListener	listener,
 		final DistributedDatabaseKey		key,
-		final DistributedDatabaseValue		values[] )
+        final DistributedDatabaseValue[] values)
 	
 		throws DistributedDatabaseException
 	{
 		throwIfNotAvailable();
-		
-		for (int i=0;i<values.length;i++){
-			
-			if (((DDBaseValueImpl)values[i]).getBytes().length > DDBaseValueImpl.MAX_VALUE_SIZE ){
-				
-				throw( new DistributedDatabaseException("Value size limited to " + DDBaseValueImpl.MAX_VALUE_SIZE + " bytes" ));		
-			}
-		}
+
+        for (DistributedDatabaseValue value1 : values) {
+
+            if (((DDBaseValueImpl) value1).getBytes().length > DDBaseValueImpl.MAX_VALUE_SIZE) {
+
+                throw (new DistributedDatabaseException("Value size limited to " + DDBaseValueImpl.MAX_VALUE_SIZE + " bytes"));
+            }
+        }
 		
 		byte	extra_flags = 0;
 		
@@ -739,7 +739,7 @@ DDBaseImpl
 	{
 		List<DHTPluginValue> values = getDHT().getValues(((DDBaseKeyImpl)key).getBytes());
 		
-		List<DistributedDatabaseValue>	result = new ArrayList<DistributedDatabaseValue>( values.size());
+		List<DistributedDatabaseValue>	result = new ArrayList<>(values.size());
 		
 		for ( DHTPluginValue v: values ){
 						

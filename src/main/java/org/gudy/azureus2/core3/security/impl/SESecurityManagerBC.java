@@ -127,7 +127,7 @@ SESecurityManagerBC
 		
 		X509Certificate certificate = certificateGenerator.generateX509Certificate(pair.getPrivate());
 		
-		java.security.cert.Certificate[] certChain = {(java.security.cert.Certificate) certificate };
+		java.security.cert.Certificate[] certChain = {certificate};
 
 		manager.addCertToKeyStore( alias, pair.getPrivate(), certChain );
 		

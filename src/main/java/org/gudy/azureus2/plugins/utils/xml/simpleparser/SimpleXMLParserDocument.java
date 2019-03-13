@@ -23,6 +23,6 @@ public interface
 SimpleXMLParserDocument
 	extends SimpleXMLParserDocumentNode
 {
-	public void
+	void
 	print();
 }

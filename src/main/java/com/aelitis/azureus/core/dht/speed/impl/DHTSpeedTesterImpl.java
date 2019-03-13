@@ -55,8 +55,8 @@ DHTSpeedTesterImpl
 	private final LinkedList			pending_contacts 	= new LinkedList();
 	private final List				active_pings		= new ArrayList();
 	
-	private final List<DHTSpeedTesterListener>			new_listeners	= new ArrayList<DHTSpeedTesterListener>();
-	private final CopyOnWriteList<DHTSpeedTesterListener>	listeners 		= new CopyOnWriteList<DHTSpeedTesterListener>();
+	private final List<DHTSpeedTesterListener>			new_listeners	= new ArrayList<>();
+	private final CopyOnWriteList<DHTSpeedTesterListener>	listeners 		= new CopyOnWriteList<>();
 	
 	public 
 	DHTSpeedTesterImpl(
@@ -119,38 +119,36 @@ DHTSpeedTesterImpl
 	findContacts()
 	{
 		DHTTransportContact[]	reachables = dht.getTransport().getReachableContacts();
-		
-		for (int i=0;i<reachables.length;i++){
-			
-			DHTTransportContact	contact = reachables[i];
-			
-			byte[]	address = contact.getAddress().getAddress().getAddress();
-			
-			if ( tried_bloom == null || tried_bloom.getEntryCount() > 500 ){
-				
-				tried_bloom = BloomFilterFactory.createAddOnly( 4096 );
-			}
-			
-			if ( !tried_bloom.contains( address )){
-				
-				tried_bloom.add( address );
-				
-				synchronized( pending_contacts ){
-					
-					potentialPing	ping =
-						new potentialPing(
-								contact,
-								DHTNetworkPositionManager.estimateRTT( contact.getNetworkPositions(), dht.getTransport().getLocalContact().getNetworkPositions()));
-									
-					pending_contacts.add( 0, ping );
-					
-					if ( pending_contacts.size() > 60 ){
-						
-						pending_contacts.removeLast();
-					}
-				}
-			}
-		}
+
+        for (DHTTransportContact contact : reachables) {
+
+            byte[] address = contact.getAddress().getAddress().getAddress();
+
+            if (tried_bloom == null || tried_bloom.getEntryCount() > 500) {
+
+                tried_bloom = BloomFilterFactory.createAddOnly(4096);
+            }
+
+            if (!tried_bloom.contains(address)) {
+
+                tried_bloom.add(address);
+
+                synchronized (pending_contacts) {
+
+                    potentialPing ping =
+                            new potentialPing(
+                                    contact,
+                                    DHTNetworkPositionManager.estimateRTT(contact.getNetworkPositions(), dht.getTransport().getLocalContact().getNetworkPositions()));
+
+                    pending_contacts.add(0, ping);
+
+                    if (pending_contacts.size() > 60) {
+
+                        pending_contacts.removeLast();
+                    }
+                }
+            }
+        }
 	}
 	
 	protected void
@@ -170,30 +168,30 @@ DHTSpeedTesterImpl
 		}
 		
 		if ( copy != null ){
-			
-			for (int i=0;i<copy.size();i++){
-			
-				DHTSpeedTesterListener	listener = (DHTSpeedTesterListener)copy.get(i);
-				
-				listeners.add( listener );
-				
-				for ( int j=0;j<active_pings.size();j++){
-					
-					activePing	ping = (activePing)active_pings.get(j);
-					
-					if ( ping.isInformedAlive()){
-						
-						try{
-						
-							listener.contactAdded( ping );
-							
-						}catch( Throwable e ){
-							
-							Debug.printStackTrace(e);
-						}
-					}
-				}
-			}
+
+            for (Object o : copy) {
+
+                DHTSpeedTesterListener listener = (DHTSpeedTesterListener) o;
+
+                listeners.add(listener);
+
+                for (Object active_ping : active_pings) {
+
+                    activePing ping = (activePing) active_ping;
+
+                    if (ping.isInformedAlive()) {
+
+                        try {
+
+                            listener.contactAdded(ping);
+
+                        } catch (Throwable e) {
+
+                            Debug.printStackTrace(e);
+                        }
+                    }
+                }
+            }
 		}
 		
 		Iterator	pit = active_pings.iterator();
@@ -209,19 +207,17 @@ DHTSpeedTesterImpl
 				if ( !ping.isInformedAlive()){
 					
 					ping.setInformedAlive();
-					
-					Iterator	it = listeners.iterator();
-					
-					while( it.hasNext()){
-						
-						try{
-							((DHTSpeedTesterListener)it.next()).contactAdded( ping );
-							
-						}catch( Throwable e ){
-							
-							Debug.printStackTrace(e);
-						}
-					}
+
+                    for (DHTSpeedTesterListener listener : listeners) {
+
+                        try {
+                            (listener).contactAdded(ping);
+
+                        } catch (Throwable e) {
+
+                            Debug.printStackTrace(e);
+                        }
+                    }
 				}
 			}
 			
@@ -300,18 +296,17 @@ DHTSpeedTesterImpl
 		DHTSpeedTesterContact[]		contacts,
 		int[]						rtts )
 	{
-		Iterator	it = listeners.iterator();
-		
-		while( it.hasNext()){
-			
-			try{
-				((DHTSpeedTesterListener)it.next()).resultGroup( contacts, rtts );
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace(e);
-			}
-		}
+
+        for (DHTSpeedTesterListener listener : listeners) {
+
+            try {
+                (listener).resultGroup(contacts, rtts);
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 	
 	public void 
@@ -508,19 +503,17 @@ DHTSpeedTesterImpl
 										consec_fails	= 0;
 									}
 								}
-								
-								Iterator	it = listeners.iterator();
-								
-								while( it.hasNext()){
-									
-									try{
-										((DHTSpeedTesterContactListener)it.next()).ping( activePing.this, getElapsed());
-										
-									}catch( Throwable e ){
-										
-										Debug.printStackTrace(e);
-									}
-								}
+
+                                for (Object listener : listeners) {
+
+                                    try {
+                                        ((DHTSpeedTesterContactListener) listener).ping(activePing.this, getElapsed());
+
+                                    } catch (Throwable e) {
+
+                                        Debug.printStackTrace(e);
+                                    }
+                                }
 							}finally{
 								
 								pi.setResult( activePing.this, rtt );
@@ -569,19 +562,17 @@ DHTSpeedTesterImpl
 								}
 								
 								if ( !dead ){
-									
-									Iterator	it = listeners.iterator();
-									
-									while( it.hasNext()){
-										
-										try{
-											((DHTSpeedTesterContactListener)it.next()).pingFailed( activePing.this );
-											
-										}catch( Throwable e ){
-											
-											Debug.printStackTrace(e);
-										}
-									}
+
+                                    for (Object listener : listeners) {
+
+                                        try {
+                                            ((DHTSpeedTesterContactListener) listener).pingFailed(activePing.this);
+
+                                        } catch (Throwable e) {
+
+                                            Debug.printStackTrace(e);
+                                        }
+                                    }
 								}
 								// System.out.println( "    " + contact.getString() + ": failed" );
 							}finally{
@@ -639,19 +630,17 @@ DHTSpeedTesterImpl
 		informDead()
 		{
 			if ( informed_alive ){
-				
-				Iterator	it = listeners.iterator();
-				
-				while( it.hasNext()){
-					
-					try{
-						((DHTSpeedTesterContactListener)it.next()).contactDied( this );
-						
-					}catch( Throwable e ){
-						
-						Debug.printStackTrace(e);
-					}
-				}
+
+                for (Object listener : listeners) {
+
+                    try {
+                        ((DHTSpeedTesterContactListener) listener).contactDied(this);
+
+                    } catch (Throwable e) {
+
+                        Debug.printStackTrace(e);
+                    }
+                }
 			}
 		}
 		

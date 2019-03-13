@@ -22,16 +22,16 @@ package org.gudy.azureus2.plugins.ui.tables;
  * This interface provides access to an Azureus table column.
  */
 public interface TableColumn {
-	public static final int MENU_STYLE_HEADER = 1;
+	int MENU_STYLE_HEADER = 1;
 
-	public static final int MENU_STYLE_COLUMN_DATA = 2;
+	int MENU_STYLE_COLUMN_DATA = 2;
 
   /** The cells in this column display textual information. */
-  public static final int TYPE_TEXT = 1;
+  int TYPE_TEXT = 1;
   /** The graphic type, providing access to graphic specific functions in 
    * {@link TableCell}.
    */
-  public static final int TYPE_GRAPHIC = 2;
+  int TYPE_GRAPHIC = 2;
   /**
    * The cells in this column display only textual information, and does not
    * set any other visible properties of cell (background, foreground, icon, 
@@ -39,47 +39,47 @@ public interface TableColumn {
    * 
    * Using this type allows azureus to call refresh less, and saves on CPU.
    */
-  public static final int TYPE_TEXT_ONLY = 3;
+  int TYPE_TEXT_ONLY = 3;
   
   /** leading alignment */
-  public static final int ALIGN_LEAD = 1;
+  int ALIGN_LEAD = 1;
   /** trailing alignment */
-  public static final int ALIGN_TRAIL = 2;
+  int ALIGN_TRAIL = 2;
   /** center alignment */
-  public static final int ALIGN_CENTER = 3;
+  int ALIGN_CENTER = 3;
   /** top align */
-  public static final int ALIGN_TOP = 4;
+  int ALIGN_TOP = 4;
   /** bottom align */
-  public static final int ALIGN_BOTTOM = 8;
+  int ALIGN_BOTTOM = 8;
 
   /** For {@link #setPosition(int)}. Make column invisible initially. */
-  public static final int POSITION_INVISIBLE = -1;
+  int POSITION_INVISIBLE = -1;
   /** For {@link #setPosition(int)}. Make column the last column initially. */
-  public static final int POSITION_LAST = -2;
+  int POSITION_LAST = -2;
   
   /** Trigger refresh listeners every time a graphic cycle occurs (set by user) */
-  public static final int INTERVAL_GRAPHIC = -1;
+  int INTERVAL_GRAPHIC = -1;
   /** Trigger refresh listeners every time a GUI update cycle occurs (set by user) */
-  public static final int INTERVAL_LIVE = -2;
+  int INTERVAL_LIVE = -2;
   /** Trigger refresh only when the cell/row becomes invalid */
-  public static final int INTERVAL_INVALID_ONLY = -3;
+  int INTERVAL_INVALID_ONLY = -3;
   
-  public static final String CAT_ESSENTIAL = "essential";
-  public static final String CAT_SHARING = "sharing";
-  public static final String CAT_TRACKER = "tracker";
-  public static final String CAT_TIME = "time";
-  public static final String CAT_SWARM = "swarm";
-  public static final String CAT_CONTENT = "content";
-  public static final String CAT_PEER_IDENTIFICATION = "identification";
-  public static final String CAT_PROTOCOL = "protocol";
-  public static final String CAT_BYTES = "bytes";
-  public static final String CAT_SETTINGS = "settings";
-  public static final String CAT_CONNECTION = "connection";
-  public static final String CAT_PROGRESS = "progress";
+  String CAT_ESSENTIAL = "essential";
+  String CAT_SHARING = "sharing";
+  String CAT_TRACKER = "tracker";
+  String CAT_TIME = "time";
+  String CAT_SWARM = "swarm";
+  String CAT_CONTENT = "content";
+  String CAT_PEER_IDENTIFICATION = "identification";
+  String CAT_PROTOCOL = "protocol";
+  String CAT_BYTES = "bytes";
+  String CAT_SETTINGS = "settings";
+  String CAT_CONNECTION = "connection";
+  String CAT_PROGRESS = "progress";
 
   	// user-data properties
   
-  public static final String UD_FORCE_VISIBLE = "ud_fv";	// Long
+  String UD_FORCE_VISIBLE = "ud_fv";	// Long
   
   /** Initialize a group of variables all at once.  Saves on individual setXxx.
    *
@@ -90,8 +90,8 @@ public interface TableColumn {
    * 
    * @since 2.1.0.0
    */
-  public void initialize(int iAlignment, int iPosition, 
-                         int iWidth, int iInterval);
+  void initialize(int iAlignment, int iPosition,
+                  int iWidth, int iInterval);
 
 
   /** Initialize a group of variables all at once.  Saves on individual setXxx.
@@ -102,7 +102,7 @@ public interface TableColumn {
    * 
    * @since 2.1.0.0
    */
-  public void initialize(int iAlignment, int iPosition, int iWidth);
+  void initialize(int iAlignment, int iPosition, int iWidth);
   
   /**
    * The logical name of the column. This was set via
@@ -112,17 +112,17 @@ public interface TableColumn {
    * 
    * @since 2.1.0.0
    */
-  public String getName();
+  String getName();
 
   /**
    * Returns the user's column name override if it exists
    * @return
    * @since 5.0.0.1
    */
+
+  String getNameOverride();
   
-  public String getNameOverride();
-  
-  public void setNameOverride( String name );
+  void setNameOverride(String name);
   
   /** Which table the column will be visible in.  This was set via
    * {@link TableManager#createColumn} and can not be changed.
@@ -131,7 +131,7 @@ public interface TableColumn {
    * 
    * @since 2.1.0.0
    */
-  public String getTableID();
+  String getTableID();
 
   /** The type of the contained data.<br>
    * Current supported types are long, string, and graphic.
@@ -144,7 +144,7 @@ public interface TableColumn {
    * 
    * @since 2.1.0.0
    */
-  public void setType(int type);
+  void setType(int type);
 
   /** Returns the type of the contained data.
    *
@@ -152,7 +152,7 @@ public interface TableColumn {
    * 
    * @since 2.1.0.0
    */
-  public int getType();
+  int getType();
   
   /** The column size.
    * <P>
@@ -162,9 +162,9 @@ public interface TableColumn {
    * 
    * @since 2.1.0.0
    */
-  public void setWidth(int unadjustedWidth);
+  void setWidth(int unadjustedWidth);
 
-  public void setWidthPX(int realPixelWidth);
+  void setWidthPX(int realPixelWidth);
 
   /** Returns the column's size
    *
@@ -172,7 +172,7 @@ public interface TableColumn {
    * 
    * @since 2.1.0.0
    */
-  public int getWidth();
+  int getWidth();
   
   /** Location to put the column.  When set before being added to the UI
    * (see {@link TableManager#addColumn}), the supplied value will be used
@@ -187,7 +187,7 @@ public interface TableColumn {
    * 
    * @since 2.1.0.0
    */
-  public void setPosition(int position);
+  void setPosition(int position);
   
   
   /** Returns the position of the column
@@ -196,7 +196,7 @@ public interface TableColumn {
    * 
    * @since 2.1.0.0
    */
-  public int getPosition();
+  int getPosition();
 
   /** Orientation of the columns text and header.
    * <P>
@@ -206,7 +206,7 @@ public interface TableColumn {
    * 
    * @since 2.1.0.0
    */
-  public void setAlignment(int alignment);
+  void setAlignment(int alignment);
 
   /** Returns the alignment of the column 
    *
@@ -214,7 +214,7 @@ public interface TableColumn {
    * 
    * @since 2.1.0.0
    */
-  public int getAlignment();
+  int getAlignment();
   
   /** Set how often the cell receives a refresh() trigger
    *
@@ -225,7 +225,7 @@ public interface TableColumn {
    * 
    * @since 2.1.0.0
    */
-  public void setRefreshInterval(int interval);
+  void setRefreshInterval(int interval);
 
   /** Returns the refresh interval of the column.
    * The default is INTERVAL_INVALID_ONLY
@@ -235,7 +235,7 @@ public interface TableColumn {
    * 
    * @since 2.1.0.0
    */
-  public int getRefreshInterval();
+  int getRefreshInterval();
   
   /**
    * Sets the minimum width that the column can be before other columns
@@ -250,7 +250,7 @@ public interface TableColumn {
    * 
    * @since 3.0.0.7
    */
-  public void setMinWidth(int minwidth);
+  void setMinWidth(int minwidth);
 
   /**
    * Gets the minimum width that the column can be before other columns
@@ -264,7 +264,7 @@ public interface TableColumn {
    * 
    * @since 3.0.0.7
    */
-  public int getMinWidth();
+  int getMinWidth();
 
   /**
    * Sets the maximum width that the column can be
@@ -275,7 +275,7 @@ public interface TableColumn {
    *
    * @since 3.0.0.7
    */
-  public void setMaxWidth(int maxwidth);
+  void setMaxWidth(int maxwidth);
   
   /**
    * Gets the maximum width the column can be
@@ -286,7 +286,7 @@ public interface TableColumn {
    *
    * @since 3.0.0.7
    */
-  public int getMaxWidth();
+  int getMaxWidth();
   
   /**
    * Sets the minimum and maximum widths in one call
@@ -298,7 +298,7 @@ public interface TableColumn {
    *
    * @since 3.0.0.7
    */
-  public void setWidthLimits(int min, int max); 
+  void setWidthLimits(int min, int max);
   
   /**
    * Sets whether the max width is automatically set.  Depending on the UI,
@@ -311,7 +311,7 @@ public interface TableColumn {
    *
    * @since 3.0.0.7
    */
-  public void setMaxWidthAuto(boolean automaxwidth);
+  void setMaxWidthAuto(boolean automaxwidth);
   
   /**
    * Retrieve whether the max width is automatically being set.
@@ -320,7 +320,7 @@ public interface TableColumn {
    *
    * @since 3.0.0.7
    */
-  public boolean isMaxWidthAuto();
+  boolean isMaxWidthAuto();
   
   /**
    * Sets whether the min width of the column is automatically set.  Depending
@@ -331,7 +331,7 @@ public interface TableColumn {
    *
    * @since 3.0.0.7
    */
-  public void setMinWidthAuto(boolean autowidth);
+  void setMinWidthAuto(boolean autowidth);
   
   /**
    * Retrieve whether the min width is automatically being set
@@ -340,7 +340,7 @@ public interface TableColumn {
    *
    * @since 3.0.0.7
    */
-  public boolean isMinWidthAuto();
+  boolean isMinWidthAuto();
   
   /**
    * Sets the preferred width of the column.  When the UI is in auto-expand
@@ -351,7 +351,7 @@ public interface TableColumn {
    *
    * @since 3.0.0.7
    */
-  public void setPreferredWidth(int width);
+  void setPreferredWidth(int width);
   
   /**
    * Gets the preferred width of the coloumn.
@@ -360,7 +360,7 @@ public interface TableColumn {
    *
    * @since 3.0.0.7
    */
-  public int getPreferredWidth();
+  int getPreferredWidth();
   
   /**
    * Retrieves whether the preferred width is automatically calculated.
@@ -369,7 +369,7 @@ public interface TableColumn {
    *
    * @since 3.0.0.7
    */
-  public boolean isPreferredWidthAuto();
+  boolean isPreferredWidthAuto();
   
   /**
    * Sets whether the preferred with is automatically calculated.  An
@@ -380,7 +380,7 @@ public interface TableColumn {
    *
    * @since 3.0.0.7
    */
-  public void setPreferredWidthAuto(boolean auto);
+  void setPreferredWidthAuto(boolean auto);
 
   /**
    * Gets the visibility of the column 
@@ -391,15 +391,15 @@ public interface TableColumn {
    *
    * @since 3.0.0.7
    */
-  public boolean isVisible();
+  boolean isVisible();
   
   /**
    * Associates custom data with the column, usually meant for column-specific settings and stores it across sessions
    * @param key the key under which the value will be stored and serialized
    * @param value should be BEncodable, otherwise it won't be serialized
    */
-  public void setUserData(String key, Object value);
-  public void removeUserData(String key);
+  void setUserData(String key, Object value);
+  void removeUserData(String key);
   
   
   	/**
@@ -407,23 +407,23 @@ public interface TableColumn {
 	 * configuration such as user data or GUI-adjustable properties have been
 	 * loaded
 	 */
-	public void postConfigLoad();
+    void postConfigLoad();
 
 	/**
 	 * implement this method if you want to be notified when the column
 	 * configuration is about to be serialized
 	 */
-	public void preConfigSave();
+    void preConfigSave();
   
   /**
    * 
    * @param key
    * @return data set via setUserData()
    */
-  public Object getUserData(String key);
+  Object getUserData(String key);
   
 
-  public String getUserDataString(String key);
+  String getUserDataString(String key);
 
   /**
    * Sets the visibility of the column
@@ -432,7 +432,7 @@ public interface TableColumn {
    *
    * @since 3.0.0.7
    */
-  public void setVisible(boolean visible);
+  void setVisible(boolean visible);
 
   /** Adds a listener that triggers when a TableCell that belongs to this column
    * needs refreshing.
@@ -441,14 +441,14 @@ public interface TableColumn {
    * 
    * @since 2.1.0.0
    */
-  public void addCellRefreshListener(TableCellRefreshListener listener);
+  void addCellRefreshListener(TableCellRefreshListener listener);
   /** Removed a previously added TableCellRefreshListener
    *
    * @param listener Previously added listener
    * 
    * @since 2.1.0.0
    */
-  public void removeCellRefreshListener(TableCellRefreshListener listener);
+  void removeCellRefreshListener(TableCellRefreshListener listener);
 
 
   /** Adds a listener that triggers when a TableCell that belongs to this column
@@ -458,8 +458,8 @@ public interface TableColumn {
    * 
    * @since 2.1.0.0
    */
-  public void addCellAddedListener(TableCellAddedListener listener);
-  public void removeCellAddedListener(TableCellAddedListener listener);
+  void addCellAddedListener(TableCellAddedListener listener);
+  void removeCellAddedListener(TableCellAddedListener listener);
 
   /** Adds a listener that triggers when a TableCell that belongs to this column
    * is being disposed.
@@ -468,8 +468,8 @@ public interface TableColumn {
    * 
    * @since 2.1.0.0
    */
-  public void addCellDisposeListener(TableCellDisposeListener listener);
-  public void removeCellDisposeListener(TableCellDisposeListener listener);
+  void addCellDisposeListener(TableCellDisposeListener listener);
+  void removeCellDisposeListener(TableCellDisposeListener listener);
 
   /** Adds a listener that triggers when a TableCell that belongs to this column
    * has a tooltip action
@@ -478,8 +478,8 @@ public interface TableColumn {
    * 
    * @since 2.1.0.2
    */
-  public void addCellToolTipListener(TableCellToolTipListener listener);
-  public void removeCellToolTipListener(TableCellToolTipListener listener);
+  void addCellToolTipListener(TableCellToolTipListener listener);
+  void removeCellToolTipListener(TableCellToolTipListener listener);
 
   /**
    * Adds a listener that triggers when a TableCell that belongs to this column
@@ -489,13 +489,13 @@ public interface TableColumn {
    * 
    * @since 2.3.0.7
    */
-  public void addCellMouseListener(TableCellMouseListener listener);
+  void addCellMouseListener(TableCellMouseListener listener);
   /** Remove a previously added TableCellMouseListener
   *
   * @param listener Previously added listener
    * @since 2.3.0.7
   */
-  public void removeCellMouseListener(TableCellMouseListener listener);
+  void removeCellMouseListener(TableCellMouseListener listener);
 
   /**
    * A listener is added for every type of cell listener the supplied object 
@@ -505,7 +505,7 @@ public interface TableColumn {
    * 
    * @since 2.4.0.0
    */
-  public void addListeners(Object listenerObject);
+  void addListeners(Object listenerObject);
 
   
   /** Invalidate all cells in this column.  The cells will be forced to
@@ -513,14 +513,14 @@ public interface TableColumn {
    * 
    * @since 2.1.0.0
    */
-  public void invalidateCells();
+  void invalidateCells();
   
   /**
    * Invalidates any cells which are linked to the given data source object.
    * 
    * @since 3.0.1.5
    */
-  public void invalidateCell(Object data_source);
+  void invalidateCell(Object data_source);
 
 
   /** Adds a Context Menu item to the column
@@ -533,8 +533,8 @@ public interface TableColumn {
 	 * 
 	 * @since 4.2.0.5
 	 */
-	public TableContextMenuItem addContextMenuItem(String resourceKey,
-			int menuStyle);
+  TableContextMenuItem addContextMenuItem(String resourceKey,
+                                          int menuStyle);
 
 	/** Adds a Context Menu item to data section of the column
 	 *
@@ -545,7 +545,7 @@ public interface TableColumn {
 	 * 
 	 * @since 2.4.0.0
 	 */
-	public TableContextMenuItem addContextMenuItem(String resourceKey);
+    TableContextMenuItem addContextMenuItem(String resourceKey);
 
 
 	/**
@@ -573,8 +573,8 @@ public interface TableColumn {
 	/**
 	 * @since 4005
 	 */
-	
-	public void
+
+    void
 	remove();
 
 
@@ -605,20 +605,20 @@ public interface TableColumn {
 	 * 
 	 * @since 4.4.0.7
 	 */
-	public void setIconReference(String iconID, boolean showOnlyIcon);
+    void setIconReference(String iconID, boolean showOnlyIcon);
 	
 	/**
 	 * 
 	 * @since 4.4.0.7
 	 */
-	public String getIconReference();
+    String getIconReference();
 	
 	/**
 	 * *since 4501
 	 * @param mode from Parameter. constants
 	 */
-	
-	public void
+
+    void
 	setMinimumRequiredUserMode(
-		int		mode );
+            int mode);
 }

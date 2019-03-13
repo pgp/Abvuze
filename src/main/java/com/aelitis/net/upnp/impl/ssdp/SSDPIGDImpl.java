@@ -311,16 +311,16 @@ SSDPIGDImpl
 		String				usn,
 		URL					location )
 	{
-		for (int i=0;i<listeners.size();i++){
-			
-			try{
-				((SSDPIGDListener)listeners.get(i)).rootDiscovered( network_interface, local_address, usn, location );
-				
-			}catch( Throwable e ){
-			
-				Debug.printStackTrace(e);
-			}
-		}
+        for (Object listener : listeners) {
+
+            try {
+                ((SSDPIGDListener) listener).rootDiscovered(network_interface, local_address, usn, location);
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 
 	protected void
@@ -328,16 +328,16 @@ SSDPIGDImpl
 		String	usn,
 		URL		location )
 	{
-		for (int i=0;i<listeners.size();i++){
-			
-			try{
-				((SSDPIGDListener)listeners.get(i)).rootAlive( usn, location );
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace(e);
-			}
-		}
+        for (Object listener : listeners) {
+
+            try {
+                ((SSDPIGDListener) listener).rootAlive(usn, location);
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 	
 	protected void
@@ -345,32 +345,32 @@ SSDPIGDImpl
 		InetAddress	local_address,
 		String		usn )
 	{
-		for (int i=0;i<listeners.size();i++){
-		
-			try{
-				((SSDPIGDListener)listeners.get(i)).rootLost( local_address, usn );
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace(e);
-			}
-		}
+        for (Object listener : listeners) {
+
+            try {
+                ((SSDPIGDListener) listener).rootLost(local_address, usn);
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 	
 	public void
 	interfaceChanged(
 		NetworkInterface	network_interface )
 	{
-		for (int i=0;i<listeners.size();i++){
-			
-			try{
-				((SSDPIGDListener)listeners.get(i)).interfaceChanged( network_interface );
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace(e);
-			}
-		}
+        for (Object listener : listeners) {
+
+            try {
+                ((SSDPIGDListener) listener).interfaceChanged(network_interface);
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 	
 	public void

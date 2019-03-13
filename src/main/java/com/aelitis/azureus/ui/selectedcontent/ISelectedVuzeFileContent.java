@@ -26,6 +26,6 @@ public interface
 ISelectedVuzeFileContent 
 	extends ISelectedContent
 {
-	public VuzeFile
+	VuzeFile
 	getVuzeFile();
 }

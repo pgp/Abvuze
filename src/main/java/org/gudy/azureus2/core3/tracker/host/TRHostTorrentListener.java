@@ -30,15 +30,15 @@ package org.gudy.azureus2.core3.tracker.host;
 public interface 
 TRHostTorrentListener
 {
-	public void
+	void
 	preProcess(
-		TRHostTorrentRequest	request )
+            TRHostTorrentRequest request)
 	
 		throws TRHostException;
 	
-	public void
+	void
 	postProcess(
-		TRHostTorrentRequest	request )
+            TRHostTorrentRequest request)
 	
 		throws TRHostException;
 }

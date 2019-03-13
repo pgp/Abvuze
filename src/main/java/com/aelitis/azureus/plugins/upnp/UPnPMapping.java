@@ -139,19 +139,19 @@ UPnPMapping
 	public void
 	destroy()
 	{
-		for (int i=0;i<listeners.size();i++){
-			
-			((UPnPMappingListener)listeners.get(i)).mappingDestroyed( this );
-		}
+        for (Object listener : listeners) {
+
+            ((UPnPMappingListener) listener).mappingDestroyed(this);
+        }
 	}
 	
 	protected void
 	changed()
 	{
-		for (int i=0;i<listeners.size();i++){
-			
-			((UPnPMappingListener)listeners.get(i)).mappingChanged( this );
-		}
+        for (Object listener : listeners) {
+
+            ((UPnPMappingListener) listener).mappingChanged(this);
+        }
 	}
 	
 	public void

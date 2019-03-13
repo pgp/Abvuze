@@ -29,6 +29,7 @@ import java.net.PasswordAuthentication;
 import java.net.Proxy;
 import java.net.Socket;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -142,7 +143,7 @@ ExternalSeedHTTPDownloaderRange
 			HttpURLConnection	connection;
 			int					response;
 			
-			Set<String>	redirect_urls = new HashSet<String>();
+			Set<String>	redirect_urls = new HashSet<>();
 							
 redirect_loop:
 			while( true ){
@@ -610,163 +611,158 @@ redirect_loop:
 			
 			OutputStream	os = socket.getOutputStream();
 			
-			os.write( output_header.getBytes( "ISO-8859-1" ));
+			os.write( output_header.getBytes(StandardCharsets.ISO_8859_1));
 			
 			os.flush();
-			
-			InputStream is = socket.getInputStream();
-			
-			try{
-				String	input_header = "";
-				
-				while( true ){
-					
-					byte[]	buffer = new byte[1];
-					
-					int	len = is.read( buffer );
-					
-					if ( len < 0 ){
-						
-						throw( new IOException( "input too short reading header" ));
-					}
-					
-					input_header	+= (char)buffer[0];
-					
-					if ( input_header.endsWith(NL+NL)){
-					
-						break;
-					}
-				}
-								
-				// HTTP/1.1 403 Forbidden
-				
-				int	line_end = input_header.indexOf(NL);
-				
-				if ( line_end == -1 ){
-					
-					throw( new IOException( "header too short" ));
-				}
-				
-				String	first_line = input_header.substring(0,line_end);
-				
-				StringTokenizer	tok = new StringTokenizer(first_line, " " );
-				
-				tok.nextToken();
-				
-				int	response = Integer.parseInt( tok.nextToken());
-				
-				last_response	= response;
-				
-				last_response_retry_after_secs	= -1;
-				
-				String	response_str	= tok.nextToken();				
-				
-				if ( 	response == HttpURLConnection.HTTP_ACCEPTED || 
-						response == HttpURLConnection.HTTP_OK ||
-						response == HttpURLConnection.HTTP_PARTIAL ){
-					
-					byte[]	buffer 		= null;
-					int		buffer_pos	= 0;
-					int		buffer_len	= 0;
-					
-					int	pos = 0;
-					
-					while( pos < length ){
-						
-						if ( buffer == null ){
-							
-							buffer 		= listener.getBuffer();							
-							buffer_pos	= listener.getBufferPosition();
-							buffer_len	= listener.getBufferLength();
-						}
-						
-						int	to_read = buffer_len - buffer_pos;
-						
-						int	permitted = listener.getPermittedBytes();
-						
-						if ( permitted < to_read ){
-							
-							to_read	= permitted;
-						}
-						
-						int	len = is.read( buffer, buffer_pos, to_read );
-						
-						if ( len < 0 ){
-							
-							break;
-						}
-						
-						listener.reportBytesRead( len );
-						
-						pos	+= len;
-						
-						buffer_pos	+= len;
-						
-						if ( buffer_pos == buffer_len ){
-							
-							listener.done();
-							
-							buffer		= null;
-							buffer_pos	= 0;
-						}
-					}
-					
-					if ( pos != length ){
-						
-						String	log_str;
-						
-						if ( buffer == null ){
-							
-							log_str = "No buffer assigned";
-							
-						}else{
-							
-							log_str =  new String( buffer, 0, buffer_pos>64?64:buffer_pos );
-						}
-						
-						throw( new ExternalSeedException("Connection failed: data too short - " + length + "/" + pos + " [last=" + log_str + "]" ));
-					}
-					
-					// System.out.println( "download length: " + pos );
-										
-				}else if ( 	response == 503 ){
-					
-						// webseed support for temp unavail - read the data
-					
-					String	data_str = "";
-					
-					while( true ){
-						
-						byte[]	buffer = new byte[1];
-						
-						int	len = is.read( buffer );
-						
-						if ( len < 0 ){
-							
-							break;
-						}
-						
-						data_str += (char)buffer[0];
-					}
-					
-					last_response_retry_after_secs = Integer.parseInt( data_str );
-				
-						// this gets trapped below and turned into an appropriate ExternalSeedException
-					
-					throw( new IOException( "Server overloaded" ));
-					
-				}else{
-					
-					ExternalSeedException	error = new ExternalSeedException("Connection failed: " + response_str );
-					
-					error.setPermanentFailure( true );
-					
-					throw( error );
-				}
-			}finally{
-				
-				is.close();
-			}
+
+            try (InputStream is = socket.getInputStream()) {
+                String input_header = "";
+
+                while (true) {
+
+                    byte[] buffer = new byte[1];
+
+                    int len = is.read(buffer);
+
+                    if (len < 0) {
+
+                        throw (new IOException("input too short reading header"));
+                    }
+
+                    input_header += (char) buffer[0];
+
+                    if (input_header.endsWith(NL + NL)) {
+
+                        break;
+                    }
+                }
+
+                // HTTP/1.1 403 Forbidden
+
+                int line_end = input_header.indexOf(NL);
+
+                if (line_end == -1) {
+
+                    throw (new IOException("header too short"));
+                }
+
+                String first_line = input_header.substring(0, line_end);
+
+                StringTokenizer tok = new StringTokenizer(first_line, " ");
+
+                tok.nextToken();
+
+                int response = Integer.parseInt(tok.nextToken());
+
+                last_response = response;
+
+                last_response_retry_after_secs = -1;
+
+                String response_str = tok.nextToken();
+
+                if (response == HttpURLConnection.HTTP_ACCEPTED ||
+                        response == HttpURLConnection.HTTP_OK ||
+                        response == HttpURLConnection.HTTP_PARTIAL) {
+
+                    byte[] buffer = null;
+                    int buffer_pos = 0;
+                    int buffer_len = 0;
+
+                    int pos = 0;
+
+                    while (pos < length) {
+
+                        if (buffer == null) {
+
+                            buffer = listener.getBuffer();
+                            buffer_pos = listener.getBufferPosition();
+                            buffer_len = listener.getBufferLength();
+                        }
+
+                        int to_read = buffer_len - buffer_pos;
+
+                        int permitted = listener.getPermittedBytes();
+
+                        if (permitted < to_read) {
+
+                            to_read = permitted;
+                        }
+
+                        int len = is.read(buffer, buffer_pos, to_read);
+
+                        if (len < 0) {
+
+                            break;
+                        }
+
+                        listener.reportBytesRead(len);
+
+                        pos += len;
+
+                        buffer_pos += len;
+
+                        if (buffer_pos == buffer_len) {
+
+                            listener.done();
+
+                            buffer = null;
+                            buffer_pos = 0;
+                        }
+                    }
+
+                    if (pos != length) {
+
+                        String log_str;
+
+                        if (buffer == null) {
+
+                            log_str = "No buffer assigned";
+
+                        } else {
+
+                            log_str = new String(buffer, 0, buffer_pos > 64 ? 64 : buffer_pos);
+                        }
+
+                        throw (new ExternalSeedException("Connection failed: data too short - " + length + "/" + pos + " [last=" + log_str + "]"));
+                    }
+
+                    // System.out.println( "download length: " + pos );
+
+                } else if (response == 503) {
+
+                    // webseed support for temp unavail - read the data
+
+                    String data_str = "";
+
+                    while (true) {
+
+                        byte[] buffer = new byte[1];
+
+                        int len = is.read(buffer);
+
+                        if (len < 0) {
+
+                            break;
+                        }
+
+                        data_str += (char) buffer[0];
+                    }
+
+                    last_response_retry_after_secs = Integer.parseInt(data_str);
+
+                    // this gets trapped below and turned into an appropriate ExternalSeedException
+
+                    throw (new IOException("Server overloaded"));
+
+                } else {
+
+                    ExternalSeedException error = new ExternalSeedException("Connection failed: " + response_str);
+
+                    error.setPermanentFailure(true);
+
+                    throw (error);
+                }
+            }
 			
 		}catch( IOException e ){
 			

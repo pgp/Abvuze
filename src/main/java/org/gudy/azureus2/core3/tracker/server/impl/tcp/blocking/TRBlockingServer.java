@@ -118,8 +118,8 @@ TRBlockingServer
 							
 							ssl_server_socket = (SSLServerSocket)factory.createServerSocket(  getPort(), 128, bind_ip );
 						}
-		
-						String cipherSuites[] = ssl_server_socket.getSupportedCipherSuites();
+
+                        String[] cipherSuites = ssl_server_socket.getSupportedCipherSuites();
 		  
 						ssl_server_socket.setEnabledCipherSuites(cipherSuites);
 		 

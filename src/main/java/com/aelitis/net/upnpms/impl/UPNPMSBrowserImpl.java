@@ -96,7 +96,7 @@ UPNPMSBrowserImpl
 		throws UPnPMSException 
 	{
 		try{
-			List<SimpleXMLParserDocumentNode>	results = new ArrayList<SimpleXMLParserDocumentNode>();
+			List<SimpleXMLParserDocumentNode>	results = new ArrayList<>();
 			
 			int	starting_index = 0;
 			
@@ -125,7 +125,7 @@ UPNPMSBrowserImpl
 				
 				UPnPMSException last_error = null;
 				
-				for ( URL endpoint: new ArrayList<URL>( endpoints )){
+				for ( URL endpoint: new ArrayList<>(endpoints)){
 				
 					try{
 						doc = getXML( endpoint, soap_action, request );

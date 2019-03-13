@@ -49,7 +49,7 @@ public class PlatformVuzeActivitiesMessenger
 		PlatformMessage message = new PlatformMessage("AZMSG",
 				reason.equals("shown") ? "vznews" : LISTENER_ID, OP_GET, new Object[] {
 					"ago-ms",
-					new Long(agoMS),
+                agoMS,
 					"reason",
 					reason,
 				}, maxDelayMS);
@@ -68,18 +68,18 @@ public class PlatformVuzeActivitiesMessenger
 					if (entriesList != null && entriesList.size() > 0) {
 						entries = new VuzeActivitiesEntry[entriesList.size()];
 						int i = 0;
-						for (Iterator iter = entriesList.iterator(); iter.hasNext();) {
-							Map platformEntry = (Map) iter.next();
-							if (platformEntry == null) {
-								continue;
-							}
-							
-							entries[i] = VuzeActivitiesManager.createEntryFromMap(
-									platformEntry, false);
-							if (entries[i] != null) {
-								i++;
-							}
-						}
+                        for (Object o : entriesList) {
+                            Map platformEntry = (Map) o;
+                            if (platformEntry == null) {
+                                continue;
+                            }
+
+                            entries[i] = VuzeActivitiesManager.createEntryFromMap(
+                                    platformEntry, false);
+                            if (entries[i] != null) {
+                                i++;
+                            }
+                        }
 					}
 					long refreshInMS = MapUtils.getMapLong(reply, "refresh-in-ms",
 							DEFAULT_RETRY_MS);
@@ -91,8 +91,8 @@ public class PlatformVuzeActivitiesMessenger
 		PlatformMessenger.queueMessage(message, listener);
 	}
 
-	public static interface GetEntriesReplyListener
+	public interface GetEntriesReplyListener
 	{
-		public void gotVuzeNewsEntries(VuzeActivitiesEntry[] entries, long refreshInMS);
+		void gotVuzeNewsEntries(VuzeActivitiesEntry[] entries, long refreshInMS);
 	}
 }

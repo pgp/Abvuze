@@ -63,7 +63,7 @@ TorrentManagerImpl
 	private static TorrentAttribute comment_attribute = new TorrentAttributeUserCommentImpl();
 	private static TorrentAttribute relative_save_path_attribute = new TorrentAttributeRelativeSavePathImpl();
 
-	private static Map<String,TorrentAttribute>	attribute_map = new HashMap<String,TorrentAttribute>();
+	private static Map<String,TorrentAttribute>	attribute_map = new HashMap<>();
 
 	static{
 		attribute_map.put( TorrentAttribute.TA_CATEGORY, 				category_attribute );
@@ -97,7 +97,7 @@ TorrentManagerImpl
 		}
 	}
 
-	protected static CopyOnWriteList<TorrentManagerListener>		listeners = new CopyOnWriteList<TorrentManagerListener>();
+	protected static CopyOnWriteList<TorrentManagerListener>		listeners = new CopyOnWriteList<>();
 
 	protected PluginInterface	plugin_interface;
 
@@ -262,7 +262,7 @@ TorrentManagerImpl
 			return(
 				new TorrentCreator()
 				{
-					private CopyOnWriteList<TorrentCreatorListener>	listeners = new CopyOnWriteList<TorrentCreatorListener>();
+					private CopyOnWriteList<TorrentCreatorListener>	listeners = new CopyOnWriteList<>();
 
 					public void
 					start()
@@ -274,20 +274,20 @@ TorrentManagerImpl
 								reportProgress(
 									int		percent_complete )
 								{
-									for (Iterator<TorrentCreatorListener> it=listeners.iterator();it.hasNext();){
+                                    for (TorrentCreatorListener listener : listeners) {
 
-										it.next().reportPercentageDone( percent_complete );
-									}
+                                        listener.reportPercentageDone(percent_complete);
+                                    }
 								}
 
 								public void
 								reportCurrentTask(
 									String	task_description )
 								{
-									for (Iterator<TorrentCreatorListener> it=listeners.iterator();it.hasNext();){
+                                    for (TorrentCreatorListener listener : listeners) {
 
-										it.next().reportActivity( task_description );
-									}
+                                        listener.reportActivity(task_description);
+                                    }
 								}
 							});
 
@@ -301,17 +301,17 @@ TorrentManagerImpl
 
 									Torrent	torrent = new TorrentImpl( plugin_interface, t );
 
-									for (Iterator<TorrentCreatorListener> it=listeners.iterator();it.hasNext();){
+                                    for (TorrentCreatorListener listener : listeners) {
 
-										it.next().complete( torrent );
-									}
+                                        listener.complete(torrent);
+                                    }
 
 								}catch( TOTorrentException e ){
 
-									for (Iterator<TorrentCreatorListener> it=listeners.iterator();it.hasNext();){
+                                    for (TorrentCreatorListener listener : listeners) {
 
-										it.next().failed( new TorrentException( e ));
-									}
+                                        listener.failed(new TorrentException(e));
+                                    }
 
 								}
 							}
@@ -372,7 +372,7 @@ TorrentManagerImpl
 		try{
 			class_mon.enter();
 
-			TorrentAttribute	res = (TorrentAttribute)attribute_map.get(name);
+			TorrentAttribute	res = attribute_map.get(name);
 
 			if ( res == null && name.startsWith( "Plugin." )){
 
@@ -401,7 +401,7 @@ TorrentManagerImpl
 		try{
 			class_mon.enter();
 
-			TorrentAttribute	res = (TorrentAttribute)attribute_map.get(name);
+			TorrentAttribute	res = attribute_map.get(name);
 
 			if ( res != null ){
 
@@ -505,24 +505,21 @@ TorrentManagerImpl
 	reportCurrentTask(
 		final String	task_description )
 	{
-		for (Iterator<TorrentManagerListener> it = listeners.iterator();it.hasNext();){
+        for (TorrentManagerListener listener : listeners) {
 
-			it.next().event(
-					new TorrentManagerEvent()
-					{
-						public int
-						getType()
-						{
-							return( ET_CREATION_STATUS );
-						}
-						
-						public Object
-						getData()
-						{
-							return( task_description );
-						}
-					});
-		}
+            listener.event(
+                    new TorrentManagerEvent() {
+                        public int
+                        getType() {
+                            return (ET_CREATION_STATUS);
+                        }
+
+                        public Object
+                        getData() {
+                            return (task_description);
+                        }
+                    });
+        }
 	}
 
 	protected void
@@ -574,7 +571,7 @@ TorrentManagerImpl
 		}
 	}
 
-	private Map<TorrentOpenOptions,TorrentOptionsImpl>	too_state = new HashMap<TorrentOpenOptions, TorrentOptionsImpl>();
+	private Map<TorrentOpenOptions,TorrentOptionsImpl>	too_state = new HashMap<>();
 	
 	private void
 	fireEvent(
@@ -639,7 +636,7 @@ TorrentManagerImpl
 		public List<Tag>
 		getTags()
 		{
-			List<Tag> tags = new ArrayList<Tag>( options.getInitialTags());
+			List<Tag> tags = new ArrayList<>(options.getInitialTags());
 			
 			return( tags );
 		}
@@ -668,7 +665,7 @@ TorrentManagerImpl
 			
 			if ( tags.contains( tag )){
 			
-				tags.remove((com.aelitis.azureus.core.tag.Tag)tag );
+				tags.remove(tag);
 				
 				options.setInitialTags(tags);
 				

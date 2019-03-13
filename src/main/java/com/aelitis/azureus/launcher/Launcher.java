@@ -50,9 +50,9 @@ public class Launcher {
 		ClassLoader primaryloader = PrimaryClassloader.getBootstrappedLoader();
 		try
 		{
-			Method mainWrapper = primaryloader.loadClass(MainExecutor.class.getName()).getDeclaredMethod("load", new Class[] {ClassLoader.class,String.class,String[].class});
+			Method mainWrapper = primaryloader.loadClass(MainExecutor.class.getName()).getDeclaredMethod("load", ClassLoader.class,String.class,String[].class);
 			mainWrapper.setAccessible(true);
-			mainWrapper.invoke(null, new Object[] {primaryloader,MainClass.getName(),args});
+			mainWrapper.invoke(null, primaryloader,MainClass.getName(),args);
 		} catch (Exception e)
 		{
 			System.err.println("Bootstrapping failed");

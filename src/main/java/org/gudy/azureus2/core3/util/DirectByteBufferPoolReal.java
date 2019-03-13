@@ -152,24 +152,24 @@ DirectByteBufferPoolReal
 	  	
 	    for (int p=START_POWER; p <= END_POWER; p++) {
 	    	
-	    	list.add( new Integer(BigInteger.valueOf(2).pow(p).intValue()));
+	    	list.add(BigInteger.valueOf(2).pow(p).intValue());
 	    }
-	    
-	    for (int i=0;i<EXTRA_BUCKETS.length;i++){
-	    	       
-	        list.add( new Integer(EXTRA_BUCKETS[i]));
-	    }
+
+        for (int extraBucket : EXTRA_BUCKETS) {
+
+            list.add(extraBucket);
+        }
 	    
 	    Integer[]	sizes = new Integer[ list.size() ];
 	    list.toArray( sizes );
 	    Arrays.sort( sizes);
-	    
-	    for (int i=0;i<sizes.length;i++){
-	    	
-	    	ArrayList bufferPool = new ArrayList();
-	    	
-	    	buffersMap.put(sizes[i], bufferPool);
-	    }
+
+        for (Integer size : sizes) {
+
+            ArrayList bufferPool = new ArrayList();
+
+            buffersMap.put(size, bufferPool);
+        }
 	    
 	    //initiate periodic timer to check free memory usage
 	    SimpleTimer.addPeriodicEvent(
@@ -275,63 +275,61 @@ DirectByteBufferPoolReal
 				
 			ByteBuffer	buff = null;
 			
-			Integer reqVal = new Integer(_length);
+			Integer reqVal = _length;
 	    
 				//loop through the buffer pools to find a buffer big enough
-	    
-			Iterator it = buffersMap.keySet().iterator();
-	    
-			while (it.hasNext()) {
-	    	
-				Integer keyVal = (Integer)it.next();
-	
-					//	check if the buffers in this pool are big enough
-	      
-				if ( reqVal.compareTo(keyVal) <= 0 ){
-	      	
-					ArrayList bufferPool = (ArrayList)buffersMap.get(keyVal);
-	        
-					while( true ){
-						
-						synchronized ( poolsLock ) { 
-		        
-							// make sure we don't remove a buffer when running compaction
-							// if there are no free buffers in the pool, create a new one.
-							// otherwise use one from the pool
-		        	
-							if ( bufferPool.isEmpty()){
-		          	
-								buff = allocateNewBuffer(keyVal.intValue());
-		            
-								if ( buff == null ){
-									
-									Debug.out( "allocateNewBuffer for " + _length + " returned null" );
-								}
-								
-								break;
-								
-							}else{
-		          	
-								synchronized ( bufferPool ) {
-		            	
-									buff = (ByteBuffer)bufferPool.remove(bufferPool.size() - 1);
-								}
-								
-								if ( buff == null ){
-									
-									Debug.out( "buffer pool for " + _length + " contained null entry" ); 
-									
-								}else{
-									
-									break;
-								}
-							}
-						}
-					}
-					
-					break;
-				}
-			}
+
+            for (Object o : buffersMap.keySet()) {
+
+                Integer keyVal = (Integer) o;
+
+                //	check if the buffers in this pool are big enough
+
+                if (reqVal.compareTo(keyVal) <= 0) {
+
+                    ArrayList bufferPool = (ArrayList) buffersMap.get(keyVal);
+
+                    while (true) {
+
+                        synchronized (poolsLock) {
+
+                            // make sure we don't remove a buffer when running compaction
+                            // if there are no free buffers in the pool, create a new one.
+                            // otherwise use one from the pool
+
+                            if (bufferPool.isEmpty()) {
+
+                                buff = allocateNewBuffer(keyVal);
+
+                                if (buff == null) {
+
+                                    Debug.out("allocateNewBuffer for " + _length + " returned null");
+                                }
+
+                                break;
+
+                            } else {
+
+                                synchronized (bufferPool) {
+
+                                    buff = (ByteBuffer) bufferPool.remove(bufferPool.size() - 1);
+                                }
+
+                                if (buff == null) {
+
+                                    Debug.out("buffer pool for " + _length + " contained null entry");
+
+                                } else {
+
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    break;
+                }
+            }
 		
 			if ( buff == null ){
 					
@@ -373,15 +371,15 @@ DirectByteBufferPoolReal
 					
 					int	trim = ((_length+trim_size-1)/trim_size)*trim_size;
 					
-					Long count = (Long)size_counts.get(new Integer(trim));
+					Long count = (Long)size_counts.get(trim);
 					
 					if ( count == null ){
 						
-						size_counts.put( new Integer( trim ), new Long(1));
+						size_counts.put(trim, 1L);
 						
 					}else{
 						
-						size_counts.put( new Integer( trim), new Long( count.longValue() + 1 ));
+						size_counts.put(trim, count.longValue() + 1);
 					}
 				}
 				
@@ -445,7 +443,7 @@ DirectByteBufferPoolReal
 			freeSliceBuffer( ddb );
 			
 		}else{
-		    Integer buffSize = new Integer(capacity);
+		    Integer buffSize = capacity;
 		    
 		    ArrayList bufferPool = (ArrayList)buffersMap.get(buffSize);
 		    
@@ -470,11 +468,10 @@ DirectByteBufferPoolReal
    * unused buffers can be garbage collected.
    */
   private void clearBufferPools() {
-    Iterator it = buffersMap.values().iterator();
-    while (it.hasNext()) {
-        ArrayList bufferPool = (ArrayList)it.next();
-        bufferPool.clear();
-    }
+      for (Object o : buffersMap.values()) {
+          ArrayList bufferPool = (ArrayList) o;
+          bufferPool.clear();
+      }
   }
   
   
@@ -520,8 +517,9 @@ DirectByteBufferPoolReal
 			{
 				ArrayList pool = (ArrayList) pools.get(i);
 				int limit = (int) (pool.size() * remainingFactor); // floor(), this way we can reach 0 at some point
-				for (int j = pool.size() - 1; j >= limit; j--)
-					pool.remove(j);
+				if (pool.size() > limit) {
+					pool.subList(limit, pool.size()).clear();
+				}
 			}
 			
 			runGarbageCollection();
@@ -542,13 +540,12 @@ DirectByteBufferPoolReal
     long bytesUsed = 0;
     synchronized( poolsLock ) {
       //count up total bytes used by free buffers
-      Iterator it = buffersMap.keySet().iterator();
-      while (it.hasNext()) {
-        Integer keyVal = (Integer)it.next();
-        ArrayList bufferPool = (ArrayList)buffersMap.get(keyVal);
-      
-        bytesUsed += keyVal.intValue() * bufferPool.size();
-      }
+        for (Object o : buffersMap.keySet()) {
+            Integer keyVal = (Integer) o;
+            ArrayList bufferPool = (ArrayList) buffersMap.get(keyVal);
+
+            bytesUsed += keyVal * bufferPool.size();
+        }
     }
     return bytesUsed;
   }
@@ -641,8 +638,8 @@ DirectByteBufferPoolReal
 		  				}
 	  				}
 	  				
-	  				Integer cap 	= new Integer( db.getBufferInternal().capacity());
-	  				Byte	alloc 	= new Byte( db.getAllocator());
+	  				Integer cap 	= db.getBufferInternal().capacity();
+	  				Byte	alloc 	= db.getAllocator();
 	  				
 	  				myInteger	c = (myInteger)cap_map.get(cap);
 	  				
@@ -674,13 +671,13 @@ DirectByteBufferPoolReal
 	  				Integer		key 	= (Integer)it.next();
 	  				myInteger	count 	= (myInteger)cap_map.get( key );
 	  				
-	  		        if( key.intValue() < 1024 ){
+	  		        if(key < 1024 ){
 	  		        	
-	  		        	System.out.print("[" +key.intValue()+ " x " +count.value+ "] ");
+	  		        	System.out.print("[" + key + " x " +count.value+ "] ");
 	  		        	
 	  		        }else{  
 	  		        	
-	  		        	System.out.print("[" +key.intValue()/1024+ "K x " +count.value+ "] ");
+	  		        	System.out.print("[" + key /1024+ "K x " +count.value+ "] ");
 	  		        }
 	  			}
 	  			
@@ -735,11 +732,11 @@ DirectByteBufferPoolReal
 				
 					boolean[]	allocs = slice_allocs[i];
 					int	alloc_count = 0;
-					for (int j=0;j<allocs.length;j++){
-						if( allocs[j]){
-							alloc_count++;
-						}
-					}
+                    for (boolean alloc : allocs) {
+                        if (alloc) {
+                            alloc_count++;
+                        }
+                    }
 					str += (i==0?"":",") + "["+SLICE_ENTRY_SIZES[i]+"]f=" +slice_entries[i].size()+",a=" + (alloc_count*SLICE_ENTRY_ALLOC_SIZES[i]) + ",u=" +slice_use_count[i];
 				}
 				
@@ -753,26 +750,36 @@ DirectByteBufferPoolReal
 	  			
 	  			synchronized (poolsLock)
 				{
-					Iterator it = buffersMap.keySet().iterator();
-					while (it.hasNext())
-					{
-						Integer keyVal = (Integer) it.next();
-						ArrayList bufferPool = (ArrayList) buffersMap.get(keyVal);
-						
-						int blocksize = keyVal.intValue();
-						int blockfootprint = keyVal.intValue() * bufferPool.size();
-						if(blockfootprint == 0)
-							continue;
-						String blocksuffix = ""; 
-						if(blocksize > 1024) { blocksize /= 1024; blocksuffix = "k";}
-						if(blocksize > 1024) { blocksize /= 1024; blocksuffix = "M";}
-						String footsuffix = ""; 
-						if(blockfootprint > 1024) { blockfootprint /= 1024; footsuffix = "k";}
-						if(blockfootprint > 1024) { blockfootprint /= 1024; footsuffix = "M";}
-						
-						
-						System.out.print("["+ blocksize + blocksuffix + ":" + blockfootprint + footsuffix + "] ");
-					}
+                    for (Object o : buffersMap.keySet()) {
+                        Integer keyVal = (Integer) o;
+                        ArrayList bufferPool = (ArrayList) buffersMap.get(keyVal);
+
+                        int blocksize = keyVal;
+                        int blockfootprint = keyVal * bufferPool.size();
+                        if (blockfootprint == 0)
+                            continue;
+                        String blocksuffix = "";
+                        if (blocksize > 1024) {
+                            blocksize /= 1024;
+                            blocksuffix = "k";
+                        }
+                        if (blocksize > 1024) {
+                            blocksize /= 1024;
+                            blocksuffix = "M";
+                        }
+                        String footsuffix = "";
+                        if (blockfootprint > 1024) {
+                            blockfootprint /= 1024;
+                            footsuffix = "k";
+                        }
+                        if (blockfootprint > 1024) {
+                            blockfootprint /= 1024;
+                            footsuffix = "M";
+                        }
+
+
+                        System.out.print("[" + blocksize + blocksuffix + ":" + blockfootprint + footsuffix + "] ");
+                    }
 				}
 	  			
 	  			System.out.println();

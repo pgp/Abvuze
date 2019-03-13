@@ -274,16 +274,16 @@ FilePluginInstallerImpl
 						SFPluginDetailsLoader	loader = SFPluginDetailsLoaderFactory.getSingleton();
 					
 						String[]	ids = loader.getPluginIDs();
-						
-						for (int i=0;i<ids.length;i++){
-							
-							if ( ids[i].equalsIgnoreCase(id)){
-								
-								id = ids[i];
-								
-								break;
-							}
-						}
+
+                        for (String id1 : ids) {
+
+                            if (id1.equalsIgnoreCase(id)) {
+
+                                id = id1;
+
+                                break;
+                            }
+                        }
 					}catch( Throwable e ){
 						
 						Debug.printStackTrace(e);

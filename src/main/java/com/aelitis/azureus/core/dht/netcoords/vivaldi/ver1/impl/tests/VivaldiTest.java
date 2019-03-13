@@ -34,8 +34,8 @@ public class VivaldiTest {
   private static final int NB_CONTACTS = 7;
   
   public VivaldiTest() {
-    VivaldiPosition positions[][] = new VivaldiPosition[ELEMENTS_X][ELEMENTS_Y];
-    Coordinates realCoordinates[][] = new Coordinates[ELEMENTS_X][ELEMENTS_Y];
+      VivaldiPosition[][] positions = new VivaldiPosition[ELEMENTS_X][ELEMENTS_Y];
+      Coordinates[][] realCoordinates = new Coordinates[ELEMENTS_X][ELEMENTS_Y];
     //Init all
     for(int i = 0 ; i < ELEMENTS_X ; i++) {
       for(int j = 0 ; j < ELEMENTS_Y ; j++) {
@@ -68,7 +68,7 @@ public class VivaldiTest {
     }
   }
   
-  public static void main(String args[]) {
+  public static void main(String[] args) {
     new VivaldiTest();
   }
 }

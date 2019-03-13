@@ -22,7 +22,7 @@ package org.gudy.azureus2.plugins.disk;
 public interface 
 DiskManagerListener 
 {
-	public void
+	void
 	eventOccurred(
-		DiskManagerEvent	event );
+            DiskManagerEvent event);
 }

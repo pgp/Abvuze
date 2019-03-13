@@ -26,6 +26,6 @@ package org.gudy.azureus2.plugins.utils;
 public interface 
 UTTimerEvent 
 {
-	public void
+	void
 	cancel();
 }

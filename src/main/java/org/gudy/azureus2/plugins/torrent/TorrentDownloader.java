@@ -34,8 +34,8 @@ TorrentDownloader
 		 * @return
 		 * @throws TorrentException
 		 */
-	
-	public Torrent
+
+        Torrent
 	download()
 	
 		throws TorrentException;
@@ -48,10 +48,10 @@ TorrentDownloader
 		 * @return
 		 * @throws TorrentException
 		 */
-	
-	public Torrent
+
+        Torrent
 	download(
-		String	encoding )
+                String encoding)
 	
 		throws TorrentException;
 
@@ -63,12 +63,12 @@ TorrentDownloader
 	 * 
 	 * @since 4.8.1.3
 	 */
-	public void setRequestProperty(String key, Object value) throws TorrentException;
+    void setRequestProperty(String key, Object value) throws TorrentException;
 
 	/**
 	 * @param key "URL_Cookie" to get cookies
 	 * @return
 	 */
-	public Object getRequestProperty(String key) throws TorrentException;
+    Object getRequestProperty(String key) throws TorrentException;
 
 }

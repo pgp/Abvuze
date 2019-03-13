@@ -22,12 +22,12 @@ package org.gudy.azureus2.plugins.update;
 public interface 
 UpdateManagerVerificationListener 
 {
-	public boolean
+	boolean
 	acceptUnVerifiedUpdate(
-		Update		update );
+            Update update);
 	
-	public void
+	void
 	verificationFailed(
-		Update		update,
-		Throwable	cause );
+            Update update,
+            Throwable cause);
 }

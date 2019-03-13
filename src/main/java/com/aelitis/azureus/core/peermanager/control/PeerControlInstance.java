@@ -18,12 +18,12 @@ package com.aelitis.azureus.core.peermanager.control;
 public interface 
 PeerControlInstance 
 {
-	public void
+	void
 	schedule();
 	
-	public int 
+	int
 	getSchedulePriority();
 	
-	public String
+	String
 	getName();
 }

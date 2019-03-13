@@ -28,8 +28,8 @@ package org.gudy.azureus2.core3.download;
 public interface 
 DownloadManagerStateListener 
 {
-	public void
+	void
 	stateChanged(
-		DownloadManagerState			state,
-		DownloadManagerStateEvent		event );
+            DownloadManagerState state,
+            DownloadManagerStateEvent event);
 }

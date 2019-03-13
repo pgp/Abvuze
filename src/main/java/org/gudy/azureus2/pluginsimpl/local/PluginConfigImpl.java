@@ -23,6 +23,7 @@
 package org.gudy.azureus2.pluginsimpl.local;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.gudy.azureus2.core3.config.*;
@@ -44,7 +45,7 @@ PluginConfigImpl
 	implements PluginConfig 
 {
 
-	protected static Map<String,String>	external_to_internal_key_map = new HashMap<String,String>();
+	protected static Map<String,String>	external_to_internal_key_map = new HashMap<>();
 	private PluginConfigSourceImpl external_source = null;
 
 	static{
@@ -82,10 +83,10 @@ PluginConfigImpl
 				"Open MyTorrents", "IconBar.enabled", "Wizard Completed",
 				"welcome.version.lastshown",
 		};
-		
-		for (int i=0; i<passthrough_params.length; i++) {
-			external_to_internal_key_map.put(passthrough_params[i], passthrough_params[i]);
-		}
+
+        for (String passthrough_param : passthrough_params) {
+            external_to_internal_key_map.put(passthrough_param, passthrough_param);
+        }
 	}
 	
 	public void checkValidCoreParam(String name) {
@@ -216,7 +217,7 @@ PluginConfigImpl
 	private boolean getBooleanParameter(String name, boolean _default, boolean map_name, boolean set_default) {
 		Object	obj = getFakeValueWhenDisabled(key,name);
 		if ( obj != null ){
-			return(((Boolean)obj).booleanValue());
+			return((Boolean) obj);
 		}
 		if (map_name) {name = mapKeyName(name, false);}
 		
@@ -298,7 +299,7 @@ PluginConfigImpl
 	private float getFloatParameter(String name, float _default, boolean map_name, boolean set_default) {
 		Object	obj = getFakeValueWhenDisabled(key,name);
 		if ( obj != null ){
-			return(((Float)obj).floatValue());
+			return((Float) obj);
 		}
 		if (map_name) {name = mapKeyName(name, false);}
 		
@@ -324,7 +325,7 @@ PluginConfigImpl
 	private long getLongParameter(String name, long _default, boolean map_name, boolean set_default) {
 		Object	obj = getFakeValueWhenDisabled(key,name);
 		if ( obj != null ){
-			return(((Long)obj).longValue());
+			return((Long) obj);
 		}
 		if (map_name) {name = mapKeyName(name, false);}
 		
@@ -355,7 +356,7 @@ PluginConfigImpl
 	private boolean getDefaultedBooleanParameter(String name, boolean map_name) {
 		Object	obj = getFakeValueWhenDisabled(key,name);
 		if ( obj != null ){
-			return(((Boolean)obj).booleanValue());
+			return((Boolean) obj);
 		}
 		return getBooleanParameter(name, ConfigurationDefaults.def_boolean == 1, map_name, false);
 	}
@@ -564,7 +565,7 @@ PluginConfigImpl
 	//
 	//
     public void setBooleanParameter(String name, boolean value) {
-		if ( setFakeValueWhenDisabled(key, name, Boolean.valueOf(value))){
+		if ( setFakeValueWhenDisabled(key, name, value)){
 			return;
 		}
     	COConfigurationManager.setParameter(mapKeyName(name, true), value);
@@ -589,21 +590,21 @@ PluginConfigImpl
     }
     
     public void setFloatParameter(String name, float value) {
-		if ( setFakeValueWhenDisabled(key, name, new Float( value))){
+		if ( setFakeValueWhenDisabled(key, name, value)){
 			return;
 		}
     	COConfigurationManager.setParameter(mapKeyName(name, true), value);
     }
 
     public void setIntParameter(String name, int value) {
-		if ( setFakeValueWhenDisabled(key, name, new Long( value))){
+		if ( setFakeValueWhenDisabled(key, name, (long) value)){
 			return;
 		}
     	COConfigurationManager.setParameter(mapKeyName(name, true), value);
     }
 
     public void setLongParameter(String name, long value) {
-		if ( setFakeValueWhenDisabled(key, name, new Long( value))){
+		if ( setFakeValueWhenDisabled(key, name, value)){
 			return;
 		}
     	COConfigurationManager.setParameter(mapKeyName(name, true), value);
@@ -623,7 +624,7 @@ PluginConfigImpl
 	//
     public void setCoreBooleanParameter(String name, boolean value) {
     	checkValidCoreParam(name);
-		if ( setFakeValueWhenDisabled(key, name, Boolean.valueOf(value))){
+		if ( setFakeValueWhenDisabled(key, name, value)){
 			return;
 		}
     	COConfigurationManager.setParameter(mapKeyName(name, true), value);
@@ -651,7 +652,7 @@ PluginConfigImpl
 
     public void setCoreFloatParameter(String name, float value) {
     	checkValidCoreParam(name);
-		if ( setFakeValueWhenDisabled(key, name, new Float( value))){
+		if ( setFakeValueWhenDisabled(key, name, value)){
 			return;
 		}
     	COConfigurationManager.setParameter(mapKeyName(name, true), value);
@@ -659,7 +660,7 @@ PluginConfigImpl
 
     public void setCoreIntParameter(String name, int value) {
     	checkValidCoreParam(name);
-		if ( setFakeValueWhenDisabled(key, name, new Long( value))){
+		if ( setFakeValueWhenDisabled(key, name, (long) value)){
 			return;
 		}
     	COConfigurationManager.setParameter(mapKeyName(name, true), value);
@@ -667,7 +668,7 @@ PluginConfigImpl
 
     public void setCoreLongParameter(String name, long value) {
     	checkValidCoreParam(name);
-		if ( setFakeValueWhenDisabled(key, name, new Long( value))){
+		if ( setFakeValueWhenDisabled(key, name, value)){
 			return;
 		}
     	COConfigurationManager.setParameter(mapKeyName(name, true), value);
@@ -855,7 +856,7 @@ PluginConfigImpl
 	//
 	//
     public void setUnsafeBooleanParameter(String name, boolean value) {
-		if ( setFakeValueWhenDisabled(key, name, Boolean.valueOf(value))){
+		if ( setFakeValueWhenDisabled(key, name, value)){
 			return;
 		}
 		notifyParamExists(name);
@@ -883,7 +884,7 @@ PluginConfigImpl
     }
     
     public void setUnsafeFloatParameter(String name, float value) {
-		if ( setFakeValueWhenDisabled(key, name, new Float( value))){
+		if ( setFakeValueWhenDisabled(key, name, value)){
 			return;
 		}
 		notifyParamExists(name);
@@ -891,7 +892,7 @@ PluginConfigImpl
     }
 
     public void setUnsafeIntParameter(String name, int value) {
-		if ( setFakeValueWhenDisabled(key, name, new Long( value))){
+		if ( setFakeValueWhenDisabled(key, name, (long) value)){
 			return;
 		}
 		notifyParamExists(name);
@@ -899,7 +900,7 @@ PluginConfigImpl
     }
 
     public void setUnsafeLongParameter(String name, long value) {
-		if ( setFakeValueWhenDisabled(key, name, new Long( value))){
+		if ( setFakeValueWhenDisabled(key, name, value)){
 			return;
 		}
 		notifyParamExists(name);
@@ -1003,11 +1004,11 @@ PluginConfigImpl
 					  
 				  }else if ( val instanceof byte[]){
 					  
-					  val = new String((byte[])val, "UTF-8" );
+					  val = new String((byte[])val, StandardCharsets.UTF_8);
 					  
 				  }else if ( val instanceof Integer ){
 					  
-					  val = new Long(((Integer)val).intValue());
+					  val = (long) ((Integer) val).intValue();
 	
 				  }else if ( val instanceof List ){
 					  
@@ -1019,7 +1020,7 @@ PluginConfigImpl
 					  
 				  }else if ( val instanceof Boolean ){
 					  
-					  val = new Long(((Boolean)val).booleanValue()?1:0);
+					  val = (long) ((Boolean) val ? 1 : 0);
 					  
 				  }else if ( val instanceof Float || val instanceof Double ){
 					  
@@ -1109,7 +1110,7 @@ PluginConfigImpl
 	}
 
 	private String mapKeyName(String key, boolean for_set) {
-		String result = (String)external_to_internal_key_map.get(key);
+		String result = external_to_internal_key_map.get(key);
 		if (result == null) {
 			if (for_set) {
 				throw new RuntimeException("No permission to set the value of core parameter: " + key);

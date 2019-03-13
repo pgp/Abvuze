@@ -32,59 +32,59 @@ import com.aelitis.azureus.plugins.net.buddy.BuddyPluginBeta.ChatMessage;
 public interface 
 BuddyPluginViewInterface 
 {
-	public void
+	void
 	openChat(
-		ChatInstance		chat );
+            ChatInstance chat);
 	
-	public static final String	VP_SWT_COMPOSITE	= "swt_comp";
-	public static final String	VP_DOWNLOAD			= "download";		// DownloadAdapter
-	public static final String	VP_CHAT				= "chat";			// ChatInstance
+	String	VP_SWT_COMPOSITE	= "swt_comp";
+	String	VP_DOWNLOAD			= "download";		// DownloadAdapter
+	String	VP_CHAT				= "chat";			// ChatInstance
 	
-	public View
+	View
 	buildView(
-		Map<String,Object>	properties,
-		ViewListener		listener );
+            Map<String, Object> properties,
+            ViewListener listener);
 	
-	public String
+	String
 	renderMessage(
-		ChatInstance	chat,
-		ChatMessage		message );
+            ChatInstance chat,
+            ChatMessage message);
 	
-	public void
+	void
 	selectClassicTab();
 	
-	public interface
+	interface
 	DownloadAdapter
 	{
-		public DownloadManager
+		DownloadManager
 		getCoreDownload();
 		
-		public String[]
+		String[]
 		getNetworks();
 		
-		public String
+		String
 		getChatKey();
 	}
 	
-	public interface
+	interface
 	View
 	{
-		public void
+		void
 		activate();
 		
-		public void
+		void
 		handleDrop(
-			String		drop );
+                String drop);
 		
-		public void
+		void
 		destroy();
 	}
 	
-	public interface
+	interface
 	ViewListener
 	{
-		public void
+		void
 		chatActivated(
-			ChatInstance		chat );
+                ChatInstance chat);
 	}
 }

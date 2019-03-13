@@ -22,6 +22,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.Proxy;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.gudy.azureus2.core3.util.*;
@@ -62,7 +63,7 @@ public class PlatformMessenger
 	public static String REPLY_RESULT = "response";
 
 	/** Key: id of queue;  Value: Map of queued messages & listeners */
-	static private Map<String, Map<PlatformMessage, PlatformMessengerListener>> mapQueues = new HashMap<String, Map<PlatformMessage, PlatformMessengerListener>>();
+	static private Map<String, Map<PlatformMessage, PlatformMessengerListener>> mapQueues = new HashMap<>();
 
 	private static final String QUEUE_NOAZID = "noazid.";
 
@@ -75,7 +76,7 @@ public class PlatformMessenger
 
 	//static private TimerEvent timerEvent = null;
 
-	static private Map<String, TimerEvent> mapTimerEvents = new HashMap<String, TimerEvent>();
+	static private Map<String, TimerEvent> mapTimerEvents = new HashMap<>();
 	
 	static private AEMonitor mon_mapTimerEvents = new AEMonitor("mapTimerEvents");
 
@@ -87,7 +88,7 @@ public class PlatformMessenger
 
 	private static AsyncDispatcher	dispatcher = new AsyncDispatcher(5000);
 
-	private static Map<String, Object> mapExtra = new HashMap<String, Object>();
+	private static Map<String, Object> mapExtra = new HashMap<>();
 	
 	public static synchronized void init() {
 		if (initialized) {
@@ -134,7 +135,7 @@ public class PlatformMessenger
 				
 				Map<PlatformMessage, PlatformMessengerListener> mapQueue = mapQueues.get(queueID);
 				if (mapQueue == null) {
-					mapQueue = new LinkedHashMap<PlatformMessage, PlatformMessengerListener>();
+					mapQueue = new LinkedHashMap<>();
 					mapQueues.put(queueID, mapQueue);
 				}
 				mapQueue.put(message, listener);
@@ -256,13 +257,13 @@ public class PlatformMessenger
 		StringBuilder urlStem = new StringBuilder();
 		long sequenceNo = 0;
 
-		Map<String, Object> mapPayload = new HashMap<String, Object>();
+		Map<String, Object> mapPayload = new HashMap<>();
 		mapPayload.put("azid", ConstantsVuze.AZID);
 		mapPayload.put("azv", Constants.AZUREUS_VERSION);
 		mapPayload.put("mode", FeatureUtils.getPlusMode());
 		mapPayload.put("noadmode", FeatureUtils.getNoAdsMode());
 		mapPayload.putAll(mapExtra);
-		List<Map> listCommands = new ArrayList<Map>();
+		List<Map> listCommands = new ArrayList<>();
 		mapPayload.put("commands", listCommands);
 
 		boolean	forceProxy = false;
@@ -276,7 +277,7 @@ public class PlatformMessenger
 				PlatformMessage message = (PlatformMessage) iter.next();
 				Object value = mapQueue.get(message);
 				
-				Map<String, Object> mapCmd = new HashMap<String, Object>();
+				Map<String, Object> mapCmd = new HashMap<>();
 
 				boolean	fp = message.isForceProxy();
 				
@@ -428,20 +429,20 @@ public class PlatformMessenger
 						} else {
 							debug("Error while sending message(s) to Platform", e);
 						}
-						for (Iterator iter = mapProcessing.keySet().iterator(); iter.hasNext();) {
-							PlatformMessage message = (PlatformMessage) iter.next();
-							PlatformMessengerListener l = (PlatformMessengerListener) mapProcessing.get(message);
-							if (l != null) {
-								try {
-									HashMap map = new HashMap();
-									map.put("text", e.toString());
-									map.put("Throwable", e);
-									l.replyReceived(message, REPLY_EXCEPTION, map);
-								} catch (Throwable e2) {
-									debug("Error while sending replyReceived", e2);
-								}
-							}
-						}
+                        for (Object o : mapProcessing.keySet()) {
+                            PlatformMessage message = (PlatformMessage) o;
+                            PlatformMessengerListener l = (PlatformMessengerListener) mapProcessing.get(message);
+                            if (l != null) {
+                                try {
+                                    HashMap map = new HashMap();
+                                    map.put("text", e.toString());
+                                    map.put("Throwable", e);
+                                    l.replyReceived(message, REPLY_EXCEPTION, map);
+                                } catch (Throwable e2) {
+                                    debug("Error while sending replyReceived", e2);
+                                }
+                            }
+                        }
 					}
 				}
 			});
@@ -466,78 +467,78 @@ public class PlatformMessenger
 		if ( listReplies == null || listReplies.isEmpty()) {
 			debug("Error while sending message(s) to Platform: reply: " + s
 					+ "\nurl: " + sURL + "\nPostData: " + sData);
-			for (Iterator iter = mapProcessing.keySet().iterator(); iter.hasNext();) {
-				PlatformMessage message = (PlatformMessage) iter.next();
-				PlatformMessengerListener l = (PlatformMessengerListener) mapProcessing.get(message);
-				if (l != null) {
-					try {
-						HashMap map = new HashMap();
-						map.put("text", "result was " + s);
-						l.replyReceived(message, REPLY_EXCEPTION, map);
-					} catch (Throwable e2) {
-						debug("Error while sending replyReceived" + "\nurl: " + sURL
-								+ "\nPostData: " + sData, e2);
-					}
-				}
-			}
+            for (Object o : mapProcessing.keySet()) {
+                PlatformMessage message = (PlatformMessage) o;
+                PlatformMessengerListener l = (PlatformMessengerListener) mapProcessing.get(message);
+                if (l != null) {
+                    try {
+                        HashMap map = new HashMap();
+                        map.put("text", "result was " + s);
+                        l.replyReceived(message, REPLY_EXCEPTION, map);
+                    } catch (Throwable e2) {
+                        debug("Error while sending replyReceived" + "\nurl: " + sURL
+                                + "\nPostData: " + sData, e2);
+                    }
+                }
+            }
 			return;
 		}
 
-		Map<Long, Map> mapOrder = new HashMap<Long, Map>();
+		Map<Long, Map> mapOrder = new HashMap<>();
 		for (Object reply : listReplies) {
 			if (reply instanceof Map) {
 				mapOrder.put(MapUtils.getMapLong((Map) reply, "seq-id", -1), (Map) reply);
 			}
 		}
-		for (Iterator iter = mapProcessing.keySet().iterator(); iter.hasNext();) {
-			PlatformMessage message = (PlatformMessage) iter.next();
-			PlatformMessengerListener l = (PlatformMessengerListener) mapProcessing.get(message);
-			if (l == null) {
-				continue;
-			}
-			Map mapReply = mapOrder.get(new Long(message.getSequenceNo()));
-			if (mapReply == null) {
-				debug("No reply for " + message.toShortString());
-			}
-			String replyType = MapUtils.getMapString(mapReply, "type", "payload");
-			Map payload;
-			if (replyType.equalsIgnoreCase("payload")) {
-				// parg, 12/5/216 - not sure when this broke or how significant it is but subscription-update (for example) returns a list not a map
-				Object test = mapReply.get( "payload" );
-				if ( test instanceof List ){
-					List temp = (List)test;
-					payload = new HashMap();
-					try{
-						for ( int i=0;i<temp.size();i+=2){
-							String k = (String)temp.get(i);
-							Object v = temp.get(i+1);
-							payload.put( k, v );
-						}
-					}catch( Throwable e ){
-						Debug.out( "invalid reply: " + mapReply, e );
-					}
-				}else{
-					payload = MapUtils.getMapMap(mapReply, "payload", Collections.EMPTY_MAP);
-				}
-			} else {
-				payload = new HashMap();
-				payload.put("message", MapUtils.getMapString(mapReply, "message", "?"));
-			}
+        for (Object o : mapProcessing.keySet()) {
+            PlatformMessage message = (PlatformMessage) o;
+            PlatformMessengerListener l = (PlatformMessengerListener) mapProcessing.get(message);
+            if (l == null) {
+                continue;
+            }
+            Map mapReply = mapOrder.get(message.getSequenceNo());
+            if (mapReply == null) {
+                debug("No reply for " + message.toShortString());
+            }
+            String replyType = MapUtils.getMapString(mapReply, "type", "payload");
+            Map payload;
+            if (replyType.equalsIgnoreCase("payload")) {
+                // parg, 12/5/216 - not sure when this broke or how significant it is but subscription-update (for example) returns a list not a map
+                Object test = mapReply.get("payload");
+                if (test instanceof List) {
+                    List temp = (List) test;
+                    payload = new HashMap();
+                    try {
+                        for (int i = 0; i < temp.size(); i += 2) {
+                            String k = (String) temp.get(i);
+                            Object v = temp.get(i + 1);
+                            payload.put(k, v);
+                        }
+                    } catch (Throwable e) {
+                        Debug.out("invalid reply: " + mapReply, e);
+                    }
+                } else {
+                    payload = MapUtils.getMapMap(mapReply, "payload", Collections.EMPTY_MAP);
+                }
+            } else {
+                payload = new HashMap();
+                payload.put("message", MapUtils.getMapString(mapReply, "message", "?"));
+            }
 
-			
-			if (mapReply != null) {
-  			String reply = JSONUtils.encodeToJSON(payload);
-  			debug("Got a reply for "
-  					+ message.toShortString() + "\n\t"
-  					+ reply.substring(0, Math.min(8192, reply.length())));
-			}
 
-			try {
-				l.replyReceived(message, replyType, payload);
-			} catch (Exception e2) {
-				debug("Error while sending replyReceived", e2);
-			}
-		}
+            if (mapReply != null) {
+                String reply = JSONUtils.encodeToJSON(payload);
+                debug("Got a reply for "
+                        + message.toShortString() + "\n\t"
+                        + reply.substring(0, Math.min(8192, reply.length())));
+            }
+
+            try {
+                l.replyReceived(message, replyType, payload);
+            } catch (Exception e2) {
+                debug("Error while sending replyReceived", e2);
+            }
+        }
 	}
 
 	private static Object[] 
@@ -658,23 +659,17 @@ public class PlatformMessenger
 		//			}
 		//		});
 
-		InputStream is = rd.download();
+		byte[] data;
+		try (InputStream is = rd.download()) {
+            int length = is.available();
 
-		byte data[];
+            data = new byte[length];
 
-		try {
-			int length = is.available();
+            is.read(data);
 
-			data = new byte[length];
+        }
 
-			is.read(data);
-
-		} finally {
-
-			is.close();
-		}
-
-		String s = new String( data, "UTF8");
+		String s = new String( data, StandardCharsets.UTF_8);
 
 		Map mapAllReplies = JSONUtils.decodeJSON(s);
 		

@@ -44,7 +44,7 @@ public interface FileHandler
 	 * @param The file, currently found by the FileWalker instance
 	 * @return true to continue, false to terminate processing of files
 	 */
-	public boolean handleFile( File file ) ;
+    boolean handleFile(File file) ;
 
   // -------------------------------------------------------------------------
 
@@ -58,7 +58,7 @@ public interface FileHandler
 	 * @param The file, currently found by the FileWalker instance
 	 * @return true to continue, false to terminate processing of files
 	 */
-	public boolean handleException( Exception ex, File file ) ;
+    boolean handleException(Exception ex, File file) ;
 
   // -------------------------------------------------------------------------
   
@@ -70,7 +70,7 @@ public interface FileHandler
 	 * @param dir The directory, the FileWalker has finished to walk through
 	 * @return true to continue, false to terminate processing of files
 	 */
-	public boolean directoryEnd( File dir ) ;	
+    boolean directoryEnd(File dir) ;
   
   // -------------------------------------------------------------------------
   
@@ -83,7 +83,7 @@ public interface FileHandler
 	 * @param count The number of files and directories the FileWalker found in the directory
 	 * @return true to continue, false to terminate processing of files
 	 */
-	public boolean directoryStart( File dir, int count ) ;
+  boolean directoryStart(File dir, int count) ;
 
   // -------------------------------------------------------------------------
   

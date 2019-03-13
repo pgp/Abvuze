@@ -29,19 +29,19 @@ public interface
 UPnPAdapter 
 	extends UPnPSSDPAdapter
 {
-	public SimpleXMLParserDocument
+	SimpleXMLParserDocument
 	parseXML(
-		String	data )
+            String data)
 	
 		throws SimpleXMLParserDocumentException;
 	
-	public ResourceDownloaderFactory
+	ResourceDownloaderFactory
 	getResourceDownloaderFactory();
 	
-	public Comparator
+	Comparator
 	getAlphanumericComparator();
 	
 	
-	public String
+	String
 	getTraceDir();
 }

@@ -22,6 +22,7 @@
 
 package com.aelitis.azureus.plugins.net.buddy;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import org.gudy.azureus2.core3.torrent.TOTorrent;
@@ -137,9 +138,9 @@ BuddyPluginUtils
 	public interface
 	CreateChatCallback
 	{
-		public void
+		void
 		complete(
-			ChatInstance	chat );
+                ChatInstance chat);
 	}
 	
 	public static Map<String,Object>
@@ -355,7 +356,7 @@ BuddyPluginUtils
 			
 			if ( torrent_name == null ){
 				
-				torrent_name = new String( to_torrent.getName(), "UTF-8" );
+				torrent_name = new String( to_torrent.getName(), StandardCharsets.UTF_8);
 			}
 		}catch( Throwable e ){
 			

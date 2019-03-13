@@ -22,8 +22,8 @@ package org.gudy.azureus2.plugins.utils.security;
 public interface 
 SEPublicKeyLocator 
 {
-	public boolean
+	boolean
 	accept(
-		Object			context,
-		SEPublicKey		other_key );
+            Object context,
+            SEPublicKey other_key);
 }

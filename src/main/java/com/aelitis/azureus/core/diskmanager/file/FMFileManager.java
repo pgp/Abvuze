@@ -36,22 +36,22 @@ import com.aelitis.azureus.core.util.LinkFileMap;
 public interface 
 FMFileManager 
 {
-	public FMFile
+	FMFile
 	createFile(
-		FMFileOwner	owner,
-		File		file,
-		int			type )
+            FMFileOwner owner,
+            File file,
+            int type)
 	
 		throws FMFileManagerException;
 	
-	public void
+	void
 	setFileLinks(
-		TOTorrent			torrent,
-		LinkFileMap			links );
+            TOTorrent torrent,
+            LinkFileMap links);
 	
-	public File
+	File
 	getFileLink(
-		TOTorrent			torrent,
-		int					from_index,
-		File				from_file );
+            TOTorrent torrent,
+            int from_index,
+            File from_file);
 }

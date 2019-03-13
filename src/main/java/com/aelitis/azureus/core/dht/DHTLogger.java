@@ -24,26 +24,26 @@ import org.gudy.azureus2.plugins.PluginInterface;
 public interface 
 DHTLogger 
 {
-	public static final int	LT_GENERAL		= 1;
-	public static final int	LT_IP_FILTER	= 2;
+	int	LT_GENERAL		= 1;
+	int	LT_IP_FILTER	= 2;
 	
-	public void
+	void
 	log(
-		String	str );
+            String str);
 	
-	public void
+	void
 	log(
-		Throwable	e );
+            Throwable e);
 	
-	public void
+	void
 	log(
-		int		log_type,
-		String	str );
+            int log_type,
+            String str);
 	
-	public boolean
+	boolean
 	isEnabled(
-		int	log_type );
+            int log_type);
 			
-	public PluginInterface
+	PluginInterface
 	getPluginInterface();
 }

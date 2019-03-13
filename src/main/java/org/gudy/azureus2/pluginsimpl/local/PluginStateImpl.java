@@ -159,19 +159,21 @@ public class PluginStateImpl implements PluginState {
 			// we must copy the list here as when we unload interfaces they will be
 			// removed from the original list	
 			List pis = new ArrayList(PluginInitializer.getPluginInterfaces());
-			for (int i=0;i<pis.size();i++){
-				PluginInterfaceImpl	pi = (PluginInterfaceImpl)pis.get(i);
-				String other_dir = pi.getPluginDirectoryName();
-		  		if (other_dir == null || other_dir.length() == 0) {continue;}
-		  		if (dir.equals(other_dir)) {
-		  			try{
-		  				((UnloadablePlugin)pi.getPlugin()).unload();
-		  			}catch( Throwable e ){
-						Debug.out( "Plugin unload operation failed", e );
-					}
-		  			initialiser.unloadPlugin( pi );
-		  		}
-			}
+            for (Object pi1 : pis) {
+                PluginInterfaceImpl pi = (PluginInterfaceImpl) pi1;
+                String other_dir = pi.getPluginDirectoryName();
+                if (other_dir == null || other_dir.length() == 0) {
+                    continue;
+                }
+                if (dir.equals(other_dir)) {
+                    try {
+                        ((UnloadablePlugin) pi.getPlugin()).unload();
+                    } catch (Throwable e) {
+                        Debug.out("Plugin unload operation failed", e);
+                    }
+                    initialiser.unloadPlugin(pi);
+                }
+            }
 		}
 		  	
 		for (int i=0;i<pi.children.size();i++){
@@ -195,16 +197,18 @@ public class PluginStateImpl implements PluginState {
 		}
 		  	
 	  	List pis = PluginInitializer.getPluginInterfaces();
-		for (int i=0;i<pis.size();i++) {
-		  	PluginInterface	pi = (PluginInterface)pis.get(i);
-	  		String other_dir = pi.getPluginDirectoryName();
-	  		if (other_dir == null || other_dir.length() == 0) {continue;}
-	  		if (dir.equals(other_dir)) {
-		  		if (!(pi.getPlugin() instanceof UnloadablePlugin)) {
-		  			return false;
-		  		}  
-	  		}
-		}
+        for (Object pi1 : pis) {
+            PluginInterface pi = (PluginInterface) pi1;
+            String other_dir = pi.getPluginDirectoryName();
+            if (other_dir == null || other_dir.length() == 0) {
+                continue;
+            }
+            if (dir.equals(other_dir)) {
+                if (!(pi.getPlugin() instanceof UnloadablePlugin)) {
+                    return false;
+                }
+            }
+        }
 		  	
 		for (int i=0;i<pi.children.size();i++){
 			if (!((PluginInterface)pi.children.get(i)).getPluginState().isUnloadable()){

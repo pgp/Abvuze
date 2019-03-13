@@ -54,7 +54,7 @@ ExternalSeedReaderRequest
 		
 		for (int i=0;i<requests.size();i++){
 			
-			PeerReadRequest	req = (PeerReadRequest)requests.get(i);
+			PeerReadRequest	req = requests.get(i);
 			
 			if ( i == 0 ){
 				
@@ -94,7 +94,7 @@ ExternalSeedReaderRequest
 			throw( new ExternalSeedException( "Insufficient buffers to satisfy request" ));
 		}
 		
-		current_request = (PeerReadRequest)requests.get(current_request_index++);
+		current_request = requests.get(current_request_index++);
 		
 		current_buffer = new byte[ current_request.getLength()];
 		
@@ -106,15 +106,13 @@ ExternalSeedReaderRequest
 	public boolean 
 	isCancelled() 
 	{
-		for (int i=0;i<requests.size();i++){
-			
-			PeerReadRequest	req = requests.get(i);
+        for (PeerReadRequest req : requests) {
 
-			if ( req.isCancelled()){
-				
-				return( true );
-			}
-		}
+            if (req.isCancelled()) {
+
+                return (true);
+            }
+        }
 		
 		return( false );
 	}
@@ -128,15 +126,13 @@ ExternalSeedReaderRequest
 	protected void
 	cancel()
 	{
-		for (int i=0;i<requests.size();i++){
-			
-			PeerReadRequest	req = requests.get(i);
+        for (PeerReadRequest req : requests) {
 
-			if ( !req.isCancelled()){
-				
-				req.cancel();
-			}
-		}
+            if (!req.isCancelled()) {
+
+                req.cancel();
+            }
+        }
 	}
 	
 	public void

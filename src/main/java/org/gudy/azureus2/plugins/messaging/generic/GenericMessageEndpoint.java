@@ -24,20 +24,20 @@ import java.net.InetSocketAddress;
 public interface 
 GenericMessageEndpoint 
 {
-	public InetSocketAddress
+	InetSocketAddress
 	getNotionalAddress();
 	
-	public void
+	void
 	addTCP(
-		InetSocketAddress	target );
+            InetSocketAddress target);
 	
-	public InetSocketAddress
+	InetSocketAddress
 	getTCP();
 	
-	public void
+	void
 	addUDP(
-		InetSocketAddress	target );
+            InetSocketAddress target);
 	
-	public InetSocketAddress
+	InetSocketAddress
 	getUDP();
 }

@@ -184,7 +184,7 @@ HTTPMessageDecoder
 				return null;
 			}
 			    
-			Message[] msgs = (Message[])messages.toArray( new Message[messages.size()] );
+			Message[] msgs = (Message[])messages.toArray(new Message[0]);
 			
 			messages.clear();
 			    
@@ -250,12 +250,12 @@ HTTPMessageDecoder
 		
 	    try{
 
-	    	for( int i=0; i<messages.size(); i++ ){
-	    		
-	    		Message msg = (Message)messages.get( i );
-	    		
-			    msg.destroy();
-			}
+            for (Object message : messages) {
+
+                Message msg = (Message) message;
+
+                msg.destroy();
+            }
 		}catch( IndexOutOfBoundsException e ){
 		    	// as access to messages_last_read isn't synchronized we can get this error if we destroy the
 		    	// decoder in parallel with messages being removed. We don't really want to synchornized access

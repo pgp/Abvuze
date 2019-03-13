@@ -419,7 +419,7 @@ DeviceMediaRendererManual
 		
 		File	copy_to = getCopyToFolder();
 		
-		List<TranscodeFileImpl>	to_copy = new ArrayList<TranscodeFileImpl>();
+		List<TranscodeFileImpl>	to_copy = new ArrayList<>();
 
 		boolean	borked = false;
 		

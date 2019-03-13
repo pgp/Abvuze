@@ -96,19 +96,17 @@ BuddyPluginBuddyMessageHandler
 			
 			dispatch_pending = message_count == 1;
 		}
-		
-		Iterator it = listeners.iterator();
-		
-		while( it.hasNext()){
-			
-			try{
-				((BuddyPluginBuddyMessageListener)it.next()).messageQueued( message );
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace(e);
-			}
-		}
+
+        for (Object listener : listeners) {
+
+            try {
+                ((BuddyPluginBuddyMessageListener) listener).messageQueued(message);
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 		
 		if ( dispatch_pending ){
 			
@@ -411,30 +409,30 @@ BuddyPluginBuddyMessageHandler
 			synchronized( this ){
 	
 				List	messages = (List)config_map.get( "messages" );
-	
-				for (int i=0;i<messages.size();i++){
-				
-					try{
-						BuddyPluginBuddyMessage msg = restoreMessage((Map)messages.get(i));
-	
-						if ( msg.getID() != message.getID()){
-							
-							other_messages.add( msg );
-						}
-					}catch( Throwable e ){
-						
-					}
-				}
+
+                for (Object message1 : messages) {
+
+                    try {
+                        BuddyPluginBuddyMessage msg = restoreMessage((Map) message1);
+
+                        if (msg.getID() != message.getID()) {
+
+                            other_messages.add(msg);
+                        }
+                    } catch (Throwable e) {
+
+                    }
+                }
 			}
 	
 			if ( other_messages.size() > 0 ){
 				
 				BuddyPluginException o_cause = new BuddyPluginException( "Reporting probable failure to subsequent messages" );
-				
-				for (int i=0;i<other_messages.size();i++){
-					
-					reportFailedSupport((BuddyPluginBuddyMessage)other_messages.get(i), o_cause );
-				}
+
+                for (Object other_message : other_messages) {
+
+                    reportFailedSupport((BuddyPluginBuddyMessage) other_message, o_cause);
+                }
 			}
 		}
 	}
@@ -443,19 +441,18 @@ BuddyPluginBuddyMessageHandler
 	reportFailedSupport(
 		BuddyPluginBuddyMessage		message,
 		BuddyPluginException		cause )
-	{	
-		Iterator it = listeners.iterator();
-	
-		while( it.hasNext()){
-			
-			try{
-				((BuddyPluginBuddyMessageListener)it.next()).deliveryFailed( message, cause );
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace(e);
-			}
-		}
+	{
+
+        for (Object listener : listeners) {
+
+            try {
+                ((BuddyPluginBuddyMessageListener) listener).deliveryFailed(message, cause);
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 	
 	protected void
@@ -495,55 +492,55 @@ BuddyPluginBuddyMessageHandler
 				}
 			}
 		}
-		
-		for ( int i=0;i<pending_messages.size();i++){
-	
-			BuddyPluginBuddyMessage message = (BuddyPluginBuddyMessage)pending_messages.get(i);
-			
-			try{
-				Map	reply = message.getReply();
-				
-				Iterator it = listeners.iterator();
-				
-				boolean	processing_ok = true;
-				
-				while( it.hasNext()){
-					
-					try{
-						if ( !((BuddyPluginBuddyMessageListener)it.next()).deliverySucceeded( message, reply )){
-							
-							processing_ok = false;
-						}
-						
-					}catch( Throwable e ){
-						
-						Debug.printStackTrace(e);
-					}
-				}
-	
-				if ( processing_ok ){
-				
-					message.delete();
-					
-				}else{
-					synchronized( this ){
-	
-						last_pending_success = SystemTime.getCurrentTime();
-					}
-				}
-			}catch( BuddyPluginPasswordException e ){
-				
-				buddy.log( "Failed to restore message reply", e );
 
-					// we don't want to delete the message if failed due to password issue
-				
-			}catch( Throwable e ){
-				
-				buddy.log( "Failed to restore message reply - deleting message", e );
+        for (Object pending_message : pending_messages) {
 
-				message.delete();
-			}
-		}
+            BuddyPluginBuddyMessage message = (BuddyPluginBuddyMessage) pending_message;
+
+            try {
+                Map reply = message.getReply();
+
+                Iterator it = listeners.iterator();
+
+                boolean processing_ok = true;
+
+                while (it.hasNext()) {
+
+                    try {
+                        if (!((BuddyPluginBuddyMessageListener) it.next()).deliverySucceeded(message, reply)) {
+
+                            processing_ok = false;
+                        }
+
+                    } catch (Throwable e) {
+
+                        Debug.printStackTrace(e);
+                    }
+                }
+
+                if (processing_ok) {
+
+                    message.delete();
+
+                } else {
+                    synchronized (this) {
+
+                        last_pending_success = SystemTime.getCurrentTime();
+                    }
+                }
+            } catch (BuddyPluginPasswordException e) {
+
+                buddy.log("Failed to restore message reply", e);
+
+                // we don't want to delete the message if failed due to password issue
+
+            } catch (Throwable e) {
+
+                buddy.log("Failed to restore message reply - deleting message", e);
+
+                message.delete();
+            }
+        }
 		
 		if ( save_pending ){
 			
@@ -570,63 +567,62 @@ BuddyPluginBuddyMessageHandler
 	deleteMessage(
 		BuddyPluginBuddyMessage		message )
 	{
-		Iterator it = listeners.iterator();
-		
-		while( it.hasNext()){
-			
-			try{
-				((BuddyPluginBuddyMessageListener)it.next()).messageDeleted( message );
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace(e);
-			}
-		}
+
+        for (Object listener : listeners) {
+
+            try {
+                ((BuddyPluginBuddyMessageListener) listener).messageDeleted(message);
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 		
 		synchronized( this ){
 			
 			String[]	keys = { "messages", "pending_success", "explicit" };
-			
-			for (int i=0;i<keys.length;i++){
-				
-				List	messages = (List)config_map.get( keys[i] );
-	
-				if ( messages != null ){
-	
-					boolean	found = false;
-					
-					for ( int j=0;j<messages.size();j++){
-						
-						Map	msg = (Map)messages.get(j);
-						
-						if ( message.getID() == ((Long)msg.get( "id")).intValue()){
-							
-							messages.remove(j);
-							
-							found	= true;
-							
-							break;
-						}
-					}
-				
-					if ( found ){
-					
-						deleteRequest( message );
-						
-						deleteReply( message );
-						
-						try{
-							saveConfig();
-							
-						}catch( Throwable e ){
-							
-							buddy.log( "Config save failed during message delete", e );
-						}
-						
-						return;
-					}
-				}
-			}
+
+            for (String key : keys) {
+
+                List messages = (List) config_map.get(key);
+
+                if (messages != null) {
+
+                    boolean found = false;
+
+                    for (int j = 0; j < messages.size(); j++) {
+
+                        Map msg = (Map) messages.get(j);
+
+                        if (message.getID() == ((Long) msg.get("id")).intValue()) {
+
+                            messages.remove(j);
+
+                            found = true;
+
+                            break;
+                        }
+                    }
+
+                    if (found) {
+
+                        deleteRequest(message);
+
+                        deleteReply(message);
+
+                        try {
+                            saveConfig();
+
+                        } catch (Throwable e) {
+
+                            buddy.log("Config save failed during message delete", e);
+                        }
+
+                        return;
+                    }
+                }
+            }
 		}
 	}
 	
@@ -845,28 +841,28 @@ BuddyPluginBuddyMessageHandler
 	retrieveExplicitMessages(
 		int		type )
 	{
-		List<BuddyPluginBuddyMessage>	result = new ArrayList<BuddyPluginBuddyMessage>();
+		List<BuddyPluginBuddyMessage>	result = new ArrayList<>();
 		
 		synchronized( this ){
 
 			List<Map<String,Object>>	messages = (List<Map<String,Object>>)config_map.get( "explicit" );
 			
 			if ( messages != null ){
-				
-				for (int i=0;i<messages.size();i++){
-					
-					try{
-						BuddyPluginBuddyMessage msg = restoreMessage(messages.get(i));
-						
-						if ( msg.getSubsystem() == BuddyPlugin.SUBSYSTEM_MSG_TYPE_BASE + type ){
-							
-							result.add( msg );
-						}
-					}catch( Throwable e ){
-						
-						buddy.log( "Failed to restore message", e );
-					}
-				}
+
+                for (Map<String, Object> message : messages) {
+
+                    try {
+                        BuddyPluginBuddyMessage msg = restoreMessage(message);
+
+                        if (msg.getSubsystem() == BuddyPlugin.SUBSYSTEM_MSG_TYPE_BASE + type) {
+
+                            result.add(msg);
+                        }
+                    } catch (Throwable e) {
+
+                        buddy.log("Failed to restore message", e);
+                    }
+                }
 			}
 		}
 		
@@ -909,10 +905,10 @@ BuddyPluginBuddyMessageHandler
 		
 		Map map = new HashMap();
 		
-		map.put( "id", new Long( msg.getID()));
-		map.put( "ss", new Long( msg.getSubsystem()));
-		map.put( "to", new Long( msg.getTimeout()));
-		map.put( "cr", new Long( msg.getCreateTime()));
+		map.put( "id", (long) msg.getID());
+		map.put( "ss", (long) msg.getSubsystem());
+		map.put( "to", (long) msg.getTimeout());
+		map.put( "cr", msg.getCreateTime());
 		
 		messages.add( map );
 				
@@ -929,7 +925,7 @@ BuddyPluginBuddyMessageHandler
 		int	ss = ((Long)map.get( "ss" )).intValue();
 		int	to = ((Long)map.get( "to" )).intValue();
 		
-		long	cr = ((Long)map.get( "cr" )).longValue();
+		long	cr = (Long) map.get("cr");
 		
 		return( new BuddyPluginBuddyMessage( this, id, ss, null, to, cr ));
 	}
@@ -1014,11 +1010,11 @@ BuddyPluginBuddyMessageHandler
 			if ( store.exists()){
 			
 				File[]	 files = store.listFiles();
-			
-				for (int i=0;i<files.length;i++ ){
-					
-					files[i].delete();
-				}
+
+                for (File file : files) {
+
+                    file.delete();
+                }
 				
 				store.delete();
 			}

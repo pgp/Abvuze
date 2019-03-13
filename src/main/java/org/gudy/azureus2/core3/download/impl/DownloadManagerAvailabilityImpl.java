@@ -51,7 +51,7 @@ public class
 DownloadManagerAvailabilityImpl
 	implements DownloadManagerAvailability
 {
-	private final List<TrackerPeerSource>	peer_sources = new ArrayList<TrackerPeerSource>();
+	private final List<TrackerPeerSource>	peer_sources = new ArrayList<>();
 	
 	private TRTrackerAnnouncer	tracker_client;
 	
@@ -67,8 +67,8 @@ DownloadManagerAvailabilityImpl
 			return;
 		}
 	
-		final Set<String>	enabled_peer_sources = new HashSet<String>( Arrays.asList( _enabled_peer_sources ));
-		final Set<String>	enabled_networks	 = new HashSet<String>( Arrays.asList( _enabled_networks ));
+		final Set<String>	enabled_peer_sources = new HashSet<>(Arrays.asList(_enabled_peer_sources));
+		final Set<String>	enabled_networks	 = new HashSet<>(Arrays.asList(_enabled_networks));
 				
 		if ( enabled_peer_sources.contains( PEPeerSource.PS_BT_TRACKER)){
 			
@@ -572,7 +572,7 @@ DownloadManagerAvailabilityImpl
 						
 						IPCInterface ipc = i2p_pi.getIPC();
 						
-						Map<String,Object>	options = new HashMap<String, Object>();
+						Map<String,Object>	options = new HashMap<>();
 						
 						options.put( "peer_networks", _enabled_networks );
 						

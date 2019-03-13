@@ -28,85 +28,85 @@ package com.aelitis.azureus.core.dht.transport;
 public interface 
 DHTTransportStats 
 {
-	public static final int	STAT_SENT		= 0;
-	public static final int	STAT_OK			= 1;
-	public static final int	STAT_FAILED		= 2;
-	public static final int	STAT_RECEIVED	= 3;
+	int	STAT_SENT		= 0;
+	int	STAT_OK			= 1;
+	int	STAT_FAILED		= 2;
+	int	STAT_RECEIVED	= 3;
 	
 		/**
 		 * returns pings sent, pings succeeded, pings failed, pings received
 		 * @return
 		 */
-	
-	public long[]
+
+        long[]
 	getPings();
 	
-	public long[]
+	long[]
 	getFindNodes();
 	
-	public long[]
+	long[]
 	getFindValues();
 	
-	public long[]
+	long[]
 	getStores();
 	
-	public long[]
+	long[]
 	getQueryStores();
 	
-	public long[]
+	long[]
 	getData();
 	
-	public long[]
+	long[]
 	getKeyBlocks();
 	
 		// aliens are indexed by these constants
 
-	public static final int AT_FIND_NODE		= 0; 
-	public static final int AT_FIND_VALUE		= 1; 
-	public static final int AT_PING				= 2; 
-	public static final int AT_STATS			= 3; 
-	public static final int AT_STORE			= 4; 
-	public static final int AT_KEY_BLOCK		= 5; 
-	public static final int AT_QUERY_STORE		= 6; 
+	int AT_FIND_NODE		= 0;
+	int AT_FIND_VALUE		= 1;
+	int AT_PING				= 2;
+	int AT_STATS			= 3;
+	int AT_STORE			= 4;
+	int AT_KEY_BLOCK		= 5;
+	int AT_QUERY_STORE		= 6;
 	
-	public long[]
+	long[]
 	getAliens();
 	
-	public long
+	long
 	getIncomingRequests();
 	
-	public long
+	long
 	getPacketsSent();
 	
-	public long
+	long
 	getPacketsReceived();
 	
-	public long
+	long
 	getRequestsTimedOut();
 	
-	public long
+	long
 	getBytesSent();
 	
-	public long
+	long
 	getBytesReceived();
 	
-	public DHTTransportStats
+	DHTTransportStats
 	snapshot();
 	
-	public long
+	long
 	getSkewAverage();
 	
 		/**
 		 * -1 if stats not yet available 
 		 * @return
 		 */
-	
-	public int
+
+        int
 	getRouteablePercentage();
 	
-	public int[]
+	int[]
 	getRTTHistory();
 	
-	public String
+	String
 	getString();
 }

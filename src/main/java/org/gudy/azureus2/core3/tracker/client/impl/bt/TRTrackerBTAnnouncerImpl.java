@@ -866,41 +866,39 @@ TRTrackerBTAnnouncerImpl
   		
   		if ( peers != null ){
 	  		List	p = new ArrayList();
-	  		
-	  		for (int i=0;i<peers.length;i++){
-	  			
-	  			TRTrackerAnnouncerResponsePeer	peer = peers[i];
-	  			
-	  			if ( peer_networks == null ){
-	  				
-	  				p.add( peer );
-	  				
-	  			}else{
-	  				
-		  			String	peer_address = peer.getAddress();
-		  			
-		  			String	peer_network = AENetworkClassifier.categoriseAddress( peer_address );
-		  			
-		  			boolean	added = false;
-		  			
-		  			for (int j=0;j<peer_networks.length;j++){
-		  				
-		  				if ( peer_networks[j] == peer_network ){
-		  					
-		  					p.add( peer );
-		  					
-		  					added = true;
-		  					
-		  					break;
-		  				}
-		  			}
-	  			
-		  			if (!added && Logger.isEnabled())
-							Logger.log(new LogEvent(torrent, LOGID, LogEvent.LT_WARNING,
-									"Tracker Announcer dropped peer '" + peer_address
-											+ "' as incompatible " + "with network selection"));
-	  			}
-	  		}
+
+            for (TRTrackerAnnouncerResponsePeer peer : peers) {
+
+                if (peer_networks == null) {
+
+                    p.add(peer);
+
+                } else {
+
+                    String peer_address = peer.getAddress();
+
+                    String peer_network = AENetworkClassifier.categoriseAddress(peer_address);
+
+                    boolean added = false;
+
+                    for (String peer_network1 : peer_networks) {
+
+                        if (peer_network1 == peer_network) {
+
+                            p.add(peer);
+
+                            added = true;
+
+                            break;
+                        }
+                    }
+
+                    if (!added && Logger.isEnabled())
+                        Logger.log(new LogEvent(torrent, LOGID, LogEvent.LT_WARNING,
+                                "Tracker Announcer dropped peer '" + peer_address
+                                        + "' as incompatible " + "with network selection"));
+                }
+            }
 	  		
 	  		peers = new TRTrackerAnnouncerResponsePeer[ p.size()];
 	  		
@@ -1353,7 +1351,7 @@ TRTrackerBTAnnouncerImpl
 			if ( 	first_effort &&
 					AENetworkClassifier.categoriseAddress( original_reqUrl.getHost() ) != AENetworkClassifier.AT_PUBLIC ){
 							
-				Map<String,Object>	opts = new HashMap<String, Object>();
+				Map<String,Object>	opts = new HashMap<>();
 				
 				if ( peer_networks != null ){
 				
@@ -1773,19 +1771,23 @@ TRTrackerBTAnnouncerImpl
 				 				int	event = PRUDPPacketRequestAnnounce.EV_UPDATE;
 				 				
 				 				if ( event_str != null ){
-				 					
-				 					if ( event_str.equals( "started" )){
-				 						
-				 						event = PRUDPPacketRequestAnnounce.EV_STARTED;
-				 						
-				 					}else if ( event_str.equals( "stopped" )){
-				 						
-				 						event = PRUDPPacketRequestAnnounce.EV_STOPPED;
-				 						
-				 					}else if ( event_str.equals( "completed" )){
-				 						
-				 						event = PRUDPPacketRequestAnnounce.EV_COMPLETED;
-				 					}
+
+                                    switch (event_str) {
+                                        case "started":
+
+                                            event = PRUDPPacketRequestAnnounce.EV_STARTED;
+
+                                            break;
+                                        case "stopped":
+
+                                            event = PRUDPPacketRequestAnnounce.EV_STOPPED;
+
+                                            break;
+                                        case "completed":
+
+                                            event = PRUDPPacketRequestAnnounce.EV_COMPLETED;
+                                            break;
+                                    }
 				 				}
 				 				
 				 				String	ip_str = getURLParam( url_str, "ip" );
@@ -1826,19 +1828,23 @@ TRTrackerBTAnnouncerImpl
 				 				int	event = PRUDPPacketRequestAnnounce.EV_UPDATE;
 				 				
 				 				if ( event_str != null ){
-				 					
-				 					if ( event_str.equals( "started" )){
-				 						
-				 						event = PRUDPPacketRequestAnnounce.EV_STARTED;
-				 						
-				 					}else if ( event_str.equals( "stopped" )){
-				 						
-				 						event = PRUDPPacketRequestAnnounce.EV_STOPPED;
-				 						
-				 					}else if ( event_str.equals( "completed" )){
-				 						
-				 						event = PRUDPPacketRequestAnnounce.EV_COMPLETED;
-				 					}
+
+                                    switch (event_str) {
+                                        case "started":
+
+                                            event = PRUDPPacketRequestAnnounce.EV_STARTED;
+
+                                            break;
+                                        case "stopped":
+
+                                            event = PRUDPPacketRequestAnnounce.EV_STOPPED;
+
+                                            break;
+                                        case "completed":
+
+                                            event = PRUDPPacketRequestAnnounce.EV_COMPLETED;
+                                            break;
+                                    }
 				 				}
 				 				
 				 				String	ip_str = getURLParam( url_str, "ip" );
@@ -1877,7 +1883,7 @@ TRTrackerBTAnnouncerImpl
 				 					
 				 					Map	map = new HashMap();
 				 					
-				 					map.put( "interval", new Long( announce_reply.getInterval()));
+				 					map.put( "interval", (long) announce_reply.getInterval());
 				 					
 				 					int[]	addresses 	= announce_reply.getAddresses();
 				 					short[]	ports		= announce_reply.getPorts();
@@ -1893,7 +1899,7 @@ TRTrackerBTAnnouncerImpl
 				 						peers.add( peer );
 				 						
 				 						peer.put( "ip", PRHelpers.intToAddress(addresses[i]).getBytes());
-				 						peer.put( "port", new Long( ports[i]));
+				 						peer.put( "port", (long) ports[i]);
 				 					}
 				 					
 				 					byte[] data = BEncoder.encode( map );
@@ -1908,13 +1914,13 @@ TRTrackerBTAnnouncerImpl
 				 					
 				 					Map	map = new HashMap();
 				 					
-				 					map.put( "interval", new Long( announce_reply.getInterval()));
+				 					map.put( "interval", (long) announce_reply.getInterval());
 				 					
 				 					int[]	addresses 	= announce_reply.getAddresses();
 				 					short[]	ports		= announce_reply.getPorts();
 				 					
-				 					map.put( "complete", new Long(announce_reply.getSeeders()));
-				 					map.put( "incomplete", new Long(announce_reply.getLeechers()));
+				 					map.put( "complete", (long) announce_reply.getSeeders());
+				 					map.put( "incomplete", (long) announce_reply.getLeechers());
 				 					
 				 					List	peers = new ArrayList();
 				 					
@@ -1927,7 +1933,7 @@ TRTrackerBTAnnouncerImpl
 				 						peers.add( peer );
 				 						
 				 						peer.put( "ip", PRHelpers.intToAddress(addresses[i]).getBytes());
-				 						peer.put( "port", new Long( ports[i]));
+				 						peer.put( "port", (long) ports[i]);
 				 					}
 				 					
 				 					byte[] data = BEncoder.encode( map );
@@ -2156,18 +2162,18 @@ TRTrackerBTAnnouncerImpl
     	normal_network_ok	= true;
     	
     }else{
-	    for (int i=0;i<peer_networks.length;i++){
-	    
-	    	if ( peer_networks[i] == AENetworkClassifier.AT_PUBLIC ){
-	    		
-	    		normal_network_ok = true;
-	    	}
-	    	
-	    	if ( peer_networks[i] == tracker_network ){
-	    		
-	    		network_ok	= true;
-	    	}
-	    }
+        for (String peer_network : peer_networks) {
+
+            if (peer_network == AENetworkClassifier.AT_PUBLIC) {
+
+                normal_network_ok = true;
+            }
+
+            if (peer_network == tracker_network) {
+
+                network_ok = true;
+            }
+        }
     }
     
     if ( !network_ok ){
@@ -2310,7 +2316,7 @@ TRTrackerBTAnnouncerImpl
 		
 		String[]	bits = tail.split( "&" );
 		
-		Map<String,String>	map = new HashMap<String, String>();
+		Map<String,String>	map = new HashMap<>();
 		
 		for ( String bit: bits ){
 			
@@ -2486,32 +2492,32 @@ TRTrackerBTAnnouncerImpl
 			}else{
 	  			
 					//Ok we have a multi-tracker torrent
-				
-				for(int i = 0 ; i < announce_urls.length ; i++){
-					
-				  	//Each list contains a list of urls
-				  
-					URL[]	urls = announce_urls[i].getAnnounceURLs();
-					
-				 	List random_urls = new ArrayList();
-				 	
-				 	for(int j = 0 ; j < urls.length; j++){
-				  		
-						//System.out.println(urls.get(j).getClass());
-						      
-						URL url = urls[j];
-						            		
-							//Shuffle
-							
-						int pos = shuffle?(int)(Math.random() *  (random_urls.size()+1)):j;
-						
-						random_urls.add(pos,url);
-				  	}
-				  			  	         
-				  		//Add this list to the list
-				  		
-				 	trackerUrlLists.add(random_urls);
-				}
+
+                for (TOTorrentAnnounceURLSet announce_url : announce_urls) {
+
+                    //Each list contains a list of urls
+
+                    URL[] urls = announce_url.getAnnounceURLs();
+
+                    List random_urls = new ArrayList();
+
+                    for (int j = 0; j < urls.length; j++) {
+
+                        //System.out.println(urls.get(j).getClass());
+
+                        URL url = urls[j];
+
+                        //Shuffle
+
+                        int pos = shuffle ? (int) (Math.random() * (random_urls.size() + 1)) : j;
+
+                        random_urls.add(pos, url);
+                    }
+
+                    //Add this list to the list
+
+                    trackerUrlLists.add(random_urls);
+                }
 			}      
 		}catch(Exception e){
 			
@@ -2575,16 +2581,14 @@ TRTrackerBTAnnouncerImpl
 	 					List peer_sources = (List)o;
 
 	 					List	x = new ArrayList();
-	 					
-	 					for (int i=0;i<peer_sources.size();i++){
-	 						
-	 						Object o1 = peer_sources.get(i);
-	 						
-	 						if ( o1 instanceof byte[] ){
-	 							
-	 							x.add( new String((byte[])o1));
-	 						}
-	 					}
+
+                        for (Object o1 : peer_sources) {
+
+                            if (o1 instanceof byte[]) {
+
+                                x.add(new String((byte[]) o1));
+                            }
+                        }
 	 					
 	 					String[]	y = new String[x.size()];
 	 					
@@ -2650,7 +2654,7 @@ TRTrackerBTAnnouncerImpl
 							throw( new Exception( "interval missing" ));
 						}
 						
-						tracker_interval = time_to_wait = ((Long) metaData.get("interval")).longValue();
+						tracker_interval = time_to_wait = (Long) metaData.get("interval");
 						
 						Long raw_min_interval = (Long) metaData.get("min interval");
 
@@ -2666,7 +2670,7 @@ TRTrackerBTAnnouncerImpl
 						}
 
 						if (raw_min_interval != null) {
-							tracker_min_interval = min_interval = raw_min_interval.longValue();
+							tracker_min_interval = min_interval = raw_min_interval;
 							
 							// ignore useless values
 							// Note: Many trackers set min_interval and interval the same.
@@ -2777,7 +2781,7 @@ TRTrackerBTAnnouncerImpl
 				    
 				    
 			    	Long	az_compact_l 	= (Long)metaData.get( "azcompact" );
-			    	long	az_compact		= az_compact_l==null?0:az_compact_l.longValue();
+			    	long	az_compact		= az_compact_l==null?0: az_compact_l;
 
 					boolean	this_is_az_tracker = az_compact == 2;
 					
@@ -2809,31 +2813,31 @@ TRTrackerBTAnnouncerImpl
 		 					 
 							long	total_rtt 	= 0;
 							int		rtt_count	= 0;
-							
-							for ( int i = 0; i < peers_length; i++ ){
-							 	
-								Map peer = (Map) meta_peers.get(i);
-								
-					    		Long	l_rtt = (Long)peer.get( "r" );
-	
-					    		if ( l_rtt != null ){
-					    			
-					    			long rtt = l_rtt.longValue();
-					    			
-					    			if ( rtt <= 0 ){
-					    				
-					    					// invalid, remove
-					    				
-					    				peer.remove( "r" );
-					    				
-					    			}else{
-					    				
-					    				total_rtt 	+= rtt;
-					    			}
-					    			
-					    			rtt_count++; 
-					    		}
-							}
+
+                            for (Object meta_peer : meta_peers) {
+
+                                Map peer = (Map) meta_peer;
+
+                                Long l_rtt = (Long) peer.get("r");
+
+                                if (l_rtt != null) {
+
+                                    long rtt = l_rtt;
+
+                                    if (rtt <= 0) {
+
+                                        // invalid, remove
+
+                                        peer.remove("r");
+
+                                    } else {
+
+                                        total_rtt += rtt;
+                                    }
+
+                                    rtt_count++;
+                                }
+                            }
 							
 							final int average_rtt = (int)( rtt_count==0?0:(total_rtt/rtt_count));
 							
@@ -2955,138 +2959,138 @@ TRTrackerBTAnnouncerImpl
 							
 							meta_peers = new_peers;
 						}
-						
-						for ( int i = 0; i < peers_length; i++ ){
-						 	
-							Map peer = (Map) meta_peers.get(i);
-							   	
-							try{
-								byte[]		ip_bytes = (byte[])peer.get("i");
-	
-								String	ip;
-								
-								if ( ip_bytes.length == 4 ){
-									
-						    		int	ip1 = 0xff & ip_bytes[0];
-						    		int	ip2 = 0xff & ip_bytes[1];
-						    		int	ip3 = 0xff & ip_bytes[2];
-						    		int	ip4 = 0xff & ip_bytes[3];
-		
-						    		ip 	= ip1 + "." + ip2 + "." + ip3 + "." + ip4;
-								}else{
-								
-									StringBuilder sb = new StringBuilder(39);
-									
-									for ( int j=0; j<16; j+=2 ){
-										
-										sb.append(	
-									    	Integer.toHexString(((ip_bytes[j]<<8) & 0xff00) | (ip_bytes[j+1]&0x00ff)));
-									    
-									    if (j < 14 ){
-									    	
-									       sb.append( ":" );
-									    }
-									}
 
-									ip = sb.toString();
-								}
-								
-					    		byte[]	tcp_bytes	= (byte[])peer.get("t");
-					    		
-					    		int		tcp_port 	= ((tcp_bytes[0]&0xff) << 8 ) + (tcp_bytes[1]&0xff );
-	                
-					    		byte[]	peer_peer_id = TRTrackerAnnouncerImpl.getAnonymousPeerId( ip, tcp_port );
-	
-					    		int		udp_port 	= 0;
-					    		
-					    		byte[]	udp_bytes = (byte[])peer.get("u");
-								
-					    		if ( udp_bytes != null ){
-					    			
-					    			if ( udp_bytes.length == 0 ){
-					    				
-					    				udp_port = tcp_port;
-					    				
-					    			}else{
-					    				
-					    				udp_port	= ((udp_bytes[0]&0xff) << 8 ) + (udp_bytes[1]&0xff );
-					    			}
-					    		}
-					    		
-					    		int	http_port = 0;
-					    		
-					    		byte[]	http_bytes = (byte[])peer.get("h");
+                        for (Object meta_peer : meta_peers) {
 
-					    		if ( http_bytes != null ){
-					    			
-					    			http_port	= ((http_bytes[0]&0xff) << 8 ) + (http_bytes[1]&0xff );
-					    		}
-					    		
-					    		short	protocol = DownloadAnnounceResultPeer.PROTOCOL_NORMAL;
-					    		
-					    		byte[]	protocol_bytes = (byte[])peer.get("c");
-					    		
-					    		if ( protocol_bytes != null ){
-					    			
-					    			protocol = (protocol_bytes[0]&0x01)==0?DownloadAnnounceResultPeer.PROTOCOL_NORMAL:DownloadAnnounceResultPeer.PROTOCOL_CRYPT;
-					    		}
-					    		
-					    		Long	l_azver = (Long)peer.get("v" );
-					    		
-					    		byte	az_ver = l_azver==null?TRTrackerAnnouncer.AZ_TRACKER_VERSION_1:l_azver.byteValue();
-					    								    		
-					    		Long	l_up_speed = (Long)peer.get( "s" );
-					    		
-					    		boolean	biased = peer.containsKey("b");
-					    		
-					    		if ( biased ){
-					    			
-					    			PeerClassifier.setAzureusIP( ip );
-					    		}
-					    		
-								TRTrackerAnnouncerResponsePeerImpl new_peer = 
-									new TRTrackerAnnouncerResponsePeerImpl( 
-										PEPeerSource.PS_BT_TRACKER, 
-										peer_peer_id, 
-										ip, 
-										tcp_port,
-										udp_port,
-										http_port,
-										protocol,
-										az_ver,
-										l_up_speed==null?0:l_up_speed.shortValue());
-										
-								if (Logger.isEnabled()){
-									
-						    		String	extra = "";
-						    		
-						    		Long	l_rtt = (Long)peer.get( "r" );
-						    				
-						    		if ( l_rtt != null ){
-						    			
-						    			extra = ",rtt=" + l_rtt;
-						    		}
-						    		
-						    		if ( biased ){
-						    			
-						    			extra += ",biased";
-						    		}
-						    		
-									Logger.log(new LogEvent(torrent, LOGID,
-											"AZ2-COMPACT PEER: " + new_peer.getString() + extra));
-								}
-								
-								valid_meta_peers.add( new_peer );
-								
-							}catch( Throwable e ){
-								
-				    			if (Logger.isEnabled())
-				    				Logger.log(
-				    					new LogEvent(
-				    						torrent, LOGID, LogEvent.LT_ERROR,
-				    						"Invalid az2 peer received: " + peer ));
-							}
-						}
+                            Map peer = (Map) meta_peer;
+
+                            try {
+                                byte[] ip_bytes = (byte[]) peer.get("i");
+
+                                String ip;
+
+                                if (ip_bytes.length == 4) {
+
+                                    int ip1 = 0xff & ip_bytes[0];
+                                    int ip2 = 0xff & ip_bytes[1];
+                                    int ip3 = 0xff & ip_bytes[2];
+                                    int ip4 = 0xff & ip_bytes[3];
+
+                                    ip = ip1 + "." + ip2 + "." + ip3 + "." + ip4;
+                                } else {
+
+                                    StringBuilder sb = new StringBuilder(39);
+
+                                    for (int j = 0; j < 16; j += 2) {
+
+                                        sb.append(
+                                                Integer.toHexString(((ip_bytes[j] << 8) & 0xff00) | (ip_bytes[j + 1] & 0x00ff)));
+
+                                        if (j < 14) {
+
+                                            sb.append(":");
+                                        }
+                                    }
+
+                                    ip = sb.toString();
+                                }
+
+                                byte[] tcp_bytes = (byte[]) peer.get("t");
+
+                                int tcp_port = ((tcp_bytes[0] & 0xff) << 8) + (tcp_bytes[1] & 0xff);
+
+                                byte[] peer_peer_id = TRTrackerAnnouncerImpl.getAnonymousPeerId(ip, tcp_port);
+
+                                int udp_port = 0;
+
+                                byte[] udp_bytes = (byte[]) peer.get("u");
+
+                                if (udp_bytes != null) {
+
+                                    if (udp_bytes.length == 0) {
+
+                                        udp_port = tcp_port;
+
+                                    } else {
+
+                                        udp_port = ((udp_bytes[0] & 0xff) << 8) + (udp_bytes[1] & 0xff);
+                                    }
+                                }
+
+                                int http_port = 0;
+
+                                byte[] http_bytes = (byte[]) peer.get("h");
+
+                                if (http_bytes != null) {
+
+                                    http_port = ((http_bytes[0] & 0xff) << 8) + (http_bytes[1] & 0xff);
+                                }
+
+                                short protocol = DownloadAnnounceResultPeer.PROTOCOL_NORMAL;
+
+                                byte[] protocol_bytes = (byte[]) peer.get("c");
+
+                                if (protocol_bytes != null) {
+
+                                    protocol = (protocol_bytes[0] & 0x01) == 0 ? DownloadAnnounceResultPeer.PROTOCOL_NORMAL : DownloadAnnounceResultPeer.PROTOCOL_CRYPT;
+                                }
+
+                                Long l_azver = (Long) peer.get("v");
+
+                                byte az_ver = l_azver == null ? TRTrackerAnnouncer.AZ_TRACKER_VERSION_1 : l_azver.byteValue();
+
+                                Long l_up_speed = (Long) peer.get("s");
+
+                                boolean biased = peer.containsKey("b");
+
+                                if (biased) {
+
+                                    PeerClassifier.setAzureusIP(ip);
+                                }
+
+                                TRTrackerAnnouncerResponsePeerImpl new_peer =
+                                        new TRTrackerAnnouncerResponsePeerImpl(
+                                                PEPeerSource.PS_BT_TRACKER,
+                                                peer_peer_id,
+                                                ip,
+                                                tcp_port,
+                                                udp_port,
+                                                http_port,
+                                                protocol,
+                                                az_ver,
+                                                l_up_speed == null ? 0 : l_up_speed.shortValue());
+
+                                if (Logger.isEnabled()) {
+
+                                    String extra = "";
+
+                                    Long l_rtt = (Long) peer.get("r");
+
+                                    if (l_rtt != null) {
+
+                                        extra = ",rtt=" + l_rtt;
+                                    }
+
+                                    if (biased) {
+
+                                        extra += ",biased";
+                                    }
+
+                                    Logger.log(new LogEvent(torrent, LOGID,
+                                            "AZ2-COMPACT PEER: " + new_peer.getString() + extra));
+                                }
+
+                                valid_meta_peers.add(new_peer);
+
+                            } catch (Throwable e) {
+
+                                if (Logger.isEnabled())
+                                    Logger.log(
+                                            new LogEvent(
+                                                    torrent, LOGID, LogEvent.LT_ERROR,
+                                                    "Invalid az2 peer received: " + peer));
+                            }
+                        }
 						
 			    	}else if ( meta_peers_peek instanceof List ){
 				    	
@@ -3449,7 +3453,7 @@ TRTrackerBTAnnouncerImpl
 								// this is to allow specific torrents to be refreshed more quickly
 								// if the tracker permits. Parg
 							
-							min_interval_override = ((Long)override).longValue();
+							min_interval_override = (Long) override;
 						}
 					}
 
@@ -3735,42 +3739,40 @@ TRTrackerBTAnnouncerImpl
 				
 			boolean ps_enabled = 	announce_data_provider != null && 
 									announce_data_provider.isPeerSourceEnabled( PEPeerSource.PS_BT_TRACKER );
-						
-			for (int i=0;i<ext_peers.length;i++){
-				
-				DownloadAnnounceResultPeer	ext_peer = ext_peers[i];
-				
-				String	ps = ext_peer.getSource();
-				
-					// filter out any disabled peers
-				
-				if ( !ps_enabled && ps.equals( PEPeerSource.PS_BT_TRACKER )){
-										
-					continue;
-					
-				}else{
-					
-					int		http_port	= 0;
-					byte	az_version 	= TRTrackerAnnouncer.AZ_TRACKER_VERSION_1;
-					
-					TRTrackerAnnouncerResponsePeerImpl p = 
-						new TRTrackerAnnouncerResponsePeerImpl( 
-									ext_peer.getSource(),
-									ext_peer.getPeerID(),
-									ext_peer.getAddress(), 
-									ext_peer.getPort(),
-									ext_peer.getUDPPort(),
-									http_port,
-									ext_peer.getProtocol(),
-									az_version,
-									(short)0 );
-					
-					l_peers.add( p );
-				
-					if (Logger.isEnabled())
-						Logger.log(new LogEvent(torrent, LOGID, "EXTERNAL PEER: " + p.getString())); 
-				}
-			}
+
+            for (DownloadAnnounceResultPeer ext_peer : ext_peers) {
+
+                String ps = ext_peer.getSource();
+
+                // filter out any disabled peers
+
+                if (!ps_enabled && ps.equals(PEPeerSource.PS_BT_TRACKER)) {
+
+                    continue;
+
+                } else {
+
+                    int http_port = 0;
+                    byte az_version = TRTrackerAnnouncer.AZ_TRACKER_VERSION_1;
+
+                    TRTrackerAnnouncerResponsePeerImpl p =
+                            new TRTrackerAnnouncerResponsePeerImpl(
+                                    ext_peer.getSource(),
+                                    ext_peer.getPeerID(),
+                                    ext_peer.getAddress(),
+                                    ext_peer.getPort(),
+                                    ext_peer.getUDPPort(),
+                                    http_port,
+                                    ext_peer.getProtocol(),
+                                    az_version,
+                                    (short) 0);
+
+                    l_peers.add(p);
+
+                    if (Logger.isEnabled())
+                        Logger.log(new LogEvent(torrent, LOGID, "EXTERNAL PEER: " + p.getString()));
+                }
+            }
 			
 			TRTrackerAnnouncerResponsePeerImpl[] peers = new TRTrackerAnnouncerResponsePeerImpl[ l_peers.size()];
 

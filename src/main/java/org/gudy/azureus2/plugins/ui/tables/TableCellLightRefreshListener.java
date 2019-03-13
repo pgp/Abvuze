@@ -27,5 +27,5 @@ public interface TableCellLightRefreshListener extends TableCellRefreshListener 
 	   * @param cell TableCell that the refresh trigger is for
 	   * @param sortOnlyRefresh true when the cell is being refreshed despite not being visible (this usually occurs when the cell belongs to the sort column)
 	   */
-	public void refresh(TableCell cell, boolean sortOnlyRefresh);
+      void refresh(TableCell cell, boolean sortOnlyRefresh);
 }

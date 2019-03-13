@@ -30,20 +30,20 @@ import java.io.*;
 public interface 
 LocaleUtilDecoder
 {
-	public String
+	String
 	getName();
 
-	public int
+	int
 	getIndex();
 	
-	public String
+	String
 	tryDecode(
-		byte[]		array,
-		boolean		lax );
+            byte[] array,
+            boolean lax);
 	
-	public String
+	String
 	decodeString(
-		byte[]		bytes )
+            byte[] bytes)
 		
 		throws UnsupportedEncodingException;
 }

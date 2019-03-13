@@ -23,12 +23,12 @@ package com.aelitis.azureus.core.pairing;
 public interface 
 PairingTestListener 
 {
-	public void
+	void
 	testStarted(
-		PairingTest		test );
+            PairingTest test);
 	
-	public void
+	void
 	testComplete(
-		PairingTest		test );
+            PairingTest test);
 
 }

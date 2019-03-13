@@ -27,12 +27,12 @@ package org.gudy.azureus2.core3.ipfilter;
 public interface 
 BadIp 
 {
-	public String
+	String
 	getIp();
 	
-	public int
+	int
 	getNumberOfWarnings();
 	
-	public long
+	long
 	getLastTime();
 }

@@ -187,45 +187,45 @@ AEProxyFactory
 	public interface
 	PluginProxy
 	{
-		public String
+		String
 		getTarget();
 		
-		public PluginProxy
+		PluginProxy
 		getChildProxy(
-			String		reason,
-			URL			url );
+                String reason,
+                URL url);
 		
-		public Proxy
+		Proxy
 		getProxy();
 		
-		public URL
+		URL
 		getURL();
 		
-		public String
+		String
 		getURLHostRewrite();
 		
-		public String
+		String
 		getHost();
 		
-		public int
+		int
 		getPort();
 		
-		public void
+		void
 		setOK(
-			boolean	good );
+                boolean good);
 	}
 	
 	public interface
 	PluginHTTPProxy
 	{
-		public Proxy
+		Proxy
 		getProxy();
 		
-		public String
+		String
 		proxifyURL(
-			String		url );
+                String url);
 		
-		public void
+		void
 		destroy();
 	}
 	

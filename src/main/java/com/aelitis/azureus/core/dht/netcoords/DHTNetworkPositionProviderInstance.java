@@ -22,7 +22,7 @@ package com.aelitis.azureus.core.dht.netcoords;
 public interface 
 DHTNetworkPositionProviderInstance 
 {
-	public void
+	void
 	log(
-		String		log );
+            String log);
 }

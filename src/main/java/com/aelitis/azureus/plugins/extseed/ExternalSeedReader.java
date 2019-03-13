@@ -30,109 +30,109 @@ import org.gudy.azureus2.plugins.torrent.Torrent;
 public interface 
 ExternalSeedReader 
 {
-	public Torrent
+	Torrent
 	getTorrent();
 	
-	public String
+	String
 	getName();
 	
-	public String
+	String
 	getType();
 	
-	public String
+	String
 	getStatus();
 	
 		// transient peers are moved from the download on failure
 	
-	public boolean
+	boolean
 	isTransient();
 	
-	public boolean
+	boolean
 	isPermanentlyUnavailable();
 	
-	public URL
+	URL
 	getURL();
 	
-	public String
+	String
 	getIP();
 	
-	public int
+	int
 	getPort();
 	
-	public boolean
+	boolean
 	isActive();
 	
-	public boolean
+	boolean
 	sameAs(
-		ExternalSeedReader	other );
+            ExternalSeedReader other);
 	
-	public boolean
+	boolean
 	checkActivation(
-		PeerManager		peer_manager,
-		Peer			peer );
+            PeerManager peer_manager,
+            Peer peer);
 	
-	public void
+	void
 	addRequests(
-		List<PeerReadRequest>			requests );
+            List<PeerReadRequest> requests);
 	
-	public void
+	void
 	cancelRequest(
-		PeerReadRequest	request );
+            PeerReadRequest request);
 	
-	public int
+	int
 	getMaximumNumberOfRequests();
 
-	public void
+	void
 	calculatePriorityOffsets(
-		PeerManager		peer_manager,
-		int[]			base_priorities );
+            PeerManager peer_manager,
+            int[] base_priorities);
 	
-	public int[]
+	int[]
 	getPriorityOffsets();
 
-	public void
+	void
 	cancelAllRequests();
 	
-	public int
+	int
 	getRequestCount();
 	
-	public List<PeerReadRequest>
+	List<PeerReadRequest>
 	getExpiredRequests();
 	
-	public List<PeerReadRequest>
+	List<PeerReadRequest>
 	getRequests();
 	
-	public int
+	int
 	readBytes(
-		int	max );
+            int max);
 	
-	public int
+	int
 	getPercentDoneOfCurrentIncomingRequest();
 	
-	public int[] 
+	int[]
    	getOutgoingRequestedPieceNumbers();
 
-   	public int
+   	int
    	getOutgoingRequestCount();
 	       	
-	public byte[]
+	byte[]
 	read(
-		int			piece_number,
-		int			offset,
-		int			length,
-		int			timeout )
+            int piece_number,
+            int offset,
+            int length,
+            int timeout)
 	
 		throws ExternalSeedException;
 	
-	public void
+	void
 	deactivate(
-		String	reason );
+            String reason);
 	
-	public void
+	void
 	addListener(
-		ExternalSeedReaderListener	l );
+            ExternalSeedReaderListener l);
 	
-	public void
+	void
 	removeListener(
-		ExternalSeedReaderListener	l );
+            ExternalSeedReaderListener l);
 }

@@ -20,6 +20,7 @@
 
 package com.aelitis.azureus.plugins.net.buddy;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.gudy.azureus2.core3.util.AEThread2;
@@ -119,7 +120,7 @@ BuddyPluginAZ2
 		if ( type == RT_AZ2_REQUEST_MESSAGE ){
 			
 			try{
-				String	msg = new String( (byte[])request.get( "msg" ), "UTF8" );
+				String	msg = new String( (byte[])request.get( "msg" ), StandardCharsets.UTF_8);
 			
 				from_buddy.setLastMessageReceived( msg );
 				
@@ -127,7 +128,7 @@ BuddyPluginAZ2
 				
 			}
 			
-			reply.put( "type", new Long( RT_AZ2_REPLY_MESSAGE ));
+			reply.put( "type", (long) RT_AZ2_REPLY_MESSAGE);
 
 		}else if (  type == RT_AZ2_REQUEST_SEND_TORRENT ){
 			
@@ -157,7 +158,7 @@ BuddyPluginAZ2
 					}
 				}.start();
 				
-				reply.put( "type", new Long( RT_AZ2_REPLY_SEND_TORRENT ));
+				reply.put( "type", (long) RT_AZ2_REPLY_SEND_TORRENT);
 				
 			}catch( Throwable e ){
 				
@@ -200,7 +201,7 @@ BuddyPluginAZ2
 			
 			chat.process( from_buddy, msg );
 						
-			reply.put( "type", new Long( RT_AZ2_REPLY_CHAT ));
+			reply.put( "type", (long) RT_AZ2_REPLY_CHAT);
 						
 		}else if (  type == RT_AZ2_REQUEST_TRACK ){
 			
@@ -219,7 +220,7 @@ BuddyPluginAZ2
 					if ( res != null ){
 						
 						reply.put( "msg", res );
-						reply.put( "type", new Long( RT_AZ2_REPLY_TRACK ));
+						reply.put( "type", (long) RT_AZ2_REPLY_TRACK);
 
 						ok = true;
 						
@@ -238,14 +239,14 @@ BuddyPluginAZ2
 		}else if (  type == RT_AZ2_REQUEST_RSS ){
 				
 			try{
-				Map<String,Object> res = new HashMap<String, Object>();
+				Map<String,Object> res = new HashMap<>();
 
 				reply.put( "msg", res );
-				reply.put( "type", new Long( RT_AZ2_REPLY_RSS ));
+				reply.put( "type", (long) RT_AZ2_REPLY_RSS);
 
 				Map msg = (Map)request.get( "msg" );
 
-				String category = new String((byte[])msg.get( "cat"), "UTF-8" );
+				String category = new String((byte[])msg.get( "cat"), StandardCharsets.UTF_8);
 				
 				byte[] hash	= (byte[])msg.get( "hash" );
 				
@@ -253,7 +254,7 @@ BuddyPluginAZ2
 					
 					byte[]	if_mod 	= (byte[])msg.get( "if_mod" );
 					
-					BuddyPlugin.feedDetails feed = plugin.getRSS( from_buddy, category, if_mod==null?null:new String( if_mod, "UTF-8" ));
+					BuddyPlugin.feedDetails feed = plugin.getRSS( from_buddy, category, if_mod==null?null:new String( if_mod, StandardCharsets.UTF_8));
 					
 					res.put( "rss", feed.getContent());
 					
@@ -327,24 +328,22 @@ BuddyPluginAZ2
 	informCreated(
 		chatInstance		chat )
 	{
-		Iterator	it = listeners.iterator();
-		
-		while( it.hasNext()){
-			
-			((BuddyPluginAZ2Listener)it.next()).chatCreated( chat );
-		}
+
+        for (Object listener : listeners) {
+
+            ((BuddyPluginAZ2Listener) listener).chatCreated(chat);
+        }
 	}
 	
 	protected void
 	informDestroyed(
 		chatInstance		chat )
 	{
-		Iterator	it = listeners.iterator();
-		
-		while( it.hasNext()){
-			
-			((BuddyPluginAZ2Listener)it.next()).chatDestroyed( chat );
-		}
+
+        for (Object listener : listeners) {
+
+            ((BuddyPluginAZ2Listener) listener).chatDestroyed(chat);
+        }
 	}
 	
 	public void
@@ -355,7 +354,7 @@ BuddyPluginAZ2
 		try{
 			Map	request = new HashMap();
 			
-			request.put( "type", new Long( RT_AZ2_REQUEST_MESSAGE ));
+			request.put( "type", (long) RT_AZ2_REQUEST_MESSAGE);
 			request.put( "msg", msg.getBytes());
 			
 			sendMessage( buddy, request );
@@ -374,7 +373,7 @@ BuddyPluginAZ2
 		try{
 			Map	request = new HashMap();
 			
-			request.put( "type", new Long( RT_AZ2_REQUEST_CHAT ));
+			request.put( "type", (long) RT_AZ2_REQUEST_CHAT);
 			request.put( "msg", msg );
 			
 			sendMessage( buddy, request );
@@ -394,7 +393,7 @@ BuddyPluginAZ2
 			
 			Map	request = new HashMap();
 			
-			request.put( "type", new Long( RT_AZ2_REQUEST_SEND_TORRENT ));
+			request.put( "type", (long) RT_AZ2_REQUEST_SEND_TORRENT);
 			request.put( "torrent", torrent.writeToBEncodedData());
 			
 			sendMessage( buddy, request );
@@ -416,7 +415,7 @@ BuddyPluginAZ2
 		try{
 			Map	request = new HashMap();
 			
-			request.put( "type", new Long( RT_AZ2_REQUEST_TRACK ));
+			request.put( "type", (long) RT_AZ2_REQUEST_TRACK);
 			request.put( "msg", msg );
 			
 			buddy.sendMessage(
@@ -466,7 +465,7 @@ BuddyPluginAZ2
 		try{
 			Map	request = new HashMap();
 			
-			request.put( "type", new Long( RT_AZ2_REQUEST_RSS ));
+			request.put( "type", (long) RT_AZ2_REQUEST_RSS);
 			request.put( "msg", msg );
 			
 			buddy.sendMessage(
@@ -621,19 +620,17 @@ BuddyPluginAZ2
 			chatParticipant p = getParticipant( buddy );
 			
 			if ( p != null ){
-				
-				Iterator it = listeners.iterator();
-				
-				while( it.hasNext()){
-					
-					try{
-						((BuddyPluginAZ2ChatListener)it.next()).participantRemoved( p );
-						
-					}catch( Throwable e ){
-						
-						Debug.printStackTrace(e);
-					}
-				}
+
+                for (Object listener : listeners) {
+
+                    try {
+                        ((BuddyPluginAZ2ChatListener) listener).participantRemoved(p);
+
+                    } catch (Throwable e) {
+
+                        Debug.printStackTrace(e);
+                    }
+                }
 			}
 		}
 
@@ -644,19 +641,17 @@ BuddyPluginAZ2
 			chatParticipant p = getParticipant( buddy );
 			
 			if ( p != null ){
-			
-				Iterator it = listeners.iterator();
-			
-				while( it.hasNext()){
-					
-					try{
-						((BuddyPluginAZ2ChatListener)it.next()).participantChanged( p );
-						
-					}catch( Throwable e ){
-						
-						Debug.printStackTrace(e);
-					}
-				}
+
+                for (Object listener : listeners) {
+
+                    try {
+                        ((BuddyPluginAZ2ChatListener) listener).participantChanged(p);
+
+                    } catch (Throwable e) {
+
+                        Debug.printStackTrace(e);
+                    }
+                }
 			}
 		}
 		
@@ -696,18 +691,18 @@ BuddyPluginAZ2
 			}else if ( type == CHAT_MSG_TYPE_PARTICIPANTS_ADDED ){
 				
 				List added = (List)msg.get( "p" );
-				
-				for (int i=0;i<added.size();i++){
-					
-					Map	participant = (Map)added.get(i);
-					
-					String pk = new String((byte[])participant.get( "pk" ));
-					
-					if ( !pk.equals( plugin.getPublicKey())){
-					
-						addParticipant( pk );
-					}
-				}
+
+                for (Object o : added) {
+
+                    Map participant = (Map) o;
+
+                    String pk = new String((byte[]) participant.get("pk"));
+
+                    if (!pk.equals(plugin.getPublicKey())) {
+
+                        addParticipant(pk);
+                    }
+                }
 			}
 		}
 		
@@ -715,7 +710,7 @@ BuddyPluginAZ2
 		sendMessage(
 			Map		msg )
 		{
-			msg.put( "type", new Long( CHAT_MSG_TYPE_TEXT ));
+			msg.put( "type", (long) CHAT_MSG_TYPE_TEXT);
 			
 			sendMessageBase( msg );
 		}
@@ -732,18 +727,16 @@ BuddyPluginAZ2
 			}
 			
 			msg.put( "id", id );
-			
-			Iterator it = ps.values().iterator();
-			
-			while( it.hasNext()){
-				
-				chatParticipant participant = (chatParticipant)it.next();
-				
-				if ( participant.isAuthorised()){
-					
-					sendAZ2Chat( participant.getBuddy(), msg );
-				}
-			}
+
+            for (Object o : ps.values()) {
+
+                chatParticipant participant = (chatParticipant) o;
+
+                if (participant.isAuthorised()) {
+
+                    sendAZ2Chat(participant.getBuddy(), msg);
+                }
+            }
 		}
 		
 		public chatMessage[]
@@ -794,19 +787,17 @@ BuddyPluginAZ2
 				
 				participants.put( pk, p );
 			}
-			
-			Iterator it = listeners.iterator();
-			
-			while( it.hasNext()){
-				
-				try{
-					((BuddyPluginAZ2ChatListener)it.next()).participantAdded( p );
-					
-				}catch( Throwable e ){
-					
-					Debug.printStackTrace(e);
-				}
-			}
+
+            for (Object listener : listeners) {
+
+                try {
+                    ((BuddyPluginAZ2ChatListener) listener).participantAdded(p);
+
+                } catch (Throwable e) {
+
+                    Debug.printStackTrace(e);
+                }
+            }
 			
 			return( p );
 		}
@@ -823,29 +814,29 @@ BuddyPluginAZ2
 			BuddyPluginBuddy[]		buddies,
 			boolean					inform_others )
 		{
-			for (int i=0;i<buddies.length;i++ ){
-				
-				addParticipant( buddies[i] );
-			}
+            for (BuddyPluginBuddy buddy1 : buddies) {
+
+                addParticipant(buddy1);
+            }
 			
 			if ( inform_others ){
 			
 				Map	msg = new HashMap();
 				
-				msg.put( "type", new Long( CHAT_MSG_TYPE_PARTICIPANTS_ADDED ));
+				msg.put( "type", (long) CHAT_MSG_TYPE_PARTICIPANTS_ADDED);
 				
 				List	added = new ArrayList();
 				
 				msg.put( "p", added );
-				
-				for ( int i=0;i<buddies.length;i++){
-				
-					Map map = new HashMap();
-					
-					map.put( "pk", buddies[i].getPublicKey());
-					
-					added.add( map );
-				}
+
+                for (BuddyPluginBuddy buddy : buddies) {
+
+                    Map map = new HashMap();
+
+                    map.put("pk", buddy.getPublicKey());
+
+                    added.add(map);
+                }
 				
 				sendMessageBase( msg );
 			}
@@ -895,19 +886,17 @@ BuddyPluginAZ2
 			}
 			
 			if ( removed ){
-				
-				Iterator it = listeners.iterator();
-				
-				while( it.hasNext()){
-					
-					try{
-						((BuddyPluginAZ2ChatListener)it.next()).participantRemoved( p );
-						
-					}catch( Throwable e ){
-						
-						Debug.printStackTrace(e);
-					}
-				}
+
+                for (Object listener : listeners) {
+
+                    try {
+                        ((BuddyPluginAZ2ChatListener) listener).participantRemoved(p);
+
+                    } catch (Throwable e) {
+
+                        Debug.printStackTrace(e);
+                    }
+                }
 			}
 		}
 		

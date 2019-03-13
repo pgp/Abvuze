@@ -64,7 +64,7 @@ DHTUDPPacketHandlerFactory
 			int	port	= transport.getPort();
 			int	network = transport.getNetwork();
 			
-			Object[]	port_details = (Object[])port_map.get( new Integer( port ));
+			Object[]	port_details = (Object[])port_map.get(port);
 			
 			if ( port_details == null ){
 				
@@ -76,12 +76,12 @@ DHTUDPPacketHandlerFactory
 				
 				port_details = new Object[]{ packet_handler, new HashMap()};
 				
-				port_map.put( new Integer( port ), port_details );
+				port_map.put(port, port_details );
 			}
 			
 			Map					network_map 	= (Map)port_details[1];
 			
-			Object[]	network_details = (Object[])network_map.get( new Integer( network ));
+			Object[]	network_details = (Object[])network_map.get(network);
 						
 			if ( network_details != null ){
 				
@@ -90,7 +90,7 @@ DHTUDPPacketHandlerFactory
 			
 			DHTUDPPacketHandler ph = new DHTUDPPacketHandler( this, network, (PRUDPPacketHandler)port_details[0], request_handler );
 			
-			network_map.put( new Integer( network ), new Object[]{ transport, ph });
+			network_map.put(network, new Object[]{ transport, ph });
 			
 			return( ph );
 			
@@ -112,7 +112,7 @@ DHTUDPPacketHandlerFactory
 		try{
 			this_mon.enter();
 			
-			Object[]	port_details = (Object[])port_map.get( new Integer( port ));
+			Object[]	port_details = (Object[])port_map.get(port);
 
 			if ( port_details == null ){
 			
@@ -121,11 +121,11 @@ DHTUDPPacketHandlerFactory
 		
 			Map network_map = (Map)port_details[1];
 		
-			network_map.remove( new Integer( network ));
+			network_map.remove(network);
 
 			if ( network_map.size() == 0 ){
 				
-				port_map.remove( new Integer( port ));
+				port_map.remove(port);
 				
 				try{
 					packet_handler.setRequestHandler(null);
@@ -156,7 +156,7 @@ DHTUDPPacketHandlerFactory
 			}
 			*/
 			
-			Object[]	port_details = (Object[])port_map.get( new Integer( port ));
+			Object[]	port_details = (Object[])port_map.get(port);
 
 			if ( port_details == null ){
 				
@@ -165,7 +165,7 @@ DHTUDPPacketHandlerFactory
 			
 			Map network_map = (Map)port_details[1];
 			
-			Object[]	network_details = (Object[])network_map.get( new Integer( network ));
+			Object[]	network_details = (Object[])network_map.get(network);
 
 			if ( network_details == null ){
 				
@@ -189,7 +189,7 @@ DHTUDPPacketHandlerFactory
 	
 		throws IOException
 	{
-		Object[]	port_details = (Object[])port_map.get( new Integer( port ));
+		Object[]	port_details = (Object[])port_map.get(port);
 
 		if ( port_details == null ){
 			
@@ -198,7 +198,7 @@ DHTUDPPacketHandlerFactory
 		
 		Map network_map = (Map)port_details[1];
 		
-		Object[]	network_details = (Object[])network_map.get( new Integer( network ));
+		Object[]	network_details = (Object[])network_map.get(network);
 
 		if ( network_details == null ){
 			

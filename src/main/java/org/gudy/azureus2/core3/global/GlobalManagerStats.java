@@ -32,61 +32,61 @@ GlobalManagerStats
 	/**
 	 * Data Receive Rate over the last 10s
 	 */
-	public int getDataReceiveRate();
-	public int getDataReceiveRateNoLAN();
-	public int getDataReceiveRateNoLAN(int average_period);
+    int getDataReceiveRate();
+	int getDataReceiveRateNoLAN();
+	int getDataReceiveRateNoLAN(int average_period);
 
-	public int getProtocolReceiveRate();
-	public int getProtocolReceiveRateNoLAN();
-	public int getProtocolReceiveRateNoLAN(int average_period);
+	int getProtocolReceiveRate();
+	int getProtocolReceiveRateNoLAN();
+	int getProtocolReceiveRateNoLAN(int average_period);
 	
-	public int getDataAndProtocolReceiveRate();
+	int getDataAndProtocolReceiveRate();
 		
 	/**
 	 * Data Send Rate over the last 10s
 	 */
-	public int getDataSendRate();
-	public int getDataSendRateNoLAN();
-	public int getDataSendRateNoLAN(int average_period);
+    int getDataSendRate();
+	int getDataSendRateNoLAN();
+	int getDataSendRateNoLAN(int average_period);
 	  
-	public int getProtocolSendRate();
-	public int getProtocolSendRateNoLAN();
-	public int getProtocolSendRateNoLAN(int average_period);
+	int getProtocolSendRate();
+	int getProtocolSendRateNoLAN();
+	int getProtocolSendRateNoLAN(int average_period);
 	  
-	public int getDataAndProtocolSendRate();
+	int getDataAndProtocolSendRate();
 	
 	/**
 	 * Smoothed Send Rate, including data and protocol, based on 
 	 * "Stats Smoothing Secs" (default to 60s, min 30s)
 	 */
-	public long	getSmoothedSendRate();
+    long	getSmoothedSendRate();
 	/**
 	 * Smoothed Receive Rate, including data and protocol, based on 
 	 * "Stats Smoothing Secs" (default to 60s, min 30s)
 	 */
-	public long	getSmoothedReceiveRate();
+    long	getSmoothedReceiveRate();
 	
-	public int getDataSendRateAtClose();
+	int getDataSendRateAtClose();
   
-	public long getTotalDataBytesReceived();
+	long getTotalDataBytesReceived();
   
-	public long getTotalProtocolBytesReceived();
+	long getTotalProtocolBytesReceived();
 	
-	public long getTotalDataBytesSent();
+	long getTotalDataBytesSent();
   
-	public long getTotalProtocolBytesSent();
+	long getTotalProtocolBytesSent();
   
-  	public long getTotalSwarmsPeerRate( boolean downloading, boolean seeding );
+  	long getTotalSwarmsPeerRate(boolean downloading, boolean seeding);
   
 		// set methods
 		
-	public void	dataBytesSent( int bytes, boolean LAN );
-	public void protocolBytesSent( int bytes, boolean LAN );
+	void	dataBytesSent(int bytes, boolean LAN);
+	void protocolBytesSent(int bytes, boolean LAN);
 		
-	public void dataBytesReceived( int bytes, boolean LAN );
-	public void protocolBytesReceived( int bytes, boolean LAN );
+	void dataBytesReceived(int bytes, boolean LAN);
+	void protocolBytesReceived(int bytes, boolean LAN);
 		
-	public void
+	void
 	discarded(
-		int		bytes );
+            int bytes);
 }

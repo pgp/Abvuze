@@ -31,53 +31,53 @@ import com.aelitis.azureus.core.dht.transport.DHTTransportContact;
 public interface 
 DHTControlActivity 
 {
-	public static final int	AT_INTERNAL_GET		= 1;
-	public static final int	AT_EXTERNAL_GET		= 2;
-	public static final int	AT_INTERNAL_PUT		= 3;
-	public static final int	AT_EXTERNAL_PUT		= 4;
+	int	AT_INTERNAL_GET		= 1;
+	int	AT_EXTERNAL_GET		= 2;
+	int	AT_INTERNAL_PUT		= 3;
+	int	AT_EXTERNAL_PUT		= 4;
 	
-	public byte[]
+	byte[]
 	getTarget();
 	
-	public String
+	String
 	getDescription();
 	
-	public int
+	int
 	getType();
 	
-	public boolean
+	boolean
 	isQueued();
 	
-	public ActivityState
+	ActivityState
 	getCurrentState();
 	
-	public String
+	String
 	getString();
 	
 	
-	public interface
+	interface
 	ActivityState
 	{
-		public ActivityNode
+		ActivityNode
 		getRootNode();
 		
-		public int
+		int
 		getDepth();
 		
-		public String
+		String
 		getResult();
 		
-		public String
+		String
 		getString();
 	}
 	
-	public interface
+	interface
 	ActivityNode
 	{
-		public DHTTransportContact
+		DHTTransportContact
 		getContact();
 		
-		public List<ActivityNode>
+		List<ActivityNode>
 		getChildren();
 	}
 }

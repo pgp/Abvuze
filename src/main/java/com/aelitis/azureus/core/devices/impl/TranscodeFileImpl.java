@@ -605,10 +605,8 @@ TranscodeFileImpl
 				}catch( Throwable e ){
 					
 					if ( derp == null ){
-						
-						derp = new ArrayList<String>();
 
-						derp.addAll(Arrays.asList(tags).subList(0, pos));
+						derp = new ArrayList<>(Arrays.asList(tags).subList(0, pos));
 					}
 				}
 			}
@@ -618,7 +616,7 @@ TranscodeFileImpl
 				return( tags );
 			}
 			
-			return( derp.toArray( new String[ derp.size()]));
+			return( derp.toArray(new String[0]));
 			
 		}else{
 		
@@ -728,7 +726,7 @@ TranscodeFileImpl
 			
 			if ( map == null && create ){
 				
-				map = new HashMap<String, Object>();
+				map = new HashMap<>();
 				
 				files_map.put( key, map );
 			}

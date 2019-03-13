@@ -148,13 +148,11 @@ DHTTransportLoopbackImpl
 			class_mon.enter();
 		
 			DHTTransportStatsImpl	overall_stats = new DHTTransportLoopbackStatsImpl( VERSION );
-			
-			Iterator	it = node_map.values().iterator();
-			
-			while( it.hasNext()){
-				
-				overall_stats.add((DHTTransportStatsImpl)((DHTTransportLoopbackImpl)it.next()).getStats());
-			}
+
+            for (Object o : node_map.values()) {
+
+                overall_stats.add((DHTTransportStatsImpl) ((DHTTransportLoopbackImpl) o).getStats());
+            }
 			
 			return( overall_stats );
 			
@@ -286,7 +284,7 @@ DHTTransportLoopbackImpl
 	exportContactToMap(
 		DHTTransportContact	contact ) 
 	{
-		Map<String,Object>	result = new HashMap<String, Object>();
+		Map<String,Object>	result = new HashMap<>();
 		
 		result.put( "i", contact.getID());
 		

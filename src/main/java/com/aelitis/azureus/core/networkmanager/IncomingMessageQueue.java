@@ -36,17 +36,17 @@ public interface IncomingMessageQueue {
    * Set the message stream decoder that will be used to decode incoming messages.
    * @param new_stream_decoder to use
    */
-  public void setDecoder( MessageStreamDecoder new_stream_decoder );
+  void setDecoder(MessageStreamDecoder new_stream_decoder);
 
   
-  public MessageStreamDecoder
+  MessageStreamDecoder
   getDecoder();
   
   /**
    * Get the percentage of the current message that has already been received.
    * @return percentage complete (0-99), or -1 if no message is currently being received
    */
-  public int getPercentDoneOfCurrentMessage();
+  int getPercentDoneOfCurrentMessage();
   
   /**
    * Receive (read) message(s) data from the underlying transport.
@@ -54,21 +54,21 @@ public interface IncomingMessageQueue {
    * @return number of bytes received as [data, protocol]
    * @throws IOException on receive error
    */
-  public int[] receiveFromTransport( int max_bytes, boolean protocol_is_free ) throws IOException;
+  int[] receiveFromTransport(int max_bytes, boolean protocol_is_free) throws IOException;
  
   
   /**
    * Notifty the queue (and its listeners) of a message received externally on the queue's behalf.
    * @param message received externally
    */
-  public void notifyOfExternallyReceivedMessage( Message message ) throws IOException;
+  void notifyOfExternallyReceivedMessage(Message message) throws IOException;
 
   
   /**
    * Manually resume processing (reading) incoming messages.
    * NOTE: Allows us to resume docoding externally, in case it was auto-paused internally.
    */
-  public void resumeQueueProcessing();
+  void resumeQueueProcessing();
  
 
   
@@ -76,7 +76,7 @@ public interface IncomingMessageQueue {
    * Add a listener to be notified of queue events.
    * @param listener
    */
-  public void registerQueueListener( MessageQueueListener listener );
+  void registerQueueListener(MessageQueueListener listener);
  
   
   
@@ -84,7 +84,7 @@ public interface IncomingMessageQueue {
    * Cancel queue event notification listener.
    * @param listener
    */
-  public void cancelQueueListener( MessageQueueListener listener );
+  void cancelQueueListener(MessageQueueListener listener);
 
   
   
@@ -92,7 +92,7 @@ public interface IncomingMessageQueue {
   /**
    * Destroy this queue.
    */
-  public void destroy();
+  void destroy();
  
   
   
@@ -101,27 +101,27 @@ public interface IncomingMessageQueue {
   /**
    * For notification of queue events.
    */
-  public interface MessageQueueListener {
+  interface MessageQueueListener {
     /**
      * A message has been read from the connection.
      * @param message recevied
      * @return true if this message was accepted, false if not handled
      */
-    public boolean messageReceived( Message message ) throws IOException;
+    boolean messageReceived(Message message) throws IOException;
     
     /**
      * The given number of protocol (overhead) bytes read from the connection.
      * @param byte_count number of protocol bytes
      */
-    public void protocolBytesReceived( int byte_count );
+    void protocolBytesReceived(int byte_count);
     
     /**
      * The given number of (piece) data bytes read from the connection.
      * @param byte_count number of data bytes
      */
-    public void dataBytesReceived( int byte_count );
+    void dataBytesReceived(int byte_count);
     
-    public boolean
+    boolean
     isPriority();
   }
   

@@ -65,12 +65,12 @@ CRC32C
 	update(
 		byte[]	bytes )
 	{
-		for ( int i=0; i<bytes.length; i++ ){
+        for (byte aByte : bytes) {
 
-			int index = (int)((value^bytes[i])&0xff);
-				    
-			value = (CONSTANTS[index]^(value>>8))&0xffffffffL;
-		}
+            int index = (int) ((value ^ aByte) & 0xff);
+
+            value = (CONSTANTS[index] ^ (value >> 8)) & 0xffffffffL;
+        }
 	}
 	
 	public void 

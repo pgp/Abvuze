@@ -106,17 +106,17 @@ NatPMPUPnPImpl
 			if ( found ){
 			
 				root_device	= new NatPMPUPnPRootDeviceImpl(upnp, nat_device );
-				
-				for (int i=0;i<listeners.size();i++){
-					
-					try{
-						((UPnPListener)listeners.get(i)).rootDeviceFound( root_device );
-						
-					}catch( Throwable e ){
-						
-						Debug.printStackTrace(e);
-					}
-				}
+
+                for (Object listener : listeners) {
+
+                    try {
+                        ((UPnPListener) listener).rootDeviceFound(root_device);
+
+                    } catch (Throwable e) {
+
+                        Debug.printStackTrace(e);
+                    }
+                }
 			}
 		}catch( Throwable e ){
 			

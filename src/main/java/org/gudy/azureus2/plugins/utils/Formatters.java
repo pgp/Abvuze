@@ -35,57 +35,57 @@ import org.gudy.azureus2.core3.util.Constants;
 public interface 
 Formatters 
 {
-	public String BYTE_ENCODING = Constants.BYTE_ENCODING;
-	public String TEXT_ENCODING = Constants.DEFAULT_ENCODING;
+	String BYTE_ENCODING = Constants.BYTE_ENCODING;
+	String TEXT_ENCODING = Constants.DEFAULT_ENCODING;
 	
-	public String
+	String
 	formatByteCountToKiBEtc(
-		long		bytes );
+            long bytes);
 	
-	public String
+	String
 	formatByteCountToKiBEtcPerSec(
-		long		bytes );
+            long bytes);
 
-	public String
+	String
 	formatPercentFromThousands(
-		long		thousands );
+            long thousands);
 	
-	public String
+	String
 	formatByteArray(
-		byte[]		data,
-		boolean		no_spaces );
+            byte[] data,
+            boolean no_spaces);
 	
-	public String
+	String
 	encodeBytesToString(
-		byte[]		bytes );
+            byte[] bytes);
 	
-	public byte[]
+	byte[]
 	decodeBytesFromString(
-		String		str );
+            String str);
 	
-	public String
+	String
 	formatDate(
-		long		millis );
+            long millis);
 	
 	/**
 	 * @since 3.0.5.3
 	 */
-	public String formatTimeOnly(long millis);
+    String formatTimeOnly(long millis);
 	
 	/**
 	 * @since 3.0.5.3
 	 */
-	public String formatTimeOnly(long millis, boolean include_secs);
+    String formatTimeOnly(long millis, boolean include_secs);
 
 	/**
 	 * @since 3.0.5.3
 	 */
-	public String formatDateOnly(long millis);
+    String formatDateOnly(long millis);
 
 	
-	public String
+	String
 	formatTimeFromSeconds(
-		long		seconds );
+            long seconds);
 	
 	
 	/**
@@ -94,32 +94,32 @@ Formatters
 	 * @return
 	 * @since 2.4.0.3
 	 */
-	public String formatETAFromSeconds( long seconds );
+    String formatETAFromSeconds(long seconds);
 	
 	
 	
-	public byte[]
+	byte[]
 	bEncode(
-		Map	map )
+            Map map)
 	
 		throws IOException;
 	
-	public Map
+	Map
 	bDecode(
-		byte[]	data )
+            byte[] data)
 	
 		throws IOException;
 	
-	public String
+	String
 	base32Encode(
-		byte[]		data );
+            byte[] data);
 	
-	public byte[]
+	byte[]
 	base32Decode(
-		String		data );
+            String data);
 	
-	public Comparator
+	Comparator
 	getAlphanumericComparator(
-		boolean	ignore_case );
+            boolean ignore_case);
 	
 }

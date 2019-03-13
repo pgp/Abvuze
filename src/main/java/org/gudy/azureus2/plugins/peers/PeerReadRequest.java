@@ -33,26 +33,26 @@ import org.gudy.azureus2.plugins.disk.DiskManager;
 public interface 
 PeerReadRequest 
 {
-	public static final int	NORMAL_REQUEST_SIZE	= DiskManager.BLOCK_SIZE;
+	int	NORMAL_REQUEST_SIZE	= DiskManager.BLOCK_SIZE;
 	
-	public int
+	int
 	getPieceNumber();
 	
-	public int
+	int
 	getOffset();
 	
-	public int
+	int
 	getLength();
 	
-	public void
+	void
 	resetTime(final long now);
 	
-	public boolean
+	boolean
 	isExpired();
 	
-	public void
+	void
 	cancel();
 	
-	public boolean
+	boolean
 	isCancelled();
 }

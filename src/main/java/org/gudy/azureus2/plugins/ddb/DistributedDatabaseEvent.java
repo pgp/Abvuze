@@ -29,33 +29,33 @@ DistributedDatabaseEvent
 {	
 		// operation level
 	
-	public static final int	ET_VALUE_WRITTEN		= 1;
-	public static final int	ET_VALUE_READ			= 2;
-	public static final int	ET_VALUE_DELETED		= 3;
+	int	ET_VALUE_WRITTEN		= 1;
+	int	ET_VALUE_READ			= 2;
+	int	ET_VALUE_DELETED		= 3;
 	
-	public static final int	ET_OPERATION_COMPLETE	= 4;
-	public static final int	ET_OPERATION_TIMEOUT	= 5;
+	int	ET_OPERATION_COMPLETE	= 4;
+	int	ET_OPERATION_TIMEOUT	= 5;
 
-	public static final int	ET_KEY_STATS_READ		= 6;
+	int	ET_KEY_STATS_READ		= 6;
 
-	public static final int	ET_OPERATION_STARTS		= 7;
+	int	ET_OPERATION_STARTS		= 7;
 
 		// ddb level
 	
-	public static final int	ET_LOCAL_CONTACT_CHANGED	= 10;
+	int	ET_LOCAL_CONTACT_CHANGED	= 10;
 	
-	public int
+	int
 	getType();
 	
-	public DistributedDatabaseKey
+	DistributedDatabaseKey
 	getKey();
 	
-	public DistributedDatabaseKeyStats
+	DistributedDatabaseKeyStats
 	getKeyStats();
 	
-	public DistributedDatabaseValue
+	DistributedDatabaseValue
 	getValue();
 	
-	public DistributedDatabaseContact
+	DistributedDatabaseContact
 	getContact();
 }

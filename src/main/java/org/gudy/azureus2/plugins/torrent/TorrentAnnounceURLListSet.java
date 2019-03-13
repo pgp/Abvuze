@@ -32,11 +32,11 @@ import java.net.URL;
 public interface 
 TorrentAnnounceURLListSet 
 {
-	public URL[]
+	URL[]
 	getURLs();
 	
-	public void
+	void
 	setURLs(
-		URL[]	urls );
+            URL[] urls);
 
 }

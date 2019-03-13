@@ -63,8 +63,8 @@ public final class HashCodeUtils
     public static final int hashCode(byte[] array)
     {
     	int hash = 0;
-        for (int i = 0; i < array.length; i++) {
-            hash += array[i];
+        for (byte b : array) {
+            hash += b;
             hash += (hash << 10);
             hash ^= (hash >> 6);
         }
@@ -78,9 +78,9 @@ public final class HashCodeUtils
     {
          int h = 0;
          int len =array.length;
-         for (int i = 0; i < len; i++) {
-        	 h = 31*h + array[i];
-         }
+        for (char c : array) {
+            h = 31 * h + c;
+        }
          return( h );
     }
 }

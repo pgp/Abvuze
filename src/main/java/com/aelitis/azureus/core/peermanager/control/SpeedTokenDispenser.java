@@ -23,9 +23,9 @@ package com.aelitis.azureus.core.peermanager.control;
 public interface 
 SpeedTokenDispenser 
 {
-	public int dispense(int numberOfChunks, int chunkSize);
+	int dispense(int numberOfChunks, int chunkSize);
 
-	public void returnUnusedChunks(int unused, int chunkSize);
+	void returnUnusedChunks(int unused, int chunkSize);
 
-	public int peek(int chunkSize);
+	int peek(int chunkSize);
 }

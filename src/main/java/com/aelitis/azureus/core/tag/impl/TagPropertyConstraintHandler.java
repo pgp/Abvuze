@@ -67,11 +67,11 @@ TagPropertyConstraintHandler
 	private boolean 	initial_assignment_complete;
 	private boolean		stopping;
 	
-	final Map<Tag,TagConstraint>	constrained_tags 	= new HashMap<Tag,TagConstraint>();
+	final Map<Tag,TagConstraint>	constrained_tags 	= new HashMap<>();
 	
 	private boolean	dm_listener_added;
 	
-	final Map<Tag,Map<DownloadManager,Long>>			apply_history 		= new HashMap<Tag, Map<DownloadManager,Long>>();
+	final Map<Tag,Map<DownloadManager,Long>>			apply_history 		= new HashMap<>();
 	
 	private final AsyncDispatcher	dispatcher = new AsyncDispatcher( "tag:constraints" );
 	
@@ -87,7 +87,7 @@ TagPropertyConstraintHandler
 			},
 			5000 );
 	
-	final IdentityHashMap<DownloadManager,List<TagConstraint>>	freq_lim_pending = new IdentityHashMap<DownloadManager,List<TagConstraint>>();
+	final IdentityHashMap<DownloadManager,List<TagConstraint>>	freq_lim_pending = new IdentityHashMap<>();
 	
 	
 	private TimerEventPeriodic		timer;
@@ -166,7 +166,7 @@ TagPropertyConstraintHandler
 	private static Object	process_lock = new Object();
 	private static int		processing_disabled_count;
 	
-	private static List<Object[]>	processing_queue = new ArrayList<Object[]>();
+	private static List<Object[]>	processing_queue = new ArrayList<>();
 	
 	public void
 	setProcessingEnabled(
@@ -180,7 +180,7 @@ TagPropertyConstraintHandler
 				
 				if ( processing_disabled_count == 0 ){
 					
-					List<Object[]> to_do = new ArrayList<Object[]>( processing_queue );
+					List<Object[]> to_do = new ArrayList<>(processing_queue);
 					
 					processing_queue.clear();
 					
@@ -417,7 +417,7 @@ TagPropertyConstraintHandler
 		int				old_state,
 		int				new_state )
 	{
-		List<TagConstraint>	interesting = new ArrayList<TagConstraint>();
+		List<TagConstraint>	interesting = new ArrayList<>();
 		
 		synchronized( constrained_tags ){
 
@@ -502,11 +502,8 @@ TagPropertyConstraintHandler
 			}
 						
 			if ( constraint.length() == 0 ){
-				
-				if ( constrained_tags.containsKey( tag )){
-					
-					constrained_tags.remove( tag );
-				}
+
+				constrained_tags.remove( tag );
 			}else{
 				
 				TagConstraint con = constrained_tags.get( tag );
@@ -564,7 +561,7 @@ TagPropertyConstraintHandler
 					
 					synchronized( constrained_tags ){
 					
-						cons = new ArrayList<TagConstraint>( constrained_tags.values());
+						cons = new ArrayList<>(constrained_tags.values());
 					}
 					
 					for ( TagConstraint con: cons ){
@@ -598,7 +595,7 @@ TagPropertyConstraintHandler
 					
 					synchronized( constrained_tags ){
 					
-						cons = new ArrayList<TagConstraint>( constrained_tags.values());
+						cons = new ArrayList<>(constrained_tags.values());
 					}
 						
 						// set up initial constraint tagged state without following implications
@@ -674,7 +671,7 @@ TagPropertyConstraintHandler
 					
 					synchronized( constrained_tags ){
 					
-						cons = new ArrayList<TagConstraint>( constrained_tags.values());
+						cons = new ArrayList<>(constrained_tags.values());
 					}
 					
 					for ( TagConstraint con: cons ){
@@ -732,7 +729,7 @@ TagPropertyConstraintHandler
 			ConstraintExpr compiled_expr = null;
 			
 			try{
-				compiled_expr = compileStart( constraint, new HashMap<String,ConstraintExpr>());
+				compiled_expr = compileStart( constraint, new HashMap<>());
 				
 			}catch( Throwable e ){
 				
@@ -1081,7 +1078,7 @@ TagPropertyConstraintHandler
 			
 			if ( recent_dms == null ){
 					
-				recent_dms = new HashMap<DownloadManager,Long>();
+				recent_dms = new HashMap<>();
 					
 				handler.apply_history.put( tag, recent_dms );
 			}
@@ -1103,12 +1100,12 @@ TagPropertyConstraintHandler
 		private interface
 		ConstraintExpr
 		{
-			public boolean
+			boolean
 			eval(
-				DownloadManager		dm,
-				List<Tag>			tags );
+					DownloadManager dm,
+					List<Tag> tags);
 			
-			public String
+			String
 			getString();
 		}
 		
@@ -1169,7 +1166,7 @@ TagPropertyConstraintHandler
 					
 					boolean in_quote = false;
 					
-					List<String>	params = new ArrayList<String>(16);
+					List<String>	params = new ArrayList<>(16);
 					
 					StringBuilder current_param = new StringBuilder( value.length());
 					
@@ -1202,7 +1199,7 @@ TagPropertyConstraintHandler
 					
 					params.add( current_param.toString());
 					
-					return( params.toArray( new Object[ params.size()]));
+					return( params.toArray(new Object[0]));
 				}
 			}
 			
@@ -1398,7 +1395,7 @@ TagPropertyConstraintHandler
 		private static final int FT_IS_ERROR		= 19;
 
 		
-		static final Map<String,Integer>	keyword_map = new HashMap<String, Integer>();
+		static final Map<String,Integer>	keyword_map = new HashMap<>();
 		
 		private static final int	KW_SHARE_RATIO		= 0;
 		private static final int	KW_AGE 				= 1;
@@ -1471,144 +1468,165 @@ TagPropertyConstraintHandler
 				params		= _params.getValues();
 				
 				boolean	params_ok = false;
-				
-				if ( func_name.equals( "hasTag" )){
-					
-					fn_type = FT_HAS_TAG;
-					
-					params_ok = params.length == 1 && getStringLiteral( params, 0 );
-					
-				}else if ( func_name.equals( "hasNet" )){
-						
-					fn_type = FT_HAS_NET;
-						
-					params_ok = params.length == 1 && getStringLiteral( params, 0 );
-					
-					if ( params_ok ){
-						
-						params[0] = AENetworkClassifier.internalise((String)params[0]);
-						
-						params_ok = params[0] != null;
-					}
-				}else if ( func_name.equals( "isPrivate" )){
-	
-					fn_type = FT_IS_PRIVATE;
-	
-					params_ok = params.length == 0;
-					
-				}else if ( func_name.equals( "isForceStart" )){
-					
-					fn_type = FT_IS_FORCE_START;
-	
-					depends_on_download_state = true;
-					
-					params_ok = params.length == 0;
-					
-				}else if ( func_name.equals( "isChecking" )){
-					
-					fn_type = FT_IS_CHECKING;
-	
-					depends_on_download_state = true;
-					
-					params_ok = params.length == 0;
-					
-				}else if ( func_name.equals( "isComplete" )){
-					
-					fn_type = FT_IS_COMPLETE;
-	
-					depends_on_download_state = true;
-					
-					params_ok = params.length == 0;
-					
-				}else if ( func_name.equals( "isStopped" )){
-						
-						fn_type = FT_IS_STOPPED;
-		
-						depends_on_download_state = true;
-						
+
+				switch (func_name) {
+					case "hasTag":
+
+						fn_type = FT_HAS_TAG;
+
+						params_ok = params.length == 1 && getStringLiteral(params, 0);
+
+						break;
+					case "hasNet":
+
+						fn_type = FT_HAS_NET;
+
+						params_ok = params.length == 1 && getStringLiteral(params, 0);
+
+						if (params_ok) {
+
+							params[0] = AENetworkClassifier.internalise((String) params[0]);
+
+							params_ok = params[0] != null;
+						}
+						break;
+					case "isPrivate":
+
+						fn_type = FT_IS_PRIVATE;
+
 						params_ok = params.length == 0;
-						
-				}else if ( func_name.equals( "isError" )){
-					
-					fn_type = FT_IS_ERROR;
-	
-					depends_on_download_state = true;
-					
-					params_ok = params.length == 0;
-				
-				}else if ( func_name.equals( "isPaused" )){
-					
-					fn_type = FT_IS_PAUSED;
-	
-					depends_on_download_state = true;
-					
-					params_ok = params.length == 0;
-					
-				}else if ( func_name.equals( "canArchive" )){
-	
-					fn_type = FT_CAN_ARCHIVE;
-	
-					params_ok = params.length == 0;
-	
-				}else if ( func_name.equals( "isGE" )){
-					
-					fn_type = FT_GE;
-					
-					params_ok = params.length == 2;
-					
-				}else if ( func_name.equals( "isGT" )){
-					
-					fn_type = FT_GT;
-					
-					params_ok = params.length == 2;
-					
-				}else if ( func_name.equals( "isLE" )){
-					
-					fn_type = FT_LE;
-					
-					params_ok = params.length == 2;
-					
-				}else if ( func_name.equals( "isLT" )){
-					
-					fn_type = FT_LT;
-					
-					params_ok = params.length == 2;
-					
-				}else if ( func_name.equals( "isEQ" )){
-					
-					fn_type = FT_EQ;
-					
-					params_ok = params.length == 2;
-					
-				}else if ( func_name.equals( "isNEQ" )){
-					
-					fn_type = FT_NEQ;
-					
-					params_ok = params.length == 2;
-				
-				}else if ( func_name.equals( "contains" )){
-					
-					fn_type = FT_CONTAINS;
-						
-					params_ok = params.length == 2;
-	
-				}else if ( func_name.equals( "matches" )){
-					
-					fn_type = FT_MATCHES;
-						
-					params_ok = params.length == 2 && getStringLiteral( params, 1 );
-	
-				}else if ( func_name.equals( "javascript" )){
-	
-					fn_type = FT_JAVASCRIPT;
-					
-					params_ok = params.length == 1 && getStringLiteral( params, 0 );
-	
-					depends_on_download_state = true;	// dunno so let's assume so
-					
-				}else{
-					
-					throw( new RuntimeException( "Unsupported function '" + func_name + "'" ));
+
+						break;
+					case "isForceStart":
+
+						fn_type = FT_IS_FORCE_START;
+
+						depends_on_download_state = true;
+
+						params_ok = params.length == 0;
+
+						break;
+					case "isChecking":
+
+						fn_type = FT_IS_CHECKING;
+
+						depends_on_download_state = true;
+
+						params_ok = params.length == 0;
+
+						break;
+					case "isComplete":
+
+						fn_type = FT_IS_COMPLETE;
+
+						depends_on_download_state = true;
+
+						params_ok = params.length == 0;
+
+						break;
+					case "isStopped":
+
+						fn_type = FT_IS_STOPPED;
+
+						depends_on_download_state = true;
+
+						params_ok = params.length == 0;
+
+						break;
+					case "isError":
+
+						fn_type = FT_IS_ERROR;
+
+						depends_on_download_state = true;
+
+						params_ok = params.length == 0;
+
+						break;
+					case "isPaused":
+
+						fn_type = FT_IS_PAUSED;
+
+						depends_on_download_state = true;
+
+						params_ok = params.length == 0;
+
+						break;
+					case "canArchive":
+
+						fn_type = FT_CAN_ARCHIVE;
+
+						params_ok = params.length == 0;
+
+						break;
+					case "isGE":
+
+						fn_type = FT_GE;
+
+						params_ok = params.length == 2;
+
+						break;
+					case "isGT":
+
+						fn_type = FT_GT;
+
+						params_ok = params.length == 2;
+
+						break;
+					case "isLE":
+
+						fn_type = FT_LE;
+
+						params_ok = params.length == 2;
+
+						break;
+					case "isLT":
+
+						fn_type = FT_LT;
+
+						params_ok = params.length == 2;
+
+						break;
+					case "isEQ":
+
+						fn_type = FT_EQ;
+
+						params_ok = params.length == 2;
+
+						break;
+					case "isNEQ":
+
+						fn_type = FT_NEQ;
+
+						params_ok = params.length == 2;
+
+						break;
+					case "contains":
+
+						fn_type = FT_CONTAINS;
+
+						params_ok = params.length == 2;
+
+						break;
+					case "matches":
+
+						fn_type = FT_MATCHES;
+
+						params_ok = params.length == 2 && getStringLiteral(params, 1);
+
+						break;
+					case "javascript":
+
+						fn_type = FT_JAVASCRIPT;
+
+						params_ok = params.length == 1 && getStringLiteral(params, 0);
+
+						depends_on_download_state = true;    // dunno so let's assume so
+
+
+						break;
+					default:
+
+						throw (new RuntimeException("Unsupported function '" + func_name + "'"));
 				}
 				
 				if ( !params_ok ){
@@ -1787,7 +1805,7 @@ TagPropertyConstraintHandler
 						Object result =
 							handler.tag_manager.evalScript( 
 								tag, 
-								"javascript( " + (String)params[0] + ")", 
+								"javascript( " + params[0] + ")",
 								dm,
 								"inTag" );
 						
@@ -1906,7 +1924,7 @@ TagPropertyConstraintHandler
 									
 								}else{
 									
-									return( new Float( sr/1000.0f ));
+									return(sr / 1000.0f);
 								}
 							}
 							case KW_PERCENT:{
@@ -1917,7 +1935,7 @@ TagPropertyConstraintHandler
 								
 								int percent = dm.getStats().getPercentDoneExcludingDND();
 			
-								return( new Float( percent/10.0f ));
+								return(percent / 10.0f);
 							}
 							case KW_AGE:{
 							

@@ -25,15 +25,15 @@ import java.net.InetAddress;
 public interface 
 NetworkAdminNode 
 {	
-	public InetAddress
+	InetAddress
 	getAddress();
 
-	public boolean
+	boolean
 	isLocalAddress();
 
-	public int
+	int
 	getDistance();
 	
-	public int
+	int
 	getRTT();
 }

@@ -150,11 +150,11 @@ ShareResourceFileOrDirImpl
 	canBeDeleted()
 	
 		throws ShareResourceDeletionVetoException
-	{		
-		for (int i=0;i<deletion_listeners.size();i++){
-			
-			((ShareResourceWillBeDeletedListener)deletion_listeners.get(i)).resourceWillBeDeleted( this );
-		}	
+	{
+        for (Object deletion_listener : deletion_listeners) {
+
+            ((ShareResourceWillBeDeletedListener) deletion_listener).resourceWillBeDeleted(this);
+        }
 		
 		return( true );
 	}
@@ -224,44 +224,49 @@ ShareResourceFileOrDirImpl
 			if ( props != null ){
 			
 				StringTokenizer	tok = new StringTokenizer( props, ";" );
-				
-				while( tok.hasMoreTokens()){
-					
-					String	token = tok.nextToken();
-					
-					int	pos = token.indexOf('=');
-					
-					if ( pos == -1 ){
-						
-						Debug.out( "ShareProperty invalid: " + props );
-						
-					}else{
-						
-						String	lhs = token.substring(0,pos).trim().toLowerCase();
-						String	rhs = token.substring(pos+1).trim().toLowerCase();
-						
-						boolean	set = rhs.equals("true");
-						
-						if ( lhs.equals("private")){
-							
-							private_torrent	= set;
-							
-						}else if ( lhs.equals("dht_backup")){
-							
-							dht_backup_enabled	= set;
-							
-						}else if ( lhs.equals("comment")){
-							
-							comment = rhs;
-							
-						}else{
-							
-							Debug.out( "ShareProperty invalid: " + props );
-							
-							break;
-						}
-					}
-				}
+
+                label:
+                while (tok.hasMoreTokens()) {
+
+                    String token = tok.nextToken();
+
+                    int pos = token.indexOf('=');
+
+                    if (pos == -1) {
+
+                        Debug.out("ShareProperty invalid: " + props);
+
+                    } else {
+
+                        String lhs = token.substring(0, pos).trim().toLowerCase();
+                        String rhs = token.substring(pos + 1).trim().toLowerCase();
+
+                        boolean set = rhs.equals("true");
+
+                        switch (lhs) {
+                            case "private":
+
+                                private_torrent = set;
+
+                                break;
+                            case "dht_backup":
+
+                                dht_backup_enabled = set;
+
+                                break;
+                            case "comment":
+
+                                comment = rhs;
+
+                                break;
+                            default:
+
+                                Debug.out("ShareProperty invalid: " + props);
+
+                                break label;
+                        }
+                    }
+                }
 			}
 			
 			if ( comment.length() > 0 ){
@@ -377,7 +382,7 @@ ShareResourceFileOrDirImpl
 	{
 		super.serialiseResource( map );
 		
-		map.put( "type", new Long(getType()));
+		map.put( "type", (long) getType());
 		
 		try{
 			map.put( "file", file.toString().getBytes( Constants.DEFAULT_ENCODING));

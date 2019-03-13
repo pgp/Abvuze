@@ -98,13 +98,13 @@ DeviceOfflineDownloaderImpl
 	private int									consec_errors	= 0;
 	private int									consec_success	= 0;
 	
-	private Map<String,OfflineDownload>			offline_downloads	= new HashMap<String, OfflineDownload>(); 
-	private Map<String,TransferableDownload>	transferable 		= new LinkedHashMap<String,TransferableDownload>();
+	private Map<String,OfflineDownload>			offline_downloads	= new HashMap<>();
+	private Map<String,TransferableDownload>	transferable 		= new LinkedHashMap<>();
 	private TransferableDownload				current_transfer;
 	private boolean								is_transferring;
 	
 	
-	private CopyOnWriteList<DeviceOfflineDownloaderListener>	listeners = new CopyOnWriteList<DeviceOfflineDownloaderListener>();		
+	private CopyOnWriteList<DeviceOfflineDownloaderListener>	listeners = new CopyOnWriteList<>();
 	
 	protected
 	DeviceOfflineDownloaderImpl(
@@ -272,8 +272,8 @@ DeviceOfflineDownloaderImpl
 		String	error_status 	= null;
 		boolean	force_status	= false;
 		
-		Map<String,DownloadManager>			new_offline_downloads 	= new HashMap<String,DownloadManager>();
-		Map<String,TransferableDownload>	new_transferables 		= new HashMap<String,TransferableDownload>();
+		Map<String,DownloadManager>			new_offline_downloads 	= new HashMap<>();
+		Map<String,TransferableDownload>	new_transferables 		= new HashMap<>();
 		
 		try{	
 			if ( update_space_outstanding ){
@@ -298,9 +298,9 @@ DeviceOfflineDownloaderImpl
 				force_status	= true;
 			}
 
-			Map<String,byte[]>	old_cache 	= (Map<String,byte[]>)getPersistentMapProperty( PP_OD_STATE_CACHE, new HashMap<String,byte[]>());
+			Map<String,byte[]>	old_cache 	= getPersistentMapProperty( PP_OD_STATE_CACHE, new HashMap<String,byte[]>());
 			
-			Map<String,byte[]>	new_cache 	= new HashMap<String, byte[]>();
+			Map<String,byte[]>	new_cache 	= new HashMap<>();
 			
 			GlobalManager gm = core.getGlobalManager();
 			
@@ -308,7 +308,7 @@ DeviceOfflineDownloaderImpl
 				
 				start_of_day = false;
 				
-				Map<String,Map> xfer_cache = getPersistentMapProperty( PP_OD_XFER_CACHE, new HashMap<String,Map>());
+				Map<String,Map> xfer_cache = getPersistentMapProperty( PP_OD_XFER_CACHE, new HashMap<>());
 				
 				if ( xfer_cache.size() > 0 ){
 					
@@ -379,7 +379,7 @@ DeviceOfflineDownloaderImpl
 
 				List<DownloadManager> initial_downloads = gm.getDownloadManagers();
 
-				List<DownloadManager> relevant_downloads = new ArrayList<DownloadManager>( initial_downloads.size());
+				List<DownloadManager> relevant_downloads = new ArrayList<>(initial_downloads.size());
 			
 					// remove uninteresting ones
 				
@@ -415,7 +415,7 @@ DeviceOfflineDownloaderImpl
 					relevant_downloads.add( download );
 				}
 			
-				downloads = new ArrayList<DownloadManager>( relevant_downloads.size());
+				downloads = new ArrayList<>(relevant_downloads.size());
 			
 				if ( dodm.getOfflineDownloadingIsAuto()){
 					
@@ -451,10 +451,10 @@ DeviceOfflineDownloaderImpl
 				}
 			}else{
 				
-				downloads = new ArrayList<DownloadManager>();
+				downloads = new ArrayList<>();
 			}
 			
-			Map<DownloadManager,byte[]>	download_map = new HashMap<DownloadManager, byte[]>();
+			Map<DownloadManager,byte[]>	download_map = new HashMap<>();
 			
 			for ( DownloadManager download: downloads ){
 											
@@ -590,7 +590,7 @@ DeviceOfflineDownloaderImpl
 			
 				// sort by download priority
 			
-			List<Map.Entry<DownloadManager, byte[]>> entries = new ArrayList<Map.Entry<DownloadManager,byte[]>>( download_map.entrySet());
+			List<Map.Entry<DownloadManager, byte[]>> entries = new ArrayList<>(download_map.entrySet());
 			
 			Collections.sort(
 				entries,
@@ -842,9 +842,9 @@ DeviceOfflineDownloaderImpl
 			
 			updateTransferable( new_transferables );
 			
-			List<OfflineDownload>	new_ods = new ArrayList<OfflineDownload>();
-			List<OfflineDownload>	del_ods = new ArrayList<OfflineDownload>();
-			List<OfflineDownload>	cha_ods = new ArrayList<OfflineDownload>();
+			List<OfflineDownload>	new_ods = new ArrayList<>();
+			List<OfflineDownload>	del_ods = new ArrayList<>();
+			List<OfflineDownload>	cha_ods = new ArrayList<>();
 			
 			synchronized( offline_downloads ){
 			
@@ -1168,11 +1168,11 @@ DeviceOfflineDownloaderImpl
 		
 		if ( current_transfer.isForced()){
 			
-			Map<String,Map> xfer_cache = new HashMap<String,Map>();
+			Map<String,Map> xfer_cache = new HashMap<>();
 			
 			Map m = new HashMap();
 			
-			m.put( "f", new Long(1));
+			m.put( "f", 1L);
 			
 			xfer_cache.put( current_transfer.getHash(), m );
 			
@@ -1261,8 +1261,8 @@ DeviceOfflineDownloaderImpl
 									org.gudy.azureus2.core3.util.TimerEvent event ) 
 								{
 									dispatcher.dispatch( target );
-								};
-							});
+								}
+                            });
 					}
 				}
 			});
@@ -1394,7 +1394,7 @@ DeviceOfflineDownloaderImpl
 	{
 		synchronized( offline_downloads ){
 			
-			return( offline_downloads.values().toArray( new DeviceOfflineDownload[ offline_downloads.size()]));
+			return( offline_downloads.values().toArray(new DeviceOfflineDownload[0]));
 		}
 	}
  		

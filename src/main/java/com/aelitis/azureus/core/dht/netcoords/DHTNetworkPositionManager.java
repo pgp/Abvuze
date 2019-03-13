@@ -43,7 +43,7 @@ DHTNetworkPositionManager
 	
 	private static DHTStorageAdapter	storage_adapter = null;
 	
-	private static final CopyOnWriteList<DHTNetworkPositionProviderListener>		provider_listeners = new CopyOnWriteList<DHTNetworkPositionProviderListener>();
+	private static final CopyOnWriteList<DHTNetworkPositionProviderListener>		provider_listeners = new CopyOnWriteList<>();
 	private static volatile CopyOnWriteList<DHTNetworkPositionListener>		position_listeners;
 	
 	private static final DHTNetworkPosition[] NP_EMPTY_ARRAY = {};
@@ -57,19 +57,17 @@ DHTNetworkPositionManager
 			if ( storage_adapter == null ){
 				
 				storage_adapter	= adapter;
-				
-				for (int i=0;i<providers.length;i++){
-				
-					DHTNetworkPositionProvider	provider = providers[i];
 
-					try{
-						startUp( provider );
-						
-					}catch( Throwable e ){
-						
-						Debug.printStackTrace(e);
-					}
-				}
+                for (DHTNetworkPositionProvider provider : providers) {
+
+                    try {
+                        startUp(provider);
+
+                    } catch (Throwable e) {
+
+                        Debug.printStackTrace(e);
+                    }
+                }
 			}
 		}
 	}
@@ -130,10 +128,10 @@ DHTNetworkPositionManager
 			
 			if ( storage_adapter == adapter ){
 
-				for (int i=0;i<providers.length;i++){
+                for (DHTNetworkPositionProvider provider : providers) {
 
-					shutDown( providers[i] );
-				}
+                    shutDown(provider);
+                }
 				
 				storage_adapter	= null;
 			}
@@ -253,20 +251,20 @@ DHTNetworkPositionManager
 			DHTNetworkPositionProvider[]	new_providers = new DHTNetworkPositionProvider[providers.length - 1 ];
 
 			int	pos = 0;
-			
-			for ( int i=0;i<providers.length;i++){
-				
-				if ( providers[i] == provider ){
-					
-					if ( storage_adapter != null ){
-						
-						shutDown( provider );
-					}
-				}else{
-					
-					new_providers[pos++] = providers[i];
-				}
-			}
+
+            for (DHTNetworkPositionProvider provider1 : providers) {
+
+                if (provider1 == provider) {
+
+                    if (storage_adapter != null) {
+
+                        shutDown(provider);
+                    }
+                } else {
+
+                    new_providers[pos++] = provider1;
+                }
+            }
 			if ( pos == new_providers.length ){
 			
 				providers = new_providers;
@@ -284,13 +282,13 @@ DHTNetworkPositionManager
 	{
 		synchronized( providers_lock ){
 
-			for (int i=0;i<providers.length;i++){
-				
-				if ( providers[i].getPositionType() == type ){
-					
-					return( providers[i] );
-				}
-			}
+            for (DHTNetworkPositionProvider provider : providers) {
+
+                if (provider.getPositionType() == type) {
+
+                    return (provider);
+                }
+            }
 		}
 		
 		return( null );
@@ -301,24 +299,24 @@ DHTNetworkPositionManager
 	{
 		DHTNetworkPositionProvider[]	prov = providers;
 		
-		List<DHTNetworkPosition> res = new ArrayList<DHTNetworkPosition>();
+		List<DHTNetworkPosition> res = new ArrayList<>();
+
+        for (DHTNetworkPositionProvider dhtNetworkPositionProvider : prov) {
+
+            try {
+                DHTNetworkPosition pos = dhtNetworkPositionProvider.getLocalPosition();
+
+                if (pos != null) {
+
+                    res.add(pos);
+                }
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 		
-		for (int i=0;i<prov.length;i++){
-			
-			try{
-				DHTNetworkPosition	pos = prov[i].getLocalPosition();
-				
-				if ( pos != null ){
-					
-					res.add( pos );
-				}
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace(e);
-			}
-		}
-		
-		return( res.toArray(new DHTNetworkPosition[res.size()])); 
+		return( res.toArray(new DHTNetworkPosition[0]));
 
 	}
 	
@@ -331,17 +329,15 @@ DHTNetworkPositionManager
 		
 		byte	best_provider = DHTNetworkPosition.POSITION_TYPE_NONE;
 
-		for (int i=0;i<positions.length;i++){
-			
-			DHTNetworkPosition	position = positions[i];
-			
-			int	type = position.getPositionType();
-			
-			if ( type > best_provider ){
-				
-				best_position = position;
-			}
-		}
+        for (DHTNetworkPosition position : positions) {
+
+            int type = position.getPositionType();
+
+            if (type > best_provider) {
+
+                best_position = position;
+            }
+        }
 		
 		return( best_position );
 	}
@@ -380,14 +376,14 @@ DHTNetworkPositionManager
 				DHTNetworkPosition[] x	= new DHTNetworkPosition[ res.length - skipped ];
 				
 				int	pos = 0;
-				
-				for (int i=0;i<res.length;i++){
-					
-					if ( res[i] != null ){
-						
-						x[pos++] = res[i];
-					}
-				}
+
+                for (DHTNetworkPosition re : res) {
+
+                    if (re != null) {
+
+                        x[pos++] = re;
+                    }
+                }
 				
 				res	= x;
 				
@@ -409,39 +405,35 @@ DHTNetworkPositionManager
 		byte	best_provider = DHTNetworkPosition.POSITION_TYPE_NONE;
 		
 		float	best_result	= Float.NaN;
-		
-		for (int i=0;i<p1s.length;i++){
-			
-			DHTNetworkPosition	p1 = p1s[i];
-			
-			byte	p1_type = p1.getPositionType();
-			
-			for (int j=0;j<p2s.length;j++){
-				
-				DHTNetworkPosition	p2 = p2s[j];
-				
-				if ( p1_type == p2.getPositionType()){
-					
-					try{
-						float	f = p1.estimateRTT( p2 );
-						
-						if ( !Float.isNaN( f )){
-							
-							if ( p1_type > best_provider ){
-								
-								best_result		= f;
-								best_provider	= p1_type;
-							}
-						}
-					}catch( Throwable e ){
-						
-						Debug.printStackTrace(e);
-					}
-					
-					break;
-				}
-			}
-		}
+
+        for (DHTNetworkPosition p1 : p1s) {
+
+            byte p1_type = p1.getPositionType();
+
+            for (DHTNetworkPosition p2 : p2s) {
+
+                if (p1_type == p2.getPositionType()) {
+
+                    try {
+                        float f = p1.estimateRTT(p2);
+
+                        if (!Float.isNaN(f)) {
+
+                            if (p1_type > best_provider) {
+
+                                best_result = f;
+                                best_provider = p1_type;
+                            }
+                        }
+                    } catch (Throwable e) {
+
+                        Debug.printStackTrace(e);
+                    }
+
+                    break;
+                }
+            }
+        }
 		
 		return( best_result );
 	}
@@ -452,29 +444,25 @@ DHTNetworkPositionManager
 		byte[]					remote_id,
 		DHTNetworkPosition[]	remote_positions,
 		float					rtt )
-	{	
-		for (int i=0;i<local_positions.length;i++){
-			
-			DHTNetworkPosition	p1 = local_positions[i];
-						
-			for (int j=0;j<remote_positions.length;j++){
-				
-				DHTNetworkPosition	p2 = remote_positions[j];
-				
-				if ( p1.getPositionType() == p2.getPositionType()){
-					
-					try{
-						p1.update( remote_id, p2, rtt );
-						
-					}catch( Throwable e ){
-						
-						Debug.printStackTrace(e);
-					}
-					
-					break;
-				}
-			}
-		}
+	{
+        for (DHTNetworkPosition p1 : local_positions) {
+
+            for (DHTNetworkPosition p2 : remote_positions) {
+
+                if (p1.getPositionType() == p2.getPositionType()) {
+
+                    try {
+                        p1.update(remote_id, p2, rtt);
+
+                    } catch (Throwable e) {
+
+                        Debug.printStackTrace(e);
+                    }
+
+                    break;
+                }
+            }
+        }
 	}
 	
 	public static byte[]
@@ -527,45 +515,43 @@ DHTNetworkPositionManager
 
 		is.mark( 512 );
 
-		for (int i=0;i<prov.length;i++){
-			
-			if ( prov[i].getPositionType() == position_type ){
-				
-				DHTNetworkPositionProvider	provider = prov[i];
-				
-				try{
-					DHTNetworkPosition np = provider.deserialisePosition( is );
-					
-					CopyOnWriteList<DHTNetworkPositionListener> listeners = position_listeners;
-					
-					if ( listeners != null ){
-						
-						Iterator<DHTNetworkPositionListener> it = listeners.iterator();
-						
-						while( it.hasNext()){
-							
-							try{
-								it.next().positionFound( provider, originator, np );
-								
-							}catch( Throwable e ){
-								
-								Debug.printStackTrace(e);
-							}
-						}
-					}
-					
-					return( np );
-					
-				}catch( Throwable e ){
-					
-					Debug.printStackTrace(e);
-					
-					is.reset();
-				}
-				
-				break;
-			}
-		}
+        for (DHTNetworkPositionProvider dhtNetworkPositionProvider : prov) {
+
+            if (dhtNetworkPositionProvider.getPositionType() == position_type) {
+
+                DHTNetworkPositionProvider provider = dhtNetworkPositionProvider;
+
+                try {
+                    DHTNetworkPosition np = provider.deserialisePosition(is);
+
+                    CopyOnWriteList<DHTNetworkPositionListener> listeners = position_listeners;
+
+                    if (listeners != null) {
+
+                        for (DHTNetworkPositionListener listener : listeners) {
+
+                            try {
+                                listener.positionFound(provider, originator, np);
+
+                            } catch (Throwable e) {
+
+                                Debug.printStackTrace(e);
+                            }
+                        }
+                    }
+
+                    return (np);
+
+                } catch (Throwable e) {
+
+                    Debug.printStackTrace(e);
+
+                    is.reset();
+                }
+
+                break;
+            }
+        }
 		
 		return( null );
 	}
@@ -578,7 +564,7 @@ DHTNetworkPositionManager
 		
 			if ( position_listeners == null ){
 				
-				position_listeners = new CopyOnWriteList<DHTNetworkPositionListener>();
+				position_listeners = new CopyOnWriteList<>();
 			}
 			
 			position_listeners.add( listener );

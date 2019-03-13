@@ -86,9 +86,9 @@ AZRequestHint
 		return( Message.TYPE_PROTOCOL_PAYLOAD );
 	}
 
-	public byte getVersion() { return version; };
+	public byte getVersion() { return version; }
 
-	public String 
+    public String
 	getDescription() 
 	{   
 		return( getID() + " piece #" + piece_number + ":" + offset + "->" + (offset + length -1) + "/" + life );
@@ -123,10 +123,10 @@ AZRequestHint
 			
 			Map	map = new HashMap();
 			
-			map.put( "piece", new Long( piece_number ));
-			map.put( "offset", new Long( offset ));
-			map.put( "length", new Long( length ));
-			map.put( "life", new Long( life ));
+			map.put( "piece", (long) piece_number);
+			map.put( "offset", (long) offset);
+			map.put( "length", (long) length);
+			map.put( "life", (long) life);
 			
 			buffer = MessagingUtil.convertPayloadToBencodedByteStream( map, DirectByteBuffer.AL_MSG );
 		} 

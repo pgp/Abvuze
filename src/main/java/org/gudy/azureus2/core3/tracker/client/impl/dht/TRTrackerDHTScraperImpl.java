@@ -48,7 +48,7 @@ TRTrackerDHTScraperImpl
 
 	private final TRTrackerScraperImpl		scraper;
 
-	private final Map<HashWrapper,TRTrackerDHTScraperResponseImpl>		responses = new HashMap<HashWrapper,TRTrackerDHTScraperResponseImpl>();
+	private final Map<HashWrapper,TRTrackerDHTScraperResponseImpl>		responses = new HashMap<>();
 	
 	public static TRTrackerDHTScraperImpl
 	create(

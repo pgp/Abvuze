@@ -29,32 +29,32 @@ package org.gudy.azureus2.plugins.tracker;
 public interface 
 TrackerPeer 
 {
- 	public boolean
+ 	boolean
 	isSeed();
 	
-	public long
+	long
 	getAmountLeft();
 	
-	public long
+	long
 	getDownloaded();
 	
-	public long
+	long
 	getUploaded();
 	
-	public String
+	String
 	getIP();
 	
-	public int
+	int
 	getPort();
 	
-	public byte[]
+	byte[]
 	getPeerID();
 	
 		/**
 		 * Raw value is as read, not InetAddress lookuped
 		 * @return
 		 */
-	
-	public String
+
+        String
 	getIPRaw();
 }

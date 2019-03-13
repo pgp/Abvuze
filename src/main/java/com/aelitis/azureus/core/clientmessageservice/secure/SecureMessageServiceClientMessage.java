@@ -24,18 +24,18 @@ import java.util.Map;
 public interface 
 SecureMessageServiceClientMessage 
 {	
-	public Map
+	Map
 	getRequest();
 	
-	public Map
+	Map
 	getReply();
 	
-	public Object
+	Object
 	getClientData();
 	
-	public void
+	void
 	cancel();
 	
-	public String
+	String
 	getString();
 }

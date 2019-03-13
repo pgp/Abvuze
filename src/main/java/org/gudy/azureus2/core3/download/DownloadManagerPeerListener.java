@@ -36,24 +36,24 @@ DownloadManagerPeerListener
 		 * Called when a peer manager is created but not yet started
 		 * @param manager
 		 */
-	
-	public void
-	peerManagerWillBeAdded(
-		PEPeerManager	manager );
 
-	public void
+        void
+	peerManagerWillBeAdded(
+                PEPeerManager manager);
+
+	void
 	peerManagerAdded(
-		PEPeerManager	manager );
+            PEPeerManager manager);
 	
-	public void
+	void
 	peerManagerRemoved(
-		PEPeerManager	manager );
+            PEPeerManager manager);
 	
-	public void
+	void
 	peerAdded(
-		PEPeer 	peer );
+            PEPeer peer);
 		
-	public void
+	void
 	peerRemoved(
-		PEPeer	peer );
+            PEPeer peer);
 }

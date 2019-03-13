@@ -77,14 +77,10 @@ PlatformManagerFactory
 					try {
 						Method methGetSingleton = platform_manager_class.getMethod("getSingleton");
 						platform_manager = (PlatformManager) methGetSingleton.invoke(null);
-					} catch (NoSuchMethodException e) {
-					} catch (SecurityException e) {
-					} catch (IllegalAccessException e) {
-					} catch (IllegalArgumentException e) {
-					} catch (InvocationTargetException e) {
+					} catch (NoSuchMethodException | InvocationTargetException | IllegalArgumentException | IllegalAccessException | SecurityException e) {
 					}
 
-					if ( explicit_class ){
+                    if ( explicit_class ){
 							// try default constructor as getSingleton method missing (but guaranteed
 							// to be there for built-in platform managers )
 						

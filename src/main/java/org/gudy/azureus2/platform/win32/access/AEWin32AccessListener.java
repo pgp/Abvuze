@@ -22,13 +22,13 @@ package org.gudy.azureus2.platform.win32.access;
 public interface 
 AEWin32AccessListener 
 {
-	public static final int ET_SHUTDOWN		= 0x0001;
-	public static final int ET_SUSPEND		= 0x0002;
-	public static final int ET_RESUME		= 0x0003;
+	int ET_SHUTDOWN		= 0x0001;
+	int ET_SUSPEND		= 0x0002;
+	int ET_RESUME		= 0x0003;
 	
-	public static final int RT_SUSPEND_DENY	= 0x0001;
+	int RT_SUSPEND_DENY	= 0x0001;
 	
-	public int
+	int
 	eventOccurred(
-		int		type );
+            int type);
 }

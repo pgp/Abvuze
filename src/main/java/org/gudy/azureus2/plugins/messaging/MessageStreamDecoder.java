@@ -36,39 +36,39 @@ public interface MessageStreamDecoder {
    * @return number of bytes decoded
    * @throws IOException on decoding error
    */
-  public int performStreamDecode( Transport transport, int max_bytes ) throws IOException;
+  int performStreamDecode(Transport transport, int max_bytes) throws IOException;
   
   /**
    * Get the messages decoded from the transport, if any, from the last decode op.
    * @return decoded messages, or null if no new complete messages were decoded
    */
-  public Message[] removeDecodedMessages();
+  Message[] removeDecodedMessages();
   
   /**
    * Get the number of protocol (overhead) bytes decoded from the transport, from the last decode op.
    * @return number of protocol bytes recevied
    */
-  public int getProtocolBytesDecoded();
+  int getProtocolBytesDecoded();
   
   /**
    * Get the number of (piece) data bytes decoded from the transport, from the last decode op.
    * @return number of data bytes received
    */
-  public int getDataBytesDecoded(); 
+  int getDataBytesDecoded();
   
   /**
    * Pause message decoding.
    */
-  public void pauseDecoding();
+  void pauseDecoding();
   
   /**
    * Resume message decoding.
    */
-  public void resumeDecoding();
+  void resumeDecoding();
   
   /**
    * Destroy this decoder, i.e. perform cleanup.
    * @return any bytes already-read and still remaining within the decoder
    */
-  public ByteBuffer destroy();
+  ByteBuffer destroy();
 }

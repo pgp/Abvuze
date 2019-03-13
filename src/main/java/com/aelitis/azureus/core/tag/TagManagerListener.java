@@ -23,13 +23,13 @@ package com.aelitis.azureus.core.tag;
 public interface 
 TagManagerListener 
 {
-	public void
+	void
 	tagTypeAdded(
-		TagManager		manager,
-		TagType			tag_type );
+            TagManager manager,
+            TagType tag_type);
 	
-	public void
+	void
 	tagTypeRemoved(
-		TagManager		manager,
-		TagType			tag_type );
+            TagManager manager,
+            TagType tag_type);
 }

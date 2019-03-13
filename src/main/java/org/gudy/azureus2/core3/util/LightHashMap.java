@@ -63,7 +63,7 @@ public class LightHashMap<S,T> extends AbstractMap<S,T> implements Cloneable {
 		{
 			final LightHashMap lightMap = (LightHashMap)m;
 			this.size = lightMap.size;
-			this.data = (Object[])lightMap.data.clone();
+			this.data = lightMap.data.clone();
 		} else
 			putAll(m);
 	}
@@ -72,7 +72,7 @@ public class LightHashMap<S,T> extends AbstractMap<S,T> implements Cloneable {
 		try
 		{
 			final LightHashMap newMap = (LightHashMap) super.clone();
-			newMap.data = (Object[])data.clone();
+			newMap.data = data.clone();
 			return newMap;
 		} catch (CloneNotSupportedException e)
 		{
@@ -232,11 +232,10 @@ public class LightHashMap<S,T> extends AbstractMap<S,T> implements Cloneable {
 
 	public void putAll(final Map m) {
 		checkCapacity(m.size());
-		for (final Iterator it = m.entrySet().iterator(); it.hasNext();)
-		{
-			final Map.Entry entry = (Map.Entry) it.next();
-			add(entry.getKey(), entry.getValue(),true);
-		}
+        for (Object o : m.entrySet()) {
+            final Entry entry = (Entry) o;
+            add(entry.getKey(), entry.getValue(), true);
+        }
 		// compactify in case we overestimated the new size due to redundant entries
 		//compactify(0.f);
 	}
@@ -444,30 +443,24 @@ public class LightHashMap<S,T> extends AbstractMap<S,T> implements Cloneable {
 		final Map m2 = new LightHashMap();
 		System.out.println("fill:");
 		time = System.currentTimeMillis();
-		for (int i = 0; i < fillData.length; i++)
-			m1.put(fillData[i], buffer);
+        for (String fillDatum7 : fillData) m1.put(fillDatum7, buffer);
 		System.out.println(System.currentTimeMillis() - time);
 		time = System.currentTimeMillis();
-		for (int i = 0; i < fillData.length; i++)
-			m2.put(fillData[i], buffer);
+        for (String fillDatum6 : fillData) m2.put(fillDatum6, buffer);
 		System.out.println(System.currentTimeMillis() - time);
 		System.out.println("replace-fill:");
 		time = System.currentTimeMillis();
-		for (int i = 0; i < fillData.length; i++)
-			m1.put(fillData[i], buffer);
+        for (String fillDatum5 : fillData) m1.put(fillDatum5, buffer);
 		System.out.println(System.currentTimeMillis() - time);
 		time = System.currentTimeMillis();
-		for (int i = 0; i < fillData.length; i++)
-			m2.put(fillData[i], buffer);
+        for (String fillDatum4 : fillData) m2.put(fillDatum4, buffer);
 		System.out.println(System.currentTimeMillis() - time);
 		System.out.println("get:");
 		time = System.currentTimeMillis();
-		for (int i = 0; i < fillData.length; i++)
-			m1.get(fillData[i]);
+        for (String fillDatum3 : fillData) m1.get(fillDatum3);
 		System.out.println(System.currentTimeMillis() - time);
 		time = System.currentTimeMillis();
-		for (int i = 0; i < fillData.length; i++)
-			m2.get(fillData[i]);
+        for (String fillDatum2 : fillData) m2.get(fillDatum2);
 		System.out.println(System.currentTimeMillis() - time);
 		System.out.println("compactify light map");
 		time = System.currentTimeMillis();
@@ -489,12 +482,10 @@ public class LightHashMap<S,T> extends AbstractMap<S,T> implements Cloneable {
 		System.out.println(System.currentTimeMillis() - time);
 		System.out.println("remove entry by entry");
 		time = System.currentTimeMillis();
-		for (int i = 0; i < fillData.length; i++)
-			m1.remove(fillData[i]);
+        for (String fillDatum1 : fillData) m1.remove(fillDatum1);
 		System.out.println(System.currentTimeMillis() - time);
 		time = System.currentTimeMillis();
-		for (int i = 0; i < fillData.length; i++)
-			m2.remove(fillData[i]);
+        for (String fillDatum : fillData) m2.remove(fillDatum);
 		System.out.println(System.currentTimeMillis() - time);
 	}
 

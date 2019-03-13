@@ -27,19 +27,19 @@ import org.gudy.azureus2.core3.torrent.TOTorrentFile;
 public interface 
 DMPieceMapperFile 
 {
-	public long 
+	long
 	getLength();
 	
-	public File
+	File
 	getDataFile();
 	
-	public TOTorrentFile
+	TOTorrentFile
 	getTorrentFile();
 	
-	public DiskManagerFileInfoImpl
+	DiskManagerFileInfoImpl
 	getFileInfo();
 	
-	public void 
+	void
 	setFileInfo(
-		DiskManagerFileInfoImpl 	file);
+            DiskManagerFileInfoImpl file);
 }

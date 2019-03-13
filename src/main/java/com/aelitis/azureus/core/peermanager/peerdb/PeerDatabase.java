@@ -44,45 +44,41 @@ public class PeerDatabase {
   
   private final HashMap peer_connections = new HashMap();
   
-  private final TreeSet<PeerItem> discovered_peers = 
-		 new TreeSet<PeerItem>(
-			new Comparator<PeerItem>()
-			{
-				public int 
-				compare(
-					PeerItem o1, 
-					PeerItem o2 ) 
-				{
-					long res = o2.getPriority() - o1.getPriority();
-					
-					if ( res == 0 ){
-						
-						res = o1.compareTo( o2 );
-					}
-					
-					return( res<0?-1:(res>0?1:0 ));
-				}
-			});
+  private final TreeSet<PeerItem> discovered_peers =
+          new TreeSet<>(
+                  new Comparator<PeerItem>() {
+                      public int
+                      compare(
+                              PeerItem o1,
+                              PeerItem o2) {
+                          long res = o2.getPriority() - o1.getPriority();
+
+                          if (res == 0) {
+
+                              res = o1.compareTo(o2);
+                          }
+
+                          return (res < 0 ? -1 : (res > 0 ? 1 : 0));
+                      }
+                  });
   
-  private final TreeSet<PeerItem> discovered_peers_non_pub = 
-			 new TreeSet<PeerItem>(
-				new Comparator<PeerItem>()
-				{
-					public int 
-					compare(
-						PeerItem o1, 
-						PeerItem o2 ) 
-					{
-						long res = o2.getPriority() - o1.getPriority();
-						
-						if ( res == 0 ){
-							
-							res = o1.compareTo( o2 );
-						}
-						
-						return( res<0?-1:(res>0?1:0 ));
-					}
-				});
+  private final TreeSet<PeerItem> discovered_peers_non_pub =
+          new TreeSet<>(
+                  new Comparator<PeerItem>() {
+                      public int
+                      compare(
+                              PeerItem o1,
+                              PeerItem o2) {
+                          long res = o2.getPriority() - o1.getPriority();
+
+                          if (res == 0) {
+
+                              res = o1.compareTo(o2);
+                          }
+
+                          return (res < 0 ? -1 : (res > 0 ? 1 : 0));
+                      }
+                  });
   
   private final AEMonitor map_mon = new AEMonitor( "PeerDatabase" );
   
@@ -119,18 +115,18 @@ public class PeerDatabase {
       PeerExchangerItem new_connection = new PeerExchangerItem( this, base_peer_item, helper );
       
       //update connection adds
-      for( Iterator it = peer_connections.entrySet().iterator(); it.hasNext(); ) {  //go through all existing connections
-        Map.Entry entry = (Map.Entry)it.next();
-        PeerItem old_key = (PeerItem)entry.getKey();
-        PeerExchangerItem old_connection = (PeerExchangerItem)entry.getValue();
-        
-        if( old_connection.getHelper().isSeed() && new_connection.getHelper().isSeed() ) {
-          continue;  //dont exchange seed peers to other seeds
+        for (Object o : peer_connections.entrySet()) {  //go through all existing connections
+            Map.Entry entry = (Map.Entry) o;
+            PeerItem old_key = (PeerItem) entry.getKey();
+            PeerExchangerItem old_connection = (PeerExchangerItem) entry.getValue();
+
+            if (old_connection.getHelper().isSeed() && new_connection.getHelper().isSeed()) {
+                continue;  //dont exchange seed peers to other seeds
+            }
+
+            old_connection.notifyAdded(base_peer_item);  //notify existing connection of new one
+            new_connection.notifyAdded(old_key);  //notify new connection of existing one for initial exchange
         }
-        
-        old_connection.notifyAdded( base_peer_item );  //notify existing connection of new one
-        new_connection.notifyAdded( old_key );  //notify new connection of existing one for initial exchange
-      }
 
       peer_connections.put( base_peer_item, new_connection );
       return new_connection;
@@ -144,12 +140,12 @@ public class PeerDatabase {
       peer_connections.remove( base_peer_key );
 
       //update connection drops
-      for( Iterator it = peer_connections.values().iterator(); it.hasNext(); ) {  //go through all remaining connections
-        PeerExchangerItem old_connection = (PeerExchangerItem)it.next();
-        
-        //dont skip seed2seed drop notification, as the dropped peer may not have been seeding initially
-        old_connection.notifyDropped( base_peer_key );  //notify existing connection of drop
-      } 
+        for (Object o : peer_connections.values()) {  //go through all remaining connections
+            PeerExchangerItem old_connection = (PeerExchangerItem) o;
+
+            //dont skip seed2seed drop notification, as the dropped peer may not have been seeding initially
+            old_connection.notifyDropped(base_peer_key);  //notify existing connection of drop
+        }
     }
     finally{  map_mon.exit();  }
   }
@@ -164,20 +160,20 @@ public class PeerDatabase {
 		 
 		  try{  
 			  map_mon.enter();
-		  
-			  for ( Iterator it = peer_connections.values().iterator(); it.hasNext(); ){
-				  		  
-				  PeerExchangerItem connection = (PeerExchangerItem)it.next();
-				  
-				  if ( connection != item && connection.getHelper().isSeed()){
-					  
-					  // System.out.println( "seedStatusChanged: dropping: originator= " + item.getBasePeer().getAddressString() + ",target=" + connection.getBasePeer().getAddressString());
-					  
-					  connection.notifyDropped( item.getBasePeer() );
-					  
-					  item.notifyDropped( connection.getBasePeer() );
-				  }
-			  }
+
+              for (Object o : peer_connections.values()) {
+
+                  PeerExchangerItem connection = (PeerExchangerItem) o;
+
+                  if (connection != item && connection.getHelper().isSeed()) {
+
+                      // System.out.println( "seedStatusChanged: dropping: originator= " + item.getBasePeer().getAddressString() + ",target=" + connection.getBasePeer().getAddressString());
+
+                      connection.notifyDropped(item.getBasePeer());
+
+                      item.notifyDropped(connection.getBasePeer());
+                  }
+              }
 	      }finally{ 
 	    	  
 	    	  map_mon.exit();
@@ -192,10 +188,11 @@ public class PeerDatabase {
    */
   public void addDiscoveredPeer( PeerItem peer ) {
     try{  map_mon.enter();
-      for( Iterator it = peer_connections.values().iterator(); it.hasNext(); ) {  //check to make sure we dont already know about this peer
-        PeerExchangerItem connection = (PeerExchangerItem)it.next();
-        if( connection.isConnectedToPeer( peer ) )  return;  //we already know about this peer via exchange, so ignore discovery
-      }
+        for (Object o : peer_connections.values()) {  //check to make sure we dont already know about this peer
+            PeerExchangerItem connection = (PeerExchangerItem) o;
+            if (connection.isConnectedToPeer(peer))
+                return;  //we already know about this peer via exchange, so ignore discovery
+        }
       
       if( !discovered_peers.contains( peer ) ) {
         discovered_peers.add( peer );  //add unknown peer
@@ -258,7 +255,7 @@ public class PeerDatabase {
 	  try{  
 		  map_mon.enter();
 	  
-		  return((PeerItem[])discovered_peers.toArray( new PeerItem[discovered_peers.size()] ));
+		  return discovered_peers.toArray( new PeerItem[discovered_peers.size()] );
 		  
 	  }finally{  
 		
@@ -274,23 +271,19 @@ public class PeerDatabase {
 	  
 	  try{  
 		  map_mon.enter();
-	  
-		  Iterator<PeerItem> it = discovered_peers.iterator();
-		 
-		  while( it.hasNext()){
-			  
-			  PeerItem peer = it.next();
-			  
-			  if( peer.getIP().equals( address )){
-				  
-				  if ( result == null ){
-					  
-					  result = new ArrayList<PeerItem>();
-				  }
-				  
-				  result.add( peer );
-			  }
-		  }
+
+          for (PeerItem peer : discovered_peers) {
+
+              if (peer.getIP().equals(address)) {
+
+                  if (result == null) {
+
+                      result = new ArrayList<>();
+                  }
+
+                  result.add(peer);
+              }
+          }
 	  }finally{  
 		
 		  map_mon.exit();  
@@ -302,7 +295,7 @@ public class PeerDatabase {
 		  
 	  }else{
 		  
-		  return( result.toArray( new PeerItem[result.size()] ));
+		  return( result.toArray(new PeerItem[0]));
 
 	  }
   }
@@ -568,24 +561,22 @@ public class PeerDatabase {
     
     try{  map_mon.enter();
       //count popularity of all known peers
-      for( Iterator it = peer_connections.values().iterator(); it.hasNext(); ) { 
-        PeerExchangerItem connection = (PeerExchangerItem)it.next();
-        PeerItem[] peers = connection.getConnectedPeers();
-        
-        for( int i=0; i < peers.length; i++ ) {
-          PeerItem peer = peers[i];
-          Integer count = (Integer)popularity_counts.get( peer );
-          
-          if( count == null ) {
-            count = new Integer( 1 );
-          }
-          else {
-            count = new Integer( count.intValue() + 1 );
-          }
-          
-          popularity_counts.put( peer, count );
+        for (Object o : peer_connections.values()) {
+            PeerExchangerItem connection = (PeerExchangerItem) o;
+            PeerItem[] peers = connection.getConnectedPeers();
+
+            for (PeerItem peer : peers) {
+                Integer count = (Integer) popularity_counts.get(peer);
+
+                if (count == null) {
+                    count = 1;
+                } else {
+                    count = count.intValue() + 1;
+                }
+
+                popularity_counts.put(peer, count);
+            }
         }
-      }
     }
     finally{  map_mon.exit();  }
     

@@ -23,7 +23,7 @@ package com.aelitis.azureus.core.peermanager.piecepicker;
 public interface 
 PiecePriorityProvider 
 {
-	public long[]
+	long[]
 	updatePriorities(
-		PiecePicker		picker );
+            PiecePicker picker);
 }

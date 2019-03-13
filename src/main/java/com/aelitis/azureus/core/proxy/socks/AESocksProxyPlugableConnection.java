@@ -31,27 +31,27 @@ import java.net.InetAddress;
 public interface 
 AESocksProxyPlugableConnection 
 {
-	public String
+	String
 	getName();
 	
-	public InetAddress
+	InetAddress
 	getLocalAddress();
 	
-	public int
+	int
 	getLocalPort();
 
-	public void
+	void
 	connect(
-		AESocksProxyAddress		address )
+            AESocksProxyAddress address)
 		
 		throws IOException;
 	
-	public void
+	void
 	relayData()
 	
 		throws IOException;
 	
-	public void
+	void
 	close()
 	
 		throws IOException;

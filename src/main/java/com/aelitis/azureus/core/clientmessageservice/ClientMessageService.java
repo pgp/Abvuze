@@ -32,7 +32,7 @@ public interface ClientMessageService {
 	 * @param message (bencode-able) to send
 	 * @throws IOException on error
 	 */
-	public void sendMessage( Map message ) throws IOException;
+    void sendMessage(Map message) throws IOException;
 	
 	
 	/**
@@ -41,18 +41,18 @@ public interface ClientMessageService {
 	 * @return message received
 	 * @throws IOException on error
 	 */
-	public Map receiveMessage() throws IOException;
+    Map receiveMessage() throws IOException;
 	
 	
 	/**
 	 * Drop and closedown the connection with the server.
 	 */
-	public void close();
+    void close();
 	
 	/**
 	 * Override the default max message size
 	 * @param max_bytes
 	 */
-	public void
-	setMaximumMessageSize( int max_bytes );
+    void
+	setMaximumMessageSize(int max_bytes);
 }

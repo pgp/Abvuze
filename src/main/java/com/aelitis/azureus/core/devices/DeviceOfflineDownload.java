@@ -25,15 +25,15 @@ import org.gudy.azureus2.plugins.download.Download;
 public interface 
 DeviceOfflineDownload 
 {
-	public Download
+	Download
 	getDownload();
 	
-	public boolean
+	boolean
 	isTransfering();
 	
-	public long
+	long
 	getCurrentTransferSize();
 	
-	public long
+	long
 	getRemaining();
 }

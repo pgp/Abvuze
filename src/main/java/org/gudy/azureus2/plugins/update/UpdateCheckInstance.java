@@ -27,53 +27,53 @@ package org.gudy.azureus2.plugins.update;
 public interface 
 UpdateCheckInstance 
 {
-	public static final int	UCI_INSTALL			= 1;
-	public static final int	UCI_UPDATE			= 2;
-	public static final int	UCI_UNINSTALL		= 3;
+	int	UCI_INSTALL			= 1;
+	int	UCI_UPDATE			= 2;
+	int	UCI_UNINSTALL		= 3;
 	
-	public static final int	PT_UI_STYLE				= 1;	//Integer
-	public static final int	PT_UI_STYLE_DEFAULT		= 1;
-	public static final int	PT_UI_STYLE_SIMPLE		= 2;
-	public static final int	PT_UI_STYLE_NONE		= 3;
+	int	PT_UI_STYLE				= 1;	//Integer
+	int	PT_UI_STYLE_DEFAULT		= 1;
+	int	PT_UI_STYLE_SIMPLE		= 2;
+	int	PT_UI_STYLE_NONE		= 3;
 	
-	public static final int	PT_UI_PARENT_SWT_COMPOSITE					= 2;	// SWT Composite
+	int	PT_UI_PARENT_SWT_COMPOSITE					= 2;	// SWT Composite
 	
-	public static final int	PT_UI_DISABLE_ON_SUCCESS_SLIDEY				= 3;	// Boolean
-	public static final int	PT_CLOSE_OR_RESTART_ALREADY_IN_PROGRESS		= 4;	// Boolean
-	public static final int	PT_UNINSTALL_RESTART_REQUIRED				= 5;	// Boolean
+	int	PT_UI_DISABLE_ON_SUCCESS_SLIDEY				= 3;	// Boolean
+	int	PT_CLOSE_OR_RESTART_ALREADY_IN_PROGRESS		= 4;	// Boolean
+	int	PT_UNINSTALL_RESTART_REQUIRED				= 5;	// Boolean
 
 		/**
 		 * returns one of the above UCI_ constants
 		 * @return
 		 */
-	
-	public int
+
+        int
 	getType();
 	
 		/**
 		 * returns the name supplied when the instance was created (or "" if it wasn't)
 		 * @return
 		 */
-	
-	public String
+
+        String
 	getName();
 	
-	public void
+	void
 	start();
 	
-	public void
+	void
 	cancel();
 	
-	public boolean
+	boolean
 	isCancelled();
 	
-	public UpdateChecker[]
+	UpdateChecker[]
 	getCheckers();
 	
-	public Update[]
+	Update[]
 	getUpdates();
 	
-	public UpdateInstaller
+	UpdateInstaller
 	createInstaller()
 		
 		throws UpdateException;
@@ -84,59 +84,59 @@ UpdateCheckInstance
 		 * @param component
 		 * @param mandatory
 		 */
-	
-	public void
+
+        void
 	addUpdatableComponent(
-		UpdatableComponent		component,
-		boolean					mandatory );
+                UpdatableComponent component,
+                boolean mandatory);
 	
 		/**
 		 * Access to the update manager
 		 * @return
 		 */
-	
-	public UpdateManager
+
+        UpdateManager
 	getManager();
 	
-	public void
+	void
 	setAutomatic(
-		boolean	automatic );
+            boolean automatic);
 	
-	public boolean
+	boolean
 	isAutomatic();
 	
-	public void
+	void
 	setLowNoise(
-		boolean	low_noise );
+            boolean low_noise);
 	
-	public boolean
+	boolean
 	isLowNoise();
 	
-	public boolean
+	boolean
 	isCompleteOrCancelled();
 	
-	public Object
+	Object
 	getProperty(
-		int		property_name );
+            int property_name);
 	
-	public void
+	void
 	setProperty(
-		int		property_name,
-		Object	value );
+            int property_name,
+            Object value);
 	
-	public void
+	void
 	addDecisionListener(
-		UpdateManagerDecisionListener	l );
+            UpdateManagerDecisionListener l);
 	
-	public void
+	void
 	removeDecisionListener(
-		UpdateManagerDecisionListener	l );
+            UpdateManagerDecisionListener l);
 	
-	public void
+	void
 	addListener(
-		UpdateCheckInstanceListener	l );
+            UpdateCheckInstanceListener l);
 	
-	public void
+	void
 	removeListener(
-		UpdateCheckInstanceListener	l );
+            UpdateCheckInstanceListener l);
 }

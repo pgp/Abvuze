@@ -33,7 +33,7 @@ ParameterTabFolderImpl
 	implements ParameterTabFolder
 	
 {
-	private List<ParameterGroupImpl>	groups = new ArrayList<ParameterGroupImpl>();
+	private List<ParameterGroupImpl>	groups = new ArrayList<>();
 	
 	public
 	ParameterTabFolderImpl()

@@ -27,9 +27,9 @@ package org.gudy.azureus2.plugins.sharing;
 public interface 
 ShareResourceListener 
 {
-	public void
+	void
 	shareResourceChanged(
-		ShareResource			resource,
-		ShareResourceEvent		event );
+            ShareResource resource,
+            ShareResourceEvent event);
 
 }

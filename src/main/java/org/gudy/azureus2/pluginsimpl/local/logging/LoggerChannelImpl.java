@@ -154,25 +154,25 @@ LoggerChannelImpl
   }
 	
 	private void notifyListeners(int log_type, String data) {
-		for (int i = 0; i < listeners.size(); i++) {
-			try {
-				LoggerChannelListener l = (LoggerChannelListener) listeners.get(i);
-				l.messageLogged(log_type, data);
-			} catch (Throwable e) {
-				Debug.printStackTrace(e);
-			}
-		}
+        for (Object listener : listeners) {
+            try {
+                LoggerChannelListener l = (LoggerChannelListener) listener;
+                l.messageLogged(log_type, data);
+            } catch (Throwable e) {
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 	
 	private void notifyListeners(String listenersText, Throwable error) {
-		for (int i = 0; i < listeners.size(); i++) {
-			try {
-				LoggerChannelListener l = (LoggerChannelListener) listeners.get(i);
-				l.messageLogged(listenersText, error);
-			} catch (Throwable e) {
-				Debug.printStackTrace(e);
-			}
-		}
+        for (Object listener : listeners) {
+            try {
+                LoggerChannelListener l = (LoggerChannelListener) listener;
+                l.messageLogged(listenersText, error);
+            } catch (Throwable e) {
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 	
 	public void log(int log_type, String data) {
@@ -277,14 +277,14 @@ LoggerChannelImpl
   
 	protected void logAlert(int alert_type, String message, boolean repeatable) {
 		// output as log message to any listeners
-		for (int i = 0; i < listeners.size(); i++) {
-			try {
-				((LoggerChannelListener) listeners.get(i)).messageLogged(alert_type,
-						addTimeStamp(message));
-			} catch (Throwable e) {
-				Debug.printStackTrace(e);
-			}
-		}
+        for (Object listener : listeners) {
+            try {
+                ((LoggerChannelListener) listener).messageLogged(alert_type,
+                        addTimeStamp(message));
+            } catch (Throwable e) {
+                Debug.printStackTrace(e);
+            }
+        }
 
 		if (!no_output) {
 			int at;
@@ -330,16 +330,16 @@ LoggerChannelImpl
 		String		message,
 		Throwable 	e )
 	{
-		for (int i=0;i<listeners.size();i++){
-			
-			try{
-				((LoggerChannelListener)listeners.get(i)).messageLogged( addTimeStamp( message ), e );
-	
-			}catch( Throwable f ){
-				
-				Debug.printStackTrace( f );
-			}
-		}	
+        for (Object listener : listeners) {
+
+            try {
+                ((LoggerChannelListener) listener).messageLogged(addTimeStamp(message), e);
+
+            } catch (Throwable f) {
+
+                Debug.printStackTrace(f);
+            }
+        }
 
 		if ( !no_output ){
 			org.gudy.azureus2.core3.logging.Logger.log(new LogAlert(
@@ -352,16 +352,16 @@ LoggerChannelImpl
 		String		message,
 		Throwable 	e )
 	{
-		for (int i=0;i<listeners.size();i++){
-			
-			try{
-				((LoggerChannelListener)listeners.get(i)).messageLogged( addTimeStamp( message ), e );
-	
-			}catch( Throwable f ){
-				
-				Debug.printStackTrace( f );
-			}
-		}	
+        for (Object listener : listeners) {
+
+            try {
+                ((LoggerChannelListener) listener).messageLogged(addTimeStamp(message), e);
+
+            } catch (Throwable f) {
+
+                Debug.printStackTrace(f);
+            }
+        }
 		
 		if ( !no_output ){
 			org.gudy.azureus2.core3.logging.Logger.log(new LogAlert(

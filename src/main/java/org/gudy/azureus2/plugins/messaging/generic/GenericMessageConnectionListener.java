@@ -25,21 +25,21 @@ import org.gudy.azureus2.plugins.utils.PooledByteBuffer;
 public interface 
 GenericMessageConnectionListener 
 {
-	public void
+	void
 	connected(
-		GenericMessageConnection	connection );
+            GenericMessageConnection connection);
 	
-	public void
+	void
 	receive(
-		GenericMessageConnection	connection,
-		PooledByteBuffer			message )
+            GenericMessageConnection connection,
+            PooledByteBuffer message)
 	
 		throws MessageException;
 	
-	public void
+	void
 	failed(
-		GenericMessageConnection	connection,
-		Throwable 					error )
+            GenericMessageConnection connection,
+            Throwable error)
 	
 		throws MessageException;
 }

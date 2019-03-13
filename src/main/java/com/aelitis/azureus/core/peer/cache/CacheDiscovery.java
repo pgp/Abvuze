@@ -50,7 +50,7 @@ CacheDiscovery
 		// No longer supported: new CLCacheDiscovery(),
 	};
 	
-	private static Set<String>	cache_ips = Collections.synchronizedSet(new HashSet<String>());
+	private static Set<String>	cache_ips = Collections.synchronizedSet(new HashSet<>());
 	
 	public static void
 	initialise(
@@ -112,16 +112,16 @@ CacheDiscovery
 				run()
 				{
 					BannedIp[] bans = ip_filter.getBannedIps();
-				
-					for (int i=0;i<bans.length;i++){
-						
-						String	ip = bans[i].getIp();
-						
-						if ( !canBan( ip )){
-							
-							ip_filter.unban( ip );
-						}
-					}
+
+                    for (BannedIp ban : bans) {
+
+                        String ip = ban.getIp();
+
+                        if (!canBan(ip)) {
+
+                            ip_filter.unban(ip);
+                        }
+                    }
 				}
 			}.start();
 	}
@@ -191,7 +191,7 @@ CacheDiscovery
 			
 		}else{
 		
-			List<CachePeer>	result = new ArrayList<CachePeer>();
+			List<CachePeer>	result = new ArrayList<>();
 			
 			for (int i=0;i<discoverers.length;i++){
 				
@@ -203,17 +203,17 @@ CacheDiscovery
 				}
 			}
 			
-			res = result.toArray( new CachePeer[result.size()]);
+			res = result.toArray(new CachePeer[0]);
 		}
-		
-		for (int i=0;i<res.length;i++){
-			
-			String	ip = res[i].getAddress().getHostAddress();
-				
-			cache_ips.add( ip );
-			
-			ip_filter.unban( ip );
-		}
+
+        for (CachePeer re : res) {
+
+            String ip = re.getAddress().getHostAddress();
+
+            cache_ips.add(ip);
+
+            ip_filter.unban(ip);
+        }
 		
 		return( res );
 	}
@@ -224,15 +224,15 @@ CacheDiscovery
 		final InetAddress		ip,
 		final int				port )
 	{
-		for (int i=0;i<discoverers.length;i++){
-			
-			CachePeer	cp = discoverers[i].lookup( peer_id, ip, port );
-			
-			if ( cp != null ){
-				
-				return( cp );
-			}
-		}
+        for (CacheDiscoverer discoverer : discoverers) {
+
+            CachePeer cp = discoverer.lookup(peer_id, ip, port);
+
+            if (cp != null) {
+
+                return (cp);
+            }
+        }
 		
 		return( new CachePeerImpl( CachePeer.PT_NONE, ip, port ));
 	}

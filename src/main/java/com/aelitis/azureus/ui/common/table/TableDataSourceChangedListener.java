@@ -24,5 +24,5 @@ package com.aelitis.azureus.ui.common.table;
  */
 public interface TableDataSourceChangedListener
 {
-	public void tableDataSourceChanged(Object newDataSource);
+	void tableDataSourceChanged(Object newDataSource);
 }

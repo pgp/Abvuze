@@ -42,11 +42,11 @@ CopyOnWriteSet<T>
 		
 		if ( is_identify ){
 			
-			set = new IdentityHashSet<T>();
+			set = new IdentityHashSet<>();
 			
 		}else{
 			
-			set = new HashSet<T>();
+			set = new HashSet<>();
 		}
 	}
 	
@@ -64,11 +64,11 @@ CopyOnWriteSet<T>
 				
 				if ( is_identify ){
 					
-					new_set = new IdentityHashSet<T>( set );
+					new_set = new IdentityHashSet<>(set);
 					
 				}else{
 					
-					new_set = new HashSet<T>( set );
+					new_set = new HashSet<>(set);
 				}
 			
 				result = new_set.add( o );
@@ -98,11 +98,11 @@ CopyOnWriteSet<T>
 				
 				if ( is_identify ){
 					
-					new_set = new IdentityHashSet<T>( set );
+					new_set = new IdentityHashSet<>(set);
 					
 				}else{
 					
-					new_set = new HashSet<T>( set );
+					new_set = new HashSet<>(set);
 				}
 				
 				boolean res = new_set.remove( o );
@@ -138,11 +138,11 @@ CopyOnWriteSet<T>
 				
 				if ( is_identify ){
 					
-					new_set = new IdentityHashSet<T>( set );
+					new_set = new IdentityHashSet<>(set);
 					
 				}else{
 					
-					new_set = new HashSet<T>( set );
+					new_set = new HashSet<>(set);
 				}
 				
 				set = new_set;

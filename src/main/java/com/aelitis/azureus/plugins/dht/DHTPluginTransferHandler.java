@@ -27,17 +27,17 @@ package com.aelitis.azureus.plugins.dht;
 public interface 
 DHTPluginTransferHandler 
 {
-	public String
+	String
 	getName();
 	
-	public byte[]
+	byte[]
 	handleRead(
-		DHTPluginContact	originator,
-		byte[]				key );
+            DHTPluginContact originator,
+            byte[] key);
 	
-	public byte[]
+	byte[]
 	handleWrite(
-		DHTPluginContact	originator,
-		byte[]				key,
-		byte[]				value );
+            DHTPluginContact originator,
+            byte[] key,
+            byte[] value);
 }

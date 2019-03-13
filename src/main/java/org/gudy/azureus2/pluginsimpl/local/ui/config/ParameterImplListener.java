@@ -27,9 +27,9 @@ package org.gudy.azureus2.pluginsimpl.local.ui.config;
 public interface 
 ParameterImplListener 
 {
-	public void
+	void
 	enabledChanged(
-		ParameterImpl	parameter );
+            ParameterImpl parameter);
 	
-	public void labelChanged(ParameterImpl	parameter, String text, boolean bIsKey);
+	void labelChanged(ParameterImpl parameter, String text, boolean bIsKey);
 }

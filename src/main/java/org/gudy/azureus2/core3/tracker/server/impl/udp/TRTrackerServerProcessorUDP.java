@@ -56,8 +56,8 @@ TRTrackerServerProcessorUDP
 	private final DatagramSocket			socket;
 	private final DatagramPacket			request_dg;
 	
-	private static final Map<Long,connectionData>				connection_id_map 	= new LinkedHashMap<Long,connectionData>();
-	private static final Map<String,List<connectionData>>		connection_ip_map 	= new HashMap<String,List<connectionData>>();
+	private static final Map<Long,connectionData>				connection_id_map 	= new LinkedHashMap<>();
+	private static final Map<String,List<connectionData>>		connection_ip_map 	= new HashMap<>();
 	private static long									last_timeout_check;
 	
 	private static final SecureRandom		random				= RandomUtils.SECURE_RANDOM;
@@ -125,184 +125,174 @@ TRTrackerServerProcessorUDP
 			
 			System.arraycopy( input_buffer, packet_data_length+8, auth_hash, 0, 8 );
 		}
-				
-		DataInputStream is = new DataInputStream(new ByteArrayInputStream(input_buffer, 0, packet_data_length ));
-		
-		try{
-			String	client_ip_address = request_dg.getAddress().getHostAddress();
-			
-			PRUDPPacketRequest	request = PRUDPPacketRequest.deserialiseRequest( null, is );
-			
-			Logger.log(new LogEvent(LOGID,
-					"TRTrackerServerProcessorUDP: packet received: "
-							+ request.getString())); 
-				
-			PRUDPPacket					reply 	= null;
-			TRTrackerServerTorrentImpl	torrent	= null;
-			
-			if ( auth_user_bytes != null ){
-				
-				// user name is irrelevant as we only have one at the moment
-	
-				//<parg_home> so <new_packet> = <old_packet> + <user_padded_to_8_bytes> + <hash>
-				//<parg_home> where <hash> = first 8 bytes of sha1(<old_packet> + <user_padded_to_8> + sha1(pass))
-				//<XTF> Yes
-				
-								
-				byte[] sha1_pw = null;
-				
-				if ( server.hasExternalAuthorisation()){
-					
-					try{
-						URL	resource = new URL( "udp://" + server.getHost() + ":" + server.getPort() + "/" );
-					
-						sha1_pw = server.performExternalAuthorisation( resource, auth_user );
-						
-					}catch( MalformedURLException e ){
-						
-						Debug.printStackTrace( e );
-						
-					}
-					
-					if ( sha1_pw == null ){
-				
-						Logger.log(new LogEvent(LOGID, LogEvent.LT_ERROR,
-								"TRTrackerServerProcessorUDP: auth fails for user '"
-										+ auth_user + "'")); 
 
-						reply = new PRUDPPacketReplyError( request.getTransactionId(), "Access Denied" );
-					}
-				}else{
-					
-					sha1_pw = server.getPassword();
-				}
-				
-					// if we haven't already failed then check the PW
-				
-				if ( reply == null ){
-					
-					SHA1Hasher	hasher = new SHA1Hasher();
-					
-					hasher.update( input_buffer, 0, packet_data_length);
-					hasher.update( auth_user_bytes );
-					hasher.update( sha1_pw );
-					
-					byte[]	digest = hasher.getDigest();
-					
-					for (int i=0;i<auth_hash.length;i++){
-						
-						if ( auth_hash[i] != digest[i] ){
-					
-							Logger.log(new LogEvent(LOGID, LogEvent.LT_ERROR,
-									"TRTrackerServerProcessorUDP: auth fails for user '"
-											+ auth_user + "'")); 
-	
-							reply = new PRUDPPacketReplyError( request.getTransactionId(), "Access Denied" );
-							
-							break;
-						}
-					}
-				}
-			}
-			
-			int request_type = TRTrackerServerRequest.RT_UNKNOWN;
-			
-			if ( reply == null ){
-				
-				if ( server.isEnabled()){
-					
-					try{
-						int	type = request.getAction();
-						
-						if ( type == PRUDPPacketTracker.ACT_REQUEST_CONNECT ){
-							
-							reply = handleConnect( client_ip_address, request );
-							
-						}else if (type == PRUDPPacketTracker.ACT_REQUEST_ANNOUNCE ){
-							
-							Object[] x = handleAnnounceAndScrape( client_ip_address, request, TRTrackerServerRequest.RT_ANNOUNCE );
-							
-							if ( x == null ){
-								
-								throw( new Exception( "Connection ID mismatch" ));
-							}
-							
-							reply 	= (PRUDPPacket)x[0];
-							torrent	= (TRTrackerServerTorrentImpl)x[1];
-					
-							request_type = TRTrackerServerRequest.RT_ANNOUNCE;
-							
-						}else if ( type == PRUDPPacketTracker.ACT_REQUEST_SCRAPE ){
-							
-							Object[] x = handleAnnounceAndScrape( client_ip_address, request, TRTrackerServerRequest.RT_SCRAPE );
-							
-							if ( x == null ){
-								
-								throw( new Exception( "Connection ID mismatch" ));
-							}
+        try (DataInputStream is = new DataInputStream(new ByteArrayInputStream(input_buffer, 0, packet_data_length))) {
+            String client_ip_address = request_dg.getAddress().getHostAddress();
 
-							reply 	= (PRUDPPacket)x[0];
-							torrent	= (TRTrackerServerTorrentImpl)x[1];
-		
-							request_type = TRTrackerServerRequest.RT_SCRAPE;
-							
-						}else{
-							
-							reply = new PRUDPPacketReplyError( request.getTransactionId(), "unsupported action");
-						}
-					}catch( Throwable e ){
-						
-						// e.printStackTrace();
-						
-						String	error = e.getMessage();
-						
-						if ( error == null ){
-							
-							error = e.toString();
-						}
-						
-						reply = new PRUDPPacketReplyError( request.getTransactionId(), error );
-					}
-				}else{
-										
-					System.out.println( "UDP Tracker: replying 'disabled' to " + client_ip_address );
-													
-					reply = new PRUDPPacketReplyError( request.getTransactionId(), "UDP Tracker disabled" );
-				}
-			}
-			
-			if ( reply != null ){
-				
-				InetAddress address = request_dg.getAddress();
-				
-				ByteArrayOutputStream	baos = new ByteArrayOutputStream();
-				
-				DataOutputStream os = new DataOutputStream( baos );
-										
-				reply.serialise(os);
-				
-				byte[]	output_buffer = baos.toByteArray();
-				
-				DatagramPacket reply_packet = new DatagramPacket(output_buffer, output_buffer.length,address,request_dg.getPort());
-							
-				socket.send( reply_packet );
-			
-				server.updateStats( request_type, torrent, input_buffer.length, output_buffer.length );
-			}
-			
-		}catch( Throwable e ){
-			
-			Logger.log(new LogEvent(LOGID,
-					"TRTrackerServerProcessorUDP: processing fails", e)); 
-		}finally{
-			
-			try{
-				is.close();
-				
-			}catch( Throwable e ){
-				
-			}
-		}
+            PRUDPPacketRequest request = PRUDPPacketRequest.deserialiseRequest(null, is);
+
+            Logger.log(new LogEvent(LOGID,
+                    "TRTrackerServerProcessorUDP: packet received: "
+                            + request.getString()));
+
+            PRUDPPacket reply = null;
+            TRTrackerServerTorrentImpl torrent = null;
+
+            if (auth_user_bytes != null) {
+
+                // user name is irrelevant as we only have one at the moment
+
+                //<parg_home> so <new_packet> = <old_packet> + <user_padded_to_8_bytes> + <hash>
+                //<parg_home> where <hash> = first 8 bytes of sha1(<old_packet> + <user_padded_to_8> + sha1(pass))
+                //<XTF> Yes
+
+
+                byte[] sha1_pw = null;
+
+                if (server.hasExternalAuthorisation()) {
+
+                    try {
+                        URL resource = new URL("udp://" + server.getHost() + ":" + server.getPort() + "/");
+
+                        sha1_pw = server.performExternalAuthorisation(resource, auth_user);
+
+                    } catch (MalformedURLException e) {
+
+                        Debug.printStackTrace(e);
+
+                    }
+
+                    if (sha1_pw == null) {
+
+                        Logger.log(new LogEvent(LOGID, LogEvent.LT_ERROR,
+                                "TRTrackerServerProcessorUDP: auth fails for user '"
+                                        + auth_user + "'"));
+
+                        reply = new PRUDPPacketReplyError(request.getTransactionId(), "Access Denied");
+                    }
+                } else {
+
+                    sha1_pw = server.getPassword();
+                }
+
+                // if we haven't already failed then check the PW
+
+                if (reply == null) {
+
+                    SHA1Hasher hasher = new SHA1Hasher();
+
+                    hasher.update(input_buffer, 0, packet_data_length);
+                    hasher.update(auth_user_bytes);
+                    hasher.update(sha1_pw);
+
+                    byte[] digest = hasher.getDigest();
+
+                    for (int i = 0; i < auth_hash.length; i++) {
+
+                        if (auth_hash[i] != digest[i]) {
+
+                            Logger.log(new LogEvent(LOGID, LogEvent.LT_ERROR,
+                                    "TRTrackerServerProcessorUDP: auth fails for user '"
+                                            + auth_user + "'"));
+
+                            reply = new PRUDPPacketReplyError(request.getTransactionId(), "Access Denied");
+
+                            break;
+                        }
+                    }
+                }
+            }
+
+            int request_type = TRTrackerServerRequest.RT_UNKNOWN;
+
+            if (reply == null) {
+
+                if (server.isEnabled()) {
+
+                    try {
+                        int type = request.getAction();
+
+                        if (type == PRUDPPacketTracker.ACT_REQUEST_CONNECT) {
+
+                            reply = handleConnect(client_ip_address, request);
+
+                        } else if (type == PRUDPPacketTracker.ACT_REQUEST_ANNOUNCE) {
+
+                            Object[] x = handleAnnounceAndScrape(client_ip_address, request, TRTrackerServerRequest.RT_ANNOUNCE);
+
+                            if (x == null) {
+
+                                throw (new Exception("Connection ID mismatch"));
+                            }
+
+                            reply = (PRUDPPacket) x[0];
+                            torrent = (TRTrackerServerTorrentImpl) x[1];
+
+                            request_type = TRTrackerServerRequest.RT_ANNOUNCE;
+
+                        } else if (type == PRUDPPacketTracker.ACT_REQUEST_SCRAPE) {
+
+                            Object[] x = handleAnnounceAndScrape(client_ip_address, request, TRTrackerServerRequest.RT_SCRAPE);
+
+                            if (x == null) {
+
+                                throw (new Exception("Connection ID mismatch"));
+                            }
+
+                            reply = (PRUDPPacket) x[0];
+                            torrent = (TRTrackerServerTorrentImpl) x[1];
+
+                            request_type = TRTrackerServerRequest.RT_SCRAPE;
+
+                        } else {
+
+                            reply = new PRUDPPacketReplyError(request.getTransactionId(), "unsupported action");
+                        }
+                    } catch (Throwable e) {
+
+                        // e.printStackTrace();
+
+                        String error = e.getMessage();
+
+                        if (error == null) {
+
+                            error = e.toString();
+                        }
+
+                        reply = new PRUDPPacketReplyError(request.getTransactionId(), error);
+                    }
+                } else {
+
+                    System.out.println("UDP Tracker: replying 'disabled' to " + client_ip_address);
+
+                    reply = new PRUDPPacketReplyError(request.getTransactionId(), "UDP Tracker disabled");
+                }
+            }
+
+            if (reply != null) {
+
+                InetAddress address = request_dg.getAddress();
+
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+                DataOutputStream os = new DataOutputStream(baos);
+
+                reply.serialise(os);
+
+                byte[] output_buffer = baos.toByteArray();
+
+                DatagramPacket reply_packet = new DatagramPacket(output_buffer, output_buffer.length, address, request_dg.getPort());
+
+                socket.send(reply_packet);
+
+                server.updateStats(request_type, torrent, input_buffer.length, output_buffer.length);
+            }
+
+        } catch (Throwable e) {
+
+            Logger.log(new LogEvent(LOGID,
+                    "TRTrackerServerProcessorUDP: processing fails", e));
+        }
 	}
 	
 	public void
@@ -319,7 +309,7 @@ TRTrackerServerProcessorUDP
 	
 			long	id = random.nextLong();
 			
-			Long	new_key = new Long(id);
+			Long	new_key = id;
 			
 			connectionData	new_data = new connectionData( client_address, id );
 			
@@ -377,7 +367,7 @@ TRTrackerServerProcessorUDP
 			
 			if ( cds == null ){
 			
-				cds = new ArrayList<connectionData>();
+				cds = new ArrayList<>();
 				
 				connection_ip_map.put( client_address, cds );
 			}
@@ -411,9 +401,9 @@ TRTrackerServerProcessorUDP
 		try{
 			random_mon.enter();
 			
-			Long	key = new Long(id);
+			Long	key = id;
 			
-			connectionData data = (connectionData)connection_id_map.get( key );
+			connectionData data = connection_id_map.get( key );
 			
 			if ( data == null ){
 				
@@ -619,7 +609,7 @@ TRTrackerServerProcessorUDP
 					
 					addresses[i] 	= PRHelpers.addressToInt(new String((byte[])peer.get("ip")));
 					
-					ports[i]		= (short)((Long)peer.get("port")).shortValue();
+					ports[i]		= ((Long)peer.get("port")).shortValue();
 				}
 				
 				reply.setPeers( addresses, ports );
@@ -652,7 +642,7 @@ TRTrackerServerProcessorUDP
 					
 					addresses[i] 	= PRHelpers.addressToInt(new String((byte[])peer.get("ip")));
 					
-					ports[i]		= (short)((Long)peer.get("port")).shortValue();
+					ports[i]		= ((Long)peer.get("port")).shortValue();
 				}
 				
 				reply.setPeers( addresses, ports );

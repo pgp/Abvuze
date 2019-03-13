@@ -23,19 +23,19 @@ package com.aelitis.azureus.core.networkmanager.admin;
 
 public interface NetworkAdminSpeedTestScheduler
 {
-	public static final int TEST_TYPE_BT	= 1;
+	int TEST_TYPE_BT	= 1;
 	
     /**
      * If system crashes on start-up, then speed tests torrents need to be
      * cleaned on start-up etc - call this method on start to allow this
      */
-    public void initialise();
+    void initialise();
     
     /**
      * returns the currently scheduled test, null if none
      * @return - NetworkAdminSpeedTestScheduledTest
      */
-    public NetworkAdminSpeedTestScheduledTest getCurrentTest();
+    NetworkAdminSpeedTestScheduledTest getCurrentTest();
     
     /**
      * Request a test using the testing service.
@@ -43,12 +43,12 @@ public interface NetworkAdminSpeedTestScheduler
      * @return boolean - true if a success, otherwise false.
      * @throws NetworkAdminException -
      */
-    public NetworkAdminSpeedTestScheduledTest scheduleTest( int type ) throws NetworkAdminException;
+    NetworkAdminSpeedTestScheduledTest scheduleTest(int type) throws NetworkAdminException;
   
     /**
      * Get the most recent result for a given test type, null if none
      * @param type - ID for the type of test - use abouve constants
      * @return - Result
      */
-    public NetworkAdminSpeedTesterResult getLastResult( int type );
+    NetworkAdminSpeedTesterResult getLastResult(int type);
 }

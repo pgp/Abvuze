@@ -23,7 +23,7 @@ package com.aelitis.azureus.core.devices;
 public interface 
 DeviceListener 
 {
-	public void
+	void
 	deviceChanged(
-		Device		device );
+            Device device);
 }

@@ -51,7 +51,7 @@ ByteCountedInputStream
 	}
 	
 	public int 
-	read(byte b[]) 
+	read(byte[] b)
 	
 		throws IOException 
 	{
@@ -63,7 +63,7 @@ ByteCountedInputStream
 	}
 	
 	public int 
-	read(byte b[], int off, int len) 
+	read(byte[] b, int off, int len)
 	
 		throws IOException 
 	{

@@ -35,111 +35,111 @@ PlatformManager
 	extends org.gudy.azureus2.plugins.platform.PlatformManager
 {
 	// TODO PGP named enum instead of sparse constants (adjust org.gudy.azureus2.platform.PlatformManagerFactory as well)
-	public static final int	PT_WINDOWS		= 1;
-	public static final int PT_OTHER		= 2;
-    public static final int PT_MACOSX 		= 3;
-  	public static final int PT_UNIX			= 4;
-  	public static final int PT_ANDROID		= 5;
+    int	PT_WINDOWS		= 1;
+	int PT_OTHER		= 2;
+    int PT_MACOSX 		= 3;
+  	int PT_UNIX			= 4;
+  	int PT_ANDROID		= 5;
 
-  	public static final int USER_REQUEST_INFO 		= 1;
-  	public static final int USER_REQUEST_WARNING 	= 2;
-  	public static final int USER_REQUEST_QUESTION 	= 3;  	
+  	int USER_REQUEST_INFO 		= 1;
+  	int USER_REQUEST_WARNING 	= 2;
+  	int USER_REQUEST_QUESTION 	= 3;
   	
- 	public static final int	SD_SHUTDOWN		= 0x00000001;	// don't change these as used to index msgs
- 	public static final int	SD_HIBERNATE	= 0x00000002;
- 	public static final int	SD_SLEEP		= 0x00000004;
+ 	int	SD_SHUTDOWN		= 0x00000001;	// don't change these as used to index msgs
+ 	int	SD_HIBERNATE	= 0x00000002;
+ 	int	SD_SLEEP		= 0x00000004;
   	
- 	public static final int[] SD_ALL = { SD_SHUTDOWN, SD_HIBERNATE, SD_SLEEP };
+ 	int[] SD_ALL = { SD_SHUTDOWN, SD_HIBERNATE, SD_SLEEP };
  	
-	public int
+	int
 	getPlatformType();
 	
-	public String
+	String
 	getVersion()
 	
 		throws PlatformManagerException;
 	
-	public void
+	void
 	startup(
-		AzureusCore		azureus_core )
+            AzureusCore azureus_core)
 	
 		throws PlatformManagerException;
 	
-	public String
+	String
 	getUserDataDirectory()
 	
 		throws PlatformManagerException;
 	
-	public boolean
+	boolean
 	isApplicationRegistered()
 	
 		throws PlatformManagerException;
 	
-	public void
+	void
 	registerApplication()
 	
 		throws PlatformManagerException;
 	
-	public String
+	String
 	getApplicationCommandLine() 
 		
 		throws PlatformManagerException;
 
-	public File
+	File
 	getVMOptionFile()
 	
 		throws PlatformManagerException;
 	
-	public String[]
+	String[]
 	getExplicitVMOptions()
 	
 		throws PlatformManagerException;
 	
-	public void
+	void
 	setExplicitVMOptions(
-		String[]		options )
+            String[] options)
 	
 		throws PlatformManagerException;
 
-	public boolean
+	boolean
 	getRunAtLogin()
 	          	
 	 	throws PlatformManagerException;
 
-	public void
+	void
 	setRunAtLogin(
-		boolean		run )
+            boolean run)
 	          	
 	 	throws PlatformManagerException;
 
-	public int
+	int
 	getShutdownTypes();
 	
-	public void
+	void
 	shutdown(
-		int			type )
+            int type)
 	
 		throws PlatformManagerException;
 	
-	public void
+	void
 	setPreventComputerSleep(
-		boolean		prevent_it )
+            boolean prevent_it)
 	
 		throws PlatformManagerException;
 	
-	public boolean
+	boolean
 	getPreventComputerSleep();
 	
-	public void
+	void
 	createProcess(
-		String	command_line,
-		boolean	inherit_handles )
+            String command_line,
+            boolean inherit_handles)
 	
 		throws PlatformManagerException;
 	
-	public void
+	void
     performRecoverableFileDelete(
-		String	file_name )
+            String file_name)
 	
 		throws PlatformManagerException;
 
@@ -148,39 +148,39 @@ PlatformManager
 		 * @param enabled
 		 * @throws PlatformManagerException
 		 */
-	
-	public void
+
+        void
 	setTCPTOSEnabled(
-		boolean		enabled )
+                boolean enabled)
 		
 		throws PlatformManagerException;
 
-	public void
+	void
     copyFilePermissions(
-		String	from_file_name,
-		String	to_file_name )
+            String from_file_name,
+            String to_file_name)
 	
 		throws PlatformManagerException;
 
-	public boolean
+	boolean
 	testNativeAvailability(
-		String	name )
+            String name)
 	
 		throws PlatformManagerException;
 	
-	public void
+	void
 	traceRoute(
-		InetAddress						interface_address,
-		InetAddress						target,
-		PlatformManagerPingCallback		callback )
+            InetAddress interface_address,
+            InetAddress target,
+            PlatformManagerPingCallback callback)
 	
 		throws PlatformManagerException;
 	
-	public void
+	void
 	ping(
-		InetAddress						interface_address,
-		InetAddress						target,
-		PlatformManagerPingCallback		callback )
+            InetAddress interface_address,
+            InetAddress target,
+            PlatformManagerPingCallback callback)
 	
 		throws PlatformManagerException;
 	
@@ -189,8 +189,8 @@ PlatformManager
 		 * @return
 		 * @throws PlatformManagerException
 		 */
-	
-	public int
+
+        int
 	getMaxOpenFiles()
 	
 		throws PlatformManagerException;
@@ -202,11 +202,11 @@ PlatformManager
 		 * @return
 		 * @throws PlatformManagerException
 		 */
-	
-	public Class<?>
+
+        Class<?>
 	loadClass(
-		ClassLoader	loader,
-		String		class_name )
+                ClassLoader loader,
+                String class_name)
 		
 		throws PlatformManagerException;
 		
@@ -220,23 +220,23 @@ PlatformManager
      * @param capability A platform manager capability
      * @return True if the manager supports the capability
      */
-    public boolean
+    boolean
 	hasCapability(
-		PlatformManagerCapabilities	capability );
+            PlatformManagerCapabilities capability);
 
     /**
      * Disposes system resources. This method is optional.
      */
-    public void
+    void
     dispose();
     
-    public void
+    void
     addListener(
-    	PlatformManagerListener		listener );
+            PlatformManagerListener listener);
     
-    public void
+    void
     removeListener(
-    	PlatformManagerListener		listener );
+            PlatformManagerListener listener);
 
 		/**
 		 * Requests the user's attention such as bouncing the application icon on OSX
@@ -245,10 +245,10 @@ PlatformManager
 		 * @param data
 		 * @throws PlatformManagerException
 		 */
-		public void
+        void
 		requestUserAttention(
-			int			type,
-			Object 	data)
+                int type,
+                Object data)
 		
 			throws PlatformManagerException;
 }

@@ -60,7 +60,7 @@ public interface PluginInterface {
      *
      * @since 2.1.0.0
      */
-	public String getAzureusName();
+    String getAzureusName();
 	
 	/**
 	 * Returns the name of the application that the user sees - if you need to
@@ -68,7 +68,7 @@ public interface PluginInterface {
 	 * 
 	 * @return 3.0.5.3
 	 */
-	public String getApplicationName();
+    String getApplicationName();
 	
 	/** Retrieve the Application's version as a string.
 	 *
@@ -79,7 +79,7 @@ public interface PluginInterface {
    *
    * @since 2.1.0.0
 	 */
-	public String
+    String
 	getAzureusVersion();
 	
   /**
@@ -98,7 +98,7 @@ public interface PluginInterface {
    *     to get a <tt>BasicPluginViewModel</tt> instance, and then use the methods on that to add
    *     parameters.
    */
-  public void addConfigUIParameters(Parameter[] parameters, String displayName);
+  void addConfigUIParameters(Parameter[] parameters, String displayName);
 
   /**
    * adds a ConfigSection to the config view.<p>
@@ -110,15 +110,15 @@ public interface PluginInterface {
    * @since 2.0.8.0
    * @deprecated Use {@link UIManager#createBasicPluginConfigModel(String)} instead.
    */
-	public void addConfigSection(ConfigSection section);
+  void addConfigSection(ConfigSection section);
 
 	/**
 	 * 
 	 * @param section
 	 * @since 2.3.0.5
 	 */
-	
-	public void removeConfigSection( ConfigSection section );
+
+    void removeConfigSection(ConfigSection section);
 
   /**
    * 
@@ -134,7 +134,7 @@ public interface PluginInterface {
    *
    * @since 2.0.6.0
    */
-  public Tracker getTracker();
+  Tracker getTracker();
   
   /**
    * Gives access to the logger
@@ -142,7 +142,7 @@ public interface PluginInterface {
    *
    * @since 2.0.7.0
    */
-  public Logger getLogger();
+  Logger getLogger();
   
   /**
    * Gives access to the IP filter
@@ -150,7 +150,7 @@ public interface PluginInterface {
    *
    * @since 2.0.8.0
    */
-  public IPFilter
+  IPFilter
   getIPFilter();
   
   /**
@@ -159,7 +159,7 @@ public interface PluginInterface {
    *
    * @since 2.0.7.0
    */
-  public DownloadManager
+  DownloadManager
   getDownloadManager();
   
   /**
@@ -168,7 +168,7 @@ public interface PluginInterface {
    *
    * @since 2.0.7.0
    */
-  public ShareManager
+  ShareManager
   getShareManager()
   
   	throws ShareException;
@@ -179,7 +179,7 @@ public interface PluginInterface {
    *
    * @since 2.0.8.0
    */
-  public TorrentManager
+  TorrentManager
   getTorrentManager();
   
   /**
@@ -188,7 +188,7 @@ public interface PluginInterface {
    *
    * @since 2.1.0.0
    */
-  public Utilities
+  Utilities
   getUtilities();
   
   /**
@@ -198,7 +198,7 @@ public interface PluginInterface {
    *
    * @since 2.1.0.0
    */
-  public ShortCuts
+  ShortCuts
   getShortCuts();
   
   /**
@@ -207,7 +207,7 @@ public interface PluginInterface {
    *
    * @since 2.1.0.0
    */
-  public UIManager
+  UIManager
   getUIManager();
   
   /**
@@ -217,7 +217,7 @@ public interface PluginInterface {
    *
    * @since 2.1.0.0
    */
-  public UpdateManager
+  UpdateManager
   getUpdateManager();
   
   /**
@@ -228,7 +228,7 @@ public interface PluginInterface {
    *
    * @deprecated Use {@link DownloadManager#addDownload}
    */
-  public void openTorrentFile(String fileName);
+  void openTorrentFile(String fileName);
   
   /**
    * opens a torrent file given the url it's at
@@ -238,7 +238,7 @@ public interface PluginInterface {
    *
    * @deprecated Use {@link DownloadManager#addDownload}
    */
-  public void openTorrentURL(String url);
+  void openTorrentURL(String url);
   
   /**
    * gives access to the plugin properties
@@ -246,7 +246,7 @@ public interface PluginInterface {
    *
    * @since 2.0.4.0
    */
-  public Properties getPluginProperties();
+  Properties getPluginProperties();
   
   /**
    * Gives access to the plugin installation path - note, if you want to use this
@@ -256,7 +256,7 @@ public interface PluginInterface {
    *
    * @since 2.0.4.0
    */
-  public String getPluginDirectoryName();
+  String getPluginDirectoryName();
   
   /**
    * gives access to the per-user plugin directory. Useful for shared plugins that need to store
@@ -264,14 +264,14 @@ public interface PluginInterface {
    * directory may not yet exist 
    * @return
    */
-  
-  public String getPerUserPluginDirectoryName();
+
+  String getPerUserPluginDirectoryName();
   
   /**
    * Returns the value of "plugin.name" if it exists in the properties file, otherwise the directory name is returned.
    * @since 2.1.0.0
    */
-  public String getPluginName();
+  String getPluginName();
   
   /**
    * Returns the version number of the plugin it if can be deduced from either the name of
@@ -281,7 +281,7 @@ public interface PluginInterface {
    *
    * @since 2.1.0.0
    */
-  public String
+  String
   getPluginVersion();
   
   /**
@@ -290,7 +290,7 @@ public interface PluginInterface {
    *
    * @since 2.1.0.0
    */
-  public String
+  String
   getPluginID();
   
   	/**
@@ -299,22 +299,22 @@ public interface PluginInterface {
   	 * 
   	 * @deprecated Use {@link PluginState#isMandatory()}.
   	 */
-  
-  public boolean
+
+    boolean
   isMandatory();
   
   	/**
   	 * Built-in plugins are those used internally by Azureus, for example the UPnP plugin
   	 * @deprecated Use {@link PluginState#isBuiltIn()}.
-  	 */ 
-  public boolean
+  	 */
+    boolean
   isBuiltIn();
   
   /**
    * gives access to the plugin config interface
    * @return the PluginConfig object associated with this plugin
    */
-  public PluginConfig getPluginconfig();
+  PluginConfig getPluginconfig();
   
   
   /**
@@ -325,7 +325,7 @@ public interface PluginInterface {
    *     to get a <tt>BasicPluginViewModel</tt> instance, and then use the methods on that to add
    *     parameters.
    */
-  public PluginConfigUIFactory getPluginConfigUIFactory();
+  PluginConfigUIFactory getPluginConfigUIFactory();
   
   /**
    * gives access to the ClassLoader used to load the plugin
@@ -333,7 +333,7 @@ public interface PluginInterface {
    *
    * @since 2.0.8.0
    */
-  public ClassLoader
+  ClassLoader
   getPluginClassLoader();
   
 	/**
@@ -346,10 +346,10 @@ public interface PluginInterface {
 	 * @return
 	 */
 
-  public PluginInterface
+    PluginInterface
   getLocalPluginInterface(
-	Class		plugin,
-	String		id )
+            Class plugin,
+            String id)
   
   	throws PluginException;
   
@@ -357,9 +357,9 @@ public interface PluginInterface {
   	 * get the inter-plugin-communcations interface for this plugin
   	 * @return
   	 */
-  
-  public IPCInterface
-  getIPC ();
+
+    IPCInterface
+  getIPC();
   
   /**
    * Gives access to the plugin itself
@@ -367,7 +367,7 @@ public interface PluginInterface {
    *
    * @since 2.1.0.0
    */
-  public Plugin
+  Plugin
   getPlugin();
   
   /**
@@ -377,7 +377,7 @@ public interface PluginInterface {
    * @since 2.1.0.0
    * @deprecated Use {@link PluginState#isOperational()}.
    */
-  public boolean
+  boolean
   isOperational();
   
   /**
@@ -386,7 +386,7 @@ public interface PluginInterface {
    * 
    * @deprecated Use {@link PluginState#isDisabled}.
    */
-  public boolean
+  boolean
   isDisabled();
   
   /**
@@ -398,14 +398,14 @@ public interface PluginInterface {
    * @param disabled
    * @deprecated Use {@link PluginState#setDisabled(boolean)}.
    */
-  public void setDisabled(boolean disabled);
+  void setDisabled(boolean disabled);
 
 
   /**
    * @deprecated Use {@link PluginState#isUnloadable()}.
    * @since 2.1.0.0
    */
-  public boolean
+  boolean
   isUnloadable();
 
   
@@ -415,15 +415,15 @@ public interface PluginInterface {
    * @since 2503/3005
    * @deprecated Use {@link PluginState#isShared()}.
    */
-  
-  public boolean
+
+  boolean
   isShared();
   
   /**
    * @deprecated Use {@link PluginState#unload()}.
    * @since 2.1.0.0
-   */  
-  public void
+   */
+  void
   unload()
   
   	throws PluginException;
@@ -432,7 +432,7 @@ public interface PluginInterface {
    * @deprecated Use {@link PluginState#reload()}.
    * @since 2.1.0.0
    */
-  public void
+  void
   reload()
   
   	throws PluginException;
@@ -443,8 +443,8 @@ public interface PluginInterface {
      * @deprecated Use {@link PluginState#uninstall()}. 
   	 * @throws PluginException
   	 */
-  
-  public void
+
+    void
   uninstall()
   
   	throws PluginException;
@@ -454,8 +454,8 @@ public interface PluginInterface {
   	 * plugin initialisation
   	 * @return
   	 */
-  
-  public boolean
+
+    boolean
   isInitialisationThread();
   
   /**
@@ -464,7 +464,7 @@ public interface PluginInterface {
    *
    * @since 2.1.0.0
    */
-  public PluginManager
+  PluginManager
   getPluginManager();
   
   	/**
@@ -472,8 +472,8 @@ public interface PluginInterface {
   	 * @return
   	 * @since 2.2.0.3
   	 */
-  
-  public ClientIDManager
+
+    ClientIDManager
   getClientIDManager();
   
   
@@ -482,7 +482,7 @@ public interface PluginInterface {
    * @since 2.2.0.3
    * @return manager
    */
-  public ConnectionManager getConnectionManager(); 
+  ConnectionManager getConnectionManager();
   
   
   /**
@@ -490,7 +490,7 @@ public interface PluginInterface {
    * @since 2.2.0.3
    * @return manager
    */
-  public MessageManager getMessageManager();
+  MessageManager getMessageManager();
   
   
   /**
@@ -498,58 +498,58 @@ public interface PluginInterface {
    * @since 2.2.0.3
    * @return
    */
-  public DistributedDatabase
+  DistributedDatabase
   getDistributedDatabase();
   
   /**
    * Gets the platform manager that gives access to native functionality
    * @return
    */
-  
-  public PlatformManager
+
+  PlatformManager
   getPlatformManager();
   
   /**
    *
    * @since 2.0.7.0
    */
-  public void
+  void
   addListener(
-  	PluginListener	l );
+          PluginListener l);
   
   /**
    *
    * @since 2.0.7.0
    */
-  public void
+  void
   removeListener(
-  	PluginListener	l );
+          PluginListener l);
   
   	/**
   	 * Fire a plugin-specific event. See PluginEvent for details of type values to use 
   	 * @since 2403
   	 * @param event
   	 */
-  
-  public void
+
+    void
   firePluginEvent(
-	PluginEvent		event );
+            PluginEvent event);
   
   /**
    *
    * @since 2.0.8.0
    */
-  public void
+  void
   addEventListener(
-  	PluginEventListener	l );
+          PluginEventListener l);
   
   /**
    *
    * @since 2.0.8.0
    */
-  public void
+  void
   removeEventListener(
-  	PluginEventListener	l );
+          PluginEventListener l);
   
   /**
    * Returns the manager object for registering plugins that connect to the
@@ -557,7 +557,7 @@ public interface PluginInterface {
    *
    * @since 3.0.4.3
    */
-  public MainlineDHTManager getMainlineDHTManager();
+  MainlineDHTManager getMainlineDHTManager();
   
   /**
    * Returns an object that provides information the current state of the plugin,
@@ -566,5 +566,5 @@ public interface PluginInterface {
    * 
    * @since 3.1.1.1
    */
-  public PluginState getPluginState();
+  PluginState getPluginState();
 }

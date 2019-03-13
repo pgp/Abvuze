@@ -104,29 +104,33 @@ WebPluginAccessController
 
             boolean ok = false;
 
-            if ( name.equals( "PluginInterface" )){
+            switch (name) {
+                case "PluginInterface":
 
-                ok  =   method.equals( "getPluginconfig" ) ||
-                        method.equals( "getDownloadManager" ) ||
-                        method.equals( "getIPFilter" );
+                    ok = method.equals("getPluginconfig") ||
+                            method.equals("getDownloadManager") ||
+                            method.equals("getIPFilter");
 
-            }else if ( name.equals( "DownloadManager" )){
+                    break;
+                case "DownloadManager":
 
-                ok  =   method.equals( "getDownloads" );
+                    ok = method.equals("getDownloads");
 
-            }else if ( name.equals( "PluginConfig" )){
+                    break;
+                case "PluginConfig":
 
-                if (    method.startsWith( "getPlugin") ||
-                        method.equals( "save" )){
+                    if (method.startsWith("getPlugin") ||
+                            method.equals("save")) {
 
-                    ok  = true;
+                        ok = true;
 
-                }else if ( method.equals( "setPluginParameter[String,int]" )){
+                    } else if (method.equals("setPluginParameter[String,int]")) {
 
-                    String  param = (String)request.getParams()[0];
+                        String param = (String) request.getParams()[0];
 
-                    ok = param.equals( "MDConfigModel:refresh_period" );
-                }
+                        ok = param.equals("MDConfigModel:refresh_period");
+                    }
+                    break;
             }
 
 

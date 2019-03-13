@@ -46,9 +46,9 @@ public class UrlFilter
 	private String DEFAULT_RPC_WHITELIST = "https?://"
 			+ default_site_host.replaceAll("\\.", "\\\\.") + ":?[0-9]*/" + ".*";
 
-	private CopyOnWriteList<String>  	listUrlBlacklist = new CopyOnWriteList<String>();
+	private CopyOnWriteList<String>  	listUrlBlacklist = new CopyOnWriteList<>();
 
-	private CopyOnWriteList<String> 	listUrlWhitelist = new CopyOnWriteList<String>();
+	private CopyOnWriteList<String> 	listUrlWhitelist = new CopyOnWriteList<>();
 
 	private AEMonitor mon = new AEMonitor("UrlFilter");
 
@@ -169,13 +169,12 @@ public class UrlFilter
 	isWhitelisted(
 		String		url )
 	{
-		Iterator<String> it = listUrlWhitelist.iterator();
-		
-		while( it.hasNext()){
-			if (url.matches(it.next())) {
-				return true;
-			}
-		}
+
+        for (String s : listUrlWhitelist) {
+            if (url.matches(s)) {
+                return true;
+            }
+        }
 		return( false );
 	}
 	
@@ -211,13 +210,12 @@ public class UrlFilter
 			return true;
 		}
 
-		for (Iterator<String> iter = listUrlBlacklist.iterator(); iter.hasNext();) {
-			String blackListed = iter.next();
-			if (url.matches(blackListed)) {
-				Debug.out("URL '" + url + "' " + " is blocked by " + blackListed);
-				return true;
-			}
-		}
+        for (String blackListed : listUrlBlacklist) {
+            if (url.matches(blackListed)) {
+                Debug.out("URL '" + url + "' " + " is blocked by " + blackListed);
+                return true;
+            }
+        }
 		return false;
 	}
 

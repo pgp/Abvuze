@@ -69,7 +69,7 @@ DHTUDPPacketRequestQueryStorage
 		
 		int	num_keys = is.readShort();
 		
-		keys = new ArrayList<Object[]>( num_keys );
+		keys = new ArrayList<>(num_keys);
 		
 		for (int i=0;i<num_keys;i++){
 			
@@ -81,7 +81,7 @@ DHTUDPPacketRequestQueryStorage
 			
 			short num_suffixes = is.readShort();
 			
-			List<byte[]> suffixes = new ArrayList<byte[]>( num_suffixes );
+			List<byte[]> suffixes = new ArrayList<>(num_suffixes);
 			
 			keys.add( new Object[]{ prefix, suffixes });
 			

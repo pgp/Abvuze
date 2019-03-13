@@ -161,13 +161,13 @@ public class BrowserMessage
 	}
 
 	private void triggerCompletionListeners(boolean success, Object data) {
-		for (Iterator iterator = completionListeners.iterator(); iterator.hasNext();) {
-			MessageCompletionListener l = (MessageCompletionListener) iterator.next();
-			try {
-				l.completed(success, data);
-			} catch (Throwable e) {
-				Debug.out(e);
-			}
-		}
+        for (Object completionListener : completionListeners) {
+            MessageCompletionListener l = (MessageCompletionListener) completionListener;
+            try {
+                l.completed(success, data);
+            } catch (Throwable e) {
+                Debug.out(e);
+            }
+        }
 	}
 }

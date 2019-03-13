@@ -26,12 +26,12 @@ import java.util.List;
 public interface 
 PairedNode 
 {
-	public String
+	String
 	getAccessCode();
 	
-	public List<InetAddress>
+	List<InetAddress>
 	getAddresses();
 	
-	public List<PairedService>
+	List<PairedService>
 	getServices();
 }

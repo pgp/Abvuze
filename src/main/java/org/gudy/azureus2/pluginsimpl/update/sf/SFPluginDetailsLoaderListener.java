@@ -26,7 +26,7 @@ package org.gudy.azureus2.pluginsimpl.update.sf;
 public interface 
 SFPluginDetailsLoaderListener 
 {
-	public void
+	void
 	log(
-		String		log );
+            String log);
 }

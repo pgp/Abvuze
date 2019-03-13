@@ -22,6 +22,7 @@ package com.aelitis.azureus.core.util.http;
 
 import java.net.*;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.InflaterInputStream;
@@ -242,8 +243,8 @@ HTTPAuthHelper
 					int	child_pos = child_host.lastIndexOf( '.' );
 					child_pos = child_host.lastIndexOf( '.', child_pos-1 );
 
-					String base_dom 	= base_host.substring( base_pos, base_host.length());
-					String child_dom 	= child_host.substring( child_pos, child_host.length());
+					String base_dom 	= base_host.substring( base_pos);
+					String child_dom 	= child_host.substring( child_pos);
 					
 					if ( base_dom.equals( child_dom )){
 						
@@ -292,17 +293,15 @@ HTTPAuthHelper
 			}
 			
 			if ( new_entry ){
-				
-				Iterator it = listeners.iterator();
-				
-				while( it.hasNext()){
-					
-					try{
-						((HTTPAuthHelperListener)it.next()).cookieFound( this, name, value );
-						
-					}catch( Throwable e ){
-						
-						Debug.printStackTrace(e );
+
+				for (Object listener : listeners) {
+
+					try {
+						((HTTPAuthHelperListener) listener).cookieFound(this, name, value);
+
+					} catch (Throwable e) {
+
+						Debug.printStackTrace(e);
 					}
 				}
 			}
@@ -364,22 +363,22 @@ HTTPAuthHelper
 			}catch( Throwable e ){	
 			}
 		}
-				
-		for (int i=0;i<chidren_to_destroy.size();i++){
-			
-			try{
-				((HTTPAuthHelper)chidren_to_destroy.get(i)).destroy();
-				
-			}catch( Throwable e ){
+
+		for (Object o1 : chidren_to_destroy) {
+
+			try {
+				((HTTPAuthHelper) o1).destroy();
+
+			} catch (Throwable e) {
 			}
 		}
-		
-		for (int i=0;i<processors_to_destroy.size();i++){
-			
-			try{
-				((processor)processors_to_destroy.get(i)).destroy();
-			
-			}catch( Throwable e ){
+
+		for (Object o : processors_to_destroy) {
+
+			try {
+				((processor) o).destroy();
+
+			} catch (Throwable e) {
 			}
 		}
 	}
@@ -582,107 +581,112 @@ HTTPAuthHelper
 			
 			List	cookies_to_remove = new ArrayList();
 
-			for (int i=0;i<request_lines.length;i++){
-				
-				String	line_out	= request_lines[i];
+			for (String request_line : request_lines) {
 
-				String	line_in 	= line_out.trim().toLowerCase();
-				
+				String line_out = request_line;
+
+				String line_in = line_out.trim().toLowerCase();
+
 				String[] bits = line_in.split(":");
-				
-				if ( bits.length >= 2 ){
-					
-					String	lhs = bits[0].trim();
-					
-					if ( lhs.equals( "host" )){
-						
-						String	port_str;
-						
-						if ( delegate_to_port == 80 || delegate_to_port == 443 ){
-						
-							port_str = "";
-							
-						}else{
-							
-							port_str = ":" + delegate_to_port;
-						}
-						
-						line_out = "Host: " + delegate_to_host + port_str;
-						
-					}else if ( lhs.equals( "connection" )){
-						
-						line_out = "Connection: close";
-						
-					}else if ( lhs.equals( "referer" )){
-						
-						String page = line_out.substring( line_out.indexOf( ':' )+1).trim();
-						
-						page = page.substring( page.indexOf( "://") + 3);
-						
-						int pos = page.indexOf( '/' );
-						
-						if ( pos >= 0 ){
-						
-							page = page.substring( pos );
-							
-						}else{
-							
-							page = "/";
-						}
-						
-						String	port_str;
-						
-						if ( delegate_to_port == 80 || delegate_to_port == 443 ){
-						
-							port_str = "";
-							
-						}else{
-							
-							port_str = ":" + delegate_to_port;
-						}
 
-						line_out = "Referer: http" + (delegate_is_https?"s":"") + "://" + delegate_to_host + port_str + page;
-						
-					}else if ( lhs.equals( "cookie" )){
+				if (bits.length >= 2) {
 
-						String cookies_str = line_out.substring( line_out.indexOf( ':' )+1).trim();
-						
-						String[] cookies = cookies_str.split( ";" );
-						
-						String	cookies_out = "";
-						
-						for (int j=0;j<cookies.length;j++){
-							
-							String	cookie = cookies[j];
-							
-							String	name = cookie.split( "=" )[0].trim();
-							
-							if ( hasSetCookieName( name )){
-								
-								cookies_out += (cookies_out.length()==0?"":"; ") + cookie;
-								
-							}else{
-								
-								cookies_to_remove.add( name );
+					String lhs = bits[0].trim();
+
+					switch (lhs) {
+						case "host": {
+
+							String port_str;
+
+							if (delegate_to_port == 80 || delegate_to_port == 443) {
+
+								port_str = "";
+
+							} else {
+
+								port_str = ":" + delegate_to_port;
 							}
+
+							line_out = "Host: " + delegate_to_host + port_str;
+
+							break;
 						}
-						
-						if ( cookies_out.length() > 0 ){
-							
-							line_out = "Cookie: " + cookies_out;
-							
-						}else{
-							
-							line_out = null;
+						case "connection":
+
+							line_out = "Connection: close";
+
+							break;
+						case "referer": {
+
+							String page = line_out.substring(line_out.indexOf(':') + 1).trim();
+
+							page = page.substring(page.indexOf("://") + 3);
+
+							int pos = page.indexOf('/');
+
+							if (pos >= 0) {
+
+								page = page.substring(pos);
+
+							} else {
+
+								page = "/";
+							}
+
+							String port_str;
+
+							if (delegate_to_port == 80 || delegate_to_port == 443) {
+
+								port_str = "";
+
+							} else {
+
+								port_str = ":" + delegate_to_port;
+							}
+
+							line_out = "Referer: http" + (delegate_is_https ? "s" : "") + "://" + delegate_to_host + port_str + page;
+
+							break;
 						}
+						case "cookie":
+
+							String cookies_str = line_out.substring(line_out.indexOf(':') + 1).trim();
+
+							String[] cookies = cookies_str.split(";");
+
+							String cookies_out = "";
+
+							for (String cookie : cookies) {
+
+								String name = cookie.split("=")[0].trim();
+
+								if (hasSetCookieName(name)) {
+
+									cookies_out += (cookies_out.length() == 0 ? "" : "; ") + cookie;
+
+								} else {
+
+									cookies_to_remove.add(name);
+								}
+							}
+
+							if (cookies_out.length() > 0) {
+
+								line_out = "Cookie: " + cookies_out;
+
+							} else {
+
+								line_out = null;
+							}
+							break;
 					}
 				}
-				
-				if ( line_out != null ){
-					
-					trace( "-> " + line_out );
-					
-					target_os.write((line_out+NL).getBytes());
+
+				if (line_out != null) {
+
+					trace("-> " + line_out);
+
+					target_os.write((line_out + NL).getBytes());
 				}
 			}
 			
@@ -729,41 +733,41 @@ HTTPAuthHelper
 				
 			String	content_type	= null;
 			String	content_charset	= "ISO-8859-1";
-			
-			for (int i=0;i<reply_lines.length;i++){
-				
-				String	line_in 	= reply_lines[i].trim().toLowerCase();
-				
-				String[] bits = line_in.split(":");
-				
-				if ( bits.length >= 2 ){
 
-					String	lhs = bits[0].trim();
-					
-					if ( lhs.equals( "content-type" )){
-						
-						String rhs = reply_lines[i].substring( line_in.indexOf( ':' ) + 1 ).trim();
-								
-						String[] x = rhs.split( ";" );
-						
+			for (String reply_line1 : reply_lines) {
+
+				String line_in = reply_line1.trim().toLowerCase();
+
+				String[] bits = line_in.split(":");
+
+				if (bits.length >= 2) {
+
+					String lhs = bits[0].trim();
+
+					if (lhs.equals("content-type")) {
+
+						String rhs = reply_line1.substring(line_in.indexOf(':') + 1).trim();
+
+						String[] x = rhs.split(";");
+
 						content_type = x[0];
-						
-						if ( x.length > 1 ){
-							
-							int	pos = rhs.toLowerCase().indexOf( "charset" );
-						
-							if ( pos >= 0 ){
-							
-								String cc = rhs.substring( pos+1 );
-							
+
+						if (x.length > 1) {
+
+							int pos = rhs.toLowerCase().indexOf("charset");
+
+							if (pos >= 0) {
+
+								String cc = rhs.substring(pos + 1);
+
 								pos = cc.indexOf('=');
-							
-								if ( pos != -1 ){
-								
-									cc = cc.substring( pos+1 ).trim();
-								
-									if ( Charset.isSupported( cc )){
-																		
+
+								if (pos != -1) {
+
+									cc = cc.substring(pos + 1).trim();
+
+									if (Charset.isSupported(cc)) {
+
 										content_charset = cc;
 									}
 								}
@@ -790,273 +794,283 @@ HTTPAuthHelper
 					rewrite = true;
 				}
 			}
-							
-			for (int i=0;i<reply_lines.length;i++){
-								
-				String	line_out	= reply_lines[i];
 
-				String	line_in 	= line_out.trim().toLowerCase();
-				
+			for (String reply_line : reply_lines) {
+
+				String line_out = reply_line;
+
+				String line_in = line_out.trim().toLowerCase();
+
 				String[] bits = line_in.split(":");
-				
-				if ( bits.length >= 2 ){
-					
-					String	lhs = bits[0].trim();
-					
-					if ( lhs.equals( "set-cookie" )){
-						
-						String	cookies_in = line_out.substring( line_out.indexOf( ':' )+1 );
-						
-						String[] cookies;
-						
-						if (!cookies_in.toLowerCase().contains("expires")){
-							
-							cookies = cookies_in.split( "," );
-							
-						}else{
-							
-							cookies = new String[]{ cookies_in };
-						}
-						
-						String	cookies_out = "";
-						
-						for (int c=0;c<cookies.length;c++){
-							
-							String	cookie = cookies[c];
-						
-							String[]	x = cookie.split( ";" );
-							
-							String	modified_cookie = "";
-							
-							for (int j=0;j<x.length;j++){
-								
-								String entry = x[j].trim();
-								
-								if ( entry.equalsIgnoreCase( "httponly" )){
-									
-									setHTTPOnlyCookieDetected();
-									
-								}else if ( entry.equalsIgnoreCase( "secure" )){
-									
-								}else if ( entry.toLowerCase().startsWith( "domain" )){
-									
+
+				if (bits.length >= 2) {
+
+					String lhs = bits[0].trim();
+
+					switch (lhs) {
+						case "set-cookie": {
+
+							String cookies_in = line_out.substring(line_out.indexOf(':') + 1);
+
+							String[] cookies;
+
+							if (!cookies_in.toLowerCase().contains("expires")) {
+
+								cookies = cookies_in.split(",");
+
+							} else {
+
+								cookies = new String[]{cookies_in};
+							}
+
+							String cookies_out = "";
+
+							for (int c = 0; c < cookies.length; c++) {
+
+								String cookie = cookies[c];
+
+								String[] x = cookie.split(";");
+
+								String modified_cookie = "";
+
+								for (int j = 0; j < x.length; j++) {
+
+									String entry = x[j].trim();
+
+									if (entry.equalsIgnoreCase("httponly")) {
+
+										setHTTPOnlyCookieDetected();
+
+									} else if (entry.equalsIgnoreCase("secure")) {
+
+									} else if (entry.toLowerCase().startsWith("domain")) {
+
 										// remove domain restriction so cookie sent to localhost
-									
-								}else if ( entry.toLowerCase().startsWith( "expires" )){
-									
+
+									} else if (entry.toLowerCase().startsWith("expires")) {
+
 										// force to be session cookie otherwise we'll end up sending
 										// cookies from multiple sites to 'localhost'
-								}else{
-									
-									if ( j == 0 ){
-										
-										int pos = entry.indexOf( '=' );
-										
-										String name 	= entry.substring( 0, pos ).trim();
-										String value 	= entry.substring( pos+1 ).trim();
-										
-										addSetCookieName( name, value );
+									} else {
+
+										if (j == 0) {
+
+											int pos = entry.indexOf('=');
+
+											String name = entry.substring(0, pos).trim();
+											String value = entry.substring(pos + 1).trim();
+
+											addSetCookieName(name, value);
+										}
+
+										modified_cookie += (modified_cookie.length() == 0 ? "" : "; ") + entry;
 									}
-									
-									modified_cookie += (modified_cookie.length()==0?"":"; ") + entry;
 								}
+
+								cookies_out += (c == 0 ? "" : ", ") + modified_cookie;
 							}
-							
-							cookies_out += (c==0?"":", " ) + modified_cookie;
-						}					
-						
-						line_out = "Set-Cookie: " + cookies_out;
-						
-					}else if ( lhs.equals( "set-cookie2" )){
-						
+
+							line_out = "Set-Cookie: " + cookies_out;
+
+							break;
+						}
+						case "set-cookie2": {
+
 							// http://www.ietf.org/rfc/rfc2965.txt
-						
+
 							// one or more comma separated
-						
-						String	cookies_in = line_out.substring( line_out.indexOf( ':' )+1 );
-						
-						String[] cookies = cookies_in.split( "," );
-						
-						String	cookies_out = "";
-						
-						for (int c=0;c<cookies.length;c++){
-							
-							String	cookie = cookies[c];
-							
-							String[]	x = cookie.split( ";" );
-							
-							String	modified_cookie = "";
-							
-							for (int j=0;j<x.length;j++){
-								
-								String entry = x[j].trim();
-								
-								if ( entry.equalsIgnoreCase( "secure" )){
-									
-								}else if ( entry.equalsIgnoreCase( "discard" )){
-	
-								}else if ( entry.toLowerCase().startsWith( "domain" )){
-																									
-								}else if ( entry.toLowerCase().startsWith( "port" )){
-																		
-								}else{
-									
-									if ( j == 0 ){
-									
-										int pos = entry.indexOf( '=' );
-										
-										String name = entry.substring( 0, pos ).trim();
-										
-										String value 	= entry.substring( pos+1 ).trim();
-										
-										addSetCookieName( name, value );
+
+							String cookies_in = line_out.substring(line_out.indexOf(':') + 1);
+
+							String[] cookies = cookies_in.split(",");
+
+							String cookies_out = "";
+
+							for (int c = 0; c < cookies.length; c++) {
+
+								String cookie = cookies[c];
+
+								String[] x = cookie.split(";");
+
+								String modified_cookie = "";
+
+								for (int j = 0; j < x.length; j++) {
+
+									String entry = x[j].trim();
+
+									if (entry.equalsIgnoreCase("secure")) {
+
+									} else if (entry.equalsIgnoreCase("discard")) {
+
+									} else if (entry.toLowerCase().startsWith("domain")) {
+
+									} else if (entry.toLowerCase().startsWith("port")) {
+
+									} else {
+
+										if (j == 0) {
+
+											int pos = entry.indexOf('=');
+
+											String name = entry.substring(0, pos).trim();
+
+											String value = entry.substring(pos + 1).trim();
+
+											addSetCookieName(name, value);
+										}
+
+										modified_cookie += (modified_cookie.length() == 0 ? "" : "; ") + entry;
 									}
-									
-									modified_cookie += (modified_cookie.length()==0?"":"; ") + entry;
 								}
+
+								cookies_out += (c == 0 ? "" : ", ") + modified_cookie + "; Discard";
 							}
-							
-							cookies_out += (c==0?"":", " ) + modified_cookie + "; Discard";
+
+							line_out = "Set-Cookie2: " + cookies_out;
+
+							break;
 						}
-						
-						line_out = "Set-Cookie2: " + cookies_out;
+						case "connection":
 
-					}else if ( lhs.equals( "connection" )){
-						
-						line_out = "Connection: close";
-						
-					}else if ( lhs.equals( "location" )){
-						
-						String page = line_out.substring( line_out.indexOf( ':' )+1).trim();
-						
-						String child_url = page.trim();
-						
-						HTTPAuthHelper child = getChild( child_url, false );
+							line_out = "Connection: close";
 
-						int	pos = page.indexOf( "://" );
-						
-						if ( pos >= 0 ){
-							
-								// absolute 
-							
-							page = page.substring( pos + 3);
-						
-							pos = page.indexOf( '/' );
-						
-							if ( pos >= 0 ){
-							
-								page = page.substring( pos );
-							
-							}else{
-							
-								page = "/";
-							}
-						}else{
-							
+							break;
+						case "location":
+
+							String page = line_out.substring(line_out.indexOf(':') + 1).trim();
+
+							String child_url = page.trim();
+
+							HTTPAuthHelper child = getChild(child_url, false);
+
+							int pos = page.indexOf("://");
+
+							if (pos >= 0) {
+
+								// absolute
+
+								page = page.substring(pos + 3);
+
+								pos = page.indexOf('/');
+
+								if (pos >= 0) {
+
+									page = page.substring(pos);
+
+								} else {
+
+									page = "/";
+								}
+							} else {
+
 								// relative. actually illegal as must be absolute
-							
-							if ( !page.startsWith( "/" )){
-								
-								String	temp = target_url;
-								
-								int marker = temp.indexOf( "://" );
-								
-								if ( marker != -1 ){
-									
+
+								if (!page.startsWith("/")) {
+
+									String temp = target_url;
+
+									int marker = temp.indexOf("://");
+
+									if (marker != -1) {
+
 										// strip out absolute part
-									
-									temp = temp.substring( marker + 3 );
-									
-									marker = temp.indexOf( "/" );
-									
-									if ( marker == -1 ){
-										
-										temp = "/";
-										
-									}else{
-										
-										temp = temp.substring( marker );
+
+										temp = temp.substring(marker + 3);
+
+										marker = temp.indexOf("/");
+
+										if (marker == -1) {
+
+											temp = "/";
+
+										} else {
+
+											temp = temp.substring(marker);
+										}
+									} else {
+
+										if (!temp.startsWith("/")) {
+
+											temp = "/" + temp;
+										}
 									}
-								}else{
-									
-									if ( !temp.startsWith( "/" )){
-										
-										temp = "/" + temp;
+
+									marker = temp.lastIndexOf("/");
+
+									if (marker >= 0) {
+
+										temp = temp.substring(0, marker + 1);
 									}
+
+									page = temp + page;
 								}
-								
-								marker = temp.lastIndexOf( "/" );
-								
-								if ( marker >= 0 ){
-									
-									temp = temp.substring( 0, marker+1 );
-								}
-								
-								page = temp + page;
 							}
-						}
-						
-						line_out = "Location: http://127.0.0.1:" + child.getPort() + page;
-						
-					}else if ( lhs.equals( "content-encoding" )){
-						 
-						if ( rewrite ){
-							
-							String	encoding = bits[1].trim();
-								 					
-		 					if ( 	encoding.equalsIgnoreCase( "gzip"  ) || 
-		 							encoding.equalsIgnoreCase( "deflate" )){
-			 									 					
-				 				content_encoding = encoding;
-			 					
-				 				line_out = null;
-		 					}
-						}
-					}else if ( lhs.equals( "content-length" )){
 
-						if ( rewrite ){
-							
-							line_out = null;
-						}
-					}else if ( lhs.equals( "transfer-encoding" )){
+							line_out = "Location: http://127.0.0.1:" + child.getPort() + page;
 
-						if (bits[1].contains("chunked")){
-							
-							chunked = true;
-							
-							if ( rewrite ){
-								
+							break;
+						case "content-encoding":
+
+							if (rewrite) {
+
+								String encoding = bits[1].trim();
+
+								if (encoding.equalsIgnoreCase("gzip") ||
+										encoding.equalsIgnoreCase("deflate")) {
+
+									content_encoding = encoding;
+
+									line_out = null;
+								}
+							}
+							break;
+						case "content-length":
+
+							if (rewrite) {
+
 								line_out = null;
 							}
-						}
-	 				}
+							break;
+						case "transfer-encoding":
+
+							if (bits[1].contains("chunked")) {
+
+								chunked = true;
+
+								if (rewrite) {
+
+									line_out = null;
+								}
+							}
+							break;
+					}
 				}
-				
-				if ( line_out != null ){
-					
-					trace( "<- " + line_out );
-					
-					source_os.write((line_out+NL).getBytes());
+
+				if (line_out != null) {
+
+					trace("<- " + line_out);
+
+					source_os.write((line_out + NL).getBytes());
 				}
 			}
-			
-			for ( int i=0;i<cookies_to_remove.size();i++ ){
-				
-				String	name = (String)cookies_to_remove.get(i);
-				
-				if ( !hasSetCookieName( name )){
-					
-					String	remove_str = "Set-Cookie: " + name + "=X; expires=Sun, 01 Jan 2000 01:00:00 GMT";
-					
-					trace( "<- (cookie removal) " + remove_str );
-					
-					source_os.write((remove_str+NL).getBytes());
-					
+
+			for (Object o : cookies_to_remove) {
+
+				String name = (String) o;
+
+				if (!hasSetCookieName(name)) {
+
+					String remove_str = "Set-Cookie: " + name + "=X; expires=Sun, 01 Jan 2000 01:00:00 GMT";
+
+					trace("<- (cookie removal) " + remove_str);
+
+					source_os.write((remove_str + NL).getBytes());
+
 					remove_str = "Set-Cookie2: " + name + "=X; Max-Age=0; Version=1";
-					
-					trace( "<- (cookie removal) " + remove_str );
-					
-					source_os.write((remove_str+NL).getBytes());
+
+					trace("<- (cookie removal) " + remove_str);
+
+					source_os.write((remove_str + NL).getBytes());
 				}
 			}
 			
@@ -1080,7 +1094,7 @@ HTTPAuthHelper
 							break;
 						}
 						
-						sb.append(new String( buffer, 0, len, "ISO-8859-1" ));
+						sb.append(new String( buffer, 0, len, StandardCharsets.ISO_8859_1));
 					}
 					
 					StringBuilder sb_dechunked = new StringBuilder( sb.length());
@@ -1139,7 +1153,7 @@ HTTPAuthHelper
 					
 						// dechunked ISO-8859-1 - unzip if required and then apply correct charset						
 
-					target_is = new ByteArrayInputStream( sb_dechunked.toString().getBytes( "ISO-8859-1" ));
+					target_is = new ByteArrayInputStream( sb_dechunked.toString().getBytes(StandardCharsets.ISO_8859_1));
 				}
 				
 				if ( content_encoding != null ){

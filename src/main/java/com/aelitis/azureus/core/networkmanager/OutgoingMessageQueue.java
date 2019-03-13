@@ -33,12 +33,12 @@ public interface
 OutgoingMessageQueue 
 {
 
-  public void
+  void
   setTransport(
-	 Transport		_transport );
+          Transport _transport);
  
   
-  public int
+  int
   getMssSize();
 
   
@@ -46,10 +46,10 @@ OutgoingMessageQueue
    * Set the message stream encoder that will be used to encode outgoing messages.
    * @param stream_encoder to use
    */
-  public void setEncoder( MessageStreamEncoder stream_encoder ) ;
+  void setEncoder(MessageStreamEncoder stream_encoder) ;
  
   
-  public MessageStreamEncoder
+  MessageStreamEncoder
   getEncoder();
   
   
@@ -57,41 +57,41 @@ OutgoingMessageQueue
    * Get the percentage of the current message that has already been sent out.
    * @return percentage complete (0-99), or -1 if no message is currently being sent
    */
-  public int getPercentDoneOfCurrentMessage();
+  int getPercentDoneOfCurrentMessage();
 
 
   /**
    * Destroy this queue; i.e. perform cleanup actions.
    */
-  public void destroy();
+  void destroy();
  
-  public boolean
+  boolean
   isDestroyed();
   
   /**
    * Get the total number of bytes ready to be transported.
    * @return total bytes remaining
    */
-  public int getTotalSize();
+  int getTotalSize();
   
-  public int getDataQueuedBytes();
+  int getDataQueuedBytes();
   
-  public int getProtocolQueuedBytes();
+  int getProtocolQueuedBytes();
   
-  public boolean isBlocked();
+  boolean isBlocked();
   
-  public boolean getPriorityBoost();
+  boolean getPriorityBoost();
 	
-  public void setPriorityBoost( boolean	boost );
+  void setPriorityBoost(boolean boost);
   
   /**
    * Whether or not an urgent message (one that needs an immediate send, i.e. a no-delay message) is queued.
    * @return true if there's a message tagged for immediate write
    */
-  public boolean hasUrgentMessage();
+  boolean hasUrgentMessage();
   
   
-  public Message
+  Message
   peekFirstMessage();
   
   /**
@@ -104,7 +104,7 @@ OutgoingMessageQueue
    * @param message message to add
    * @param manual_listener_notify true for manual notification, false for automatic
    */
-  public void addMessage( Message message, boolean manual_listener_notify ) ;
+  void addMessage(Message message, boolean manual_listener_notify) ;
  
   
   /**
@@ -117,7 +117,7 @@ OutgoingMessageQueue
    * @param message_types type to remove
    * @param manual_listener_notify true for manual notification, false for automatic
    */
-  public void removeMessagesOfType( Message[] message_types, boolean manual_listener_notify );
+  void removeMessagesOfType(Message[] message_types, boolean manual_listener_notify);
  
   
   /**
@@ -137,8 +137,8 @@ OutgoingMessageQueue
    * @param manual_listener_notify true for manual notification, false for automatic
    * @return true if the message was removed, false otherwise
    */
-  
-  public boolean removeMessage( Message message, boolean manual_listener_notify );
+
+  boolean removeMessage(Message message, boolean manual_listener_notify);
  
   /**
    * Deliver (write) message(s) data to the underlying transport.
@@ -153,45 +153,45 @@ OutgoingMessageQueue
    * @return number of bytes delivered as [data, protocol]
    * @throws IOException on delivery error
    */
-  public int[] deliverToTransport( int max_bytes, boolean protocol_is_free, boolean manual_listener_notify ) throws IOException;  
+  int[] deliverToTransport(int max_bytes, boolean protocol_is_free, boolean manual_listener_notify) throws IOException;
  
   
   /**
    * Manually send any unsent listener notifications.
    */
-  public void doListenerNotifications();
+  void doListenerNotifications();
  
   /**
    * Force all pending messages to be delivered
    */
-  
-  public void
+
+  void
   flush();
   
-  public void
+  void
   setTrace(
-		boolean	on );
+          boolean on);
   
-  public String getQueueTrace();
+  String getQueueTrace();
   
   /**
    * Add a listener to be notified of queue events.
    * @param listener
    */
-  public void registerQueueListener( MessageQueueListener listener );
+  void registerQueueListener(MessageQueueListener listener);
 
   /**
    * Cancel queue event notification listener.
    * @param listener
    */
-  public void cancelQueueListener( MessageQueueListener listener );
+  void cancelQueueListener(MessageQueueListener listener);
  
   
   /**
    * Notifty the queue (and its listeners) of a message sent externally on the queue's behalf.
    * @param message sent externally
    */
-  public void notifyOfExternallySentMessage( Message message );
+  void notifyOfExternallySentMessage(Message message);
  
 
   /////////////////////////////////////////////////////////////////
@@ -199,20 +199,20 @@ OutgoingMessageQueue
   /**
    * Receive notification of queue events.
    */
-  public interface MessageQueueListener {
+  interface MessageQueueListener {
     /**
      * The given message has just been added to the queue.
      * @param message added for queuing
      * @return true if this message addition is allowed, false if it should be immediately removed without being queued or sent
      */
-    public boolean messageAdded( Message message );
+    boolean messageAdded(Message message);
     
     
     /**
      * The given message has just been queued for sending out the transport.
      * @param message queued
      */
-    public void messageQueued( Message message );
+    void messageQueued(Message message);
     
     
     /**
@@ -220,27 +220,27 @@ OutgoingMessageQueue
      * i.e. it was *not* sent out the transport.
      * @param message removed
      */
-    public void messageRemoved( Message message );
+    void messageRemoved(Message message);
     
     /**
      * The given message has been completely sent out through the transport.
      * @param message sent
      */
-    public void messageSent( Message message );
+    void messageSent(Message message);
     
     /**
      * The given number of protocol (overhead) bytes has been written to the transport.
      * @param byte_count number of protocol bytes
      */
-    public void protocolBytesSent( int byte_count );
+    void protocolBytesSent(int byte_count);
     
     
     /**
      * The given number of (piece) data bytes has been written to the transport.
      * @param byte_count number of data bytes
      */
-    public void dataBytesSent( int byte_count );
+    void dataBytesSent(int byte_count);
     
-    public void flush();
+    void flush();
   }
 }

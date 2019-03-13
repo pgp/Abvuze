@@ -22,15 +22,15 @@ package com.aelitis.azureus.core.dht.speed;
 public interface 
 DHTSpeedTesterListener 
 {
-	public void
+	void
 	contactAdded(
-		DHTSpeedTesterContact	contact );
+            DHTSpeedTesterContact contact);
 	
-	public void
+	void
 	resultGroup(
-		DHTSpeedTesterContact[]	contacts,
-		int[]					round_trip_times );
+            DHTSpeedTesterContact[] contacts,
+            int[] round_trip_times);
 	
-	public void
+	void
 	destroyed();
 }

@@ -31,34 +31,34 @@ import org.gudy.azureus2.core3.torrent.TOTorrent;
 public interface ISelectedContent
 {
 
-	public String getHash();
+	String getHash();
 
-	public void setHash(String hash);
+	void setHash(String hash);
 
-	public DownloadManager getDownloadManager();
+	DownloadManager getDownloadManager();
 
-	public int getFileIndex(); 
+	int getFileIndex();
 		
-	public void setDownloadManager(DownloadManager dm);
+	void setDownloadManager(DownloadManager dm);
 
-	public TOTorrent getTorrent();
+	TOTorrent getTorrent();
 	
-	public void setTorrent( TOTorrent torrent );
+	void setTorrent(TOTorrent torrent);
 	
-	public String getDisplayName();
+	String getDisplayName();
 
-	public void setDisplayName(String displayName);
+	void setDisplayName(String displayName);
 
 	/**
 	 * @since 3.1.1.1
 	 */
-	public DownloadUrlInfo getDownloadInfo();
+    DownloadUrlInfo getDownloadInfo();
 
 	/**
 	 * @since 3.1.1.1
 	 */
-	public void setDownloadInfo(DownloadUrlInfo downloadInfo);
+    void setDownloadInfo(DownloadUrlInfo downloadInfo);
 	
-	public boolean
-	sameAs( ISelectedContent other );
+	boolean
+	sameAs(ISelectedContent other);
 }

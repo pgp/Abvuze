@@ -32,11 +32,11 @@ import java.net.*;
 public interface 
 PRUDPPacketHandler 
 {
-	public static final int	PRIORITY_LOW		= 2;
-	public static final int	PRIORITY_MEDIUM		= 1;
-	public static final int	PRIORITY_HIGH		= 0;
+	int	PRIORITY_LOW		= 2;
+	int	PRIORITY_MEDIUM		= 1;
+	int	PRIORITY_HIGH		= 0;
 	
-	public static final int	PRIORITY_IMMEDIATE	= 99;
+	int	PRIORITY_IMMEDIATE	= 99;
 
 		/**
 		 * Asynchronous send and receive
@@ -45,14 +45,14 @@ PRUDPPacketHandler
 		 * @param receiver
 		 * @throws PRUDPPacketHandlerException
 		 */
-	
-	public void
+
+        void
 	sendAndReceive(
-		PRUDPPacket					request_packet,
-		InetSocketAddress			destination_address,
-		PRUDPPacketReceiver			receiver,
-		long						timeout,
-		int							priority )
+                PRUDPPacket request_packet,
+                InetSocketAddress destination_address,
+                PRUDPPacketReceiver receiver,
+                long timeout,
+                int priority)
 	
 		throws PRUDPPacketHandlerException;
 	
@@ -64,31 +64,31 @@ PRUDPPacketHandler
 		 * @return
 		 * @throws PRUDPPacketHandlerException
 		 */
-	
-	public PRUDPPacket
+
+        PRUDPPacket
 	sendAndReceive(
-		PasswordAuthentication		auth,
-		PRUDPPacket					request_packet,
-		InetSocketAddress			destination_address )
+                PasswordAuthentication auth,
+                PRUDPPacket request_packet,
+                InetSocketAddress destination_address)
 	
 		throws PRUDPPacketHandlerException;
 	
-	public PRUDPPacket
+	PRUDPPacket
 	sendAndReceive(
-		PasswordAuthentication		auth,
-		PRUDPPacket					request_packet,
-		InetSocketAddress			destination_address,
-		long						timeout_millis )
+            PasswordAuthentication auth,
+            PRUDPPacket request_packet,
+            InetSocketAddress destination_address,
+            long timeout_millis)
 	
 		throws PRUDPPacketHandlerException;
 	
-	public PRUDPPacket
+	PRUDPPacket
 	sendAndReceive(
-		PasswordAuthentication		auth,
-		PRUDPPacket					request_packet,
-		InetSocketAddress			destination_address,
-		long						timeout_millis,
-		int							priority )
+            PasswordAuthentication auth,
+            PRUDPPacket request_packet,
+            InetSocketAddress destination_address,
+            long timeout_millis,
+            int priority)
 	
 		throws PRUDPPacketHandlerException;
 	
@@ -98,69 +98,69 @@ PRUDPPacketHandler
 		 * @param destination_address
 		 * @throws PRUDPPacketHandlerException
 		 */
-	
-	public void
+
+        void
 	send(
-		PRUDPPacket					request_packet,
-		InetSocketAddress			destination_address )
+                PRUDPPacket request_packet,
+                InetSocketAddress destination_address)
 	
 		throws PRUDPPacketHandlerException;
 	
-	public PRUDPRequestHandler
+	PRUDPRequestHandler
 	getRequestHandler();
 	
-	public void
+	void
 	setRequestHandler(
-		PRUDPRequestHandler	request_handler );
+            PRUDPRequestHandler request_handler);
 	
-	public void
+	void
 	primordialSend(
-		byte[]				data,
-		InetSocketAddress	target )
+            byte[] data,
+            InetSocketAddress target)
 	
 		throws PRUDPPacketHandlerException;
 	
-	public boolean
+	boolean
 	hasPrimordialHandler();
 	
-	public void
+	void
 	addPrimordialHandler(
-		PRUDPPrimordialHandler	handler );
+            PRUDPPrimordialHandler handler);
 	
-	public void
+	void
 	removePrimordialHandler(
-		PRUDPPrimordialHandler	handler );
+            PRUDPPrimordialHandler handler);
 	
-	public int
+	int
 	getPort();
 	
-	public InetAddress
+	InetAddress
 	getBindIP();
 	
-	public void
+	void
 	setDelays(
-		int		send_delay,
-		int		receive_delay,
-		int		queued_request_timeout );
+            int send_delay,
+            int receive_delay,
+            int queued_request_timeout);
 	
-	public void
+	void
 	setExplicitBindAddress(
-		InetAddress	address );
+            InetAddress address);
 	
-	public PRUDPPacketHandlerStats
+	PRUDPPacketHandlerStats
 	getStats();
 	
-	public PRUDPPacketHandler
+	PRUDPPacketHandler
 	openSession(
-		InetSocketAddress	target )
+            InetSocketAddress target)
 	
 		throws PRUDPPacketHandlerException;
 	
-	public void
+	void
 	closeSession()
 	
 		throws PRUDPPacketHandlerException;
 	
-	public void
+	void
 	destroy();
 }

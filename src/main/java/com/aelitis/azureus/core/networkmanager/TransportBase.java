@@ -28,7 +28,7 @@ TransportBase
 	   * @return true if the transport is write ready, false if not yet ready
 	   */
 
-	public boolean isReadyForWrite( EventWaiter waiter );
+      boolean isReadyForWrite(EventWaiter waiter);
 	  
 	  
 	  /**
@@ -36,15 +36,15 @@ TransportBase
 	   * i.e. will a read request result in >0 bytes read.
 	   * @return 0 if the transport is read ready, ms since last ready or created if never ready
 	   */
+
+      long isReadyForRead(EventWaiter waiter);
 	
-	public long isReadyForRead( EventWaiter waiter );
-	
-	public boolean isTCP();
+	boolean isTCP();
 	
 	  /**
 	   * Get a textual description for this transport.
 	   * @return description
 	   */
 
-	public String getDescription();
+      String getDescription();
 }

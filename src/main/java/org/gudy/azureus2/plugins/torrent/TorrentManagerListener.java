@@ -27,7 +27,7 @@ package org.gudy.azureus2.plugins.torrent;
 public interface 
 TorrentManagerListener 
 {
-	public void
+	void
 	event(
-		TorrentManagerEvent	ev );
+            TorrentManagerEvent ev);
 }

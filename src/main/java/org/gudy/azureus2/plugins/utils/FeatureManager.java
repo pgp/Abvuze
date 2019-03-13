@@ -26,167 +26,167 @@ import org.gudy.azureus2.plugins.PluginException;
 public interface 
 FeatureManager 
 {
-	public Licence[]
+	Licence[]
 	getLicences();
 	
-	public Licence[]
+	Licence[]
 	createLicences(
-		String[]				feature_ids )
+            String[] feature_ids)
 	
 		throws PluginException;
 	
-	public Licence
+	Licence
 	addLicence(
-		String		licence_key )
+            String licence_key)
 	
 		throws PluginException;
 	
-	public FeatureDetails[]
+	FeatureDetails[]
 	getFeatureDetails(
-		String					feature_id );
+            String feature_id);
 	
 		// feature present and not expired
 	
-	public boolean
+	boolean
 	isFeatureInstalled(
-		String					feature_id );
+            String feature_id);
 	
-	public void
+	void
 	refreshLicences();
 	
-	public void
+	void
 	registerFeatureEnabler(
-		FeatureEnabler	enabler );
+            FeatureEnabler enabler);
 	
-	public void
+	void
 	unregisterFeatureEnabler(
-		FeatureEnabler	enabler );
+            FeatureEnabler enabler);
 	
-	public void
+	void
 	addListener(
-		FeatureManagerListener		listener );
+            FeatureManagerListener listener);
 	
-	public void
+	void
 	removeListener(
-		FeatureManagerListener		listener );
+            FeatureManagerListener listener);
 
 	
-	public interface
+	interface
 	Licence
 	{
-		public final int LS_PENDING_AUTHENTICATION	= 1;
-		public final int LS_AUTHENTICATED			= 2;
-		public final int LS_INVALID_KEY				= 3;
-		public final int LS_CANCELLED				= 4;
-		public final int LS_REVOKED					= 5;
-		public final int LS_ACTIVATION_DENIED		= 6;
+		int LS_PENDING_AUTHENTICATION	= 1;
+		int LS_AUTHENTICATED			= 2;
+		int LS_INVALID_KEY				= 3;
+		int LS_CANCELLED				= 4;
+		int LS_REVOKED					= 5;
+		int LS_ACTIVATION_DENIED		= 6;
 		
-		public int
+		int
 		getState();
 		
-		public String
+		String
 		getKey();
 		
-		public String
+		String
 		getShortID();
 		
-		public FeatureDetails[]
+		FeatureDetails[]
 		getFeatures();
 		
-		public boolean
+		boolean
 		isFullyInstalled();
 		
-		public void
+		void
 		retryInstallation();
 		
-		public void
+		void
 		addInstallationListener(
-			LicenceInstallationListener	listener );
+                LicenceInstallationListener listener);
 		
-		public void
+		void
 		removeInstallationListener(
-			LicenceInstallationListener	listener );
+                LicenceInstallationListener listener);
 		
-		public void
+		void
 		remove();
 		
-		public interface
+		interface
 		LicenceInstallationListener
 		{
-			public void
+			void
 			start(
-				String		licence_key );
+                    String licence_key);
 			
-			public void
+			void
 			reportActivity(
-				String		licence_key,
-				String		install,
-				String		activity );
+                    String licence_key,
+                    String install,
+                    String activity);
 			
-			public void
+			void
 			reportProgress(
-				String		licence_key,
-				String		install,
-				int			percent );
+                    String licence_key,
+                    String install,
+                    int percent);
 			
-			public void
+			void
 			complete(
-				String		licence_key );
+                    String licence_key);
 			
-			public void
+			void
 			failed(
-				String				licence_key,
-				PluginException		error );
+                    String licence_key,
+                    PluginException error);
 		}
 	}
 	
-	public interface
+	interface
 	FeatureEnabler
 	{
-		public Licence[]
+		Licence[]
        	getLicences();
 		
-		public Licence[]
+		Licence[]
 		createLicences(
-			String[]				feature_ids )
+                String[] feature_ids)
 		
 			throws PluginException;
 		
-       	public Licence
+       	Licence
        	addLicence(
-       		String		licence_key );
+                String licence_key);
        	
-       	public void
+       	void
        	refreshLicences();
        	
-    	public void
+    	void
     	addListener(
-    		FeatureManagerListener		listener );
+                FeatureManagerListener listener);
     	
-    	public void
+    	void
     	removeListener(
-    		FeatureManagerListener		listener );
+                FeatureManagerListener listener);
 	}
 	
-	public interface
+	interface
 	FeatureDetails
 	{
-		public String	PR_PUBLIC_KEY				= "PublicKey";				// String
-		public String	PR_VALID_UNTIL				= "ValidUntil";				// Long
-		public String	PR_OFFLINE_VALID_UNTIL		= "OfflineValidUntil";		// Long
-		public String	PR_IS_INSTALL_TIME			= "IsInstallTime";			// Long (0=false)
-		public String	PR_IS_TRIAL					= "IsTrial";				// Long (0=false)
-		public String	PR_TRIAL_USES_LIMIT			= "TrialUsesLimit";			// Long
-		public String	PR_TRIAL_USES_FAIL_COUNT	= "TrialUsesFailCount";		// Long
-		public String	PR_TRIAL_USES_REMAINING		= "TrialUsesRemaining";		// Long
-		public String	PR_REQUIRED_PLUGINS			= "Plugins";				// String: comma separated plugin ids
-		public String	PR_FINGERPRINT				= "Fingerprint";			// String
-		public String	PR_RENEWAL_KEY				= "RenewalKey";				// String
+		String	PR_PUBLIC_KEY				= "PublicKey";				// String
+		String	PR_VALID_UNTIL				= "ValidUntil";				// Long
+		String	PR_OFFLINE_VALID_UNTIL		= "OfflineValidUntil";		// Long
+		String	PR_IS_INSTALL_TIME			= "IsInstallTime";			// Long (0=false)
+		String	PR_IS_TRIAL					= "IsTrial";				// Long (0=false)
+		String	PR_TRIAL_USES_LIMIT			= "TrialUsesLimit";			// Long
+		String	PR_TRIAL_USES_FAIL_COUNT	= "TrialUsesFailCount";		// Long
+		String	PR_TRIAL_USES_REMAINING		= "TrialUsesRemaining";		// Long
+		String	PR_REQUIRED_PLUGINS			= "Plugins";				// String: comma separated plugin ids
+		String	PR_FINGERPRINT				= "Fingerprint";			// String
+		String	PR_RENEWAL_KEY				= "RenewalKey";				// String
 		
-		public Licence
+		Licence
 		getLicence();
 		
-		public String
+		String
 		getID();
 		
 			/**
@@ -195,39 +195,39 @@ FeatureManager
 			 * signed properties
 			 * @return
 			 */
-		
-		public boolean
+
+            boolean
 		hasExpired();
 		
-		public byte[]
+		byte[]
 		getEncodedProperties();
 		
-		public byte[]
+		byte[]
 		getSignature();
 		
-		public Object
+		Object
 		getProperty(
-			String		propery_name );
+                String propery_name);
 		
-		public void
+		void
 		setProperty(
-			String		property_name,
-			Object		property_value );
+                String property_name,
+                Object property_value);
 	}
 	
-	public interface
+	interface
 	FeatureManagerListener
 	{
-		public void
+		void
 		licenceAdded(
-			Licence	licence );
+                Licence licence);
 		
-		public void
+		void
 		licenceChanged(
-			Licence	licence );
+                Licence licence);
 		
-		public void
+		void
 		licenceRemoved(
-			Licence	licence );
+                Licence licence);
 	}
 }

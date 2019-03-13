@@ -27,11 +27,11 @@ package com.aelitis.azureus.plugins.upnp;
 public interface 
 UPnPMappingListener 
 {
-	public void
+	void
 	mappingChanged(
-		UPnPMapping	mapping );
+            UPnPMapping mapping);
 	
-	public void
+	void
 	mappingDestroyed(
-		UPnPMapping	mapping );
+            UPnPMapping mapping);
 }

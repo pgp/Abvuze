@@ -32,5 +32,5 @@ public interface MdiEntryDropListener
 	 * @param droppedObject
 	 * @return true if you handled it, false if you didn't
 	 */
-	public boolean mdiEntryDrop(MdiEntry entry, Object droppedObject);
+    boolean mdiEntryDrop(MdiEntry entry, Object droppedObject);
 }

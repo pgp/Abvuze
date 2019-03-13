@@ -154,14 +154,14 @@ DHTTransportStatsImpl
 	snapshotSupport(
 		DHTTransportStatsImpl	clone )
 	{
-		clone.pings			= (long[])pings.clone();
-		clone.find_nodes	= (long[])find_nodes.clone();
-		clone.find_values	= (long[])find_values.clone();
-		clone.stores		= (long[])stores.clone();
-		clone.data			= (long[])data.clone();
-		clone.key_blocks	= (long[])key_blocks.clone();
-		clone.store_queries	= (long[])store_queries.clone();
-		clone.aliens		= (long[])aliens.clone();
+		clone.pings			= pings.clone();
+		clone.find_nodes	= find_nodes.clone();
+		clone.find_values	= find_values.clone();
+		clone.stores		= stores.clone();
+		clone.data			= data.clone();
+		clone.key_blocks	= key_blocks.clone();
+		clone.store_queries	= store_queries.clone();
+		clone.aliens		= aliens.clone();
 		
 		clone.incoming_requests	= incoming_requests;
 		clone.outgoing_requests	= outgoing_requests;
@@ -606,7 +606,7 @@ DHTTransportStatsImpl
 		if ( 	now < last_skew_average_time ||
 				now - last_skew_average_time > 30000 ){
 			
-			int[]	values = (int[])skew_values.clone();
+			int[]	values = skew_values.clone();
 			
 			int		pos = skew_pos;
 			

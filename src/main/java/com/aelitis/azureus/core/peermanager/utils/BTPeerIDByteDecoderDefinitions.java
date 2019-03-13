@@ -144,8 +144,8 @@ public class BTPeerIDByteDecoderDefinitions {
 
 	public static ClientData getSubstringStyleClient(String peer_id) {
 		ClientData cd = null;
-		for (int i=0; i<custom_style_client_list.size(); i++) {
-			cd = (ClientData)custom_style_client_list.get(i);
+		for (Object o : custom_style_client_list) {
+			cd = (ClientData) o;
 			if (peer_id.startsWith(cd.simple_string, cd.simple_string_pos)) {
 				return cd;
 			}
@@ -165,7 +165,7 @@ public class BTPeerIDByteDecoderDefinitions {
 				version_string = BTPeerIDByteDecoderUtils.getTwoByteThreePartVersion(peer_id_bytes[start_byte_index], peer_id_bytes[start_byte_index+1]);
 			}
 			else if (version_scheme == VER_BLOCK && verdata.length == -1) {
-				version_string = BTPeerIDByteDecoderUtils.extractReadableVersionSubstringFromPeerID(peer_id.substring(verdata.pos, peer_id.length()));
+				version_string = BTPeerIDByteDecoderUtils.extractReadableVersionSubstringFromPeerID(peer_id.substring(verdata.pos));
 			}
 			else {
 				version_string = BTPeerIDByteDecoderUtils.decodeCustomVersionNumber(

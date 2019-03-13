@@ -283,21 +283,21 @@ TrackerTorrentImpl
 		throws TRHostException
 	{
 		List	listeners_ref = listeners_cow;
-		
-		for (int i=0;i<listeners_ref.size();i++){
-			
-			try{
-				((TrackerTorrentListener)listeners_ref.get(i)).preProcess(new TrackerTorrentRequestImpl(request));
-				
-			}catch( TrackerException e ){
-				
-				throw( new TRHostException( e.getMessage(), e ));
-				
-			}catch( Throwable e ){
-			
-				throw( new TRHostException( "Pre-process fails", e ));
-			}
-		}
+
+        for (Object o : listeners_ref) {
+
+            try {
+                ((TrackerTorrentListener) o).preProcess(new TrackerTorrentRequestImpl(request));
+
+            } catch (TrackerException e) {
+
+                throw (new TRHostException(e.getMessage(), e));
+
+            } catch (Throwable e) {
+
+                throw (new TRHostException("Pre-process fails", e));
+            }
+        }
 	}
 	
 	public void
@@ -307,21 +307,21 @@ TrackerTorrentImpl
 		throws TRHostException
 	{
 		List	listeners_ref = listeners_cow;
-		
-		for (int i=0;i<listeners_ref.size();i++){
-			
-			try{
-				((TrackerTorrentListener)listeners_ref.get(i)).postProcess(new TrackerTorrentRequestImpl(request));
-				
-			}catch( TrackerException e ){
-				
-				throw( new TRHostException( e.getMessage(), e ));
-				
-			}catch( Throwable e ){
-			
-				throw( new TRHostException( "Post-process fails", e ));
-			}
-		}
+
+        for (Object o : listeners_ref) {
+
+            try {
+                ((TrackerTorrentListener) o).postProcess(new TrackerTorrentRequestImpl(request));
+
+            } catch (TrackerException e) {
+
+                throw (new TRHostException(e.getMessage(), e));
+
+            } catch (Throwable e) {
+
+                throw (new TRHostException("Post-process fails", e));
+            }
+        }
 	}
 	
 	public void
@@ -378,16 +378,16 @@ TrackerTorrentImpl
 	
 		throws TRHostTorrentRemovalVetoException
 	{
-		for (int i=0;i<removal_listeners.size();i++){
-			
-			try{
-				((TrackerTorrentWillBeRemovedListener)removal_listeners.get(i)).torrentWillBeRemoved( this );
-				
-			}catch( TrackerTorrentRemovalVetoException e ){
-				
-				throw( new TRHostTorrentRemovalVetoException( e.getMessage()));
-			}
-		}
+        for (Object removal_listener : removal_listeners) {
+
+            try {
+                ((TrackerTorrentWillBeRemovedListener) removal_listener).torrentWillBeRemoved(this);
+
+            } catch (TrackerTorrentRemovalVetoException e) {
+
+                throw (new TRHostTorrentRemovalVetoException(e.getMessage()));
+            }
+        }
 	}
 	
 	public void

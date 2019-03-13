@@ -280,7 +280,7 @@ NetworkConnectionImpl
   {
 	synchronized( this ){
 		if ( user_data == null ){
-			user_data = new LightHashMap<Object, Object>();
+			user_data = new LightHashMap<>();
 		}
 		
 		return( user_data.put( key, value ));

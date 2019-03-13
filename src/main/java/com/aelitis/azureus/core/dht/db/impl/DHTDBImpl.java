@@ -100,8 +100,8 @@ DHTDBImpl
 	protected static final int		QUERY_STORE_REQUEST_ENTRY_SIZE	= 6;
 	protected static final int		QUERY_STORE_REPLY_ENTRY_SIZE	= 2;
 	
-	final Map<HashWrapper,DHTDBMapping>				stored_values 				= new HashMap<HashWrapper,DHTDBMapping>();
-	private final Map<DHTDBMapping.ShortHash,DHTDBMapping>	stored_values_prefix_map	= new HashMap<DHTDBMapping.ShortHash,DHTDBMapping>();
+	final Map<HashWrapper,DHTDBMapping>				stored_values 				= new HashMap<>();
+	private final Map<DHTDBMapping.ShortHash,DHTDBMapping>	stored_values_prefix_map	= new HashMap<>();
 	
 	private DHTControl				control;
 	private final DHTStorageAdapter		adapter;
@@ -139,7 +139,7 @@ DHTDBImpl
 	
 	private volatile boolean survey_in_progress;
 		
-	private final Map<HashWrapper,Long>	survey_mapping_times = new HashMap<HashWrapper, Long>();
+	private final Map<HashWrapper,Long>	survey_mapping_times = new HashMap<>();
 	
 	private final Map<HashWrapper,SurveyContactState>	survey_state =
 		new LinkedHashMap<HashWrapper,SurveyContactState>(MAX_SURVEY_STATE_SIZE,0.75f,true)
@@ -332,15 +332,11 @@ DHTDBImpl
 			this_mon.enter();
 			
 			survey_state.clear();
-			
-			Iterator<DHTDBMapping>	it = stored_values.values().iterator();
-			
-			while( it.hasNext()){
-				
-				DHTDBMapping	mapping = it.next();
-				
-				mapping.updateLocalContact( local_contact );
-			}
+
+            for (DHTDBMapping mapping : stored_values.values()) {
+
+                mapping.updateLocalContact(local_contact);
+            }
 		}finally{
 			
 			this_mon.exit();
@@ -383,7 +379,7 @@ DHTDBImpl
 					// don't police max check for locally stored data
 					// only that received
 				
-				DHTDBMapping	mapping = (DHTDBMapping)stored_values.get( key );
+				DHTDBMapping	mapping = stored_values.get( key );
 				
 				if ( mapping == null ){
 					
@@ -472,7 +468,7 @@ DHTDBImpl
 			
 			checkCacheExpiration( false );
 				
-			DHTDBMapping	mapping = (DHTDBMapping)stored_values.get( key );
+			DHTDBMapping	mapping = stored_values.get( key );
 			
 			if ( mapping == null ){
 				
@@ -485,15 +481,13 @@ DHTDBImpl
 						
 				// we carry on an update as its ok to replace existing entries
 				// even if diversified
-			
-			for (int i=0;i<values.length;i++){
-				
-				DHTTransportValue	value = values[i];
-					
-				DHTDBValueImpl mapping_value	= new DHTDBValueImpl( sender, value, false );
-			
-				mapping.add( mapping_value );
-			}
+
+            for (DHTTransportValue value : values) {
+
+                DHTDBValueImpl mapping_value = new DHTDBValueImpl(sender, value, false);
+
+                mapping.add(mapping_value);
+            }
 			
 			return( mapping.getDiversificationType());
 	
@@ -516,7 +510,7 @@ DHTDBImpl
 			
 			checkCacheExpiration( false );
 					
-			final DHTDBMapping mapping = (DHTDBMapping)stored_values.get(key);
+			final DHTDBMapping mapping = stored_values.get(key);
 			
 			if ( mapping == null ){
 				
@@ -561,7 +555,7 @@ DHTDBImpl
 		try{
 			this_mon.enter();
 		
-			DHTDBMapping mapping = (DHTDBMapping)stored_values.get( key );
+			DHTDBMapping mapping = stored_values.get( key );
 			
 			if ( mapping != null ){
 				
@@ -583,7 +577,7 @@ DHTDBImpl
 		try{
 			this_mon.enter();
 		
-			DHTDBMapping mapping = (DHTDBMapping)stored_values.get( key );
+			DHTDBMapping mapping = stored_values.get( key );
 			
 			if ( mapping != null ){
 				
@@ -605,9 +599,9 @@ DHTDBImpl
 		try{
 			this_mon.enter();
 		
-			DHTDBMapping mapping = (DHTDBMapping)stored_values.get( key );
+			DHTDBMapping mapping = stored_values.get( key );
 			
-			List<DHTDBValue> result = new ArrayList<DHTDBValue>();
+			List<DHTDBValue> result = new ArrayList<>();
 			
 			if ( mapping != null ){
 				
@@ -647,7 +641,7 @@ DHTDBImpl
 		try{
 			this_mon.enter();
 		
-			DHTDBMapping mapping = (DHTDBMapping)stored_values.get( key );
+			DHTDBMapping mapping = stored_values.get( key );
 			
 			if ( mapping != null ){
 				
@@ -701,16 +695,16 @@ DHTDBImpl
 			List<DHTTransportContact> closest_contacts = control.getClosestKContactsList( key, true );
 			
 			boolean	process_it	= false;
-			
-			for (int i=0;i<closest_contacts.size();i++){
-				
-				if ( router.isID(closest_contacts.get(i).getID())){
-					
-					process_it	= true;
-					
-					break;
-				}		
-			}
+
+            for (DHTTransportContact closest_contact : closest_contacts) {
+
+                if (router.isID(closest_contact.getID())) {
+
+                    process_it = true;
+
+                    break;
+                }
+            }
 		
 			if ( !process_it ){
 			
@@ -769,7 +763,7 @@ DHTDBImpl
 	public int
 	getKeyCount()
 	{
-		return( (int)total_keys );
+		return total_keys;
 	}
 	
 	public int
@@ -781,13 +775,13 @@ DHTDBImpl
 	public int
 	getValueCount()
 	{
-		return( (int)total_values );
+		return total_values;
 	}
 	
 	public int
 	getSize()
 	{
-		return( (int)total_size );
+		return total_size;
 	}
 	
 	public int[]
@@ -797,27 +791,23 @@ DHTDBImpl
 			this_mon.enter();
 			
 			int[]	res = new int[6];
-			
-			Iterator<DHTDBMapping>	it = stored_values.values().iterator();
-			
-			while( it.hasNext()){
-				
-				DHTDBMapping	mapping = it.next();
-				
-				res[DHTDBStats.VD_VALUE_COUNT] += mapping.getValueCount();
-				res[DHTDBStats.VD_LOCAL_SIZE] += mapping.getLocalSize();
-				res[DHTDBStats.VD_DIRECT_SIZE] += mapping.getDirectSize();
-				res[DHTDBStats.VD_INDIRECT_SIZE] += mapping.getIndirectSize();
-				
-				int	dt = mapping.getDiversificationType();
-				
-				if ( dt == DHT.DT_FREQUENCY ){
-					
-					res[DHTDBStats.VD_DIV_FREQ]++;
-					
-				}else if ( dt == DHT.DT_SIZE ){
-					
-					res[DHTDBStats.VD_DIV_SIZE]++;
+
+            for (DHTDBMapping mapping : stored_values.values()) {
+
+                res[DHTDBStats.VD_VALUE_COUNT] += mapping.getValueCount();
+                res[DHTDBStats.VD_LOCAL_SIZE] += mapping.getLocalSize();
+                res[DHTDBStats.VD_DIRECT_SIZE] += mapping.getDirectSize();
+                res[DHTDBStats.VD_INDIRECT_SIZE] += mapping.getIndirectSize();
+
+                int dt = mapping.getDiversificationType();
+
+                if (dt == DHT.DT_FREQUENCY) {
+
+                    res[DHTDBStats.VD_DIV_FREQ]++;
+
+                } else if (dt == DHT.DT_SIZE) {
+
+                    res[DHTDBStats.VD_DIV_SIZE]++;
 					
 					/*
 					Iterator<DHTDBValueImpl> it2 = mapping.getIndirectValues();
@@ -831,8 +821,8 @@ DHTDBImpl
 						System.out.println( new String( val.getValue()) + " - " + val.getOriginator().getAddress());
 					}
 					*/
-				}
-			}
+                }
+            }
 			
 			return( res );
 			
@@ -859,7 +849,7 @@ DHTDBImpl
 		try{
 			this_mon.enter();
 			
-			return( new ArrayList<HashWrapper>( stored_values.keySet()).iterator());
+			return(new ArrayList<>(stored_values.keySet()).iterator());
 			
 		}finally{
 			
@@ -879,45 +869,41 @@ DHTDBImpl
 		
 		int	values_published	= 0;
 
-		Map<HashWrapper,List<DHTDBValueImpl>>	republish = new HashMap<HashWrapper,List<DHTDBValueImpl>>();
+		Map<HashWrapper,List<DHTDBValueImpl>>	republish = new HashMap<>();
 		
 		try{
 			this_mon.enter();
-			
-			Iterator<Map.Entry<HashWrapper,DHTDBMapping>>	it = stored_values.entrySet().iterator();
-			
-			while( it.hasNext()){
-				
-				Map.Entry<HashWrapper,DHTDBMapping>	entry = it.next();
-				
-				HashWrapper		key		= (HashWrapper)entry.getKey();
-				
-				DHTDBMapping	mapping	= (DHTDBMapping)entry.getValue();
-				
-				Iterator<DHTDBValueImpl>	it2 = mapping.getValues();
-				
-				List<DHTDBValueImpl>	values = new ArrayList<DHTDBValueImpl>();
-				
-				while( it2.hasNext()){
-					
-					DHTDBValueImpl	value = it2.next();
-				
-					if ( value != null && value.isLocal()){
-						
-						// we're republising the data, reset the creation time
-						
-						value.setCreationTime();
 
-						values.add( value );
-					}
-				}
-				
-				if ( values.size() > 0 ){
-					
-					republish.put( key, values );
-					
-				}
-			}
+            for (Map.Entry<HashWrapper, DHTDBMapping> entry : stored_values.entrySet()) {
+
+                HashWrapper key = entry.getKey();
+
+                DHTDBMapping mapping = entry.getValue();
+
+                Iterator<DHTDBValueImpl> it2 = mapping.getValues();
+
+                List<DHTDBValueImpl> values = new ArrayList<>();
+
+                while (it2.hasNext()) {
+
+                    DHTDBValueImpl value = it2.next();
+
+                    if (value != null && value.isLocal()) {
+
+                        // we're republising the data, reset the creation time
+
+                        value.setCreationTime();
+
+                        values.add(value);
+                    }
+                }
+
+                if (values.size() > 0) {
+
+                    republish.put(key, values);
+
+                }
+            }
 		}finally{
 			
 			this_mon.exit();
@@ -934,19 +920,19 @@ DHTDBImpl
 			
 			Map.Entry<HashWrapper,List<DHTDBValueImpl>>	entry = it.next();
 			
-			HashWrapper			key		= (HashWrapper)entry.getKey();
+			HashWrapper			key		= entry.getKey();
 			
 			List<DHTDBValueImpl>		values	= entry.getValue();
 			
 				// no point in worry about multi-value puts here as it is extremely unlikely that
 				// > 1 value will locally stored, or > 1 value will go to the same contact
-			
-			for (int i=0;i<values.size();i++){
-				
-				values_published++;
-				
-				control.putEncodedKey( key.getHash(), "Republish orig: " + key_num + " of " + key_tot, values.get(i), 0, true );
-			}
+
+            for (DHTDBValueImpl value : values) {
+
+                values_published++;
+
+                control.putEncodedKey(key.getHash(), "Republish orig: " + key_num + " of " + key_tot, value, 0, true);
+            }
 		}
 		
 		return( values_published );
@@ -967,9 +953,9 @@ DHTDBImpl
 		
 		router.refreshIdleLeaves( cache_republish_interval );
 		
-		final Map<HashWrapper,List<DHTDBValueImpl>>	republish = new HashMap<HashWrapper,List<DHTDBValueImpl>>();
+		final Map<HashWrapper,List<DHTDBValueImpl>>	republish = new HashMap<>();
 		
-		List<DHTDBMapping>	republish_via_survey = new ArrayList<DHTDBMapping>();
+		List<DHTDBMapping>	republish_via_survey = new ArrayList<>();
 		
 		long	now = System.currentTimeMillis();
 		
@@ -978,83 +964,79 @@ DHTDBImpl
 			
 			checkCacheExpiration( true );
 
-			Iterator<Map.Entry<HashWrapper,DHTDBMapping>>	it = stored_values.entrySet().iterator();
-			
-			while( it.hasNext()){
-				
-				Map.Entry<HashWrapper,DHTDBMapping>	entry = it.next();
-				
-				HashWrapper			key		= entry.getKey();
-				
-				DHTDBMapping		mapping	= entry.getValue();
-				
-					// assume that if we've diversified then the other k-1 locations are under similar
-					// stress and will have done likewise - no point in republishing cache values to them
-					// New nodes joining will have had stuff forwarded to them regardless of diversification
-					// status
-				
-				if ( mapping.getDiversificationType() != DHT.DT_NONE ){
-					
-					continue;
-				}
-				
-				Iterator<DHTDBValueImpl>	it2 = mapping.getValues();
-				
-				boolean	all_rf_values = it2.hasNext();
-				
-				List<DHTDBValueImpl>	values = new ArrayList<DHTDBValueImpl>();
-				
-				while( it2.hasNext()){
-					
-					DHTDBValueImpl	value = it2.next();
-				
-					if ( value.isLocal()){
-						
-						all_rf_values = false;
-						
-					}else{
-						
-						if ( value.getReplicationFactor() == DHT.REP_FACT_DEFAULT ){
-							
-							all_rf_values = false;
-						}
-						
-							// if this value was stored < period ago then we assume that it was
-							// also stored to the other k-1 locations at the same time and therefore
-							// we don't need to re-store it
-						
-						if ( now < value.getStoreTime()){
-							
-								// deal with clock changes
-							
-							value.setStoreTime( now );
-							
-						}else if ( now - value.getStoreTime() <= cache_republish_interval ){
-							
-							// System.out.println( "skipping store" );
-							
-						}else{
-								
-							values.add( value );
-						}
-					}
-				}
+            for (Map.Entry<HashWrapper, DHTDBMapping> entry : stored_values.entrySet()) {
 
-				if ( all_rf_values ){
-					
-						// if surveying is disabled then we swallow values here to prevent them
-						// from being replicated using the existing technique and muddying the waters
-					
-					values.clear();	// handled by the survey process
-					
-					republish_via_survey.add( mapping );
-				}
-					
-				if ( values.size() > 0 ){
-						
-					republish.put( key, values );
-				}
-			}
+                HashWrapper key = entry.getKey();
+
+                DHTDBMapping mapping = entry.getValue();
+
+                // assume that if we've diversified then the other k-1 locations are under similar
+                // stress and will have done likewise - no point in republishing cache values to them
+                // New nodes joining will have had stuff forwarded to them regardless of diversification
+                // status
+
+                if (mapping.getDiversificationType() != DHT.DT_NONE) {
+
+                    continue;
+                }
+
+                Iterator<DHTDBValueImpl> it2 = mapping.getValues();
+
+                boolean all_rf_values = it2.hasNext();
+
+                List<DHTDBValueImpl> values = new ArrayList<>();
+
+                while (it2.hasNext()) {
+
+                    DHTDBValueImpl value = it2.next();
+
+                    if (value.isLocal()) {
+
+                        all_rf_values = false;
+
+                    } else {
+
+                        if (value.getReplicationFactor() == DHT.REP_FACT_DEFAULT) {
+
+                            all_rf_values = false;
+                        }
+
+                        // if this value was stored < period ago then we assume that it was
+                        // also stored to the other k-1 locations at the same time and therefore
+                        // we don't need to re-store it
+
+                        if (now < value.getStoreTime()) {
+
+                            // deal with clock changes
+
+                            value.setStoreTime(now);
+
+                        } else if (now - value.getStoreTime() <= cache_republish_interval) {
+
+                            // System.out.println( "skipping store" );
+
+                        } else {
+
+                            values.add(value);
+                        }
+                    }
+                }
+
+                if (all_rf_values) {
+
+                    // if surveying is disabled then we swallow values here to prevent them
+                    // from being replicated using the existing technique and muddying the waters
+
+                    values.clear();    // handled by the survey process
+
+                    republish_via_survey.add(mapping);
+                }
+
+                if (values.size() > 0) {
+
+                    republish.put(key, values);
+                }
+            }
 		}finally{
 			
 			this_mon.exit();
@@ -1064,7 +1046,7 @@ DHTDBImpl
 		
 				// we still check for being too far away here
 			
-			List<HashWrapper>	stop_caching = new ArrayList<HashWrapper>();
+			List<HashWrapper>	stop_caching = new ArrayList<>();
 
 			for ( DHTDBMapping mapping: republish_via_survey ){
 				
@@ -1078,16 +1060,16 @@ DHTDBImpl
 					// cache the value
 			
 				boolean	keep_caching	= false;
-			
-				for (int j=0;j<contacts.size();j++){
-			
-					if ( router.isID(((DHTTransportContact)contacts.get(j)).getID())){
-					
-						keep_caching	= true;
-					
-						break;
-					}
-				}
+
+                for (DHTTransportContact contact : contacts) {
+
+                    if (router.isID(contact.getID())) {
+
+                        keep_caching = true;
+
+                        break;
+                    }
+                }
 			
 				if ( !keep_caching ){
 					
@@ -1101,18 +1083,18 @@ DHTDBImpl
 				
 				try{
 					this_mon.enter();
-					
-					for (int i=0;i<stop_caching.size();i++){
-						
-						DHTDBMapping	mapping = (DHTDBMapping)stored_values.remove( stop_caching.get(i));
-						
-						if ( mapping != null ){
-							
-							removeFromPrefixMap( mapping );
-							
-							mapping.destroy();
-						}
-					}
+
+                    for (HashWrapper hashWrapper : stop_caching) {
+
+                        DHTDBMapping mapping = stored_values.remove(hashWrapper);
+
+                        if (mapping != null) {
+
+                            removeFromPrefixMap(mapping);
+
+                            mapping.destroy();
+                        }
+                    }
 				}finally{
 					
 					this_mon.exit();
@@ -1124,7 +1106,7 @@ DHTDBImpl
 		final int[]	keys_published		= {0};
 		final int[]	republish_ops		= {0};
 		
-		final HashSet<DHTTransportContact>	anti_spoof_done	= new HashSet<DHTTransportContact>();
+		final HashSet<DHTTransportContact>	anti_spoof_done	= new HashSet<>();
 		
 		if ( republish.size() > 0 ){
 			
@@ -1140,11 +1122,11 @@ DHTDBImpl
 					
 			Iterator<Map.Entry<HashWrapper,List<DHTDBValueImpl>>>	it1 = republish.entrySet().iterator();
 			
-			List<HashWrapper>	stop_caching = new ArrayList<HashWrapper>();
+			List<HashWrapper>	stop_caching = new ArrayList<>();
 			
 				// build a map of contact -> list of keys to republish
 			
-			Map<HashWrapper,Object[]>	contact_map	= new HashMap<HashWrapper,Object[]>();
+			Map<HashWrapper,Object[]>	contact_map	= new HashMap<>();
 			
 			while( it1.hasNext()){
 				
@@ -1165,16 +1147,16 @@ DHTDBImpl
 					// cache the value
 				
 				boolean	keep_caching	= false;
-				
-				for (int j=0;j<contacts.size();j++){
-				
-					if ( router.isID(((DHTTransportContact)contacts.get(j)).getID())){
-						
-						keep_caching	= true;
-						
-						break;
-					}
-				}
+
+                for (DHTTransportContact contact1 : contacts) {
+
+                    if (router.isID(contact1.getID())) {
+
+                        keep_caching = true;
+
+                        break;
+                    }
+                }
 				
 				if ( !keep_caching ){
 					
@@ -1185,27 +1167,25 @@ DHTDBImpl
 						// we carry on and do one last publish
 					
 				}
-				
-				for (int j=0;j<contacts.size();j++){
-					
-					DHTTransportContact	contact = (DHTTransportContact)contacts.get(j);
-					
-					if ( router.isID( contact.getID())){
-						
-						continue;	// ignore ourselves
-					}
-					
-					Object[]	data = (Object[])contact_map.get( new HashWrapper(contact.getID()));
-					
-					if ( data == null ){
-						
-						data	= new Object[]{ contact, new ArrayList<HashWrapper>()};
-						
-						contact_map.put( new HashWrapper(contact.getID()), data );
-					}
-					
-					((List<HashWrapper>)data[1]).add( key );
-				}
+
+                for (DHTTransportContact contact : contacts) {
+
+                    if (router.isID(contact.getID())) {
+
+                        continue;    // ignore ourselves
+                    }
+
+                    Object[] data = contact_map.get(new HashWrapper(contact.getID()));
+
+                    if (data == null) {
+
+                        data = new Object[]{contact, new ArrayList<HashWrapper>()};
+
+                        contact_map.put(new HashWrapper(contact.getID()), data);
+                    }
+
+                    ((List<HashWrapper>) data[1]).add(key);
+                }
 			}
 		
 			Iterator<Object[]> it2 = contact_map.values().iterator();
@@ -1271,7 +1251,7 @@ DHTDBImpl
 										}
 									}
 										
-									List<DHTTransportContact>	contacts = new ArrayList<DHTTransportContact>();
+									List<DHTTransportContact>	contacts = new ArrayList<>();
 									
 									contacts.add( contact );
 									
@@ -1314,18 +1294,18 @@ DHTDBImpl
 			
 			try{
 				this_mon.enter();
-				
-				for (int i=0;i<stop_caching.size();i++){
-					
-					DHTDBMapping	mapping = (DHTDBMapping)stored_values.remove( stop_caching.get(i));
-					
-					if ( mapping != null ){
-						
-						removeFromPrefixMap( mapping );
-						
-						mapping.destroy();
-					}
-				}
+
+                for (HashWrapper hashWrapper : stop_caching) {
+
+                    DHTDBMapping mapping = stored_values.remove(hashWrapper);
+
+                    if (mapping != null) {
+
+                        removeFromPrefixMap(mapping);
+
+                        mapping.destroy();
+                    }
+                }
 			}finally{
 				
 				this_mon.exit();
@@ -1335,110 +1315,101 @@ DHTDBImpl
 		DHTStorageBlock[]	direct_key_blocks = getDirectKeyBlocks();
 
 		if ( direct_key_blocks.length > 0 ){
-					
-			for (int i=0;i<direct_key_blocks.length;i++){
-			
-				final DHTStorageBlock	key_block = direct_key_blocks[i];
-				
-				List	contacts = control.getClosestKContactsList( key_block.getKey(), false );
 
-				boolean	forward_it = false;
-				
-					// ensure that the key is close enough to us 
-				
-				for (int j=0;j<contacts.size();j++){
+            for (final DHTStorageBlock key_block : direct_key_blocks) {
 
-					final DHTTransportContact	contact = (DHTTransportContact)contacts.get(j);
+                List contacts = control.getClosestKContactsList(key_block.getKey(), false);
 
-					if ( router.isID( contact.getID())){
-						
-						forward_it	= true;
-						
-						break;
-					}
-				}
-					
-				for (int j=0; forward_it && j<contacts.size();j++){
-					
-					final DHTTransportContact	contact = (DHTTransportContact)contacts.get(j);
-					
-					if ( key_block.hasBeenSentTo( contact )){
-						
-						continue;
-					}
-					
-					if ( router.isID( contact.getID())){
-						
-						continue;	// ignore ourselves
-					}
+                boolean forward_it = false;
 
-					if ( contact.getProtocolVersion() >= DHTTransportUDP.PROTOCOL_VERSION_BLOCK_KEYS ){
-						
-						final Runnable task = 
-							new Runnable()
-							{
-								public void
-								run()
-								{
-									contact.sendKeyBlock(
-										new DHTTransportReplyHandlerAdapter()
-										{
-											public void
-											keyBlockReply(
-												DHTTransportContact 	_contact )
-											{
-												DHTLog.log( "key block forward ok " + DHTLog.getString( _contact ));
-												
-												key_block.sentTo( _contact );
-											}
-											
-											public void
-											failed(
-												DHTTransportContact 	_contact,
-												Throwable				_error )
-											{
-												DHTLog.log( "key block forward failed " + DHTLog.getString( _contact ) + " -> failed: " + _error.getMessage());
-											}
-										},
-										key_block.getRequest(),
-										key_block.getCertificate());
-								}
-							};
-						
-							if ( anti_spoof_done.contains( contact )){
-								
-								task.run();
-								
-							}else{
-								
-								contact.sendFindNode(
-										new DHTTransportReplyHandlerAdapter()
-										{
-											public void
-											findNodeReply(
-												DHTTransportContact 	contact,
-												DHTTransportContact[]	contacts )
-											{	
-												task.run();
-											}
-											public void
-											failed(
-												DHTTransportContact 	_contact,
-												Throwable				_error )
-											{
-												// System.out.println( "nodeAdded: pre-store findNode Failed" );
+                // ensure that the key is close enough to us
 
-												DHTLog.log( "pre-kb findNode failed " + DHTLog.getString( _contact ) + " -> failed: " + _error.getMessage());
-																						
-												router.contactDead( _contact.getID(), false);
-											}
-										},
-										contact.getProtocolVersion() >= DHTTransportUDP.PROTOCOL_VERSION_ANTI_SPOOF2?new byte[0]:new byte[20],
-										DHT.FLAG_LOOKUP_FOR_STORE );
-							}
-					}
-				}
-			}
+                for (Object contact1 : contacts) {
+
+                    final DHTTransportContact contact = (DHTTransportContact) contact1;
+
+                    if (router.isID(contact.getID())) {
+
+                        forward_it = true;
+
+                        break;
+                    }
+                }
+
+                for (int j = 0; forward_it && j < contacts.size(); j++) {
+
+                    final DHTTransportContact contact = (DHTTransportContact) contacts.get(j);
+
+                    if (key_block.hasBeenSentTo(contact)) {
+
+                        continue;
+                    }
+
+                    if (router.isID(contact.getID())) {
+
+                        continue;    // ignore ourselves
+                    }
+
+                    if (contact.getProtocolVersion() >= DHTTransportUDP.PROTOCOL_VERSION_BLOCK_KEYS) {
+
+                        final Runnable task =
+                                new Runnable() {
+                                    public void
+                                    run() {
+                                        contact.sendKeyBlock(
+                                                new DHTTransportReplyHandlerAdapter() {
+                                                    public void
+                                                    keyBlockReply(
+                                                            DHTTransportContact _contact) {
+                                                        DHTLog.log("key block forward ok " + DHTLog.getString(_contact));
+
+                                                        key_block.sentTo(_contact);
+                                                    }
+
+                                                    public void
+                                                    failed(
+                                                            DHTTransportContact _contact,
+                                                            Throwable _error) {
+                                                        DHTLog.log("key block forward failed " + DHTLog.getString(_contact) + " -> failed: " + _error.getMessage());
+                                                    }
+                                                },
+                                                key_block.getRequest(),
+                                                key_block.getCertificate());
+                                    }
+                                };
+
+                        if (anti_spoof_done.contains(contact)) {
+
+                            task.run();
+
+                        } else {
+
+                            contact.sendFindNode(
+                                    new DHTTransportReplyHandlerAdapter() {
+                                        public void
+                                        findNodeReply(
+                                                DHTTransportContact contact,
+                                                DHTTransportContact[] contacts) {
+                                            task.run();
+                                        }
+
+                                        public void
+                                        failed(
+                                                DHTTransportContact _contact,
+                                                Throwable _error) {
+                                            // System.out.println( "nodeAdded: pre-store findNode Failed" );
+
+                                            DHTLog.log("pre-kb findNode failed " + DHTLog.getString(_contact) + " -> failed: " + _error.getMessage());
+
+                                            router.contactDead(_contact.getID(), false);
+                                        }
+                                    },
+                                    contact.getProtocolVersion() >= DHTTransportUDP.PROTOCOL_VERSION_ANTI_SPOOF2 ? new byte[0] : new byte[20],
+                                    DHT.FLAG_LOOKUP_FOR_STORE);
+                        }
+                    }
+                }
+            }
 		}
 		
 		return( new int[]{ values_published[0], keys_published[0], republish_ops[0] });
@@ -1589,73 +1560,65 @@ DHTDBImpl
 	{
 		long	 now = SystemTime.getCurrentTime();
 		
-		Map<HashWrapper,List<DHTDBValueImpl>>	republish = new HashMap<HashWrapper,List<DHTDBValueImpl>>();
+		Map<HashWrapper,List<DHTDBValueImpl>>	republish = new HashMap<>();
 
 		try{
 
 			this_mon.enter();
-						
-			Iterator<Map.Entry<HashWrapper,DHTDBMapping>>	it = stored_values.entrySet().iterator();
-			
-			while( it.hasNext()){
-				
-				Map.Entry<HashWrapper,DHTDBMapping>	entry = it.next();
-				
-				HashWrapper		key		= entry.getKey();
-				
-				DHTDBMapping	mapping	= entry.getValue();
 
-				Iterator<DHTDBValueImpl>	it2 = mapping.getValues();
-				
-				List<DHTDBValueImpl>	values = new ArrayList<DHTDBValueImpl>();
+            for (Map.Entry<HashWrapper, DHTDBMapping> entry : stored_values.entrySet()) {
 
-				while( it2.hasNext()){
-					
-					DHTDBValueImpl	value = it2.next();				
+                HashWrapper key = entry.getKey();
 
-					if ( value.isLocal()){
-						
-						if (( value.getFlags() & DHT.FLAG_PRECIOUS ) != 0 ){
-							
-							if ( now - value.getCreationTime() > PRECIOUS_CHECK_INTERVAL ){
-								
-								value.setCreationTime();
+                DHTDBMapping mapping = entry.getValue();
 
-								values.add( value );
-							}
-						}
-					}
-				}
-				
-				if ( values.size() > 0 ){
-					
-					republish.put( key, values );
-					
-				}
-			}
+                Iterator<DHTDBValueImpl> it2 = mapping.getValues();
+
+                List<DHTDBValueImpl> values = new ArrayList<>();
+
+                while (it2.hasNext()) {
+
+                    DHTDBValueImpl value = it2.next();
+
+                    if (value.isLocal()) {
+
+                        if ((value.getFlags() & DHT.FLAG_PRECIOUS) != 0) {
+
+                            if (now - value.getCreationTime() > PRECIOUS_CHECK_INTERVAL) {
+
+                                value.setCreationTime();
+
+                                values.add(value);
+                            }
+                        }
+                    }
+                }
+
+                if (values.size() > 0) {
+
+                    republish.put(key, values);
+
+                }
+            }
 		}finally{
 			
 			this_mon.exit();
 		}
-		
-		Iterator<Map.Entry<HashWrapper,List<DHTDBValueImpl>>>	it = republish.entrySet().iterator();
-		
-		while( it.hasNext()){
-			
-			Map.Entry<HashWrapper,List<DHTDBValueImpl>>	entry = it.next();
-			
-			HashWrapper			key		= entry.getKey();
-			
-			List<DHTDBValueImpl>		values	= entry.getValue();
-			
-				// no point in worry about multi-value puts here as it is extremely unlikely that
-				// > 1 value will locally stored, or > 1 value will go to the same contact
-			
-			for (int i=0;i<values.size();i++){
-								
-				control.putEncodedKey( key.getHash(), "Precious republish", values.get(i), 0, true );
-			}
-		}
+
+        for (Map.Entry<HashWrapper, List<DHTDBValueImpl>> entry : republish.entrySet()) {
+
+            HashWrapper key = entry.getKey();
+
+            List<DHTDBValueImpl> values = entry.getValue();
+
+            // no point in worry about multi-value puts here as it is extremely unlikely that
+            // > 1 value will locally stored, or > 1 value will go to the same contact
+
+            for (DHTDBValueImpl value : values) {
+
+                control.putEncodedKey(key.getHash(), "Precious republish", value, 0, true);
+            }
+        }
 	}
 	
 	protected DHTTransportContact
@@ -1703,7 +1666,7 @@ DHTDBImpl
 			System.out.println( "    my_id=" + ByteFormatter.encodeString( my_id ));
 		}
 		
-		final ByteArrayHashMap<DHTTransportContact>	id_map = new ByteArrayHashMap<DHTTransportContact>();
+		final ByteArrayHashMap<DHTTransportContact>	id_map = new ByteArrayHashMap<>();
 
 		List<DHTTransportContact> all_contacts = control.getClosestContactsList( my_id, router.getK()*3, true );
 				
@@ -1715,7 +1678,7 @@ DHTDBImpl
 		byte[]	max_key 	= my_id;
 		byte[]	max_dist	= null;
 		
-		final List<HashWrapper> applicable_keys = new ArrayList<HashWrapper>();
+		final List<HashWrapper> applicable_keys = new ArrayList<>();
 		
 		try{
 			this_mon.enter();
@@ -1734,7 +1697,7 @@ DHTDBImpl
 			
 			Iterator<DHTDBMapping>	it = stored_values.values().iterator();
 						
-			Set<HashWrapper>	existing_times = new HashSet<HashWrapper>( survey_mapping_times.keySet());
+			Set<HashWrapper>	existing_times = new HashSet<>(survey_mapping_times.keySet());
 			
 			while( it.hasNext()){
 				
@@ -1817,7 +1780,7 @@ DHTDBImpl
 				true,
 				new DHTOperationAdapter()
 				{
-					private final List<DHTTransportContact> contacts = new ArrayList<DHTTransportContact>();
+					private final List<DHTTransportContact> contacts = new ArrayList<>();
 					
 					private boolean	survey_complete;
 					
@@ -1972,11 +1935,11 @@ DHTDBImpl
 				node_ids[pos++] = id;
 			}
 				
-			ByteArrayHashMap<List<DHTDBMapping>>	value_map = new ByteArrayHashMap<List<DHTDBMapping>>();
+			ByteArrayHashMap<List<DHTDBMapping>>	value_map = new ByteArrayHashMap<>();
 			
-			Map<DHTTransportContact,ByteArrayHashMap<List<DHTDBMapping>>> request_map = new HashMap<DHTTransportContact, ByteArrayHashMap<List<DHTDBMapping>>>();
+			Map<DHTTransportContact,ByteArrayHashMap<List<DHTDBMapping>>> request_map = new HashMap<>();
 					
-			Map<DHTDBMapping,List<DHTTransportContact>>	mapping_to_node_map = new HashMap<DHTDBMapping, List<DHTTransportContact>>();
+			Map<DHTDBMapping,List<DHTTransportContact>>	mapping_to_node_map = new HashMap<>();
 			
 			int max_nodes = Math.min( node_ids.length, router.getK());
 			
@@ -2040,7 +2003,7 @@ DHTDBImpl
 						continue;
 					}
 					
-					List<DHTTransportContact>	node_list = new ArrayList<DHTTransportContact>(max_nodes);
+					List<DHTTransportContact>	node_list = new ArrayList<>(max_nodes);
 					
 					mapping_to_node_map.put( mapping, node_list );
 					
@@ -2061,7 +2024,7 @@ DHTDBImpl
 						
 						if ( list == null ){
 							
-							list = new ArrayList<DHTDBMapping>();
+							list = new ArrayList<>();
 							
 							value_map.put( id, list );
 						}
@@ -2084,7 +2047,7 @@ DHTDBImpl
 									
 					List<DHTDBMapping> all_entries = value_map.remove( id );
 					
-					ByteArrayHashMap<List<DHTDBMapping>> prefix_map = new ByteArrayHashMap<List<DHTDBMapping>>();
+					ByteArrayHashMap<List<DHTDBMapping>> prefix_map = new ByteArrayHashMap<>();
 
 					if ( all_entries != null ){
 						
@@ -2105,7 +2068,7 @@ DHTDBImpl
 										continue;
 									}
 									
-									ByteArrayHashMap<List<DHTDBMapping>> temp_map = new ByteArrayHashMap<List<DHTDBMapping>>();
+									ByteArrayHashMap<List<DHTDBMapping>> temp_map = new ByteArrayHashMap<>();
 									
 									for ( DHTDBMapping mapping: list ){
 										
@@ -2119,7 +2082,7 @@ DHTDBImpl
 										
 										if ( entries == null ){
 											
-											entries = new ArrayList<DHTDBMapping>();
+											entries = new ArrayList<>();
 											
 											temp_map.put( sub_prefix, entries );
 										}
@@ -2127,7 +2090,7 @@ DHTDBImpl
 										entries.add( mapping );
 									}
 									
-									List<DHTDBMapping> new_list = new ArrayList<DHTDBMapping>( list.size());
+									List<DHTDBMapping> new_list = new ArrayList<>(list.size());
 	
 									List<byte[]> temp_keys = temp_map.keys();
 									
@@ -2200,9 +2163,9 @@ DHTDBImpl
 				this_mon.exit();
 			}
 						
-			LinkedList<Map.Entry<DHTTransportContact,ByteArrayHashMap<List<DHTDBMapping>>>> to_do = new LinkedList<Map.Entry<DHTTransportContact,ByteArrayHashMap<List<DHTDBMapping>>>>( request_map.entrySet());
+			LinkedList<Map.Entry<DHTTransportContact,ByteArrayHashMap<List<DHTDBMapping>>>> to_do = new LinkedList<>(request_map.entrySet());
 				
-			Map<DHTTransportContact,Object[]>	replies = new HashMap<DHTTransportContact,Object[]>();
+			Map<DHTTransportContact,Object[]>	replies = new HashMap<>();
 			
 			for ( int i=0;i<Math.min(3,to_do.size());i++ ){
 			
@@ -2351,13 +2314,13 @@ DHTDBImpl
 					System.out.println( "Hitting " + contact.getString());
 				}
 				
-				final List<DHTDBMapping>	mapping_list = new ArrayList<DHTDBMapping>();
+				final List<DHTDBMapping>	mapping_list = new ArrayList<>();
 				
 				ByteArrayHashMap<List<DHTDBMapping>>	map = entry.getValue();
 				
 				List<byte[]> prefixes = map.keys();
 	
-				List<Object[]> encoded = new ArrayList<Object[]>( prefixes.size() );					
+				List<Object[]> encoded = new ArrayList<>(prefixes.size());
 				
 				try{
 					this_mon.enter();
@@ -2371,7 +2334,7 @@ DHTDBImpl
 						
 						List<DHTDBMapping> mappings = map.get( prefix );
 						
-						List<byte[]> l = new ArrayList<byte[]>( mappings.size());
+						List<byte[]> l = new ArrayList<>(mappings.size());
 						
 						encoded.add( new Object[]{ prefix, l });
 						
@@ -2423,11 +2386,11 @@ DHTDBImpl
 								try{
 									if ( DEBUG_SURVEY ){
 										System.out.println( "response " + response.size());
-										
-										for (int i=0;i<response.size();i++){
-											
-											System.out.println( "    " + ByteFormatter.encodeString( response.get(i)));
-										}
+
+                                        for (byte[] bytes : response) {
+
+                                            System.out.println("    " + ByteFormatter.encodeString(bytes));
+                                        }
 									}
 								}finally{
 								
@@ -2466,7 +2429,7 @@ DHTDBImpl
 			
 			if ( !handled ){
 					
-				final List<DHTDBMapping>	mapping_list = new ArrayList<DHTDBMapping>();
+				final List<DHTDBMapping>	mapping_list = new ArrayList<>();
 				
 				ByteArrayHashMap<List<DHTDBMapping>>	map = entry.getValue();
 				
@@ -2488,7 +2451,7 @@ DHTDBImpl
 		Map<DHTDBMapping,List<DHTTransportContact>>		mapping_to_node_map,
 		Map<DHTTransportContact,Object[]>				replies )
 	{
-		Map<SurveyContactState,List<DHTDBMapping>>	store_ops = new HashMap<SurveyContactState, List<DHTDBMapping>>();
+		Map<SurveyContactState,List<DHTDBMapping>>	store_ops = new HashMap<>();
 
 		try{
 			this_mon.enter();
@@ -2504,7 +2467,7 @@ DHTDBImpl
 				System.out.println( "Queries complete (replies=" + replies.size() + ")" );
 			}
 					
-			Map<DHTDBMapping,int[]>	totals = new HashMap<DHTDBMapping, int[]>();
+			Map<DHTDBMapping,int[]>	totals = new HashMap<>();
 			
 			for ( Map.Entry<DHTTransportContact,Object[]> entry: replies.entrySet()){
 				
@@ -2678,9 +2641,9 @@ DHTDBImpl
 						
 						int	required = max_replication_factor - copies;
 						
-						List<SurveyContactState> potential_targets = new ArrayList<SurveyContactState>();
+						List<SurveyContactState> potential_targets = new ArrayList<>();
 						
-						List<byte[]>	addresses = new ArrayList<byte[]>( contacts.size());
+						List<byte[]>	addresses = new ArrayList<>(contacts.size());
 						
 						for ( DHTTransportContact c: contacts ){
 						
@@ -2699,7 +2662,7 @@ DHTDBImpl
 							}
 						}
 						
-						Set<HashWrapper>	bad_addresses = new HashSet<HashWrapper>();
+						Set<HashWrapper>	bad_addresses = new HashSet<>();
 						
 						for ( byte[] a1: addresses ){
 							
@@ -2800,7 +2763,7 @@ DHTDBImpl
 								
 								if ( m == null ){
 									
-									m = new ArrayList<DHTDBMapping>();
+									m = new ArrayList<>();
 									
 									store_ops.put( target, m );
 								}
@@ -2838,7 +2801,7 @@ DHTDBImpl
 			
 				store_keys[i] = mapping.getKey().getBytes();
 					
-				List<DHTTransportValue> v = new ArrayList<DHTTransportValue>();
+				List<DHTTransportValue> v = new ArrayList<>();
 				
 				Iterator<DHTDBValueImpl> it = mapping.getValues();
 				
@@ -2852,7 +2815,7 @@ DHTDBImpl
 					}
 				}
 				
-				store_values[i] = v.toArray( new DHTTransportValue[v.size()]);
+				store_values[i] = v.toArray(new DHTTransportValue[0]);
 			}
 				
 			final DHTTransportContact d_contact = contact.getContact();
@@ -3064,7 +3027,7 @@ DHTDBImpl
 		int							header_len,
 		List<Object[]>				keys )
 	{
-		final List<byte[]> reply = new ArrayList<byte[]>();
+		final List<byte[]> reply = new ArrayList<>();
 		
 		try{
 			this_mon.enter();
@@ -3142,7 +3105,7 @@ DHTDBImpl
 	print(
 		boolean	full )
 	{
-		Map<Integer,Object[]>	count = new TreeMap<Integer,Object[]>();
+		Map<Integer,Object[]>	count = new TreeMap<>();
 		
 		try{
 			this_mon.enter();
@@ -3153,30 +3116,24 @@ DHTDBImpl
 				
 				return;
 			}
-			
-			Iterator<Map.Entry<HashWrapper,DHTDBMapping>>	it1 = stored_values.entrySet().iterator();
-			
-			// ByteArrayHashMap<Integer> blah = new ByteArrayHashMap<Integer>();
-			
-			while( it1.hasNext()){
-						
-				Map.Entry<HashWrapper,DHTDBMapping>		entry = it1.next();
-				
-				HashWrapper		value_key	= entry.getKey();
-				
-				DHTDBMapping	mapping 	= entry.getValue();
+
+            // ByteArrayHashMap<Integer> blah = new ByteArrayHashMap<Integer>();
+
+            for (Map.Entry<HashWrapper, DHTDBMapping> entry : stored_values.entrySet()) {
+
+                HashWrapper value_key = entry.getKey();
+
+                DHTDBMapping mapping = entry.getValue();
 				
 				/*
 				if ( mapping.getIndirectSize() > 1000 ){
 					mapping.print();
 				}
 				*/
-				
-				DHTDBValue[]	values = mapping.get(null,0,(byte)0);
-					
-				for (int i=0;i<values.length;i++){
-					
-					DHTDBValue	value = values[i];
+
+                DHTDBValue[] values = mapping.get(null, 0, (byte) 0);
+
+                for (DHTDBValue value : values) {
 					
 					/*
 					byte[] v = value.getValue();
@@ -3189,33 +3146,33 @@ DHTDBImpl
 						blah.put( v, y+1 );
 					}
 					*/
-					
-					Integer key = new Integer( value.isLocal()?0:1);
-					
-					Object[]	data = (Object[])count.get( key );
-									
-					if ( data == null ){
-						
-						data = new Object[2];
-						
-						data[0] = new Integer(1);
-						
-						data[1] = "";
-									
-						count.put( key, data );
-	
-					}else{
-						
-						data[0] = new Integer(((Integer)data[0]).intValue() + 1 );
-					}
-				
-					String	s = (String)data[1];
-					
-					s += (s.length()==0?"":", ") + "key=" + DHTLog.getString2(value_key.getHash()) + ",val=" + value.getString();
-					
-					data[1]	= s;
-				}
-			}
+
+                    Integer key = value.isLocal() ? 0 : 1;
+
+                    Object[] data = count.get(key);
+
+                    if (data == null) {
+
+                        data = new Object[2];
+
+                        data[0] = 1;
+
+                        data[1] = "";
+
+                        count.put(key, data);
+
+                    } else {
+
+                        data[0] = ((Integer) data[0]).intValue() + 1;
+                    }
+
+                    String s = (String) data[1];
+
+                    s += (s.length() == 0 ? "" : ", ") + "key=" + DHTLog.getString2(value_key.getHash()) + ",val=" + value.getString();
+
+                    data[1] = s;
+                }
+            }
 			
 			/*
 			long	total_dup = 0;
@@ -3234,17 +3191,13 @@ DHTDBImpl
 			
 			System.out.println( "Total dup: " + total_dup );
 			*/
-			
-			Iterator<Integer> it2 = count.keySet().iterator();
-			
-			while( it2.hasNext()){
-				
-				Integer	k = it2.next();
-				
-				Object[]	data = (Object[])count.get(k);
-				
-				logger.log( "    " + k + " -> " + data[0] + " entries" ); // ": " + data[1]);
-			}
+
+            for (Integer k : count.keySet()) {
+
+                Object[] data = count.get(k);
+
+                logger.log("    " + k + " -> " + data[0] + " entries"); // ": " + data[1]);
+            }
 			
 			Iterator<Map.Entry<HashWrapper,DHTDBMapping>> it3 = stored_values.entrySet().iterator();
 			
@@ -3287,8 +3240,8 @@ DHTDBImpl
 				sb.append( mapping.getDirectSize());
 				sb.append( "," );
 				sb.append( mapping.getIndirectSize());
-				sb.append( "]" );;
-			}
+				sb.append( "]" );
+            }
 			
 			if ( str_entries > 0 ){
 				
@@ -3927,7 +3880,7 @@ DHTDBImpl
 		
 		private long					last_used		= creation_time;
 		
-		private final Set<DHTDBMapping>		mappings = new HashSet<DHTDBMapping>();
+		private final Set<DHTDBMapping>		mappings = new HashSet<>();
 		
 		private int	consec_fails;
 		

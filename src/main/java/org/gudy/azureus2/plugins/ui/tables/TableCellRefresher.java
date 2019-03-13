@@ -45,7 +45,7 @@ public class TableCellRefresher {
 	
 	private  AEThread2 refresher;
 	
-	private Map<TableCell, TableColumn> mapCellsToColumn = new HashMap<TableCell, TableColumn>();
+	private Map<TableCell, TableColumn> mapCellsToColumn = new HashMap<>();
 	
 	private  long iterationNumber;
 	
@@ -59,12 +59,12 @@ public class TableCellRefresher {
 				try {
 					Map<TableCell, TableColumn> cellsCopy;
   				synchronized (mapCellsToColumn) {
-  					cellsCopy = new HashMap<TableCell, TableColumn>(mapCellsToColumn);
+  					cellsCopy = new HashMap<>(mapCellsToColumn);
   					mapCellsToColumn.clear();
   				}
 
   				for (TableCell cell : cellsCopy.keySet()) {
-  					TableColumn column = (TableColumn) cellsCopy.get(cell);
+  					TableColumn column = cellsCopy.get(cell);
 
   					try {
   						//cc.cell.invalidate();

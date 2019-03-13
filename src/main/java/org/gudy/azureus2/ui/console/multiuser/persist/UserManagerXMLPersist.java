@@ -69,8 +69,8 @@ public class UserManagerXMLPersist implements UserManagerPersister {
 
         try {
             UserManagerConfig managerConfig = new Gson().fromJson(new String(IOUtils.toByteArray(in)),UserManagerConfig.class);
-            for (Iterator iter = managerConfig.getUsers().iterator(); iter.hasNext();) {
-                UserProfile user = (UserProfile) iter.next();
+            for (Object o : managerConfig.getUsers()) {
+                UserProfile user = (UserProfile) o;
                 usersMap.put(user.getUsername().toLowerCase(), user);
             }
             System.out.println("UserManager: registered " + usersMap.size() + " users");

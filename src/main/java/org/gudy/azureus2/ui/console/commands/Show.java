@@ -35,7 +35,6 @@ import org.gudy.azureus2.core3.peer.PEPeerManagerStats;
 import org.gudy.azureus2.core3.peer.PEPeerStats;
 import org.gudy.azureus2.core3.peer.PEPiece;
 import org.gudy.azureus2.core3.tracker.client.TRTrackerAnnouncer;
-import org.gudy.azureus2.core3.tracker.client.TRTrackerScraperResponse;
 import org.gudy.azureus2.core3.util.AEDiagnostics;
 import org.gudy.azureus2.core3.util.DisplayFormatters;
 import org.gudy.azureus2.core3.util.IndentWriter;
@@ -263,7 +262,7 @@ public class Show extends IConsoleCommand {
 			ci.out.println("Total Speed (down/up): " + DisplayFormatters.formatByteCountToKiBEtcPerSec(gm.getStats().getDataReceiveRate() + gm.getStats().getProtocolReceiveRate() ) + " / " + DisplayFormatters.formatByteCountToKiBEtcPerSec(gm.getStats().getDataSendRate() + gm.getStats().getProtocolSendRate() ));
 
 			ci.out.println("Transferred Volume (down/up/discarded): " + DisplayFormatters.formatByteCountToKiBEtc(totalReceived) + " / " + DisplayFormatters.formatByteCountToKiBEtc(totalSent) + " / " + DisplayFormatters.formatByteCountToKiBEtc(totalDiscarded));
-			ci.out.println("Total Connected Peers (seeds/peers): " + Integer.toString(connectedSeeds) + " / " + Integer.toString(connectedPeers));
+			ci.out.println("Total Connected Peers (seeds/peers): " + connectedSeeds + " / " + connectedPeers);
 			ci.out.println("> -----");
 		} else if (subCommand.equalsIgnoreCase("dht") || subCommand.equalsIgnoreCase("d")) {
 
@@ -314,11 +313,11 @@ public class Show extends IConsoleCommand {
 			}
 			
 			Collections.sort( lines );
-			
-			for ( int i=0;i<lines.size();i++){
-				
-				ci.out.println( lines.get(i));
-			}
+
+            for (Object line : lines) {
+
+                ci.out.println(line);
+            }
 		} else if (subCommand.equalsIgnoreCase("diag") || subCommand.equalsIgnoreCase("z")) {
 
 			try{
@@ -381,7 +380,7 @@ public class Show extends IConsoleCommand {
 		} catch (Exception e) {
 			out.println("Health: " + health[0]);
 		}
-		out.println("State: " + Integer.toString(dm.getState()));
+		out.println("State: " + dm.getState());
 		if (dm.getState() == DownloadManager.STATE_ERROR)
 			out.println("Error: " + dm.getErrorDetails());
 		out.println("Hash: " + TorrentUtils.nicePrintTorrentHash(dm.getTorrent(), true));
@@ -432,10 +431,10 @@ public class Show extends IConsoleCommand {
 			out.println("  Not available");
 		
 		out.println("- Files Info -");
-		DiskManagerFileInfo files[] = dm.getDiskManagerFileInfo();
+		DiskManagerFileInfo[] files = dm.getDiskManagerFileInfo();
 		if (files != null) {
 			for (int i = 0; i < files.length; i++) {
-				out.print(((i < 9) ? "   " : "  ") + Integer.toString(i + 1)
+				out.print(((i < 9) ? "   " : "  ") + (i + 1)
 						+ " (");
 				String tmp = ">";
 				if (files[i].getPriority()>0)

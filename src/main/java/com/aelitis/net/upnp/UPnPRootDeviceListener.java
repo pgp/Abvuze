@@ -27,8 +27,8 @@ package com.aelitis.net.upnp;
 public interface 
 UPnPRootDeviceListener 
 {
-	public void
+	void
 	lost(
-		UPnPRootDevice	root,
-		boolean			replaced );
+            UPnPRootDevice root,
+            boolean replaced);
 }

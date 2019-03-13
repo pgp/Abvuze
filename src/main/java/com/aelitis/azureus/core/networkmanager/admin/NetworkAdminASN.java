@@ -25,29 +25,29 @@ import java.net.InetAddress;
 public interface 
 NetworkAdminASN
 {
-	public String
+	String
 	getAS();
 	
-	public String
+	String
 	getASName();
 	
-	public String
+	String
 	getBGPPrefix();
 	
-	public InetAddress
+	InetAddress
 	getBGPStartAddress();
 	
-	public InetAddress
+	InetAddress
 	getBGPEndAddress();
 	
-	public boolean
+	boolean
 	matchesCIDR(
-		InetAddress		address );
+            InetAddress address);
 			
-	public boolean
+	boolean
 	sameAs(
-		NetworkAdminASN	other );
+            NetworkAdminASN other);
 	
-	public String
+	String
 	getString();
 }

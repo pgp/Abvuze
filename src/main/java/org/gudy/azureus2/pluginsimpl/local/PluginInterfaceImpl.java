@@ -87,10 +87,10 @@ PluginInterfaceImpl
   private Object				initialiser_key;
   protected ClassLoader			class_loader;
   
-  private CopyOnWriteList<PluginListener>		listeners 				= new CopyOnWriteList<PluginListener>();
-  private Set<PluginListener>					init_complete_fired_set	= new HashSet<PluginListener>();
+  private CopyOnWriteList<PluginListener>		listeners 				= new CopyOnWriteList<>();
+  private Set<PluginListener>					init_complete_fired_set	= new HashSet<>();
   
-  private CopyOnWriteList<PluginEventListener>		event_listeners	= new CopyOnWriteList<PluginEventListener>();
+  private CopyOnWriteList<PluginEventListener>		event_listeners	= new CopyOnWriteList<>();
   private String				key;
   private String 				pluginConfigKey;
   private Properties 			props;
@@ -585,23 +585,22 @@ PluginInterfaceImpl
   protected void
   initialisationComplete()
   {
-	  Iterator<PluginListener> it = listeners.iterator();
-	  
-	  while( it.hasNext()){
 
-		  try{
-			  fireInitComplete( it.next());
-			  
-		  }catch( Throwable e ){
+      for (PluginListener listener : listeners) {
 
-			  Debug.printStackTrace( e );
-		  }
-	  }
+          try {
+              fireInitComplete(listener);
 
-	  for (int i=0;i<children.size();i++){
+          } catch (Throwable e) {
 
-		  ((PluginInterfaceImpl)children.get(i)).initialisationComplete();
-	  }
+              Debug.printStackTrace(e);
+          }
+      }
+
+      for (Object child : children) {
+
+          ((PluginInterfaceImpl) child).initialisationComplete();
+      }
   }
   
   protected void
@@ -628,45 +627,43 @@ PluginInterfaceImpl
   protected void
   closedownInitiated()
   {
-	  Iterator it = listeners.iterator();
-	  
-	  while( it.hasNext()){
 
-		  try{
-			  ((PluginListener)it.next()).closedownInitiated();
+      for (PluginListener listener : listeners) {
 
-		  }catch( Throwable e ){
+          try {
+              (listener).closedownInitiated();
 
-			  Debug.printStackTrace( e );
-		  }
-	  }
+          } catch (Throwable e) {
 
-	  for (int i=0;i<children.size();i++){
+              Debug.printStackTrace(e);
+          }
+      }
 
-		  ((PluginInterfaceImpl)children.get(i)).closedownInitiated();
-	  }
+      for (Object child : children) {
+
+          ((PluginInterfaceImpl) child).closedownInitiated();
+      }
   }
   
   protected void
   closedownComplete()
   {
-	  Iterator it = listeners.iterator();
-	  
-	  while( it.hasNext()){
 
-		  try{
-			  ((PluginListener)it.next()).closedownComplete();
+      for (PluginListener listener : listeners) {
 
-		  }catch( Throwable e ){
+          try {
+              (listener).closedownComplete();
 
-			  Debug.printStackTrace( e );
-		  }
-	  }
+          } catch (Throwable e) {
 
-	  for (int i=0;i<children.size();i++){
+              Debug.printStackTrace(e);
+          }
+      }
 
-		  ((PluginInterfaceImpl)children.get(i)).closedownComplete();
-	  }
+      for (Object child : children) {
+
+          ((PluginInterfaceImpl) child).closedownComplete();
+      }
   }
     
   public ClassLoader
@@ -855,25 +852,24 @@ PluginInterfaceImpl
   firePluginEventSupport(
 	  PluginEvent		event )
   {
-	  Iterator<PluginEventListener> it = event_listeners.iterator();
 
-	  while( it.hasNext()){
+      for (PluginEventListener event_listener : event_listeners) {
 
-		  try{
-			  PluginEventListener listener = it.next();
-			  			 
-			  listener.handleEvent( event );
+          try {
+              PluginEventListener listener = event_listener;
 
-		  }catch( Throwable e ){
+              listener.handleEvent(event);
 
-			  Debug.printStackTrace( e );
-		  }
-	  } 
+          } catch (Throwable e) {
 
-	  for (int i=0;i<children.size();i++){
+              Debug.printStackTrace(e);
+          }
+      }
 
-		  ((PluginInterfaceImpl)children.get(i)).firePluginEvent(event);
-	  }
+      for (Object child : children) {
+
+          ((PluginInterfaceImpl) child).firePluginEvent(event);
+      }
   }
 
 	protected void
@@ -999,14 +995,11 @@ PluginInterfaceImpl
 	propertyWrapper(
 		Properties	_props )
 	{
-  		Iterator it = _props.keySet().iterator();
-  		
-  		while( it.hasNext()){
-  			
-  			Object	key = it.next();
-  			
-  			put( key, _props.get(key));
-  		}
+
+        for (Object key : _props.keySet()) {
+
+            put(key, _props.get(key));
+        }
   		
   		initialising	= false;
   	}

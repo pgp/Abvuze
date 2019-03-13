@@ -23,14 +23,14 @@ package org.gudy.azureus2.core3.disk.impl.piecemapper;
 public interface 
 DMPieceList 
 {
-	public int 
+	int
 	size();
 	
-	public DMPieceMapEntry 
+	DMPieceMapEntry
 	get(
-		int index);
+            int index);
 	
-	public int 
+	int
 	getCumulativeLengthToPiece(
-		int index );
+            int index);
 }

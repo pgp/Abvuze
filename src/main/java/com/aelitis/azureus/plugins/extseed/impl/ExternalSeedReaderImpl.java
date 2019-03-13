@@ -103,7 +103,7 @@ ExternalSeedReaderImpl
 	
 	private volatile PeerManager		current_manager;
 		
-	private List<PeerReadRequest>			requests			= new LinkedList<PeerReadRequest>();
+	private List<PeerReadRequest>			requests			= new LinkedList<>();
 	private List<PeerReadRequest>			dangling_requests;
 
 	private Thread			request_thread;
@@ -131,7 +131,7 @@ ExternalSeedReaderImpl
 	private int					rate_bytes_read;
 	private int					rate_bytes_permitted;
 
-	private volatile CopyOnWriteSet<MutableInteger>		bad_pieces = new CopyOnWriteSet<MutableInteger>( true );
+	private volatile CopyOnWriteSet<MutableInteger>		bad_pieces = new CopyOnWriteSet<>(true);
 	
 	protected
 	ExternalSeedReaderImpl(
@@ -388,30 +388,28 @@ ExternalSeedReaderImpl
 				
 				if ( 	( download_limit == 0 || download_limit > STALLED_DOWNLOAD_SPEED + 5*1024 ) &&
 						peer_manager.getStats().getDownloadAverage() < STALLED_DOWNLOAD_SPEED ){
-					
-					for (int i=0;i<existing_peers.length;i++){
-					
-						Peer	existing_peer = existing_peers[i];
-						
-							// no point in booting ourselves!
-						
-						if ( existing_peer instanceof ExternalSeedPeer ){
-							
-							continue;
-						}
-						
-						PeerStats stats = existing_peer.getStats();
-						
-						if ( stats.getTimeSinceConnectionEstablished() > INITIAL_DELAY ){
-							
-							if ( stats.getDownloadAverage() < STALLED_PEER_SPEED ){
-								
-								existing_peer.close( "Replacing slow peer with web-seed", false, false );
-								
-								existing_peer_count--;
-							}
-						}
-					}
+
+                    for (Peer existing_peer : existing_peers) {
+
+                        // no point in booting ourselves!
+
+                        if (existing_peer instanceof ExternalSeedPeer) {
+
+                            continue;
+                        }
+
+                        PeerStats stats = existing_peer.getStats();
+
+                        if (stats.getTimeSinceConnectionEstablished() > INITIAL_DELAY) {
+
+                            if (stats.getDownloadAverage() < STALLED_PEER_SPEED) {
+
+                                existing_peer.close("Replacing slow peer with web-seed", false, false);
+
+                                existing_peer_count--;
+                            }
+                        }
+                    }
 				}
 				
 				if ( existing_peer_count == 0 ){
@@ -735,7 +733,7 @@ ExternalSeedReaderImpl
 					}
 				}else{
 					
-					List<PeerReadRequest>	selected_requests 	= new ArrayList<PeerReadRequest>();
+					List<PeerReadRequest>	selected_requests 	= new ArrayList<>();
 					PeerReadRequest			cancelled_request	= null;
 					
 					try{
@@ -785,7 +783,7 @@ ExternalSeedReaderImpl
 							}
 						}
 						
-						dangling_requests = new ArrayList<PeerReadRequest>( selected_requests );
+						dangling_requests = new ArrayList<>(selected_requests);
 						
 					}finally{
 						
@@ -1056,7 +1054,7 @@ ExternalSeedReaderImpl
 		
 		for (int i=0;i<requests.size();i++){
 			
-			PeerReadRequest	request = (PeerReadRequest)requests.get(i);
+			PeerReadRequest	request = requests.get(i);
 			
 			int	this_piece_number	= request.getPieceNumber();
 			
@@ -1257,13 +1255,13 @@ ExternalSeedReaderImpl
 				
 				Debug.out( "request added when not active!!!!" );
 			}
-				
-			for (int i=0;i<new_requests.size();i++){
-			
-				requests.add( new_requests.get(i));
 
-				request_sem.release();
-			}
+            for (PeerReadRequest new_request : new_requests) {
+
+                requests.add(new_request);
+
+                request_sem.release();
+            }
 						
 			if ( request_thread == null ){
 				
@@ -1364,21 +1362,19 @@ ExternalSeedReaderImpl
 		
 		try{
 			requests_mon.enter();
-			
-			for (int i=0;i<requests.size();i++){
-				
-				PeerReadRequest	request = (PeerReadRequest)requests.get(i);
-				
-				if ( request.isExpired()){
-					
-					if ( res == null ){
-						
-						res = new ArrayList<PeerReadRequest>();
-					}
-					
-					res.add( request );
-				}
-			}			
+
+            for (PeerReadRequest request : requests) {
+
+                if (request.isExpired()) {
+
+                    if (res == null) {
+
+                        res = new ArrayList<>();
+                    }
+
+                    res.add(request);
+                }
+            }
 		}finally{
 			
 			requests_mon.exit();
@@ -1395,7 +1391,7 @@ ExternalSeedReaderImpl
 		try{
 			requests_mon.enter();
 			
-			res = new ArrayList<PeerReadRequest>( requests );
+			res = new ArrayList<>(requests);
 			
 		}finally{
 			
@@ -1514,49 +1510,49 @@ ExternalSeedReaderImpl
 		byte[]				buffer )
 	{
 		PooledByteBuffer pool_buffer = plugin.getPluginInterface().getUtilities().allocatePooledByteBuffer( buffer );
-		
-		for (int i=0;i<listeners.size();i++){
-			
-			try{
-				((ExternalSeedReaderListener)listeners.get(i)).requestComplete( request, pool_buffer );
-				
-			}catch( Throwable e ){
-				
-				e.printStackTrace();
-			}
-		}		
+
+        for (Object listener : listeners) {
+
+            try {
+                ((ExternalSeedReaderListener) listener).requestComplete(request, pool_buffer);
+
+            } catch (Throwable e) {
+
+                e.printStackTrace();
+            }
+        }
 	}
 	
 	protected void
 	informCancelled(
 		PeerReadRequest		request )
 	{
-		for (int i=0;i<listeners.size();i++){
-			
-			try{
-				((ExternalSeedReaderListener)listeners.get(i)).requestCancelled( request );
-				
-			}catch( Throwable e ){
-				
-				e.printStackTrace();
-			}
-		}		
+        for (Object listener : listeners) {
+
+            try {
+                ((ExternalSeedReaderListener) listener).requestCancelled(request);
+
+            } catch (Throwable e) {
+
+                e.printStackTrace();
+            }
+        }
 	}
 	
 	protected void
 	informFailed(
 		PeerReadRequest	request )
 	{
-		for (int i=0;i<listeners.size();i++){
-			
-			try{
-				((ExternalSeedReaderListener)listeners.get(i)).requestFailed( request );
-				
-			}catch( Throwable e ){
-				
-				e.printStackTrace();
-			}
-		}
+        for (Object listener : listeners) {
+
+            try {
+                ((ExternalSeedReaderListener) listener).requestFailed(request);
+
+            } catch (Throwable e) {
+
+                e.printStackTrace();
+            }
+        }
 	}
 	
 	public void

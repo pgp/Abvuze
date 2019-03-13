@@ -31,6 +31,6 @@ public interface MessageStreamEncoder {
    * @param message to encode
    * @return raw messages encoding
    */
-  public RawMessage[] encodeMessage( Message message );
+  RawMessage[] encodeMessage(Message message);
   
 }

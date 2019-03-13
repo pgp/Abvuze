@@ -65,10 +65,10 @@ TRTrackerAnnouncerMuxer
 	
 	private final long				create_time = SystemTime.getMonotonousTime();
 	
-	private final CopyOnWriteList<TRTrackerAnnouncerHelper>	announcers 	= new CopyOnWriteList<TRTrackerAnnouncerHelper>();
-	private final Set<TRTrackerAnnouncerHelper>				activated	= new HashSet<TRTrackerAnnouncerHelper>();
+	private final CopyOnWriteList<TRTrackerAnnouncerHelper>	announcers 	= new CopyOnWriteList<>();
+	private final Set<TRTrackerAnnouncerHelper>				activated	= new HashSet<>();
 	private long										last_activation_time;
-	private final Set<String>									failed_urls	= new HashSet<String>();
+	private final Set<String>									failed_urls	= new HashSet<>();
 	
 	private volatile TimerEvent					event;
 	
@@ -83,7 +83,7 @@ TRTrackerAnnouncerMuxer
 	private TRTrackerAnnouncerHelper			last_best_active;
 	private long								last_best_active_set_time;
 	
-	final Map<String,StatusSummary>			recent_responses = new HashMap<String,StatusSummary>();
+	final Map<String,StatusSummary>			recent_responses = new HashMap<>();
 	
 	private TRTrackerAnnouncerResponse			last_response_informed;
 
@@ -189,42 +189,40 @@ TRTrackerAnnouncerMuxer
 				
 				boolean	found_decentralised = false;
 				boolean	modified			= false;
-				
-				for ( int i=0;i<sets.length;i++ ){
-					
-					TOTorrentAnnounceURLSet set = sets[i];
-					
-					URL[] urls = set.getAnnounceURLs().clone();
-					
-					for (int j=0;j<urls.length;j++){
-						
-						URL u = urls[j];
-						
-						if ( u != null && TorrentUtils.isDecentralised( u )){
-														
-							if ( found_decentralised ){
-								
-								modified = true;
-								
-								urls[j] = null;
-								
-							}else{
-								
-								found_decentralised = true;
-							}
-						}
-					}
-				}
+
+                for (TOTorrentAnnounceURLSet set : sets) {
+
+                    URL[] urls = set.getAnnounceURLs().clone();
+
+                    for (int j = 0; j < urls.length; j++) {
+
+                        URL u = urls[j];
+
+                        if (u != null && TorrentUtils.isDecentralised(u)) {
+
+                            if (found_decentralised) {
+
+                                modified = true;
+
+                                urls[j] = null;
+
+                            } else {
+
+                                found_decentralised = true;
+                            }
+                        }
+                    }
+                }
 				
 				if ( modified ){
 					
-					List<TOTorrentAnnounceURLSet> s_list = new ArrayList<TOTorrentAnnounceURLSet>();
+					List<TOTorrentAnnounceURLSet> s_list = new ArrayList<>();
 					
 					for ( TOTorrentAnnounceURLSet set: sets ){
 						
 						URL[] urls = set.getAnnounceURLs();
 						
-						List<URL> u_list = new ArrayList<URL>( urls.length );
+						List<URL> u_list = new ArrayList<>(urls.length);
 						
 						for ( URL u: urls ){
 							
@@ -236,15 +234,15 @@ TRTrackerAnnouncerMuxer
 						
 						if ( u_list.size() > 0 ){
 							
-							s_list.add( torrent.getAnnounceURLGroup().createAnnounceURLSet( u_list.toArray( new URL[ u_list.size() ])));
+							s_list.add( torrent.getAnnounceURLGroup().createAnnounceURLSet( u_list.toArray(new URL[0])));
 						}
 					}
 					
-					sets = s_list.toArray( new TOTorrentAnnounceURLSet[ s_list.size() ]);
+					sets = s_list.toArray(new TOTorrentAnnounceURLSet[0]);
 				}
 			}
 			
-			List<TOTorrentAnnounceURLSet[]>	new_sets = new ArrayList<TOTorrentAnnounceURLSet[]>();
+			List<TOTorrentAnnounceURLSet[]>	new_sets = new ArrayList<>();
 			
 			if ( is_manual || sets.length < 2 ){
 					
@@ -252,7 +250,7 @@ TRTrackerAnnouncerMuxer
 				
 			}else{
 				
-				List<TOTorrentAnnounceURLSet> list = new ArrayList<TOTorrentAnnounceURLSet>( Arrays.asList( sets ));
+				List<TOTorrentAnnounceURLSet> list = new ArrayList<>(Arrays.asList(sets));
 				
 					// often we have http:/xxxx/ and udp:/xxxx/ as separate groups - keep these together
 								
@@ -313,9 +311,9 @@ TRTrackerAnnouncerMuxer
 			
 				// need to copy list as we modify it and returned list ain't thread safe
 			
-			List<TRTrackerAnnouncerHelper> existing_announcers 	= new ArrayList<TRTrackerAnnouncerHelper>( announcers.getList());
+			List<TRTrackerAnnouncerHelper> existing_announcers 	= new ArrayList<>(announcers.getList());
 			
-			List<TRTrackerAnnouncerHelper> new_announcers 		= new ArrayList<TRTrackerAnnouncerHelper>();
+			List<TRTrackerAnnouncerHelper> new_announcers 		= new ArrayList<>();
 			
 				// first look for unchanged sets
 			
@@ -746,14 +744,14 @@ TRTrackerAnnouncerMuxer
 				return( u1[0].toExternalForm().equals( u2[0].toExternalForm()));
 			}
 			
-			Set<String> set1 = new HashSet<String>();
+			Set<String> set1 = new HashSet<>();
 			
 			for ( URL u: u1 ){
 				
 				set1.add( u.toExternalForm());
 			}
 			
-			Set<String> set2 = new HashSet<String>();
+			Set<String> set2 = new HashSet<>();
 			
 			for ( URL u: u2 ){
 				
@@ -1045,9 +1043,9 @@ TRTrackerAnnouncerMuxer
 	setTrackerURL(
 		URL		url )
 	{
-		List<List<String>> groups = new ArrayList<List<String>>();
+		List<List<String>> groups = new ArrayList<>();
 		
-		List<String> group = new ArrayList<String>();
+		List<String> group = new ArrayList<>();
 		
 		group.add( url.toExternalForm());
 		
@@ -1157,7 +1155,7 @@ TRTrackerAnnouncerMuxer
 		
 		synchronized( this ){
 						
-			to_update = is_manual?announcers.getList():new ArrayList<TRTrackerAnnouncerHelper>( activated );
+			to_update = is_manual?announcers.getList(): new ArrayList<>(activated);
 		}
 		
 		for ( TRTrackerAnnouncer announcer: to_update ){
@@ -1176,7 +1174,7 @@ TRTrackerAnnouncerMuxer
 			
 			complete	= true;
 			
-			to_complete = is_manual?announcers.getList():new ArrayList<TRTrackerAnnouncerHelper>( activated );
+			to_complete = is_manual?announcers.getList(): new ArrayList<>(activated);
 		}
 		
 		for ( TRTrackerAnnouncer announcer: to_complete ){
@@ -1195,7 +1193,7 @@ TRTrackerAnnouncerMuxer
 			
 			stopped	= true;
 			
-			to_stop = is_manual?announcers.getList():new ArrayList<TRTrackerAnnouncerHelper>( activated );
+			to_stop = is_manual?announcers.getList(): new ArrayList<>(activated);
 			
 			activated.clear();
 		}

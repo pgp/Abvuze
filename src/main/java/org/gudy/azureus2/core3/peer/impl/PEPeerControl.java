@@ -40,102 +40,102 @@ public interface
 PEPeerControl
 	extends PEPeerManager
 {
-	public boolean 
+	boolean
 	validateReadRequest(
-		PEPeerTransport	originator,
-		int 			pieceNumber, 
-		int 			offset, 
-		int 			length );
+            PEPeerTransport originator,
+            int pieceNumber,
+            int offset,
+            int length);
 
-	public boolean
+	boolean
 	validateHintRequest(
-		PEPeerTransport	originator,
-		int 			pieceNumber, 
-		int 			offset, 
-		int 			length );
+            PEPeerTransport originator,
+            int pieceNumber,
+            int offset,
+            int length);
 	
-	public void 
+	void
 	havePiece(
-		int pieceNumber,
-		int pieceLength,
-		PEPeer pcOrigin );
+            int pieceNumber,
+            int pieceLength,
+            PEPeer pcOrigin);
 
-	public void
+	void
 	updateSuperSeedPiece(
-	    PEPeer peer,
-	    int pieceNumber);
+            PEPeer peer,
+            int pieceNumber);
 	
-	public boolean
+	boolean
 	isPrivateTorrent();
 	
-	public int
+	int
 	getExtendedMessagingMode();
   
-	public boolean
+	boolean
 	isPeerExchangeEnabled();
 	
-	public byte[][]
+	byte[][]
 	getSecrets(
-		int	crypto_level );
+            int crypto_level);
 	
-	public int
+	int
 	getUploadPriority();
 	
-	public int
+	int
 	getHiddenPiece();
 	
-	public void addPeerTransport( PEPeerTransport transport );
+	void addPeerTransport(PEPeerTransport transport);
 	
-	public int
+	int
 	getConnectTimeout(
-		int		ct_def );
+            int ct_def);
 	
-	public int[]
+	int[]
 	getMaxConnections();
     
-    public boolean 
+    boolean
     doOptimisticDisconnect(
-    	boolean pending_lan_local_peer,
-    	boolean	force,
-    	String	network );
+            boolean pending_lan_local_peer,
+            boolean force,
+            String network);
     
-	public int getNbActivePieces();
+	int getNbActivePieces();
 
-	public int getNbPeersStalledPendingLoad();
+	int getNbPeersStalledPendingLoad();
 	
 	// Snubbed peers accounting
-	public void incNbPeersSnubbed();
-	public void decNbPeersSnubbed();
-	public void setNbPeersSnubbed(int n);
-	public int getNbPeersSnubbed();
+    void incNbPeersSnubbed();
+	void decNbPeersSnubbed();
+	void setNbPeersSnubbed(int n);
+	int getNbPeersSnubbed();
 	
-	public void
+	void
 	badPieceReported(
-		PEPeerTransport		originator,
-		int					piece_number );
+            PEPeerTransport originator,
+            int piece_number);
 	
-	public boolean
+	boolean
 	isFastExtensionPermitted(
-		PEPeerTransport		originator );
+            PEPeerTransport originator);
 	
-	public void
+	void
 	reportBadFastExtensionUse(
-		PEPeerTransport		originator );
+            PEPeerTransport originator);
 	
-	public void
+	void
 	statsRequest(
-		PEPeerTransport		originator,
-		Map					request );
+            PEPeerTransport originator,
+            Map request);
 	
-	public void
+	void
 	statsReply(
-		PEPeerTransport		originator,
-		Map					reply );
+            PEPeerTransport originator,
+            Map reply);
 	
-	public boolean isRTA();
+	boolean isRTA();
 	
-	public void
+	void
 	peerDiscovered(
-		PEPeerTransport		finder,
-		PeerItem			pi );
+            PEPeerTransport finder,
+            PeerItem pi);
 }

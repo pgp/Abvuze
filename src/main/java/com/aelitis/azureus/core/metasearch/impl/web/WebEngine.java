@@ -237,18 +237,16 @@ WebEngine
 		List	maps = new ArrayList();
 		
 		map.put( "web.maps", maps );
-		
-		for (int i=0;i<mappings.length;i++){
-			
-			FieldMapping fm = mappings[i];
-			
-			Map m = new HashMap();
-			
-			ImportExportUtils.exportString( m, "name", fm.getName());
-			m.put( "field", new Long( fm.getField()));
-			
-			maps.add( m );
-		}
+
+        for (FieldMapping fm : mappings) {
+
+            Map m = new HashMap();
+
+            ImportExportUtils.exportString(m, "name", fm.getName());
+            m.put("field", (long) fm.getField());
+
+            maps.add(m);
+        }
 	}
 	
 		// json encoded constructor
@@ -287,55 +285,55 @@ WebEngine
 		List	maps = (List)map.get( "column_map" );
 		
 		List	conv_maps = new ArrayList();
-		
-		for (int i=0;i<maps.size();i++){
-			
-			Map	m = (Map)maps.get(i);
-				
-				// wha? getting some nulls here :( 
-				// from JSON like "column_map\":[null,null,{\"group_nb\":\"3
-			
-			if ( m == null ){
-				
-				continue;
-			}
-			
-				// backwards compact from when there was a mapping entry
-			
-			Map test = (Map)m.get( "mapping" );
-			
-			if ( test != null ){
-				
-				m = test;
-			}
-			
-			String	vuze_field 	= ImportExportUtils.importString( m, "vuze_field" ).toUpperCase();
-			
-			String	field_name	= ImportExportUtils.importString( m, "group_nb" );	// regexp case
-			
-			if ( field_name == null ){
-				
-				field_name = ImportExportUtils.importString( m, "field_name" );	// json case
-			}
-			
-			if ( vuze_field == null || field_name == null ){
-				
-				log( "Missing field mapping name/value in '" + m + "'" );
 
-			}
-			int	field_id = vuzeFieldToID( vuze_field );
-			
-			if ( field_id == -1 ){
-				
-				log( "Unrecognised field mapping '" + vuze_field + "'" );
-				
-				continue;
-			}
-			
-			conv_maps.add( new FieldMapping( field_name, field_id ));
-		}
+        for (Object map1 : maps) {
+
+            Map m = (Map) map1;
+
+            // wha? getting some nulls here :(
+            // from JSON like "column_map\":[null,null,{\"group_nb\":\"3
+
+            if (m == null) {
+
+                continue;
+            }
+
+            // backwards compact from when there was a mapping entry
+
+            Map test = (Map) m.get("mapping");
+
+            if (test != null) {
+
+                m = test;
+            }
+
+            String vuze_field = ImportExportUtils.importString(m, "vuze_field").toUpperCase();
+
+            String field_name = ImportExportUtils.importString(m, "group_nb");    // regexp case
+
+            if (field_name == null) {
+
+                field_name = ImportExportUtils.importString(m, "field_name");    // json case
+            }
+
+            if (vuze_field == null || field_name == null) {
+
+                log("Missing field mapping name/value in '" + m + "'");
+
+            }
+            int field_id = vuzeFieldToID(vuze_field);
+
+            if (field_id == -1) {
+
+                log("Unrecognised field mapping '" + vuze_field + "'");
+
+                continue;
+            }
+
+            conv_maps.add(new FieldMapping(field_name, field_id));
+        }
 		
-		mappings = (FieldMapping[])conv_maps.toArray( new FieldMapping[conv_maps.size()]);
+		mappings = (FieldMapping[])conv_maps.toArray(new FieldMapping[0]);
 		
 		init();
 	}
@@ -373,36 +371,34 @@ WebEngine
 		
 		res.put( "column_map", maps );
 
-		for (int i=0;i<mappings.length;i++){
-			
-			FieldMapping fm = mappings[i];
-			
-			int	field_id = fm.getField();
-			
-			String	field_value = vuzeIDToField( field_id );
-			
-			if ( field_value == null ){
-				
-				log( "JSON export: unknown field id " + field_id );
-				
-			}else{
-							
-				JSONObject entry = new JSONObject();
+        for (FieldMapping fm : mappings) {
 
-				maps.add( entry );
-					
-				entry.put( "vuze_field", field_value );
-				
-				if ( getType() == ENGINE_TYPE_JSON ){
-					
-					entry.put( "field_name", fm.getName());
-					
-				}else{
-					
-					entry.put( "group_nb", fm.getName());
-				}
-			}
-		}	
+            int field_id = fm.getField();
+
+            String field_value = vuzeIDToField(field_id);
+
+            if (field_value == null) {
+
+                log("JSON export: unknown field id " + field_id);
+
+            } else {
+
+                JSONObject entry = new JSONObject();
+
+                maps.add(entry);
+
+                entry.put("vuze_field", field_value);
+
+                if (getType() == ENGINE_TYPE_JSON) {
+
+                    entry.put("field_name", fm.getName());
+
+                } else {
+
+                    entry.put("group_nb", fm.getName());
+                }
+            }
+        }
 	}
 	
 	protected void
@@ -598,7 +594,7 @@ WebEngine
 						
 				// strip out any stuff we probably don't want to send
 			
-			searchContext = new HashMap<String, String>();
+			searchContext = new HashMap<>();
 			
 			String target_resource = explicit_tor?searchURL.substring( 4 ):searchURL;
 			
@@ -613,7 +609,7 @@ WebEngine
 				throw( new SearchException( e ));
 			}
 			
-			Map<String,Object>	options = new HashMap<String,Object>();
+			Map<String,Object>	options = new HashMap<>();
 		
 			options.put( AEProxyFactory.PO_PEER_NETWORKS, new String[]{ AENetworkClassifier.AT_TOR });
 		
@@ -679,7 +675,7 @@ WebEngine
 					
 					// strip out any stuff we probably don't want to send
 					
-					searchContext = new HashMap<String, String>();
+					searchContext = new HashMap<>();
 				}
 			}catch( Throwable e ){
 			}
@@ -718,8 +714,8 @@ WebEngine
 					
 						if ( verifier != null ){
 							
-							verifier.verify( details );;
-						}
+							verifier.verify( details );
+                        }
 						
 						ok = true;
 						
@@ -774,31 +770,27 @@ WebEngine
 				}
 				
 				searchURL = GeneralUtils.replaceAll( searchURL, from_strs, to_strs );
-					
-				Iterator<Map.Entry<String, String>>	it = searchContext.entrySet().iterator();
-				
-				while( it.hasNext()){
-					
-					Map.Entry<String, String>	entry = it.next();
-					
-					String	key 	= entry.getKey();
-						
-					if ( supportsContext( key )){
-						
-						if ( searchURL.indexOf('?') == -1 ){
-							
-							searchURL += "?";
-							
-						}else{
-							
-							searchURL += "&";
-						}
-						
-						String	value 	= entry.getValue();
-	
-						searchURL += key + "=" + URLEncoder.encode( value, "UTF-8" );
-					}
-				}
+
+                for (Map.Entry<String, String> entry : searchContext.entrySet()) {
+
+                    String key = entry.getKey();
+
+                    if (supportsContext(key)) {
+
+                        if (searchURL.indexOf('?') == -1) {
+
+                            searchURL += "?";
+
+                        } else {
+
+                            searchURL += "&";
+                        }
+
+                        String value = entry.getValue();
+
+                        searchURL += key + "=" + URLEncoder.encode(value, "UTF-8");
+                    }
+                }
 			}
 			
 			//System.out.println(searchURL);
@@ -943,7 +935,7 @@ WebEngine
 					
 						Long	response = (Long)mr_rd.getProperty( "URL_HTTP_Response" );
 						
-						if ( response != null && response.longValue() == 304 ){
+						if ( response != null && response == 304 ){
 							
 								// not modified
 							
@@ -963,21 +955,21 @@ WebEngine
 						List	cookies_set = new ArrayList();
 						
 						if ( cookies_list != null ){
-							
-							for (int i=0;i<cookies_list.size();i++){
-								
-								String[] cookies = ((String)cookies_list.get(i)).split(";");
-								
-								for (int j=0;j<cookies.length;j++){
-									
-									String	cookie = cookies[j].trim();
-									
-									if ( cookie.indexOf('=') != -1 ){
-										
-										cookies_set.add( cookie );
-									}
-								}
-							}
+
+                            for (Object o : cookies_list) {
+
+                                String[] cookies = ((String) o).split(";");
+
+                                for (String cookie1 : cookies) {
+
+                                    String cookie = cookie1.trim();
+
+                                    if (cookie.indexOf('=') != -1) {
+
+                                        cookies_set.add(cookie);
+                                    }
+                                }
+                            }
 						}
 						
 							// well, not much we can do with the cookies anyway as in general the ones
@@ -1382,13 +1374,13 @@ WebEngine
 	supportsField(
 		int		field_id )
 	{
-		for (int i=0;i<mappings.length;i++){
-			
-			if ( mappings[i].getField() == field_id ){
-				
-				return( true );
-			}
-		}
+        for (FieldMapping mapping : mappings) {
+
+            if (mapping.getField() == field_id) {
+
+                return (true);
+            }
+        }
 		
 		return( false );
 	}
@@ -1585,9 +1577,9 @@ WebEngine
 	public interface
 	pageDetailsVerifier
 	{
-		public void
+		void
 		verify(
-			pageDetails	details )
+                pageDetails details)
 		
 			throws SearchException;
 	}

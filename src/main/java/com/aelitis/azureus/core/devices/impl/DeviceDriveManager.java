@@ -41,7 +41,7 @@ DeviceDriveManager
 {
 	private DeviceManagerImpl		manager;
 	
-	private Map<String,DeviceMediaRendererManual>	device_map = new HashMap<String, DeviceMediaRendererManual>();
+	private Map<String,DeviceMediaRendererManual>	device_map = new HashMap<>();
 	
 	private AsyncDispatcher	async_dispatcher = new AsyncDispatcher();
 	
@@ -231,7 +231,7 @@ DeviceDriveManager
 
 					if (folders != null) {
 
-						Set<String> names = new HashSet<String>();
+						Set<String> names = new HashSet<>();
 
 						for (File file : folders) {
 

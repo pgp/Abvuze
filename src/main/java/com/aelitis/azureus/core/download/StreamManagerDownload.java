@@ -27,25 +27,25 @@ import org.gudy.azureus2.core3.download.DownloadManager;
 public interface 
 StreamManagerDownload 
 {
-	public DownloadManager
+	DownloadManager
 	getDownload();
 	
-	public int
+	int
 	getFileIndex();
 	
-	public URL
+	URL
 	getURL();
 	
-	public boolean
+	boolean
 	getPreviewMode();
 	
-	public void
+	void
 	setPreviewMode(
-		boolean	preview_mode );
+            boolean preview_mode);
 	
-	public void
+	void
 	cancel();
 	
-	public boolean
+	boolean
 	isCancelled();
 }

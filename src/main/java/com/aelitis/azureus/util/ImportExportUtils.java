@@ -20,6 +20,7 @@ package com.aelitis.azureus.util;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.gudy.azureus2.core3.util.UrlUtils;
@@ -40,15 +41,10 @@ public final class ImportExportUtils {
 		String	value )
 	{
 		if ( value != null ){
-	
-			try{
-				map.put( key, value.getBytes( "UTF-8" ));
-				
-			}catch( UnsupportedEncodingException e ){
-				
-				e.printStackTrace();
-			}
-		}
+
+            map.put( key, value.getBytes(StandardCharsets.UTF_8));
+
+        }
 	}
 	
 	public final static void
@@ -97,15 +93,10 @@ public final class ImportExportUtils {
 			return((String)obj);
 			
 		}else if ( obj instanceof byte[]){
-			
-			try{
-				return( new String((byte[])obj, "UTF-8" ));
-				
-			}catch( UnsupportedEncodingException e ){
-				
-				e.printStackTrace();
-			}
-		}
+
+            return( new String((byte[])obj, StandardCharsets.UTF_8));
+
+        }
 		
 		return( null );
 	}
@@ -133,7 +124,7 @@ public final class ImportExportUtils {
 		
 		if ( obj instanceof Long){
 			
-			return(((Long)obj).longValue());
+			return((Long) obj);
 			
 		}else if ( obj instanceof String ){
 			
@@ -158,7 +149,7 @@ public final class ImportExportUtils {
 		String	key,
 		int		value )
 	{
-		map.put( key, new Long( value ));
+		map.put( key, (long) value);
 	}
 	
 	public final static int
@@ -210,7 +201,7 @@ public final class ImportExportUtils {
 		String	key,
 		boolean	value )
 	{
-		map.put( key, new Long( value?1:0 ));
+		map.put( key, (long) (value ? 1 : 0));
 	}
 	
 	public final static boolean
@@ -236,11 +227,11 @@ public final class ImportExportUtils {
 		
 		if ( obj instanceof Long){
 			
-			return(((Long)obj).longValue() == 1 );
+			return((Long) obj == 1 );
 			
 		}else if ( obj instanceof Boolean ){
 			
-			return(((Boolean)obj).booleanValue());
+			return((Boolean) obj);
 		}
 		
 		return( def );
@@ -252,7 +243,7 @@ public final class ImportExportUtils {
 		String	key,
 		boolean	value )
 	{
-		map.put( key, Boolean.valueOf(value));
+		map.put( key, value);
 	}
 	
 	public static final String
@@ -326,15 +317,10 @@ public final class ImportExportUtils {
 				res[i] = (String)obj;
 				
 			}else if ( obj instanceof byte[] ){
-				
-				try{
-					res[i] = new String((byte[])obj, "UTF-8" );
-					
-				}catch( UnsupportedEncodingException e ){
-					
-					e.printStackTrace();
-				}
-			}
+
+                res[i] = new String((byte[])obj, StandardCharsets.UTF_8);
+
+            }
 		}
 		
 		return( res );
@@ -349,17 +335,12 @@ public final class ImportExportUtils {
 		List	l = new ArrayList(data.length);
 		
 		map.put( key, l );
-		
-		for (int i=0;i<data.length;i++){
-			
-			try{
-				l.add( data[i].getBytes( "UTF-8" ));
-				
-			}catch( UnsupportedEncodingException e ){
-				
-				e.printStackTrace();
-			}
-		}
+
+        for (String datum : data) {
+
+            l.add(datum.getBytes(StandardCharsets.UTF_8));
+
+        }
 	}
 	
 	public static final void
@@ -390,16 +371,14 @@ public final class ImportExportUtils {
 		
 		byte[]	bytes 	= new byte[num*4];
 		int		pos		= 0;
-		
-		for (int i=0;i<num;i++){
-			
-			int	v = values[i];
-			
-		    bytes[pos++] = (byte)(v >>> 24);
-		    bytes[pos++] = (byte)(v >>> 16);
-		    bytes[pos++] = (byte)(v >>> 8);
-		    bytes[pos++] = (byte)(v);
-		}
+
+        for (int v : values) {
+
+            bytes[pos++] = (byte) (v >>> 24);
+            bytes[pos++] = (byte) (v >>> 16);
+            bytes[pos++] = (byte) (v >>> 8);
+            bytes[pos++] = (byte) (v);
+        }
 		
 		map.put( key, bytes );
 	}

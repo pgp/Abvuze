@@ -23,80 +23,80 @@ package com.aelitis.azureus.core.tag;
 public interface 
 TagFeatureProperties 
 {
-	public static final String	PR_TRACKERS 			= "trackers";			// string list
-	public static final String	PR_UNTAGGED 			= "untagged";			// boolean
-	public static final String	PR_TRACKER_TEMPLATES 	= "tracker_templates";	// string list
-	public static final String	PR_CONSTRAINT		 	= "constraint";			// string list
+	String	PR_TRACKERS 			= "trackers";			// string list
+	String	PR_UNTAGGED 			= "untagged";			// boolean
+	String	PR_TRACKER_TEMPLATES 	= "tracker_templates";	// string list
+	String	PR_CONSTRAINT		 	= "constraint";			// string list
 	
-	public static final int		PT_STRING_LIST	= 1;
-	public static final int		PT_BOOLEAN		= 2;
-	public static final int		PT_LONG			= 3;
+	int		PT_STRING_LIST	= 1;
+	int		PT_BOOLEAN		= 2;
+	int		PT_LONG			= 3;
 	
-	public TagProperty[]
+	TagProperty[]
 	getSupportedProperties();
 	
-	public TagProperty
+	TagProperty
 	getProperty(
-		String		name );
+            String name);
 	
-	public interface
+	interface
 	TagProperty
 	{
-		public Tag
+		Tag
 		getTag();
 		
-		public int
+		int
 		getType();
 		
-		public String
+		String
 		getName(
-			boolean	localize );
+                boolean localize);
 		
-		public void
+		void
 		setStringList(
-			String[]	value );
+                String[] value);
 			
-		public String[]
+		String[]
 		getStringList();
 		
-		public void
+		void
 		setBoolean(
-			Boolean		value );
+                Boolean value);
 			
-		public Boolean
+		Boolean
 		getBoolean();
 		
-		public void
+		void
 		setLong(
-			Long		value );
+                Long value);
 			
-		public Long
+		Long
 		getLong();
 		
-		public String
+		String
 		getString();
 		
-		public void
+		void
 		addListener(
-			TagPropertyListener		listener );
+                TagPropertyListener listener);
 		
-		public void
+		void
 		removeListener(
-			TagPropertyListener		listener );
+                TagPropertyListener listener);
 		
-		public void
+		void
 		syncListeners();
 	}
 	
-	public interface
+	interface
 	TagPropertyListener
 	{
-		public void
+		void
 		propertyChanged(
-			TagProperty		property );
+                TagProperty property);
 		
-		public void
+		void
 		propertySync(
-			TagProperty		property );
+                TagProperty property);
 	}
 }

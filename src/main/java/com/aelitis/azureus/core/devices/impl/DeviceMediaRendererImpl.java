@@ -211,7 +211,7 @@ DeviceMediaRendererImpl
 	}
 	
 	private static TorrentAttribute	share_ta;
-	private static List<Object[]>	share_requests		= new ArrayList<Object[]>();
+	private static List<Object[]>	share_requests		= new ArrayList<>();
 	private static AsyncDispatcher	share_dispatcher 	= new AsyncDispatcher();
 	
 	protected void
@@ -249,7 +249,7 @@ DeviceMediaRendererImpl
 						
 							Set<Taggable> taggables = assigned_tag.getTagged();
 							
-							Set<String>	done_files = new HashSet<String>();
+							Set<String>	done_files = new HashSet<>();
 							
 							for ( Taggable temp: taggables ){
 								
@@ -323,7 +323,7 @@ DeviceMediaRendererImpl
 					
 					synchronized( share_requests ){
 
-						to_process = new ArrayList<Object[]>( share_requests );
+						to_process = new ArrayList<>(share_requests);
 					}
 					
 					for ( Object[] entry: to_process ){
@@ -336,7 +336,7 @@ DeviceMediaRendererImpl
 							
 							log( "Auto sharing " + name + " (" + file + ") to tag " + tag.getTagName( true ));
 							
-							Map<String,String>	properties = new HashMap<String, String>();
+							Map<String,String>	properties = new HashMap<>();
 
 							properties.put( ShareManager.PR_USER_DATA, "device:autoshare" );
 							

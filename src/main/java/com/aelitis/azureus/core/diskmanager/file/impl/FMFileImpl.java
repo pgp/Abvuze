@@ -827,26 +827,26 @@ FMFileImpl
 				
 				file_map.put( canonical_path, owners );				
 			}
-			
-			for (Iterator it=owners.iterator();it.hasNext();){
-				
-				Object[]	entry = (Object[])it.next();
-			
-				String	entry_name = ((FMFileOwner)entry[0]).getName();
-				
-				//System.out.println( "    existing entry: " + entry_name );
-				
-				if ( owner.getName().equals( entry_name )){
-				
-						// already present, start off read-access
-					
-					Debug.out( "reserve file - entry already present" );
-					
-					entry[1] = Boolean.FALSE;
-					
-					return;	
-				}
-			}
+
+            for (Object owner1 : owners) {
+
+                Object[] entry = (Object[]) owner1;
+
+                String entry_name = ((FMFileOwner) entry[0]).getName();
+
+                //System.out.println( "    existing entry: " + entry_name );
+
+                if (owner.getName().equals(entry_name)) {
+
+                    // already present, start off read-access
+
+                    Debug.out("reserve file - entry already present");
+
+                    entry[1] = Boolean.FALSE;
+
+                    return;
+                }
+            }
 			
 			owners.add( new Object[]{ owner, Boolean.FALSE, "<reservation>" });
 			
@@ -882,20 +882,20 @@ FMFileImpl
 				
 				throw( new FMFileManagerException( "File '"+canonical_path+"' has not been reserved (no entries), '" + owner.getName()+"'"));
 			}
-			
-			for (Iterator it=owners.iterator();it.hasNext();){
-					
-				Object[]	entry = (Object[])it.next();
-				
-				String	entry_name = ((FMFileOwner)entry[0]).getName();
-				
-				//System.out.println( "    existing entry: " + entry_name );
-				
-				if ( owner.getName().equals( entry_name )){
-					
-					my_entry	= entry;
-				}
-			}				
+
+            for (Object owner2 : owners) {
+
+                Object[] entry = (Object[]) owner2;
+
+                String entry_name = ((FMFileOwner) entry[0]).getName();
+
+                //System.out.println( "    existing entry: " + entry_name );
+
+                if (owner.getName().equals(entry_name)) {
+
+                    my_entry = entry;
+                }
+            }
 			
 			if ( my_entry == null ){
 				
@@ -904,7 +904,7 @@ FMFileImpl
 				throw( new FMFileManagerException( "File '"+canonical_path+"' has not been reserved (not found), '" + owner.getName()+"'"));
 			}
 		
-			my_entry[1] = Boolean.valueOf(access_mode == FM_WRITE);
+			my_entry[1] = access_mode == FM_WRITE;
 			my_entry[2] = reason;
 			
 			int	read_access 		= 0;
@@ -914,45 +914,45 @@ FMFileImpl
 			TOTorrentFile	my_torrent_file = owner.getTorrentFile();
 			
 			StringBuilder	users_sb = owners.size()==1?null:new StringBuilder( 128 );
-				
-			for (Iterator it=owners.iterator();it.hasNext();){
-				
-				Object[]	entry = (Object[])it.next();
-					
-				FMFileOwner	this_owner = (FMFileOwner)entry[0];
-				
-				if (((Boolean)entry[1]).booleanValue()){
-										
-					write_access++;
-					
-					TOTorrentFile this_tf = this_owner.getTorrentFile();
-					
-					if ( my_torrent_file != null && this_tf != null && my_torrent_file.getLength() == this_tf.getLength()){
-						
-						write_access_lax++;
-					}
-					
-					if ( users_sb != null ){
-						if ( users_sb.length() > 0 ){
-							users_sb.append( "," );
-						}
-						users_sb.append( this_owner.getName());
-						users_sb.append( " [write]" );
-					}
 
-				}else{
-					
-					read_access++;
-					
-					if ( users_sb != null ){
-						if ( users_sb.length() > 0 ){
-							users_sb.append( "," );
-						}
-						users_sb.append( this_owner.getName());
-						users_sb.append( " [read]" );	
-					}
-				}
-			}
+            for (Object owner1 : owners) {
+
+                Object[] entry = (Object[]) owner1;
+
+                FMFileOwner this_owner = (FMFileOwner) entry[0];
+
+                if ((Boolean) entry[1]) {
+
+                    write_access++;
+
+                    TOTorrentFile this_tf = this_owner.getTorrentFile();
+
+                    if (my_torrent_file != null && this_tf != null && my_torrent_file.getLength() == this_tf.getLength()) {
+
+                        write_access_lax++;
+                    }
+
+                    if (users_sb != null) {
+                        if (users_sb.length() > 0) {
+                            users_sb.append(",");
+                        }
+                        users_sb.append(this_owner.getName());
+                        users_sb.append(" [write]");
+                    }
+
+                } else {
+
+                    read_access++;
+
+                    if (users_sb != null) {
+                        if (users_sb.length() > 0) {
+                            users_sb.append(",");
+                        }
+                        users_sb.append(this_owner.getName());
+                        users_sb.append(" [read]");
+                    }
+                }
+            }
 
 			if ( 	write_access > 1 ||
 					( write_access == 1 && read_access > 0 )){
@@ -1097,32 +1097,30 @@ FMFileImpl
 				// delete any dirs we created if the target file doesn't exist
 			
 			if ( !created_dirs_leaf.exists()){
-				
-				Iterator	it = created_dirs.iterator();
-					
-				while( it.hasNext()){
-					
-					File	dir = (File)it.next();
-					
-					if ( dir.exists() && dir.isDirectory()){
-						
-						File[]	entries = dir.listFiles();
-						
-						if ( entries == null || entries.length == 0 ){
-							
-							// System.out.println( "deleted " + dir );
-							
-							dir.delete();
-							
-						}else{
-							
-							break;
-						}
-					}else{
-						
-						break;
-					}
-				}
+
+                for (Object created_dir : created_dirs) {
+
+                    File dir = (File) created_dir;
+
+                    if (dir.exists() && dir.isDirectory()) {
+
+                        File[] entries = dir.listFiles();
+
+                        if (entries == null || entries.length == 0) {
+
+                            // System.out.println( "deleted " + dir );
+
+                            dir.delete();
+
+                        } else {
+
+                            break;
+                        }
+                    } else {
+
+                        break;
+                    }
+                }
 			}
 	
 			created_dirs_leaf	= null;
@@ -1155,34 +1153,32 @@ FMFileImpl
 
 			try{
 				file_map_mon.enter();
-			
-				Iterator	it = file_map.keySet().iterator();
-				
-				while( it.hasNext()){
-					
-					String	key = (String)it.next();
-					
-					List	owners = (List)file_map.get(key);
-					
-					Iterator	it2 = owners.iterator();
-					
-					String	str = "";
-						
-					while( it2.hasNext()){
-						
-						Object[]	entry = (Object[])it2.next();
 
-						FMFileOwner	owner 	= (FMFileOwner)entry[0];
-						Boolean		write	= (Boolean)entry[1];
-						String		reason	= (String)entry[2];
-						
-						
-						str += (str.length()==0?"":", ") + owner.getName() + "[" + (write.booleanValue()?"write":"read")+ "/" + reason + "]";
-					}
-					
+                for (Object o : file_map.keySet()) {
 
-					writer.println( Debug.secretFileName(key) + " -> " + str );
-				}
+                    String key = (String) o;
+
+                    List owners = (List) file_map.get(key);
+
+                    Iterator it2 = owners.iterator();
+
+                    String str = "";
+
+                    while (it2.hasNext()) {
+
+                        Object[] entry = (Object[]) it2.next();
+
+                        FMFileOwner owner = (FMFileOwner) entry[0];
+                        Boolean write = (Boolean) entry[1];
+                        String reason = (String) entry[2];
+
+
+                        str += (str.length() == 0 ? "" : ", ") + owner.getName() + "[" + (write ? "write" : "read") + "/" + reason + "]";
+                    }
+
+
+                    writer.println(Debug.secretFileName(key) + " -> " + str);
+                }
 			}finally{
 				
 				file_map_mon.exit();

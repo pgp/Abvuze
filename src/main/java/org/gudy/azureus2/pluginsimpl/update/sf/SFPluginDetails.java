@@ -26,59 +26,59 @@ package org.gudy.azureus2.pluginsimpl.update.sf;
 public interface 
 SFPluginDetails 
 {
-	public String
+	String
 	getId();
 	
-	public String
+	String
 	getName();
 	
-	public String
+	String
 	getCategory();
 	
 		/**
 		 * 
 		 * @return null if version number unknown
 		 */
-	
-	public String
+
+        String
 	getVersion();
 	
-	public String
+	String
 	getDownloadURL()
 	
 		throws SFPluginDetailsException;
 
 	
-	public String
+	String
 	getAuthor()
 	
 		throws SFPluginDetailsException;
 
 	
-	public String
+	String
 	getCVSVersion()
 	
 		throws SFPluginDetailsException;
 
 	
-	public String
+	String
 	getCVSDownloadURL()
 	
 		throws SFPluginDetailsException;
 
 
-	public String
+	String
 	getDescription()
 	
 		throws SFPluginDetailsException;
 
 	
-	public String
+	String
 	getComment()
 	
 		throws SFPluginDetailsException;
 
-	public String
+	String
 	getRelativeURLBase();
 
 	/**

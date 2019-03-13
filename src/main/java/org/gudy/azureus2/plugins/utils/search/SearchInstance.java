@@ -23,6 +23,6 @@ package org.gudy.azureus2.plugins.utils.search;
 public interface 
 SearchInstance 
 {
-	public void
+	void
 	cancel();
 }

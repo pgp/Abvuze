@@ -13,8 +13,8 @@ public class Test {
 	public static void main(String[] args) throws Exception{
 		JSONArray array1=new JSONArray();
 		array1.add("abc\u0010a/");
-		array1.add(new Integer(123));
-		array1.add(new Double(122.22));
+		array1.add(123);
+		array1.add(122.22);
 		array1.add(Boolean.TRUE);
 		System.out.println("======array1==========");
 		System.out.println(array1);
@@ -22,9 +22,9 @@ public class Test {
 		
 		JSONObject obj1=new JSONObject();
 		obj1.put("name","fang");
-		obj1.put("age",new Integer(27));
+		obj1.put("age", 27);
 		obj1.put("is_developer", Boolean.TRUE);
-		obj1.put("weight",new Double(60.21));
+		obj1.put("weight", 60.21);
 		obj1.put("array1",array1);
 		System.out.println();
 		

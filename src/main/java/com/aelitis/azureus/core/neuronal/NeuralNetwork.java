@@ -105,17 +105,13 @@ public class NeuralNetwork {
 	}
 	
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		
-		sb.append("Input Layer :\n");
-		sb.append(inputLayer.toString());
-		sb.append("\n\n");
-		
-		sb.append("Hidden Layer :\n");
-		sb.append(hiddenLayer.toString());
-		sb.append("\n\n");
-		
-		return sb.toString();
+
+		return "Input Layer :\n" +
+				inputLayer.toString() +
+				"\n\n" +
+				"Hidden Layer :\n" +
+				hiddenLayer.toString() +
+				"\n\n";
 	}
 	
 }

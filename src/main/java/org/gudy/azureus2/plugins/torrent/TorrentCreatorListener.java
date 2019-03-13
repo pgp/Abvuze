@@ -22,19 +22,19 @@ package org.gudy.azureus2.plugins.torrent;
 public interface 
 TorrentCreatorListener 
 {
-	public void
+	void
 	reportPercentageDone(
-		int		percent );
+            int percent);
 	
-	public void
+	void
 	reportActivity(
-		String	activity );
+            String activity);
 	
-	public void
+	void
 	complete(
-		Torrent	torrent );
+            Torrent torrent);
 	
-	public void
+	void
 	failed(
-		TorrentException	cause );
+            TorrentException cause);
 }

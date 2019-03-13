@@ -27,6 +27,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -228,7 +229,7 @@ DiskManagerImpl
                 {
                     if (type == LDT_STATECHANGED){
 
-                        int params[] = (int[])value;
+                        int[] params = (int[]) value;
 
                         listener.stateChanged(params[0], params[1]);
 
@@ -246,8 +247,8 @@ DiskManagerImpl
 
                         listener.fileAccessModeChanged(
                             (DiskManagerFileInfo)o[0],
-                            ((Integer)o[1]).intValue(),
-                            ((Integer)o[2]).intValue());
+                                (Integer) o[1],
+                                (Integer) o[2]);
                     }
                 }
             });
@@ -465,16 +466,16 @@ DiskManagerImpl
         	/**
         	 * Try one of these candidate directories, see if the data already exists there.
         	 */
-        	File[] move_to_dirs = DownloadManagerMoveHandler.getRelatedDirs(download_manager); 
-        	
-        	for (int i=0; i<move_to_dirs.length; i++) {
-        		String move_to_dir = move_to_dirs[i].getAbsolutePath();
-        		if (filesExist (move_to_dir)) {
+        	File[] move_to_dirs = DownloadManagerMoveHandler.getRelatedDirs(download_manager);
+
+            for (File move_to_dir1 : move_to_dirs) {
+                String move_to_dir = move_to_dir1.getAbsolutePath();
+                if (filesExist(move_to_dir)) {
                     alreadyMoved = files_exist = true;
                     download_manager.setTorrentSaveDir(move_to_dir);
                     break;
                 }
-        	}
+            }
         }
 
         reader.start();
@@ -641,16 +642,16 @@ DiskManagerImpl
 
         if ( files != null ){
 
-            for (int i = 0; i < files.length; i++){
+            for (DiskManagerFileInfoImpl file : files) {
 
-                try{
-                    if (files[i] != null) {
+                try {
+                    if (file != null) {
 
-                        files[i].getCacheFile().close();
+                        file.getCacheFile().close();
                     }
-                }catch ( Throwable e ){
+                } catch (Throwable e) {
 
-                    setFailed( "File close fails: " + Debug.getNestedExceptionMessage(e));
+                    setFailed("File close fails: " + Debug.getNestedExceptionMessage(e));
                 }
             }
         }
@@ -875,7 +876,7 @@ DiskManagerImpl
         		
         		File temp = actual_file;
         		
-        		Stack<String>	comps = new Stack<String>();
+        		Stack<String>	comps = new Stack<>();
         		
         		boolean	fixed = false;
         		
@@ -923,7 +924,7 @@ DiskManagerImpl
         				
         				if ( comps.isEmpty()){
         				
-        					String prefix = Base32.encode( new SHA1Simple().calculateHash( relative_file.toString().getBytes( "UTF-8" ))).substring( 0, 4 );
+        					String prefix = Base32.encode( new SHA1Simple().calculateHash( relative_file.toString().getBytes(StandardCharsets.UTF_8))).substring( 0, 4 );
         					
         					comp = prefix + "_" + comp;
         				}
@@ -1211,14 +1212,14 @@ DiskManagerImpl
 
             if ( files == null ){
 
-                for (int i=0;i<allocated_files.length;i++){
+                for (DiskManagerFileInfoImpl allocated_file : allocated_files) {
 
-                    if ( allocated_files[i] != null ){
+                    if (allocated_file != null) {
 
-                        try{
-                            allocated_files[i].getCacheFile().close();
+                        try {
+                            allocated_file.getCacheFile().close();
 
-                        }catch( Throwable e ){
+                        } catch (Throwable e) {
                         }
                     }
                 }
@@ -1449,14 +1450,12 @@ DiskManagerImpl
                     long skipped   		= 0;
                     long downloaded  	= 0;
 
-                    for (int i=0;i<current_files.length;i++){
+                    for (DiskManagerFileInfoImpl file : current_files) {
 
-                        DiskManagerFileInfoImpl file = current_files[i];
+                        if (file.isSkipped()) {
 
-                        if ( file.isSkipped()){
-
-                        	skipped   += file.getLength();
-                        	downloaded  += file.getDownloaded();
+                            skipped += file.getLength();
+                            downloaded += file.getDownloaded();
                         }
                     }
                     
@@ -1742,7 +1741,7 @@ DiskManagerImpl
     {
         listeners.dispatch(
             LDT_ACCESS_MODE_CHANGED,
-            new Object[]{ file, new Integer(old_mode), new Integer(new_mode)});
+            new Object[]{ file, old_mode, new_mode});
     }
 
     public DiskManagerPiece[] getPieces()
@@ -1803,7 +1802,7 @@ DiskManagerImpl
 
         if ( state_set_via_method != _state ){
 
-            int params[] = {state_set_via_method, _state};
+            int[] params = {state_set_via_method, _state};
 
             state_set_via_method = _state;
 
@@ -2581,7 +2580,7 @@ DiskManagerImpl
 	        String	_average_config_key = null;
 	        
 	        try{
-	        	_average_config_key = "dm.move.target.abps." + Base32.encode( abs_path.getBytes( "UTF-8" ));
+	        	_average_config_key = "dm.move.target.abps." + Base32.encode( abs_path.getBytes(StandardCharsets.UTF_8));
 	        	
 	        }catch( Throwable e ){
 	        	
@@ -2939,7 +2938,7 @@ DiskManagerImpl
     {
         listeners.addListener( l );
 
-        int params[] = {getState(), getState()};
+        int[] params = {getState(), getState()};
 
         listeners.dispatch( l, LDT_STATECHANGED, params);
     }
@@ -3044,12 +3043,12 @@ DiskManagerImpl
 
             if ( files != null ){
 
-                for (int i=0;i<files.length;i++){
+                for (File file : files) {
 
-                    res += countFiles( files[i], stopAfterCount );
-                    
+                    res += countFiles(file, stopAfterCount);
+
                     if (res > stopAfterCount) {
-                    	break;
+                        break;
                     }
                 }
             }
@@ -3262,9 +3261,9 @@ DiskManagerImpl
 
       details.put( "downloaded", downloaded );
 
-      for (int i=0;i<files.length;i++){
+      for (DiskManagerFileInfo file : files) {
 
-          downloaded.add( new Long( files[i].getDownloaded()));
+          downloaded.add(file.getDownloaded());
       }
 
       state.setMapAttribute( DownloadManagerState.AT_FILE_DOWNLOADED, details );

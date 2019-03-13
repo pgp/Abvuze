@@ -22,6 +22,7 @@ package org.gudy.azureus2.core3.download.impl;
 import java.io.*;
 import java.lang.ref.WeakReference;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -90,17 +91,17 @@ DownloadManagerStateImpl
 	
 	static{
 		default_parameters  = new HashMap();
-		
-		for (int i=0;i<PARAMETERS.length;i++){
-			
-			default_parameters.put( PARAMETERS[i][0], PARAMETERS[i][1] );
+
+		for (Object[] parameter : PARAMETERS) {
+
+			default_parameters.put(parameter[0], parameter[1]);
 		}
 		
 		default_attributes  = new HashMap();
-		
-		for (int i=0;i<ATTRIBUTE_DEFAULTS.length;i++){
-			
-			default_attributes.put( ATTRIBUTE_DEFAULTS[i][0], ATTRIBUTE_DEFAULTS[i][1] );
+
+		for (Object[] attributeDefault : ATTRIBUTE_DEFAULTS) {
+
+			default_attributes.put(attributeDefault[0], attributeDefault[1]);
 		}
 		
 		// only add keys that will point to Map objects here!
@@ -109,7 +110,7 @@ DownloadManagerStateImpl
 	
 	private static final AEMonitor	class_mon	= new AEMonitor( "DownloadManagerState:class" );
 	
-	static final Map<HashWrapper,DownloadManagerStateImpl>		state_map 					= new HashMap<HashWrapper,DownloadManagerStateImpl>();
+	static final Map<HashWrapper,DownloadManagerStateImpl>		state_map 					= new HashMap<>();
 	
 	static{
 		ParameterListener listener = 
@@ -123,7 +124,7 @@ DownloadManagerStateImpl
 					
 					synchronized( state_map ){
 						
-						states = new ArrayList<DownloadManagerStateImpl>( state_map.values());
+						states = new ArrayList<>(state_map.values());
 					}
 					
 					for ( DownloadManagerStateImpl state: states ){
@@ -152,8 +153,8 @@ DownloadManagerStateImpl
 	private static final Map					global_state_cache			= new HashMap();
 	private static final ArrayList			global_state_cache_wrappers	= new ArrayList();
 	
-	private static final CopyOnWriteMap<String,CopyOnWriteList<DownloadManagerStateAttributeListener>> global_listeners_read_map_cow  = new CopyOnWriteMap<String,CopyOnWriteList<DownloadManagerStateAttributeListener>>();
-	private static final CopyOnWriteMap<String,CopyOnWriteList<DownloadManagerStateAttributeListener>> global_listeners_write_map_cow = new CopyOnWriteMap<String,CopyOnWriteList<DownloadManagerStateAttributeListener>>();
+	private static final CopyOnWriteMap<String,CopyOnWriteList<DownloadManagerStateAttributeListener>> global_listeners_read_map_cow  = new CopyOnWriteMap<>();
+	private static final CopyOnWriteMap<String,CopyOnWriteList<DownloadManagerStateAttributeListener>> global_listeners_write_map_cow = new CopyOnWriteMap<>();
 
 	
 	private DownloadManagerImpl			download_manager;
@@ -164,10 +165,10 @@ DownloadManagerStateImpl
 	
 	private Category 	category;
 
-	private final CopyOnWriteList<DownloadManagerStateListener>		listeners_cow	= new CopyOnWriteList<DownloadManagerStateListener>();
+	private final CopyOnWriteList<DownloadManagerStateListener>		listeners_cow	= new CopyOnWriteList<>();
 	
-	private final CopyOnWriteMap<String,CopyOnWriteList<DownloadManagerStateAttributeListener>> listeners_read_map_cow  = new CopyOnWriteMap<String,CopyOnWriteList<DownloadManagerStateAttributeListener>>();
-	private final CopyOnWriteMap<String,CopyOnWriteList<DownloadManagerStateAttributeListener>> listeners_write_map_cow = new CopyOnWriteMap<String,CopyOnWriteList<DownloadManagerStateAttributeListener>>();
+	private final CopyOnWriteMap<String,CopyOnWriteList<DownloadManagerStateAttributeListener>> listeners_read_map_cow  = new CopyOnWriteMap<>();
+	private final CopyOnWriteMap<String,CopyOnWriteList<DownloadManagerStateAttributeListener>> listeners_write_map_cow = new CopyOnWriteMap<>();
 	
 	
 	private Map			parameters;
@@ -204,7 +205,7 @@ DownloadManagerStateImpl
 		
 			HashWrapper	hash_wrapper = new HashWrapper( hash );
 			
-			res = (DownloadManagerStateImpl)state_map.get(hash_wrapper); 
+			res = state_map.get(hash_wrapper);
 			
 			if ( res == null ){
 			
@@ -388,42 +389,33 @@ DownloadManagerStateImpl
 		}
 		
 		try{
-			
-			BufferedInputStream is = new BufferedInputStream( new GZIPInputStream( new FileInputStream( file )));
-			
-			try{
-				
-				Map	map = BDecoder.decode( is );
-				
-				List	cache = (List)map.get( "state" );
-				
-				if ( cache != null ){
-					
-					for (int i=0;i<cache.size();i++){
-						
-						Map	entry = (Map)cache.get(i);
-						
-						byte[]	hash = (byte[])entry.get( "hash" );
-						
-						if ( hash != null ){
-							
-							global_state_cache.put( new HashWrapper( hash ), entry );
+
+			try (BufferedInputStream is = new BufferedInputStream(new GZIPInputStream(new FileInputStream(file)))) {
+
+				Map map = BDecoder.decode(is);
+
+				List cache = (List) map.get("state");
+
+				if (cache != null) {
+
+					for (Object o : cache) {
+
+						Map entry = (Map) o;
+
+						byte[] hash = (byte[]) entry.get("hash");
+
+						if (hash != null) {
+
+							global_state_cache.put(new HashWrapper(hash), entry);
 						}
 					}
 				}
-				
+
 				is.close();
-				
-			}catch( IOException e){
-				
-				Debug.printStackTrace( e );
-			}finally{
-				
-				try{
-					is.close();
-					
-				}catch( Throwable e ){
-				}
+
+			} catch (IOException e) {
+
+				Debug.printStackTrace(e);
 			}
 		}catch( Throwable e ){
 			
@@ -443,24 +435,22 @@ DownloadManagerStateImpl
 			
 			map.put( "state", cache );
 
-			Iterator	it = state_map.values().iterator();
-			
-			while( it.hasNext()){
-				
-				DownloadManagerState dms = (DownloadManagerState)it.next();
-				
+			for (DownloadManagerStateImpl downloadManagerState : state_map.values()) {
+
+				DownloadManagerState dms = (DownloadManagerState) downloadManagerState;
+
 				DownloadManager dm = dms.getDownloadManager();
-				
-				if ( dm != null && dm.isPersistent()){
-					
-					try{
-						Map	state = CachedStateWrapper.export( dms );
-					
-						cache.add( state );
-						
-					}catch( Throwable e ){
-						
-						Debug.printStackTrace( e );
+
+				if (dm != null && dm.isPersistent()) {
+
+					try {
+						Map state = CachedStateWrapper.export(dms);
+
+						cache.add(state);
+
+					} catch (Throwable e) {
+
+						Debug.printStackTrace(e);
 					}
 				}
 			}
@@ -499,10 +489,10 @@ DownloadManagerStateImpl
 	discardGlobalStateCache()
 	{
 		getGlobalStateFile().delete();
-		
-		for ( int i=0;i<global_state_cache_wrappers.size();i++){
-			
-			((CachedStateWrapper)global_state_cache_wrappers.get(i)).clearCache();
+
+		for (Object global_state_cache_wrapper : global_state_cache_wrappers) {
+
+			((CachedStateWrapper) global_state_cache_wrapper).clearCache();
 		}
 		
 		global_state_cache_wrappers.clear();
@@ -1138,19 +1128,19 @@ DownloadManagerStateImpl
 						
 						int	def = COConfigurationManager.getIntParameter( "Max Uploads Seeding" );
 						
-						value = new Integer( def );
+						value = def;
 											
 					}else if ( name == PARAM_MAX_UPLOADS ){
 						
 						int	def = COConfigurationManager.getIntParameter("Max Uploads" );
 						
-						value = new Integer( def );
+						value = def;
 						
 					}else if ( name == PARAM_MAX_PEERS ){
 						
 						int	def = COConfigurationManager.getIntParameter( "Max.Peer.Connections.Per.Torrent" );
 						
-						value = new Integer( def );
+						value = def;
 						
 					}else if ( name == PARAM_MAX_PEERS_WHEN_SEEDING_ENABLED ){
 						
@@ -1163,11 +1153,11 @@ DownloadManagerStateImpl
 						
 						int	def = COConfigurationManager.getIntParameter( "Max.Peer.Connections.Per.Torrent.When.Seeding" );
 						
-						value = new Integer( def );
+						value = def;
 						
 					}else if ( name == PARAM_MAX_SEEDS ){
 					
-						value = new Integer(COConfigurationManager.getIntParameter( "Max Seeds Per Torrent" ));
+						value = COConfigurationManager.getIntParameter("Max Seeds Per Torrent");
 						
 					}else if ( name == PARAM_RANDOM_SEED ){
 						
@@ -1175,14 +1165,14 @@ DownloadManagerStateImpl
 						
 						setLongParameter( name, rand );
 						
-						value = new Long( rand );
+						value = rand;
 					}
 				}
 			}
 			
 			if ( value instanceof Boolean ){
 				
-				return(((Boolean)value).booleanValue()?1:0);
+				return((Boolean) value ?1:0);
 				
 			}else if ( value instanceof Integer ){
 				
@@ -1190,7 +1180,7 @@ DownloadManagerStateImpl
 				
 			}else if ( value instanceof Long ){
 				
-				return( ((Long)value).longValue());
+				return((Long) value);
 			}
 			
 			Debug.out( "Invalid parameter value for '" + name + "' - " + value );
@@ -1223,7 +1213,7 @@ DownloadManagerStateImpl
 			
 			parameters	= new LightHashMap(parameters);
 			
-			parameters.put( name, new Long(value));
+			parameters.put( name, value);
 			
 			setMapAttribute( AT_PARAMETERS, parameters );
 			
@@ -1467,18 +1457,18 @@ DownloadManagerStateImpl
 		List	res = new ArrayList();
 		
 			// map back to the constants to allow == comparisons
-		
-		for (int i=0;i<values.size();i++){
-			
-			String	nw = (String)values.get(i);
-			
-			for (int j=0;j<AENetworkClassifier.AT_NETWORKS.length;j++){
-			
-				String	nn = AENetworkClassifier.AT_NETWORKS[j];
-		
-				if ( nn.equals( nw )){
-					
-					res.add( nn );
+
+		for (Object value : values) {
+
+			String nw = (String) value;
+
+			for (int j = 0; j < AENetworkClassifier.AT_NETWORKS.length; j++) {
+
+				String nn = AENetworkClassifier.AT_NETWORKS[j];
+
+				if (nn.equals(nw)) {
+
+					res.add(nn);
 				}
 			}
 		}
@@ -1520,19 +1510,15 @@ DownloadManagerStateImpl
 	    boolean alreadyEnabled = values.contains(network);
 	    List	l = new ArrayList();
 	    	  
-	    if(enabled && !alreadyEnabled) {	      	
-	      for (int i=0;i<values.size();i++){
-	        l.add(values.get(i));
-	      }	
-	      l.add(network);
-	      setListAttribute( AT_NETWORKS, l );
+	    if(enabled && !alreadyEnabled) {
+            l.addAll(values);
+	        l.add(network);
+	        setListAttribute( AT_NETWORKS, l );
 	    }
 	    if(!enabled && alreadyEnabled) {
-	      for (int i=0;i<values.size();i++){
-	        l.add(values.get(i));
-	      }	
-	      l.remove(network);
-	      setListAttribute( AT_NETWORKS, l );
+	        l.addAll(values);
+	      	l.remove(network);
+	        setListAttribute( AT_NETWORKS, l );
 	    }
 	  }
 	
@@ -1546,18 +1532,18 @@ DownloadManagerStateImpl
 		List	res = new ArrayList();
 		
 			// map back to the constants to allow == comparisons
-		
-		for (int i=0;i<values.size();i++){
-			
-			String	ps = (String)values.get(i);
-			
-			for (int j=0;j<PEPeerSource.PS_SOURCES.length;j++){
-			
-				String	x = PEPeerSource.PS_SOURCES[j];
-		
-				if ( x.equals( ps )){
-					
-					res.add( x );
+
+		for (Object value : values) {
+
+			String ps = (String) value;
+
+			for (int j = 0; j < PEPeerSource.PS_SOURCES.length; j++) {
+
+				String x = PEPeerSource.PS_SOURCES[j];
+
+				if (x.equals(ps)) {
+
+					res.add(x);
 				}
 			}
 		}
@@ -1674,14 +1660,12 @@ DownloadManagerStateImpl
 		}
 		
 		List	l = new ArrayList();
-		
-		for (int i=0;i<ps.length;i++){
-			
-			String	p = ps[i];
-			
-			if ( isPeerSourcePermitted(p)){
-				
-				l.add( ps[i]);
+
+		for (String p : ps) {
+
+			if (isPeerSourcePermitted(p)) {
+
+				l.add(p);
 			}
 		}
 		
@@ -1704,17 +1688,13 @@ DownloadManagerStateImpl
 		  
 		  List	l = new ArrayList();
   	  
-		  if(enabled && !alreadyEnabled) {	      	
-		    for (int i=0;i<values.size();i++){
-		      l.add(values.get(i));
-		    }	
+		  if(enabled && !alreadyEnabled) {
+		  	l.addAll(values);
 		    l.add(source);
 		    setListAttribute( AT_PEER_SOURCES, l );
 		  }
 		  if(!enabled && alreadyEnabled) {
-		    for (int i=0;i<values.size();i++){
-		      l.add(values.get(i));
-		    }	
+		  	l.addAll(values);
 		    l.remove(source);
 		    setListAttribute( AT_PEER_SOURCES, l );
 		  }
@@ -1733,7 +1713,7 @@ DownloadManagerStateImpl
 	{
 		LinkFileMap	links = getFileLinks();
 		
-		File	existing = (File)links.get( source_index, link_source);
+		File	existing = links.get( source_index, link_source);
 		
 		if ( link_destination == null ){
 			
@@ -1769,7 +1749,7 @@ DownloadManagerStateImpl
 		
 		synchronized( this ){
 				
-			file_link_cache = new WeakReference<LinkFileMap>( links );
+			file_link_cache = new WeakReference<>(links);
 		}
 			
 		setListAttribute( AT_FILE_LINKS2, list );
@@ -1835,7 +1815,7 @@ DownloadManagerStateImpl
 		
 		synchronized( this ){
 				
-			file_link_cache = new WeakReference<LinkFileMap>( links );		
+			file_link_cache = new WeakReference<>(links);
 		}
 			
 		setListAttribute( AT_FILE_LINKS2, list );
@@ -1903,7 +1883,7 @@ DownloadManagerStateImpl
 			
 			synchronized( this ){
 								
-				file_link_cache = new WeakReference<LinkFileMap>( map );
+				file_link_cache = new WeakReference<>(map);
 			}
 		}
 		
@@ -1932,7 +1912,7 @@ DownloadManagerStateImpl
 			
 			synchronized( this ){
 								
-				file_link_cache = new WeakReference<LinkFileMap>( map );
+				file_link_cache = new WeakReference<>(map);
 			}
 		}
 		
@@ -1947,51 +1927,51 @@ DownloadManagerStateImpl
 		List	new_values = getListAttributeSupport( AT_FILE_LINKS2 );
 		
 		if ( new_values.size() > 0 ){
-			
-			for (int i=0;i<new_values.size();i++){
-				
-				String	entry = (String)new_values.get(i);
-			
-				String[] bits = entry.split( "\n" );
-					
-				if ( bits.length >= 2 ){
-					
-					try{
-						int		index 	= Integer.parseInt( bits[0].trim());
-						File	source	= new File(bits[1].trim());
-						File	target	= bits.length<3?null:new File(bits[2].trim());
-							
-						if( index >= 0 ){
-						
-							res.put( index, source, target );
-						
-						}else{
-							
-								// can get here when partially resolved link state is saved and then re-read
-							
-							res.putMigration( source, target );
+
+			for (Object new_value : new_values) {
+
+				String entry = (String) new_value;
+
+				String[] bits = entry.split("\n");
+
+				if (bits.length >= 2) {
+
+					try {
+						int index = Integer.parseInt(bits[0].trim());
+						File source = new File(bits[1].trim());
+						File target = bits.length < 3 ? null : new File(bits[2].trim());
+
+						if (index >= 0) {
+
+							res.put(index, source, target);
+
+						} else {
+
+							// can get here when partially resolved link state is saved and then re-read
+
+							res.putMigration(source, target);
 						}
-					}catch( Throwable e ){
-						
-						Debug.out( e );
+					} catch (Throwable e) {
+
+						Debug.out(e);
 					}
 				}
 			}
 		}else{
 			
 			List	old_values = getListAttributeSupport( AT_FILE_LINKS_DEPRECATED );
-			
-			for (int i=0;i<old_values.size();i++){
-				
-				String	entry = (String)old_values.get(i);
-			
-				int	sep = entry.indexOf( "\n" );
-				
-				if ( sep != -1 ){
-					
-					File target = (sep == entry.length()-1)?null:new File( entry.substring( sep+1 ));
-					
-					res.putMigration( new File( entry.substring(0,sep)), target );
+
+			for (Object old_value : old_values) {
+
+				String entry = (String) old_value;
+
+				int sep = entry.indexOf("\n");
+
+				if (sep != -1) {
+
+					File target = (sep == entry.length() - 1) ? null : new File(entry.substring(sep + 1));
+
+					res.putMigration(new File(entry.substring(0, sep)), target);
 				}
 			}
 		}
@@ -2118,7 +2098,7 @@ DownloadManagerStateImpl
 					
 					if ( def instanceof Long ){
 						
-						return(((Long)def).longValue());
+						return((Long) def);
 						
 					}else if ( def instanceof Integer ){
 						
@@ -2134,7 +2114,7 @@ DownloadManagerStateImpl
 					
 					long res = featured?1:0;
 					
-					attributes.put( attribute_name, new Long( res ));
+					attributes.put( attribute_name, res);
 					
 					write_required	= true;
 					
@@ -2144,7 +2124,7 @@ DownloadManagerStateImpl
 				return( 0 );
 			}
 			
-			return( l.longValue());
+			return(l);
 			
 		}finally{
 			
@@ -2165,9 +2145,9 @@ DownloadManagerStateImpl
 			Long	existing_value = (Long)attributes.get( attribute_name );
 					
 			if ( 	existing_value == null ||
-					existing_value.longValue() != attribute_value ){
+					existing_value != attribute_value ){
 					
-				attributes.put( attribute_name, new Long( attribute_value) );
+				attributes.put( attribute_name, attribute_value);
 									
 				write_required = changed = true;
 			}
@@ -2685,7 +2665,7 @@ DownloadManagerStateImpl
 		CopyOnWriteMap<String,CopyOnWriteList<DownloadManagerStateAttributeListener>> map_to_use = (event_type == DownloadManagerStateAttributeListener.WILL_BE_READ) ? this.listeners_read_map_cow : this.listeners_write_map_cow;
 		CopyOnWriteList<DownloadManagerStateAttributeListener> lst = map_to_use.get(attribute);
 		if (lst == null) {
-			lst = new CopyOnWriteList<DownloadManagerStateAttributeListener>();
+			lst = new CopyOnWriteList<>();
 			map_to_use.put(attribute, lst);
 		}
 		lst.add(l);
@@ -2704,7 +2684,7 @@ DownloadManagerStateImpl
 		CopyOnWriteMap<String,CopyOnWriteList<DownloadManagerStateAttributeListener>> map_to_use = (event_type == DownloadManagerStateAttributeListener.WILL_BE_READ) ? global_listeners_read_map_cow : global_listeners_write_map_cow;
 		CopyOnWriteList<DownloadManagerStateAttributeListener> lst = map_to_use.get(attribute);
 		if (lst == null) {
-			lst = new CopyOnWriteList<DownloadManagerStateAttributeListener>();
+			lst = new CopyOnWriteList<>();
 			map_to_use.put(attribute, lst);
 		}
 		lst.add(l);
@@ -2715,7 +2695,7 @@ DownloadManagerStateImpl
 		DownloadManagerStateAttributeListener l, String attribute, int event_type)
 	{
 		CopyOnWriteMap<String,CopyOnWriteList<DownloadManagerStateAttributeListener>> map_to_use = (event_type == DownloadManagerStateAttributeListener.WILL_BE_READ) ? global_listeners_read_map_cow : global_listeners_write_map_cow;
-		CopyOnWriteList<DownloadManagerStateAttributeListener> lst = (CopyOnWriteList)map_to_use.get(attribute);
+		CopyOnWriteList<DownloadManagerStateAttributeListener> lst = map_to_use.get(attribute);
 		if (lst != null) {lst.remove(l);}
 	}
 	
@@ -3197,7 +3177,7 @@ DownloadManagerStateImpl
 				
 				if ( l_fp != null ){
 					
-					discard_pieces = l_fp.longValue() == 1;
+					discard_pieces = l_fp == 1;
 				}
 			}
 			
@@ -3205,7 +3185,7 @@ DownloadManagerStateImpl
 			
 			if ( st != null ){
 				
-				simple_torrent = Boolean.valueOf(st.longValue() == 1);
+				simple_torrent = st.longValue() == 1;
 			}
 			
 			Long	fc = (Long)cache.get( "fc" );
@@ -3219,7 +3199,7 @@ DownloadManagerStateImpl
 			
 			if ( l_size != null ){
 				
-				size = l_size.longValue();
+				size = l_size;
 			}
 			
 			byte[]	au = (byte[])cache.get( "au" );
@@ -3227,7 +3207,7 @@ DownloadManagerStateImpl
 			if ( au != null ){
 				
 				try{
-					announce_url = StringInterner.internURL(new URL((new String( au, "UTF-8" ))));
+					announce_url = StringInterner.internURL(new URL((new String( au, StandardCharsets.UTF_8))));
 					
 				}catch( Throwable e ){
 					
@@ -3262,7 +3242,7 @@ DownloadManagerStateImpl
 			cache.put( "utf8name", state.getUTF8Name() == null ? "" : state.getUTF8Name());
 			cache.put( "comment", state.getComment());
 			cache.put( "createdby", state.getCreatedBy());
-			cache.put( "size", new Long( state.getSize()));
+			cache.put( "size", state.getSize());
 			
 			cache.put( "encoding", state.getAdditionalStringProperty( "encoding" ));
 			cache.put( "torrent filename", state.getAdditionalStringProperty( "torrent filename" ));
@@ -3298,7 +3278,7 @@ DownloadManagerStateImpl
 				
 				if ( simple_torrent != null ){
 					
-					cache.put( "simple", new Long(simple_torrent.booleanValue()?1:0 ));
+					cache.put( "simple", (long) (simple_torrent.booleanValue() ? 1 : 0));
 					
 				}else{
 					
@@ -3309,14 +3289,14 @@ DownloadManagerStateImpl
 				
 				if ( fc > 0 ){
 					
-					cache.put( "fc", new Long( fc ));
+					cache.put( "fc", (long) fc);
 				}
 			}else{
 				if ( t instanceof TorrentUtils.torrentDelegate ){
 				
 					// torrent is already 'fixed up' so no harm in directly grabbing stuff for export as already loaded
 					
-					cache.put( "simple", new Long(t.isSimpleTorrent()?1:0 ));
+					cache.put( "simple", (long) (t.isSimpleTorrent() ? 1 : 0));
 					
 					cache.put( "fc", t.getFileCount());
 					
@@ -3326,7 +3306,7 @@ DownloadManagerStateImpl
 				}
 			}
 			
-			cache.put( "dp", new Long( discard_pieces?1:0 ));
+			cache.put( "dp", (long) (discard_pieces ? 1 : 0));
 			
 			return( cache );
 		}
@@ -3338,23 +3318,21 @@ DownloadManagerStateImpl
 			TOTorrentAnnounceURLSet[]	sets = group.getAnnounceURLSets();
 			
 			List	result = new ArrayList();
-							
-			for (int i=0;i<sets.length;i++){
-			
-				TOTorrentAnnounceURLSet	set = sets[i];
-				
-				URL[]	urls = set.getAnnounceURLs();
-				
-				if ( urls.length > 0 ){
-					
-					List	s = new ArrayList( urls.length );
 
-					for (int j=0;j<urls.length;j++){
-					
-						s.add( urls[j].toExternalForm());
+			for (TOTorrentAnnounceURLSet set : sets) {
+
+				URL[] urls = set.getAnnounceURLs();
+
+				if (urls.length > 0) {
+
+					List s = new ArrayList(urls.length);
+
+					for (URL url : urls) {
+
+						s.add(url.toExternalForm());
 					}
-					
-					result.add( s );
+
+					result.add(s);
 				}
 			}
 			
@@ -3392,7 +3370,7 @@ DownloadManagerStateImpl
 					
 					for (int j = 0; j < urls.length; j++){
 						
-						urls[j] = StringInterner.internURL(new URL(new String((byte[]) set.get(j), "UTF-8")));
+						urls[j] = StringInterner.internURL(new URL(new String((byte[]) set.get(j), StandardCharsets.UTF_8)));
 					}
 					
 					sets[i] = new cacheSet(urls);
@@ -3698,11 +3676,7 @@ DownloadManagerStateImpl
 				byte[] name = (byte[])c.get( "utf8name" );
 				if (name != null) {
 					String utf8name;
-					try {
-						utf8name = new String(name, "utf8");
-					} catch (UnsupportedEncodingException e) {
-						return null;
-					}
+					utf8name = new String(name, StandardCharsets.UTF_8);
 					if (utf8name.length() == 0) {
 						return null;
 					}
@@ -3721,14 +3695,14 @@ DownloadManagerStateImpl
     	{
     		if ( simple_torrent != null ){
     			
-    			return( simple_torrent.booleanValue());
+    			return(simple_torrent);
     		}
     		
     		if ( fixup()){
     			
     			boolean st = delegate.isSimpleTorrent();
     			
-    			simple_torrent = Boolean.valueOf(st);
+    			simple_torrent = st;
     			
     			return( st );
     		}
@@ -4100,7 +4074,7 @@ DownloadManagerStateImpl
 				}
 				
 				try{
-					return( new String( res, "UTF8" ));
+					return( new String( res, StandardCharsets.UTF_8));
 					
 				}catch( Throwable e ){
 					

@@ -171,128 +171,131 @@ RPDownload
 		RPRequest	request	)
 	{
 		String	method = request.getMethod();
-		
-		if ( method.equals( "initialize")){
-			
-			try{
-				delegate.initialize();
-				
-			}catch( DownloadException e ){
-				
-				return( new RPReply(e));
-			}
-			
-			return( null );
-			
-		}else if ( method.equals( "start")){
-			
-			try{
-				delegate.start();
-				
-			}catch( DownloadException e ){
-				
-				return( new RPReply(e));
-			}
-			
-			return( null );
-			
-		}else if ( method.equals( "restart")){
-			
-			try{
-				delegate.restart();
-				
-			}catch( DownloadException e ){
-				
-				return( new RPReply(e));
-			}
-			
-			return( null );
-			
-		}else if ( method.equals( "stop")){
-			
-			try{
-				delegate.stop();
-				
-			}catch( DownloadException e ){
-				
-				return( new RPReply(e));
-			}
-			
-			return( null );
-			
-		}else if ( method.equals( "remove")){
-			
-			try{
-				delegate.remove();
-				
-			}catch( Throwable e ){
-				
-				return( new RPReply(e));
-			}
-			
-			return( null );
-			
-		}else if ( method.equals( "setForceStart[boolean]")){
-			
-			boolean	b = ((Boolean)request.getParams()[0]).booleanValue();
-			
-			delegate.setForceStart( b );
-			
-			return( null );
-			
-		}else if ( method.equals( "setPosition[int]")){
-			
-			int	p = ((Integer)request.getParams()[0]).intValue();
-			
-			delegate.setPosition( p );
-			
-			return( null );
-			
-		}else if ( method.equals( "moveUp")){
-						
-			delegate.moveUp();
-			
-			return( null );
-			
-		}else if ( method.equals( "moveDown")){
-			
-			delegate.moveDown();
-			
-			return( null );
-	
-		}else if ( method.equals( "moveTo[int]")){
-			
-			int	p = ((Integer)request.getParams()[0]).intValue();
-			
-			delegate.setPosition( p );
-			
-			return( null );
-			
-		}else if ( method.equals( "setPriority[int]")){
-			
-			delegate.setPriority(((Integer)request.getParams()[0]).intValue());
-			
-			return( null );
-			
-		}else if ( method.equals( "requestTrackerAnnounce")){
-			
-			delegate.requestTrackerAnnounce();
-			
-			return( null );
-		
-		}else if ( method.equals( "getDiskManagerFileInfo")){
-			
-			DiskManagerFileInfo[] info = delegate.getDiskManagerFileInfo();
-					
-			RPDiskManagerFileInfo[] rp_info = new RPDiskManagerFileInfo[info.length];
-			
-			for (int i=0;i<rp_info.length;i++){
-				
-				rp_info[i] = RPDiskManagerFileInfo.create( info[i] );
-			}
-			
-			return( new RPReply( rp_info ));
-		}
+
+        switch (method) {
+            case "initialize":
+
+                try {
+                    delegate.initialize();
+
+                } catch (DownloadException e) {
+
+                    return (new RPReply(e));
+                }
+
+                return (null);
+
+            case "start":
+
+                try {
+                    delegate.start();
+
+                } catch (DownloadException e) {
+
+                    return (new RPReply(e));
+                }
+
+                return (null);
+
+            case "restart":
+
+                try {
+                    delegate.restart();
+
+                } catch (DownloadException e) {
+
+                    return (new RPReply(e));
+                }
+
+                return (null);
+
+            case "stop":
+
+                try {
+                    delegate.stop();
+
+                } catch (DownloadException e) {
+
+                    return (new RPReply(e));
+                }
+
+                return (null);
+
+            case "remove":
+
+                try {
+                    delegate.remove();
+
+                } catch (Throwable e) {
+
+                    return (new RPReply(e));
+                }
+
+                return (null);
+
+            case "setForceStart[boolean]":
+
+                boolean b = (Boolean) request.getParams()[0];
+
+                delegate.setForceStart(b);
+
+                return (null);
+
+            case "setPosition[int]": {
+
+                int p = (Integer) request.getParams()[0];
+
+                delegate.setPosition(p);
+
+                return (null);
+
+            }
+            case "moveUp":
+
+                delegate.moveUp();
+
+                return (null);
+
+            case "moveDown":
+
+                delegate.moveDown();
+
+                return (null);
+
+            case "moveTo[int]": {
+
+                int p = (Integer) request.getParams()[0];
+
+                delegate.setPosition(p);
+
+                return (null);
+
+            }
+            case "setPriority[int]":
+
+                delegate.setPriority((Integer) request.getParams()[0]);
+
+                return (null);
+
+            case "requestTrackerAnnounce":
+
+                delegate.requestTrackerAnnounce();
+
+                return (null);
+
+            case "getDiskManagerFileInfo":
+
+                DiskManagerFileInfo[] info = delegate.getDiskManagerFileInfo();
+
+                RPDiskManagerFileInfo[] rp_info = new RPDiskManagerFileInfo[info.length];
+
+                for (int i = 0; i < rp_info.length; i++) {
+
+                    rp_info[i] = RPDiskManagerFileInfo.create(info[i]);
+                }
+
+                return (new RPReply(rp_info));
+        }
 		
 		throw( new RPException( "Unknown method: " + method ));
 	}
@@ -644,14 +647,14 @@ RPDownload
 	{
 		force_start	= _force_start;
 		
-		_dispatcher.dispatch( new RPRequest( this, "setForceStart[boolean]", new Object[]{Boolean.valueOf(force_start)})).getResponse();
+		_dispatcher.dispatch( new RPRequest( this, "setForceStart[boolean]", new Object[]{force_start})).getResponse();
 	}
 	
 	public void 
 	setPosition(
 		int new_position) 
 	{
-		_dispatcher.dispatch( new RPRequest( this, "setPosition[int]", new Object[]{new Integer(new_position )})).getResponse();
+		_dispatcher.dispatch( new RPRequest( this, "setPosition[int]", new Object[]{new_position})).getResponse();
 	}
 	
 	public void
@@ -670,7 +673,7 @@ RPDownload
 	moveTo(
 		int		position )
 	{
-		_dispatcher.dispatch( new RPRequest( this, "moveTo[int]", new Object[]{new Integer(position )})).getResponse();	
+		_dispatcher.dispatch( new RPRequest( this, "moveTo[int]", new Object[]{position})).getResponse();
 	}
 	
 	public void stopAndQueue() throws DownloadException {
@@ -889,10 +892,10 @@ RPDownload
 						"getDiskManagerFileInfo", 
 						null)).getResponse();
 
-		for (int i=0;i<resp.length;i++){
-			
-			resp[i]._setRemote( _dispatcher );
-		}
+        for (RPDiskManagerFileInfo rpDiskManagerFileInfo : resp) {
+
+            rpDiskManagerFileInfo._setRemote(_dispatcher);
+        }
 		
 		return( resp );
 	}

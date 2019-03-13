@@ -232,18 +232,18 @@ DiskManagerUtil
 		
 		        return( true );
 		    }
-		
-		    for (int i=0;i<info.length;i++){
-		
-		        if ( to_link.equals( info[i].getFile( true ))){
-		
-		            Logger.log(new LogAlert(download_manager, LogAlert.REPEATABLE, LogAlert.AT_ERROR,
-		                            "Attempt to link to existing file '" + info[i].getFile(true)
-		                                    + "'"));
-		
-		            return( false );
-		        }
-		    }
+
+            for (DiskManagerFileInfo diskManagerFileInfo : info) {
+
+                if (to_link.equals(diskManagerFileInfo.getFile(true))) {
+
+                    Logger.log(new LogAlert(download_manager, LogAlert.REPEATABLE, LogAlert.AT_ERROR,
+                            "Attempt to link to existing file '" + diskManagerFileInfo.getFile(true)
+                                    + "'"));
+
+                    return (false);
+                }
+            }
 		
 		    if ( to_link.exists()){
 		
@@ -449,9 +449,9 @@ DiskManagerUtil
 							DiskManagerImpl.storeFilePriorities( download_manager, res);
 						}
 						
-						List<Integer>	from_indexes 	= new ArrayList<Integer>();
-						List<File>		from_links 		= new ArrayList<File>();
-						List<File>		to_links		= new ArrayList<File>();
+						List<Integer>	from_indexes 	= new ArrayList<>();
+						List<File>		from_links 		= new ArrayList<>();
+						List<File>		to_links		= new ArrayList<>();
 						
 						for(int i=0;i<res.length;i++){
 							if ( to_link[i] != null ){
@@ -1046,9 +1046,9 @@ DiskManagerUtil
 	
 	                		throws IOException
 	                	{
-	                		CacheFile temp;;
-	                		
-	                		try{
+	                		CacheFile temp;
+
+                            try{
 	                			cache_read_mon.enter();
 	
 	                			if ( read_cache_file == null ){
@@ -1349,7 +1349,7 @@ DiskManagerUtil
 					value = Integer.MIN_VALUE;
 				}
 			}
-			file_priorities.add( i, Long.valueOf(value));
+			file_priorities.add( i, (long) value);
 		}
 		
 	   download_manager.setData( "file_priorities", file_priorities );
@@ -1361,17 +1361,15 @@ DiskManagerUtil
 		   
 	       long skipped_file_set_size   = 0;
 	       long skipped_but_downloaded  = 0;
-	  
-	       for (int i=0;i<files.length;i++){
-	  
-	           DiskManagerFileInfo file = files[i];
-	  
-	           if ( file.isSkipped()){
-	  
-	               skipped_file_set_size   += file.getLength();
-	               skipped_but_downloaded  += file.getDownloaded();
-	           }
-	       }
+
+           for (DiskManagerFileInfo file : files) {
+
+               if (file.isSkipped()) {
+
+                   skipped_file_set_size += file.getLength();
+                   skipped_but_downloaded += file.getDownloaded();
+               }
+           }
 	      
 	       DownloadManagerStats stats = download_manager.getStats();
 	       if (stats instanceof DownloadManagerStatsImpl) {
@@ -1445,7 +1443,7 @@ DiskManagerUtil
 	      try{
 	          for (int i=0;i<files.length;i++){
 	
-	              files[i].setDownloaded(((Long)downloaded.get(i)).longValue());
+	              files[i].setDownloaded((Long) downloaded.get(i));
 	          }
 	     }catch( Throwable e ){
 	

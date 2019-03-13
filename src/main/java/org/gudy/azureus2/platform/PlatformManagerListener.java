@@ -22,13 +22,13 @@ package org.gudy.azureus2.platform;
 public interface 
 PlatformManagerListener 
 {
-	public static final int	ET_SHUTDOWN	= 1;
-	public static final int	ET_SUSPEND	= 2;
-	public static final int	ET_RESUME	= 3;
+	int	ET_SHUTDOWN	= 1;
+	int	ET_SUSPEND	= 2;
+	int	ET_RESUME	= 3;
 	
-	public static final int	RT_SUSPEND_DENY	= 1;
+	int	RT_SUSPEND_DENY	= 1;
 
-	public int
+	int
 	eventOccurred(
-		int		type );
+            int type);
 }

@@ -39,25 +39,25 @@ import org.gudy.azureus2.core3.util.IndentWriter;
 public interface
 DiskManager
 {
-	public static final int INITIALIZING = 1;
-	public static final int ALLOCATING = 2;
-	public static final int CHECKING = 3;
-	public static final int READY = 4;
-	public static final int FAULTY = 10;
+	int INITIALIZING = 1;
+	int ALLOCATING = 2;
+	int CHECKING = 3;
+	int READY = 4;
+	int FAULTY = 10;
 	
-	public static final int ET_NONE						= 0;
-	public static final int ET_OTHER					= 1;
-	public static final int ET_INSUFFICIENT_SPACE		= 2;
+	int ET_NONE						= 0;
+	int ET_OTHER					= 1;
+	int ET_INSUFFICIENT_SPACE		= 2;
 	
 		// CHANGE THIS AND YOU MUST CHANGE NORMAL_REQUEST_SIZE in PeerReadRequest (plugin interface)
 	
-	public static final int BLOCK_SIZE_KB 	= 16;
-	public static final int BLOCK_SIZE 		= BLOCK_SIZE_KB*1024;
+	int BLOCK_SIZE_KB 	= 16;
+	int BLOCK_SIZE 		= BLOCK_SIZE_KB*1024;
 
 	/**
 	 * Start checking/allocating
 	 */
-	public void
+    void
 	start();
 	
 		/**
@@ -65,33 +65,33 @@ DiskManager
 		 * @param closing
 		 * @return 
 		 */
-	
-	public boolean
+
+        boolean
 	stop(
-		boolean	closing );
+                boolean closing);
 	
-	public boolean
+	boolean
 	isStopped();
 	
 	/**
 	  * @return whether all files exist and sizes match
 	  */
-	
-	public boolean
+
+    boolean
 	filesExist();
 
-	public DirectByteBuffer 
+	DirectByteBuffer
 	readBlock(
-		int pieceNumber, 
-		int offset, 
-		int length );
+            int pieceNumber,
+            int offset,
+            int length);
 	
-	public DiskManagerWriteRequest
+	DiskManagerWriteRequest
 	createWriteRequest(
-		int 				pieceNumber,
-		int 				offset,
-		DirectByteBuffer 	data,
-		Object 				user_data );
+            int pieceNumber,
+            int offset,
+            DirectByteBuffer data,
+            Object user_data);
 
 	
 		/**
@@ -102,36 +102,36 @@ DiskManager
 		 * @param user_data	this will be provided to the listener when called back
 		 * @param listener
 		 */
-	
-	public void 
-	enqueueWriteRequest(
-		DiskManagerWriteRequest			request,
-		DiskManagerWriteRequestListener	listener );
 
-	public boolean
+        void
+	enqueueWriteRequest(
+                DiskManagerWriteRequest request,
+                DiskManagerWriteRequestListener listener);
+
+	boolean
 	hasOutstandingWriteRequestForPiece(
-		int		piece_number );
+            int piece_number);
 	
-	public DiskManagerReadRequest
+	DiskManagerReadRequest
 	createReadRequest(
-		int pieceNumber,
-		int offset,
-		int length );
+            int pieceNumber,
+            int offset,
+            int length);
 	
 		  /**
 		   * Enqueue an async disk read request.
 		   * @param request
 		   * @param listener
 		   */
-	
-	public void 
-	enqueueReadRequest( 
-		DiskManagerReadRequest 			request, 
-		DiskManagerReadRequestListener 	listener );
 
-	public boolean
+          void
+	enqueueReadRequest(
+                  DiskManagerReadRequest request,
+                  DiskManagerReadRequestListener listener);
+
+	boolean
 	hasOutstandingReadRequestForPiece(
-		int		piece_number );
+            int piece_number);
 	
 		/**
 		 * Create a request to check a particular piece
@@ -139,11 +139,11 @@ DiskManager
 		 * @param user_data
 		 * @return
 		 */
-	
-	public DiskManagerCheckRequest
+
+        DiskManagerCheckRequest
 	createCheckRequest(
-		int 		pieceNumber,
-		Object		user_data );
+                int pieceNumber,
+                Object user_data);
 	
 		/**
 		 * enqueue an asynchronous single piece check
@@ -151,77 +151,77 @@ DiskManager
 		 * @param listener
 		 * @param user_data
 		 */
-	
-	public void
+
+        void
 	enqueueCheckRequest(
-		DiskManagerCheckRequest			request,
-		DiskManagerCheckRequestListener	listener );
+                DiskManagerCheckRequest request,
+                DiskManagerCheckRequestListener listener);
 	
-	public boolean
+	boolean
 	hasOutstandingCheckRequestForPiece(
-		int		piece_number );
+            int piece_number);
 	
 		/**
 		 * recheck the entire torrent asynchronously, reporting each piece to the listener
 		 * @param listener
 		 * @param user_data
 		 */
-	
-	public void
+
+        void
 	enqueueCompleteRecheckRequest(
-		DiskManagerCheckRequest			request,
-		DiskManagerCheckRequestListener	listener );
+                DiskManagerCheckRequest request,
+                DiskManagerCheckRequestListener listener);
 	
-	public void
+	void
 	setPieceCheckingEnabled(
-		boolean		enabled );
+            boolean enabled);
 			
-	public void
+	void
     saveResumeData(
-    	boolean interim_save )
+            boolean interim_save)
 		
 		throws Exception;
 
 	
-	public DiskManagerPiece[] 
+	DiskManagerPiece[]
 	getPieces();
 	
-	public int 
+	int
 	getNbPieces();
 
-	public DiskManagerFileInfo[] getFiles();
-	public DiskManagerFileInfoSet getFileSet();
-	public DiskManagerPiece getPiece(int PieceNumber);
+	DiskManagerFileInfo[] getFiles();
+	DiskManagerFileInfoSet getFileSet();
+	DiskManagerPiece getPiece(int PieceNumber);
 
 		/**
 		 * DON'T CACHE the DMPieceMap - as it is designed to be discarded when not in use
 		 * @return
 		 */
+
+        DMPieceMap  getPieceMap();
 	
-	public DMPieceMap  getPieceMap();
+	DMPieceList getPieceList(int pieceNumber);
 	
-	public DMPieceList getPieceList(int pieceNumber);
-	
-	public int
+	int
 	getState();
 	
-	public long
+	long
 	getTotalLength();
 	
-	public int
+	int
 	getPieceLength();
 	
-	public int
+	int
 	getPieceLength(
-		int	piece_number );
+            int piece_number);
 	
 	/**
 	 * Get remaining bytes to completion *including* DND files
 	 */
-	public long
+    long
 	getRemaining();
 	
-	public long
+	long
 	getRemainingExcludingDND();
 	
 	/**
@@ -229,42 +229,42 @@ DiskManager
 	 *  
 	 * @return percent done * 1000 (1000 = 100%)
 	 */
-	public int
+    int
 	getPercentDone();
 	
-	public String
+	String
 	getErrorMessage();
   
-	public int
+	int
 	getErrorType();
 	
-	public void
+	void
 	downloadEnded(
-		OperationStatus		op_status );
+            OperationStatus op_status);
 
-    public void
+    void
     downloadRemoved();
 	
-	public void 
+	void
 	moveDataFiles(
-		File 				new_parent_dir, 
-		String 				dl_name, 
-		OperationStatus 	op_status );
+            File new_parent_dir,
+            String dl_name,
+            OperationStatus op_status);
 	
 		/**
 		 * returns -1 if no recheck in progress, percentage complete in 1000 notation otherwise
 		 * @return
 		 */
-	
-	public int 
+
+        int
 	getCompleteRecheckStatus();
   
 		/**
 		 * When a download's data is moving (for completion or removal events) this gives the progress in 1000 notation. -1 if nothing's going on
 		 * @return
 		 */
-	
-	public int
+
+        int
 	getMoveProgress();
 	
 		/**
@@ -274,13 +274,13 @@ DiskManager
 		 * @param data
 		 * @return
 		 */
-	
-	public boolean 
+
+        boolean
 	checkBlockConsistencyForWrite(
-		String				originator,
-		int 				pieceNumber, 
-		int 				offset, 
-		DirectByteBuffer 	data );
+                String originator,
+                int pieceNumber,
+                int offset,
+                DirectByteBuffer data);
 
 		/**
 		 * method for checking that the block details are sensible
@@ -289,84 +289,84 @@ DiskManager
 		 * @param length
 		 * @return
 		 */
-	
-	public boolean 
+
+        boolean
 	checkBlockConsistencyForRead(
-		String	originator,
-		boolean	peer_request,
-		int 	pieceNumber, 
-		int	 	offset, 
-		int 	length );
+                String originator,
+                boolean peer_request,
+                int pieceNumber,
+                int offset,
+                int length);
 		
-	public boolean 
+	boolean
 	checkBlockConsistencyForHint(
-		String	originator,
-		int 	pieceNumber, 
-		int	 	offset, 
-		int 	length );
+            String originator,
+            int pieceNumber,
+            int offset,
+            int length);
 	
-	public TOTorrent
+	TOTorrent
 	getTorrent();
 	
-	public File
+	File
 	getSaveLocation();
 	
-	public void
+	void
 	addListener(
-		DiskManagerListener	l );
+            DiskManagerListener l);
 	
-	public void
+	void
 	removeListener(
-		DiskManagerListener	l );
+            DiskManagerListener l);
   
-	public boolean
+	boolean
 	hasListener(
-	    DiskManagerListener	l );
+            DiskManagerListener l);
   
   /**
    * Save the individual file priorities map to
    * DownloadManager.getData( "file_priorities" ).
    */
 
-	public void 
+  void
 	saveState();
 
 	/**
 	 * @param pieceNumber
 	 * @return true if the pieceNumber is Needed and not Done
 	 */
-	public boolean isInteresting(int pieceNumber);
+    boolean isInteresting(int pieceNumber);
 	
-	public boolean isDone(int pieceNumber);
+	boolean isDone(int pieceNumber);
 
-	public int getCacheMode();
+	int getCacheMode();
 	
-	public long[]
+	long[]
 	getReadStats();
 	
-	public void
+	void
 	generateEvidence(
-		IndentWriter		writer );
+            IndentWriter writer);
 	
-	public interface
+	interface
 	OperationStatus
 	{
-		public void
+		void
 		gonnaTakeAWhile(
-			GettingThere	gt );
+                GettingThere gt);
 	}
 	
-	public interface
+	interface
 	GettingThere
 	{
-		public boolean
+		boolean
 		hasGotThere();
 	}
 
-	public long getSizeExcludingDND();
+	long getSizeExcludingDND();
 
-	public int getPercentDoneExcludingDND();
+	int getPercentDoneExcludingDND();
 	
-	public long
+	long
 	getPriorityChangeMarker();
 }

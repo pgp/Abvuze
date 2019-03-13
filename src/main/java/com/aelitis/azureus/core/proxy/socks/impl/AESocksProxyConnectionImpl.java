@@ -603,20 +603,20 @@ AESocksProxyConnectionImpl
 			
 			boolean found_no_auth 	= false;
 			boolean found_user_pass	= false;
-			
-			for ( int i=0;i<methods.length;i++){
-				
-				int method = methods[i]&0xff;
-				
-				if ( method == 0 ){
-					
-					found_no_auth = true;
-					
-				}else if ( method == 2 ){
-					
-					found_user_pass = true;
-				}
-			}
+
+            for (byte method1 : methods) {
+
+                int method = method1 & 0xff;
+
+                if (method == 0) {
+
+                    found_no_auth = true;
+
+                } else if (method == 2) {
+
+                    found_user_pass = true;
+                }
+            }
 			
 			if ( found_no_auth ){
 			

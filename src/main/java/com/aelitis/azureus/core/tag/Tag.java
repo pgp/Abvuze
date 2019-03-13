@@ -27,144 +27,144 @@ public interface
 Tag 
 	extends org.gudy.azureus2.plugins.tag.Tag
 {
-	public static final String	TP_SETTINGS_REQUESTED	= "Settings Requested";	// Boolean
+	String	TP_SETTINGS_REQUESTED	= "Settings Requested";	// Boolean
 	
 		/**
 		 * Unique type denoting this species of tag
 		 * @return
 		 */
-	
-	public TagType
+
+        TagType
 	getTagType();
 
 		/**
 		 * Unique ID within this tag type 
 		 * @return
 		 */
-	
-	public int
+
+        int
 	getTagID();
 	
 		/**
 		 * Unique across tag types and can be used to lookup by TagManager::lookuptagByUID
 		 * @return
 		 */
-	
-	public long
+
+        long
 	getTagUID();
 	
-	public String
-	getTagName( 
-		boolean	localize );
+	String
+	getTagName(
+            boolean localize);
 		
-	public void
+	void
 	setTagName(
-		String		name )
+            String name)
 	
 		throws TagException;
 	
-	public int
+	int
 	getTaggableTypes();
 	
-	public void
+	void
 	setCanBePublic(
-		boolean	can_be_public );
+            boolean can_be_public);
 	
-	public boolean
+	boolean
 	canBePublic();
 	
-	public boolean
+	boolean
 	isPublic();
 	
-	public void
+	void
 	setPublic(
-		boolean	pub );
+            boolean pub);
 	
 	/**
 	 * @return [auto_add,auto_remove]
 	 */
-	
-	public boolean[]
+
+    boolean[]
 	isTagAuto();
 	
-	public boolean
+	boolean
 	isVisible();
 	
-	public void
+	void
 	setVisible(
-		boolean		visible );
+            boolean visible);
 	
-	public String
+	String
 	getGroup();
 	
-	public void
+	void
 	setGroup(
-		String		group );
+            String group);
 	
-	public String
+	String
 	getImageID();
 	
-	public void
+	void
 	setImageID(
-		String		id );
+            String id);
 	
-	public int[]
+	int[]
 	getColor();
 	
-	public void
+	void
 	setColor(
-		int[]		rgb );
+            int[] rgb);
 	
-	public void
+	void
 	addTaggable(
-		Taggable	t );
+            Taggable t);
 	
-	public void
+	void
 	removeTaggable(
-		Taggable	t );
+            Taggable t);
 	
-	public int
+	int
 	getTaggedCount();
 	
-	public Set<Taggable>
+	Set<Taggable>
 	getTagged();
 	
-	public boolean
+	boolean
 	hasTaggable(
-		Taggable	t );
+            Taggable t);
 	
-	public void
+	void
 	removeTag();
 	
-	public String
+	String
 	getDescription();
 	
-	public void
+	void
 	setDescription(
-		String		desc );
+            String desc);
 	
-	public void
+	void
 	setTransientProperty(
-		String		property,
-		Object		value );
+            String property,
+            Object value);
 	
-	public Object
+	Object
 	getTransientProperty(
-		String		property );
+            String property);
 	
-	public long
+	long
 	getTaggableAddedTime(
-		Taggable	taggble );
+            Taggable taggble);
 	
-	public void
+	void
 	requestAttention();
 	
-	public void
+	void
 	addTagListener(
-		TagListener	listener,
-		boolean		fire_for_existing );
+            TagListener listener,
+            boolean fire_for_existing);
 	
-	public void
+	void
 	removeTagListener(
-		TagListener	listener );
+            TagListener listener);
 }

@@ -25,15 +25,15 @@ package com.aelitis.azureus.ui.common.table;
  */
 public interface TableSelectionListener
 {
-	public void selected(TableRowCore[] row);
+	void selected(TableRowCore[] row);
 
-	public void deselected(TableRowCore[] rows);
+	void deselected(TableRowCore[] rows);
 	
-	public void focusChanged(TableRowCore focus);
+	void focusChanged(TableRowCore focus);
 
-	public void defaultSelected(TableRowCore[] rows, int stateMask);
+	void defaultSelected(TableRowCore[] rows, int stateMask);
 
-	public void mouseEnter(TableRowCore row);
+	void mouseEnter(TableRowCore row);
 
-	public void mouseExit(TableRowCore row);
+	void mouseExit(TableRowCore row);
 }

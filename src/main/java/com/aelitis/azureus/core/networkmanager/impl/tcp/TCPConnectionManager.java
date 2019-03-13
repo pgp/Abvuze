@@ -153,26 +153,24 @@ public class TCPConnectionManager {
   
   private long connection_request_id_next;
   
-  private final Set<ConnectionRequest> new_requests = 
-	  new TreeSet<ConnectionRequest>(
-			new Comparator<ConnectionRequest>()
-			{
-				public int 
-				compare(
-					ConnectionRequest r1, 
-					ConnectionRequest r2 )
-				{
-					if ( r1 == r2 ){
-						
-						return( 0 );
-					}
-					
-					int	res = r1.getPriority() - r2.getPriority();
-					
-					if ( res == 0 ){
-						
-							// check for duplicates
-							// erm, no, think of the socks data proxy connections luke
+  private final Set<ConnectionRequest> new_requests =
+          new TreeSet<>(
+                  new Comparator<ConnectionRequest>() {
+                      public int
+                      compare(
+                              ConnectionRequest r1,
+                              ConnectionRequest r2) {
+                          if (r1 == r2) {
+
+                              return (0);
+                          }
+
+                          int res = r1.getPriority() - r2.getPriority();
+
+                          if (res == 0) {
+
+                              // check for duplicates
+                              // erm, no, think of the socks data proxy connections luke
 						
 						/*
 						InetSocketAddress a1 = r1.address;
@@ -186,41 +184,41 @@ public class TCPConnectionManager {
 							}
 						}
 						*/
-						
-						res = r1.getRandom() - r2.getRandom();
-						
-						if ( res == 0 ){
-							
-							long l = r1.getID() - r2.getID();
-							
-							if ( l < 0 ){
-								
-								res = -1;
-								
-							}else if ( l > 0 ){
-								
-								res = 1;
-								
-							}else{
-								
-								Debug.out( "arghhh, borkage" );
-							}
-						}
-					}
-					
-					return( res );
-				}
-			});
+
+                              res = r1.getRandom() - r2.getRandom();
+
+                              if (res == 0) {
+
+                                  long l = r1.getID() - r2.getID();
+
+                                  if (l < 0) {
+
+                                      res = -1;
+
+                                  } else if (l > 0) {
+
+                                      res = 1;
+
+                                  } else {
+
+                                      Debug.out("arghhh, borkage");
+                                  }
+                              }
+                          }
+
+                          return (res);
+                      }
+                  });
   
-  private final List<ConnectListener> 	canceled_requests 	= new ArrayList<ConnectListener>();
+  private final List<ConnectListener> 	canceled_requests 	= new ArrayList<>();
   
   private final AEMonitor	new_canceled_mon	= new AEMonitor( "ConnectDisconnectManager:NCM");
   
-  private final Map<ConnectionRequest,Object> pending_attempts = new HashMap<ConnectionRequest, Object>();
+  private final Map<ConnectionRequest,Object> pending_attempts = new HashMap<>();
   
-  private final LinkedList<SocketChannel> 	pending_closes 	= new LinkedList<SocketChannel>();
+  private final LinkedList<SocketChannel> 	pending_closes 	= new LinkedList<>();
   
-  private final Map<SocketChannel,Long>		delayed_closes	= new HashMap<SocketChannel, Long>();
+  private final Map<SocketChannel,Long>		delayed_closes	= new HashMap<>();
   
   private final AEMonitor	pending_closes_mon = new AEMonitor( "ConnectDisconnectManager:PC");
        
@@ -230,7 +228,7 @@ public class TCPConnectionManager {
   public 
   TCPConnectionManager() 
   {
-	  Set<String>	types = new HashSet<String>();
+	  Set<String>	types = new HashSet<>();
 	  
 	  types.add( AzureusCoreStats.ST_NET_TCP_OUT_CONNECT_QUEUE_LENGTH );
 	  types.add( AzureusCoreStats.ST_NET_TCP_OUT_CANCEL_QUEUE_LENGTH );
@@ -248,22 +246,22 @@ public class TCPConnectionManager {
 					{
 						if ( types.contains( AzureusCoreStats.ST_NET_TCP_OUT_CONNECT_QUEUE_LENGTH )){
 							
-							values.put( AzureusCoreStats.ST_NET_TCP_OUT_CONNECT_QUEUE_LENGTH, new Long( new_requests.size()));
+							values.put( AzureusCoreStats.ST_NET_TCP_OUT_CONNECT_QUEUE_LENGTH, (long) new_requests.size());
 						}	
 						
 						if ( types.contains( AzureusCoreStats.ST_NET_TCP_OUT_CANCEL_QUEUE_LENGTH )){
 							
-							values.put( AzureusCoreStats.ST_NET_TCP_OUT_CANCEL_QUEUE_LENGTH, new Long( canceled_requests.size()));
+							values.put( AzureusCoreStats.ST_NET_TCP_OUT_CANCEL_QUEUE_LENGTH, (long) canceled_requests.size());
 						}					
 
 						if ( types.contains( AzureusCoreStats.ST_NET_TCP_OUT_CLOSE_QUEUE_LENGTH )){
 							
-							values.put( AzureusCoreStats.ST_NET_TCP_OUT_CLOSE_QUEUE_LENGTH, new Long( pending_closes.size()));
+							values.put( AzureusCoreStats.ST_NET_TCP_OUT_CLOSE_QUEUE_LENGTH, (long) pending_closes.size());
 						}					
 
 						if ( types.contains( AzureusCoreStats.ST_NET_TCP_OUT_PENDING_QUEUE_LENGTH )){
 							
-							values.put( AzureusCoreStats.ST_NET_TCP_OUT_PENDING_QUEUE_LENGTH, new Long( pending_attempts.size()));
+							values.put( AzureusCoreStats.ST_NET_TCP_OUT_PENDING_QUEUE_LENGTH, (long) pending_attempts.size());
 						}					
 
 					}
@@ -361,7 +359,7 @@ public class TCPConnectionManager {
 					  Logger.log(new LogEvent(LOGID, "Setting socket TOS field "
 							  + "for outgoing connection [" + request.address + "] to: "
 							  + ip_tos));
-				  request.channel.socket().setTrafficClass( Integer.decode( ip_tos ).intValue() );
+				  request.channel.socket().setTrafficClass(Integer.decode(ip_tos));
 			  }
 
 			  if( local_bind_port > 0 ) {
@@ -620,26 +618,24 @@ public class TCPConnectionManager {
     try{
       new_canceled_mon.enter();
 
-      for (Iterator<ConnectListener> can_it = canceled_requests.iterator(); can_it.hasNext();){
-    	  
-        ConnectListener key =can_it.next();
+        for (ConnectListener key : canceled_requests) {
 
-        for (Iterator<ConnectionRequest> pen_it = pending_attempts.keySet().iterator(); pen_it.hasNext();) {
-        	
-          ConnectionRequest request =pen_it.next();
-          
-          if ( request.listener == key ){
-         	  
-            connect_selector.cancel(request.channel);
+            for (Iterator<ConnectionRequest> pen_it = pending_attempts.keySet().iterator(); pen_it.hasNext(); ) {
 
-            closeConnection(request.channel);
+                ConnectionRequest request = pen_it.next();
 
-            pen_it.remove();
-            
-            break;
-          }
+                if (request.listener == key) {
+
+                    connect_selector.cancel(request.channel);
+
+                    closeConnection(request.channel);
+
+                    pen_it.remove();
+
+                    break;
+                }
+            }
         }
-      }
 
       canceled_requests.clear();
       
@@ -706,7 +702,7 @@ public class TCPConnectionManager {
 
 	        if ( timeouts == null ){
 	        	
-	        	timeouts = new ArrayList<ConnectionRequest>();
+	        	timeouts = new ArrayList<>();
 	        }
 	        
 	        timeouts.add( request );
@@ -787,9 +783,9 @@ public class TCPConnectionManager {
     		
     		while( it.hasNext()){
     			
-    			Map.Entry<SocketChannel,Long>	entry = (Map.Entry<SocketChannel,Long>)it.next();
+    			Map.Entry<SocketChannel,Long>	entry = it.next();
     			
-    			long	wait = ((Long)entry.getValue()).longValue() - now;
+    			long	wait = entry.getValue() - now;
     			
     			if ( wait < 0 || wait > 60*1000 ){
     				
@@ -886,26 +882,24 @@ public class TCPConnectionManager {
 			  }
 	
 			  if ( priority == ProtocolEndpoint.CONNECT_PRIORITY_HIGHEST ){
-	
-				  for (Iterator<ConnectionRequest> pen_it = pending_attempts.keySet().iterator(); pen_it.hasNext();){
-	
-					  ConnectionRequest request =(ConnectionRequest) pen_it.next();
-	
-					  if ( request.priority == ProtocolEndpoint.CONNECT_PRIORITY_LOW ){
-	
-						  if ( !canceled_requests.contains( request.listener )){
-						  
-							  canceled_requests.add( request.listener );
-						  
-							  if ( kicked == null ){
-							  
-								  kicked = new ArrayList<ConnectionRequest>();
-							  }
-						  
-							  kicked.add( request );
-						  }
-					  }
-				  }
+
+                  for (ConnectionRequest request : pending_attempts.keySet()) {
+
+                      if (request.priority == ProtocolEndpoint.CONNECT_PRIORITY_LOW) {
+
+                          if (!canceled_requests.contains(request.listener)) {
+
+                              canceled_requests.add(request.listener);
+
+                              if (kicked == null) {
+
+                                  kicked = new ArrayList<>();
+                              }
+
+                              kicked.add(request);
+                          }
+                      }
+                  }
 			  }
 		  }
 	  }finally{
@@ -925,18 +919,18 @@ public class TCPConnectionManager {
 	  }
 	  
 	  if ( kicked != null ){
-		  
-		  for (int i=0;i<kicked.size();i++){
-			  
-			  try{
-				  ((ConnectionRequest)kicked.get(i)).listener.connectFailure(
-						 new Exception( "Low priority connection request abandoned in favour of high priority" ));
-				  
-			  }catch( Throwable e ){
-				  
-				  Debug.printStackTrace( e );
-			  }
-		  }
+
+          for (ConnectionRequest connectionRequest : kicked) {
+
+              try {
+                  connectionRequest.listener.connectFailure(
+                          new Exception("Low priority connection request abandoned in favour of high priority"));
+
+              } catch (Throwable e) {
+
+                  Debug.printStackTrace(e);
+              }
+          }
 	  }
   }
   
@@ -970,7 +964,7 @@ public class TCPConnectionManager {
 			  }
 		  }else{
 
-			  delayed_closes.put( channel, new Long( SystemTime.getMonotonousTime() + delay ));
+			  delayed_closes.put( channel, SystemTime.getMonotonousTime() + delay);
 		  }
 	  }finally{
 
@@ -1073,20 +1067,20 @@ public class TCPConnectionManager {
       * i.e. the connection is actively being attempted.
       * @return adjusted connect timeout
       */
-     public int connectAttemptStarted( int default_timeout );    
+     int connectAttemptStarted(int default_timeout);
      
      /**
       * The connection attempt succeeded.
       * @param channel connected socket channel
       */
-     public void connectSuccess( SocketChannel channel ) ;
+     void connectSuccess(SocketChannel channel) ;
      
     
     /**
      * The connection attempt failed.
      * @param failure_msg failure reason
      */
-    public void connectFailure( Throwable failure_msg );
+    void connectFailure(Throwable failure_msg);
   }
    
 /////////////////////////////////////////////////////////////

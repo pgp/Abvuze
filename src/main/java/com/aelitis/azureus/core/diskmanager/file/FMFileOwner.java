@@ -33,12 +33,12 @@ import org.gudy.azureus2.core3.torrent.TOTorrentFile;
 public interface 
 FMFileOwner 
 {
-	public String
+	String
 	getName();
 	
-	public TOTorrentFile
+	TOTorrentFile
 	getTorrentFile();
 	
-	public File
-	getControlFileDir( );
+	File
+	getControlFileDir();
 }

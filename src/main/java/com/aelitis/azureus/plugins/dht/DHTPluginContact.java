@@ -31,61 +31,61 @@ import java.util.Map;
 public interface 
 DHTPluginContact 
 {
-	public byte[]
+	byte[]
 	getID();
 	
-	public String
+	String
 	getName();
 	
-	public InetSocketAddress
+	InetSocketAddress
 	getAddress();
 	
-	public byte
+	byte
 	getProtocolVersion();
 	
-	public int
+	int
 	getNetwork();
 	
-	public Map<String,Object>
+	Map<String,Object>
 	exportToMap();
 	
-	public boolean
+	boolean
 	isAlive(
-		long		timeout );
+            long timeout);
 	
-	public void
+	void
 	isAlive(
-		long						timeout,
-		DHTPluginOperationListener	listener );
+            long timeout,
+            DHTPluginOperationListener listener);
 	
-	public boolean
+	boolean
 	isOrHasBeenLocal();
 	
-	public Map
+	Map
 	openTunnel();
 	
-	public byte[]
+	byte[]
 	read(
-		DHTPluginProgressListener	listener,
-		byte[]						handler_key,
-		byte[]						key,
-		long						timeout );
+            DHTPluginProgressListener listener,
+            byte[] handler_key,
+            byte[] key,
+            long timeout);
 	
-	public void
+	void
 	write(
-		DHTPluginProgressListener	listener,
-		byte[]						handler_key,
-		byte[]						key,
-		byte[]						data,
-		long						timeout );
+            DHTPluginProgressListener listener,
+            byte[] handler_key,
+            byte[] key,
+            byte[] data,
+            long timeout);
 	
-	public byte[]
+	byte[]
 	call(
-		DHTPluginProgressListener	listener,
-		byte[]						handler_key,
-		byte[]						data,
-		long						timeout );
+            DHTPluginProgressListener listener,
+            byte[] handler_key,
+            byte[] data,
+            long timeout);
 	
-	public String
+	String
 	getString();
 }

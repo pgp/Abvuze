@@ -23,12 +23,12 @@ package org.gudy.azureus2.plugins.disk;
 public interface 
 DiskManagerReadRequest 
 {
-	public int
+	int
 	getPieceNumber();
 	
-	public int
+	int
 	getOffset();
 	
-	public int
+	int
 	getLength();
 }

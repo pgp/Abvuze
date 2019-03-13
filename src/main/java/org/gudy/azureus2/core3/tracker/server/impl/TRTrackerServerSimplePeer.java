@@ -27,39 +27,39 @@ import com.aelitis.azureus.core.dht.netcoords.DHTNetworkPosition;
 public interface 
 TRTrackerServerSimplePeer 
 {
-	public byte[]
+	byte[]
 	getIPAsRead();
 	
-	public byte[]
+	byte[]
 	getIPAddressBytes();
 
-	public HashWrapper
+	HashWrapper
    	getPeerId();
 
-	public int
+	int
 	getTCPPort();
 	
-	public int
+	int
 	getUDPPort();
 	
-	public int
+	int
 	getHTTPPort();
 	
-	public boolean
+	boolean
 	isSeed();
 	
-	public boolean
+	boolean
 	isBiased();
 	
-	public byte
+	byte
 	getCryptoLevel();
 	
-	public byte
+	byte
 	getAZVer();
 	
-	public int
+	int
 	getUpSpeed();
 	
-	public DHTNetworkPosition
+	DHTNetworkPosition
 	getNetworkPosition();
 }

@@ -75,8 +75,8 @@ TransferProcessor
   private final ByteBucket main_bucket;
   private final EntityHandler main_controller;
   
-  private final HashMap<LimitedRateGroup,GroupData> 			group_buckets 	= new HashMap<LimitedRateGroup,GroupData>();
-  private final HashMap<NetworkConnectionBase,ConnectionData> 	connections 	= new HashMap<NetworkConnectionBase,ConnectionData>();
+  private final HashMap<LimitedRateGroup,GroupData> 			group_buckets 	= new HashMap<>();
+  private final HashMap<NetworkConnectionBase,ConnectionData> 	connections 	= new HashMap<>();
   
   private final AEMonitor connections_mon;
 
@@ -182,7 +182,7 @@ TransferProcessor
     	  
 		  // boolean log = group.getName().contains("parg");
 
-    	  GroupData group_data = (GroupData)group_buckets.get( group );
+    	  GroupData group_data = group_buckets.get( group );
 	      if( group_data == null ) {
 	        int limit = NetworkManagerUtilities.getGroupRateLimit( group );
 	        group_data = new GroupData( createBucket( limit ) );
@@ -222,7 +222,7 @@ TransferProcessor
 	  try{ 
 		  connections_mon.enter();
 
-		  return( new ArrayList<NetworkConnectionBase>( connections.keySet()));
+		  return(new ArrayList<>(connections.keySet()));
 
 	  }finally{
 
@@ -243,7 +243,7 @@ TransferProcessor
    */
   public void deregisterPeerConnection( NetworkConnectionBase connection ) {
     try{ connections_mon.enter();
-      ConnectionData conn_data = (ConnectionData)connections.remove( connection );
+      ConnectionData conn_data = connections.remove( connection );
       
       if( conn_data != null ) {
     	  
@@ -287,23 +287,23 @@ TransferProcessor
 	  try{ 
 		  connections_mon.enter();
 	  
-	      ConnectionData conn_data = (ConnectionData)connections.get( connection );
+	      ConnectionData conn_data = connections.get( connection );
 	      
 	      if ( conn_data != null ){
 	    	 
 			  LimitedRateGroup[]	groups 		= conn_data.groups;
 
-			  for (int i=0;i<groups.length;i++){
-				  
-				  if ( groups[i] == group ){
-					  
-					  return;
-				  }
-			  }
+              for (LimitedRateGroup group1 : groups) {
+
+                  if (group1 == group) {
+
+                      return;
+                  }
+              }
 			  
 			  // boolean log = group.getName().contains("parg");
 			  
-	    	  GroupData group_data = (GroupData)group_buckets.get( group );
+	    	  GroupData group_data = group_buckets.get( group );
 	    	  
 		      if ( group_data == null ){
 		    	  
@@ -360,7 +360,7 @@ TransferProcessor
 	   try{ 
 		   connections_mon.enter();
 		   
-		   ConnectionData conn_data = (ConnectionData)connections.get( connection );
+		   ConnectionData conn_data = connections.get( connection );
 	      
 		   if ( conn_data != null ){
 	    	  
@@ -433,7 +433,7 @@ TransferProcessor
     try{ 
     	connections_mon.enter();
       
-    	connection_data = (ConnectionData)connections.get( connection );
+    	connection_data = connections.get( connection );
     	
     }finally{
     	
@@ -627,7 +627,7 @@ TransferProcessor
     ConnectionData conn_data = null;
     
     try{ connections_mon.enter();
-      conn_data = (ConnectionData)connections.get( connection );
+      conn_data = connections.get( connection );
     }
     finally{ connections_mon.exit(); }
     

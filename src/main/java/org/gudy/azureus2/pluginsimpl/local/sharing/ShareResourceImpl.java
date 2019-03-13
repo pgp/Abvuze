@@ -76,30 +76,28 @@ ShareResourceImpl
 		Map	attrs = (Map)_map.get( "attributes" );
 		
 		if ( attrs != null ){
-			
-			Iterator	keys = attrs.keySet().iterator();
-			
-			while( keys.hasNext()){
-				
-				String	key = (String)keys.next();
-				
-				try{
-					String	value = new String((byte[])attrs.get(key), Constants.DEFAULT_ENCODING );
-				
-					TorrentAttribute ta = TorrentManagerImpl.getSingleton().getAttribute( key );
-					
-					if ( ta == null ){
-						
-						Debug.out( "Invalid attribute '" + key );
-					}else{
-						
-						attributes.put( ta, value );
-					}
-				}catch( Throwable e ){
-					
-					Debug.printStackTrace(e);
-				}
-			}
+
+            for (Object o : attrs.keySet()) {
+
+                String key = (String) o;
+
+                try {
+                    String value = new String((byte[]) attrs.get(key), Constants.DEFAULT_ENCODING);
+
+                    TorrentAttribute ta = TorrentManagerImpl.getSingleton().getAttribute(key);
+
+                    if (ta == null) {
+
+                        Debug.out("Invalid attribute '" + key);
+                    } else {
+
+                        attributes.put(ta, value);
+                    }
+                } catch (Throwable e) {
+
+                    Debug.printStackTrace(e);
+                }
+            }
 		}
 	}
 	
@@ -168,11 +166,11 @@ ShareResourceImpl
 			config.suspendSaving();
 		
 			ShareResource[]	kids = getChildren();
-			
-			for (int i=0;i<kids.length;i++){
-				
-				kids[i].setAttribute( attribute, value );
-			}
+
+            for (ShareResource kid : kids) {
+
+                kid.setAttribute(attribute, value);
+            }
 			
 			String	old_value = (String)attributes.get( attribute );
 			
@@ -206,32 +204,29 @@ ShareResourceImpl
 				Debug.printStackTrace( e );
 			}
 		}
-		
-		for (int i=0;i<change_listeners.size();i++){
-			
-			try{
-				((ShareResourceListener)change_listeners.get(i)).shareResourceChanged(
-						this,
-						new ShareResourceEvent()
-						{
-							public int
-							getType()
-							{
-								return( ShareResourceEvent.ET_ATTRIBUTE_CHANGED);
-							}
-							
-							public Object
-							getData()
-							{
-								return( attribute );
-							}
-						});
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace(e);
-			}
-		}
+
+        for (Object change_listener : change_listeners) {
+
+            try {
+                ((ShareResourceListener) change_listener).shareResourceChanged(
+                        this,
+                        new ShareResourceEvent() {
+                            public int
+                            getType() {
+                                return (ShareResourceEvent.ET_ATTRIBUTE_CHANGED);
+                            }
+
+                            public Object
+                            getData() {
+                                return (attribute);
+                            }
+                        });
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 	
 	public String
@@ -256,11 +251,11 @@ ShareResourceImpl
 		ShareResourceImpl	source )
 	{
 		TorrentAttribute[]	attrs = source.getAttributes();
-		
-		for ( int i=0;i<attrs.length;i++ ){
-			
-			setAttribute( attrs[i], source.getAttribute( attrs[i] ));
-		}
+
+        for (TorrentAttribute attr : attrs) {
+
+            setAttribute(attr, source.getAttribute(attr));
+        }
 	}
 	
 	public void
@@ -378,25 +373,25 @@ ShareResourceImpl
 				List file_list = new ArrayList(Arrays.asList(dir_file_list));
 				
 				Collections.sort(file_list);
-				
-				for (int i=0;i<file_list.size();i++){
-					
-					File	f = (File)file_list.get(i);
-					
-					String	file_name = f.getName();
-					
-					if ( !(file_name.equals( "." ) || file_name.equals( ".." ))){
-						
-						StringBuffer	sub_print	= new StringBuffer();
-						
-						getFingerPrintSupport( sub_print, f, ignore_set );
-						
-						if  ( sub_print.length() > 0 ){
-							
-							buffer.append( ":" ).append( sub_print );
-						}
-					}
-				}
+
+                for (Object o : file_list) {
+
+                    File f = (File) o;
+
+                    String file_name = f.getName();
+
+                    if (!(file_name.equals(".") || file_name.equals(".."))) {
+
+                        StringBuffer sub_print = new StringBuffer();
+
+                        getFingerPrintSupport(sub_print, f, ignore_set);
+
+                        if (sub_print.length() > 0) {
+
+                            buffer.append(":").append(sub_print);
+                        }
+                    }
+                }
 			}else{
 				
 				throw( new ShareException( "ShareResource::getFingerPrint: '" + file.toString() + "' doesn't exist" ));

@@ -259,8 +259,8 @@ public class VuzeActivitiesEntry
 	}
 
 	public Map<String, Object> toDeletedMap() {
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("timestamp", new Long(timestamp));
+		Map<String, Object> map = new HashMap<>();
+		map.put("timestamp", timestamp);
 		map.put("id", id);
 		return map;
 	}
@@ -313,8 +313,8 @@ public class VuzeActivitiesEntry
 		"rawtypes"
 	})
 	public Map<String, Object> toMap() {
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("timestamp", new Long(timestamp));
+		Map<String, Object> map = new HashMap<>();
+		map.put("timestamp", timestamp);
 		if (assetHash != null) {
 			map.put("assetHash", assetHash);
 		}
@@ -323,7 +323,7 @@ public class VuzeActivitiesEntry
 		map.put("text", getText());
 		map.put("typeID", getTypeID());
 		map.put("assetImageURL", assetImageURL);
-		map.put("showThumb", new Long(getShowThumb() ? 1 : 0));
+		map.put("showThumb", (long) (getShowThumb() ? 1 : 0));
 		if (imageBytes != null) {
 			map.put("imageBytes", imageBytes);
 		} else if (dm != null) {
@@ -364,10 +364,10 @@ public class VuzeActivitiesEntry
 		}
 		
 		if (playable) {
-			map.put("playable", new Long(playable ? 1 : 0));
+			map.put("playable", (long) (playable ? 1 : 0));
 		}
 		
-		map.put("readOn", new Long(readOn));
+		map.put("readOn", readOn);
 		
 		if ( actions != null && actions.length > 0 ){
 			List<String>	list = Arrays.asList( actions );

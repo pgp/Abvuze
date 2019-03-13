@@ -26,23 +26,23 @@ package org.gudy.azureus2.core3.config;
  */
 public interface StringList {
 	
-	public int size();
+	int size();
 	
-	public String get(int i);
+	String get(int i);
 	
-	public void add(String str);
+	void add(String str);
 
-	public void add(int index,String str);
+	void add(int index, String str);
 
-	public StringIterator iterator();
+	StringIterator iterator();
 	
-	public int indexOf(String str);
+	int indexOf(String str);
 	
-	public boolean contains(String str);
+	boolean contains(String str);
 
-	public String remove(int index);
+	String remove(int index);
 	
-	public String[] toArray();
+	String[] toArray();
 	
-	public void clear();
+	void clear();
 }

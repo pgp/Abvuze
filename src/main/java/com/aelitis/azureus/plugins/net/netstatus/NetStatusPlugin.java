@@ -156,7 +156,7 @@ NetStatusPlugin
 						try{
 							Class.forName( "com.aelitis.azureus.plugins.net.netstatus.swt.NetStatusPluginView" ).getConstructor(
 								new Class[]{ NetStatusPlugin.class, UIInstance.class, String.class } ).newInstance(
-									new Object[]{ NetStatusPlugin.this, instance, VIEW_ID } );
+                                    NetStatusPlugin.this, instance, VIEW_ID);
 							
 						}catch( Throwable e ){
 							

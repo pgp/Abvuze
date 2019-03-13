@@ -22,13 +22,13 @@ package com.aelitis.net.upnp.services;
 public interface 
 UPnPWANConnectionListener 
 {
-	public void
+	void
 	mappingResult(
-		UPnPWANConnection	connection,
-		boolean				ok );
+            UPnPWANConnection connection,
+            boolean ok);
 		
-	public void
+	void
 	mappingsReadResult(
-		UPnPWANConnection	connection,
-		boolean				ok );
+            UPnPWANConnection connection,
+            boolean ok);
 }

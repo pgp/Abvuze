@@ -23,21 +23,21 @@ package com.aelitis.azureus.core.download;
 public interface 
 StreamManagerDownloadListener 
 {
-	public void
+	void
 	updateActivity(
-		String		str );
+            String str);
 	
-	public void
+	void
 	updateStats(
-		int			secs_until_playable,
-		int			buffer_secs,
-		long		buffer_bytes,
-		int			target_buffer_secs );
+            int secs_until_playable,
+            int buffer_secs,
+            long buffer_bytes,
+            int target_buffer_secs);
 	
-	public void
+	void
 	ready();
 	
-	public void
+	void
 	failed(
-		Throwable 	error );
+            Throwable error);
 }

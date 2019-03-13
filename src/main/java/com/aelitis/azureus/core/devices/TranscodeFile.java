@@ -30,115 +30,115 @@ TranscodeFile
 {
 		// don't change these, they are serialised
 	
-	public static final String PT_COMPLETE		= "comp";
-	public static final String PT_COPIED		= "copied";
-	public static final String PT_COPY_FAILED	= "copy_fail";
-	public static final String PT_CATEGORY		= "cat";
-	public static final String PT_TAGS			= "tags";
+	String PT_COMPLETE		= "comp";
+	String PT_COPIED		= "copied";
+	String PT_COPY_FAILED	= "copy_fail";
+	String PT_CATEGORY		= "cat";
+	String PT_TAGS			= "tags";
 	
-	public String
+	String
 	getName();
 	
-	public DiskManagerFileInfo
+	DiskManagerFileInfo
 	getSourceFile()
 	
 		throws TranscodeException;
 	
-	public DiskManagerFileInfo 
+	DiskManagerFileInfo
 	getTargetFile() 
 	
 		throws TranscodeException;
 	
-	public String
+	String
 	getProfileName();
 	
-	public long
+	long
 	getCreationDateMillis();
 	
-	public boolean
+	boolean
 	isComplete();
 	
-	public boolean
+	boolean
 	getTranscodeRequired();
 	
-	public boolean
+	boolean
 	isCopiedToDevice();
 	
-	public long
+	long
 	getCopyToDeviceFails();
 	
-	public void
+	void
 	retryCopyToDevice();
 	
-	public boolean
+	boolean
 	isTemplate();
 	
-	public long
+	long
 	getDurationMillis();
 	
-	public long
+	long
 	getVideoWidth();
 	
-	public long
+	long
 	getVideoHeight();
 	
-	public long
+	long
 	getEstimatedTranscodeSize();
 	
-	public String[]
+	String[]
 	getCategories();
 	
-	public void
+	void
 	setCategories(
-		String[]	cats );
+            String[] cats);
 	
-	public String[]
+	String[]
 	getTags(
-		boolean	localize );
+            boolean localize);
 	
-	public void
+	void
 	setTags(
-		String[]	tags );
+            String[] tags);
 	
-	public Device
+	Device
 	getDevice();
 	
-	public File
+	File
 	getCacheFileIfExists();
 	
 		/**
 		 * Will return null unless there is a job in existance for this file
 		 * @return
 		 */
-	
-	public TranscodeJob
+
+        TranscodeJob
 	getJob();
 	
-	public URL
+	URL
 	getStreamURL();
 	
-	public URL
+	URL
 	getStreamURL(
-		String	host );
+            String host);
 	
-	public void
+	void
 	delete(
-		boolean	delete_cache_file )
+            boolean delete_cache_file)
 	
 		throws TranscodeException;
 	
-	public void
+	void
 	setTransientProperty(
-		Object		key,
-		Object		value );
+            Object key,
+            Object value);
 			
-	public Object
+	Object
 	getTransientProperty(
-		Object		key );
+            Object key);
 
-	public boolean 
+	boolean
 	isDeleted();
 
-	public boolean
+	boolean
 	isCopyingToDevice();
 }

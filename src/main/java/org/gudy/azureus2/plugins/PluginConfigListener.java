@@ -22,6 +22,6 @@ package org.gudy.azureus2.plugins;
 public interface 
 PluginConfigListener 
 {
-	public void
+	void
 	configSaved();
 }

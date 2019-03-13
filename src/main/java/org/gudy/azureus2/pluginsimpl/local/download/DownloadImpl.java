@@ -501,7 +501,7 @@ DownloadImpl
   }
     
   public List<Tag> getTags() {
-	  return( new ArrayList<Tag>( TagManagerFactory.getTagManager().getTagsForTaggable( download_manager )));
+	  return(new ArrayList<>(TagManagerFactory.getTagManager().getTagsForTaggable(download_manager)));
   }
   
   public String
@@ -842,21 +842,21 @@ DownloadImpl
 		throws DownloadRemovalVetoException
 	{
 			// no sync required, see update code
-		
-		for (int i=0;i<removal_listeners.size();i++){
-			
-			try{
-				((DownloadWillBeRemovedListener)removal_listeners.get(i)).downloadWillBeRemoved(this);
-				
-			}catch( DownloadRemovalVetoException e ){
-				
-				throw( e );
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace( e );
-			}
-		}
+
+        for (Object removal_listener : removal_listeners) {
+
+            try {
+                ((DownloadWillBeRemovedListener) removal_listener).downloadWillBeRemoved(this);
+
+            } catch (DownloadRemovalVetoException e) {
+
+                throw (e);
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 	
 	protected void
@@ -887,27 +887,27 @@ DownloadImpl
 		if ( prev_state != latest_state || latest_forcedStart != curr_forcedStart ){
 			
 			latest_forcedStart = curr_forcedStart;
-			
-			for (int i=0;i<listeners_to_use.size();i++){
-				
-				try{
-					long startTime = SystemTime.getCurrentTime();
-					DownloadListener listener = (DownloadListener)listeners_to_use.get(i);
 
-					listener.stateChanged( this, prev_state, latest_state );
-					
-					long diff = SystemTime.getCurrentTime() - startTime;
-					if (diff > 1000) {
-						System.out.println("Plugin should move long processes (" + diff
-								+ "ms) off of Download's stateChanged listener trigger. "
-								+ listener);
-					}
-				
-				}catch( Throwable e ){
-					
-					Debug.printStackTrace( e );
-				}
-			}
+            for (Object o : listeners_to_use) {
+
+                try {
+                    long startTime = SystemTime.getCurrentTime();
+                    DownloadListener listener = (DownloadListener) o;
+
+                    listener.stateChanged(this, prev_state, latest_state);
+
+                    long diff = SystemTime.getCurrentTime() - startTime;
+                    if (diff > 1000) {
+                        System.out.println("Plugin should move long processes (" + diff
+                                + "ms) off of Download's stateChanged listener trigger. "
+                                + listener);
+                    }
+
+                } catch (Throwable e) {
+
+                    Debug.printStackTrace(e);
+                }
+            }
 		}
 	}
 	
@@ -946,24 +946,24 @@ DownloadImpl
   	DownloadManager download, 
     int oldPosition, 
 	int newPosition) 
-  {	
-	for (int i = 0; i < listeners.size(); i++) {
-		try {
-			long startTime = SystemTime.getCurrentTime();
-			DownloadListener listener = (DownloadListener)listeners.get(i);
+  {
+      for (Object listener1 : listeners) {
+          try {
+              long startTime = SystemTime.getCurrentTime();
+              DownloadListener listener = (DownloadListener) listener1;
 
-			listener.positionChanged(this, oldPosition, newPosition);
+              listener.positionChanged(this, oldPosition, newPosition);
 
-			long diff = SystemTime.getCurrentTime() - startTime;
-			if (diff > 1000) {
-				System.out.println("Plugin should move long processes (" + diff
-						+ "ms) off of Download's positionChanged listener trigger. "
-						+ listener);
-			}
-		} catch (Throwable e) {
-			Debug.printStackTrace( e );
-		}
-	}
+              long diff = SystemTime.getCurrentTime() - startTime;
+              if (diff > 1000) {
+                  System.out.println("Plugin should move long processes (" + diff
+                          + "ms) off of Download's positionChanged listener trigger. "
+                          + listener);
+              }
+          } catch (Throwable e) {
+              Debug.printStackTrace(e);
+          }
+      }
   }
 
 	public void
@@ -1247,17 +1247,17 @@ DownloadImpl
 			return;
 		
 		last_scrape_result.setContent( response );
-		
-		for (int i=0;i<tracker_listeners.size();i++){
-			
-			try{						
-				((DownloadTrackerListener)tracker_listeners.get(i)).scrapeResult( last_scrape_result );
 
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace( e );
-			}
-		}
+        for (Object tracker_listener : tracker_listeners) {
+
+            try {
+                ((DownloadTrackerListener) tracker_listener).scrapeResult(last_scrape_result);
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 	
 	// Used by DownloadEventNotifierImpl.
@@ -1273,17 +1273,17 @@ DownloadImpl
 		last_announce_result.setContent( response );
 		
 		List	tracker_listeners_ref = tracker_listeners;
-		
-		for (int i=0;i<tracker_listeners_ref.size();i++){
-			
-			try{						
-				((DownloadTrackerListener)tracker_listeners_ref.get(i)).announceResult( last_announce_result );
 
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace( e );
-			}
-		}
+        for (Object o : tracker_listeners_ref) {
+
+            try {
+                ((DownloadTrackerListener) o).announceResult(last_announce_result);
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 	
 	public TrackerPeerSource
@@ -1507,7 +1507,7 @@ DownloadImpl
 				
 				if ( announce_response_map == null ){
 					
-					announce_response_map = new HashMap<String, int[]>();
+					announce_response_map = new HashMap<>();
 					
 				}else{
 					
@@ -1519,7 +1519,7 @@ DownloadImpl
 					}
 				}
 				
-				int[]	data = (int[])announce_response_map.get( class_name );
+				int[]	data = announce_response_map.get( class_name );
 				
 				if ( data == null ){
 					
@@ -1558,7 +1558,7 @@ DownloadImpl
 				
 				if ( announce_response_map == null ){
 					
-					announce_response_map = new HashMap<String, int[]>();
+					announce_response_map = new HashMap<>();
 					
 				}else{
 					
@@ -1570,7 +1570,7 @@ DownloadImpl
 					}
 				}
 				
-				int[]	data = (int[])announce_response_map.get( class_name );
+				int[]	data = announce_response_map.get( class_name );
 				
 				if ( data == null ){
 					
@@ -1608,34 +1608,31 @@ DownloadImpl
 			final TorrentAttribute	attr = convertAttribute( name );
 			
 			if ( attr != null ){
-				
-				for (int i=0;i<property_listeners_ref.size();i++){
-					
-					try{						
-						((DownloadPropertyListener)property_listeners_ref.get(i)).propertyChanged(
-								this,
-								new DownloadPropertyEvent()
-								{
-									public int
-									getType()
-									{
-										return( type==DownloadManagerStateEvent.ET_ATTRIBUTE_WRITTEN
-													?DownloadPropertyEvent.PT_TORRENT_ATTRIBUTE_WRITTEN
-													:DownloadPropertyEvent.PT_TORRENT_ATTRIBUTE_WILL_BE_READ	);
-									}
-									
-									public Object
-									getData()
-									{
-										return( attr );
-									}
-								});
 
-					}catch( Throwable e ){
-						
-						Debug.printStackTrace( e );
-					}
-				}
+                for (Object o : property_listeners_ref) {
+
+                    try {
+                        ((DownloadPropertyListener) o).propertyChanged(
+                                this,
+                                new DownloadPropertyEvent() {
+                                    public int
+                                    getType() {
+                                        return (type == DownloadManagerStateEvent.ET_ATTRIBUTE_WRITTEN
+                                                ? DownloadPropertyEvent.PT_TORRENT_ATTRIBUTE_WRITTEN
+                                                : DownloadPropertyEvent.PT_TORRENT_ATTRIBUTE_WILL_BE_READ);
+                                    }
+
+                                    public Object
+                                    getData() {
+                                        return (attr);
+                                    }
+                                });
+
+                    } catch (Throwable e) {
+
+                        Debug.printStackTrace(e);
+                    }
+                }
 			}			
 		}
 	}
@@ -1922,21 +1919,21 @@ DownloadImpl
 				return( count );
 			}
 		};
-		
-		for (Iterator it=activation_listeners.iterator();it.hasNext();){	
-				
-			try{
-				DownloadActivationListener	listener = (DownloadActivationListener)it.next();
-				
-				if ( listener.activationRequested( event )){
-					
-					return( true );
-				}
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace(e);
-			}
-		}
+
+        for (Object activation_listener : activation_listeners) {
+
+            try {
+                DownloadActivationListener listener = (DownloadActivationListener) activation_listener;
+
+                if (listener.activationRequested(event)) {
+
+                    return (true);
+                }
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 		
 		return( false );
 	}
@@ -2289,12 +2286,15 @@ DownloadImpl
 		listeners = ((CopyOnWriteList)attr_listener_map.get(attribute)).getList();
 
 		if (listeners == null) {return;}
-	
-		for (int i=0; i<listeners.size(); i++) {
-			DownloadAttributeListener dal = (DownloadAttributeListener)listeners.get(i);
-			try {dal.attributeEventOccurred(this, attr, event_type);}
-			catch (Throwable t) {Debug.printStackTrace(t);}
-		}
+
+        for (Object listener : listeners) {
+            DownloadAttributeListener dal = (DownloadAttributeListener) listener;
+            try {
+                dal.attributeEventOccurred(this, attr, event_type);
+            } catch (Throwable t) {
+                Debug.printStackTrace(t);
+            }
+        }
 	}
 	
 	public SaveLocationChange calculateDefaultDownloadLocation() {

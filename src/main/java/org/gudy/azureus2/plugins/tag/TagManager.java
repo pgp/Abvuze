@@ -27,14 +27,14 @@ import java.util.List;
 public interface 
 TagManager 
 {
-	public List<Tag>
+	List<Tag>
 	getTags();
 	
-	public Tag
+	Tag
 	lookupTag(
-		String		name );
+            String name);
 	
-	public Tag
+	Tag
 	createTag(
-		String		name );
+            String name);
 }

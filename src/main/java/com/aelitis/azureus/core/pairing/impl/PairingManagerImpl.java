@@ -32,6 +32,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -161,7 +162,7 @@ PairingManagerImpl
 
 	private final BooleanParameter 	param_icon_enable;
 
-	private final Map<String,PairedServiceImpl>		services = new HashMap<String, PairedServiceImpl>();
+	private final Map<String,PairedServiceImpl>		services = new HashMap<>();
 	
 	private final AESemaphore	init_sem = new AESemaphore( "PM:init" );
 	
@@ -197,9 +198,9 @@ PairingManagerImpl
 	
 	private String			last_message;
 	
-	final Map<String,Object[]>	local_address_checks = new HashMap<String, Object[]>();
+	final Map<String,Object[]>	local_address_checks = new HashMap<>();
 
-	private final CopyOnWriteList<PairingManagerListener>	listeners = new CopyOnWriteList<PairingManagerListener>();
+	private final CopyOnWriteList<PairingManagerListener>	listeners = new CopyOnWriteList<>();
 	
 	private UIAdapter		ui;
 	
@@ -574,11 +575,11 @@ PairingManagerImpl
 					
 			InputStream is =  new ResourceDownloaderFactoryImpl().create( url ).download();
 			
-			Map json = JSONUtils.decodeJSON( new String( FileUtil.readInputStreamAsByteArray( is ), "UTF-8" ));
+			Map json = JSONUtils.decodeJSON( new String( FileUtil.readInputStreamAsByteArray( is ), StandardCharsets.UTF_8));
 			
 			List<Map>	list = (List<Map>)json.get( "result" );
 			
-			List<PairedNode>	result = new ArrayList<PairedNode>();
+			List<PairedNode>	result = new ArrayList<>();
 			
 			String my_ac = peekAccessCode();
 
@@ -614,7 +615,7 @@ PairingManagerImpl
 					
 			InputStream is =  new ResourceDownloaderFactoryImpl().create( url ).download();
 			
-			String reply = new String( FileUtil.readInputStreamAsByteArray( is ), "UTF-8" );
+			String reply = new String( FileUtil.readInputStreamAsByteArray( is ), StandardCharsets.UTF_8);
 			
 				// hack to remove callback
 			
@@ -631,7 +632,7 @@ PairingManagerImpl
 			
 			List<Map>	list = (List<Map>)json.get( "result" );
 			
-			List<PairedService>	result = new ArrayList<PairedService>();
+			List<PairedService>	result = new ArrayList<>();
 			
 			if ( list != null ){
 				
@@ -821,7 +822,7 @@ PairingManagerImpl
 			}
 		}
 		
-		Map<String,Object>	request = new HashMap<String, Object>();
+		Map<String,Object>	request = new HashMap<>();
 		
 		request.put( "ac", existing );
 		
@@ -845,7 +846,7 @@ PairingManagerImpl
 	
 		throws PairingException
 	{
-		Map<String,Object>	request = new HashMap<String, Object>();
+		Map<String,Object>	request = new HashMap<>();
 		
 		String existing = readAccessCode();
 		
@@ -1056,18 +1057,18 @@ PairingManagerImpl
 	
 			InetAddress temp_v6 = updateAddress( current_v6, latest_v6, true );
 			
-			final TreeSet<String>	latest_v4_locals = new TreeSet<String>();
-			final TreeSet<String>	latest_v6_locals = new TreeSet<String>();
+			final TreeSet<String>	latest_v4_locals = new TreeSet<>();
+			final TreeSet<String>	latest_v6_locals = new TreeSet<>();
 			
 			NetworkAdminNetworkInterface[] interfaces = network_admin.getInterfaces();
 			
-			List<Runnable>	to_do = new ArrayList<Runnable>();
+			List<Runnable>	to_do = new ArrayList<>();
 			
 			Set<String> existing_checked;
 			
 			synchronized( local_address_checks ){
 				
-				existing_checked = new HashSet<String>( local_address_checks.keySet());
+				existing_checked = new HashSet<>(local_address_checks.keySet());
 			}
 			
 			for ( NetworkAdminNetworkInterface intf: interfaces ){
@@ -1106,30 +1107,21 @@ PairingManagerImpl
 									public void
 									run()
 									{
-										Socket socket = new Socket();
-										
-										String	result = a_str;
-										
-										try{
-											socket.bind( new InetSocketAddress( ia, 0 ));
-																								
-											socket.connect(  new InetSocketAddress( "www.google.com", 80 ), 10*1000 );
-											
-											result += "*";
-											
-										}catch( Throwable e ){
-											
-										}finally{
-											try{
-												socket.close();
-											}catch( Throwable e ){
-											}
-											
-										}
+										String result = a_str;
+                                        try (Socket socket = new Socket()) {
+                                            socket.bind(new InetSocketAddress(ia, 0));
+
+                                            socket.connect(new InetSocketAddress("www.google.com", 80), 10 * 1000);
+
+                                            result += "*";
+
+                                        } catch (Throwable e) {
+
+                                        }
 										
 										synchronized( local_address_checks ){
 											
-											local_address_checks.put( a_str, new Object[]{ new Long(now), result });
+											local_address_checks.put( a_str, new Object[]{now, result });
 																		
 											if ( ia instanceof Inet4Address ){
 													
@@ -1303,7 +1295,7 @@ PairingManagerImpl
 		}
 		
 		try{
-			Map<String,Object>	payload = new HashMap<String, Object>();
+			Map<String,Object>	payload = new HashMap<>();
 						
 			boolean	is_enabled = param_enable.getValue();
 			
@@ -1311,7 +1303,7 @@ PairingManagerImpl
 			
 			synchronized( this ){
 				
-				List<Map<String,String>>	list =  new ArrayList<Map<String,String>>();
+				List<Map<String,String>>	list = new ArrayList<>();
 				
 				payload.put( "s", list );
 				
@@ -1480,13 +1472,13 @@ PairingManagerImpl
 
 				        if ( upnp.isEnabled()){
 				        	
-				        	List<Map<String,String>>	upnp_list = new ArrayList<Map<String,String>>();
+				        	List<Map<String,String>>	upnp_list = new ArrayList<>();
 				        	
 				        	payload.put( "upnp", upnp_list );
 				        	
 				        	UPnPPluginService[] services = upnp.getServices();
 				        	
-				        	Set<UPnPRootDevice> devices = new HashSet<UPnPRootDevice>();
+				        	Set<UPnPRootDevice> devices = new HashSet<>();
 				        	
 				        	for ( UPnPPluginService service: services ){
 				        		
@@ -1503,7 +1495,7 @@ PairingManagerImpl
 				        			
 				        			devices.add( root_device );
 				        	
-					        		Map<String,String>	map = new HashMap<String, String>();
+					        		Map<String,String>	map = new HashMap<>();
 					        	
 					        		upnp_list.add( map );
 					        		
@@ -1656,7 +1648,7 @@ PairingManagerImpl
 		throws PairingException
 	{
 		try{
-			Map<String, Object> request = new HashMap<String, Object>();
+			Map<String, Object> request = new HashMap<>();
 
 			CryptoManager cman = CryptoManagerFactory.getSingleton();
 
@@ -1679,7 +1671,7 @@ PairingManagerImpl
 			String	sig = null;
 			
 			try{
-				sig = Base32.encode( cman.getECCHandler().sign( request_str.getBytes( "UTF-8" ), "pairing" ));
+				sig = Base32.encode( cman.getECCHandler().sign( request_str.getBytes(StandardCharsets.UTF_8), "pairing" ));
 				
 			}catch( Throwable e ){
 			}
@@ -1716,7 +1708,7 @@ PairingManagerImpl
 			
 			InputStream is = connection.getInputStream();
 			
-			Map<String,Object> response = (Map<String,Object>)BDecoder.decode( new BufferedInputStream( is ));
+			Map<String,Object> response = BDecoder.decode( new BufferedInputStream( is ));
 			
 			synchronized( this ){
 				
@@ -1785,7 +1777,7 @@ PairingManagerImpl
 			
 			if ( qr_v != null ){
 				
-				if ( qr_version != qr_v.longValue()){
+				if ( qr_version != qr_v){
 				
 					qr_version = qr_v;
 					
@@ -1933,7 +1925,7 @@ PairingManagerImpl
 			return( null );
 		}
 		
-		return( new String( bytes, "UTF-8" ));
+		return( new String( bytes, StandardCharsets.UTF_8));
 	}
 	
 	public void 
@@ -2058,7 +2050,7 @@ PairingManagerImpl
 							
 							InputStream is = connection.getInputStream();
 							
-							Map<String,Object> response = (Map<String,Object>)BDecoder.decode( new BufferedInputStream( is ));
+							Map<String,Object> response = BDecoder.decode( new BufferedInputStream( is ));
 							
 							response = BDecoder.decodeStrings( response );
 							
@@ -2095,9 +2087,9 @@ PairingManagerImpl
 								
 							}else{
 								
-								outcome = OT_SERVER_FAILED;;
-								
-								error_message = "Unknown response code " + code;
+								outcome = OT_SERVER_FAILED;
+
+                                error_message = "Unknown response code " + code;
 							}
 						}catch( SocketTimeoutException e ){
 							
@@ -2153,7 +2145,7 @@ PairingManagerImpl
 		implements PairedService, PairingConnectionData
 	{
 		private final String				sid;
-		private final Map<String,String>	attributes	= new HashMap<String, String>();
+		private final Map<String,String>	attributes	= new HashMap<>();
 		
 		private	PairedServiceRequestHandler		request_handler;
 		
@@ -2239,7 +2231,7 @@ PairingManagerImpl
 		toMap(
 			boolean		enable_nets )
 		{
-			Map<String,String> result = new HashMap<String, String>();
+			Map<String,String> result = new HashMap<>();
 			
 			result.put( "sid", sid );
 			
@@ -2281,7 +2273,7 @@ PairingManagerImpl
 		public List<InetAddress>
 		getAddresses()
 		{
-			Set<InetAddress> addresses = new HashSet<InetAddress>();
+			Set<InetAddress> addresses = new HashSet<>();
 			
 			addAddress( addresses, "c_v4" );
 			addAddress( addresses, "c_v6" );
@@ -2293,7 +2285,7 @@ PairingManagerImpl
 			addAddress( addresses, "e_l_v6" );
 			addAddress( addresses, "e_h" );
 			
-			return( new ArrayList<InetAddress>( addresses ));
+			return(new ArrayList<>(addresses));
 		}
 		
 		private void
@@ -2336,7 +2328,7 @@ PairingManagerImpl
 		{
 			Map<String,Map> smap = (Map)map.get( "services" );
 			
-			List<PairedService>	services = new ArrayList<PairedService>();
+			List<PairedService>	services = new ArrayList<>();
 			
 			for ( Map.Entry<String,Map> entry: smap.entrySet()){
 				
@@ -2420,18 +2412,18 @@ PairingManagerImpl
 	public interface
 	UIAdapter
 	{
-		public void
+		void
 		initialise(
-			PluginInterface			pi,
-			BooleanParameter		icon_enable );
+                PluginInterface pi,
+                BooleanParameter icon_enable);
 		
-		public void
+		void
 		recordRequest(
-			final String		name,
-			final String		ip,
-			final boolean		good );
+                final String name,
+                final String ip,
+                final boolean good);
 		
-		public char[]
+		char[]
 		getSRPPassword();
 	}
 }

@@ -24,29 +24,29 @@ public interface
 TagFeatureRunState
 	extends TagFeatureRateLimit
 {
-	public static final int	RSC_STOP	= 0x00000001;
-	public static final int	RSC_PAUSE	= 0x00000002;
-	public static final int	RSC_RESUME	= 0x00000004;
-	public static final int	RSC_START	= 0x00000008;
+	int	RSC_STOP	= 0x00000001;
+	int	RSC_PAUSE	= 0x00000002;
+	int	RSC_RESUME	= 0x00000004;
+	int	RSC_START	= 0x00000008;
 
-	public static final int	RSC_NONE	= 0x00000000;
-	public static final int	RSC_ALL		= 0xffffffff;
+	int	RSC_NONE	= 0x00000000;
+	int	RSC_ALL		= 0xffffffff;
 
-	public static final int	RSC_STOP_PAUSE			= RSC_STOP | RSC_PAUSE;
-	public static final int	RSC_START_STOP_PAUSE	= RSC_START | RSC_STOP | RSC_PAUSE;
+	int	RSC_STOP_PAUSE			= RSC_STOP | RSC_PAUSE;
+	int	RSC_START_STOP_PAUSE	= RSC_START | RSC_STOP | RSC_PAUSE;
 	
-	public int
+	int
 	getRunStateCapabilities();
 	
-	public boolean
+	boolean
 	hasRunStateCapability(
-		int		capability );
+            int capability);
 	
-	public boolean[]
+	boolean[]
 	getPerformableOperations(
-		int[]	ops );
+            int[] ops);
 	
-	public void
+	void
 	performOperation(
-		int		op );
+            int op);
 }

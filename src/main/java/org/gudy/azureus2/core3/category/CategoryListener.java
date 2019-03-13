@@ -30,12 +30,12 @@ public interface CategoryListener {
   /** A DownloadManager has been added to a Category
    * @param cat Category that the DownloadManager has been added to
    * @param manager DownloadManager that was added
-   */  
-	public void	downloadManagerAdded(Category cat, DownloadManager manager);
+   */
+  void	downloadManagerAdded(Category cat, DownloadManager manager);
 		
   /** A DownloadManager has been removed from a Category
    * @param cat Category that the DownloadManager was removed from
    * @param removed The DownloadManager that was removed
-   */  
-	public void	downloadManagerRemoved(Category cat, DownloadManager removed);
+   */
+  void	downloadManagerRemoved(Category cat, DownloadManager removed);
 }

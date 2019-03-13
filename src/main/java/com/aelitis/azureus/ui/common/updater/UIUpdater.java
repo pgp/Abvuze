@@ -24,29 +24,29 @@ package com.aelitis.azureus.ui.common.updater;
 public interface UIUpdater
 {
 
-	public void addUpdater(UIUpdatable updateable );
+	void addUpdater(UIUpdatable updateable);
 
-	public boolean isAdded( UIUpdatable updateable );
+	boolean isAdded(UIUpdatable updateable);
 	
-	public void removeUpdater(UIUpdatable updateable );
+	void removeUpdater(UIUpdatable updateable);
 
-	public void stopIt();
+	void stopIt();
 
-	public void start();
+	void start();
 	
-	public void
+	void
 	addListener(
-		UIUpdaterListener		listener );
+            UIUpdaterListener listener);
 	
-	public void
+	void
 	removeListener(
-		UIUpdaterListener		listener );
+            UIUpdaterListener listener);
 	
-	public interface
+	interface
 	UIUpdaterListener
 	{
-		public void
+		void
 		updateComplete(
-			int		count );
+                int count);
 	}
 }

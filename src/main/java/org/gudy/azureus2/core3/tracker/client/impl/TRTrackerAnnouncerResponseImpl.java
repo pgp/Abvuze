@@ -237,13 +237,11 @@ TRTrackerAnnouncerResponseImpl
 		System.out.println( "\tpeers:" );
 		
 		if ( peers != null ){
-					
-			for (int i=0;i<peers.length;i++){
-				
-				TRTrackerAnnouncerResponsePeer	peer = peers[i];
-				
-				System.out.println( "\t\t" + peer.getAddress() + ":" + peer.getPort());
-			}
+
+            for (TRTrackerAnnouncerResponsePeer peer : peers) {
+
+                System.out.println("\t\t" + peer.getAddress() + ":" + peer.getPort());
+            }
 		}
 	}
 		

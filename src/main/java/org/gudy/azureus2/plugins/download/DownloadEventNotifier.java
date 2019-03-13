@@ -37,7 +37,7 @@ public interface DownloadEventNotifier {
 	 * @param l The listener to add.
 	 * @since 2.0.7.0
 	 */
-	public void addListener(DownloadListener l);
+    void addListener(DownloadListener l);
 
 	/**
 	 * Removes a listener object added via the
@@ -46,7 +46,7 @@ public interface DownloadEventNotifier {
 	 * @param l The listener to remove.
 	 * @since 2.0.7.0
 	 */
-	public void removeListener(DownloadListener l);
+    void removeListener(DownloadListener l);
 
 	/**
 	 * Adds a listener that will be informed when the latest announce/scrape
@@ -58,7 +58,7 @@ public interface DownloadEventNotifier {
 	 * @param l The listener to add.
 	 * @since 2.0.7.0
 	 */
-	public void addTrackerListener(DownloadTrackerListener l);
+    void addTrackerListener(DownloadTrackerListener l);
 
 	/**
 	 * Adds a listener that will be informed when the latest announce/scrape
@@ -68,7 +68,7 @@ public interface DownloadEventNotifier {
 	 * @param immediateTrigger Whether to immediately trigger listener's events.
 	 * @since 2.4.0.3
 	 */
-	public void addTrackerListener(DownloadTrackerListener l, boolean immediateTrigger);
+    void addTrackerListener(DownloadTrackerListener l, boolean immediateTrigger);
 
 	/**
 	 * Removes a listener object added via the
@@ -78,7 +78,7 @@ public interface DownloadEventNotifier {
 	 * @param l The listener to remove.
 	 * @since 2.0.7.0
 	 */
-	public void removeTrackerListener(DownloadTrackerListener l);
+    void removeTrackerListener(DownloadTrackerListener l);
 
 	/**
 	 * Adds a listener that will be informed when a download is about to be
@@ -87,7 +87,7 @@ public interface DownloadEventNotifier {
 	 * @param l The listener to add.
 	 * @since 2.0.7.0
 	 */
-	public void addDownloadWillBeRemovedListener(DownloadWillBeRemovedListener l);
+    void addDownloadWillBeRemovedListener(DownloadWillBeRemovedListener l);
 
 	/**
 	 * Removes a listener object added via the
@@ -97,8 +97,8 @@ public interface DownloadEventNotifier {
 	 * @param l The listener to remove.
 	 * @since 2.0.7.0
 	 */
-	public void removeDownloadWillBeRemovedListener(
-			DownloadWillBeRemovedListener l);
+    void removeDownloadWillBeRemovedListener(
+            DownloadWillBeRemovedListener l);
 
 	/**
 	 * Adds a listener that will be invoked when a request is made to activate a
@@ -108,7 +108,7 @@ public interface DownloadEventNotifier {
 	 * @since 2.4.0.3
 	 */
 
-	public void addActivationListener(DownloadActivationListener l);
+    void addActivationListener(DownloadActivationListener l);
 
 	/**
 	 * Removes a listener object added via the
@@ -118,7 +118,7 @@ public interface DownloadEventNotifier {
 	 * @since 2.4.0.3
 	 */
 
-	public void removeActivationListener(DownloadActivationListener l);
+    void removeActivationListener(DownloadActivationListener l);
 
 	/**
 	 * Adds a listener that will be informed of when peer managers have been
@@ -127,7 +127,7 @@ public interface DownloadEventNotifier {
 	 * @param l The listener to add.
 	 * @since 2.1.0.0
 	 */
-	public void addPeerListener(DownloadPeerListener l);
+    void addPeerListener(DownloadPeerListener l);
 
 	/**
 	 * Removes a listener object added via the
@@ -136,7 +136,7 @@ public interface DownloadEventNotifier {
 	 * @param l The listener to remove.
 	 * @since 2.1.0.0
 	 */
-	public void removePeerListener(DownloadPeerListener l);
+    void removePeerListener(DownloadPeerListener l);
 
 	/**
 	 * Adds a listener that will be informed of when properties on a download
@@ -147,7 +147,7 @@ public interface DownloadEventNotifier {
 	 * @deprecated Use {@link #addAttributeListener(DownloadAttributeListener, TorrentAttribute, int)}
 	 *     instead - support for this method will be removed in future.
 	 */
-	public void addPropertyListener(DownloadPropertyListener l);
+    void addPropertyListener(DownloadPropertyListener l);
 
 	/**
 	 * Removes a listener object added via the
@@ -156,7 +156,7 @@ public interface DownloadEventNotifier {
 	 * @param l The listener to remove.
 	 * @since 2.2.0.2
 	 */
-	public void removePropertyListener(DownloadPropertyListener l);
+    void removePropertyListener(DownloadPropertyListener l);
 	
 	/**
 	 * Adds a listener that will be informed of when attributes on a download
@@ -167,7 +167,7 @@ public interface DownloadEventNotifier {
 	 * @param event_type The type of event to be notified of, as defined on {@link DownloadAttributeListener}.
 	 * @since 3.0.3.5
 	 */
-	public void addAttributeListener(DownloadAttributeListener l, TorrentAttribute attr, int event_type);
+    void addAttributeListener(DownloadAttributeListener l, TorrentAttribute attr, int event_type);
 
 	/**
 	 * Removes a listener object added via the
@@ -178,7 +178,7 @@ public interface DownloadEventNotifier {
 	 * @param event_type The type of event which it registered with.
 	 * @since 3.0.3.5
 	 */
-	public void removeAttributeListener(DownloadAttributeListener l, TorrentAttribute attr, int event_type);
+    void removeAttributeListener(DownloadAttributeListener l, TorrentAttribute attr, int event_type);
 	
 	/**
 	 * Adds a listener that will be informed when a download moves into a
@@ -187,7 +187,7 @@ public interface DownloadEventNotifier {
 	 * @param l The listener to add.
 	 * @since 3.0.5.3
 	 */
-	public void addCompletionListener(DownloadCompletionListener l);
+    void addCompletionListener(DownloadCompletionListener l);
 	
 	/**
 	 * Removes a listener object removed via the
@@ -196,5 +196,5 @@ public interface DownloadEventNotifier {
 	 * @param l The listener to remove.
 	 * @since 3.0.5.3
 	 */
-	public void removeCompletionListener(DownloadCompletionListener l);
+    void removeCompletionListener(DownloadCompletionListener l);
 }

@@ -72,7 +72,7 @@ NetworkGlueLoopBack
 							
 							Object[]	entry = (Object[])message_queue.get(0);
 							
-							if (((Long)entry[0]).longValue() < now ){
+							if ((Long) entry[0] < now ){
 								
 								message_queue.remove(0);
 								
@@ -100,7 +100,7 @@ NetworkGlueLoopBack
 	
 		throws IOException
 	{	
-		Long	expires = new Long( SystemTime.getCurrentTime() + latency );
+		Long	expires = SystemTime.getCurrentTime() + latency;
 			
 		InetSocketAddress local_address = new InetSocketAddress( target.getAddress(), local_port );
 			

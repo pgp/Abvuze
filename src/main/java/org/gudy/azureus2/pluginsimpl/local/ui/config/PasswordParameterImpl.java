@@ -24,6 +24,7 @@ package org.gudy.azureus2.pluginsimpl.local.ui.config;
  * @author parg
  *
  */
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import org.gudy.azureus2.core3.util.Debug;
 import org.gudy.azureus2.core3.util.SHA1Hasher;
@@ -108,7 +109,7 @@ PasswordParameterImpl
 		
 		try{
 		
-			return( encode( encoding_type == ET_MD5?str.getBytes( "UTF-8" ):str.getBytes()));
+			return( encode( encoding_type == ET_MD5?str.getBytes(StandardCharsets.UTF_8):str.getBytes()));
 			
 		}catch( Throwable e ){
 			

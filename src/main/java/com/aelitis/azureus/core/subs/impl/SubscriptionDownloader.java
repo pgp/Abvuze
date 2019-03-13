@@ -90,7 +90,7 @@ SubscriptionDownloader
 		}
 		*/
 		
-		SearchParameter[] parameters = (SearchParameter[])sps.toArray(new SearchParameter[ sps.size()] );
+		SearchParameter[] parameters = (SearchParameter[])sps.toArray(new SearchParameter[0]);
 
 		
 		SubscriptionHistoryImpl history = (SubscriptionHistoryImpl)subs.getHistory();
@@ -143,18 +143,16 @@ SubscriptionDownloader
 			
 			return;
 		}
-		
-		for (int i=0;i<results.length;i++){
-			
-			SubscriptionResultImpl	result = results[i];
-			
-			if ( result.isDeleted() || result.getRead()){
-				
-				continue;
-			}
-						
-			manager.getScheduler().download( subs, result );
-		}
+
+        for (SubscriptionResultImpl result : results) {
+
+            if (result.isDeleted() || result.getRead()) {
+
+                continue;
+            }
+
+            manager.getScheduler().download(subs, result);
+        }
 	}
 	
 	protected void

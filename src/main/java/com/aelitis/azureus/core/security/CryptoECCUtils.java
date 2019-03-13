@@ -121,7 +121,7 @@ CryptoECCUtils
    	{
    		BigInteger D = new BigInteger(input);
    		
-   		KeySpec keyspec = new ECPrivateKeySpec(D,(ECParameterSpec)ECCparam);
+   		KeySpec keyspec = new ECPrivateKeySpec(D, ECCparam);
    		
    		PrivateKey privkey = null;
    		
@@ -159,7 +159,7 @@ CryptoECCUtils
    	{
    		ECPoint W = ECCparam.getCurve().decodePoint(input);
    		
-   		KeySpec keyspec = new ECPublicKeySpec(W,(ECParameterSpec)ECCparam);
+   		KeySpec keyspec = new ECPublicKeySpec(W, ECCparam);
 
    		try{
    			

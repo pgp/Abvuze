@@ -168,17 +168,15 @@ DiskAccessRequestImpl
 			
 			base_request.getListener().requestExecuted( total_size );
 
-			for (int i=0;i<requests.length;i++){
+            for (DiskAccessRequestImpl request : requests) {
 
-				DiskAccessRequestImpl	request = requests[i];
-				
-				request.getListener().requestComplete( request );
-				
-				if ( request != base_request ){
-					
-					request.getListener().requestExecuted( 0 );
-				}
-			}
+                request.getListener().requestComplete(request);
+
+                if (request != base_request) {
+
+                    request.getListener().requestExecuted(0);
+                }
+            }
 			
 		}catch( CacheFileManagerException e ){
 			
@@ -198,13 +196,11 @@ DiskAccessRequestImpl
 				request.getListener().requestFailed( request, e );
 			}			
 		}catch( Throwable e ){
-			
-			for (int i=0;i<requests.length;i++){
 
-				DiskAccessRequestImpl	request = requests[i];
-				
-				request.getListener().requestFailed( request, e );
-			}			
+            for (DiskAccessRequestImpl request : requests) {
+
+                request.getListener().requestFailed(request, e);
+            }
 		}
 	}
 	

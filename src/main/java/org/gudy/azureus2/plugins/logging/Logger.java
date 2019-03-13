@@ -40,7 +40,7 @@ public interface Logger {
 	 * 
 	 * @since 2.0.7.0
 	 */
-	public LoggerChannel getChannel(String name);
+    LoggerChannel getChannel(String name);
 
 	/**
 	 * Create a timestamped logging channel. Multiple calls to this method with
@@ -51,7 +51,7 @@ public interface Logger {
 	 * 
 	 * @since 2.3.0.0
 	 */
-	public LoggerChannel getTimeStampedChannel(String name);
+    LoggerChannel getTimeStampedChannel(String name);
 
 	/**
 	 * Create a logger channel that doesn't output to the standard AZ log.
@@ -64,7 +64,7 @@ public interface Logger {
 	 * 
 	 * @since 2.3.0.0
 	 */
-	public LoggerChannel getNullChannel(String name);
+    LoggerChannel getNullChannel(String name);
 
 	/**
 	 * Retrieve all the channels that have been created for all plugins.
@@ -73,7 +73,7 @@ public interface Logger {
 	 * 
 	 * @since 2.1.0.0
 	 */
-	public LoggerChannel[] getChannels();
+    LoggerChannel[] getChannels();
 
 	/**
 	 * Retrieve the PluginInterface
@@ -82,7 +82,7 @@ public interface Logger {
 	 * 
 	 * @since 2.3.0.0
 	 */
-	public PluginInterface getPluginInterface();
+    PluginInterface getPluginInterface();
 
 	/**
 	 * Add LoggerAlertListener for all alerts raised. It might be a
@@ -93,7 +93,7 @@ public interface Logger {
 	 * @see #addAlertListener(LogAlertListener)
 	 * @since 2.3.0.6
 	 */
-	public void addAlertListener(LoggerAlertListener listener);
+    void addAlertListener(LoggerAlertListener listener);
 
 	/**
 	 * Remove previously added AlertListener.
@@ -101,22 +101,22 @@ public interface Logger {
 	 * @param listener LoggerAlertListener to remove
 	 * @since 2.3.0.6
 	 */
-	public void removeAlertListener(LoggerAlertListener listener);
+    void removeAlertListener(LoggerAlertListener listener);
 	
 	/**
 	 * Add a listener to be informed of any alerts to be displayed to users.
 	 * 
 	 * @since 3.1.1.1
 	 */
-	public void addAlertListener(LogAlertListener listener);
+    void addAlertListener(LogAlertListener listener);
 
 	/**
 	 * Remove a previously added alert listener.
 	 * 
 	 * @since 3.1.1.1
 	 */
-	public void removeAlertListener(LogAlertListener listener);
+    void removeAlertListener(LogAlertListener listener);
 	
-	public void addFileLoggingListener(FileLoggerAdapter listener);
-	public void removeFileLoggingListener(FileLoggerAdapter listener);
+	void addFileLoggingListener(FileLoggerAdapter listener);
+	void removeFileLoggingListener(FileLoggerAdapter listener);
 }

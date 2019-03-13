@@ -37,7 +37,7 @@ public interface Transport {
    * @return number of bytes read
    * @throws IOException on read error
    */
-  public long read( ByteBuffer[] buffers, int array_offset, int length ) throws IOException;
+  long read(ByteBuffer[] buffers, int array_offset, int length) throws IOException;
   
   
   /**
@@ -49,10 +49,10 @@ public interface Transport {
    * @return number of bytes written
    * @throws IOException on write error
    */
-  public long write( ByteBuffer[] buffers, int array_offset, int length ) throws IOException;
+  long write(ByteBuffer[] buffers, int array_offset, int length) throws IOException;
   
   /**
    * @since 3.0.5.3
    */
-  public void setFilter(TransportFilter filter) throws IOException;
+  void setFilter(TransportFilter filter) throws IOException;
 }

@@ -540,25 +540,25 @@ TRNonBlockingServer
         	this_mon.enter();
         
         	List	new_processors = new ArrayList(processors.size());
-        	
-        	for (int i=0;i<processors.size();i++){
-        		
-        		TRNonBlockingServerProcessor	processor = (TRNonBlockingServerProcessor)processors.get(i);
-        		
-        		if ( now - processor.getStartTime() > PROCESSING_GET_LIMIT && !processor.areTimeoutsDisabled()){
-              
-        			read_selector.cancel( processor.getSocketChannel() );
-        			write_selector.cancel( processor.getSocketChannel() );
-              
-        			connections_to_close.add( processor );
-                	            		
-        			total_timeouts++;
-               		
-        		}else{
-        			
-        			new_processors.add( processor );
-        		}
-        	}
+
+            for (Object processor1 : processors) {
+
+                TRNonBlockingServerProcessor processor = (TRNonBlockingServerProcessor) processor1;
+
+                if (now - processor.getStartTime() > PROCESSING_GET_LIMIT && !processor.areTimeoutsDisabled()) {
+
+                    read_selector.cancel(processor.getSocketChannel());
+                    write_selector.cancel(processor.getSocketChannel());
+
+                    connections_to_close.add(processor);
+
+                    total_timeouts++;
+
+                } else {
+
+                    new_processors.add(processor);
+                }
+            }
         	
         	processors	= new_processors;
         	
@@ -599,20 +599,20 @@ TRNonBlockingServer
 			// System.out.println( "close delay = " + delay + ", pending =" + pending_list.size());
 			
 			long	start = SystemTime.getCurrentTime();
-			
-	        for (int i=0;i<pending_list.size();i++){
-	        	
-	        	try{
-	        		TRNonBlockingServerProcessor processor = (TRNonBlockingServerProcessor)pending_list.get(i);
-	        		
-	        		processor.closed();
-	        		
-	        		processor.getSocketChannel().close();
-	        		
-	        	}catch( Throwable e ){
-	        		
-	        	}
-	        }
+
+            for (Object o : pending_list) {
+
+                try {
+                    TRNonBlockingServerProcessor processor = (TRNonBlockingServerProcessor) o;
+
+                    processor.closed();
+
+                    processor.getSocketChannel().close();
+
+                } catch (Throwable e) {
+
+                }
+            }
 				        	
 		    try{
 		    	this_mon.enter();

@@ -209,11 +209,11 @@ CacheFileWithoutCache
 		throws CacheFileManagerException
 	{
 		int	read_length	= 0;
-		
-		for (int i=0;i<buffers.length;i++){
-			
-			read_length += buffers[i].remaining(DirectByteBuffer.SS_CACHE);
-		}
+
+        for (DirectByteBuffer buffer : buffers) {
+
+            read_length += buffer.remaining(DirectByteBuffer.SS_CACHE);
+        }
 		
 		try{			
 			file.read( buffers, position );
@@ -281,11 +281,11 @@ CacheFileWithoutCache
 		throws CacheFileManagerException
 	{
 		int	write_length	= 0;
-		
-		for (int i=0;i<buffers.length;i++){
-			
-			write_length += buffers[i].remaining(DirectByteBuffer.SS_CACHE);
-		}
+
+        for (DirectByteBuffer buffer : buffers) {
+
+            write_length += buffer.remaining(DirectByteBuffer.SS_CACHE);
+        }
 		
 		try{			
 			file.write( buffers, position );
@@ -341,11 +341,11 @@ CacheFileWithoutCache
 		throws CacheFileManagerException
 	{
 		int	write_length	= 0;
-		
-		for (int i=0;i<buffers.length;i++){
-			
-			write_length += buffers[i].remaining(DirectByteBuffer.SS_CACHE);
-		}
+
+        for (DirectByteBuffer buffer1 : buffers) {
+
+            write_length += buffer1.remaining(DirectByteBuffer.SS_CACHE);
+        }
 		
 		boolean	write_ok	= false;
 		
@@ -365,11 +365,11 @@ CacheFileWithoutCache
 		}finally{
 			
 			if ( write_ok ){
-				
-				for (int i=0;i<buffers.length;i++){
 
-					buffers[i].returnToPool();
-				}
+                for (DirectByteBuffer buffer : buffers) {
+
+                    buffer.returnToPool();
+                }
 			}
 		}
 	}

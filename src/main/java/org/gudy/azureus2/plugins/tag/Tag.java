@@ -29,17 +29,17 @@ Tag
 {
 		// minimal interface oriented towards plugin use and extensibility
 	
-	public String
+	String
 	getTagName();
 	
-	public List<Taggable>
+	List<Taggable>
 	getTaggables();
 	
-	public void
+	void
 	addListener(
-		TagListener 	listener );
+            TagListener listener);
 	
-	public void
+	void
 	removeListener(
-		TagListener 	listener );
+            TagListener listener);
 }

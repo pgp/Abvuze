@@ -24,10 +24,10 @@ import java.net.InetSocketAddress;
 public interface 
 NetworkGlueListener 
 {
-	public void
+	void
 	receive(
-		int					local_port,
-		InetSocketAddress	source,
-		byte[]				data,
-		int					data_length );
+            int local_port,
+            InetSocketAddress source,
+            byte[] data,
+            int data_length);
 }

@@ -28,19 +28,18 @@ public class CookieParser {
 		boolean[] cookieFound = new boolean[requiredCookies.length];
 		
 		String[] names = getCookiesNames(cookies);
-		
-		for(int j = 0 ; j < names.length ; j++) {
-			String cookieName = names[j];
-			for(int i = 0 ; i < requiredCookies.length ;i++) {
-				if(requiredCookies[i].equals(cookieName)) {
-					cookieFound[i] = true;
-				}
-			}
-		}
-		
-		for(int i = 0 ; i < cookieFound.length ; i++) {
-			if(!cookieFound[i]) return false;
-		}
+
+        for (String cookieName : names) {
+            for (int i = 0; i < requiredCookies.length; i++) {
+                if (requiredCookies[i].equals(cookieName)) {
+                    cookieFound[i] = true;
+                }
+            }
+        }
+
+        for (boolean b : cookieFound) {
+            if (!b) return false;
+        }
 		
 		return true;
 	}
@@ -59,7 +58,7 @@ public class CookieParser {
 			}
 		}
 		
-		String[] result = (String[]) names.toArray(new String[names.size()]);
+		String[] result = (String[]) names.toArray(new String[0]);
 		
 		return result;
 	

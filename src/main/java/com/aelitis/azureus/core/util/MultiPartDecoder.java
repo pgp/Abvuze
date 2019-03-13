@@ -28,6 +28,7 @@ package com.aelitis.azureus.core.util;
  */
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class 
@@ -51,9 +52,9 @@ MultiPartDecoder
 		//Music
 		// -----------------------------7d4f2a310bca--
 		
-		byte[]	header_end_bytes	= "\r\n\r\n".getBytes( "ISO-8859-1" );
+		byte[]	header_end_bytes	= "\r\n\r\n".getBytes(StandardCharsets.ISO_8859_1);
 		
-		byte[]	boundary_bytes = (  "\r\n--" + boundary ).getBytes( "ISO-8859-1" );
+		byte[]	boundary_bytes = (  "\r\n--" + boundary ).getBytes(StandardCharsets.ISO_8859_1);
 	
 		int	boundary_len = boundary_bytes.length;
 		

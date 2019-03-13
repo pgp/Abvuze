@@ -87,102 +87,105 @@ RPDownloadManager
 	{
 		String		method 	= request.getMethod();
 		Object[]	params	= request.getParams();
-		
-		if ( method.equals( "getDownloads")){
-			
-			Download[]	downloads = delegate.getDownloads();
-			
-				// unfortunately downloads with broken torrents can exist and have no associated
-				// Torrent. Easiest fix here is to filter them out.
-			
-			RPDownload[]	res = new RPDownload[downloads.length];
-			
-			for (int i=0;i<res.length;i++){
-				
-				res[i] = RPDownload.create( downloads[i]);
-			}
-			
-			return( new RPReply( res ));
-			
-		}else if ( method.equals( "getDownloads[boolean]")){
-			
-			Download[]	downloads = delegate.getDownloads(((Boolean)request.getParams()[0]).booleanValue());
-			
-			RPDownload[]	res = new RPDownload[downloads.length];
-			
-			for (int i=0;i<res.length;i++){
-				
-				res[i] = RPDownload.create( downloads[i]);
-			}
-			
-			return( new RPReply( res ));
-						
-		}else if ( method.equals( "addDownload[Torrent]" )){
-		
-			try{
-				RPTorrent	torrent = (RPTorrent)request.getParams()[0];
-				
-				Download res = delegate.addDownload((Torrent)torrent._setLocal());
-				
-				return( new RPReply( RPDownload.create(res)));
-				
-			}catch( DownloadException e ){
-				
-				throw( new RPException("DownloadManager::addDownload failed", e ));
-			}
-		
-		}else if ( method.equals( "addDownload[Torrent,String,String]" )){
-			
-			try{
-				RPTorrent	torrent = (RPTorrent)request.getParams()[0];
-				File		f1 = params[1]==null?null:new File((String)params[1]);
-				File		f2 = params[2]==null?null:new File((String)params[2]);
-				
-				Download res = delegate.addDownload((Torrent)torrent._setLocal(), f1, f2 );
-				
-				return( new RPReply( RPDownload.create(res)));
-				
-			}catch( DownloadException e ){
-				
-				throw( new RPException("DownloadManager::addDownload failed", e ));
-			}
-			
-		}else if ( method.equals( "addDownload[URL]" )){
-				
-			try{
-				delegate.addDownload((URL)request.getParams()[0]);
-				
-			}catch( DownloadException e ){
-				
-				throw( new RPException("DownloadManager::addDownload failed", e ));
-			}
-			
-			return( new RPReply( null ));
-			
-		}else if ( method.equals( "pauseDownloads")){
-			
-			delegate.pauseDownloads();
-			
-			return( null );
-				
-		}else if ( method.equals( "resumeDownloads")){
-			
-			delegate.resumeDownloads();
-			
-			return( null );
-				
-		}else if ( method.equals( "stopAllDownloads")){
-			
-			delegate.stopAllDownloads();
-			
-			return( null );
-				
-		}else if ( method.equals( "startAllDownloads")){
-			
-			delegate.startAllDownloads();
-		
-			return( null );
-		}
+
+        switch (method) {
+            case "getDownloads": {
+
+                Download[] downloads = delegate.getDownloads();
+
+                // unfortunately downloads with broken torrents can exist and have no associated
+                // Torrent. Easiest fix here is to filter them out.
+
+                RPDownload[] res = new RPDownload[downloads.length];
+
+                for (int i = 0; i < res.length; i++) {
+
+                    res[i] = RPDownload.create(downloads[i]);
+                }
+
+                return (new RPReply(res));
+
+            }
+            case "getDownloads[boolean]": {
+
+                Download[] downloads = delegate.getDownloads((Boolean) request.getParams()[0]);
+
+                RPDownload[] res = new RPDownload[downloads.length];
+
+                for (int i = 0; i < res.length; i++) {
+
+                    res[i] = RPDownload.create(downloads[i]);
+                }
+
+                return (new RPReply(res));
+
+            }
+            case "addDownload[Torrent]":
+
+                try {
+                    RPTorrent torrent = (RPTorrent) request.getParams()[0];
+
+                    Download res = delegate.addDownload((Torrent) torrent._setLocal());
+
+                    return (new RPReply(RPDownload.create(res)));
+
+                } catch (DownloadException e) {
+
+                    throw (new RPException("DownloadManager::addDownload failed", e));
+                }
+
+            case "addDownload[Torrent,String,String]":
+
+                try {
+                    RPTorrent torrent = (RPTorrent) request.getParams()[0];
+                    File f1 = params[1] == null ? null : new File((String) params[1]);
+                    File f2 = params[2] == null ? null : new File((String) params[2]);
+
+                    Download res = delegate.addDownload((Torrent) torrent._setLocal(), f1, f2);
+
+                    return (new RPReply(RPDownload.create(res)));
+
+                } catch (DownloadException e) {
+
+                    throw (new RPException("DownloadManager::addDownload failed", e));
+                }
+
+            case "addDownload[URL]":
+
+                try {
+                    delegate.addDownload((URL) request.getParams()[0]);
+
+                } catch (DownloadException e) {
+
+                    throw (new RPException("DownloadManager::addDownload failed", e));
+                }
+
+                return (new RPReply(null));
+
+            case "pauseDownloads":
+
+                delegate.pauseDownloads();
+
+                return (null);
+
+            case "resumeDownloads":
+
+                delegate.resumeDownloads();
+
+                return (null);
+
+            case "stopAllDownloads":
+
+                delegate.stopAllDownloads();
+
+                return (null);
+
+            case "startAllDownloads":
+
+                delegate.startAllDownloads();
+
+                return (null);
+        }
 		
 		throw( new RPException( "Unknown method: " + method ));
 	}
@@ -358,11 +361,11 @@ RPDownloadManager
 	getDownloads()
 	{
 		RPDownload[]	res = (RPDownload[])_dispatcher.dispatch( new RPRequest( this, "getDownloads", null )).getResponse();
-		
-		for (int i=0;i<res.length;i++){
-			
-			res[i]._setRemote( _dispatcher );
-		}
+
+        for (RPDownload re : res) {
+
+            re._setRemote(_dispatcher);
+        }
 		
 		return( res );
 	}
@@ -371,13 +374,13 @@ RPDownloadManager
 	getDownloads(boolean bSort)
 	{
 		RPDownload[]	res = (RPDownload[])_dispatcher.dispatch( new RPRequest( this, "getDownloads[boolean]", new Object[]{
-			Boolean.valueOf(bSort)
+                bSort
 		} )).getResponse();
-		
-		for (int i=0;i<res.length;i++){
-			
-			res[i]._setRemote( _dispatcher );
-		}
+
+        for (RPDownload re : res) {
+
+            re._setRemote(_dispatcher);
+        }
 		
 		return( res );
 	}

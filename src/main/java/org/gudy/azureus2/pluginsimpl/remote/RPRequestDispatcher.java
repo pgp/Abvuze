@@ -29,12 +29,12 @@ package org.gudy.azureus2.pluginsimpl.remote;
 public interface 
 RPRequestDispatcher 
 {
-	public RPPluginInterface
+	RPPluginInterface
 	getPlugin();
 	
-	public RPReply
+	RPReply
 	dispatch(
-		RPRequest	request )
+            RPRequest request)
 	
 		throws RPException;
 }

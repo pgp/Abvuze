@@ -26,9 +26,9 @@ import java.util.Map;
  */
 public interface DriveDetectedInfo
 {
-	public File getLocation();
+	File getLocation();
 
-	public Object getInfo(String key);
+	Object getInfo(String key);
 
-	public Map<String, Object> getInfoMap();
+	Map<String, Object> getInfoMap();
 }

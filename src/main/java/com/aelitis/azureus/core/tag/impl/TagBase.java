@@ -127,7 +127,7 @@ TagBase
 				}
 			});	
 		
-	private final Map<org.gudy.azureus2.plugins.tag.TagListener, TagListener>	listener_map = new HashMap<org.gudy.azureus2.plugins.tag.TagListener, TagListener>();
+	private final Map<org.gudy.azureus2.plugins.tag.TagListener, TagListener>	listener_map = new HashMap<>();
 	
 	private Boolean	is_visible;
 	private Boolean	is_public;
@@ -1200,7 +1200,7 @@ TagBase
 					return;
 				}
 				
-				transient_properties = new HashMap<String, Object>();
+				transient_properties = new HashMap<>();
 			}		
 			
 			if ( value == null ){
@@ -1274,7 +1274,7 @@ TagBase
 	{
 		Set<Taggable> taggables = getTagged();
 		
-		List<org.gudy.azureus2.plugins.tag.Taggable> result = new ArrayList<org.gudy.azureus2.plugins.tag.Taggable>( taggables.size());
+		List<org.gudy.azureus2.plugins.tag.Taggable> result = new ArrayList<>(taggables.size());
 		
 		for ( Taggable t: taggables ){
 			
@@ -1414,7 +1414,7 @@ TagBase
 		return( tag_type.writeStringListAttribute( this, attr, value ));
 	}
 	
-	private static final Map<Long,long[][]>	session_cache = new HashMap<Long, long[][]>();
+	private static final Map<Long,long[][]>	session_cache = new HashMap<>();
 	
 	private long[]						total_up_at_start;
 	private long[]						total_down_at_start;
@@ -1842,7 +1842,7 @@ TagBase
  		private final String		name;
  		private final int			type;
  		
- 		private final CopyOnWriteList<TagPropertyListener>	listeners = new CopyOnWriteList<TagPropertyListener>();
+ 		private final CopyOnWriteList<TagPropertyListener>	listeners = new CopyOnWriteList<>();
  		
  		private
  		TagPropertyImpl(

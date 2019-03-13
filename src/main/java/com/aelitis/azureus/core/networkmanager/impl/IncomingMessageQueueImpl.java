@@ -36,7 +36,7 @@ import com.aelitis.azureus.core.peermanager.messaging.*;
  */
 public class IncomingMessageQueueImpl implements IncomingMessageQueue{
   
-  private volatile ArrayList<MessageQueueListener> listeners = new ArrayList<MessageQueueListener>();  //copy-on-write
+  private volatile ArrayList<MessageQueueListener> listeners = new ArrayList<>();  //copy-on-write
   private final AEMonitor listeners_mon = new AEMonitor( "IncomingMessageQueue:listeners" );
 
   private MessageStreamDecoder stream_decoder;
@@ -135,13 +135,13 @@ public class IncomingMessageQueueImpl implements IncomingMessageQueue{
         
         ArrayList listeners_ref = listeners;  //copy-on-write
         boolean handled = false;
-        
-        for( int x=0; x < listeners_ref.size(); x++ ) {
-          MessageQueueListener mql = (MessageQueueListener)listeners_ref.get( x );
-          if ( mql.messageReceived( msg )){
-        	  handled = true;
+
+          for (Object o : listeners_ref) {
+              MessageQueueListener mql = (MessageQueueListener) o;
+              if (mql.messageReceived(msg)) {
+                  handled = true;
+              }
           }
-        }
         
         if( !handled ) {
           if( listeners_ref.size() > 0 ) {
@@ -149,9 +149,9 @@ public class IncomingMessageQueueImpl implements IncomingMessageQueue{
           }
           
           DirectByteBuffer[] buffs = msg.getData();
-          for( int x=0; x < buffs.length; x++ ) {
-            buffs[ x ].returnToPool();
-          }
+            for (DirectByteBuffer buff : buffs) {
+                buff.returnToPool();
+            }
         }
       }
     }
@@ -159,19 +159,19 @@ public class IncomingMessageQueueImpl implements IncomingMessageQueue{
     int protocol_read = stream_decoder.getProtocolBytesDecoded();
     if( protocol_read > 0 ) {
       ArrayList listeners_ref = listeners;  //copy-on-write
-      for( int i=0; i < listeners_ref.size(); i++ ) {
-        MessageQueueListener mql = (MessageQueueListener)listeners_ref.get( i );
-        mql.protocolBytesReceived( protocol_read );
-      }
+        for (Object o : listeners_ref) {
+            MessageQueueListener mql = (MessageQueueListener) o;
+            mql.protocolBytesReceived(protocol_read);
+        }
     }
     
     int data_read = stream_decoder.getDataBytesDecoded();
     if( data_read > 0 ) {
       ArrayList listeners_ref = listeners;  //copy-on-write
-      for( int i=0; i < listeners_ref.size(); i++ ) {
-        MessageQueueListener mql = (MessageQueueListener)listeners_ref.get( i );
-        mql.dataBytesReceived( data_read );
-      }
+        for (Object o : listeners_ref) {
+            MessageQueueListener mql = (MessageQueueListener) o;
+            mql.dataBytesReceived(data_read);
+        }
     }
     
     	// ideally bytes_read = data_read + protocol_read. in case it isn't then we want to
@@ -202,24 +202,23 @@ public class IncomingMessageQueueImpl implements IncomingMessageQueue{
 
     DirectByteBuffer[] dbbs = message.getData();
     int size = 0;
-    for( int i=0; i < dbbs.length; i++ ) {
-      size += dbbs[i].remaining( DirectByteBuffer.SS_NET );
-    }
-    
-    
-    for( int x=0; x < listeners_ref.size(); x++ ) {
-      MessageQueueListener mql = (MessageQueueListener)listeners_ref.get( x );
-      if ( mql.messageReceived( message )){
-    	  handled = true;
+      for (DirectByteBuffer dbb : dbbs) {
+          size += dbb.remaining(DirectByteBuffer.SS_NET);
       }
-      
-      if( message.getType() == Message.TYPE_DATA_PAYLOAD ) {
-        mql.dataBytesReceived( size );
+
+
+      for (Object o : listeners_ref) {
+          MessageQueueListener mql = (MessageQueueListener) o;
+          if (mql.messageReceived(message)) {
+              handled = true;
+          }
+
+          if (message.getType() == Message.TYPE_DATA_PAYLOAD) {
+              mql.dataBytesReceived(size);
+          } else {
+              mql.protocolBytesReceived(size);
+          }
       }
-      else {
-        mql.protocolBytesReceived( size );
-      }
-    }
     
     if( !handled ) {
       if( listeners_ref.size() > 0 ) {
@@ -227,9 +226,9 @@ public class IncomingMessageQueueImpl implements IncomingMessageQueue{
       }
       
       DirectByteBuffer[] buffs = message.getData();
-      for( int x=0; x < buffs.length; x++ ) {
-        buffs[ x ].returnToPool();
-      }
+        for (DirectByteBuffer buff : buffs) {
+            buff.returnToPool();
+        }
     }
   }
   
@@ -252,19 +251,18 @@ public class IncomingMessageQueueImpl implements IncomingMessageQueue{
   public void registerQueueListener( MessageQueueListener listener ) {
     try{  listeners_mon.enter();
       //copy-on-write
-      ArrayList<MessageQueueListener> new_list = new ArrayList<MessageQueueListener>( listeners.size() + 1 );
+      ArrayList<MessageQueueListener> new_list = new ArrayList<>(listeners.size() + 1);
       
       if ( listener.isPriority()){
     	  boolean	added = false;
-    	  for (int i=0;i<listeners.size();i++){
-    		  MessageQueueListener existing = listeners.get(i);
-    		  if ( added || existing.isPriority()){
-     		  }else{
-    			  new_list.add( listener );
-    			  added = true;
-    		  }
-   			  new_list.add( existing );
-    	  }
+          for (MessageQueueListener existing : listeners) {
+              if (added || existing.isPriority()) {
+              } else {
+                  new_list.add(listener);
+                  added = true;
+              }
+              new_list.add(existing);
+          }
     	  if ( !added ){
     		  new_list.add( listener );
     	  }

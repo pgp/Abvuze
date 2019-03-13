@@ -37,90 +37,90 @@ TRTrackerAnnouncer
 		
 		
 	
-	public final static byte AZ_TRACKER_VERSION_1	= 1;	// anything before 2 ;)
-	public final static byte AZ_TRACKER_VERSION_2	= 2;	// supports azcompact
-	public final static byte AZ_TRACKER_VERSION_3	= 3;	// supports experimental alternative secret for crypto
+	byte AZ_TRACKER_VERSION_1	= 1;	// anything before 2 ;)
+	byte AZ_TRACKER_VERSION_2	= 2;	// supports azcompact
+	byte AZ_TRACKER_VERSION_3	= 3;	// supports experimental alternative secret for crypto
 	
-	public final static byte AZ_TRACKER_VERSION_CURRENT	= AZ_TRACKER_VERSION_3;
+	byte AZ_TRACKER_VERSION_CURRENT	= AZ_TRACKER_VERSION_3;
 	
-	public static final int REFRESH_MINIMUM_SECS		= 60;
-	public static final int DEFAULT_PEERS_TO_CACHE		= 512;
+	int REFRESH_MINIMUM_SECS		= 60;
+	int DEFAULT_PEERS_TO_CACHE		= 512;
 	
-	public static final int TS_INITIALISED		= 1;
-	public static final int TS_DOWNLOADING		= 2;
-	public static final int TS_COMPLETED		= 3;
-	public static final int TS_STOPPED			= 4;
+	int TS_INITIALISED		= 1;
+	int TS_DOWNLOADING		= 2;
+	int TS_COMPLETED		= 3;
+	int TS_STOPPED			= 4;
 
 	
-	public void
+	void
 	setAnnounceDataProvider(
-		TRTrackerAnnouncerDataProvider		provider );
+            TRTrackerAnnouncerDataProvider provider);
 	
-	public TOTorrent
+	TOTorrent
 	getTorrent();
 	
-	public URL
+	URL
 	getTrackerURL();
 	
-	public void
+	void
 	setTrackerURL(
-		URL		url );
+            URL url);
 			
-	public void
+	void
 	resetTrackerUrl(
-		boolean	shuffle );
+            boolean shuffle);
 	
-	public void
+	void
 	setIPOverride(
-		String		override );
+            String override);
 		
-	public void
+	void
 	clearIPOverride();
 	
-	public byte[]
+	byte[]
 	getPeerId();
 	
-	public void
+	void
 	setRefreshDelayOverrides(
-		int		percentage );
+            int percentage);
 	
-	public int
+	int
 	getTimeUntilNextUpdate();
 	
 	/** 
 	 * Last Update Time in seconds
 	 */
-	public int
+    int
 	getLastUpdateTime();
 			
-	public void
+	void
 	update(
-		boolean	force );
+            boolean force);
 	
-	public void
+	void
 	complete(
-		boolean	already_reported );
+            boolean already_reported);
 	
-	public void
+	void
 	stop(
-		boolean	for_queue );
+            boolean for_queue);
 	
-	public void
+	void
 	destroy();
 	
-	public int
+	int
 	getStatus();
 	
-	public boolean
+	boolean
 	isManual();
 	
-	public String
+	String
 	getStatusString();
 	
-	public TRTrackerAnnouncer
+	TRTrackerAnnouncer
 	getBestAnnouncer();
 	
-	public TRTrackerAnnouncerResponse
+	TRTrackerAnnouncerResponse
 	getLastResponse();
 	
 		/**
@@ -128,8 +128,8 @@ TRTrackerAnnouncer
 		 * responses.
 		 * @return
 		 */
-	
-	public Map
+
+        Map
 	getTrackerResponseCache();
 	
 		/**
@@ -137,56 +137,56 @@ TRTrackerAnnouncer
 		 * details when the tracker is offline 
 		 * @param map
 		 */
-	
-	public void
+
+        void
 	setTrackerResponseCache(
-		Map		map );
+                Map map);
 	
 		/**
 		 * remove a specific entry from the cache if present
 		 * @param ip
 		 * @param tcp_port
 		 */
-	
-	public void
+
+        void
 	removeFromTrackerResponseCache(
-		String		ip,
-		int			tcp_port );
+                String ip,
+                int tcp_port);
 	
 		/**
 		 * Gets a delegate tracker peer source for reporting against
 		 * @param set
 		 * @return
 		 */
-		
-	public TrackerPeerSource 
+
+        TrackerPeerSource
 	getTrackerPeerSource(
-		TOTorrentAnnounceURLSet		set );
+                TOTorrentAnnounceURLSet set);
 	
-	public TrackerPeerSource 
+	TrackerPeerSource
 	getCacheTrackerPeerSource();
 
 	/**
 	 * This method forces all listeners to get an explicit "urlChanged" event to get them
 	 * to re-examine the tracker
 	 */
-	
-	public void
+
+    void
 	refreshListeners();
 	
-	public void
+	void
 	setAnnounceResult(
-		DownloadAnnounceResult	result );
+            DownloadAnnounceResult result);
 	
-	public void
+	void
 	addListener(
-		TRTrackerAnnouncerListener	l );
+            TRTrackerAnnouncerListener l);
 		
-	public void
+	void
 	removeListener(
-		TRTrackerAnnouncerListener	l );
+            TRTrackerAnnouncerListener l);
 	
-	public void 
+	void
 	generateEvidence(
-		IndentWriter writer );
+            IndentWriter writer);
 }

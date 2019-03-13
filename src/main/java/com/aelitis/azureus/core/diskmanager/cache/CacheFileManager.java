@@ -34,19 +34,19 @@ import com.aelitis.azureus.core.util.LinkFileMap;
 public interface 
 CacheFileManager 
 {
-	public CacheFile
+	CacheFile
 	createFile(
-		CacheFileOwner	owner,
-		File			file,
-		int				type )
+            CacheFileOwner owner,
+            File file,
+            int type)
 	
 		throws CacheFileManagerException;
 	
-	public CacheFileManagerStats
+	CacheFileManagerStats
 	getStats();
 	
-	public void
+	void
 	setFileLinks(
-		TOTorrent				torrent,
-		LinkFileMap				links );
+            TOTorrent torrent,
+            LinkFileMap links);
 }

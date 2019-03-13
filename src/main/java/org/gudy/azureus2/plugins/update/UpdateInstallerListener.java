@@ -23,14 +23,14 @@ package org.gudy.azureus2.plugins.update;
 public interface 
 UpdateInstallerListener 
 {
-	public void
+	void
 	reportProgress(
-		String		str );
+            String str);
 	
-	public void
+	void
 	complete();
 	
-	public void
+	void
 	failed(
-		UpdateException	exception );
+            UpdateException exception);
 }

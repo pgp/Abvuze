@@ -24,5 +24,5 @@ package org.gudy.azureus2.plugins.logging;
  * @since 3.1.1.1
  */
 public interface LogAlertListener {
-	public void alertRaised(LogAlert alert);
+	void alertRaised(LogAlert alert);
 }

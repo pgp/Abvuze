@@ -25,13 +25,13 @@ import java.util.*;
 public interface 
 BuddyPluginAZ2TrackerListener 
 {
-	public Map<String,Object>
+	Map<String,Object>
 	messageReceived(
-		BuddyPluginBuddy		buddy,
-		Map<String,Object>		message );
+            BuddyPluginBuddy buddy,
+            Map<String, Object> message);
 	
-	public void
+	void
 	messageFailed(
-		BuddyPluginBuddy	buddy,
-		Throwable			cause );
+            BuddyPluginBuddy buddy,
+            Throwable cause);
 }

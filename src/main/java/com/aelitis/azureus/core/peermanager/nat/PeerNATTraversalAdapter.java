@@ -24,10 +24,10 @@ import java.net.InetSocketAddress;
 public interface 
 PeerNATTraversalAdapter 
 {
-	public void
+	void
 	success(
-		InetSocketAddress	target );
+            InetSocketAddress target);
 	
-	public void
+	void
 	failed();
 }

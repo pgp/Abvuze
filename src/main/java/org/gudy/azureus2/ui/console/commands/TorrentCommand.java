@@ -18,7 +18,6 @@ import org.gudy.azureus2.core3.download.DownloadManager;
 import org.gudy.azureus2.core3.download.DownloadManagerState;
 import org.gudy.azureus2.core3.tracker.host.TRHost;
 import org.gudy.azureus2.core3.tracker.host.TRHostTorrent;
-import org.gudy.azureus2.core3.util.ByteFormatter;
 import org.gudy.azureus2.core3.util.TorrentUtils;
 import org.gudy.azureus2.ui.console.ConsoleInput;
 import org.gudy.azureus2.ui.console.UserProfile;
@@ -63,7 +62,7 @@ public abstract class TorrentCommand extends IConsoleCommand {
 	public void execute(String commandName, ConsoleInput ci, List<String> args)
 	{
 		if (!args.isEmpty()) {
-		    String subcommand = (String) args.remove(0);
+		    String subcommand = args.remove(0);
 			if (ci.torrents.isEmpty()) {
 				ci.out.println("> Command '" + getCommandName() + "': No torrents in list (Maybe you forgot to 'show torrents' first).");
 			} else {
@@ -82,34 +81,32 @@ public abstract class TorrentCommand extends IConsoleCommand {
 						ci.out.println("> Command '" + getCommandName() + "': Torrent #" + subcommand + " unknown.");
 				} catch (NumberFormatException e) {
 					if ("all".equalsIgnoreCase(subcommand)) {
-						Iterator torrent = ci.torrents.iterator();
-						while (torrent.hasNext()) {
-							dm = (DownloadManager) torrent.next();
-							if (dm.getDisplayName() == null)
-								name = "?";
-							else
-								name = dm.getDisplayName();
-							performCommandIfAllowed(ci, args, dm, subcommand, name);
-						}
+                        for (Object o : ci.torrents) {
+                            dm = (DownloadManager) o;
+                            if (dm.getDisplayName() == null)
+                                name = "?";
+                            else
+                                name = dm.getDisplayName();
+                            performCommandIfAllowed(ci, args, dm, subcommand, name);
+                        }
 					} else if ("hash".equalsIgnoreCase(subcommand)) {
-						String hash = (String) args.remove(0); 
+						String hash = args.remove(0);
 						List torrents = ci.getGlobalManager().getDownloadManagers();
 						boolean foundit = false;
-						Iterator torrent = torrents.iterator();
-						while (torrent.hasNext()) {
-							dm = (DownloadManager) torrent.next();
-							if (hash.equals(TorrentUtils.nicePrintTorrentHash(dm.getTorrent(), true))) {
-								if (dm.getDisplayName() == null)
-									name = "?";
-								else
-									name = dm.getDisplayName();
-								// FIXME: check user permission here and fix it to take torrent hash instead of subcommand
-								
-								performCommandIfAllowed(ci, args, dm, hash, name);
-								foundit = true;
-								break;
-							}
-						}
+                        for (Object torrent1 : torrents) {
+                            dm = (DownloadManager) torrent1;
+                            if (hash.equals(TorrentUtils.nicePrintTorrentHash(dm.getTorrent(), true))) {
+                                if (dm.getDisplayName() == null)
+                                    name = "?";
+                                else
+                                    name = dm.getDisplayName();
+                                // FIXME: check user permission here and fix it to take torrent hash instead of subcommand
+
+                                performCommandIfAllowed(ci, args, dm, hash, name);
+                                foundit = true;
+                                break;
+                            }
+                        }
 						if ( !foundit ){
 							
 								// second check for 
@@ -119,23 +116,21 @@ public abstract class TorrentCommand extends IConsoleCommand {
 							if ( host != null ){
 								
 								TRHostTorrent[] h_torrents = host.getTorrents();
-								
-								for (int i=0;i<h_torrents.length;i++){
-									
-									TRHostTorrent ht = h_torrents[i];
-									
-									if (hash.equals(TorrentUtils.nicePrintTorrentHash(ht.getTorrent(), true))) {
-										
-										name = TorrentUtils.getLocalisedName( ht.getTorrent());
-										
-										// FIXME: check user permission here and fix it to take torrent hash instead of subcommand
-										
-										performCommandIfAllowed(ci, args, ht, hash, name);
-										foundit = true;
-										break;
 
-									}
-								}
+                                for (TRHostTorrent ht : h_torrents) {
+
+                                    if (hash.equals(TorrentUtils.nicePrintTorrentHash(ht.getTorrent(), true))) {
+
+                                        name = TorrentUtils.getLocalisedName(ht.getTorrent());
+
+                                        // FIXME: check user permission here and fix it to take torrent hash instead of subcommand
+
+                                        performCommandIfAllowed(ci, args, ht, hash, name);
+                                        foundit = true;
+                                        break;
+
+                                    }
+                                }
 							}
 						}
 						

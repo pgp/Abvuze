@@ -26,8 +26,8 @@ PeerEvent
 	 * peer state has changed
 	 * data - Integer holding one of the state values defined in Peer
 	 */
-	
-	public static final int	ET_STATE_CHANGED		= 1;
+
+    int	ET_STATE_CHANGED		= 1;
 
 	/**
 	 * The peer has sent us a bad piece data chunk.
@@ -35,8 +35,8 @@ PeerEvent
 	 *     piece_num piece that failed hash check
 	 *     total_bad_chunks total number of bad chunks sent by this peer so far
 	 */
-	
-	public static final int	ET_BAD_CHUNK			= 2;
+
+    int	ET_BAD_CHUNK			= 2;
 
 	/** The peer asserts that their availability should be added to the torrent-global availability pool.
 	 * The peer must send this when, and only when, their availability is known (such as after
@@ -46,7 +46,7 @@ PeerEvent
 	 * data - peerHavePieces boolean[] of pieces availabile
 	 */
 
-	public static final int	ET_ADD_AVAILABILITY		= 3;
+    int	ET_ADD_AVAILABILITY		= 3;
 	
 	/** The peer asserts that their availability must now be taken from the torrent-global availability pool
 	 * The peer must send this only after having sent a corresponding addAvailability message,
@@ -54,12 +54,12 @@ PeerEvent
 	 * pieces from any Bitfield message as well as those from any Have messages.
 	 * data -  peerHavePieces boolean[] of pieces no longer available
 	 */
-	
-	public static final int	ET_REMOVE_AVAILABILITY	= 4;
 
-	public int
+    int	ET_REMOVE_AVAILABILITY	= 4;
+
+	int
 	getType();
 	
-	public Object
+	Object
 	getData();
 }

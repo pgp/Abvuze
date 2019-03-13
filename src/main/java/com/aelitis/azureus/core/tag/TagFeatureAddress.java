@@ -25,6 +25,6 @@ import java.net.InetAddress;
 public interface 
 TagFeatureAddress 
 {
-	public InetAddress
+	InetAddress
 	getAddress();
 }

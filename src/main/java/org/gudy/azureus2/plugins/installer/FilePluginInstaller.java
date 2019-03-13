@@ -30,6 +30,6 @@ public interface
 FilePluginInstaller
 	extends InstallablePlugin
 {
-	public File
+	File
 	getFile();
 }

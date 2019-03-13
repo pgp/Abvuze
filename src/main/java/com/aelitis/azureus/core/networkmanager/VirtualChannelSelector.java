@@ -98,10 +98,10 @@ public class VirtualChannelSelector {
     }
     
     selector_impl = null;
-    selectors = new HashMap<VirtualChannelSelectorImpl,ArrayList<AbstractSelectableChannel>>();
+    selectors = new HashMap<>();
     selectors_mon = new AEMonitor( "VirtualChannelSelector:FM" );
-    selectors.put( new VirtualChannelSelectorImpl( this, op, pause, randomise_keys ), new ArrayList<AbstractSelectableChannel>() );
-    selectors_keyset_cow = new HashSet<VirtualChannelSelectorImpl>( selectors.keySet());
+    selectors.put( new VirtualChannelSelectorImpl( this, op, pause, randomise_keys ), new ArrayList<>() );
+    selectors_keyset_cow = new HashSet<>(selectors.keySet());
   }
   
   
@@ -182,7 +182,7 @@ public class VirtualChannelSelector {
 
         VirtualChannelSelectorImpl sel = new VirtualChannelSelectorImpl( this, op, pause , randomise_keys);
         
-        ArrayList<AbstractSelectableChannel> chans = new ArrayList<AbstractSelectableChannel>();
+        ArrayList<AbstractSelectableChannel> chans = new ArrayList<>();
         
         selectors.put( sel, chans );
         
@@ -190,7 +190,7 @@ public class VirtualChannelSelector {
         
         chans.add( channel );
         
-        selectors_keyset_cow = new HashSet<VirtualChannelSelectorImpl>( selectors.keySet());
+        selectors_keyset_cow = new HashSet<>(selectors.keySet());
       }
       finally{ selectors_mon.exit();  }
     }
@@ -337,7 +337,7 @@ public class VirtualChannelSelector {
    				 selectors_mon.enter();
 
 	 		     selectors.clear();
-			     selectors_keyset_cow = new HashSet<VirtualChannelSelectorImpl>();
+			     selectors_keyset_cow = new HashSet<>();
 			     
    			 }finally{
    				 selectors_mon.exit();
@@ -428,13 +428,13 @@ public class VirtualChannelSelector {
      * 			null -> progress made, String -> location of non progress
      *         e.g. read-select -> read >0 bytes, write-select -> wrote > 0 bytes
      */
-    public boolean selectSuccess(VirtualChannelSelector selector, SocketChannel sc, Object attachment);
+    boolean selectSuccess(VirtualChannelSelector selector, SocketChannel sc, Object attachment);
 
     /**
      * Called when a channel selection fails.
      * @param msg  failure message
      */
-    public void selectFailure(VirtualChannelSelector selector, SocketChannel sc, Object attachment, Throwable msg);
+    void selectFailure(VirtualChannelSelector selector, SocketChannel sc, Object attachment, Throwable msg);
   }
 
   public interface VirtualAcceptSelectorListener extends VirtualAbstractSelectorListener{
@@ -444,13 +444,13 @@ public class VirtualChannelSelector {
      * @return indicator of whether or not any 'progress' was made due to this select
      *         e.g. read-select -> read >0 bytes, write-select -> wrote > 0 bytes
      */
-    public boolean selectSuccess(VirtualChannelSelector selector, ServerSocketChannel sc, Object attachment);
+    boolean selectSuccess(VirtualChannelSelector selector, ServerSocketChannel sc, Object attachment);
 
     /**
      * Called when a channel selection fails.
      * @param msg  failure message
      */
-    public void selectFailure(VirtualChannelSelector selector, ServerSocketChannel sc, Object attachment, Throwable msg);
+    void selectFailure(VirtualChannelSelector selector, ServerSocketChannel sc, Object attachment, Throwable msg);
   }
 
 }

@@ -293,22 +293,22 @@ DHTControlImpl
 						
 						// sort for closeness to new router id
 					
-					Set	sorted_contacts = new sortedTransportContactSet( router.getID(), true ).getSet(); 
+					Set	sorted_contacts = new sortedTransportContactSet( router.getID(), true ).getSet();
 
-					for (int i=0;i<old_contacts.size();i++){
-						
-						DHTRouterContact	contact = (DHTRouterContact)old_contacts.get(i);
-					
-						if ( !Arrays.equals( old_router_id, contact.getID())){
-							
-							if ( contact.isAlive()){
-								
-								DHTTransportContact	t_contact = ((DHTControlContact)contact.getAttachment()).getTransportContact();
+                    for (Object old_contact : old_contacts) {
 
-								sorted_contacts.add( t_contact );
-							}
-						}
-					}
+                        DHTRouterContact contact = (DHTRouterContact) old_contact;
+
+                        if (!Arrays.equals(old_router_id, contact.getID())) {
+
+                            if (contact.isAlive()) {
+
+                                DHTTransportContact t_contact = ((DHTControlContact) contact.getAttachment()).getTransportContact();
+
+                                sorted_contacts.add(t_contact);
+                            }
+                        }
+                    }
 					
 						// fill up with non-alive ones to lower limit in case this is a start-of-day
 						// router change and we only have imported contacts in limbo state
@@ -352,16 +352,14 @@ DHTControlImpl
 				resetNetworkPositions()
 				{
 					List<DHTRouterContact>	contacts = router.getAllContacts();
-					
-					for (int i=0;i<contacts.size();i++){
-												
-						DHTRouterContact	rc = contacts.get(i);
 
-						if ( !router.isID( rc.getID())){
-							
-							((DHTControlContact)rc.getAttachment()).getTransportContact().createNetworkPositions( false );
-						}
-					}
+                    for (DHTRouterContact rc : contacts) {
+
+                        if (!router.isID(rc.getID())) {
+
+                            ((DHTControlContact) rc.getAttachment()).getTransportContact().createNetworkPositions(false);
+                        }
+                    }
 				}
 				
 				public void
@@ -693,72 +691,72 @@ DHTControlImpl
 		List	reserves	= new ArrayList();
 		
 		//System.out.println( "Exporting" );
-		
-		for (int i=0;i<contacts.size();i++){
-		
-			DHTRouterContact	contact = (DHTRouterContact)contacts.get(i);
-			
-			Object[]	imported = (Object[])imported_state.get( new HashWrapper( contact.getID()));
-			
-			if ( imported != null ){
 
-				if ( contact.isAlive()){
-					
-						// definitely want to keep this one
-					
-					to_save.add( contact );
-					
-				}else if ( !contact.isFailing()){
-					
-						// dunno if its still good or not, however its got to be better than any
-						// new ones that we didn't import who aren't known to be alive
-					
-					reserves.add( contact );
-				}
-			}
-		}
+        for (Object contact3 : contacts) {
+
+            DHTRouterContact contact = (DHTRouterContact) contact3;
+
+            Object[] imported = (Object[]) imported_state.get(new HashWrapper(contact.getID()));
+
+            if (imported != null) {
+
+                if (contact.isAlive()) {
+
+                    // definitely want to keep this one
+
+                    to_save.add(contact);
+
+                } else if (!contact.isFailing()) {
+
+                    // dunno if its still good or not, however its got to be better than any
+                    // new ones that we didn't import who aren't known to be alive
+
+                    reserves.add(contact);
+                }
+            }
+        }
 		
 		//System.out.println( "    initial to_save = " + to_save.size() + ", reserves = " + reserves.size());
 		
 			// now pull out any live ones
-		
-		for (int i=0;i<contacts.size();i++){
-			
-			DHTRouterContact	contact = (DHTRouterContact)contacts.get(i);
-		
-			if ( contact.isAlive() && !to_save.contains( contact )){
-				
-				to_save.add( contact );
-			}
-		}
+
+        for (Object contact2 : contacts) {
+
+            DHTRouterContact contact = (DHTRouterContact) contact2;
+
+            if (contact.isAlive() && !to_save.contains(contact)) {
+
+                to_save.add(contact);
+            }
+        }
 		
 		//System.out.println( "    after adding live ones = " + to_save.size());
 		
 			// now add any reserve ones
-		
-		for (int i=0;i<reserves.size();i++){
-			
-			DHTRouterContact	contact = (DHTRouterContact)reserves.get(i);
-		
-			if ( !to_save.contains( contact )){
-				
-				to_save.add( contact );
-			}
-		}
+
+        for (Object reserve : reserves) {
+
+            DHTRouterContact contact = (DHTRouterContact) reserve;
+
+            if (!to_save.contains(contact)) {
+
+                to_save.add(contact);
+            }
+        }
 		
 		//System.out.println( "    after adding reserves = " + to_save.size());
 
 			// now add in the rest!
-		
-		for (int i=0;i<contacts.size();i++){
-			
-			DHTRouterContact	contact = (DHTRouterContact)contacts.get(i);
-		
-			if (!to_save.contains( contact )){
-				
-				to_save.add( contact );
-			}
-		}	
+
+        for (Object contact1 : contacts) {
+
+            DHTRouterContact contact = (DHTRouterContact) contact1;
+
+            if (!to_save.contains(contact)) {
+
+                to_save.add(contact);
+            }
+        }
 		
 			// and finally remove the invalid ones
 		
@@ -826,7 +824,7 @@ DHTControlImpl
 				
 				DHTTransportContact	contact = transport.importContact( dais, false );
 								
-				imported_state.put( new HashWrapper( contact.getID()), new Object[]{ new Long( time_alive ), contact });
+				imported_state.put( new HashWrapper( contact.getID()), new Object[]{time_alive, contact });
 				
 			}catch( DHTTransportException e ){
 				
@@ -1115,70 +1113,65 @@ DHTControlImpl
 		}
 		
 			// may be > 1 if diversification is replicating (for load balancing) 
-		
-		for (int i=0;i<encoded_keys.length;i++){
-			
-			final byte[]	encoded_key	= encoded_keys[i];
-				
-			HashWrapper	hw = new HashWrapper( encoded_key );
-			
-			synchronized( things_written ){
-				
-				if ( things_written.contains( hw )){
-					
-					// System.out.println( "put: skipping key as already written" );
-					
-					continue;
-				}
-				
-				things_written.add( hw );
-			}
-						
-			final String	this_description = 
-				Arrays.equals( encoded_key, initial_encoded_key )?
-						description:
-						("Diversification of [" + description + "]" );
-			
-			lookup( thread_pool, 
-					high_priority,
-					encoded_key,
-					this_description,
-					(short)( flags | DHT.FLAG_LOOKUP_FOR_STORE ),
-					false, 
-					timeout,
-					search_concurrency,
-					1,
-					router.getK(),
-					new lookupResultHandler(listener)
-					{						
-						public void
-						diversify(
-							DHTTransportContact	cause,
-							byte				diversification_type )
-						{
-							Debug.out( "Shouldn't get a diversify on a lookup-node" );
-						}
-	
-						public void
-						closest(
-							List				_closest )
-						{
-							put( 	thread_pool,
-									high_priority,
-									new byte[][]{ encoded_key }, 
-									"Store of [" + this_description + "]",
-									new DHTTransportValue[][]{ values }, 
-									flags,
-									_closest, 
-									timeout, 
-									listener, 
-									true,
-									things_written,
-									put_level,
-									false );		
-						}
-					});
-		}
+
+        for (final byte[] encoded_key : encoded_keys) {
+
+            HashWrapper hw = new HashWrapper(encoded_key);
+
+            synchronized (things_written) {
+
+                if (things_written.contains(hw)) {
+
+                    // System.out.println( "put: skipping key as already written" );
+
+                    continue;
+                }
+
+                things_written.add(hw);
+            }
+
+            final String this_description =
+                    Arrays.equals(encoded_key, initial_encoded_key) ?
+                            description :
+                            ("Diversification of [" + description + "]");
+
+            lookup(thread_pool,
+                    high_priority,
+                    encoded_key,
+                    this_description,
+                    (short) (flags | DHT.FLAG_LOOKUP_FOR_STORE),
+                    false,
+                    timeout,
+                    search_concurrency,
+                    1,
+                    router.getK(),
+                    new lookupResultHandler(listener) {
+                        public void
+                        diversify(
+                                DHTTransportContact cause,
+                                byte diversification_type) {
+                            Debug.out("Shouldn't get a diversify on a lookup-node");
+                        }
+
+                        public void
+                        closest(
+                                List _closest) {
+                            put(thread_pool,
+                                    high_priority,
+                                    new byte[][]{encoded_key},
+                                    "Store of [" + this_description + "]",
+                                    new DHTTransportValue[][]{values},
+                                    flags,
+                                    _closest,
+                                    timeout,
+                                    listener,
+                                    true,
+                                    things_written,
+                                    put_level,
+                                    false);
+                        }
+                    });
+        }
 	}
 	
 	public void
@@ -1219,7 +1212,7 @@ DHTControlImpl
 			// of cached mappings and we maintain these as normal - its up to the original
 			// publisher to diversify as required)
 		
-		List<DHTTransportContact> contacts = new ArrayList<DHTTransportContact>(1);
+		List<DHTTransportContact> contacts = new ArrayList<>(1);
 		
 		contacts.add( contact );
 		
@@ -1470,217 +1463,210 @@ DHTControlImpl
 		final boolean[]	diversified = new boolean[encoded_keys.length];
 		
 		int	skipped = 0;
-		
-		for (int i=0;i<contacts.size();i++){
-		
-			final DHTTransportContact	contact = (DHTTransportContact)contacts.get(i);
-			
-			if ( router.isID( contact.getID())){
-					
-					// don't send to ourselves!
-				
-				skipped++;
-				
-			}else{
-				
-				boolean skip_this = false;
-			
-				synchronized( things_written ){
-					
-					if ( things_written.contains( contact )){
-				
-					
-							// if we've come back to an already hit contact due to a diversification loop
-							// then ignore it
-						
-						// Debug.out( "Put: contact encountered for a second time, ignoring" );
-						
-						skipped++;
-						
-						skip_this	= true;
-						
-					}else{
-						
-						things_written.add( contact );
-					}
-				}
-			
-				if ( !skip_this ){
-					
-					try{
-	
-						for (int j=0;j<value_sets.length;j++){
-								
-							for (int k=0;k<value_sets[j].length;k++){
-								
-								listener.wrote( contact, value_sets[j][k] );
-							}
-						}
-								  
-							// each store is going to report its complete event
-						
-						listener.incrementCompletes();
-											
-						contact.sendStore( 
-							new DHTTransportReplyHandlerAdapter()
-							{
-								public void
-								storeReply(
-									DHTTransportContact _contact,
-									byte[]				_diversifications )
-								{
-									boolean	complete_is_async = false;
-									
-									try{
-										if ( DHTLog.isOn()){
-											DHTLog.log( "Store OK " + DHTLog.getString( _contact ));
-										}
-																	
-										router.contactAlive( _contact.getID(), new DHTControlContactImpl(_contact));
-									
-											// can be null for old protocol versions
-										
-										boolean div_done = false;
-										
-										if ( consider_diversification && _diversifications != null ){
-																			
-											for (int j=0;j<_diversifications.length;j++){
-												
-												if ( _diversifications[j] != DHT.DT_NONE && !diversified[j] ){
-													
-													div_done = true;
-													
-													diversified[j]	= true;
-													
-													byte[][]	diversified_keys = 
-														adapter.diversify( description, _contact, true, false, encoded_keys[j], _diversifications[j], false, getMaxDivDepth());
-												
-													
-													logDiversification( _contact, encoded_keys, diversified_keys );
-													
-													for (int k=0;k<diversified_keys.length;k++){
-													
-														put( 	thread_pool,
-																high_priority,
-																diversified_keys[k], 
-																"Diversification of [" + description + "]",
-																value_sets[j], 
-																flags,
-																timeout,
-																false,
-																things_written,
-																put_level + 1,
-																listener );
-													}
-												}
-											}
-										}
-										
-										if ( !div_done ){
-											
-											if ( obs_keys != null ){
-																								
-												contact.sendStore( 
-														new DHTTransportReplyHandlerAdapter()
-														{
-															public void
-															storeReply(
-																DHTTransportContact _contact,
-																byte[]				_diversifications )
-															{
-																if ( DHTLog.isOn()){
-																	DHTLog.log( "Obs store OK " + DHTLog.getString( _contact ));
-																}
 
-																listener.complete( false );
-															}
-															
-															public void
-															failed(
-																DHTTransportContact 	_contact,
-																Throwable 				_error )
-															{
-																if ( DHTLog.isOn()){
-																	DHTLog.log( "Obs store failed " + DHTLog.getString( _contact ) + " -> failed: " + _error.getMessage());
-																}
+        for (Object contact1 : contacts) {
 
-																listener.complete( true );
-															}
-														},
-														obs_keys,
-														obs_vals,
-														immediate );
-												
-												complete_is_async = true;
-											}
-										}
-									}finally{
-										
-										if ( !complete_is_async ){
-										
-											listener.complete( false );
-										}
-									}	
-								}
-								
-								public void
-								failed(
-									DHTTransportContact 	_contact,
-									Throwable 				_error )
-								{
-									try{
-										if ( DHTLog.isOn()){
-											DHTLog.log( "Store failed " + DHTLog.getString( _contact ) + " -> failed: " + _error.getMessage());
-										}
-																				
-										router.contactDead( _contact.getID(), false );
-										
-									}finally{
-										
-										listener.complete( true );
-									}
-								}
-								
-								public void
-								keyBlockRequest(
-									DHTTransportContact		contact,
-									byte[]					request,
-									byte[]					key_signature )
-								{
-									DHTStorageBlock	key_block = database.keyBlockRequest( null, request, key_signature );
-									
-									if ( key_block != null ){
-										
-											// remove this key for any subsequent publishes. Quickest hack
-											// is to change it into a random key value - this will be rejected
-											// by the recipient as not being close enough anyway
-										
-										for (int i=0;i<encoded_keys.length;i++){
-											
-											if ( Arrays.equals( encoded_keys[i], key_block.getKey())){
-												
-												byte[]	dummy = new byte[encoded_keys[i].length];
-												
-												RandomUtils.nextBytes( dummy );
-												
-												encoded_keys[i] = dummy;
-											}
-										}
-									}
-								}
-							},
-							encoded_keys, 
-							value_sets,
-							immediate );
-						
-					}catch( Throwable e ){
-											
-						Debug.printStackTrace(e);
-						
-					}
-				}
-			}
-		}
+            final DHTTransportContact contact = (DHTTransportContact) contact1;
+
+            if (router.isID(contact.getID())) {
+
+                // don't send to ourselves!
+
+                skipped++;
+
+            } else {
+
+                boolean skip_this = false;
+
+                synchronized (things_written) {
+
+                    if (things_written.contains(contact)) {
+
+
+                        // if we've come back to an already hit contact due to a diversification loop
+                        // then ignore it
+
+                        // Debug.out( "Put: contact encountered for a second time, ignoring" );
+
+                        skipped++;
+
+                        skip_this = true;
+
+                    } else {
+
+                        things_written.add(contact);
+                    }
+                }
+
+                if (!skip_this) {
+
+                    try {
+
+                        for (DHTTransportValue[] value_set : value_sets) {
+
+                            for (int k = 0; k < value_set.length; k++) {
+
+                                listener.wrote(contact, value_set[k]);
+                            }
+                        }
+
+                        // each store is going to report its complete event
+
+                        listener.incrementCompletes();
+
+                        contact.sendStore(
+                                new DHTTransportReplyHandlerAdapter() {
+                                    public void
+                                    storeReply(
+                                            DHTTransportContact _contact,
+                                            byte[] _diversifications) {
+                                        boolean complete_is_async = false;
+
+                                        try {
+                                            if (DHTLog.isOn()) {
+                                                DHTLog.log("Store OK " + DHTLog.getString(_contact));
+                                            }
+
+                                            router.contactAlive(_contact.getID(), new DHTControlContactImpl(_contact));
+
+                                            // can be null for old protocol versions
+
+                                            boolean div_done = false;
+
+                                            if (consider_diversification && _diversifications != null) {
+
+                                                for (int j = 0; j < _diversifications.length; j++) {
+
+                                                    if (_diversifications[j] != DHT.DT_NONE && !diversified[j]) {
+
+                                                        div_done = true;
+
+                                                        diversified[j] = true;
+
+                                                        byte[][] diversified_keys =
+                                                                adapter.diversify(description, _contact, true, false, encoded_keys[j], _diversifications[j], false, getMaxDivDepth());
+
+
+                                                        logDiversification(_contact, encoded_keys, diversified_keys);
+
+                                                        for (byte[] diversified_key : diversified_keys) {
+
+                                                            put(thread_pool,
+                                                                    high_priority,
+                                                                    diversified_key,
+                                                                    "Diversification of [" + description + "]",
+                                                                    value_sets[j],
+                                                                    flags,
+                                                                    timeout,
+                                                                    false,
+                                                                    things_written,
+                                                                    put_level + 1,
+                                                                    listener);
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+                                            if (!div_done) {
+
+                                                if (obs_keys != null) {
+
+                                                    contact.sendStore(
+                                                            new DHTTransportReplyHandlerAdapter() {
+                                                                public void
+                                                                storeReply(
+                                                                        DHTTransportContact _contact,
+                                                                        byte[] _diversifications) {
+                                                                    if (DHTLog.isOn()) {
+                                                                        DHTLog.log("Obs store OK " + DHTLog.getString(_contact));
+                                                                    }
+
+                                                                    listener.complete(false);
+                                                                }
+
+                                                                public void
+                                                                failed(
+                                                                        DHTTransportContact _contact,
+                                                                        Throwable _error) {
+                                                                    if (DHTLog.isOn()) {
+                                                                        DHTLog.log("Obs store failed " + DHTLog.getString(_contact) + " -> failed: " + _error.getMessage());
+                                                                    }
+
+                                                                    listener.complete(true);
+                                                                }
+                                                            },
+                                                            obs_keys,
+                                                            obs_vals,
+                                                            immediate);
+
+                                                    complete_is_async = true;
+                                                }
+                                            }
+                                        } finally {
+
+                                            if (!complete_is_async) {
+
+                                                listener.complete(false);
+                                            }
+                                        }
+                                    }
+
+                                    public void
+                                    failed(
+                                            DHTTransportContact _contact,
+                                            Throwable _error) {
+                                        try {
+                                            if (DHTLog.isOn()) {
+                                                DHTLog.log("Store failed " + DHTLog.getString(_contact) + " -> failed: " + _error.getMessage());
+                                            }
+
+                                            router.contactDead(_contact.getID(), false);
+
+                                        } finally {
+
+                                            listener.complete(true);
+                                        }
+                                    }
+
+                                    public void
+                                    keyBlockRequest(
+                                            DHTTransportContact contact,
+                                            byte[] request,
+                                            byte[] key_signature) {
+                                        DHTStorageBlock key_block = database.keyBlockRequest(null, request, key_signature);
+
+                                        if (key_block != null) {
+
+                                            // remove this key for any subsequent publishes. Quickest hack
+                                            // is to change it into a random key value - this will be rejected
+                                            // by the recipient as not being close enough anyway
+
+                                            for (int i = 0; i < encoded_keys.length; i++) {
+
+                                                if (Arrays.equals(encoded_keys[i], key_block.getKey())) {
+
+                                                    byte[] dummy = new byte[encoded_keys[i].length];
+
+                                                    RandomUtils.nextBytes(dummy);
+
+                                                    encoded_keys[i] = dummy;
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                encoded_keys,
+                                value_sets,
+                                immediate);
+
+                    } catch (Throwable e) {
+
+                        Debug.printStackTrace(e);
+
+                    }
+                }
+            }
+        }
 		
 		if ( skipped == contacts.size()){
 			
@@ -1780,7 +1766,7 @@ DHTControlImpl
 			return( null );
 		}
 		
-		ArrayList<DHTTransportValue>	temp = new ArrayList<DHTTransportValue>( res.size());
+		ArrayList<DHTTransportValue>	temp = new ArrayList<>(res.size());
 		
 		temp.addAll( res );
 		
@@ -1986,10 +1972,10 @@ DHTControlImpl
 						closest(
 							List	closest )
 						{
-							for (int i=0;i<closest.size();i++){
-								
-								lookup_listener.found((DHTTransportContact)closest.get(i),true);
-							}
+                            for (Object o : closest) {
+
+                                lookup_listener.found((DHTTransportContact) o, true);
+                            }
 						}
 					});
 		
@@ -2025,94 +2011,90 @@ DHTControlImpl
 			
 			return( result );
 		}
-		
-		for (int i=0;i<encoded_keys.length;i++){
-			
-			final boolean[]	diversified = { false };
 
-			final byte[]	encoded_key	= encoded_keys[i];
-				
-			boolean	div = !Arrays.equals( encoded_key, initial_encoded_key );
-			
-			final String	this_description = 
-				div?("Diversification of [" + description + "]" ):description;						
+        for (byte[] encoded_key1 : encoded_keys) {
 
-			if ( div ){
-				
-				if ( !get_listener.diversified( this_description )){
-					
-					continue;
-				}
-			}
-			
-			boolean	is_stats_query = (flags & DHT.FLAG_STATS ) != 0;
-			
-			result.add(
-				lookup( external_lookup_pool,
-					high_priority,
-					encoded_key, 
-					this_description,
-					flags,
-					true, 
-					timeout,
-					is_stats_query?search_concurrency*2:search_concurrency,
-					max_values,
-					router.getK(),
-					new lookupResultHandler( get_listener )
-					{
-						private final List	found_values	= new ArrayList();
-							
-						public void
-						diversify(
-							DHTTransportContact	cause,
-							byte				diversification_type )
-						{
-							boolean ok_to_div = diversified( "Diversification of [" + this_description + "]" );
-							
-								// we only want to follow one diversification
-							
-							if ( ok_to_div && !diversified[0]){
-								
-								diversified[0] = true;
+            final boolean[] diversified = {false};
 
-								int	rem = max_values==0?0:( max_values - found_values.size());
-								
-								if ( max_values == 0 || rem > 0 ){
-									
-									byte[][]	diversified_keys = adapter.diversify( description, cause, false, false, encoded_key, diversification_type, exhaustive, getMaxDivDepth());
-									
-									if ( diversified_keys.length > 0 ){
-										
-											// should return a max of 1 (0 if diversification refused)
-											// however, could change one day to search > 1 
-										
-										for (int j=0;j<diversified_keys.length;j++){
-											
-											if ( !result.isCancelled()){
-												
-												result.add(
-													getSupport( diversified_keys[j], "Diversification of [" + this_description + "]", flags, rem,  timeout, exhaustive, high_priority, get_listener ));
-											}
-										}
-									}
-								}								
-							}
-						}
-						
-						public void
-						read(
-							DHTTransportContact	contact,
-							DHTTransportValue	value )
-						{	
-							found_values.add( value );
-							
-							super.read( contact, value );
-						}
-														
-						public void
-						closest(
-							List	closest )
-						{
+            final byte[] encoded_key = encoded_key1;
+
+            boolean div = !Arrays.equals(encoded_key, initial_encoded_key);
+
+            final String this_description =
+                    div ? ("Diversification of [" + description + "]") : description;
+
+            if (div) {
+
+                if (!get_listener.diversified(this_description)) {
+
+                    continue;
+                }
+            }
+
+            boolean is_stats_query = (flags & DHT.FLAG_STATS) != 0;
+
+            result.add(
+                    lookup(external_lookup_pool,
+                            high_priority,
+                            encoded_key,
+                            this_description,
+                            flags,
+                            true,
+                            timeout,
+                            is_stats_query ? search_concurrency * 2 : search_concurrency,
+                            max_values,
+                            router.getK(),
+                            new lookupResultHandler(get_listener) {
+                                private final List found_values = new ArrayList();
+
+                                public void
+                                diversify(
+                                        DHTTransportContact cause,
+                                        byte diversification_type) {
+                                    boolean ok_to_div = diversified("Diversification of [" + this_description + "]");
+
+                                    // we only want to follow one diversification
+
+                                    if (ok_to_div && !diversified[0]) {
+
+                                        diversified[0] = true;
+
+                                        int rem = max_values == 0 ? 0 : (max_values - found_values.size());
+
+                                        if (max_values == 0 || rem > 0) {
+
+                                            byte[][] diversified_keys = adapter.diversify(description, cause, false, false, encoded_key, diversification_type, exhaustive, getMaxDivDepth());
+
+                                            if (diversified_keys.length > 0) {
+
+                                                // should return a max of 1 (0 if diversification refused)
+                                                // however, could change one day to search > 1
+
+                                                for (byte[] diversified_key : diversified_keys) {
+
+                                                    if (!result.isCancelled()) {
+
+                                                        result.add(
+                                                                getSupport(diversified_key, "Diversification of [" + this_description + "]", flags, rem, timeout, exhaustive, high_priority, get_listener));
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                                public void
+                                read(
+                                        DHTTransportContact contact,
+                                        DHTTransportValue value) {
+                                    found_values.add(value);
+
+                                    super.read(contact, value);
+                                }
+
+                                public void
+                                closest(
+                                        List closest) {
 							/* we don't use teh cache-at-closest kad feature
 							if ( found_values.size() > 0 ){
 									
@@ -2162,9 +2144,9 @@ DHTControlImpl
 								}
 							}
 							*/
-						}
-					}));
-		}
+                                }
+                            }));
+        }
 		
 		return( result );
 	}
@@ -2349,10 +2331,10 @@ DHTControlImpl
 					
 					contacts_to_query = getClosestContactsSet(lookup_id, K, false);
 				
-					level_map = new LightHashMap<DHTTransportContact,Object[]>();
+					level_map = new LightHashMap<>();
 
 					// record the set of contacts we've queried to avoid re-queries
-					contacts_queried = new ByteArrayHashMap<DHTTransportContact>();
+					contacts_queried = new ByteArrayHashMap<>();
 					
 					// record the set of contacts that we've had a reply from
 					// furthest away at front
@@ -2366,14 +2348,12 @@ DHTControlImpl
 
 					last_lookup = SystemTime.getCurrentTime();
 					handler.incrementCompletes();
-					
-					Iterator it = contacts_to_query.iterator();
-					while (it.hasNext())
-					{
-						DHTTransportContact contact = (DHTTransportContact) it.next();
-						handler.found(contact,false);
-						level_map.put(contact, new Object[]{ new Integer(0), null });
-					}
+
+                    for (Object o : contacts_to_query) {
+                        DHTTransportContact contact = (DHTTransportContact) o;
+                        handler.found(contact, false);
+                        level_map.put(contact, new Object[]{0, null});
+                    }
 					
 					if ( DHTLog.isOn()){
 						DHTLog.log("lookup for " + DHTLog.getString(lookup_id));
@@ -2627,7 +2607,7 @@ DHTControlImpl
 									release();
 									continue;
 								}
-								final int search_level = ((Integer) level_map.get(closest)[0]).intValue();
+								final int search_level = (Integer) level_map.get(closest)[0];
 								active_searches++;
 								handler.searching(closest, search_level, active_searches);
 
@@ -2643,16 +2623,14 @@ DHTControlImpl
 											}
 											
 											router.contactAlive(target_contact.getID(), new DHTControlContactImpl(target_contact));
-											for (int i = 0; i < reply_contacts.length; i++)
-											{
-												DHTTransportContact contact = reply_contacts[i];
-												// ignore responses that are ourselves
-												if (compareDistances(router.getID(), contact.getID()) == 0)
-													continue;
+                                            for (DHTTransportContact contact : reply_contacts) {
+                                                // ignore responses that are ourselves
+                                                if (compareDistances(router.getID(), contact.getID()) == 0)
+                                                    continue;
 
-												// dunno if its alive or not, however record its existance
-												router.contactKnown(contact.getID(), new DHTControlContactImpl(contact), false );
-											}
+                                                // dunno if its alive or not, however record its existance
+                                                router.contactKnown(contact.getID(), new DHTControlContactImpl(contact), false);
+                                            }
 											try
 											{
 												contacts_to_query_mon.enter();
@@ -2664,32 +2642,27 @@ DHTControlImpl
 													ok_it.next();
 													ok_it.remove();
 												}
-												for (int i = 0; i < reply_contacts.length; i++)
-												{
-													DHTTransportContact contact = reply_contacts[i];
-													// ignore responses that are ourselves
-													if (compareDistances(router.getID(), contact.getID()) == 0)
-														continue;
+                                                for (DHTTransportContact contact : reply_contacts) {
+                                                    // ignore responses that are ourselves
+                                                    if (compareDistances(router.getID(), contact.getID()) == 0)
+                                                        continue;
 
-													if (contacts_queried.get( contact.getID()) == null && (!contacts_to_query.contains(contact)))
-													{
-														if ( DHTLog.isOn()){
-															DHTLog.log("    new contact for query: " + DHTLog.getString(contact));
-														}
-														
-														contacts_to_query.add(contact);
-														handler.found(contact,false);
-														level_map.put(contact, new Object[]{ new Integer(search_level + 1), target_contact });
-														if (idle_searches > 0)
-														{
-															idle_searches--;
-															release();
-														}
-													} else
-													{
-														// DHTLog.log( "    already queried: " + DHTLog.getString( contact ));
-													}
-												}
+                                                    if (contacts_queried.get(contact.getID()) == null && (!contacts_to_query.contains(contact))) {
+                                                        if (DHTLog.isOn()) {
+                                                            DHTLog.log("    new contact for query: " + DHTLog.getString(contact));
+                                                        }
+
+                                                        contacts_to_query.add(contact);
+                                                        handler.found(contact, false);
+                                                        level_map.put(contact, new Object[]{search_level + 1, target_contact});
+                                                        if (idle_searches > 0) {
+                                                            idle_searches--;
+                                                            release();
+                                                        }
+                                                    } else {
+                                                        // DHTLog.log( "    already queried: " + DHTLog.getString( contact ));
+                                                    }
+                                                }
 											} finally
 											{
 												contacts_to_query_mon.exit();
@@ -2749,66 +2722,61 @@ DHTControlImpl
 											int new_values = 0;
 											if (!key_blocked)
 											{
-												for (int i = 0; i < values.length; i++)
-												{
-													DHTTransportValue value = values[i];
-													DHTTransportContact originator = value.getOriginator();
-													// can't just use originator id as this value can be DOSed (see DB code)
-													byte[] originator_id = originator.getID();
-													byte[] value_bytes = value.getValue();
-													byte[] value_id = new byte[originator_id.length + value_bytes.length];
-													System.arraycopy(originator_id, 0, value_id, 0, originator_id.length);
-													System.arraycopy(value_bytes, 0, value_id, originator_id.length, value_bytes.length);
-													HashWrapper x = new HashWrapper(value_id);
-													
-													if ( !values_found_set.contains(x)){
-														
-														if ( obs_value != null && ! obs_recurse ){
-														
-																// we have read the marker value, now issue a direct read with the 
-																// real key
-															
-															if ( Arrays.equals( obs_value, value_bytes )){
-															
-																more_to_come = true;
-															
-																final DHTTransportReplyHandlerAdapter f_outer = this;
-																
-																f_closest.sendFindValue( 
-																	new DHTTransportReplyHandlerAdapter()
-																	{
-																		public void
-																		findValueReply(
-																			DHTTransportContact 	contact, 
-																			DHTTransportValue[] 	values, 
-																			byte 					diversification_type, 
-																			boolean 				more_to_come )
-																		{
-																			if ( diversification_type == DHT.DT_NONE ){
-																			
-																				f_outer.findValueReply( contact, values, (byte)99, false );
-																			}
-																		}
-																		
-																		public void 
-																		failed(
-																			DHTTransportContact 	contact,
-																			Throwable 				error )
-																		{
-																			f_outer.failed( contact, error );
-																		}
-																	},
-																	_lookup_id, 1, flags );
-																
-																break;
-															}
-														}else{
-															new_values++;
-															values_found_set.add(x);
-															handler.read(contact, values[i]);
-														}
-													}
-												}
+                                                for (DHTTransportValue value : values) {
+                                                    DHTTransportContact originator = value.getOriginator();
+                                                    // can't just use originator id as this value can be DOSed (see DB code)
+                                                    byte[] originator_id = originator.getID();
+                                                    byte[] value_bytes = value.getValue();
+                                                    byte[] value_id = new byte[originator_id.length + value_bytes.length];
+                                                    System.arraycopy(originator_id, 0, value_id, 0, originator_id.length);
+                                                    System.arraycopy(value_bytes, 0, value_id, originator_id.length, value_bytes.length);
+                                                    HashWrapper x = new HashWrapper(value_id);
+
+                                                    if (!values_found_set.contains(x)) {
+
+                                                        if (obs_value != null && !obs_recurse) {
+
+                                                            // we have read the marker value, now issue a direct read with the
+                                                            // real key
+
+                                                            if (Arrays.equals(obs_value, value_bytes)) {
+
+                                                                more_to_come = true;
+
+                                                                final DHTTransportReplyHandlerAdapter f_outer = this;
+
+                                                                f_closest.sendFindValue(
+                                                                        new DHTTransportReplyHandlerAdapter() {
+                                                                            public void
+                                                                            findValueReply(
+                                                                                    DHTTransportContact contact,
+                                                                                    DHTTransportValue[] values,
+                                                                                    byte diversification_type,
+                                                                                    boolean more_to_come) {
+                                                                                if (diversification_type == DHT.DT_NONE) {
+
+                                                                                    f_outer.findValueReply(contact, values, (byte) 99, false);
+                                                                                }
+                                                                            }
+
+                                                                            public void
+                                                                            failed(
+                                                                                    DHTTransportContact contact,
+                                                                                    Throwable error) {
+                                                                                f_outer.failed(contact, error);
+                                                                            }
+                                                                        },
+                                                                        _lookup_id, 1, flags);
+
+                                                                break;
+                                                            }
+                                                        } else {
+                                                            new_values++;
+                                                            values_found_set.add(x);
+                                                            handler.read(contact, value);
+                                                        }
+                                                    }
+                                                }
 											}
 											try
 											{
@@ -2957,7 +2925,7 @@ DHTControlImpl
 	
 							if ( contacts_queried != null && level_map != null ){
 								
-								List<Map.Entry<DHTTransportContact, Object[]>> lm_entries = new ArrayList<Map.Entry<DHTTransportContact,Object[]>>( level_map.entrySet());
+								List<Map.Entry<DHTTransportContact, Object[]>> lm_entries = new ArrayList<>(level_map.entrySet());
 								
 								Collections.sort(
 									lm_entries,
@@ -2974,9 +2942,9 @@ DHTControlImpl
 										}
 									});
 								
-								Set<DHTTransportContact>	qd = new HashSet<DHTTransportContact>( contacts_queried.values());
+								Set<DHTTransportContact>	qd = new HashSet<>(contacts_queried.values());
 								
-								Map<DHTTransportContact,ANImpl>	node_map = new HashMap<DHTTransportContact, ANImpl>();
+								Map<DHTTransportContact,ANImpl>	node_map = new HashMap<>();
 								
 								node_map.put( local, root_node );
 								
@@ -3088,7 +3056,7 @@ DHTControlImpl
 		implements DHTControlActivity.ActivityNode
 	{
 		private final DHTTransportContact		contact;
-		private final List<ActivityNode>		kids = new ArrayList<ActivityNode>();
+		private final List<ActivityNode>		kids = new ArrayList<>();
 		
 		private
 		ANImpl(
@@ -3597,16 +3565,16 @@ DHTControlImpl
 		if ( perform_closeness_check ){
 			
 			List	closest_contacts = getClosestKContactsList( new_contact.getID(), false );
-			
-			for (int i=0;i<closest_contacts.size();i++){
-				
-				if ( router.isID(((DHTTransportContact)closest_contacts.get(i)).getID())){
-					
-					close	= true;
-					
-					break;
-				}
-			}
+
+            for (Object closest_contact : closest_contacts) {
+
+                if (router.isID(((DHTTransportContact) closest_contact).getID())) {
+
+                    close = true;
+
+                    break;
+                }
+            }
 			
 			if ( !close ){
 				
@@ -3832,103 +3800,94 @@ DHTControlImpl
 			// finally transfer any key-blocks
 		
 		if ( t_contact.getProtocolVersion() >= DHTTransportUDP.PROTOCOL_VERSION_BLOCK_KEYS ){
-					
-			for (int i=0;i<direct_key_blocks.length;i++){
-				
-				final DHTStorageBlock	key_block = direct_key_blocks[i];
-				
-				List	contacts = getClosestKContactsList( key_block.getKey(), false );
 
-				boolean	forward_it = false;
-				
-					// ensure that the key is close enough to us 
-				
-				for (int j=0;j<contacts.size();j++){
+            for (final DHTStorageBlock key_block : direct_key_blocks) {
 
-					final DHTTransportContact	contact = (DHTTransportContact)contacts.get(j);
+                List contacts = getClosestKContactsList(key_block.getKey(), false);
 
-					if ( router.isID( contact.getID())){
-						
-						forward_it	= true;
-						
-						break;
-					}
-				}
-				
-				if ( !forward_it || key_block.hasBeenSentTo( t_contact )){
-					
-					continue;
-				}
-				
-				final Runnable task = 
-					new Runnable()
-					{
-						public void
-						run()
-						{
-							t_contact.sendKeyBlock(
-									new DHTTransportReplyHandlerAdapter()
-									{
-										public void
-										keyBlockReply(
-											DHTTransportContact 	_contact )
-										{
-											if ( DHTLog.isOn()){
-												DHTLog.log( "key block forward ok " + DHTLog.getString( _contact ));
-											}
-											
-											key_block.sentTo( _contact );
-										}
-										
-										public void
-										failed(
-											DHTTransportContact 	_contact,
-											Throwable				_error )
-										{
-											if ( DHTLog.isOn()){
-												DHTLog.log( "key block forward failed " + DHTLog.getString( _contact ) + " -> failed: " + _error.getMessage());
-											}
-										}
-									},
-									key_block.getRequest(),
-									key_block.getCertificate());
-						}
-					};
-					
-				if ( anti_spoof_done[0] ){
-				
-					task.run();
-					
-				}else{
-					
-					t_contact.sendFindNode(
-							new DHTTransportReplyHandlerAdapter()
-							{
-								public void
-								findNodeReply(
-									DHTTransportContact 	contact,
-									DHTTransportContact[]	contacts )
-								{	
-									task.run();
-								}
-								public void
-								failed(
-									DHTTransportContact 	_contact,
-									Throwable				_error )
-								{
-									// System.out.println( "nodeAdded: pre-store findNode Failed" );
+                boolean forward_it = false;
 
-									if ( DHTLog.isOn()){
-										DHTLog.log( "pre-kb findNode failed " + DHTLog.getString( _contact ) + " -> failed: " + _error.getMessage());
-									}
-																			
-									router.contactDead( _contact.getID(), false);
-								}
-							},
-							t_contact.getProtocolVersion() >= DHTTransportUDP.PROTOCOL_VERSION_ANTI_SPOOF2?new byte[0]:new byte[20],
-							DHT.FLAG_LOOKUP_FOR_STORE );
-				}
-			}
+                // ensure that the key is close enough to us
+
+                for (Object contact1 : contacts) {
+
+                    final DHTTransportContact contact = (DHTTransportContact) contact1;
+
+                    if (router.isID(contact.getID())) {
+
+                        forward_it = true;
+
+                        break;
+                    }
+                }
+
+                if (!forward_it || key_block.hasBeenSentTo(t_contact)) {
+
+                    continue;
+                }
+
+                final Runnable task =
+                        new Runnable() {
+                            public void
+                            run() {
+                                t_contact.sendKeyBlock(
+                                        new DHTTransportReplyHandlerAdapter() {
+                                            public void
+                                            keyBlockReply(
+                                                    DHTTransportContact _contact) {
+                                                if (DHTLog.isOn()) {
+                                                    DHTLog.log("key block forward ok " + DHTLog.getString(_contact));
+                                                }
+
+                                                key_block.sentTo(_contact);
+                                            }
+
+                                            public void
+                                            failed(
+                                                    DHTTransportContact _contact,
+                                                    Throwable _error) {
+                                                if (DHTLog.isOn()) {
+                                                    DHTLog.log("key block forward failed " + DHTLog.getString(_contact) + " -> failed: " + _error.getMessage());
+                                                }
+                                            }
+                                        },
+                                        key_block.getRequest(),
+                                        key_block.getCertificate());
+                            }
+                        };
+
+                if (anti_spoof_done[0]) {
+
+                    task.run();
+
+                } else {
+
+                    t_contact.sendFindNode(
+                            new DHTTransportReplyHandlerAdapter() {
+                                public void
+                                findNodeReply(
+                                        DHTTransportContact contact,
+                                        DHTTransportContact[] contacts) {
+                                    task.run();
+                                }
+
+                                public void
+                                failed(
+                                        DHTTransportContact _contact,
+                                        Throwable _error) {
+                                    // System.out.println( "nodeAdded: pre-store findNode Failed" );
+
+                                    if (DHTLog.isOn()) {
+                                        DHTLog.log("pre-kb findNode failed " + DHTLog.getString(_contact) + " -> failed: " + _error.getMessage());
+                                    }
+
+                                    router.contactDead(_contact.getID(), false);
+                                }
+                            },
+                            t_contact.getProtocolVersion() >= DHTTransportUDP.PROTOCOL_VERSION_ANTI_SPOOF2 ? new byte[0] : new byte[20],
+                            DHT.FLAG_LOOKUP_FOR_STORE);
+                }
+            }
 		}
 	}
 	
@@ -3946,11 +3905,11 @@ DHTControlImpl
 			// this is safe since the list returned is created for us only
 		
 		long size = l.size();
-		
-		for (int i=0;i<size;i++){
-			
-			sorted_set.add(((DHTControlContact)((DHTRouterContact)l.get(i)).getAttachment()).getTransportContact());
-		}
+
+        for (DHTRouterContact dhtRouterContact : l) {
+
+            sorted_set.add(((DHTControlContact) dhtRouterContact.getAttachment()).getTransportContact());
+        }
 		
 		return( sorted_set );
 	}
@@ -3971,7 +3930,7 @@ DHTControlImpl
 	{
 		Set<DHTTransportContact>	sorted_set	= getClosestContactsSet( id, num_to_return, live_only );
 					
-		List<DHTTransportContact>	res = new ArrayList<DHTTransportContact>(num_to_return);
+		List<DHTTransportContact>	res = new ArrayList<>(num_to_return);
 		
 		Iterator<DHTTransportContact>	it = sorted_set.iterator();
 		
@@ -4141,11 +4100,11 @@ DHTControlImpl
 			activity_mon.enter();
 			
 			listeners.addListener( l );
-			
-			for (int i=0;i<activities.size();i++){
-				
-				listeners.dispatch( DHTControlListener.CT_ADDED, activities.get(i));
-			}
+
+            for (Object activity : activities) {
+
+                listeners.dispatch(DHTControlListener.CT_ADDED, activity);
+            }
 			
 		}finally{
 			
@@ -4192,7 +4151,7 @@ DHTControlImpl
 			try{
 				estimate_mon.enter();
 				
-				remote_estimate_values.add( new Integer( size ));
+				remote_estimate_values.add(size);
 				
 				if ( remote_estimate_values.size() > REMOTE_ESTIMATE_HISTORY ){
 					
@@ -4352,7 +4311,7 @@ DHTControlImpl
 						this_estimate	= 1;
 					}
 					
-					local_estimate_values.put( new HashWrapper( id ), new Long( this_estimate ));
+					local_estimate_values.put( new HashWrapper( id ), this_estimate);
 					
 					long	new_estimate	= 0;
 					
@@ -4362,7 +4321,7 @@ DHTControlImpl
 						
 					while( it.hasNext()){
 						
-						long	estimate = ((Long)it.next()).longValue();
+						long	estimate = (Long) it.next();
 						
 						sizes += (sizes.length()==0?"":",") + estimate;
 						
@@ -4383,7 +4342,7 @@ DHTControlImpl
 				
 				for (int i=3;i<rems.size()-3;i++){
 				
-					rem_average += ((Integer)rems.get(i)).intValue();
+					rem_average += (Integer) rems.get(i);
 					
 					rem_vals++;
 				}
@@ -4418,18 +4377,18 @@ DHTControlImpl
 		byte[]		data )
 	{
 		StringBuilder	str_key = new StringBuilder( data.length*2 );
-		
-		for (int i=0;i<data.length;i++){
-			
-			String	hex = Integer.toHexString( data[i]&0xff );
-			
-			if ( hex.length() < 2 ){
-				
-				str_key.append( "0" );
-			}
-				
-			str_key.append( hex );
-		}
+
+        for (byte datum : data) {
+
+            String hex = Integer.toHexString(datum & 0xff);
+
+            if (hex.length() < 2) {
+
+                str_key.append("0");
+            }
+
+            str_key.append(hex);
+        }
 				
 		BigInteger	res		= new BigInteger( str_key.toString(), 16 );	
 		
@@ -4604,13 +4563,13 @@ DHTControlImpl
 		List	contacts = router.getAllContacts();
 		
 		List	res = new ArrayList( contacts.size());
-		
-		for (int i=0;i<contacts.size();i++){
-			
-			DHTRouterContact	rc = (DHTRouterContact)contacts.get(i);
-			
-			res.add( rc.getAttachment());
-		}
+
+        for (Object contact : contacts) {
+
+            DHTRouterContact rc = (DHTRouterContact) contact;
+
+            res.add(rc.getAttachment());
+        }
 		
 		return( res );
 	}
@@ -4623,46 +4582,42 @@ DHTControlImpl
 		final AESemaphore sem = new AESemaphore( "pingAll", 32 );
 		
 		final int[]	results = {0,0};
-		
-		for (int i=0;i<contacts.size();i++){
-			
-			sem.reserve();
-			
-			DHTRouterContact	rc = (DHTRouterContact)contacts.get(i);
 
-			((DHTControlContact)rc.getAttachment()).getTransportContact().sendPing(
-					new DHTTransportReplyHandlerAdapter()
-					{
-						public void
-						pingReply(
-							DHTTransportContact _contact )
-						{
-							results[0]++;
-							
-							print();
-							
-							sem.release();
-						}	
-						
-						public void
-						failed(
-							DHTTransportContact 	_contact,
-							Throwable				_error )
-						{
-							results[1]++;
-							
-							print();
-							
-							sem.release();
-						}
-						
-						protected void
-						print()
-						{
-							System.out.println( "ok=" + results[0] + ",bad=" + results[1] );
-						}
-					});
-		}
+        for (Object contact : contacts) {
+
+            sem.reserve();
+
+            DHTRouterContact rc = (DHTRouterContact) contact;
+
+            ((DHTControlContact) rc.getAttachment()).getTransportContact().sendPing(
+                    new DHTTransportReplyHandlerAdapter() {
+                        public void
+                        pingReply(
+                                DHTTransportContact _contact) {
+                            results[0]++;
+
+                            print();
+
+                            sem.release();
+                        }
+
+                        public void
+                        failed(
+                                DHTTransportContact _contact,
+                                Throwable _error) {
+                            results[1]++;
+
+                            print();
+
+                            sem.release();
+                        }
+
+                        protected void
+                        print() {
+                            System.out.println("ok=" + results[0] + ",bad=" + results[1]);
+                        }
+                    });
+        }
 	}
 	
 	public void
@@ -4730,29 +4685,27 @@ DHTControlImpl
 			pivot		= _pivot;
 			ascending	= _ascending;
 			
-			tree_set = new TreeSet<DHTTransportContact>(
-				new Comparator<DHTTransportContact>()
-				{
-					public int
-					compare(
-						DHTTransportContact	t1,
-						DHTTransportContact	t2 )
-					{
-							// this comparator ensures that the closest to the key
-							// is first in the iterator traversal
-							 									
-						int	distance = computeAndCompareDistances2( t1.getID(), t2.getID(), pivot );
-						
-						if ( ascending ){
-							
-							return( distance );
-							
-						}else{
-							
-							return( -distance );
-						}
-					}
-				});
+			tree_set = new TreeSet<>(
+                    new Comparator<DHTTransportContact>() {
+                        public int
+                        compare(
+                                DHTTransportContact t1,
+                                DHTTransportContact t2) {
+                            // this comparator ensures that the closest to the key
+                            // is first in the iterator traversal
+
+                            int distance = computeAndCompareDistances2(t1.getID(), t2.getID(), pivot);
+
+                            if (ascending) {
+
+                                return (distance);
+
+                            } else {
+
+                                return (-distance);
+                            }
+                        }
+                    });
 		}
 		
 		public Set<DHTTransportContact>
@@ -5577,20 +5530,18 @@ DHTControlImpl
 				}else{
 					
 					List	l = (List)to_cancel;
-					
-					for (int i=0;i<l.size();i++){
-						
-						Object o = l.get(i);
-						
-						if ( o instanceof DhtTask ){
-							
-							((DhtTask)o).cancel();
-							
-						}else{
-							
-							((DhtTaskSet)o).cancel();
-						}
-					}
+
+                    for (Object o : l) {
+
+                        if (o instanceof DhtTask) {
+
+                            ((DhtTask) o).cancel();
+
+                        } else {
+
+                            ((DhtTaskSet) o).cancel();
+                        }
+                    }
 				}
 			}
 		}

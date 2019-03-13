@@ -26,13 +26,13 @@ import java.util.Map;
 public interface 
 AzureusContentFilter 
 {
-	public boolean
+	boolean
 	isVisible(
-		AzureusContentDownload		download,
-		Map<String,Object>			args );
+            AzureusContentDownload download,
+            Map<String, Object> args);
 	
-	public boolean
+	boolean
 	isVisible(
-		AzureusContentFile		file,
-		Map<String,Object>		args );
+            AzureusContentFile file,
+            Map<String, Object> args);
 }

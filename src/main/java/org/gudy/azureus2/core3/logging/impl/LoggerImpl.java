@@ -166,7 +166,7 @@ public class LoggerImpl {
 			}
 		}
 
-		public void write(byte b[], int off, int len) {
+		public void write(byte[] b, int off, int len) {
 			for (int i = off; i < off + len; i++) {
 				int d = b[i];
 				if (d < 0)
@@ -217,18 +217,18 @@ public class LoggerImpl {
 			}
 		}
 		if (bEventLoggingEnabled)
-			for (int i = 0; i < logListeners.size(); i++) {
-				try {
-					Object listener = logListeners.get(i);
-					if (listener instanceof ILogEventListener)
-						((ILogEventListener) listener).log(event);
-				} catch (Throwable e) {
-					if (logToStdErrAllowed && psOldErr != null) {
-						psOldErr.println("Error while logging: " + e.getMessage());
-						e.printStackTrace(psOldErr);
-					}
-				}
-			}
+            for (Object logListener : logListeners) {
+                try {
+                    Object listener = logListener;
+                    if (listener instanceof ILogEventListener)
+                        ((ILogEventListener) listener).log(event);
+                } catch (Throwable e) {
+                    if (logToStdErrAllowed && psOldErr != null) {
+                        psOldErr.println("Error while logging: " + e.getMessage());
+                        e.printStackTrace(psOldErr);
+                    }
+                }
+            }
 
 		// Write error to stderr, which will eventually get back here
 		if (event.err != null && event.entryType == LogEvent.LT_ERROR){
@@ -241,7 +241,7 @@ public class LoggerImpl {
 		log(event);
 	}
 
-	public void logTextResource(LogEvent event, String params[]) {
+	public void logTextResource(LogEvent event, String[] params) {
 		event.text = MessageText.getString(event.text, params);
 		log(event);
 	}
@@ -286,18 +286,18 @@ public class LoggerImpl {
 		if (alertHistory.size() > MAXHISTORY)
 			alertHistory.remove(0);
 
-		for (int i = 0; i < alertListeners.size(); i++) {
-			try {
-				Object listener = alertListeners.get(i);
-				if (listener instanceof ILogAlertListener)
-					((ILogAlertListener) listener).alertRaised(alert);
-			} catch (Throwable f) {
-				if (psOldErr != null) {
-					psOldErr.println("Error while alerting: " + f.getMessage());
-					f.printStackTrace(psOldErr);
-				}
-			}
-		}
+        for (Object alertListener : alertListeners) {
+            try {
+                Object listener = alertListener;
+                if (listener instanceof ILogAlertListener)
+                    ((ILogAlertListener) listener).alertRaised(alert);
+            } catch (Throwable f) {
+                if (psOldErr != null) {
+                    psOldErr.println("Error while alerting: " + f.getMessage());
+                    f.printStackTrace(psOldErr);
+                }
+            }
+        }
 	}
 
 	public void logTextResource(LogAlert alert) {
@@ -305,7 +305,7 @@ public class LoggerImpl {
 		log(alert);
 	}
 
-	public void logTextResource(LogAlert alert, String params[]) {
+	public void logTextResource(LogAlert alert, String[] params) {
 		alert.text = MessageText.getString(alert.text, params);
 		log(alert);
 	}
@@ -313,10 +313,10 @@ public class LoggerImpl {
 	public void addListener(ILogAlertListener l) {
 		alertListeners.add(l);
 
-		for (int i = 0; i < alertHistory.size(); i++) {
-			LogAlert alert = (LogAlert) alertHistory.get(i);
-			l.alertRaised(alert);
-		}
+        for (Object o : alertHistory) {
+            LogAlert alert = (LogAlert) o;
+            l.alertRaised(alert);
+        }
 	}
 
 	public void removeListener(ILogAlertListener l) {

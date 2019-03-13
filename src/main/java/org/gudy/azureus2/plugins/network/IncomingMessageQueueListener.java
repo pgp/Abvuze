@@ -33,11 +33,11 @@ public interface IncomingMessageQueueListener {
    * @param message recevied
    * @return true if this message was accepted, false if not handled
    */
-  public boolean messageReceived( Message message );
+  boolean messageReceived(Message message);
   
   /**
    * The given number of bytes read from the connection.
    * @param byte_count number of protocol bytes
    */
-  public void bytesReceived( int byte_count );  
+  void bytesReceived(int byte_count);
 }

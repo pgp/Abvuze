@@ -77,7 +77,7 @@ RPObject
     {
         synchronized( object_registry ){
 
-            Object  res = object_registry_reverse.get( new Long(object_id ));
+            Object  res = object_registry_reverse.get(object_id);
 
             if ( res == null ){
                 throw new RPObjectNoLongerExistsException();
@@ -112,7 +112,7 @@ RPObject
 
             }else{
 
-                _object_id  = new Long(next_key++);
+                _object_id  = next_key++;
 
                 object_registry.put( key, this );
 
@@ -128,7 +128,7 @@ RPObject
     public long
     _getOID()
     {
-        return( _object_id.longValue());
+        return(_object_id);
     }
 
     protected void

@@ -29,9 +29,9 @@ package org.gudy.azureus2.plugins.tracker;
 public interface 
 TrackerTorrentListener 
 {
-	public void
+	void
 	preProcess(
-		TrackerTorrentRequest request )
+            TrackerTorrentRequest request)
 	
 		throws TrackerException;
 	
@@ -42,10 +42,10 @@ TrackerTorrentListener
 	 * not appropriate to insert peer-specific data unless caching is *switched off*
 	 * @param request
 	 */
-	
-	public void
+
+    void
 	postProcess(
-		TrackerTorrentRequest request )
+            TrackerTorrentRequest request)
 	
 		throws TrackerException;
 

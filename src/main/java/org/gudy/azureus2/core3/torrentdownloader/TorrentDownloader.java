@@ -24,24 +24,24 @@ package org.gudy.azureus2.core3.torrentdownloader;
  * @author  Tobias Minich
  */
 public interface TorrentDownloader {
-    public static final int STATE_NON_INIT = -1;
-    public static final int STATE_INIT = 0;
-    public static final int STATE_START = 1;
-    public static final int STATE_DOWNLOADING = 2;
-    public static final int STATE_FINISHED = 3;
-    public static final int STATE_ERROR = 4;
-    public static final int STATE_DUPLICATE = 5;
-    public static final int STATE_CANCELLED = 6;
+    int STATE_NON_INIT = -1;
+    int STATE_INIT = 0;
+    int STATE_START = 1;
+    int STATE_DOWNLOADING = 2;
+    int STATE_FINISHED = 3;
+    int STATE_ERROR = 4;
+    int STATE_DUPLICATE = 5;
+    int STATE_CANCELLED = 6;
     
     //public void init(TorrentDownloaderCallBackInterface _iface, String _url, String _file);
     /**
      * Starts the download.
      */
-    public void start();
+    void start();
     /**
      * Cancels the download.
      */
-    public void cancel();
+    void cancel();
     /**
      * Changes the path and filename to download to.
      * You can give <code>null</code> for either to leave it as is.
@@ -54,34 +54,34 @@ public interface TorrentDownloader {
      * @param path The path for download.
      * @param file The file name for download.
      */
-    public void setDownloadPath(String path, String file);
+    void setDownloadPath(String path, String file);
     /**
      * Gets the state of the TorrentDownloader.
      */
-    public int getDownloadState();
+    int getDownloadState();
     /**
      * Returns the <code>File</code> the TorrentDownloader downloads to.
      */
-    public java.io.File getFile();
+    java.io.File getFile();
     /**
      * Returns the amount downloaded in per cent. Gives -1 if total size is not available.
      */
-    public int getPercentDone();
+    int getPercentDone();
 	/**
 	 * Returns the amount downloaded in bytes.
 	 */
-	public int getTotalRead();
+    int getTotalRead();
     /**
      * Returns the error string if one occured, "Ok" otherwise.
      */
-    public String getError();
+    String getError();
     
-    public String getStatus();
+    String getStatus();
     
     /**
      * Returns the URL downloaded from.
      */
-    public String getURL();
+    String getURL();
 		/**
 		 * @return
 		 */

@@ -28,27 +28,27 @@ UITextArea
 	extends UIComponent
 
 {
-	public static final int	DEFAULT_MAX_SIZE	= 60000;
+	int	DEFAULT_MAX_SIZE	= 60000;
 	
 	/**
 	 * Setting values results in a PT_VALUE property change with a String value
 	 * @param precentage
 	 */
-	
-	public void
+
+    void
 	setText(
-		String		text );
+            String text);
 	
 	/**
 	 * Appends the supplied text to the existing text value
 	 * @param text
 	 */
-	
-	public void
+
+    void
 	appendText(
-		String		text );
+            String text);
 	
-	public String
+	String
 	getText();
 	
 	/**
@@ -56,8 +56,8 @@ UITextArea
 	 * will be truncated (text at the start of the string is removed, NOT the end)
 	 * All areas have a default max size as defined by the constant above
 	 */
-	
-	public void
+
+    void
 	setMaximumSize(
-		int	max_size );
+            int max_size);
 }

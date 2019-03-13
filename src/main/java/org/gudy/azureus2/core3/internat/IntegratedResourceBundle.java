@@ -182,8 +182,8 @@ IntegratedResourceBundle
 		
 		synchronized (localizationPaths)
 		{
-			for (Iterator iter = localizationPaths.keySet().iterator(); iter.hasNext();){
-				String localizationPath = (String) iter.next();
+			for (Object o : localizationPaths.keySet()) {
+				String localizationPath = (String) o;
 				ClassLoader classLoader = (ClassLoader) localizationPaths.get(localizationPath);
 
 				addPluginBundle(localizationPath, classLoader);
@@ -193,8 +193,8 @@ IntegratedResourceBundle
 		if (resource_bundles != null) {
 			synchronized (resource_bundles)
 			{
-				for (Iterator itr = resource_bundles.iterator(); itr.hasNext();) {
-					addResourceMessages((ResourceBundle)itr.next());
+				for (Object resource_bundle : resource_bundles) {
+					addResourceMessages((ResourceBundle) resource_bundle);
 				}
 			}
 
@@ -278,7 +278,7 @@ IntegratedResourceBundle
 		
 		Integer keyHash = null;
 		if (null_values != null) {
-			keyHash = new Integer(key.hashCode());
+			keyHash = key.hashCode();
   		int index = Collections.binarySearch(null_values, keyHash);
   		if (index >= 0) {
   			return null;
@@ -468,7 +468,7 @@ IntegratedResourceBundle
 			
 			pos2++;
 			
-			result.append( str.substring( pos1, pos2 ));
+			result.append(str, pos1, pos2);
 			
 			pos = pos2;
 			
@@ -694,7 +694,7 @@ IntegratedResourceBundle
 		synchronized( bundle_map ){
 			if ( added_strings == null ){
 				
-				added_strings = new HashMap<String, String>();
+				added_strings = new HashMap<>();
 			}
 			
 			added_strings.put( key, value );

@@ -23,21 +23,21 @@ package org.gudy.azureus2.plugins.network;
 public interface 
 RateLimiter 
 {
-	public String
+	String
 	getName();
 	
 	/**
 	 * Get rate limit. 0 -> unlimited, -1 -> disabled
 	 * @return
 	 */
-	
-	public int 
+
+    int
 	getRateLimitBytesPerSecond();
 	
-	public void
+	void
 	setRateLimitBytesPerSecond(
-		int		bytes_per_second );
+            int bytes_per_second);
 	
-	public long
+	long
 	getRateLimitTotalByteCount();
 }

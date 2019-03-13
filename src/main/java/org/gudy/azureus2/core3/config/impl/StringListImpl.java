@@ -49,18 +49,16 @@ public class StringListImpl implements StringList {
 	 */	
 	public StringListImpl(Collection _list) {
 		//Attempt to convert list to String List
-		this();		
-		Iterator iter = _list.iterator();
-		while(iter.hasNext()) {
-			Object obj = iter.next();
-			if(obj instanceof String) {
-				list.add(obj);
-			} else if(obj instanceof byte[]) {
-				list.add(ConfigurationManager.bytesToString((byte[]) obj));
-			} else if (obj != null) {
-				list.add(obj.toString());
-			}
-		}		
+		this();
+        for (Object obj : _list) {
+            if (obj instanceof String) {
+                list.add(obj);
+            } else if (obj instanceof byte[]) {
+                list.add(ConfigurationManager.bytesToString((byte[]) obj));
+            } else if (obj != null) {
+                list.add(obj.toString());
+            }
+        }
 	}
 	
 	List getList() {
@@ -102,7 +100,7 @@ public class StringListImpl implements StringList {
 	}
 	
 	public String[] toArray() {
-		return (String[])list.toArray(new String[list.size()]);
+		return (String[])list.toArray(new String[0]);
 	}
 
 	public void clear()

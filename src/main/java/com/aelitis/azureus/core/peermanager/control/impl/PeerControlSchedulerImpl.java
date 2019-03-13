@@ -154,23 +154,23 @@ PeerControlSchedulerImpl
 	{
 		if ( types.contains( AzureusCoreStats.ST_PEER_CONTROL_SCHEDULE_COUNT )){
 			
-			values.put( AzureusCoreStats.ST_PEER_CONTROL_SCHEDULE_COUNT, new Long( schedule_count ));
+			values.put( AzureusCoreStats.ST_PEER_CONTROL_SCHEDULE_COUNT, schedule_count);
 		}
 		if ( types.contains( AzureusCoreStats.ST_PEER_CONTROL_LOOP_COUNT )){
 			
-			values.put( AzureusCoreStats.ST_PEER_CONTROL_LOOP_COUNT, new Long( wait_count + yield_count ));
+			values.put( AzureusCoreStats.ST_PEER_CONTROL_LOOP_COUNT, wait_count + yield_count);
 		}
 		if ( types.contains( AzureusCoreStats.ST_PEER_CONTROL_YIELD_COUNT )){
 			
-			values.put( AzureusCoreStats.ST_PEER_CONTROL_YIELD_COUNT, new Long( yield_count ));
+			values.put( AzureusCoreStats.ST_PEER_CONTROL_YIELD_COUNT, yield_count);
 		}
 		if ( types.contains( AzureusCoreStats.ST_PEER_CONTROL_WAIT_COUNT )){
 			
-			values.put( AzureusCoreStats.ST_PEER_CONTROL_WAIT_COUNT, new Long( wait_count ));
+			values.put( AzureusCoreStats.ST_PEER_CONTROL_WAIT_COUNT, wait_count);
 		}
 		if ( types.contains( AzureusCoreStats.ST_PEER_CONTROL_WAIT_TIME )){
 			
-			values.put( AzureusCoreStats.ST_PEER_CONTROL_WAIT_TIME, new Long( total_wait_time ));
+			values.put( AzureusCoreStats.ST_PEER_CONTROL_WAIT_TIME, total_wait_time);
 		}
 	}
 		

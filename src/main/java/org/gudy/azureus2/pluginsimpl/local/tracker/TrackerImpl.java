@@ -52,7 +52,7 @@ TrackerImpl
 	
 	private TRHost		host;
 	
-	private List<TrackerAuthenticationListener>	auth_listeners	= new ArrayList<TrackerAuthenticationListener>();
+	private List<TrackerAuthenticationListener>	auth_listeners	= new ArrayList<>();
 	
 	
 	public static Tracker
@@ -246,11 +246,11 @@ TrackerImpl
 	{
 		try{
 			this_mon.enter();
-		
-			for (int i=0;i<listeners.size();i++){
-				
-				((TrackerListener)listeners.get(i)).torrentAdded(new TrackerTorrentImpl(t));
-			}
+
+            for (Object listener : listeners) {
+
+                ((TrackerListener) listener).torrentAdded(new TrackerTorrentImpl(t));
+            }
 		}finally{
 			
 			this_mon.exit();
@@ -261,10 +261,10 @@ TrackerImpl
 	torrentChanged(
 		TRHostTorrent		t )
 	{
-		for (int i=0;i<listeners.size();i++){
-			
-			((TrackerListener)listeners.get(i)).torrentChanged(new TrackerTorrentImpl(t));
-		}
+        for (Object listener : listeners) {
+
+            ((TrackerListener) listener).torrentChanged(new TrackerTorrentImpl(t));
+        }
 	}
 	
 
@@ -274,11 +274,11 @@ TrackerImpl
 	{	
 		try{
 			this_mon.enter();
-		
-			for (int i=0;i<listeners.size();i++){
-			
-				((TrackerListener)listeners.get(i)).torrentRemoved(new TrackerTorrentImpl(t));
-			}
+
+            for (Object listener : listeners) {
+
+                ((TrackerListener) listener).torrentRemoved(new TrackerTorrentImpl(t));
+            }
 		}finally{
 			
 			this_mon.exit();
@@ -296,11 +296,11 @@ TrackerImpl
 			listeners.add( listener );
 		
 			TrackerTorrent[] torrents = getTorrents();
-		
-			for (int i=0;i<torrents.length;i++){
-			
-				listener.torrentAdded( torrents[i]);
-			}
+
+            for (TrackerTorrent torrent : torrents) {
+
+                listener.torrentAdded(torrent);
+            }
 		}finally{
 			
 			this_mon.exit();
@@ -329,31 +329,31 @@ TrackerImpl
 		String		user,
 		String		password )
 	{
-		for (int i=0;i<auth_listeners.size();i++){
-			
-			try{
-				TrackerAuthenticationListener listener = auth_listeners.get(i);
-				
-				boolean res;
-				
-				if ( listener instanceof TrackerAuthenticationAdapter ){
-					
-					res = ((TrackerAuthenticationAdapter)listener).authenticate( headers, resource, user, password );
-					
-				}else{
-					
-					res = listener.authenticate( resource, user, password );
-				}
-				
-				if ( res ){
-					
-					return(true );
-				}
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace( e );
-			}
-		}
+        for (TrackerAuthenticationListener auth_listener : auth_listeners) {
+
+            try {
+                TrackerAuthenticationListener listener = auth_listener;
+
+                boolean res;
+
+                if (listener instanceof TrackerAuthenticationAdapter) {
+
+                    res = ((TrackerAuthenticationAdapter) listener).authenticate(headers, resource, user, password);
+
+                } else {
+
+                    res = listener.authenticate(resource, user, password);
+                }
+
+                if (res) {
+
+                    return (true);
+                }
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 		
 		return( false );
 	}
@@ -363,20 +363,20 @@ TrackerImpl
 		URL			resource,
 		String		user )
 	{
-		for (int i=0;i<auth_listeners.size();i++){
-			
-			try{
-				byte[] res = ((TrackerAuthenticationListener)auth_listeners.get(i)).authenticate( resource, user );
-				
-				if ( res != null ){
-					
-					return( res );
-				}
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace( e );
-			}
-		}
+        for (TrackerAuthenticationListener auth_listener : auth_listeners) {
+
+            try {
+                byte[] res = auth_listener.authenticate(resource, user);
+
+                if (res != null) {
+
+                    return (res);
+                }
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 		
 		return( null );
 	}

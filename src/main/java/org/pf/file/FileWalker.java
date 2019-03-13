@@ -116,18 +116,14 @@ public class FileWalker
 		filter = new ExtendedFileFilter() ;
 		
 		patterns = this.extractPatterns( pattern ) ;
-		for (int i = 0; i < patterns.length; i++)
-		{
-			strPattern = patterns[i] ;
-			if ( this.hasDigitWildcard() )
-			{
-				filter.addPattern( strPattern, true, this.getDigitWildcardChar() ) ;
-			}
-			else
-			{
-				filter.addPattern( strPattern, true ) ;
-			}
-		}
+        for (String pattern1 : patterns) {
+            strPattern = pattern1;
+            if (this.hasDigitWildcard()) {
+                filter.addPattern(strPattern, true, this.getDigitWildcardChar());
+            } else {
+                filter.addPattern(strPattern, true);
+            }
+        }
 		
 		if ( recursive )
 			filter.alwaysIncludeDirectories() ;
@@ -153,7 +149,7 @@ public class FileWalker
 		}
 		else
 		{
-			this.setDigitWildcard( new Character( digitWildcard ) ) ;
+			this.setDigitWildcard(digitWildcard) ;
 		}
 	} // setDigitWildcardChar()
 
@@ -216,7 +212,7 @@ public class FileWalker
 	protected char getDigitWildcardChar()
 	{
 		if ( this.hasDigitWildcard() )
-			return this.getDigitWildcard().charValue() ;
+			return this.getDigitWildcard();
 		else
 			return '\0' ;
 	} // getDigitWildcardChar()

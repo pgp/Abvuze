@@ -24,34 +24,34 @@ import java.util.Map;
 public interface 
 BloomFilter 
 {
-	public int
+	int
 	add(
-		byte[]		value );
+            byte[] value);
 	
-	public int
+	int
 	remove(
-		byte[]		value );
+            byte[] value);
 	
-	public boolean
+	boolean
 	contains(
-		byte[]		value );
+            byte[] value);
 	
-	public int
+	int
 	count(
-		byte[]		value );
+            byte[] value);
 	
 		/**
 		 * Returns number of unique entries
 		 * @return
 		 */
-	
-	public int
+
+        int
 	getEntryCount();
 		
-	public void 
+	void
 	clear();
 	
-	public long
+	long
 	getStartTimeMono();
 	
 	/**
@@ -59,15 +59,15 @@ BloomFilter
 	 * @return
 	 */
 
-	public int
+    int
 	getSize();
 	
-	public BloomFilter
+	BloomFilter
 	getReplica();
 	
-	public Map<String,Object>
+	Map<String,Object>
 	serialiseToMap();
 	
-	public String
+	String
 	getString();
 }

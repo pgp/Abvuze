@@ -27,10 +27,10 @@ package org.gudy.azureus2.core3.ipfilter;
 public interface 
 IpFilterManager 
 {
-	public IpFilter
+	IpFilter
 	getIPFilter();
 	
-	public BadIps
+	BadIps
 	getBadIps();
 
 	/**

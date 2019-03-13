@@ -179,17 +179,14 @@ public class SpeedManagerAlgorithmProviderPingMap
      * @param currUploadLimit -
      */
     private void logCurrentData(int downRate, int currDownLimit, int upRate, int currUploadLimit) {
-        StringBuilder sb = new StringBuilder("curr-data-m:"+downRate+":"+currDownLimit+":");
-        sb.append( limitMonitor.getDownloadMaxLimit() ).append(":");
-        sb.append(limitMonitor.getDownloadBandwidthMode()).append(":");
-        sb.append(limitMonitor.getDownloadLimitSettingMode()).append(":");
-        sb.append(upRate).append(":").append(currUploadLimit).append(":");
-        sb.append( limitMonitor.getUploadMaxLimit() ).append(":");
-        sb.append(limitMonitor.getUploadBandwidthMode()).append(":");
-        sb.append(limitMonitor.getUploadLimitSettingMode()).append(":");
-        sb.append(limitMonitor.getTransferModeAsString());
-
-        SpeedManagerLogger.log( sb.toString() );
+        SpeedManagerLogger.log("curr-data-m:" + downRate + ":" + currDownLimit + ":" + limitMonitor.getDownloadMaxLimit() + ":" +
+                limitMonitor.getDownloadBandwidthMode() + ":" +
+                limitMonitor.getDownloadLimitSettingMode() + ":" +
+                upRate + ":" + currUploadLimit + ":" +
+                limitMonitor.getUploadMaxLimit() + ":" +
+                limitMonitor.getUploadBandwidthMode() + ":" +
+                limitMonitor.getUploadLimitSettingMode() + ":" +
+                limitMonitor.getTransferModeAsString());
     }
 
     /**
@@ -232,12 +229,12 @@ public class SpeedManagerAlgorithmProviderPingMap
 
         //Get new data to ping-source-manager.
         int len = sources.length;
-        for(int i=0; i<len; i++){
-            pingSourceManager.addPingTime( sources[i] );
-            int pingTime = sources[i].getPingTime();
+        for (SpeedManagerPingSource source : sources) {
+            pingSourceManager.addPingTime(source);
+            int pingTime = source.getPingTime();
 
             //exclude ping-times of -1 which mess up the averages.
-            if(pingTime>0){
+            if (pingTime > 0) {
                 //pingTimeList.add( new Integer( sources[i].getPingTime() ) );
                 intervalCount++;
             }//if
@@ -341,17 +338,13 @@ public class SpeedManagerAlgorithmProviderPingMap
      * log("limits:down-max:down-min:down-conf:up-max:up-min:up-conf");
      */
     private void logLimitStatus(){
-
-        StringBuilder msg = new StringBuilder();
-        msg.append("limits:");
-        msg.append(limitMonitor.getUploadMaxLimit()).append(":");
-        msg.append(limitMonitor.getUploadMinLimit()).append(":");
-        msg.append(limitMonitor.getUploadConfidence()).append(":");
-        msg.append(limitMonitor.getDownloadMaxLimit()).append(":");
-        msg.append(limitMonitor.getDownloadMinLimit()).append(":");
-        msg.append(limitMonitor.getDownloadConfidence());
-
-        SpeedManagerLogger.log( msg.toString() );
+        SpeedManagerLogger.log("limits:" +
+                limitMonitor.getUploadMaxLimit() + ":" +
+                limitMonitor.getUploadMinLimit() + ":" +
+                limitMonitor.getUploadConfidence() + ":" +
+                limitMonitor.getDownloadMaxLimit() + ":" +
+                limitMonitor.getDownloadMinLimit() + ":" +
+                limitMonitor.getDownloadConfidence());
     }//logLimitStatus
 
     /**

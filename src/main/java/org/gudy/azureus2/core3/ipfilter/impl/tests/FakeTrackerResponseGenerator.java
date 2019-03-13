@@ -27,7 +27,7 @@ package org.gudy.azureus2.core3.ipfilter.impl.tests;
 public class FakeTrackerResponseGenerator {
 	
 	//This will generate a fake announce with loads of bad IPs in it.
-	public static void main(String args[]) {
+	public static void main(String[] args) {
 		String baseRange = "195.68.236.";
 		String basePeerId = "-AZ2104-0VR73lDzLejd";
 		System.out.print("d8:intervali10e5:peersl");

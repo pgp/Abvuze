@@ -67,7 +67,7 @@ ExternalSeedPeer
 	private Monitor					connection_mon;
 	private boolean					peer_added;
 	
-	private List<PeerReadRequest>					request_list = new ArrayList<PeerReadRequest>();
+	private List<PeerReadRequest>					request_list = new ArrayList<>();
 	
 	private CopyOnWriteList			listeners;
 	private Monitor					listeners_mon;
@@ -176,7 +176,7 @@ ExternalSeedPeer
 	{
 		state	= newState;
 		
-		fireEvent( PeerEvent.ET_STATE_CHANGED, new Integer( newState ));
+		fireEvent( PeerEvent.ET_STATE_CHANGED, newState);
 	}
 	
 	protected boolean
@@ -779,51 +779,48 @@ ExternalSeedPeer
 			listeners_mon.enter();
 
 			List	ref = listeners.getList();
-			
-			for (int i =0; i <ref.size(); i++){
-				
-				try{
-					Object	 _listener = ref.get(i);
-						
-					if ( _listener instanceof PeerListener ){
-						
-						PeerListener	listener = (PeerListener)_listener;
-						
-						if ( type == PeerEvent.ET_STATE_CHANGED ){
-							
-							listener.stateChanged(((Integer)data).intValue());
-							
-						}else if ( type == PeerEvent.ET_BAD_CHUNK ){
-							
-							Integer[]	d = (Integer[])data;
-							
-							listener.sentBadChunk(d[0].intValue(),d[1].intValue());
-						}
-					}else{
-						
-						PeerListener2	listener = (PeerListener2)_listener;
-	
-						listener.eventOccurred(
-							new PeerEvent()
-							{
-								public int
-								getType()
-								{
-									return( type );
-								}
-								
-								public Object
-								getData()
-								{
-									return( data );
-								}
-							});
-					}
-				}catch( Throwable e ){
-					
-					e.printStackTrace();
-				}
-			}
+
+            for (Object o : ref) {
+
+                try {
+                    Object _listener = o;
+
+                    if (_listener instanceof PeerListener) {
+
+                        PeerListener listener = (PeerListener) _listener;
+
+                        if (type == PeerEvent.ET_STATE_CHANGED) {
+
+                            listener.stateChanged((Integer) data);
+
+                        } else if (type == PeerEvent.ET_BAD_CHUNK) {
+
+                            Integer[] d = (Integer[]) data;
+
+                            listener.sentBadChunk(d[0], d[1]);
+                        }
+                    } else {
+
+                        PeerListener2 listener = (PeerListener2) _listener;
+
+                        listener.eventOccurred(
+                                new PeerEvent() {
+                                    public int
+                                    getType() {
+                                        return (type);
+                                    }
+
+                                    public Object
+                                    getData() {
+                                        return (data);
+                                    }
+                                });
+                    }
+                } catch (Throwable e) {
+
+                    e.printStackTrace();
+                }
+            }
 		}finally{
 			
 			listeners_mon.exit();
@@ -1014,14 +1011,14 @@ ExternalSeedPeer
 	
 				public void notifyOfExternalSend( Message message ){}  
 	
-				public int getPercentDoneOfCurrentMessage(){ return( -1 );};
-	
-				public int getDataQueuedBytes(){ return( 0 ); }
+				public int getPercentDoneOfCurrentMessage(){ return( -1 );}
+
+                public int getDataQueuedBytes(){ return( 0 ); }
 	
 				public int getProtocolQueuedBytes(){ return( 0 ); }
 	
-				public boolean isBlocked(){ return( false ); };
-			};
+				public boolean isBlocked(){ return( false ); }
+            };
 			
 		private IncomingMessageQueue in_q =
 			new	IncomingMessageQueue()

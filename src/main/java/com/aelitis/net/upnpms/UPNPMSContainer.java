@@ -26,7 +26,7 @@ public interface
 UPNPMSContainer 
 	extends UPNPMSNode
 {
-	public List<UPNPMSNode>
+	List<UPNPMSNode>
 	getChildren()
 		
 		throws UPnPMSException;

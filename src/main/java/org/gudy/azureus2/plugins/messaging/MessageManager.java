@@ -29,9 +29,9 @@ import org.gudy.azureus2.plugins.messaging.generic.GenericMessageRegistration;
  */
 public interface MessageManager {
 
-  public static final int	STREAM_ENCRYPTION_NONE				= 1;
-  public static final int	STREAM_ENCRYPTION_RC4_PREFERRED		= 2;
-  public static final int	STREAM_ENCRYPTION_RC4_REQUIRED		= 3;
+  int	STREAM_ENCRYPTION_NONE				= 1;
+  int	STREAM_ENCRYPTION_RC4_PREFERRED		= 2;
+  int	STREAM_ENCRYPTION_RC4_REQUIRED		= 3;
   
   /**
    * Register the given message type with the manager for processing.
@@ -40,14 +40,14 @@ public interface MessageManager {
    * @param message instance to use for decoding
    * @throws MessageException if this message type has already been registered
    */
-  public void registerMessageType( Message message ) throws MessageException;
+  void registerMessageType(Message message) throws MessageException;
   
   
   /**
    * Remove registration of given message type from manager.
    * @param message type to remove
    */
-  public void deregisterMessageType( Message message );
+  void deregisterMessageType(Message message);
   
   
   /**
@@ -56,14 +56,14 @@ public interface MessageManager {
    * @param message to match
    * @param listener to notify
    */
-  public void locateCompatiblePeers( PluginInterface plug_interface, Message message, MessageManagerListener listener );
+  void locateCompatiblePeers(PluginInterface plug_interface, Message message, MessageManagerListener listener);
   
   
   /**
    * Cancel registration for compatible-peer notification.
    * @param orig_listener listener used for registration
    */
-  public void cancelCompatiblePeersLocation( MessageManagerListener orig_listener );
+  void cancelCompatiblePeersLocation(MessageManagerListener orig_listener);
   
   /**
    * Register a peer-independent message handler
@@ -73,13 +73,13 @@ public interface MessageManager {
    * @return
    * @throws MessageException
    */
-  
-  public GenericMessageRegistration
+
+  GenericMessageRegistration
   registerGenericMessageType(
-		String					type,
-		String					description,
-		int						stream_encryption,
-		GenericMessageHandler	handler )
+          String type,
+          String description,
+          int stream_encryption,
+          GenericMessageHandler handler)
   
   	throws MessageException;
 }

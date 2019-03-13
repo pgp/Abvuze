@@ -504,13 +504,13 @@ DHTTransportUDPContactImpl
   	getNetworkPosition(
   		byte	position_type )
   	{
-  		for (int i=0;i<network_positions.length;i++){
-  			
-  			if ( network_positions[i].getPositionType() == position_type ){
-  				
-  				return( network_positions[i] );
-  			}
-  		}
+        for (DHTNetworkPosition network_position : network_positions) {
+
+            if (network_position.getPositionType() == position_type) {
+
+                return (network_position);
+            }
+        }
   		
   		return( null );
   	}

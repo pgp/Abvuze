@@ -38,15 +38,15 @@ PluginInstaller
 		 * Gives access to the list of standard plugins listed on the Azureus website
 		 * @return
 		 */
-	
-	public StandardPlugin[]
+
+        StandardPlugin[]
 	getStandardPlugins()
 	
 		throws PluginException;	
 	
-	public StandardPlugin
+	StandardPlugin
   	getStandardPlugin(
-  		String		id )
+            String id)
   	
   		throws PluginException;
 	
@@ -55,11 +55,11 @@ PluginInstaller
 		 * @param plugin
 		 * @throws PluginException
 		 */
-	
-	public void
+
+        void
 	requestInstall(
-		String				reason,
-		InstallablePlugin 	plugin )
+                String reason,
+                InstallablePlugin plugin)
 	
 		throws PluginException;
 	
@@ -67,20 +67,20 @@ PluginInstaller
 		 * Install one of more plugins in a single operation
 		 * @param plugins
 		 */
-	
-	public void
+
+        void
 	install(
-		InstallablePlugin[]	plugins,
-		boolean				shared )
+                InstallablePlugin[] plugins,
+                boolean shared)
 	
 		throws PluginException;
 	
-	public UpdateCheckInstance
+	UpdateCheckInstance
 	install(
-		InstallablePlugin[]			plugins,
-		boolean						shared,
-		Map<Integer,Object>			properties,
-		PluginInstallationListener	listener )
+            InstallablePlugin[] plugins,
+            boolean shared,
+            Map<Integer, Object> properties,
+            PluginInstallationListener listener)
 	
 		throws PluginException;
 			
@@ -93,46 +93,46 @@ PluginInstaller
 		 * @param file
 		 * @throws PluginException
 		 */
-	
-	public FilePluginInstaller
+
+        FilePluginInstaller
 	installFromFile(
-		File		file )
+                File file)
 	
 		throws PluginException;
 	
-	public void
+	void
 	uninstall(
-		PluginInterface		plugin_interface )
+            PluginInterface plugin_interface)
 	
 	
 		throws PluginException;
 	
-	public void
+	void
 	uninstall(
-		PluginInterface[]	plugin_interfaces )
+            PluginInterface[] plugin_interfaces)
 	
 		throws PluginException;
 	
-	public void
+	void
 	uninstall(
-		PluginInterface[]			plugin_interfaces,
-		PluginInstallationListener	listener )
+            PluginInterface[] plugin_interfaces,
+            PluginInstallationListener listener)
 	
 		throws PluginException;
 	
-	public UpdateCheckInstance
+	UpdateCheckInstance
 	uninstall(
-		PluginInterface[]			plugin_interfaces,
-		PluginInstallationListener	listener,
-		Map<Integer,Object>			properties )
+            PluginInterface[] plugin_interfaces,
+            PluginInstallationListener listener,
+            Map<Integer, Object> properties)
 	
 		throws PluginException;
 	
-	public void
+	void
 	addListener(
-		PluginInstallerListener		l );
+            PluginInstallerListener l);
 	
-	public void
+	void
 	removeListener(
-		PluginInstallerListener		l );
+            PluginInstallerListener l);
 }

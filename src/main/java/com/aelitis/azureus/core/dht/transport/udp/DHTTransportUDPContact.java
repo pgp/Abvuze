@@ -32,7 +32,7 @@ public interface
 DHTTransportUDPContact
 	extends DHTTransportContact
 {
-	public void
+	void
 	setTransportAddress(
-		InetSocketAddress	address );
+            InetSocketAddress address);
 }

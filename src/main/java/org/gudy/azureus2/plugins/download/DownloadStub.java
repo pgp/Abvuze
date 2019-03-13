@@ -28,30 +28,30 @@ import org.gudy.azureus2.plugins.torrent.TorrentAttribute;
 public interface 
 DownloadStub 
 {
-	public boolean
+	boolean
 	isStub();
 	
-	public Download
+	Download
 	destubbify()
 	
 		throws DownloadException;
 	
-	public String
+	String
 	getName();
 	
-	public byte[]
+	byte[]
 	getTorrentHash();
 	
-	public long
+	long
 	getTorrentSize();
 	
-	public Torrent
+	Torrent
 	getTorrent();
 	
-	public String
+	String
 	getSavePath();
 	
-	public DownloadStubFile[]
+	DownloadStubFile[]
 	getStubFiles();
 	
 		/**
@@ -62,51 +62,51 @@ DownloadStub
 		 * @param attribute
 		 * @return
 		 */
-	
-	public long 
+
+        long
 	getLongAttribute(
-		TorrentAttribute 	attribute );
+                TorrentAttribute attribute);
 	  
-	public void 
+	void
 	setLongAttribute(
-		TorrentAttribute 	attribute, 
-		long 				value);
+            TorrentAttribute attribute,
+            long value);
 	  
-	public void
+	void
 	remove()
 	
 		throws DownloadException, DownloadRemovalVetoException;
 	
-	public interface 
+	interface
 	DownloadStubFile 
 	{
-		public File
+		File
 		getFile();
 		
-		public long
+		long
 		getLength();
 	}
 	
-	public interface
+	interface
 	DownloadStubEx
 	
 		extends DownloadStub
 	{
-		public long
+		long
 		getCreationDate();
 		
-		public String[]
+		String[]
 		getManualTags();
 		
-		public int
+		int
 		getShareRatio();
 		
 			// could migrate to DownloadStub one day
 		
-		public void
+		void
 		remove(
-			boolean		delete_torrent,
-			boolean		delete_data )
+                boolean delete_torrent,
+                boolean delete_data)
 		
 			throws DownloadException, DownloadRemovalVetoException;
 	}

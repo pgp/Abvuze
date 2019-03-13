@@ -33,12 +33,12 @@ public interface MessageManagerListener {
    * @param peer that supports the message type
    * @param message that is supported
    */
-  public void compatiblePeerFound( Download download, Peer peer, Message message );
+  void compatiblePeerFound(Download download, Peer peer, Message message);
   
   /**
    * Notify of peer connection removal.
    * @param download that contained the peer
    * @param peer that was dropped
    */
-  public void peerRemoved( Download download, Peer peer );
+  void peerRemoved(Download download, Peer peer);
 }

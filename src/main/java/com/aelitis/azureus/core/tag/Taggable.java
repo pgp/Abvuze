@@ -24,24 +24,24 @@ public interface
 Taggable 
 	extends org.gudy.azureus2.plugins.tag.Taggable
 {	
-	public static final int	TT_DOWNLOAD		= 0x00000002;		// DownloadManagers
-	public static final int	TT_PEER			= 0x00000004;		// PEPeers
+	int	TT_DOWNLOAD		= 0x00000002;		// DownloadManagers
+	int	TT_PEER			= 0x00000004;		// PEPeers
 	
-	public int
+	int
 	getTaggableType();
 	
-	public String
+	String
 	getTaggableID();
 	
-	public TaggableResolver 
+	TaggableResolver
 	getTaggableResolver();
 	
-	public void
+	void
 	setTaggableTransientProperty(
-		String		key,
-		Object		value );
+            String key,
+            Object value);
 	
-	public Object
+	Object
 	getTaggableTransientProperty(
-		String		key );
+            String key);
 }

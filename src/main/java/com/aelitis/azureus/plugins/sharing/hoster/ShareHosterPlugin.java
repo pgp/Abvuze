@@ -221,13 +221,11 @@ ShareHosterPlugin
 					});
 					
 				TorrentAttribute[]	attributes = resource.getAttributes();
-				
-				for (int i=0;i<attributes.length;i++){
-					
-					TorrentAttribute	ta = attributes[i];
-								
-					new_download.setAttribute( ta,	resource.getAttribute( ta ));
-				}
+
+                for (TorrentAttribute ta : attributes) {
+
+                    new_download.setAttribute(ta, resource.getAttribute(ta));
+                }
 				
 				new_download.addAttributeListener(
 					new DownloadAttributeListener() {
@@ -308,8 +306,8 @@ ShareHosterPlugin
 	{
 		Map<String,String>	properties  = resource.getProperties();
 		
-		final List<String>	networks 	= new ArrayList<String>();
-		final List<Tag>		tags		= new ArrayList<Tag>();
+		final List<String>	networks 	= new ArrayList<>();
+		final List<Tag>		tags		= new ArrayList<>();
 		
 		if ( properties != null ){
 			
@@ -370,7 +368,7 @@ ShareHosterPlugin
 					{
 						if ( Arrays.equals( download.getTorrentHash(), torrent.getHash())){ 
 						
-							PluginCoreUtils.unwrap( download ).getDownloadState().setNetworks( networks.toArray( new String[networks.size()]));
+							PluginCoreUtils.unwrap( download ).getDownloadState().setNetworks( networks.toArray(new String[0]));
 						}
 					}
 				};

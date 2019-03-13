@@ -25,6 +25,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.gudy.azureus2.core3.util.AERunnable;
@@ -95,8 +96,8 @@ BuddyPluginBuddy
 	
 	private boolean			check_active;
 		
-	private List<buddyConnection>		connections	= new ArrayList<buddyConnection>();
-	private List<buddyMessage>			messages	= new ArrayList<buddyMessage>();
+	private List<buddyConnection>		connections	= new ArrayList<>();
+	private List<buddyMessage>			messages	= new ArrayList<>();
 	private buddyMessage				current_message;
 	
 	private int	next_connection_id;
@@ -119,7 +120,7 @@ BuddyPluginBuddy
 	
 	private BuddyPluginBuddyMessageHandler		persistent_msg_handler;
 
-	private Map<Object,Object>		user_data = new LightHashMap<Object,Object>();
+	private Map<Object,Object>		user_data = new LightHashMap<>();
 	
 	private boolean	keep_alive_outstanding;
 	private volatile long	last_connect_attempt	= SystemTime.getCurrentTime();
@@ -333,7 +334,7 @@ BuddyPluginBuddy
 			
 			if ( rss_local_cats == null ){
 				
-				rss_local_cats = new HashSet<String>();
+				rss_local_cats = new HashSet<>();
 			}
 			
 			if ( dirty = !rss_local_cats.contains( category )){
@@ -510,7 +511,7 @@ BuddyPluginBuddy
 			
 			if ( rss_cats_read == null ){
 				
-				rss_cats_read = new HashSet<String>();
+				rss_cats_read = new HashSet<>();
 			}
 			
 			dirty = rss_cats_read.add( str );
@@ -643,7 +644,7 @@ BuddyPluginBuddy
 		
 		String[] bits = str.split( "," );
 		
-		Set<String> res = new HashSet<String>( bits.length );
+		Set<String> res = new HashSet<>(bits.length);
 		
 		for ( String b: bits ){
 			
@@ -738,7 +739,7 @@ BuddyPluginBuddy
 	public List<InetAddress>
 	getAdjustedIPs()
 	{
-		List<InetAddress>	result = new ArrayList<InetAddress>();
+		List<InetAddress>	result = new ArrayList<>();
 		
 		if ( current_ip == null ){
 			
@@ -754,14 +755,14 @@ BuddyPluginBuddy
 		}else{
 			
 			List l = AddressUtils.getLANAddresses( adjusted.getHostAddress());
-			
-			for (int i=0;i<l.size();i++){
-				
-				try{
-					result.add( InetAddress.getByName((String)l.get(i)));
-					
-				}catch( Throwable e ){
-					
+
+			for (Object o : l) {
+
+				try {
+					result.add(InetAddress.getByName((String) o));
+
+				} catch (Throwable e) {
+
 				}
 			}
 		}
@@ -799,15 +800,8 @@ BuddyPluginBuddy
 			
 			return( false );
 		}
-	
-		if ( is_connected ){
-		
-			return( false );
-			
-		}else{
-			
-			return( true );
-		}
+
+		return !is_connected;
 	}
 	
 	protected boolean
@@ -928,13 +922,13 @@ BuddyPluginBuddy
 	addYGMMarker(
 		long		marker )
 	{
-		Long	l = new Long( marker );
+		Long	l = marker;
 		
 		synchronized( this ){
 		
 			if ( recent_ygm == null ){
 				
-				recent_ygm = new ArrayList<Long>();
+				recent_ygm = new ArrayList<>();
 			}
 			
 			if ( recent_ygm.contains( l )){
@@ -979,7 +973,7 @@ BuddyPluginBuddy
 	{
 		synchronized( this ){
 		
-			return( recent_ygm==null?null:new ArrayList<Long>( recent_ygm ));
+			return( recent_ygm==null?null: new ArrayList<>(recent_ygm));
 		}
 	}
 	
@@ -1071,13 +1065,11 @@ BuddyPluginBuddy
 		boolean connected = false;
 		
 		synchronized( this ){
-						
-			for (int i=0;i<connections.size();i++){
-				
-				buddyConnection c = (buddyConnection)connections.get(i);
-				
-				if ( c.isConnected() && !c.hasFailed()){
-					
+
+			for (buddyConnection c : connections) {
+
+				if (c.isConnected() && !c.hasFailed()) {
+
 					connected = true;
 				}
 			}
@@ -1111,7 +1103,7 @@ BuddyPluginBuddy
 		try{
 			Map	ping_request = new HashMap();
 			
-			ping_request.put( "type", new Long( BuddyPlugin.RT_INTERNAL_REQUEST_PING ));
+			ping_request.put( "type", (long) BuddyPlugin.RT_INTERNAL_REQUEST_PING);
 			
 			sendMessage(
 				BuddyPlugin.SUBSYSTEM_INTERNAL,
@@ -1151,59 +1143,54 @@ BuddyPluginBuddy
 		synchronized( this ){
 				
 			closing	= true;
-			
-			for (int i=0;i<connections.size();i++){
-				
-				buddyConnection c = (buddyConnection)connections.get(i);
-				
-				if ( c.isConnected() && !c.hasFailed() && !c.isActive()){
-					
-					to_send.add( c );
+
+			for (buddyConnection c : connections) {
+
+				if (c.isConnected() && !c.hasFailed() && !c.isActive()) {
+
+					to_send.add(c);
 				}
 			}
 		}
-		
-		for (int i=0;i<to_send.size();i++){
-			
-			buddyConnection c = (buddyConnection)to_send.get(i);
-			
-			try{
-				Map	close_request = new HashMap();
-				
-				close_request.put( "type", new Long( BuddyPlugin.RT_INTERNAL_REQUEST_CLOSE ));
-				
-				close_request.put( "r", new Long( restarting?1:0));
-				
-				close_request.put( "os", new Long( plugin.getCurrentStatusSeq()));
-				
-				final buddyMessage	message = 
-					new buddyMessage( BuddyPlugin.SUBSYSTEM_INTERNAL, close_request, 60*1000 );
+
+		for (Object o : to_send) {
+
+			buddyConnection c = (buddyConnection) o;
+
+			try {
+				Map close_request = new HashMap();
+
+				close_request.put("type", (long) BuddyPlugin.RT_INTERNAL_REQUEST_CLOSE);
+
+				close_request.put("r", (long) (restarting ? 1 : 0));
+
+				close_request.put("os", (long) plugin.getCurrentStatusSeq());
+
+				final buddyMessage message =
+						new buddyMessage(BuddyPlugin.SUBSYSTEM_INTERNAL, close_request, 60 * 1000);
 
 				message.setListener(
-						new BuddyPluginBuddyReplyListener()
-						{
+						new BuddyPluginBuddyReplyListener() {
 							public void
 							replyReceived(
-								BuddyPluginBuddy	from_buddy,
-								Map					reply )
-							{
-								log( "Close reply received:" + reply );
+									BuddyPluginBuddy from_buddy,
+									Map reply) {
+								log("Close reply received:" + reply);
 							}
-							
+
 							public void
 							sendFailed(
-								BuddyPluginBuddy		to_buddy,
-								BuddyPluginException	cause )
-							{
-								log( "Close failed to " + getString(), cause );
+									BuddyPluginBuddy to_buddy,
+									BuddyPluginException cause) {
+								log("Close failed to " + getString(), cause);
 							}
 						});
-				
-				c.sendCloseMessage( message );
 
-			}catch( Throwable e ){
-							
-				log( "Close request failed", e );
+				c.sendCloseMessage(message);
+
+			} catch (Throwable e) {
+
+				log("Close request failed", e);
 			}
 		}
 	}
@@ -1212,20 +1199,20 @@ BuddyPluginBuddy
 	receivedCloseRequest(
 		Map		request )
 	{
-		List<buddyConnection>	closing = new ArrayList<buddyConnection>();
+		List<buddyConnection>	closing;
 		
 		synchronized( this ){
 			
-			closing.addAll( connections );
+			closing = new ArrayList<>(connections);
 		}
-		
-		for (int i=0;i<closing.size();i++){
-			
-			((buddyConnection)closing.get(i)).remoteClosing();
+
+		for (BuddyPluginBuddy.buddyConnection buddyConnection : closing) {
+
+			buddyConnection.remoteClosing();
 		}
 		
 		try{
-			boolean	restarting = ((Long)request.get( "r" )).longValue() == 1;
+			boolean	restarting = (Long) request.get("r") == 1;
 			
 			if ( restarting ){
 				
@@ -1241,10 +1228,10 @@ BuddyPluginBuddy
 					
 					if ( offline_seq_set == null ){
 						
-						offline_seq_set = new HashSet<Long>();
+						offline_seq_set = new HashSet<>();
 					}
 					
-					offline_seq_set.add( new Long( last_status_seq ));
+					offline_seq_set.add((long) last_status_seq);
 					
 					offline_seq_set.add((Long)request.get( "os" ));
 					
@@ -1501,15 +1488,13 @@ BuddyPluginBuddy
 				return;
 			}
 			
-			allocated_message = current_message = (buddyMessage)messages.remove( 0 );
-			
-			for (int i=0;i<connections.size();i++){
-				
-				buddyConnection c = (buddyConnection)connections.get(i);
-				
-				if ( !c.hasFailed()){
-					
-					bc	= c;
+			allocated_message = current_message = messages.remove( 0 );
+
+			for (buddyConnection c : connections) {
+
+				if (!c.hasFailed()) {
+
+					bc = c;
 				}
 			}
 			
@@ -1552,14 +1537,12 @@ BuddyPluginBuddy
 					}
 						
 					if ( failed_msg_error == null ){
-						
-						for (int i=0;i<connections.size();i++){
-							
-							buddyConnection c = (buddyConnection)connections.get(i);
-							
-							if ( !c.hasFailed()){
-								
-								bc	= c;
+
+						for (buddyConnection c : connections) {
+
+							if (!c.hasFailed()) {
+
+								bc = c;
 							}
 						}
 						
@@ -1852,7 +1835,7 @@ BuddyPluginBuddy
 				
 				if ( offline_seq_set != null ){
 					
-					if ( offline_seq_set.contains(new Long( _status_seq ))){
+					if ( offline_seq_set.contains((long) _status_seq)){
 						
 						return;
 						
@@ -2046,22 +2029,22 @@ BuddyPluginBuddy
 				}
 			}
 		}else{
-			
-			for (int i=0;i<connections_to_check.size();i++){
-				
-				buddyConnection connection = (buddyConnection)connections_to_check.get(i);
-				
-				boolean closed = connection.checkTimeout( now );
-				
-				if ( 	current_ip != null &&
-						!closed && 
+
+			for (Object o : connections_to_check) {
+
+				buddyConnection connection = (buddyConnection) o;
+
+				boolean closed = connection.checkTimeout(now);
+
+				if (current_ip != null &&
+						!closed &&
 						!messages_queued &&
-						connection.isConnected() && 
-						!connection.isActive()){
-					
-					if ( now - connection.getLastActive( now ) > CONNECTION_KEEP_ALIVE ){
-									
-						send_keep_alive	= true;
+						connection.isConnected() &&
+						!connection.isActive()) {
+
+					if (now - connection.getLastActive(now) > CONNECTION_KEEP_ALIVE) {
+
+						send_keep_alive = true;
 					}
 				}
 			}
@@ -2073,10 +2056,10 @@ BuddyPluginBuddy
 		}
 		
 		if ( failed != null ){
-			
-			for (int i=0;i<failed.size();i++){
-				
-				((buddyMessage)failed.get(i)).reportFailed( new BuddyPluginTimeoutException( "Timeout", false ));
+
+			for (Object o : failed) {
+
+				((buddyMessage) o).reportFailed(new BuddyPluginTimeoutException("Timeout", false));
 			}
 		}
 	}
@@ -2103,7 +2086,7 @@ BuddyPluginBuddy
 			try{
 				Map	ping_request = new HashMap();
 				
-				ping_request.put( "type", new Long( BuddyPlugin.RT_INTERNAL_REQUEST_PING ));
+				ping_request.put( "type", (long) BuddyPlugin.RT_INTERNAL_REQUEST_PING);
 				
 				sendMessageSupport(
 					ping_request,
@@ -2150,10 +2133,10 @@ BuddyPluginBuddy
 		synchronized( this ){
 			
 			String	str = "";
-			
-			for (int i=0;i<connections.size();i++){
-				
-				str += (str.length()==0?"":",") + ((buddyConnection)connections.get(i)).getString( true );
+
+			for (buddyConnection connection : connections) {
+
+				str += (str.length() == 0 ? "" : ",") + connection.getString(true);
 			}
 			
 			return( str );
@@ -2163,16 +2146,16 @@ BuddyPluginBuddy
 	public void
 	disconnect()
 	{
-		List	to_disconnect = new ArrayList();
+		List	to_disconnect;
 		
 		synchronized( this ){
 			
-			to_disconnect.addAll( connections );
+			to_disconnect = new ArrayList(connections);
 		}
-		
-		for (int i=0;i<to_disconnect.size();i++){
-			
-			((buddyConnection)to_disconnect.get(i)).disconnect();
+
+		for (Object o : to_disconnect) {
+
+			((buddyConnection) o).disconnect();
 		}
 	}
 	
@@ -2185,18 +2168,18 @@ BuddyPluginBuddy
 	protected void
 	destroy()
 	{
-		List<buddyConnection>	to_close = new ArrayList<buddyConnection>();
+		List<buddyConnection>	to_close;
 		
 		synchronized( this ){
 			
 			destroyed = true;
 			
-			to_close.addAll( connections );
+			to_close = new ArrayList<>(connections);
 		}
-		
-		for (int i=0;i<to_close.size();i++){
-			
-			((buddyConnection)to_close.get(i)).close();
+
+		for (BuddyPluginBuddy.buddyConnection buddyConnection : to_close) {
+
+			buddyConnection.close();
 		}
 		
 		InetAddress ip = current_ip;
@@ -2820,12 +2803,12 @@ BuddyPluginBuddy
 			
 			Map	send_map = new HashMap();
 			
-			send_map.put( "type", new Long( RT_REQUEST_DATA ));
+			send_map.put( "type", (long) RT_REQUEST_DATA);
 			send_map.put( "req", request );
-			send_map.put( "ss", new Long( msg.getSubsystem()));
-			send_map.put( "id", new Long( msg.getID()));
-			send_map.put( "oz", new Long( plugin.getOnlineStatus()));
-			send_map.put( "v", new Long( BuddyPlugin.VERSION_CURRENT ));
+			send_map.put( "ss", (long) msg.getSubsystem());
+			send_map.put( "id", (long) msg.getID());
+			send_map.put( "oz", (long) plugin.getOnlineStatus());
+			send_map.put( "v", (long) BuddyPlugin.VERSION_CURRENT);
 			
 			String	loc_cat = getLocalAuthorisedRSSTagsOrCategoriesAsString();
 			
@@ -2840,7 +2823,7 @@ BuddyPluginBuddy
 							
 				synchronized( this ){
 					
-					last_active	= SystemTime.getCurrentTime();;
+					last_active	= SystemTime.getCurrentTime();
 				}
 			}catch( BuddyPluginException e ){
 			
@@ -2860,7 +2843,7 @@ BuddyPluginBuddy
 		{
 			synchronized( this ){
 				
-				last_active	= SystemTime.getCurrentTime();;
+				last_active	= SystemTime.getCurrentTime();
 			}
 			
 			if ( TRACE ){
@@ -2892,7 +2875,7 @@ BuddyPluginBuddy
 					
 				}else{
 					
-					setRemoteAuthorisedRSSTagsOrCategories( stringToCats( new String( b_rem_cat, "UTF-8" )));
+					setRemoteAuthorisedRSSTagsOrCategories( stringToCats( new String( b_rem_cat, StandardCharsets.UTF_8)));
 				}
 				
 				if ( type == RT_REQUEST_DATA ){
@@ -2943,9 +2926,9 @@ BuddyPluginBuddy
 					Map reply_map = new HashMap();
 					
 					reply_map.put( "ss", subsystem );
-					reply_map.put( "type", new Long( reply_type ));																
+					reply_map.put( "type", (long) reply_type);
 					reply_map.put( "id", data_map.get( "id" ) );
-					reply_map.put( "oz", new Long( plugin.getOnlineStatus()));
+					reply_map.put( "oz", (long) plugin.getOnlineStatus());
 
 					String	loc_cat = getLocalAuthorisedRSSTagsOrCategoriesAsString();
 					
@@ -2963,7 +2946,7 @@ BuddyPluginBuddy
 					
 				}else if ( type == RT_REPLY_DATA || type == RT_REPLY_ERROR ){
 					
-					long	id = ((Long)data_map.get( "id" )).longValue();
+					long	id = (Long) data_map.get("id");
 					
 					buddyMessage	bm;
 					
@@ -3199,12 +3182,12 @@ BuddyPluginBuddy
 							
 							Map	chunk_map = new HashMap();
 							
-							chunk_map.put( "type", new Long( BuddyPlugin.RT_INTERNAL_FRAGMENT ));
-							chunk_map.put( "f", new Long( fragment_id ));
-							chunk_map.put( "l", new Long( data_length ));
-							chunk_map.put( "c", new Long( max_chunk ));
-							chunk_map.put( "i", new Long( chunk_num ));
-							chunk_map.put( "q", new Long( is_request?1:0 ));
+							chunk_map.put( "type", (long) BuddyPlugin.RT_INTERNAL_FRAGMENT);
+							chunk_map.put( "f", (long) fragment_id);
+							chunk_map.put( "l", (long) data_length);
+							chunk_map.put( "c", (long) max_chunk);
+							chunk_map.put( "i", (long) chunk_num);
+							chunk_map.put( "q", (long) (is_request ? 1 : 0));
 							chunk_map.put( "d", chunk );
 							
 							byte[] chunk_data = BEncoder.encode( chunk_map );
@@ -3430,7 +3413,7 @@ BuddyPluginBuddy
 			{
 				// System.out.println( "received chunk " + chunk_num + " of " + num_chunks );
 				
-				Integer	i = new Integer( chunk_num );
+				Integer	i = chunk_num;
 				
 				if ( chunks_received.contains( i )){
 					
@@ -3455,15 +3438,15 @@ BuddyPluginBuddy
 	interface
 	fragmentHandlerReceiver
 	{
-		public void
+		void
 		connected();
 		
-		public void
+		void
 		receive(
-			Map			data );
+				Map data);
 		
-		public void
+		void
 		failed(
-			Throwable	error );
+				Throwable error);
 	}
 }

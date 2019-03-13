@@ -22,6 +22,7 @@
 
 package org.gudy.azureus2.core3.category.impl;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map;
@@ -84,7 +85,7 @@ CategoryManagerImpl
   private static boolean doneLoading = false;
   private static final AEMonitor	class_mon	= new AEMonitor( "CategoryManager:class" );
   
-  private final Map<String,CategoryImpl> categories 			= new HashMap<String,CategoryImpl>();
+  private final Map<String,CategoryImpl> categories 			= new HashMap<>();
   private final AEMonitor	categories_mon	= new AEMonitor( "Categories" );
   
   private static final int LDT_CATEGORY_ADDED     = 1;
@@ -160,45 +161,44 @@ CategoryManagerImpl
       Map map = BDecoder.decode(bin);
 
       List catList = (List) map.get("categories");
-      for (int i = 0; i < catList.size(); i++) {
-        Map mCategory = (Map) catList.get(i);
-        try {
-          String catName = new String((byte[]) mCategory.get("name"), Constants.DEFAULT_ENCODING);
-          
-          Long l_maxup 		= (Long)mCategory.get( "maxup" );
-          Long l_maxdown 	= (Long)mCategory.get( "maxdown" );
-          Map<String,String>	attributes = BDecoder.decodeStrings((Map)mCategory.get( "attr" ));
-          
-          if ( attributes == null ){
-        	  
-        	  attributes = new HashMap<String, String>();
-          }
-          
-          if ( catName.equals( UNCAT_NAME )){
-        	  
-        	  catUncategorized.setUploadSpeed(l_maxup==null?0:l_maxup.intValue());
-        	  catUncategorized.setDownloadSpeed(l_maxdown==null?0:l_maxdown.intValue());
-        	  catUncategorized.setAttributes( attributes );
-        	  
-          }else if ( catName.equals( ALL_NAME )){
-            	  
-              catAll.setAttributes( attributes );
+        for (Object o : catList) {
+            Map mCategory = (Map) o;
+            try {
+                String catName = new String((byte[]) mCategory.get("name"), Constants.DEFAULT_ENCODING);
 
-          }else{
-	          categories.put( 
-	        	catName,
-	        	  new CategoryImpl( 
-	        		  this,
-	        		  catName, 
-	        		  l_maxup==null?0:l_maxup.intValue(),
-	        		  l_maxdown==null?0:l_maxdown.intValue(),
-	        			attributes ));
-          }
+                Long l_maxup = (Long) mCategory.get("maxup");
+                Long l_maxdown = (Long) mCategory.get("maxdown");
+                Map<String, String> attributes = BDecoder.decodeStrings((Map) mCategory.get("attr"));
+
+                if (attributes == null) {
+
+                    attributes = new HashMap<>();
+                }
+
+                if (catName.equals(UNCAT_NAME)) {
+
+                    catUncategorized.setUploadSpeed(l_maxup == null ? 0 : l_maxup.intValue());
+                    catUncategorized.setDownloadSpeed(l_maxdown == null ? 0 : l_maxdown.intValue());
+                    catUncategorized.setAttributes(attributes);
+
+                } else if (catName.equals(ALL_NAME)) {
+
+                    catAll.setAttributes(attributes);
+
+                } else {
+                    categories.put(
+                            catName,
+                            new CategoryImpl(
+                                    this,
+                                    catName,
+                                    l_maxup == null ? 0 : l_maxup.intValue(),
+                                    l_maxdown == null ? 0 : l_maxdown.intValue(),
+                                    attributes));
+                }
+            } catch (UnsupportedEncodingException e1) {
+                //Do nothing and process next.
+            }
         }
-        catch (UnsupportedEncodingException e1) {
-          //Do nothing and process next.
-        }
-      }
     }
     catch (FileNotFoundException e) {
       //Do nothing
@@ -234,24 +234,21 @@ CategoryManagerImpl
       Map map = new HashMap();
       List list = new ArrayList(categories.size());
 
-      Iterator<CategoryImpl> iter = categories.values().iterator();
-      while (iter.hasNext()) {
-        CategoryImpl cat = iter.next();
-
-        if (cat.getType() == Category.TYPE_USER) {
-          Map catMap = new HashMap();
-          catMap.put( "name", cat.getName());
-          catMap.put( "maxup", new Long(cat.getUploadSpeed()));
-          catMap.put( "maxdown", new Long(cat.getDownloadSpeed()));
-          catMap.put( "attr", cat.getAttributes());
-          list.add(catMap);
+        for (CategoryImpl cat : categories.values()) {
+            if (cat.getType() == Category.TYPE_USER) {
+                Map catMap = new HashMap();
+                catMap.put("name", cat.getName());
+                catMap.put("maxup", (long) cat.getUploadSpeed());
+                catMap.put("maxdown", (long) cat.getDownloadSpeed());
+                catMap.put("attr", cat.getAttributes());
+                list.add(catMap);
+            }
         }
-      }
       
       Map uncat = new HashMap();
       uncat.put( "name", UNCAT_NAME );
-      uncat.put( "maxup", new Long(catUncategorized.getUploadSpeed()));
-      uncat.put( "maxdown", new Long(catUncategorized.getDownloadSpeed()));
+      uncat.put( "maxup", (long) catUncategorized.getUploadSpeed());
+      uncat.put( "maxdown", (long) catUncategorized.getDownloadSpeed());
       uncat.put( "attr", catUncategorized.getAttributes());
       list.add( uncat );
       
@@ -311,12 +308,12 @@ CategoryManagerImpl
     makeSpecialCategories();
     CategoryImpl newCategory = getCategory(name);
     if (newCategory == null) {
-      newCategory = new CategoryImpl(this,name, 0, 0, new HashMap<String,String>());
+      newCategory = new CategoryImpl(this,name, 0, 0, new HashMap<>());
       categories.put(name, newCategory);
       saveCategories();
 
       category_listeners.dispatch( LDT_CATEGORY_ADDED, newCategory );
-      return (Category)categories.get(name);
+      return categories.get(name);
     }
     return newCategory;
   }
@@ -335,7 +332,7 @@ CategoryManagerImpl
 
   public Category[] getCategories() {
     if (categories.size() > 0)
-      return (Category[])categories.values().toArray(new Category[categories.size()]);
+      return categories.values().toArray(new Category[0]);
     return (new Category[0]);
   }
 
@@ -353,12 +350,12 @@ CategoryManagerImpl
 
   private void makeSpecialCategories() {
     if (catAll == null) {
-      catAll = new CategoryImpl(this,"Categories.all", Category.TYPE_ALL, new HashMap<String,String>());
+      catAll = new CategoryImpl(this,"Categories.all", Category.TYPE_ALL, new HashMap<>());
       categories.put("Categories.all", catAll);
     }
     
     if (catUncategorized == null) {
-      catUncategorized = new CategoryImpl(this,"Categories.uncategorized", Category.TYPE_UNCATEGORIZED, new HashMap<String,String>());
+      catUncategorized = new CategoryImpl(this,"Categories.uncategorized", Category.TYPE_UNCATEGORIZED, new HashMap<>());
       categories.put("Categories.uncategorized", catUncategorized);
     }
   }
@@ -373,7 +370,7 @@ CategoryManagerImpl
   public List<Tag> 
   getTags() 
   {
-	  return( new ArrayList<Tag>( categories.values()));
+	  return(new ArrayList<>(categories.values()));
   }
   
   private void
@@ -427,7 +424,7 @@ CategoryManagerImpl
 		
 		path = path.substring( PROVIDER.length()+1);
 
-		XMLEscapeWriter pw = new XMLEscapeWriter( new PrintWriter(new OutputStreamWriter( response.getOutputStream(), "UTF-8" )));
+		XMLEscapeWriter pw = new XMLEscapeWriter( new PrintWriter(new OutputStreamWriter( response.getOutputStream(), StandardCharsets.UTF_8)));
 
 		pw.setEnabled( false );
 		
@@ -437,14 +434,14 @@ CategoryManagerImpl
 			
 			pw.println( "<HTML><HEAD><TITLE>Vuze Category Feeds</TITLE></HEAD><BODY>" );
 			
-			Map<String,String>	lines = new TreeMap<String, String>();
+			Map<String,String>	lines = new TreeMap<>();
 			
 			List<CategoryImpl>	cats;
 			
 			try{
 				categories_mon.enter();
 
-				cats = new ArrayList<CategoryImpl>( categories.values());
+				cats = new ArrayList<>(categories.values());
 
 			}finally{
 			
@@ -495,7 +492,7 @@ CategoryManagerImpl
 			
 			List<DownloadManager> dms = cat.getDownloadManagers( AzureusCoreFactory.getSingleton().getGlobalManager().getDownloadManagers());
 			
-			List<Download> downloads = new ArrayList<Download>( dms.size());
+			List<Download> downloads = new ArrayList<>(dms.size());
 			
 			long	dl_marker = 0;
 			
@@ -516,7 +513,7 @@ CategoryManagerImpl
 				}
 			}
 			
-			String	config_key = "cat.rss.config." + Base32.encode( cat.getName().getBytes( "UTF-8" ));
+			String	config_key = "cat.rss.config." + Base32.encode( cat.getName().getBytes(StandardCharsets.UTF_8));
 			
 			long	old_marker = COConfigurationManager.getLongParameter( config_key + ".marker", 0 );
 			
@@ -570,48 +567,46 @@ CategoryManagerImpl
 								
 							
 			pw.println(	"<pubDate>" + TimeFormatter.getHTTPDate( last_modified ) + "</pubDate>" );
-		
-			for (int i=0;i<downloads.size();i++){
-				
-				Download download = downloads.get( i );
-				
-				DownloadManager	core_download = PluginCoreUtils.unwrap( download );
-				
-				Torrent torrent = download.getTorrent();
-				
-				byte[] hash = torrent.getHash();
-				
-				String	hash_str = Base32.encode( hash );
-				
-				pw.println( "<item>" );
-				
-				pw.println( "<title>" + escape( download.getName()) + "</title>" );
-				
-				pw.println( "<guid>" + hash_str + "</guid>" );
-				
-				String magnet_url = escape( UrlUtils.getMagnetURI( download ));
 
-				pw.println( "<link>" + magnet_url + "</link>" );
-				
-				long added = core_download.getDownloadState().getLongParameter(DownloadManagerState.PARAM_DOWNLOAD_ADDED_TIME);
-				
-				pw.println(	"<pubDate>" + TimeFormatter.getHTTPDate( added ) + "</pubDate>" );
-				
-				pw.println(	"<vuze:size>" + torrent.getSize()+ "</vuze:size>" );
-				pw.println(	"<vuze:assethash>" + hash_str + "</vuze:assethash>" );
-												
-				pw.println( "<vuze:downloadurl>" + magnet_url + "</vuze:downloadurl>" );
-		
-				DownloadScrapeResult scrape = download.getLastScrapeResult();
-				
-				if ( scrape != null && scrape.getResponseType() == DownloadScrapeResult.RT_SUCCESS ){
-					
-					pw.println(	"<vuze:seeds>" + scrape.getSeedCount() + "</vuze:seeds>" );
-					pw.println(	"<vuze:peers>" + scrape.getNonSeedCount() + "</vuze:peers>" );
-				}
-				
-				pw.println( "</item>" );
-			}
+            for (Download download : downloads) {
+
+                DownloadManager core_download = PluginCoreUtils.unwrap(download);
+
+                Torrent torrent = download.getTorrent();
+
+                byte[] hash = torrent.getHash();
+
+                String hash_str = Base32.encode(hash);
+
+                pw.println("<item>");
+
+                pw.println("<title>" + escape(download.getName()) + "</title>");
+
+                pw.println("<guid>" + hash_str + "</guid>");
+
+                String magnet_url = escape(UrlUtils.getMagnetURI(download));
+
+                pw.println("<link>" + magnet_url + "</link>");
+
+                long added = core_download.getDownloadState().getLongParameter(DownloadManagerState.PARAM_DOWNLOAD_ADDED_TIME);
+
+                pw.println("<pubDate>" + TimeFormatter.getHTTPDate(added) + "</pubDate>");
+
+                pw.println("<vuze:size>" + torrent.getSize() + "</vuze:size>");
+                pw.println("<vuze:assethash>" + hash_str + "</vuze:assethash>");
+
+                pw.println("<vuze:downloadurl>" + magnet_url + "</vuze:downloadurl>");
+
+                DownloadScrapeResult scrape = download.getLastScrapeResult();
+
+                if (scrape != null && scrape.getResponseType() == DownloadScrapeResult.RT_SUCCESS) {
+
+                    pw.println("<vuze:seeds>" + scrape.getSeedCount() + "</vuze:seeds>");
+                    pw.println("<vuze:peers>" + scrape.getNonSeedCount() + "</vuze:peers>");
+                }
+
+                pw.println("</item>");
+            }
 			
 			pw.println( "</channel>" );
 			

@@ -27,8 +27,8 @@ import org.gudy.azureus2.plugins.tracker.web.TrackerWebPageRequest;
 public interface 
 DeviceManagerDiscoveryListener 
 {
-	public boolean
+	boolean
 	browseReceived(
-		TrackerWebPageRequest		request,
-		Map<String,Object>			browser_args );
+            TrackerWebPageRequest request,
+            Map<String, Object> browser_args);
 }

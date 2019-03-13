@@ -26,69 +26,69 @@ DownloadManagerStats
 		 * bytes ever received
 		 * @return
 		 */
-	
-	public long
+
+        long
 	getOverallDataBytesReceived();
 	
 		/**
 		 * bytes ever sent
 		 * @return
 		 */
-	
-	public long
+
+        long
 	getOverallDataBytesSent();
 	
 		/**
 		 * how long since az started
 		 * @return
 		 */
-	
-	public long
+
+        long
 	getSessionUptimeSeconds();
 
 		/**
 		 * current data receive rate
 		 * @return
 		 */
-	
-	public int 
+
+        int
 	getDataReceiveRate();
 	  
-	public int 
+	int
 	getProtocolReceiveRate();
 		
-	public int
+	int
 	getDataAndProtocolReceiveRate();
 	
-	public int 
+	int
 	getDataSendRate();
 	  
-	public int 
+	int
 	getProtocolSendRate();
 	   
-	public int
+	int
 	getDataAndProtocolSendRate();
 
 		/**
 		 * data received since session start
 		 * @return
 		 */
-	
-	public long 
+
+        long
 	getDataBytesReceived();
 	  
-	public long 
+	long
 	getProtocolBytesReceived();
 	  	
-	public long 
+	long
 	getDataBytesSent();
 	  
-	public long 
+	long
 	getProtocolBytesSent();
 	
-	public long
+	long
 	getSmoothedReceiveRate();
 	
-	public long
+	long
 	getSmoothedSendRate();
 }

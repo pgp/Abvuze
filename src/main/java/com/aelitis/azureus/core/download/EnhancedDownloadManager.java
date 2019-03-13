@@ -367,24 +367,24 @@ EnhancedDownloadManager
 				// Check existing downloading torrents and turn off any
 				// existing progressive/downloading
 				Object[] dms = gm.getDownloadManagers().toArray();
-				for (int i = 0; i < dms.length; i++) {
-					DownloadManager dmCheck = (DownloadManager) dms[i];
-					if (dmCheck.equals(download_manager)) {
-						continue;
-					}
+                for (Object dm : dms) {
+                    DownloadManager dmCheck = (DownloadManager) dm;
+                    if (dmCheck.equals(download_manager)) {
+                        continue;
+                    }
 
-					if (!dmCheck.isDownloadComplete(false)) {
-						int state = dmCheck.getState();
-						if (state == DownloadManager.STATE_DOWNLOADING
-								|| state == DownloadManager.STATE_QUEUED) {
-							enhancer.pause( dmCheck );
-						}
-						EnhancedDownloadManager edmCheck = enhancer.getEnhancedDownload(dmCheck);
-						if (edmCheck != null && edmCheck.getProgressiveMode()) {
-							edmCheck.setProgressiveMode(false, true);
-						}
-					}
-				}
+                    if (!dmCheck.isDownloadComplete(false)) {
+                        int state = dmCheck.getState();
+                        if (state == DownloadManager.STATE_DOWNLOADING
+                                || state == DownloadManager.STATE_QUEUED) {
+                            enhancer.pause(dmCheck);
+                        }
+                        EnhancedDownloadManager edmCheck = enhancer.getEnhancedDownload(dmCheck);
+                        if (edmCheck != null && edmCheck.getProgressiveMode()) {
+                            edmCheck.setProgressiveMode(false, true);
+                        }
+                    }
+                }
 				if (download_manager.isPaused()) {
 					enhancer.resume( download_manager );
 				}
@@ -1294,23 +1294,23 @@ EnhancedDownloadManager
 				long	max_cp	= 0;
 				
 				PieceRTAProvider	best_provider = null;
-				
-				for (int i=0;i<providers.size();i++){
-					
-					PieceRTAProvider	provider = (PieceRTAProvider)providers.get(i);
-					
-					if ( provider.getStartTime() > 0 ){
-						
-						long	cp = provider.getCurrentPosition();
-						
-						if ( cp >= max_cp ){
-							
-							best_provider = provider;
-							
-							max_cp	= cp;
-						}
-					}
-				}
+
+                for (Object provider1 : providers) {
+
+                    PieceRTAProvider provider = (PieceRTAProvider) provider1;
+
+                    if (provider.getStartTime() > 0) {
+
+                        long cp = provider.getCurrentPosition();
+
+                        if (cp >= max_cp) {
+
+                            best_provider = provider;
+
+                            max_cp = cp;
+                        }
+                    }
+                }
 
 				updateCurrentProvider( best_provider );
 												

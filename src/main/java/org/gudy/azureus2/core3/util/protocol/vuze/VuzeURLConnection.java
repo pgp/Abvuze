@@ -51,7 +51,7 @@ VuzeURLConnection
 	private String	response_msg	= "OK";
 	
 	private InputStream					input_stream;
-	private final Map<String,List<String>> 	headers = new HashMap<String, List<String>>();
+	private final Map<String,List<String>> 	headers = new HashMap<>();
 
 	VuzeURLConnection(
 		URL 	u )
@@ -112,7 +112,7 @@ VuzeURLConnection
        	
        	if ( values == null ){
        		
-       		values = new ArrayList<String>();
+       		values = new ArrayList<>();
        		
        		headers.put( name, values );
        	}

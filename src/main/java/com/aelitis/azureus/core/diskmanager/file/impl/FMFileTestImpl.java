@@ -96,32 +96,30 @@ FMFileTestImpl
 		throws FMFileManagerException
 	{
 		offset	+= file_offset_in_torrent;
-		
-		for (int i=0;i<buffers.length;i++){
-			
-			DirectByteBuffer	buffer = buffers[i];
-			
-			if ( AEDiagnostics.CHECK_DUMMY_FILE_DATA ){
 
-				while( buffer.hasRemaining( DirectByteBuffer.SS_FILE )){
-					
-					byte	v = buffer.get( DirectByteBuffer.SS_FILE );
-					
-					if ((byte)offset != v ){
-						
-						System.out.println( "FMFileTest: write is bad at " + offset +
-											": expected = " + (byte)offset + ", actual = " + v );
-	
-						offset += buffer.remaining( DirectByteBuffer.SS_FILE ) + 1;
-						
-						break;
-					}
-					
-					offset++;
-				}
-			}
-			
-			buffer.position( DirectByteBuffer.SS_FILE, buffer.limit( DirectByteBuffer.SS_FILE ));
-		}
+        for (DirectByteBuffer buffer : buffers) {
+
+            if (AEDiagnostics.CHECK_DUMMY_FILE_DATA) {
+
+                while (buffer.hasRemaining(DirectByteBuffer.SS_FILE)) {
+
+                    byte v = buffer.get(DirectByteBuffer.SS_FILE);
+
+                    if ((byte) offset != v) {
+
+                        System.out.println("FMFileTest: write is bad at " + offset +
+                                ": expected = " + (byte) offset + ", actual = " + v);
+
+                        offset += buffer.remaining(DirectByteBuffer.SS_FILE) + 1;
+
+                        break;
+                    }
+
+                    offset++;
+                }
+            }
+
+            buffer.position(DirectByteBuffer.SS_FILE, buffer.limit(DirectByteBuffer.SS_FILE));
+        }
 	}
 }

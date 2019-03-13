@@ -86,8 +86,8 @@ TranscodePipeStreamSource2
 	interface
 	streamListener
 	{
-		public void
+		void
 		gotStream(
-			InputStream		is );
+                InputStream is);
 	}
 }

@@ -27,20 +27,20 @@ package org.gudy.azureus2.plugins.ddb;
 public interface 
 DistributedDatabaseTransferHandler 
 {
-	public DistributedDatabaseValue
+	DistributedDatabaseValue
 	read(
-		DistributedDatabaseContact			contact,
-		DistributedDatabaseTransferType		type,
-		DistributedDatabaseKey				key )
+            DistributedDatabaseContact contact,
+            DistributedDatabaseTransferType type,
+            DistributedDatabaseKey key)
 	
 		throws DistributedDatabaseException;
 	
-	public DistributedDatabaseValue
+	DistributedDatabaseValue
 	write(
-		DistributedDatabaseContact			contact,
-		DistributedDatabaseTransferType		type,
-		DistributedDatabaseKey				key,
-		DistributedDatabaseValue			value )
+            DistributedDatabaseContact contact,
+            DistributedDatabaseTransferType type,
+            DistributedDatabaseKey key,
+            DistributedDatabaseValue value)
 	
 		throws DistributedDatabaseException;
 	

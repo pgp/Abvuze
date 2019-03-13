@@ -27,18 +27,18 @@ package com.aelitis.azureus.core.dht.transport;
 public interface 
 DHTTransportListener 
 {
-	public void
+	void
 	localContactChanged(
-		DHTTransportContact	local_contact );
+            DHTTransportContact local_contact);
 	
-	public void
+	void
 	resetNetworkPositions();
 	
-	public void
+	void
 	currentAddress(
-		String		address );
+            String address);
 	
-	public void
+	void
 	reachabilityChanged(
-		boolean	reacheable );
+            boolean reacheable);
 }

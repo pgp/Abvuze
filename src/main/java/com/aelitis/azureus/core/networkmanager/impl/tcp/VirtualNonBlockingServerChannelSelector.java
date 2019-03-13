@@ -144,17 +144,18 @@ VirtualNonBlockingServerChannelSelector
   	try{
   		this_mon.enter();
 
-	    for (int i=0;i<server_channels.size();i++){
-	      try {
-	    	  ServerSocketChannel	server_channel = (ServerSocketChannel)server_channels.get(i);
-	    	
-	    	  VirtualAcceptSelector.getSingleton().cancel( server_channel );
-	        
-	    	  server_channel.close();
-	       
-	      }
-	      catch( Throwable t ) {  Debug.out( t );  }
-	    }
+        for (Object server_channel1 : server_channels) {
+            try {
+                ServerSocketChannel server_channel = (ServerSocketChannel) server_channel1;
+
+                VirtualAcceptSelector.getSingleton().cancel(server_channel);
+
+                server_channel.close();
+
+            } catch (Throwable t) {
+                Debug.out(t);
+            }
+        }
 	    
 	    server_channels.clear();
   	}finally{

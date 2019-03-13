@@ -52,7 +52,7 @@ public class MessageText {
   
   private static final String BUNDLE_NAME;
   
-  private static final Map<String,String>	DEFAULT_EXPANSIONS = new HashMap<String, String>();
+  private static final Map<String,String>	DEFAULT_EXPANSIONS = new HashMap<>();
   
   static{
 	  BUNDLE_NAME = System.getProperty( "az.factory.internat.bundle", "org.gudy.azureus2.internat.MessagesBundle" );
@@ -126,17 +126,17 @@ public class MessageText {
 		Locale	new_locale = getCurrentLocale();
 		
 		if ( !old_locale.equals( new_locale ) || forceReload){
-			
-			for (int i=0;i<listeners.size();i++){
-				
-				try{
-					((MessageTextListener)listeners.get(i)).localeChanged( old_locale, new_locale);
-					
-				}catch( Throwable e ){
-					
-					Debug.printStackTrace(e);
-				}
-			}
+
+            for (Object listener : listeners) {
+
+                try {
+                    ((MessageTextListener) listener).localeChanged(old_locale, new_locale);
+
+                } catch (Throwable e) {
+
+                    Debug.printStackTrace(e);
+                }
+            }
 		}
 	}
   
@@ -535,7 +535,7 @@ public class MessageText {
 							// "MessagesBundle_de_DE.properties"
 						}
 					}
-					bundles = (String[]) list.toArray(new String[list.size()]);
+					bundles = (String[]) list.toArray(new String[0]);
 				} catch (Exception e) {
 					Debug.printStackTrace(e);
 				}
@@ -556,11 +556,11 @@ public class MessageText {
     
     // Add local first
     File localDir = new File(SystemProperties.getUserPath());
-    String localBundles[] = localDir.list(new FilenameFilter() {
-      public boolean accept(File dir, String name) {
-        return name.startsWith(prefix) && name.endsWith(extension);
-      }
-    });
+      String[] localBundles = localDir.list(new FilenameFilter() {
+          public boolean accept(File dir, String name) {
+              return name.startsWith(prefix) && name.endsWith(extension);
+          }
+      });
     
     	// can be null if user path is borked
     
@@ -571,11 +571,11 @@ public class MessageText {
     
     // Add AppDir 2nd
     File appDir = new File(SystemProperties.getApplicationPath());
-    String appBundles[] = appDir.list(new FilenameFilter() {
-      public boolean accept(File dir, String name) {
-        return name.startsWith(prefix) && name.endsWith(extension);
-      }
-    });
+      String[] appBundles = appDir.list(new FilenameFilter() {
+          public boolean accept(File dir, String name) {
+              return name.startsWith(prefix) && name.endsWith(extension);
+          }
+      });
     
     	// can be null if app path is borked
     
@@ -590,32 +590,31 @@ public class MessageText {
     
   	foundLocalesList.add( LOCALE_ENGLISH );
 
-    Iterator val = bundleSet.iterator();
-    while (val.hasNext()) {
-      String sBundle = (String)val.next();
-      
-      // System.out.println("ResourceBundle: " + bundles[i]);
-      if (prefix.length() + 1 < sBundle.length() - extension.length()) {
-        String locale = sBundle.substring(prefix.length() + 1, sBundle.length() - extension.length());
-        //System.out.println("Locale: " + locale);
-        String[] sLocalesSplit = locale.split("_", 3);
-        if (sLocalesSplit.length > 0 && sLocalesSplit[0].length() == 2) {
-          if (sLocalesSplit.length == 3) {
-          	foundLocalesList.add( new Locale(sLocalesSplit[0], sLocalesSplit[1], sLocalesSplit[2]));
-          } else if (sLocalesSplit.length == 2 && sLocalesSplit[1].length() == 2) {
-          	foundLocalesList.add( new Locale(sLocalesSplit[0], sLocalesSplit[1]));
-          } else {
-          	foundLocalesList.add( new Locale(sLocalesSplit[0]));
+      for (Object o : bundleSet) {
+          String sBundle = (String) o;
+
+          // System.out.println("ResourceBundle: " + bundles[i]);
+          if (prefix.length() + 1 < sBundle.length() - extension.length()) {
+              String locale = sBundle.substring(prefix.length() + 1, sBundle.length() - extension.length());
+              //System.out.println("Locale: " + locale);
+              String[] sLocalesSplit = locale.split("_", 3);
+              if (sLocalesSplit.length > 0 && sLocalesSplit[0].length() == 2) {
+                  if (sLocalesSplit.length == 3) {
+                      foundLocalesList.add(new Locale(sLocalesSplit[0], sLocalesSplit[1], sLocalesSplit[2]));
+                  } else if (sLocalesSplit.length == 2 && sLocalesSplit[1].length() == 2) {
+                      foundLocalesList.add(new Locale(sLocalesSplit[0], sLocalesSplit[1]));
+                  } else {
+                      foundLocalesList.add(new Locale(sLocalesSplit[0]));
+                  }
+              } else {
+                  if (sLocalesSplit.length == 3 &&
+                          sLocalesSplit[0].length() == 0 &&
+                          sLocalesSplit[2].length() > 0) {
+                      foundLocalesList.add(new Locale(sLocalesSplit[0], sLocalesSplit[1], sLocalesSplit[2]));
+                  }
+              }
           }
-        } else {
-          if (sLocalesSplit.length == 3 && 
-              sLocalesSplit[0].length() == 0 && 
-              sLocalesSplit[2].length() > 0) {
-          	foundLocalesList.add( new Locale(sLocalesSplit[0], sLocalesSplit[1], sLocalesSplit[2]));
-          }
-        }
-       }
-    }
+      }
 
     Locale[] foundLocales = new Locale[foundLocalesList.size()];
     
@@ -723,13 +722,13 @@ public class MessageText {
             // find first language we have in our list
             System.out.println("changeLocale: Searching for language " + newLocale.getDisplayLanguage() + " in *any* country..");
             Locale[] locales = getLocales(false);
-            for (int i = 0; i < locales.length; i++) {
-              if (locales[i].getLanguage().equals( newLocale.getLanguage())) {
-                newResourceBundle = getResourceBundle("MessagesBundle", locales[i], 
-                                                              new URLClassLoader(urls));
-                break;
+              for (Locale locale : locales) {
+                  if (locale.getLanguage().equals(newLocale.getLanguage())) {
+                      newResourceBundle = getResourceBundle("MessagesBundle", locale,
+                              new URLClassLoader(urls));
+                      break;
+                  }
               }
-            }
           }
         }
       } catch (MissingResourceException e) {
@@ -841,13 +840,13 @@ public class MessageText {
   }
   */
   
-  public static interface
+  public interface
   MessageTextListener
   {
-	  public void
+	  void
 	  localeChanged(
-		Locale	old_locale,
-		Locale	new_locale );
+              Locale old_locale,
+              Locale new_locale);
   }
   
 	/**

@@ -217,16 +217,14 @@ DHTLog
 		if ( logging_on ){
 			StringBuilder sb = new StringBuilder( 128 );
 			sb.append( "{" );
-			
-			Iterator it = s.iterator();
-			
-			while( it.hasNext()){
-				
-				if ( sb.length() > 1 ){
-					sb.append( "," );
-				}
-				sb.append( getString((DHTTransportContact)it.next()));
-			}
+
+            for (Object o : s) {
+
+                if (sb.length() > 1) {
+                    sb.append(",");
+                }
+                sb.append(getString((DHTTransportContact) o));
+            }
 			
 			sb.append( "}" );
 			
@@ -243,16 +241,14 @@ DHTLog
 		if ( logging_on ){
 			StringBuilder sb = new StringBuilder( 128 );
 			sb.append( "{" );
-			
-			Iterator it = s.keySet().iterator();
-			
-			while( it.hasNext()){
-				
-				if ( sb.length() > 1 ){
-					sb.append( "," );
-				}
-				sb.append( getString((HashWrapper)it.next()));
-			}
+
+            for (Object o : s.keySet()) {
+
+                if (sb.length() > 1) {
+                    sb.append(",");
+                }
+                sb.append(getString((HashWrapper) o));
+            }
 			
 			sb.append( "}" );
 			

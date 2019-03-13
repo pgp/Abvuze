@@ -767,7 +767,7 @@ DiskManagerFileInfoImpl
 
 			if ( listeners == null ){
 			
-				listeners = new CopyOnWriteList<DiskManagerFileInfoListener>();
+				listeners = new CopyOnWriteList<>();
 			}
 		}
 		

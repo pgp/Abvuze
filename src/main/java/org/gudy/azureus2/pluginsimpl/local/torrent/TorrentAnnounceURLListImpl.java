@@ -124,48 +124,44 @@ TorrentAnnounceURLListImpl
 		
 		TOTorrentAnnounceURLSet[]	sets = group.getAnnounceURLSets();
 
-		for (int i=0;i<sets.length;i++){
-			
-			URL[]	u = sets[i].getAnnounceURLs();
-			
-			if ( u.length != urls.length ){
-				
-				continue;
-			}
-			
-			boolean	all_found = true;
-			
-			for (int j=0;j<urls.length;j++){
-				
-				URL	u1 = urls[j];
-				
-				boolean	this_found = false;
-				
-				for ( int k=0;k<u.length;k++){
-					
-					URL	u2 = u[k];
-					
-					if ( u1.toString().equals( u2.toString())){
-						
-						this_found = true;
-						
-						break;
-					}
-				}
-				
-				if ( !this_found ){
-					
-					all_found = false;
-					
-					break;
-				}
-			}
-			
-			if ( all_found ){
-				
-				return( true );
-			}
-		}
+        for (TOTorrentAnnounceURLSet set : sets) {
+
+            URL[] u = set.getAnnounceURLs();
+
+            if (u.length != urls.length) {
+
+                continue;
+            }
+
+            boolean all_found = true;
+
+            for (URL u1 : urls) {
+
+                boolean this_found = false;
+
+                for (URL u2 : u) {
+
+                    if (u1.toString().equals(u2.toString())) {
+
+                        this_found = true;
+
+                        break;
+                    }
+                }
+
+                if (!this_found) {
+
+                    all_found = false;
+
+                    break;
+                }
+            }
+
+            if (all_found) {
+
+                return (true);
+            }
+        }
 		
 		return( false );
 	}

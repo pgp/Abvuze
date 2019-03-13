@@ -40,7 +40,7 @@ TorrentManager
 	 * @since 3009
 	 * @author Damokles
 	 */
-	public static final int PRESERVE_NONE = 0;
+    int PRESERVE_NONE = 0;
 
 	/**
 	 * Preserve the encoding Attribute
@@ -48,7 +48,7 @@ TorrentManager
 	 * @since 3009
 	 * @author Damokles 
 	 */
-	public static final int PRESERVE_ENCODING = 0x00000001;
+    int PRESERVE_ENCODING = 0x00000001;
 
 	/**
 	 * Preserve all additional Attributes
@@ -56,19 +56,19 @@ TorrentManager
 	 * @since 3009
 	 * @author Damokles
 	 */
-	public static final int PRESERVE_ALL = 0xffffffff;
+    int PRESERVE_ALL = 0xffffffff;
 
-	public TorrentDownloader
+	TorrentDownloader
 	getURLDownloader(
-		URL		url )
+            URL url)
 
 		throws TorrentException;
 
-	public TorrentDownloader
+	TorrentDownloader
 	getURLDownloader(
-		URL		url,
-		String	user_name,
-		String	password )
+            URL url,
+            String user_name,
+            String password)
 
 		throws TorrentException;
 
@@ -79,9 +79,9 @@ TorrentManager
 		 * @throws TorrentException
 		 */
 
-	public Torrent
+        Torrent
 	createFromBEncodedFile(
-		File		file )
+                File file)
 
 		throws TorrentException;
 
@@ -94,10 +94,10 @@ TorrentManager
 		 * @return
 		 */
 
-	public Torrent
+        Torrent
 	createFromBEncodedFile(
-		File		file,
-		boolean		for_seeding )
+                File file,
+                boolean for_seeding)
 
 		throws TorrentException;
 
@@ -108,9 +108,9 @@ TorrentManager
 		 * @throws TorrentException
 		 */
 
-	public Torrent
+        Torrent
 	createFromBEncodedInputStream(
-		InputStream		data )
+                InputStream data)
 
 		throws TorrentException;
 
@@ -121,9 +121,9 @@ TorrentManager
 	 * @throws TorrentException
 	 */
 
-	public Torrent
+    Torrent
 	createFromBEncodedData(
-			byte[]		data )
+            byte[] data)
 
 	throws TorrentException;
 
@@ -137,10 +137,10 @@ TorrentManager
 	 * @since 3009
 	 */
 
-	public Torrent
+    Torrent
 	createFromBEncodedFile(
-			File		file,
-			int 		preserve )
+            File file,
+            int preserve)
 
 	throws TorrentException;
 
@@ -154,10 +154,10 @@ TorrentManager
 	 * @since 3009
 	 */
 
-	public Torrent
+    Torrent
 	createFromBEncodedInputStream(
-			InputStream		data,
-			int 			preserve )
+            InputStream data,
+            int preserve)
 
 	throws TorrentException;
 
@@ -171,10 +171,10 @@ TorrentManager
 	 * @since 3009
 	 */
 
-	public Torrent
+    Torrent
 	createFromBEncodedData(
-			byte[]		data,
-			int 		preserve )
+            byte[] data,
+            int preserve)
 
 	throws TorrentException;
 
@@ -185,26 +185,26 @@ TorrentManager
 		 * @throws TorrentException
 		 */
 
-	public Torrent
+        Torrent
 	createFromDataFile(
-		File		data,
-		URL			announce_url )
+                File data,
+                URL announce_url)
 
 		throws TorrentException;
 
-	public Torrent
+	Torrent
 	createFromDataFile(
-		File		data,
-		URL			announce_url,
-		boolean		include_other_hashes )
+            File data,
+            URL announce_url,
+            boolean include_other_hashes)
 
 		throws TorrentException;
 
-	public TorrentCreator
+	TorrentCreator
 	createFromDataFileEx(
-		File					data,
-		URL						announce_url,
-		boolean					include_other_hashes )
+            File data,
+            URL announce_url,
+            boolean include_other_hashes)
 
 		throws TorrentException;
 
@@ -215,7 +215,7 @@ TorrentManager
 		 * @return
 		 */
 
-	public TorrentAttribute[]
+        TorrentAttribute[]
 	getDefinedAttributes();
 
 		/**
@@ -224,9 +224,9 @@ TorrentManager
 		 * @return
 		 */
 
-	public TorrentAttribute
+        TorrentAttribute
 	getAttribute(
-		String		name );
+                String name);
 
 		/**
 		 * Gives access to/creates arbitrary String attributes for plugins to use. The
@@ -237,15 +237,15 @@ TorrentManager
 		 * @param name
 		 * @return
 		 */
-	public TorrentAttribute
+        TorrentAttribute
 	getPluginAttribute(
-		String		name );
+                String name);
 
-	public void
+	void
 	addListener(
-		TorrentManagerListener	l );
+            TorrentManagerListener l);
 
-	public void
+	void
 	removeListener(
-		TorrentManagerListener	l );
+            TorrentManagerListener l);
 }

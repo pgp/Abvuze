@@ -36,10 +36,10 @@ Plugin
    *
    * @since 2.0.4.0
 	 */
-	
-  public void 
+
+    void
   initialize(
-  		PluginInterface pluginInterface )
+            PluginInterface pluginInterface)
   
   	throws PluginException;
   

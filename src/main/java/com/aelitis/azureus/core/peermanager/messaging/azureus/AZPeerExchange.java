@@ -68,7 +68,7 @@ public class AZPeerExchange implements AZMessage, AZStylePeerExchange {
       
       for( int i=0; i < peers.length; i++ ) {
         raw_peers.add( peers[i].getSerialization() );
-        handshake_types[i] = (byte)peers[i].getHandshakeType();
+        handshake_types[i] = peers[i].getHandshakeType();
         int	udp_port = peers[i].getUDPPort();
         if ( udp_port > 0 ){
         	num_valid_udp++;
@@ -107,26 +107,26 @@ public class AZPeerExchange implements AZMessage, AZStylePeerExchange {
        	  Logger.log(new LogEvent( LOGID, LogEvent.LT_WARNING,"PEX: invalid udp ports received: peers=" + peer_num + ",udp_ports=" + udp_ports.length ));
     	  udp_ports = null;
       }
-      
-      for( Iterator it = raw_peers.iterator(); it.hasNext(); ) {
-        byte[] full_address = (byte[])it.next();
-        
-        byte type = PeerItemFactory.HANDSHAKE_TYPE_PLAIN;        
-        if( handshake_types != null ) { //only 2307+ send types
-        	type = handshake_types[pos];
+
+        for (Object raw_peer : raw_peers) {
+            byte[] full_address = (byte[]) raw_peer;
+
+            byte type = PeerItemFactory.HANDSHAKE_TYPE_PLAIN;
+            if (handshake_types != null) { //only 2307+ send types
+                type = handshake_types[pos];
+            }
+            int udp_port = 0;
+            if (udp_ports != null) {
+                udp_port = ((udp_ports[pos * 2] << 8) & 0xff00) + (udp_ports[pos * 2 + 1] & 0xff);
+            }
+            try {
+                PeerItem peer = PeerItemFactory.createPeerItem(full_address, PeerItemFactory.PEER_SOURCE_PEER_EXCHANGE, type, udp_port, AENetworkClassifier.AT_PUBLIC);
+                peers.add(peer);
+            } catch (Exception t) {
+                Logger.log(new LogEvent(LOGID, LogEvent.LT_WARNING, "PEX: invalid peer received"));
+            }
+            pos++;
         }
-        int	udp_port = 0;
-        if ( udp_ports != null ){
-        	udp_port = ((udp_ports[pos*2]<<8)&0xff00) + (udp_ports[pos*2+1]&0xff);
-        }
-        try{
-        	PeerItem peer = PeerItemFactory.createPeerItem( full_address, PeerItemFactory.PEER_SOURCE_PEER_EXCHANGE, type, udp_port, AENetworkClassifier.AT_PUBLIC );
-        	peers.add( peer );
-        }catch( Exception t ){
-            Logger.log(new LogEvent( LOGID, LogEvent.LT_WARNING,"PEX: invalid peer received" ));	 
-        }
-        pos++;
-      }
     }
     
     if( !peers.isEmpty() ) {
@@ -158,9 +158,9 @@ public class AZPeerExchange implements AZMessage, AZStylePeerExchange {
   
   public int getType() {  return Message.TYPE_PROTOCOL_PAYLOAD;  }
    
-  public byte getVersion() { return version; };
-  
-  public String getDescription() {
+  public byte getVersion() { return version; }
+
+    public String getDescription() {
     if( description == null ) {
       int add_count = peers_added == null ? 0 : peers_added.length;
       int drop_count = peers_dropped == null ? 0 : peers_dropped.length;

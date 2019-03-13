@@ -23,31 +23,31 @@ public interface
 DiskManagerCheckRequest
 	extends DiskManagerRequest
 {
-	public int
+	int
 	getPieceNumber();
 	
-	public Object
+	Object
 	getUserData();
 	
-	public void
+	void
 	setLowPriority(
-		boolean	low );
+            boolean low);
 	
-	public boolean
+	boolean
 	isLowPriority();
 	
-	public void
+	void
 	setAdHoc(
-		boolean	adhoc );
+            boolean adhoc);
 	
-	public boolean
+	boolean
 	isAdHoc();
 	
-	public void
+	void
 	setHash(
-		byte[]		hash );
+            byte[] hash);
 	
-	public byte[]
+	byte[]
 	getHash();
 	
 }

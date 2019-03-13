@@ -18,7 +18,7 @@ private StringBuffer sb=new StringBuffer();
 	private int yy_buffer_read;
 	private int yy_buffer_start;
 	private int yy_buffer_end;
-	private char yy_buffer[];
+    private char[] yy_buffer;
 	private boolean yy_at_bol;
 	private int yy_lexical_state;
 
@@ -51,10 +51,10 @@ private StringBuffer sb=new StringBuffer();
 	//private boolean yy_eof_done = false;
 	private static final int YYINITIAL = 0;
 	private static final int STRING_BEGIN = 1;
-	private static final int yy_state_dtrans[] = {
-		0,
-		39
-	};
+    private static final int[] yy_state_dtrans = {
+            0,
+            39
+    };
 	private void yybegin (int state) {
 		yy_lexical_state = state;
 	}
@@ -134,9 +134,9 @@ private StringBuffer sb=new StringBuffer();
 	//private int yylength () {
 	//	return yy_buffer_end - yy_buffer_start;
 	//}
-	private char[] yy_double (char buf[]) {
+	private char[] yy_double (char[] buf) {
 		int i;
-		char newbuf[];
+        char[] newbuf;
 		newbuf = new char[2*buf.length];
 		for (i = 0; i < buf.length; ++i) {
 			newbuf[i] = buf[i];
@@ -144,11 +144,11 @@ private StringBuffer sb=new StringBuffer();
 		return newbuf;
 	}
 	private static final int YY_E_INTERNAL = 0;
-	//private final int YY_E_MATCH = 1;
-	private java.lang.String yy_error_string[] = {
-		"Error: Internal error.\n",
-		"Error: Unmatched input.\n"
-	};
+    //private final int YY_E_MATCH = 1;
+    private java.lang.String[] yy_error_string = {
+            "Error: Internal error.\n",
+            "Error: Unmatched input.\n"
+    };
 	private void yy_error (int code,boolean fatal) {
 		java.lang.System.out.print(yy_error_string[code]);
 		java.lang.System.out.flush();
@@ -165,7 +165,7 @@ private StringBuffer sb=new StringBuffer();
 		int commaIndex;
 		String workString;
 
-		int res[][] = new int[size1][size2];
+        int[][] res = new int[size1][size2];
 		for (int i= 0; i < size1; i++) {
 			for (int j= 0; j < size2; j++) {
 				if (sequenceLength != 0) {
@@ -193,69 +193,70 @@ private StringBuffer sb=new StringBuffer();
 		}
 		return res;
 	}
-	private static final int yy_acpt[] = {
-		/* 0 */ YY_NOT_ACCEPT,
-		/* 1 */ YY_NO_ANCHOR,
-		/* 2 */ YY_NO_ANCHOR,
-		/* 3 */ YY_NO_ANCHOR,
-		/* 4 */ YY_NO_ANCHOR,
-		/* 5 */ YY_NO_ANCHOR,
-		/* 6 */ YY_NO_ANCHOR,
-		/* 7 */ YY_NO_ANCHOR,
-		/* 8 */ YY_NO_ANCHOR,
-		/* 9 */ YY_NO_ANCHOR,
-		/* 10 */ YY_NO_ANCHOR,
-		/* 11 */ YY_NO_ANCHOR,
-		/* 12 */ YY_NO_ANCHOR,
-		/* 13 */ YY_NO_ANCHOR,
-		/* 14 */ YY_NO_ANCHOR,
-		/* 15 */ YY_NO_ANCHOR,
-		/* 16 */ YY_NO_ANCHOR,
-		/* 17 */ YY_NO_ANCHOR,
-		/* 18 */ YY_NO_ANCHOR,
-		/* 19 */ YY_NO_ANCHOR,
-		/* 20 */ YY_NO_ANCHOR,
-		/* 21 */ YY_NO_ANCHOR,
-		/* 22 */ YY_NO_ANCHOR,
-		/* 23 */ YY_NO_ANCHOR,
-		/* 24 */ YY_NO_ANCHOR,
-		/* 25 */ YY_NOT_ACCEPT,
-		/* 26 */ YY_NO_ANCHOR,
-		/* 27 */ YY_NO_ANCHOR,
-		/* 28 */ YY_NOT_ACCEPT,
-		/* 29 */ YY_NOT_ACCEPT,
-		/* 30 */ YY_NOT_ACCEPT,
-		/* 31 */ YY_NOT_ACCEPT,
-		/* 32 */ YY_NOT_ACCEPT,
-		/* 33 */ YY_NOT_ACCEPT,
-		/* 34 */ YY_NOT_ACCEPT,
-		/* 35 */ YY_NOT_ACCEPT,
-		/* 36 */ YY_NOT_ACCEPT,
-		/* 37 */ YY_NOT_ACCEPT,
-		/* 38 */ YY_NOT_ACCEPT,
-		/* 39 */ YY_NOT_ACCEPT,
-		/* 40 */ YY_NOT_ACCEPT,
-		/* 41 */ YY_NOT_ACCEPT,
-		/* 42 */ YY_NOT_ACCEPT,
-		/* 43 */ YY_NOT_ACCEPT,
-		/* 44 */ YY_NOT_ACCEPT
-	};
-	private static final int yy_cmap[] = unpackFromString(1,65538,
-"11:8,27:2,28,11,27,28,11:18,27,11,2,11:8,16,25,12,14,3,13:10,26,11:6,10:4,1" +
-"5,10,11:20,23,1,24,11:3,18,4,10:2,17,5,11:5,19,11,6,11:3,7,20,8,9,11:5,21,1" +
-"1,22,11:65410,0:2")[0];
 
-	private static final int yy_rmap[] = unpackFromString(1,45,
-"0,1:2,2,1:7,3,1:2,4,1:10,5,6,1,7,8,9,10,11,12,13,14,15,16,6,17,18,19,20,21," +
-"22")[0];
+    private static final int[] yy_acpt = {
+            /* 0 */ YY_NOT_ACCEPT,
+            /* 1 */ YY_NO_ANCHOR,
+            /* 2 */ YY_NO_ANCHOR,
+            /* 3 */ YY_NO_ANCHOR,
+            /* 4 */ YY_NO_ANCHOR,
+            /* 5 */ YY_NO_ANCHOR,
+            /* 6 */ YY_NO_ANCHOR,
+            /* 7 */ YY_NO_ANCHOR,
+            /* 8 */ YY_NO_ANCHOR,
+            /* 9 */ YY_NO_ANCHOR,
+            /* 10 */ YY_NO_ANCHOR,
+            /* 11 */ YY_NO_ANCHOR,
+            /* 12 */ YY_NO_ANCHOR,
+            /* 13 */ YY_NO_ANCHOR,
+            /* 14 */ YY_NO_ANCHOR,
+            /* 15 */ YY_NO_ANCHOR,
+            /* 16 */ YY_NO_ANCHOR,
+            /* 17 */ YY_NO_ANCHOR,
+            /* 18 */ YY_NO_ANCHOR,
+            /* 19 */ YY_NO_ANCHOR,
+            /* 20 */ YY_NO_ANCHOR,
+            /* 21 */ YY_NO_ANCHOR,
+            /* 22 */ YY_NO_ANCHOR,
+            /* 23 */ YY_NO_ANCHOR,
+            /* 24 */ YY_NO_ANCHOR,
+            /* 25 */ YY_NOT_ACCEPT,
+            /* 26 */ YY_NO_ANCHOR,
+            /* 27 */ YY_NO_ANCHOR,
+            /* 28 */ YY_NOT_ACCEPT,
+            /* 29 */ YY_NOT_ACCEPT,
+            /* 30 */ YY_NOT_ACCEPT,
+            /* 31 */ YY_NOT_ACCEPT,
+            /* 32 */ YY_NOT_ACCEPT,
+            /* 33 */ YY_NOT_ACCEPT,
+            /* 34 */ YY_NOT_ACCEPT,
+            /* 35 */ YY_NOT_ACCEPT,
+            /* 36 */ YY_NOT_ACCEPT,
+            /* 37 */ YY_NOT_ACCEPT,
+            /* 38 */ YY_NOT_ACCEPT,
+            /* 39 */ YY_NOT_ACCEPT,
+            /* 40 */ YY_NOT_ACCEPT,
+            /* 41 */ YY_NOT_ACCEPT,
+            /* 42 */ YY_NOT_ACCEPT,
+            /* 43 */ YY_NOT_ACCEPT,
+            /* 44 */ YY_NOT_ACCEPT
+    };
+    private static final int[] yy_cmap = unpackFromString(1, 65538,
+            "11:8,27:2,28,11,27,28,11:18,27,11,2,11:8,16,25,12,14,3,13:10,26,11:6,10:4,1" +
+                    "5,10,11:20,23,1,24,11:3,18,4,10:2,17,5,11:5,19,11,6,11:3,7,20,8,9,11:5,21,1" +
+                    "1,22,11:65410,0:2")[0];
 
-	private static final int yy_nxt[][] = unpackFromString(23,29,
-"1,-1,2,-1:2,25,28,-1,29,-1:3,30,3,-1:7,4,5,6,7,8,9,10:2,-1:42,3,33,34,-1,34" +
-",-1:24,11,-1,34,-1,34,-1:12,16,17,18,19,20,21,22,23,40,-1:37,31,-1:23,26,-1" +
-":24,42,-1:26,32,-1:34,3,-1:34,35,-1:18,37,-1:32,11,-1:27,38,26,-1:2,38,-1:3" +
-"2,37,-1:27,12,-1:26,13,-1:11,1,14,15,27:25,-1:5,44:2,-1:4,44,-1:2,44,-1,44," +
-"-1,44:2,-1:14,24:2,-1:4,24,-1:2,24,-1,24,-1,24:2,-1:29,36,-1:13,41:2,-1:4,4" +
-"1,-1:2,41,-1,41,-1,41:2,-1:14,43:2,-1:4,43,-1:2,43,-1,43,-1,43:2,-1:10");
+    private static final int[] yy_rmap = unpackFromString(1, 45,
+            "0,1:2,2,1:7,3,1:2,4,1:10,5,6,1,7,8,9,10,11,12,13,14,15,16,6,17,18,19,20,21," +
+                    "22")[0];
+
+    private static final int[][] yy_nxt = unpackFromString(23, 29,
+            "1,-1,2,-1:2,25,28,-1,29,-1:3,30,3,-1:7,4,5,6,7,8,9,10:2,-1:42,3,33,34,-1,34" +
+                    ",-1:24,11,-1,34,-1,34,-1:12,16,17,18,19,20,21,22,23,40,-1:37,31,-1:23,26,-1" +
+                    ":24,42,-1:26,32,-1:34,3,-1:34,35,-1:18,37,-1:32,11,-1:27,38,26,-1:2,38,-1:3" +
+                    "2,37,-1:27,12,-1:26,13,-1:11,1,14,15,27:25,-1:5,44:2,-1:4,44,-1:2,44,-1,44," +
+                    "-1,44:2,-1:14,24:2,-1:4,24,-1:2,24,-1,24,-1,24:2,-1:29,36,-1:13,41:2,-1:4,4" +
+                    "1,-1:2,41,-1,41,-1,41:2,-1:14,43:2,-1:4,43,-1:2,43,-1,43,-1,43:2,-1:10");
 
 	public Yytoken yylex ()
 		throws java.io.IOException {

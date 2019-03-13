@@ -303,38 +303,36 @@ TRTrackerDHTAnnouncerImpl
 		}else{
 			DownloadAnnounceResultPeer[]	ext_peers = result.getPeers();
 			
-			List<TRTrackerAnnouncerResponsePeerImpl> peers_list = new ArrayList<TRTrackerAnnouncerResponsePeerImpl>( ext_peers.length );
-				
-			for (int i=0;i<ext_peers.length;i++){
-				
-				DownloadAnnounceResultPeer	ext_peer	= ext_peers[i];
-				
-				if ( ext_peer == null){
-					
-					continue;
-				}
-				
-				if (Logger.isEnabled()){
-					Logger.log(new LogEvent(torrent, LOGID, "EXTERNAL PEER DHT: ip="
-							+ ext_peer.getAddress() + ",port=" + ext_peer.getPort() +",prot=" + ext_peer.getProtocol()));
-				}
-				
-				int		http_port	= 0;
-				byte	az_version 	= TRTrackerAnnouncer.AZ_TRACKER_VERSION_1;
-				
-				peers_list.add( new TRTrackerAnnouncerResponsePeerImpl( 
-									ext_peer.getSource(),
-									ext_peer.getPeerID(),
-									ext_peer.getAddress(), 
-									ext_peer.getPort(),
-									ext_peer.getUDPPort(),
-									http_port,
-									ext_peer.getProtocol(),
-									az_version,
-									(short)0 ));
-			}
+			List<TRTrackerAnnouncerResponsePeerImpl> peers_list = new ArrayList<>(ext_peers.length);
+
+            for (DownloadAnnounceResultPeer ext_peer : ext_peers) {
+
+                if (ext_peer == null) {
+
+                    continue;
+                }
+
+                if (Logger.isEnabled()) {
+                    Logger.log(new LogEvent(torrent, LOGID, "EXTERNAL PEER DHT: ip="
+                            + ext_peer.getAddress() + ",port=" + ext_peer.getPort() + ",prot=" + ext_peer.getProtocol()));
+                }
+
+                int http_port = 0;
+                byte az_version = TRTrackerAnnouncer.AZ_TRACKER_VERSION_1;
+
+                peers_list.add(new TRTrackerAnnouncerResponsePeerImpl(
+                        ext_peer.getSource(),
+                        ext_peer.getPeerID(),
+                        ext_peer.getAddress(),
+                        ext_peer.getPort(),
+                        ext_peer.getUDPPort(),
+                        http_port,
+                        ext_peer.getProtocol(),
+                        az_version,
+                        (short) 0));
+            }
 			
-			TRTrackerAnnouncerResponsePeerImpl[]	peers = peers_list.toArray( new TRTrackerAnnouncerResponsePeerImpl[peers_list.size()] );
+			TRTrackerAnnouncerResponsePeerImpl[]	peers = peers_list.toArray(new TRTrackerAnnouncerResponsePeerImpl[0]);
 			
 			helper.addToTrackerCache( peers);
 		
@@ -353,18 +351,16 @@ TRTrackerDHTAnnouncerImpl
 
 		     if ( cached_peers.length > 0 ){
 		     	
-		    	 Set<TRTrackerAnnouncerResponsePeer>	new_peers = 
-		    		 new TreeSet<TRTrackerAnnouncerResponsePeer>(
-			    		new Comparator<TRTrackerAnnouncerResponsePeer>()
-			    		{
-			    			public int 
-			    			compare(
-			    				TRTrackerAnnouncerResponsePeer o1,
-			    				TRTrackerAnnouncerResponsePeer o2 ) 
-			    			{
-			    				return( o1.compareTo( o2 ));
-			    			}		    			
-			    		});
+		    	 Set<TRTrackerAnnouncerResponsePeer>	new_peers =
+                         new TreeSet<>(
+                                 new Comparator<TRTrackerAnnouncerResponsePeer>() {
+                                     public int
+                                     compare(
+                                             TRTrackerAnnouncerResponsePeer o1,
+                                             TRTrackerAnnouncerResponsePeer o2) {
+                                         return (o1.compareTo(o2));
+                                     }
+                                 });
 		    	 
 		    	 if ( peers != null ){
 		    		 
@@ -373,7 +369,7 @@ TRTrackerDHTAnnouncerImpl
 		    	 
 	    		 new_peers.addAll( Arrays.asList( cached_peers ));
 
-		    	 response.setPeers( new_peers.toArray( new TRTrackerAnnouncerResponsePeer[new_peers.size()]) );
+		    	 response.setPeers( new_peers.toArray(new TRTrackerAnnouncerResponsePeer[0]) );
 		     }
 		}
 		

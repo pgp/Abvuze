@@ -266,16 +266,18 @@ PluginManagerImpl
 		boolean     operational)
 	{
 		PluginInterface[]	p = getPluginInterfaces();
-		
-		for (int i=0;i<p.length;i++){
-			
-			if ( p[i].getPluginID().equalsIgnoreCase( id )){
-				
-				if (operational && !p[i].getPluginState().isOperational()) {return null;}
-				
-				return( p[i]);
-			}
-		}
+
+        for (PluginInterface pluginInterface : p) {
+
+            if (pluginInterface.getPluginID().equalsIgnoreCase(id)) {
+
+                if (operational && !pluginInterface.getPluginState().isOperational()) {
+                    return null;
+                }
+
+                return (pluginInterface);
+            }
+        }
 		
 		return( null );
 	}
@@ -290,16 +292,18 @@ PluginManagerImpl
 		boolean     operational)
 	{
 		PluginInterface[]	p = getPluginInterfaces();
-		
-		for (int i=0;i<p.length;i++){
-			
-			if ( p[i].getPlugin().getClass().equals( c )){
-				
-				if (operational && !p[i].getPluginState().isOperational()) {return null;}
-				
-				return( p[i]);
-			}
-		}
+
+        for (PluginInterface pluginInterface : p) {
+
+            if (pluginInterface.getPlugin().getClass().equals(c)) {
+
+                if (operational && !pluginInterface.getPluginState().isOperational()) {
+                    return null;
+                }
+
+                return (pluginInterface);
+            }
+        }
 		
 		return( null );
 	}
@@ -314,16 +318,18 @@ PluginManagerImpl
 		boolean     operational)
 	{
 		PluginInterface[]	p = getPluginInterfaces();
-		
-		for (int i=0;i<p.length;i++){
-			
-			if ( p[i].getPlugin().getClass().getName().equals( class_name )){
-				
-				if (operational && !p[i].getPluginState().isOperational()) {return null;}
-				
-				return( p[i]);
-			}
-		}
+
+        for (PluginInterface pluginInterface : p) {
+
+            if (pluginInterface.getPlugin().getClass().getName().equals(class_name)) {
+
+                if (operational && !pluginInterface.getPluginState().isOperational()) {
+                    return null;
+                }
+
+                return (pluginInterface);
+            }
+        }
 		
 		return( null );
 	}
@@ -387,34 +393,34 @@ PluginManagerImpl
 	
 	public void refreshPluginList(boolean initialise) {
 		List loadedPlugins = pi.loadPlugins(pi.getAzureusCore(), true, true, false, initialise);
-		for (Iterator iter = loadedPlugins.iterator(); iter.hasNext();) {
-			PluginInterfaceImpl plugin = (PluginInterfaceImpl) iter.next();
-			
-			// If the plugin is disabled, it will just get added to the list
-			// of plugins, but won't initialise.
-			if (!plugin.getPluginState().isOperational()) {
-				try {
-					pi.reloadPlugin(plugin, false, initialise);
-				} catch (PluginException e) {
-					// TODO Auto-generated catch block
-					Debug.printStackTrace(e);
-				}
-			}
-		}
+        for (Object loadedPlugin : loadedPlugins) {
+            PluginInterfaceImpl plugin = (PluginInterfaceImpl) loadedPlugin;
+
+            // If the plugin is disabled, it will just get added to the list
+            // of plugins, but won't initialise.
+            if (!plugin.getPluginState().isOperational()) {
+                try {
+                    pi.reloadPlugin(plugin, false, initialise);
+                } catch (PluginException e) {
+                    // TODO Auto-generated catch block
+                    Debug.printStackTrace(e);
+                }
+            }
+        }
 	}
 	
 	public boolean
 	isSilentRestartEnabled()
 	{
 		PluginInterface[] pis = pi.getPlugins();
-		
-		for ( int i=0;i<pis.length;i++ ){
-			
-			if ( pis[i].getPluginProperties().getProperty("plugin.silentrestart.disabled", "" ).equalsIgnoreCase( "true" )){
-				
-				return( false );
-			}
-		}
+
+        for (PluginInterface pi1 : pis) {
+
+            if (pi1.getPluginProperties().getProperty("plugin.silentrestart.disabled", "").equalsIgnoreCase("true")) {
+
+                return (false);
+            }
+        }
 		
 		return( true );
 	}
@@ -451,7 +457,7 @@ PluginManagerImpl
 		String		name,
 		Class<?>[]	parameters )
 	{
-		List<PluginInterface>	result = new ArrayList<PluginInterface>();
+		List<PluginInterface>	result = new ArrayList<>();
 		
 		List<PluginInterfaceImpl>	pis = PluginInitializer.getPluginInterfaces();
 		

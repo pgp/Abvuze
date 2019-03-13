@@ -68,7 +68,7 @@ public interface SaveLocationManager {
 	 *   download.
 	 * @return The new save location instructions.
 	 */
-	public SaveLocationChange onInitialization(Download download, boolean for_move, boolean on_event);
+    SaveLocationChange onInitialization(Download download, boolean for_move, boolean on_event);
 
 	/**
 	 * Return the location to move the download to when it is completed (or
@@ -83,7 +83,7 @@ public interface SaveLocationManager {
 	 *   download.
 	 * @return The new save location instructions.
 	 */
-	public SaveLocationChange onCompletion(Download download, boolean for_move, boolean on_event);
+    SaveLocationChange onCompletion(Download download, boolean for_move, boolean on_event);
 
 	/**
 	 * Return the location to move the download to when it is removed (or
@@ -98,6 +98,6 @@ public interface SaveLocationManager {
 	 *   when it is removed.
 	 * @return The new save location instructions.
 	 */
-	public SaveLocationChange onRemoval(Download download, boolean for_move, boolean on_event);
+    SaveLocationChange onRemoval(Download download, boolean for_move, boolean on_event);
 
 }

@@ -26,8 +26,8 @@ package org.gudy.azureus2.plugins.ui.tables;
  */
 public interface TableCellVisibilityListener
 {
-	public static int VISIBILITY_SHOWN = 0;
-	public static int VISIBILITY_HIDDEN = 1;
+	int VISIBILITY_SHOWN = 0;
+	int VISIBILITY_HIDDEN = 1;
 	// Future: GAINED_FOCUS, LOST_FOCUS, SELECTED, UNSELECTED?
 	
 	void cellVisibilityChanged(TableCell cell, int visibility);

@@ -32,9 +32,9 @@ import java.io.*;
 public interface 
 StatsWriterStreamer 
 {
-	public void
+	void
 	write(
-		OutputStream	output_stream )
+            OutputStream output_stream)
 		
 		throws IOException;
 }

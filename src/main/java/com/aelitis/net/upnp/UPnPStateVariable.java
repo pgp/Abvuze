@@ -27,13 +27,13 @@ package com.aelitis.net.upnp;
 public interface 
 UPnPStateVariable 
 {
-	public String
+	String
 	getName();
 	
-	public UPnPService
+	UPnPService
 	getService();
 	
-	public String
+	String
 	getValue()
 	
 		throws UPnPException;

@@ -43,14 +43,14 @@ NetUtils
 	
 	private static long	last_ni_check	= -1;
 	
-	private static volatile List<NetworkInterface>		current_interfaces = new ArrayList<NetworkInterface>();
+	private static volatile List<NetworkInterface>		current_interfaces = new ArrayList<>();
 	
 	private static boolean						first_check	= true;
 	private static boolean						check_in_progress;
 	
 	static final AESemaphore					ni_sem = new AESemaphore( "NetUtils:ni" );
 	
-	private static final Map<Object,Object[]>			host_or_address_map 	= new HashMap<Object, Object[]>();
+	private static final Map<Object,Object[]>			host_or_address_map 	= new HashMap<>();
 	
 	private static final Object	RESULT_NULL = new Object();
 	
@@ -92,7 +92,7 @@ NetUtils
 					
 						throws SocketException
 					{
-						List<NetworkInterface> result = new ArrayList<NetworkInterface>();
+						List<NetworkInterface> result = new ArrayList<>();
 			
 						try{
 								// got some major CPU issues on some machines with crap loads of NIs
@@ -418,7 +418,7 @@ NetUtils
 		try {
 			Method mGetByIndex = NetworkInterface.class.getDeclaredMethod(
 					"getByIndex", int.class);
-			List<NetworkInterface> list = new ArrayList<NetworkInterface>();
+			List<NetworkInterface> list = new ArrayList<>();
 			int i = 0;
 			do {
 				//NetworkInterface nif = NetworkInterface.getByIndex(i);
@@ -444,7 +444,7 @@ NetUtils
 		}
 
 		// Worst case, try some common interface names
-		List<NetworkInterface> list = new ArrayList<NetworkInterface>();
+		List<NetworkInterface> list = new ArrayList<>();
 		final String[] commonNames = {
 			"lo",
 			"eth",

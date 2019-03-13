@@ -34,14 +34,14 @@ import org.gudy.azureus2.core3.disk.DiskManagerFileInfo;
 public interface 
 DownloadManagerListener 
 {
-	public void
+	void
 	stateChanged(
-		DownloadManager manager,
-		int		state );
+            DownloadManager manager,
+            int state);
 		
   /** Notification that we were downloading and the download has completed
    */
-	public void
+  void
 	downloadComplete(DownloadManager manager);
 
   /** Notification that the completion state has changed.
@@ -50,12 +50,12 @@ DownloadManagerListener
    *  when it goes out of CHECKING, to avoid torrents jumping momentarily from 
    *  Completed to Incompleted to Completed again.
    */
-  public void
+  void
   completionChanged(DownloadManager manager, boolean bCompleted);
 
-  public void
+  void
   positionChanged(DownloadManager download, int oldPosition, int newPosition);
   
-  public void
-  filePriorityChanged( DownloadManager download, DiskManagerFileInfo file );
+  void
+  filePriorityChanged(DownloadManager download, DiskManagerFileInfo file);
 }

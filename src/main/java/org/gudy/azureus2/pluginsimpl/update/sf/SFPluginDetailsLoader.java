@@ -27,30 +27,30 @@ package org.gudy.azureus2.pluginsimpl.update.sf;
 public interface 
 SFPluginDetailsLoader 
 {
-	public String[]
+	String[]
 	getPluginIDs()
 	
 		throws SFPluginDetailsException;
 	
-	public SFPluginDetails
+	SFPluginDetails
 	getPluginDetails(
-		String		name )
+            String name)
 	
 		throws SFPluginDetailsException;
 	
-	public SFPluginDetails[]
+	SFPluginDetails[]
 	getPluginDetails()
 	
 		throws SFPluginDetailsException;
 	
-	public void
+	void
 	reset();
 	
-	public void
+	void
 	addListener(
-		SFPluginDetailsLoaderListener		l );
+            SFPluginDetailsLoaderListener l);
 	
-	public void
+	void
 	removeListener(
-		SFPluginDetailsLoaderListener		l );
+            SFPluginDetailsLoaderListener l);
 }

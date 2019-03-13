@@ -27,13 +27,13 @@ import java.util.List;
 public interface 
 DownloadHistoryEvent 
 {
-	public static final int DHE_HISTORY_ADDED		= 1;
-	public static final int DHE_HISTORY_REMOVED		= 2;
-	public static final int DHE_HISTORY_MODIFIED	= 3;
+	int DHE_HISTORY_ADDED		= 1;
+	int DHE_HISTORY_REMOVED		= 2;
+	int DHE_HISTORY_MODIFIED	= 3;
 
-	public int
+	int
 	getEventType();
 	
-	public List<DownloadHistory>
+	List<DownloadHistory>
 	getHistory();
 }

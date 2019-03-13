@@ -70,11 +70,11 @@ TRTrackerServerTorrentImpl
 	private final TRTrackerServerImpl	server;
 	private final HashWrapper			hash;
 
-	private Map<HashWrapper,TRTrackerServerPeerImpl>		peer_map 		= new HashMap<HashWrapper,TRTrackerServerPeerImpl>();
+	private Map<HashWrapper,TRTrackerServerPeerImpl>		peer_map 		= new HashMap<>();
 	
-	private Map<String,TRTrackerServerPeerImpl>				peer_reuse_map	= new HashMap<String,TRTrackerServerPeerImpl>();
+	private Map<String,TRTrackerServerPeerImpl>				peer_reuse_map	= new HashMap<>();
 	
-	private List<TRTrackerServerPeerImpl>					peer_list		= new ArrayList<TRTrackerServerPeerImpl>();
+	private List<TRTrackerServerPeerImpl>					peer_list		= new ArrayList<>();
 	
 	private int				peer_list_hole_count;
 	private boolean			peer_list_compaction_suspended;
@@ -171,37 +171,37 @@ TRTrackerServerTorrentImpl
 				
 				return;
 			}
-			
-			for (int i=0;i<peers.size();i++){
-				
-				TRTrackerServerPeerImpl peer = TRTrackerServerPeerImpl.importPeer((Map)peers.get(i));
-				
-				if ( peer != null ){
-					
-					try{
-						String	reuse_key = new String( peer.getIPAsRead(), Constants.BYTE_ENCODING ) + ":" + peer.getTCPPort();
-	
-						peer_map.put( peer.getPeerId(), peer );
-						
-						peer_list.add( peer );
-										
-						peer_reuse_map.put( reuse_key, peer );
-							
-						if ( peer.isSeed()){
-							
+
+			for (Object peer1 : peers) {
+
+				TRTrackerServerPeerImpl peer = TRTrackerServerPeerImpl.importPeer((Map) peer1);
+
+				if (peer != null) {
+
+					try {
+						String reuse_key = new String(peer.getIPAsRead(), Constants.BYTE_ENCODING) + ":" + peer.getTCPPort();
+
+						peer_map.put(peer.getPeerId(), peer);
+
+						peer_list.add(peer);
+
+						peer_reuse_map.put(reuse_key, peer);
+
+						if (peer.isSeed()) {
+
 							seed_count++;
 						}
-						
-						if ( peer.isBiased()){
-								
-							if ( biased_peers == null ){
-							
+
+						if (peer.isBiased()) {
+
+							if (biased_peers == null) {
+
 								biased_peers = new ArrayList();
 							}
-							
-							biased_peers.add( peer );
+
+							biased_peers.add(peer);
 						}
-					}catch( Throwable e ){
+					} catch (Throwable e) {
 					}
 				}
 			}
@@ -286,7 +286,7 @@ TRTrackerServerTorrentImpl
 			
 			int		tracker_key_hash_code	= tracker_key==null?0:tracker_key.hashCode();
 			
-			TRTrackerServerPeerImpl	peer = (TRTrackerServerPeerImpl)peer_map.get( peer_id );
+			TRTrackerServerPeerImpl	peer = peer_map.get( peer_id );
 	
 			boolean		new_peer 				= false;
 			boolean		peer_already_removed	= false;
@@ -315,7 +315,7 @@ TRTrackerServerTorrentImpl
 				//System.out.println( "new peer" );
 				
 				
-				TRTrackerServerPeerImpl old_peer	= (TRTrackerServerPeerImpl)peer_reuse_map.get( reuse_key );
+				TRTrackerServerPeerImpl old_peer	= peer_reuse_map.get( reuse_key );
 								
 				if ( old_peer != null ){
 							
@@ -530,7 +530,7 @@ TRTrackerServerTorrentImpl
 							// the assumption is that the other peer has also had an address change and has yet
 							// to report it. The only action here is to delete the other peer
 						
-						TRTrackerServerPeerImpl old_peer = (TRTrackerServerPeerImpl)peer_reuse_map.get( new_key );
+						TRTrackerServerPeerImpl old_peer = peer_reuse_map.get( new_key );
 						
 						if ( old_peer != null ){
 						
@@ -607,7 +607,7 @@ TRTrackerServerTorrentImpl
 					
 				le_diff = (event_type==TRTrackerServerTorrentPeerListener.ET_STOPPED)?0:(left - peer.getAmountLeft());
 				
-				boolean	was_seed 	= new_peer?false:peer.isSeed();
+				boolean	was_seed 	= !new_peer && peer.isSeed();
 				
 				peer.setStats( uploaded, downloaded, left );
 				
@@ -679,7 +679,7 @@ TRTrackerServerTorrentImpl
 							
 							for (int i=0;i<peer_list.size();i++){
 								
-								TRTrackerServerPeerImpl	this_peer = (TRTrackerServerPeerImpl)peer_list.get(i);
+								TRTrackerServerPeerImpl	this_peer = peer_list.get(i);
 								
 								if ( this_peer != null && this_peer.isSeed() && !this_peer.isBiased()){
 							
@@ -1140,77 +1140,77 @@ TRTrackerServerTorrentImpl
 			if ( requesting_peer != null ){
 				
 				if ( peer_listeners != null ){
-					
-					for (int i=0;i<peer_listeners.size();i++){
-						
-						try{
-							Map reply = ((TRTrackerServerTorrentPeerListener)peer_listeners.get(i)).eventOccurred( this, requesting_peer, TRTrackerServerTorrentPeerListener.ET_ANNOUNCE, null );
-										
-							if ( reply != null ){
-								
-								List	limited_peers = (List)reply.get( "limited_peers" );
-								
-								if ( limited_peers != null ){
-									
-									if ( explicit_limited_peers == null ){
-										
-										explicit_limited_peers = new ArrayList<TRTrackerServerSimplePeer>();
+
+					for (Object peer_listener : peer_listeners) {
+
+						try {
+							Map reply = ((TRTrackerServerTorrentPeerListener) peer_listener).eventOccurred(this, requesting_peer, TRTrackerServerTorrentPeerListener.ET_ANNOUNCE, null);
+
+							if (reply != null) {
+
+								List limited_peers = (List) reply.get("limited_peers");
+
+								if (limited_peers != null) {
+
+									if (explicit_limited_peers == null) {
+
+										explicit_limited_peers = new ArrayList<>();
 									}
-									
-									for (int j=0;j<limited_peers.size();j++){
-										
-										Map peer_map = (Map)limited_peers.get(j);
-										
-										String	ip 		= (String)peer_map.get("ip");
-										int		port 	= ((Long)peer_map.get( "port")).intValue();
-										
-										String	reuse_key = ip + ":" + port;
 
-										TRTrackerServerPeerImpl peer	= (TRTrackerServerPeerImpl)peer_reuse_map.get( reuse_key );
+									for (Object limited_peer : limited_peers) {
 
-										if ( peer != null && !explicit_limited_peers.contains( peer )){
-											
-											explicit_limited_peers.add( peer );
+										Map peer_map = (Map) limited_peer;
+
+										String ip = (String) peer_map.get("ip");
+										int port = ((Long) peer_map.get("port")).intValue();
+
+										String reuse_key = ip + ":" + port;
+
+										TRTrackerServerPeerImpl peer = peer_reuse_map.get(reuse_key);
+
+										if (peer != null && !explicit_limited_peers.contains(peer)) {
+
+											explicit_limited_peers.add(peer);
 										}
 									}
 								}
-								
-								List	biased_peers = (List)reply.get( "biased_peers" );
-								
-								if ( biased_peers != null ){
-									
-									if ( explicit_biased_peers == null ){
-										
-										explicit_biased_peers = new ArrayList<TRTrackerServerSimplePeer>();
+
+								List biased_peers = (List) reply.get("biased_peers");
+
+								if (biased_peers != null) {
+
+									if (explicit_biased_peers == null) {
+
+										explicit_biased_peers = new ArrayList<>();
 									}
-									
-									for (int j=0;j<biased_peers.size();j++){
-										
-										Map peer_map = (Map)biased_peers.get(j);
-										
-										String	ip 		= (String)peer_map.get("ip");
-										int		port 	= ((Long)peer_map.get( "port")).intValue();
-										
-										String	reuse_key = ip + ":" + port;
 
-										TRTrackerServerSimplePeer peer	= peer_reuse_map.get( reuse_key );
+									for (Object biased_peer : biased_peers) {
 
-										if ( peer == null ){
-											
-											peer = new temporaryBiasedSeed( ip, port );
+										Map peer_map = (Map) biased_peer;
+
+										String ip = (String) peer_map.get("ip");
+										int port = ((Long) peer_map.get("port")).intValue();
+
+										String reuse_key = ip + ":" + port;
+
+										TRTrackerServerSimplePeer peer = peer_reuse_map.get(reuse_key);
+
+										if (peer == null) {
+
+											peer = new temporaryBiasedSeed(ip, port);
 										}
-										
-										if ( !explicit_biased_peers.contains( peer )){
-											
-											explicit_biased_peers.add( peer );
+
+										if (!explicit_biased_peers.contains(peer)) {
+
+											explicit_biased_peers.add(peer);
 										}
 									}
 								}
-								
-								remove_ips = (Set)reply.get( "remove_ips" );
+
+								remove_ips = (Set) reply.get("remove_ips");
 							}
-						}catch( Throwable e ){
-							
+						} catch (Throwable e) {
+
 							Debug.printStackTrace(e);
 						}
 					}
@@ -1276,13 +1276,13 @@ TRTrackerServerTorrentImpl
 				
 				for (int i=num_want/10;i>num_want/20;i--){
 									
-					announceCacheEntry	entry = (announceCacheEntry)announce_cache.get(new Integer(i));
+					announceCacheEntry	entry = (announceCacheEntry)announce_cache.get(i);
 					
 					if( entry != null ){
 				
 						if ( now - entry.getTime() > cache_millis ){
 							
-							announce_cache.remove( new Integer(i));
+							announce_cache.remove(i);
 							
 						}else{
 						
@@ -1316,7 +1316,7 @@ TRTrackerServerTorrentImpl
 					
 					for (int i=0;i<peer_list.size();i++){
 									
-						TRTrackerServerPeerImpl	peer = (TRTrackerServerPeerImpl)peer_list.get(i);
+						TRTrackerServerPeerImpl	peer = peer_list.get(i);
 										
 						if ( peer == null || peer == requesting_peer ){
 													
@@ -1341,7 +1341,7 @@ TRTrackerServerTorrentImpl
 								// if we have an explicit biased peer list and this peer is biased 
 								// skip here as we add them later
 							
-						}else if ( remove_ips != null && remove_ips.contains( new String( peer.getIP()))){
+						}else if ( remove_ips != null && remove_ips.contains(peer.getIP())){
 
 								// skippy skippy
 							
@@ -1367,13 +1367,13 @@ TRTrackerServerTorrentImpl
 								
 								if ( compact_mode >= COMPACT_MODE_AZ ){
 									
-									rep_peer.put( "azver", new Long( peer.getAZVer()));
+									rep_peer.put( "azver", (long) peer.getAZVer());
 									
-									rep_peer.put( "azudp", new Long( peer.getUDPPort()));
+									rep_peer.put( "azudp", (long) peer.getUDPPort());
 									
 									if ( peer.isSeed()){
 										
-										rep_peer.put( "azhttp", new Long( peer.getHTTPPort()));
+										rep_peer.put( "azhttp", (long) peer.getHTTPPort());
 									}
 								
 									if ( compact_mode >= COMPACT_MODE_XML ){
@@ -1382,7 +1382,7 @@ TRTrackerServerTorrentImpl
 
 									}else{
 										
-										rep_peer.put( "azup", new Long( peer.getUpSpeed()));
+										rep_peer.put( "azup", (long) peer.getUpSpeed());
 										
 										if ( peer.isBiased()){
 											
@@ -1395,7 +1395,7 @@ TRTrackerServerTorrentImpl
 											
 											if ( peer_pos != null && network_position.getPositionType() == peer_pos.getPositionType()){
 												
-												rep_peer.put( "azrtt", new Long( (long)peer_pos.estimateRTT(network_position )));
+												rep_peer.put( "azrtt", (long) peer_pos.estimateRTT(network_position));
 											}
 										}
 									}
@@ -1405,11 +1405,11 @@ TRTrackerServerTorrentImpl
 								rep_peer.put( "ip", peer.getIPAsRead() );
 							}
 							
-							rep_peer.put( "port", new Long( peer.getTCPPort()));
+							rep_peer.put( "port", (long) peer.getTCPPort());
 							
 							if ( crypto_level != TRTrackerServerPeer.CRYPTO_NONE ){
 								
-								rep_peer.put( "crypto_flag", new Long( peer.getCryptoLevel() == TRTrackerServerPeer.CRYPTO_REQUIRED?1:0));
+								rep_peer.put( "crypto_flag", (long) (peer.getCryptoLevel() == TRTrackerServerPeer.CRYPTO_REQUIRED ? 1 : 0));
 							}
 							
 							if ( peer.isBiased()){
@@ -1513,7 +1513,7 @@ TRTrackerServerTorrentImpl
 									
 									peer_index = random.nextInt(peer_list_size);
 									
-									peer = (TRTrackerServerPeerImpl)peer_list.get(peer_index);
+									peer = peer_list.get(peer_index);
 									
 									if ( peer == null || peer.isBiased()){
 										
@@ -1535,7 +1535,7 @@ TRTrackerServerTorrentImpl
 									
 									// don't return "crypto required" peers to those that can't correctly connect to them
 
-								}else if ( remove_ips != null && remove_ips.contains( new String( peer.getIP()))){
+								}else if ( remove_ips != null && remove_ips.contains(peer.getIP())){
 
 									// skippy skippy
 
@@ -1580,13 +1580,13 @@ TRTrackerServerTorrentImpl
 												
 												if ( compact_mode >= COMPACT_MODE_AZ ){
 													
-													rep_peer.put( "azver", new Long( peer.getAZVer()));
+													rep_peer.put( "azver", (long) peer.getAZVer());
 													
-													rep_peer.put( "azudp", new Long( peer.getUDPPort()));
+													rep_peer.put( "azudp", (long) peer.getUDPPort());
 													
 													if ( peer.isSeed()){
 														
-														rep_peer.put( "azhttp", new Long( peer.getHTTPPort()));
+														rep_peer.put( "azhttp", (long) peer.getHTTPPort());
 													}
 													
 													if ( compact_mode >= COMPACT_MODE_XML ){
@@ -1595,7 +1595,7 @@ TRTrackerServerTorrentImpl
 
 													}else{
 														
-														rep_peer.put( "azup", new Long( peer.getUpSpeed()));
+														rep_peer.put( "azup", (long) peer.getUpSpeed());
 														
 														if ( peer.isBiased()){
 															
@@ -1608,7 +1608,7 @@ TRTrackerServerTorrentImpl
 															
 															if ( peer_pos != null && network_position.getPositionType() == peer_pos.getPositionType()){
 																
-																rep_peer.put( "azrtt", new Long( (long)peer_pos.estimateRTT(network_position )));
+																rep_peer.put( "azrtt", (long) peer_pos.estimateRTT(network_position));
 															}
 														}
 													}
@@ -1618,11 +1618,11 @@ TRTrackerServerTorrentImpl
 												rep_peer.put( "ip", peer.getIPAsRead() );
 											}
 											
-											rep_peer.put( "port", new Long( peer.getTCPPort()));	
+											rep_peer.put( "port", (long) peer.getTCPPort());
 											
 											if ( crypto_level != TRTrackerServerPeer.CRYPTO_NONE ){
 												
-												rep_peer.put( "crypto_flag", new Long( peer.getCryptoLevel() == TRTrackerServerPeer.CRYPTO_REQUIRED?1:0));
+												rep_peer.put( "crypto_flag", (long) (peer.getCryptoLevel() == TRTrackerServerPeer.CRYPTO_REQUIRED ? 1 : 0));
 											}
 
 											if ( peer.isBiased()){
@@ -1773,13 +1773,13 @@ TRTrackerServerTorrentImpl
 								
 							if ( compact_mode >= COMPACT_MODE_AZ ){
 									
-								rep_peer.put( "azver", new Long( peer.getAZVer()));
+								rep_peer.put( "azver", (long) peer.getAZVer());
 								
-								rep_peer.put( "azudp", new Long( peer.getUDPPort()));
+								rep_peer.put( "azudp", (long) peer.getUDPPort());
 								
 								if ( peer.isSeed()){
 									
-									rep_peer.put( "azhttp", new Long( peer.getHTTPPort()));
+									rep_peer.put( "azhttp", (long) peer.getHTTPPort());
 								}
 								
 								if ( compact_mode >= COMPACT_MODE_XML ){
@@ -1793,11 +1793,11 @@ TRTrackerServerTorrentImpl
 							rep_peer.put( "ip", peer.getIPAsRead());
 						}
 							
-						rep_peer.put( "port", new Long( peer.getTCPPort()));
+						rep_peer.put( "port", (long) peer.getTCPPort());
 							
 						if ( crypto_level != TRTrackerServerPeer.CRYPTO_NONE ){
 								
-							rep_peer.put( "crypto_flag", new Long( peer.getCryptoLevel() == TRTrackerServerPeer.CRYPTO_REQUIRED?1:0));
+							rep_peer.put( "crypto_flag", (long) (peer.getCryptoLevel() == TRTrackerServerPeer.CRYPTO_REQUIRED ? 1 : 0));
 						}
 							
 						// System.out.println( "added queued peer " + peer.getString());
@@ -1811,11 +1811,8 @@ TRTrackerServerTorrentImpl
 						it.remove();
 					}
 				}
-				
-				for (int i=0;i<added.size();i++){
-					
-					queued_peers.add( added.get(i));
-				}
+
+				queued_peers.addAll(added);
 			}
 			
 			Map	root = new TreeMap();	// user TreeMap to pre-sort so encoding quicker
@@ -1826,25 +1823,25 @@ TRTrackerServerTorrentImpl
 			}
 			
 			if ( explicit_limited_peers != null ){
-				
-				for (int i=0;i<explicit_limited_peers.size();i++){
-					
+
+				for (TRTrackerServerSimplePeer explicit_limited_peer : explicit_limited_peers) {
+
 					num_want--;
-					
-					TRTrackerServerSimplePeer  peer = explicit_limited_peers.get(i);
-					
+
+					TRTrackerServerSimplePeer peer = explicit_limited_peer;
+
 					exportPeer(rep_peers, peer, send_peer_ids, compact_mode, crypto_level, network_position);
 				}
 			}
 			
 			if ( explicit_biased_peers != null ){
-				
-				for (int i=0;i<explicit_biased_peers.size();i++){
-					
+
+				for (TRTrackerServerSimplePeer explicit_biased_peer : explicit_biased_peers) {
+
 					num_want--;
-					
-					TRTrackerServerSimplePeer peer = explicit_biased_peers.get(i);
-					
+
+					TRTrackerServerSimplePeer peer = explicit_biased_peer;
+
 					exportPeer(rep_peers, peer, send_peer_ids, compact_mode, crypto_level, network_position);
 				}
 			}
@@ -1879,11 +1876,11 @@ TRTrackerServerTorrentImpl
 						
 						if ( compact_mode >= COMPACT_MODE_AZ ){
 							
-							rep_peer.put( "azver", new Long( 0 ));	// non-az
+							rep_peer.put( "azver", 0L);	// non-az
 							
-							rep_peer.put( "azudp", new Long( 0 ));
+							rep_peer.put( "azudp", 0L);
 							
-							rep_peer.put( "azup", new Long( 0 ));
+							rep_peer.put( "azup", 0L);
 															
 							rep_peer.put( "azbiased", "" );
 						}
@@ -1892,11 +1889,11 @@ TRTrackerServerTorrentImpl
 						rep_peer.put( "ip", ((String)explicit_peer[0]).getBytes());
 					}
 					
-					rep_peer.put( "port", new Long( ((Integer)explicit_peer[2]).intValue()));	
+					rep_peer.put( "port", (long) ((Integer) explicit_peer[2]).intValue());
 					
 					if ( crypto_level != TRTrackerServerPeer.CRYPTO_NONE ){
 						
-						rep_peer.put( "crypto_flag", new Long( 0 ));
+						rep_peer.put( "crypto_flag", 0L);
 					}
 
 					rep_peers.addFirst( rep_peer );
@@ -1939,7 +1936,7 @@ TRTrackerServerTorrentImpl
 									
 				root.put( "peers", compact_peers );
 				
-				root.put( "azcompact", new Long(1));
+				root.put( "azcompact", 1L);
 				
 			}else if ( compact_mode == COMPACT_MODE_AZ_2 ){
 					
@@ -2000,12 +1997,12 @@ TRTrackerServerTorrentImpl
 					
 					if ( az_ver != 0 ){
 						
-						peer.put( "v", new Long(az_ver));
+						peer.put( "v", (long) az_ver);
 					}
 					
 					Long up_speed = (Long)rep_peer.get( "azup" );
 					
-					if ( up_speed != null && up_speed.longValue() != 0 ){
+					if ( up_speed != null && up_speed != 0 ){
 						
 						peer.put( "s", up_speed );
 					}
@@ -2019,13 +2016,13 @@ TRTrackerServerTorrentImpl
 					
 					if ( rep_peer.containsKey("azbiased")){
 						
-						peer.put( "b", new Long(1));
+						peer.put( "b", 1L);
 					}
 				}
 									
 				root.put( "peers", compact_peers );
 				
-				root.put( "azcompact", new Long(2));
+				root.put( "azcompact", 2L);
 				
 			}else if ( compact_mode == COMPACT_MODE_XML ){
 				
@@ -2047,7 +2044,7 @@ TRTrackerServerTorrentImpl
 					
 					if ( udp_port != 0 ){
 													
-						peer.put( "udp", new Long( udp_port ));
+						peer.put( "udp", (long) udp_port);
 					}
 					
 					Long	http_port_l	= (Long)rep_peer.get( "azhttp" );
@@ -2058,7 +2055,7 @@ TRTrackerServerTorrentImpl
 						
 						if ( http_port != 0 ){
 							
-							peer.put( "http", new Long( http_port ));
+							peer.put( "http", (long) http_port);
 						}
 					}
 				}
@@ -2212,9 +2209,9 @@ TRTrackerServerTorrentImpl
 				}
 			}
 			
-			root.put( "interval", new Long( interval ));
+			root.put( "interval", interval);
 		
-			root.put( "min interval", new Long( min_interval ));
+			root.put( "min interval", min_interval);
 			
 			if ( nat_warning ){
 				
@@ -2228,13 +2225,13 @@ TRTrackerServerTorrentImpl
 			
 				// also include scrape details
 			
-			root.put( "complete", new Long( getSeedCountForScrape( requester_is_biased )));
-			root.put( "incomplete", new Long( getLeecherCount() ));
-			root.put( "downloaded", new Long(stats.getCompletedCount()));
+			root.put( "complete", (long) getSeedCountForScrape(requester_is_biased));
+			root.put( "incomplete", (long) getLeecherCount());
+			root.put( "downloaded", stats.getCompletedCount());
 			
 			if ( add_to_cache ){
 					
-				announce_cache.put( new Integer((num_peers_returned+9)/10), new announceCacheEntry( root, send_peer_ids, compact_mode ));
+				announce_cache.put((num_peers_returned + 9) / 10, new announceCacheEntry( root, send_peer_ids, compact_mode ));
 			}
 			
 			return( root );
@@ -2275,13 +2272,13 @@ TRTrackerServerTorrentImpl
 			
 			if ( compact_mode >= COMPACT_MODE_AZ ){
 				
-				rep_peer.put( "azver", new Long( peer.getAZVer()));
+				rep_peer.put( "azver", (long) peer.getAZVer());
 				
-				rep_peer.put( "azudp", new Long( peer.getUDPPort()));
+				rep_peer.put( "azudp", (long) peer.getUDPPort());
 				
 				if ( peer.isSeed()){
 					
-					rep_peer.put( "azhttp", new Long( peer.getHTTPPort()));
+					rep_peer.put( "azhttp", (long) peer.getHTTPPort());
 				}
 				
 				if ( compact_mode >= COMPACT_MODE_XML ){
@@ -2290,7 +2287,7 @@ TRTrackerServerTorrentImpl
 
 				}else{
 					
-					rep_peer.put( "azup", new Long( peer.getUpSpeed()));
+					rep_peer.put( "azup", (long) peer.getUpSpeed());
 					
 					if ( peer.isBiased()){
 						
@@ -2303,7 +2300,7 @@ TRTrackerServerTorrentImpl
 						
 						if ( peer_pos != null && network_position.getPositionType() == peer_pos.getPositionType()){
 							
-							rep_peer.put( "azrtt", new Long( (long)peer_pos.estimateRTT(network_position )));
+							rep_peer.put( "azrtt", (long) peer_pos.estimateRTT(network_position));
 						}
 					}
 				}
@@ -2313,11 +2310,11 @@ TRTrackerServerTorrentImpl
 			rep_peer.put( "ip", peer.getIPAsRead() );
 		}
 		
-		rep_peer.put( "port", new Long( peer.getTCPPort()));	
+		rep_peer.put( "port", (long) peer.getTCPPort());
 		
 		if ( crypto_level != TRTrackerServerPeer.CRYPTO_NONE ){
 			
-			rep_peer.put( "crypto_flag", new Long( peer.getCryptoLevel() == TRTrackerServerPeer.CRYPTO_REQUIRED?1:0));
+			rep_peer.put( "crypto_flag", (long) (peer.getCryptoLevel() == TRTrackerServerPeer.CRYPTO_REQUIRED ? 1 : 0));
 		}
 
 		if ( peer.isBiased()){
@@ -2370,9 +2367,9 @@ TRTrackerServerTorrentImpl
 				requester_is_biased = bp.contains( ip_address );
 			}
 			
-			last_scrape.put( "complete", new Long( getSeedCountForScrape( requester_is_biased )));
-			last_scrape.put( "incomplete", new Long( getLeecherCount()));
-			last_scrape.put( "downloaded", new Long(stats.getCompletedCount()));
+			last_scrape.put( "complete", (long) getSeedCountForScrape(requester_is_biased));
+			last_scrape.put( "incomplete", (long) getLeecherCount());
+			last_scrape.put( "downloaded", stats.getCompletedCount());
 			
 			return( last_scrape );
 			
@@ -2402,7 +2399,7 @@ TRTrackerServerTorrentImpl
 				
 				for (int i=0;i<peer_list.size();i++){
 									
-					TRTrackerServerPeerImpl	peer = (TRTrackerServerPeerImpl)peer_list.get(i);
+					TRTrackerServerPeerImpl	peer = peer_list.get(i);
 					
 					if ( peer == null ){
 						
@@ -2481,17 +2478,15 @@ TRTrackerServerTorrentImpl
 				ArrayList	new_peer_list = new ArrayList( peer_list.size() - (peer_list_hole_count/2));
 				
 				int	holes_found = 0;
-				
-				for (int i=0;i<peer_list.size();i++){
-					
-					Object	obj = peer_list.get(i);
-					
-					if ( obj == null ){
-						
+
+				for (Object obj : peer_list) {
+
+					if (obj == null) {
+
 						holes_found++;
-					}else{
-						
-						new_peer_list.add( obj );
+					} else {
+
+						new_peer_list.add(obj);
 					}
 				}
 				
@@ -2547,17 +2542,15 @@ TRTrackerServerTorrentImpl
 		if ( biased_peers != null && !requester_is_biased ){
 			
 			int	bpc = 0;
-			
-			Iterator it = biased_peers.iterator();
-			
-			while( it.hasNext()){
-				
-				TRTrackerServerPeerImpl bp = (TRTrackerServerPeerImpl)it.next();
-				
-				if ( bp.isSeed()){
-					
+
+			for (Object biased_peer : biased_peers) {
+
+				TRTrackerServerPeerImpl bp = (TRTrackerServerPeerImpl) biased_peer;
+
+				if (bp.isSeed()) {
+
 					seeds--;
-					
+
 					bpc++;
 				}
 			}
@@ -2674,7 +2667,7 @@ TRTrackerServerTorrentImpl
 					explicit_manual_biased_peers = new ArrayList();
 				}
 				
-				explicit_manual_biased_peers.add( new Object[]{ ip, bytes, new Integer( port )});
+				explicit_manual_biased_peers.add( new Object[]{ ip, bytes, port});
 				
 			}finally{
 				
@@ -2789,18 +2782,18 @@ TRTrackerServerTorrentImpl
 		throws TRTrackerServerException
 	{
 		if ( peer_listeners != null ){
-			
-			for (int i=0;i<peer_listeners.size();i++){
-				
-				try{
-					((TRTrackerServerTorrentPeerListener)peer_listeners.get(i)).eventOccurred( this, peer, event, url_parameters );
-					
-				}catch( TRTrackerServerException e ){
-					
-					throw( e );
-					
-				}catch( Throwable e ){
-					
+
+			for (Object peer_listener : peer_listeners) {
+
+				try {
+					((TRTrackerServerTorrentPeerListener) peer_listener).eventOccurred(this, peer, event, url_parameters);
+
+				} catch (TRTrackerServerException e) {
+
+					throw (e);
+
+				} catch (Throwable e) {
+
 					Debug.printStackTrace(e);
 				}
 			}
@@ -2851,10 +2844,10 @@ TRTrackerServerTorrentImpl
 	delete()
 	{
 		deleted	= true;
-		
-		for (int i=0;i<listeners.size();i++){
-			
-			((TRTrackerServerTorrentListener)listeners.get(i)).deleted(this);
+
+		for (Object listener : listeners) {
+
+			((TRTrackerServerTorrentListener) listener).deleted(this);
 		}
 	}
 	

@@ -30,17 +30,17 @@ package org.gudy.azureus2.plugins.ipfilter;
 public interface 
 IPBanned 
 {
-	 public String 
+	 String
 	 getBannedIP();
 	 
 	 	/**
 	 	 * returns the torrent name the IP was banned by the user
 	 	 * @return
 	 	 */
-	 
-	 public String
+
+        String
 	 getBannedTorrentName();
 	 
-	 public long 
+	 long
 	 getBannedTime();
 }

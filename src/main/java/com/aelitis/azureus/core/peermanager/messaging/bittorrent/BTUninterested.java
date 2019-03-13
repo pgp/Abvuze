@@ -45,9 +45,9 @@ public class BTUninterested implements BTMessage {
   
   public int getType() {  return Message.TYPE_PROTOCOL_PAYLOAD;  }
     
-  public byte getVersion() { return version; };
+  public byte getVersion() { return version; }
 
-  public String getDescription() {  return BTMessage.ID_BT_UNINTERESTED;  }
+    public String getDescription() {  return BTMessage.ID_BT_UNINTERESTED;  }
   
   public DirectByteBuffer[] getData() {  return new DirectByteBuffer[] {};  }
   

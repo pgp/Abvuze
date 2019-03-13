@@ -25,7 +25,7 @@ import com.aelitis.azureus.core.dht.speed.DHTSpeedTester;
 public interface 
 DHTListener 
 {
-	public void
+	void
 	speedTesterAvailable(
-		DHTSpeedTester		tester );
+            DHTSpeedTester tester);
 }

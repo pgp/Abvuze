@@ -21,6 +21,7 @@
 package org.gudy.azureus2.pluginsimpl.local.download;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -125,7 +126,7 @@ DownloadStubImpl
 			
 			for ( int i=0;i<files.length;i++){
 				
-				files[i] = new DownloadStubFileImpl( this, (Map)file_list.get(i));
+				files[i] = new DownloadStubFileImpl( this, file_list.get(i));
 			}
 		}
 		
@@ -153,7 +154,7 @@ DownloadStubImpl
 	public Map<String,Object>
 	exportToMap()
 	{
-		Map<String,Object>	map = new HashMap<String,Object>();
+		Map<String,Object>	map = new HashMap<>();
 		
 		map.put( "dt", date_created );
 		map.put( "hash", hash );
@@ -164,7 +165,7 @@ DownloadStubImpl
 		
 		map.put( "gm", gm_map );
 		
-		List<Map<String,Object>>	file_list = new ArrayList<Map<String,Object>>();
+		List<Map<String,Object>>	file_list = new ArrayList<>();
 		
 		map.put( "files", file_list );
 		
@@ -175,7 +176,7 @@ DownloadStubImpl
 		
 		if ( manual_tags != null ){
 		
-			List<String>	tag_list = new ArrayList<String>( manual_tags.length );
+			List<String>	tag_list = new ArrayList<>(manual_tags.length);
 			
 			for ( String s: manual_tags ){
 				if ( s != null ){
@@ -195,7 +196,7 @@ DownloadStubImpl
 			
 		if ( share_ratio >= 0 ){
 			
-			map.put( "sr", new Long( share_ratio ));
+			map.put( "sr", (long) share_ratio);
 		}
 		
 		return( map );
@@ -424,7 +425,7 @@ DownloadStubImpl
 			if ( bytes != null ){
 				
 				try{
-					String torrent_file = new String( bytes, "UTF-8" );
+					String torrent_file = new String( bytes, StandardCharsets.UTF_8);
 					
 					File file = new File( torrent_file );
 					
@@ -534,7 +535,7 @@ DownloadStubImpl
 				
 			}else{
 				
-				map.put( "rel",(String)file );
+				map.put( "rel", file);
 			}
 			
 			map.put( "len", length );

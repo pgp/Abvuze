@@ -17,6 +17,7 @@
 
 package com.aelitis.azureus.util;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.gudy.azureus2.core3.util.Base32;
@@ -85,7 +86,7 @@ public class MapUtils
 				return (String) o;
 			}
 			if (o instanceof byte[]) {
-				return new String((byte[]) o, "utf-8");
+				return new String((byte[]) o, StandardCharsets.UTF_8);
 			}
 			return def;
 		} catch (Throwable t) {
@@ -121,7 +122,7 @@ public class MapUtils
 		}else if ( obj instanceof byte[]){
 			
 			try{
-				return new String((byte[])obj, "UTF-8");
+				return new String((byte[])obj, StandardCharsets.UTF_8);
 			}catch( Throwable e ){
 				
 			}
@@ -138,7 +139,7 @@ public class MapUtils
 			if ( val == null ){
 				map.remove( key );
 			}else{
-				map.put( key, val.getBytes( "utf-8" ));
+				map.put( key, val.getBytes(StandardCharsets.UTF_8));
 			}
 		}catch( Throwable e ){
 			Debug.out(e);
@@ -202,11 +203,11 @@ public class MapUtils
 		try {
 			Object o = map.get(key);
 			if (o instanceof Boolean) {
-				return ((Boolean) o).booleanValue();
+				return (Boolean) o;
 			}
 			
 			if (o instanceof Long) {
-				return ((Long) o).longValue() == 1;
+				return (Long) o == 1;
 			}
 			
 			return def;

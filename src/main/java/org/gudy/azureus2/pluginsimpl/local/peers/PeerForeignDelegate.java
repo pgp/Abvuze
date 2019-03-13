@@ -779,12 +779,12 @@ PeerForeignDelegate
 					
 					switch( event.getType() ){
 						case PeerEvent.ET_STATE_CHANGED:{
-							l.stateChanged(self, ((Integer)data).intValue());
+							l.stateChanged(self, (Integer) data);
 							break;
 						}
 						case PeerEvent.ET_BAD_CHUNK:{
 							Integer[] d = (Integer[])data;
-							l.sentBadChunk(self, d[0].intValue(), d[1].intValue() );
+							l.sentBadChunk(self, d[0], d[1]);
 							break;
 						}
 						case PeerEvent.ET_ADD_AVAILABILITY:{
@@ -1012,25 +1012,23 @@ PeerForeignDelegate
   				
   				int		pos 	= 0;
   				boolean	found 	= false;
-  				
-  				for (int i=0;i<existing.length;i++){
-  				
-  					int	pn = existing[i];
-  					
-  					if ( found || pn != piece_number ){
-  						
-  						if ( pos == updated.length ){
-  							
-  							return;
-  						}
-  						
-  						updated[pos++] = pn;
-  						
-  					}else{
-  						
-  						found = true;
-  					}
-  				}
+
+                for (int pn : existing) {
+
+                    if (found || pn != piece_number) {
+
+                        if (pos == updated.length) {
+
+                            return;
+                        }
+
+                        updated[pos++] = pn;
+
+                    } else {
+
+                        found = true;
+                    }
+                }
   				
   				reserved_pieces = updated;
   			}
@@ -1090,9 +1088,9 @@ PeerForeignDelegate
     /**
      * Nothing to do if called
      */
-	public void clearAvailabilityAdded() {};
-	
-	public PEPeerTransport reconnect(boolean tryUDP, boolean tryIPv6){ return null; }
+	public void clearAvailabilityAdded() {}
+
+    public PEPeerTransport reconnect(boolean tryUDP, boolean tryIPv6){ return null; }
 	public boolean isSafeForReconnect() { return false; }
 	
 	public void setUploadRateLimitBytesPerSecond( int bytes ){ network_connection.setUploadLimit( bytes ); }
@@ -1149,7 +1147,7 @@ PeerForeignDelegate
 				
 				if ( disabled ){
 					
-					download_disabled_set = new HashSet<Object>();
+					download_disabled_set = new HashSet<>();
 					
 					download_disabled_set.add( key );
 					

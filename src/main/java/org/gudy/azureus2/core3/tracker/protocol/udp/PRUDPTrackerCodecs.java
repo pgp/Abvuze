@@ -99,10 +99,10 @@ PRUDPTrackerCodecs
 					
 		Map	reply_decoders = new HashMap();
 		
-		reply_decoders.put( new Integer( PRUDPPacketTracker.ACT_REPLY_CONNECT ), reply_decoder );
-		reply_decoders.put( new Integer( PRUDPPacketTracker.ACT_REPLY_ANNOUNCE ), reply_decoder );
-		reply_decoders.put( new Integer( PRUDPPacketTracker.ACT_REPLY_SCRAPE ), reply_decoder );
-		reply_decoders.put( new Integer( PRUDPPacketTracker.ACT_REPLY_ERROR ), reply_decoder );
+		reply_decoders.put(PRUDPPacketTracker.ACT_REPLY_CONNECT, reply_decoder );
+		reply_decoders.put(PRUDPPacketTracker.ACT_REPLY_ANNOUNCE, reply_decoder );
+		reply_decoders.put(PRUDPPacketTracker.ACT_REPLY_SCRAPE, reply_decoder );
+		reply_decoders.put(PRUDPPacketTracker.ACT_REPLY_ERROR, reply_decoder );
 		
 		PRUDPPacketReply.registerDecoders( reply_decoders );
 		
@@ -146,9 +146,9 @@ PRUDPTrackerCodecs
 
 		Map	request_decoders = new HashMap();
 		
-		request_decoders.put( new Integer( PRUDPPacketTracker.ACT_REQUEST_CONNECT ), request_decoder );
-		request_decoders.put( new Integer( PRUDPPacketTracker.ACT_REQUEST_ANNOUNCE ), request_decoder );
-		request_decoders.put( new Integer( PRUDPPacketTracker.ACT_REQUEST_SCRAPE ), request_decoder );
+		request_decoders.put(PRUDPPacketTracker.ACT_REQUEST_CONNECT, request_decoder );
+		request_decoders.put(PRUDPPacketTracker.ACT_REQUEST_ANNOUNCE, request_decoder );
+		request_decoders.put(PRUDPPacketTracker.ACT_REQUEST_SCRAPE, request_decoder );
 		
 		PRUDPPacketRequest.registerDecoders( request_decoders );
 

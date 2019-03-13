@@ -24,5 +24,5 @@ package com.aelitis.azureus.core.messenger.browser.listeners;
  */
 public interface MessageCompletionListener
 {
-	public void completed(boolean success, Object data);
+	void completed(boolean success, Object data);
 }

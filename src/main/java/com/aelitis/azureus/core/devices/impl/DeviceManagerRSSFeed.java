@@ -28,6 +28,7 @@ import java.net.InetSocketAddress;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -111,7 +112,7 @@ DeviceManagerRSSFeed
 		
 		OutputStream os = response.getOutputStream();
 
-		XMLEscapeWriter pw = new XMLEscapeWriter( new PrintWriter(new OutputStreamWriter( os, "UTF-8" )));
+		XMLEscapeWriter pw = new XMLEscapeWriter( new PrintWriter(new OutputStreamWriter( os, StandardCharsets.UTF_8)));
 
 		pw.setEnabled( false );
 
@@ -170,7 +171,7 @@ DeviceManagerRSSFeed
 			
 			TranscodeFileImpl[] _files = device.getFiles();
 			
-			List<TranscodeFileImpl>	files = new ArrayList<TranscodeFileImpl>( _files.length );
+			List<TranscodeFileImpl>	files = new ArrayList<>(_files.length);
 			
 			files.addAll( Arrays.asList( _files ));
 			

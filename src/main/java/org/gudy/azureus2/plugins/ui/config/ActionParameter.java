@@ -28,13 +28,13 @@ public interface
 ActionParameter
 	extends Parameter
 {
-	public static final int STYLE_BUTTON		= 1;
-	public static final int STYLE_LINK			= 2;
+	int STYLE_BUTTON		= 1;
+	int STYLE_LINK			= 2;
 	
-	public void
+	void
 	setStyle(
-		int		style );
+			int style);
 	
-	public int
+	int
 	getStyle();
 }

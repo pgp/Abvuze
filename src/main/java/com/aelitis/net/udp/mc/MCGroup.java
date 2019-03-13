@@ -24,27 +24,27 @@ import java.net.InetSocketAddress;
 public interface 
 MCGroup 
 {
-	public int
+	int
 	getControlPort();
 	
-	public void
+	void
 	sendToGroup(
-		byte[]	data );
+            byte[] data);
 	
 		/**
 		 * Sends to the group but will replace any occurrence of %AZINTERFACE% in the string with the
 		 * interface being used for the send
 		 * @param param_data
 		 */
-	
-	public void
+
+        void
 	sendToGroup(
-		String	param_data );
+                String param_data);
 	
-	public void
+	void
 	sendToMember(
-		InetSocketAddress	address,
-		byte[]				data )
+            InetSocketAddress address,
+            byte[] data)
 	
 		throws MCGroupException;
 }

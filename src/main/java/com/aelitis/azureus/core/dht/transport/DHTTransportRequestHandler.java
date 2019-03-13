@@ -29,62 +29,62 @@ import java.util.*;
 public interface 
 DHTTransportRequestHandler 
 {
-	public void
+	void
 	pingRequest(
-		DHTTransportContact contact );
+            DHTTransportContact contact);
 		
-	public void
+	void
 	keyBlockRequest(
-		DHTTransportContact contact,
-		byte[]				key_block_request,
-		byte[]				key_block_signature );
+            DHTTransportContact contact,
+            byte[] key_block_request,
+            byte[] key_block_signature);
 	
-	public DHTTransportFullStats
-	statsRequest(	
-		DHTTransportContact contact );
+	DHTTransportFullStats
+	statsRequest(
+            DHTTransportContact contact);
 	
-	public DHTTransportStoreReply
+	DHTTransportStoreReply
 	storeRequest(
-		DHTTransportContact contact, 
-		byte[][]				keys,
-		DHTTransportValue[][]	value_sets );
+            DHTTransportContact contact,
+            byte[][] keys,
+            DHTTransportValue[][] value_sets);
 	
-	public DHTTransportQueryStoreReply
+	DHTTransportQueryStoreReply
 	queryStoreRequest(
-		DHTTransportContact 	contact, 
-		int						header_len,
-		List<Object[]>			keys );
+            DHTTransportContact contact,
+            int header_len,
+            List<Object[]> keys);
 	
-	public DHTTransportContact[]
+	DHTTransportContact[]
 	findNodeRequest(
-		DHTTransportContact contact, 
-		byte[]				id );
+            DHTTransportContact contact,
+            byte[] id);
 	
-	public DHTTransportFindValueReply
+	DHTTransportFindValueReply
 	findValueRequest(
-		DHTTransportContact contact, 
-		byte[]				key,
-		int					max_values,
-		short				flags );
+            DHTTransportContact contact,
+            byte[] key,
+            int max_values,
+            short flags);
 
 		/**
 		 * Mechanism for reporting that a contact has been imported
 		 * @param contact
 		 */
 
-	public void
+        void
 	contactImported(
-		DHTTransportContact		contact,
-		boolean					is_bootstrap );
+                DHTTransportContact contact,
+                boolean is_bootstrap);
 	
-	public void
+	void
 	contactRemoved(
-		DHTTransportContact	contact );
+            DHTTransportContact contact);
 	
-	public int
+	int
 	getTransportEstimatedDHTSize();
 	
-	public void
+	void
 	setTransportEstimatedDHTSize(
-		int	size );
+            int size);
 }

@@ -26,7 +26,7 @@ import java.util.Map;
  */
 public interface PlatformMessengerListener
 {
-	public void messageSent(PlatformMessage message);
+	void messageSent(PlatformMessage message);
 
-	public void replyReceived(PlatformMessage message, String replyType, Map reply);
+	void replyReceived(PlatformMessage message, String replyType, Map reply);
 }

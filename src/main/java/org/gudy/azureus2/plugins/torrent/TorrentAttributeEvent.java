@@ -27,15 +27,15 @@ package org.gudy.azureus2.plugins.torrent;
 public interface 
 TorrentAttributeEvent
 {
-	public static final int		ET_ATTRIBUTE_VALUE_ADDED		= 1;	// data is String value
-	public static final int		ET_ATTRIBUTE_VALUE_REMOVED		= 2;	// data is String value
+	int		ET_ATTRIBUTE_VALUE_ADDED		= 1;	// data is String value
+	int		ET_ATTRIBUTE_VALUE_REMOVED		= 2;	// data is String value
 	
-	public int
+	int
 	getType();
 	
-	public TorrentAttribute
+	TorrentAttribute
 	getAttribute();
 	
-	public Object
+	Object
 	getData();
 }

@@ -25,15 +25,15 @@ public interface
 DiskManagerWriteRequest 
 	extends DiskManagerRequest	
 {
-	public int 
+	int
 	getPieceNumber();
 	 
-	public int 
+	int
 	getOffset();
 	
-	public DirectByteBuffer
+	DirectByteBuffer
 	getBuffer();
 	
-	public Object
+	Object
 	getUserData();
 }

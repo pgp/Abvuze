@@ -27,21 +27,21 @@ package com.aelitis.net.magneturi;
 public interface 
 MagnetURIHandlerProgressListener 
 {
-	public void
+	void
 	reportSize(
-		long	size );
+            long size);
 	
-	public void
+	void
 	reportActivity(
-		String	str );
+            String str);
 	
-	public void
+	void
 	reportCompleteness(
-		int		percent );
+            int percent);
 	
-	public boolean
+	boolean
 	cancelled();
 	
-	public boolean 
+	boolean
 	verbose();
 }

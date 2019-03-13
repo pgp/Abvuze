@@ -76,7 +76,7 @@ TRTrackerAnnouncerFactory
 	public interface
 	DataProvider
 	{
-		public String[]
+		String[]
 		getNetworks();
 	}
 }

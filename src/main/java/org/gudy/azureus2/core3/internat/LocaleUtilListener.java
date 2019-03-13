@@ -27,11 +27,11 @@ package org.gudy.azureus2.core3.internat;
 public interface 
 LocaleUtilListener 
 {
-	public LocaleUtilDecoderCandidate
+	LocaleUtilDecoderCandidate
 	selectDecoder(
-		LocaleUtil						locale_util,
-		Object							selection_owner,
-		LocaleUtilDecoderCandidate[]	candidates )
+            LocaleUtil locale_util,
+            Object selection_owner,
+            LocaleUtilDecoderCandidate[] candidates)
 	
 		throws LocaleUtilEncodingException;
 }

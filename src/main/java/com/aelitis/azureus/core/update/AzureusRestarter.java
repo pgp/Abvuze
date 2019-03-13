@@ -29,11 +29,11 @@ import com.aelitis.azureus.core.AzureusCoreException;
 public interface 
 AzureusRestarter 
 {
-	public void
+	void
 	restart(
-		boolean	update_only );
+            boolean update_only);
 	
-	public void
+	void
 	updateNow()
 	
 		throws AzureusCoreException;

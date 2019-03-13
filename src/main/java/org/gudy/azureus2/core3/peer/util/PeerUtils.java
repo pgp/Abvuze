@@ -378,7 +378,7 @@ public class PeerUtils {
   }
   
 
-	private static final Set<Integer>	ignore_peer_ports	= new HashSet<Integer>();
+	private static final Set<Integer>	ignore_peer_ports	= new HashSet<>();
 	
 	static{
 		COConfigurationManager.addParameterListener(
@@ -408,31 +408,30 @@ public class PeerUtils {
 			
 			String[] ports = str.split("\\;");
 			if (ports != null && ports.length > 0) {
-				for (int i = 0; i < ports.length; i++) {
-					String port = ports[i];
-					int spreadPos = port.indexOf('-');
-					if (spreadPos > 0 && spreadPos < port.length() - 1) {
-						try {
-							int iMin = Integer.parseInt(port.substring(0, spreadPos).trim());
-							int iMax = Integer.parseInt(port.substring(spreadPos + 1).trim());
-							
-							iMin = Math.max( 0, iMin );
-							iMax = Math.min(65535, iMax );
-							
-							for (int j = iMin; j <= iMax; j++) {
-								ignore_peer_ports.add(Integer.valueOf(j));
-							}
-						} catch (Throwable e) {
-							Debug.out( "Invalid ignore-port entry: " + port );
-						}
-					} else {
-						try{
-							ignore_peer_ports.add(Integer.parseInt(port.trim()));
-						} catch (Throwable e) {
-							Debug.out( "Invalid ignore-port entry: " + port );
-						}
-					}
-				}
+                for (String port : ports) {
+                    int spreadPos = port.indexOf('-');
+                    if (spreadPos > 0 && spreadPos < port.length() - 1) {
+                        try {
+                            int iMin = Integer.parseInt(port.substring(0, spreadPos).trim());
+                            int iMax = Integer.parseInt(port.substring(spreadPos + 1).trim());
+
+                            iMin = Math.max(0, iMin);
+                            iMax = Math.min(65535, iMax);
+
+                            for (int j = iMin; j <= iMax; j++) {
+                                ignore_peer_ports.add(j);
+                            }
+                        } catch (Throwable e) {
+                            Debug.out("Invalid ignore-port entry: " + port);
+                        }
+                    } else {
+                        try {
+                            ignore_peer_ports.add(Integer.parseInt(port.trim()));
+                        } catch (Throwable e) {
+                            Debug.out("Invalid ignore-port entry: " + port);
+                        }
+                    }
+                }
 			}
 		}
 	}

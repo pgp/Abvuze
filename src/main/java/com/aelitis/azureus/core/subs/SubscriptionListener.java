@@ -23,16 +23,16 @@ package com.aelitis.azureus.core.subs;
 public interface 
 SubscriptionListener 
 {
-	public static final int CR_METADATA	= 1;
-	public static final int CR_RESULTS	= 2;
+	int CR_METADATA	= 1;
+	int CR_RESULTS	= 2;
 	
-	public void
+	void
 	subscriptionChanged(
-		Subscription		subs,
-		int					reason );
+            Subscription subs,
+            int reason);
 	
-	public void
+	void
 	subscriptionDownloaded(
-		Subscription		subs,
-		boolean				auto );
+            Subscription subs,
+            boolean auto);
 }

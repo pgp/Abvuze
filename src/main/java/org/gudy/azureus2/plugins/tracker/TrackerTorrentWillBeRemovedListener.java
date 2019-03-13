@@ -29,9 +29,9 @@ package org.gudy.azureus2.plugins.tracker;
 public interface 
 TrackerTorrentWillBeRemovedListener 
 {
-	public void
+	void
 	torrentWillBeRemoved(
-		TrackerTorrent	torrent )
+            TrackerTorrent torrent)
 	
 		throws TrackerTorrentRemovalVetoException;
 }

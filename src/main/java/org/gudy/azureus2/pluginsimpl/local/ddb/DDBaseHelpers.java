@@ -24,6 +24,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 import org.gudy.azureus2.core3.util.HashWrapper;
 import org.gudy.azureus2.core3.util.SHA1Simple;
@@ -54,15 +55,10 @@ DDBaseHelpers
 			res = (byte[])obj;
 			
 		}else if ( obj instanceof String ){
-			
-			try{
-				res = ((String)obj).getBytes("UTF-8");
-			
-			}catch( UnsupportedEncodingException e ){
-				
-				throw( new DistributedDatabaseException( "charset error", e ));
-			}
-		}else if (	obj instanceof Byte ||
+
+            res = ((String)obj).getBytes(StandardCharsets.UTF_8);
+
+        }else if (	obj instanceof Byte ||
 					obj instanceof Short ||
 					obj instanceof Integer ||
 					obj instanceof Long ||
@@ -106,16 +102,10 @@ DDBaseHelpers
 			return( data );
 			
 		}else if ( target == String.class ){
-			
-			try{
-				
-				return( new String( data, "UTF-8" ));
-				
-			}catch( UnsupportedEncodingException e ){
-				
-				throw( new DistributedDatabaseException( "charset error", e ));
-			}
-		}else{
+
+            return( new String( data, StandardCharsets.UTF_8));
+
+        }else{
 			
 			try{
 				ObjectInputStream	iis = new ObjectInputStream( new ByteArrayInputStream( data ));

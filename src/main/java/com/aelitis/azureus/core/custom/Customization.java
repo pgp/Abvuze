@@ -26,38 +26,38 @@ import java.io.InputStream;
 public interface 
 Customization 
 {
-	public static final String RT_META_SEARCH_TEMPLATES	= "metasearch";	// InputStream[]
-	public static final String RT_SUBSCRIPTIONS			= "subs";		// InputStream[]
-	public static final String RT_CNETWORKS				= "cnetworks";	// InputStream[]
+	String RT_META_SEARCH_TEMPLATES	= "metasearch";	// InputStream[]
+	String RT_SUBSCRIPTIONS			= "subs";		// InputStream[]
+	String RT_CNETWORKS				= "cnetworks";	// InputStream[]
 	
-	public String
+	String
 	getName();
 	
-	public String
+	String
 	getVersion();
 	
-	public Object
+	Object
 	getProperty(
-		String		name );
+            String name);
 	
-	public boolean
+	boolean
 	isActive();
 	
-	public void
+	void
 	setActive(
-		boolean		active );
+            boolean active);
 	
-	public InputStream
+	InputStream
 	getResource(
-		String		resource_name );
+            String resource_name);
 	
-	public InputStream[]
+	InputStream[]
 	getResources(
-		String		resource_name );
+            String resource_name);
 	
-	public void
+	void
 	exportToVuzeFile(
-		File		file )
+            File file)
 	
 		throws CustomizationException;
 }

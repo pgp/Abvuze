@@ -77,7 +77,7 @@ public class IncomingSocketChannelManager
   private boolean		explicit_bind_address_set;
   
   private VirtualServerChannelSelector[] serverSelectors = new VirtualServerChannelSelector[0];
-  private int listenFailCounts[] = new int[0];
+    private int[] listenFailCounts = new int[0];
   
   final IncomingConnectionManager	incoming_manager = IncomingConnectionManager.getSingleton();
   
@@ -400,33 +400,30 @@ public class IncomingSocketChannelManager
 					
 					
 					listenFailCounts = new int[bindAddresses.length];
-					for (int i = 0; i < bindAddresses.length; i++)
-					{
-						InetAddress bindAddress = bindAddresses[i];
+                    for (InetAddress bindAddress : bindAddresses) {
+                        if (!NetworkAdmin.getSingleton().hasIPV6Potential(true) && bindAddress instanceof Inet6Address)
+                            continue;
 
-						if(!NetworkAdmin.getSingleton().hasIPV6Potential(true) && bindAddress instanceof Inet6Address)
-							continue;
-						
-						if (bindAddress != null)
-							address = new InetSocketAddress(bindAddress, tcp_listen_port);
-						else
-							address = new InetSocketAddress(tcp_listen_port);
-						
-						VirtualServerChannelSelector serverSelector;
-						
-						if(bindAddresses.length == 1)
-							serverSelector = VirtualServerChannelSelectorFactory.createBlocking(address, so_rcvbuf_size, selectListener);
-						else
-							serverSelector = VirtualServerChannelSelectorFactory.createNonBlocking(address, so_rcvbuf_size, selectListener);
-						serverSelector.start();
-						
-						tempSelectors.add(serverSelector);
-					}
+                        if (bindAddress != null)
+                            address = new InetSocketAddress(bindAddress, tcp_listen_port);
+                        else
+                            address = new InetSocketAddress(tcp_listen_port);
+
+                        VirtualServerChannelSelector serverSelector;
+
+                        if (bindAddresses.length == 1)
+                            serverSelector = VirtualServerChannelSelectorFactory.createBlocking(address, so_rcvbuf_size, selectListener);
+                        else
+                            serverSelector = VirtualServerChannelSelectorFactory.createNonBlocking(address, so_rcvbuf_size, selectListener);
+                        serverSelector.start();
+
+                        tempSelectors.add(serverSelector);
+                    }
 					
 					if(tempSelectors.size() == 0)
 						Logger.log(new LogAlert(true,LogAlert.AT_WARNING,MessageText.getString("network.bindError")));
 					
-					serverSelectors = (VirtualServerChannelSelector[])tempSelectors.toArray(new VirtualServerChannelSelector[tempSelectors.size()]);
+					serverSelectors = (VirtualServerChannelSelector[])tempSelectors.toArray(new VirtualServerChannelSelector[0]);
 				}
 			} else
 			{
@@ -456,7 +453,7 @@ public class IncomingSocketChannelManager
       if( so_sndbuf_size > 0 )  socket.setSendBufferSize( so_sndbuf_size );
       
       String ip_tos = COConfigurationManager.getStringParameter( "network.tcp.socket.IPDiffServ" );
-      if( ip_tos.length() > 0 )  socket.setTrafficClass( Integer.decode( ip_tos ).intValue() );
+      if( ip_tos.length() > 0 )  socket.setTrafficClass(Integer.decode(ip_tos));
     }
     catch( Throwable t ) {
       t.printStackTrace();
@@ -492,9 +489,8 @@ public class IncomingSocketChannelManager
   private void restart() {
   	try{
   		this_mon.enter();
-  		
-  		for(int i=0;i<serverSelectors.length;i++)
-  			serverSelectors[i].stop();
+
+        for (VirtualServerChannelSelector serverSelector : serverSelectors) serverSelector.stop();
   		serverSelectors = new VirtualServerChannelSelector[0];
   	}finally{
       		

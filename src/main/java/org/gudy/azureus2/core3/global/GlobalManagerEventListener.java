@@ -23,7 +23,7 @@ package org.gudy.azureus2.core3.global;
 public interface 
 GlobalManagerEventListener 
 {
-	public void
+	void
 	eventOccurred(
-		GlobalManagerEvent		event );
+            GlobalManagerEvent event);
 }

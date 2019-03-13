@@ -25,7 +25,7 @@ public interface
 DiskManagerFileInfoHelper
 	extends DiskManagerFileInfo
 {
-	public void
+	void
 	setDownloaded(
-		long		downloaded );
+            long downloaded);
 }

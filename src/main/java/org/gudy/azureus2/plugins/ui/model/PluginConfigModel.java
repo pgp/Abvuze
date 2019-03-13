@@ -28,9 +28,9 @@ import org.gudy.azureus2.plugins.PluginInterface;
 public interface 
 PluginConfigModel 
 {
-	public PluginInterface
+	PluginInterface
 	getPluginInterface();
 	
-	public void
+	void
 	destroy();
 }

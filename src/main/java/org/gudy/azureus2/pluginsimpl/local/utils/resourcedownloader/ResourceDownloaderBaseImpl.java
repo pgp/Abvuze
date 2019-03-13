@@ -47,7 +47,7 @@ ResourceDownloaderBaseImpl
 	private Object		result_informed_data;
 	
 	private ResourceDownloaderBaseImpl			parent;
-	private List<ResourceDownloaderBaseImpl>	children = new ArrayList<ResourceDownloaderBaseImpl>();
+	private List<ResourceDownloaderBaseImpl>	children = new ArrayList<>();
 	
 	private boolean		download_cancelled;
 	
@@ -101,7 +101,7 @@ ResourceDownloaderBaseImpl
 	
 		if ( obj instanceof Boolean ){
 			
-			return(((Boolean)obj).booleanValue());
+			return((Boolean) obj);
 		}
 		
 		return( false );
@@ -259,21 +259,19 @@ ResourceDownloaderBaseImpl
 		ResourceDownloaderBaseImpl	other )
 	{
 		Map p = other.lc_key_properties;
-		
-		Iterator it = p.keySet().iterator();
-		
-		while( it.hasNext()){
-			
-			String	key = (String)it.next();
-			
-			try{
-				setProperty( key, p.get(key));
-				
-			}catch( Throwable e ){
-			
-				Debug.printStackTrace(e);
-			}
-		}
+
+        for (Object o : p.keySet()) {
+
+            String key = (String) o;
+
+            try {
+                setProperty(key, p.get(key));
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 
 	protected void
@@ -398,13 +396,13 @@ ResourceDownloaderBaseImpl
 	informPercentDone(
 		int	percentage )
 	{
-		for (int i=0;i<listeners.size();i++){
-			
-			try{
-				((ResourceDownloaderListener)listeners.get(i)).reportPercentComplete(this,percentage);
-				
-			}catch( Throwable e ){
-				
+		for (Object listener : listeners) {
+
+			try {
+				((ResourceDownloaderListener) listener).reportPercentComplete(this, percentage);
+
+			} catch (Throwable e) {
+
 				Debug.printStackTrace(e);
 			}
 		}
@@ -414,20 +412,16 @@ ResourceDownloaderBaseImpl
 	informAmountComplete(
 		long	amount )
 	{
-		for (int i=0;i<listeners.size();i++){
-			
-			try{
-				((ResourceDownloaderListener)listeners.get(i)).reportAmountComplete(this,amount);
-				
-			}catch( NoSuchMethodError e ){
-				
+		for (Object listener : listeners) {
+
+			try {
+				((ResourceDownloaderListener) listener).reportAmountComplete(this, amount);
+
+			} catch (NoSuchMethodError | AbstractMethodError e) {
+
 				// handle addition of this new method with old impls
-			}catch( AbstractMethodError e ){
-				
-				// handle addition of this new method with old impls
-			
-			}catch( Throwable e ){
-				
+			} catch (Throwable e) {
+
 				Debug.printStackTrace(e);
 			}
 		}
@@ -444,13 +438,13 @@ ResourceDownloaderBaseImpl
 	informActivity(
 		String	activity )
 	{
-		for (int i=0;i<listeners.size();i++){
-			
-			try{
-				((ResourceDownloaderListener)listeners.get(i)).reportActivity(this,activity);
-				
-			}catch( Throwable e ){
-				
+		for (Object listener : listeners) {
+
+			try {
+				((ResourceDownloaderListener) listener).reportActivity(this, activity);
+
+			} catch (Throwable e) {
+
 				Debug.printStackTrace(e);
 			}
 		}
@@ -461,19 +455,19 @@ ResourceDownloaderBaseImpl
 		InputStream	is )
 	{
 		if ( !result_informed ){
-			
-			for (int i=0;i<listeners.size();i++){
-				
-				try{
-					if ( !((ResourceDownloaderListener)listeners.get(i)).completed(this,is)){
-						
-						return( false );
+
+			for (Object listener : listeners) {
+
+				try {
+					if (!((ResourceDownloaderListener) listener).completed(this, is)) {
+
+						return (false);
 					}
-				}catch( Throwable e ){
-					
+				} catch (Throwable e) {
+
 					Debug.printStackTrace(e);
-					
-					return( false );
+
+					return (false);
 				}
 			}
 			
@@ -494,14 +488,14 @@ ResourceDownloaderBaseImpl
 			result_informed	= true;
 		
 			result_informed_data = e;
-			
-			for (int i=0;i<listeners.size();i++){
-				
-				try{
-					((ResourceDownloaderListener)listeners.get(i)).failed(this,e);
-					
-				}catch( Throwable f ){
-					
+
+			for (Object listener : listeners) {
+
+				try {
+					((ResourceDownloaderListener) listener).failed(this, e);
+
+				} catch (Throwable f) {
+
 					Debug.printStackTrace(f);
 				}
 			}

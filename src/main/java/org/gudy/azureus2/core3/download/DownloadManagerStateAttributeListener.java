@@ -24,7 +24,7 @@ import org.gudy.azureus2.plugins.download.DownloadAttributeListener;
  *
  */
 public interface DownloadManagerStateAttributeListener {
-	public static final int	WRITTEN = DownloadAttributeListener.WRITTEN;
-	public static final int	WILL_BE_READ = DownloadAttributeListener.WILL_BE_READ;
-	public void attributeEventOccurred(DownloadManager download, String attribute, int event_type);
+	int	WRITTEN = DownloadAttributeListener.WRITTEN;
+	int	WILL_BE_READ = DownloadAttributeListener.WILL_BE_READ;
+	void attributeEventOccurred(DownloadManager download, String attribute, int event_type);
 }

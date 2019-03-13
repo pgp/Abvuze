@@ -191,7 +191,7 @@ TagPropertyTrackerTemplateHandler
 				return;
 			}
 			
-			Set<Taggable> taggables = new HashSet<Taggable>();
+			Set<Taggable> taggables = new HashSet<>();
 			
 			taggables.add( tagged );
 			

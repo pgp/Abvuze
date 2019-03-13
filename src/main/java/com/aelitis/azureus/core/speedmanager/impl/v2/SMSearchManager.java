@@ -25,13 +25,13 @@ package com.aelitis.azureus.core.speedmanager.impl.v2;
 public interface SMSearchManager
 {
 
-    public static final String UPLOAD = "Upload";
-    public static final String DOWNLOAD = "Download";
+    String UPLOAD = "Upload";
+    String DOWNLOAD = "Download";
 
-    public void setEndOfSearch(String type, int measuredRate);
+    void setEndOfSearch(String type, int measuredRate);
 
-    public void setEndOfSearch(String type, int measuredRate, int pingMapType);
+    void setEndOfSearch(String type, int measuredRate, int pingMapType);
 
-    public boolean startSearch(String type);
+    boolean startSearch(String type);
 
 }

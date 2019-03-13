@@ -24,28 +24,28 @@ import java.nio.ByteBuffer;
 public interface 
 ProtocolDecoderAdapter 
 {
-	public static final int MATCH_NONE							= 1;
-	public static final int MATCH_CRYPTO_NO_AUTO_FALLBACK		= 2;
-	public static final int MATCH_CRYPTO_AUTO_FALLBACK			= 3;
+	int MATCH_NONE							= 1;
+	int MATCH_CRYPTO_NO_AUTO_FALLBACK		= 2;
+	int MATCH_CRYPTO_AUTO_FALLBACK			= 3;
 	
-	public int
+	int
 	getMaximumPlainHeaderLength();
 	
-	public int
+	int
 	matchPlainHeader(
-		ByteBuffer			buffer );
+            ByteBuffer buffer);
 	
-	public void
+	void
 	gotSecret(
-		byte[]				session_secret );
+            byte[] session_secret);
 	
-	public void
+	void
 	decodeComplete(
-		ProtocolDecoder		decoder,
-		ByteBuffer			remaining_initial_data );
+            ProtocolDecoder decoder,
+            ByteBuffer remaining_initial_data);
 	
-	public void
+	void
 	decodeFailed(
-		ProtocolDecoder		decoder,
-		Throwable			cause );
+            ProtocolDecoder decoder,
+            Throwable cause);
 }

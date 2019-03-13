@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.*;
 import java.nio.channels.UnsupportedAddressTypeException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.gudy.azureus2.core3.logging.LogAlert;
@@ -375,8 +376,8 @@ ClientIDManagerImpl
 				if ( hash == null ){
 					hash_str = "";
 				}else{
-					hash_str = URLEncoder.encode(new String( hash, "ISO-8859-1" ), "ISO-8859-1" ).replaceAll("\\+", "%20");;
-				}
+					hash_str = URLEncoder.encode(new String( hash, StandardCharsets.ISO_8859_1), "ISO-8859-1" ).replaceAll("\\+", "%20");
+                }
 				
 				int host_pos = url_str.indexOf( target_host );
 				
@@ -464,7 +465,7 @@ ClientIDManagerImpl
 					}
 				}
 				
-				List<String>	lines = new ArrayList<String>();
+				List<String>	lines = new ArrayList<>();
 				
 				int	pos = 0;
 				
@@ -525,7 +526,7 @@ ClientIDManagerImpl
 				
 				String  hash_str	= port_hash.length==1?"":port_hash[1];
 				
-				byte[] hash = hash_str.length()==0?null:URLDecoder.decode( port_hash[1], "ISO-8859-1" ).getBytes( "ISO-8859-1" );
+				byte[] hash = hash_str.length()==0?null:URLDecoder.decode( port_hash[1], "ISO-8859-1" ).getBytes(StandardCharsets.ISO_8859_1);
 				
 				looks_like_tracker_request = hash != null;
 				
@@ -593,169 +594,154 @@ ClientIDManagerImpl
 				}
 				
 				String	header_out = "";
-				
-				for (int i=0;i<lines_out.length;i++){
-					
-					header_out += lines_out[i] + NL;
+
+				for (String s : lines_out) {
+
+					header_out += s + NL;
 				}
 				
 				header_out += NL;
-				
-				Socket	target = 
-						UrlUtils.connectSocketAndWrite(
-							is_ssl, 
-							target_host, 
-							target_port, 
-							header_out.getBytes(Constants.BYTE_ENCODING ),
-							connect_timeout,
-							read_timeout );
 
-				try{
+				try (Socket target = UrlUtils.connectSocketAndWrite(
+						is_ssl,
+						target_host,
+						target_port,
+						header_out.getBytes(Constants.BYTE_ENCODING),
+						connect_timeout,
+						read_timeout)) {
 					target.getOutputStream().flush();
-					
-					InputStream	target_is = target.getInputStream(); 
-						
-						// meh, need to support 301/302 redirects here
-					
+
+					InputStream target_is = target.getInputStream();
+
+					// meh, need to support 301/302 redirects here
+
 					String reply_header = "";
-					
+
 					byte[] temp = new byte[1];
-					
-					while( true ){
-						
-						int	len = target_is.read( temp );
-						
-						if ( len != 1 ){
-							
-							throw( new ClientIDException( "EOF while reading reply header" ));
+
+					while (true) {
+
+						int len = target_is.read(temp);
+
+						if (len != 1) {
+
+							throw (new ClientIDException("EOF while reading reply header"));
 						}
-						
-						reply_header += new String(temp,"ISO-8859-1" );
-						
-						if ( temp[0] == '\n' && reply_header.endsWith( "\r\n\r\n" )){
-							
+
+						reply_header += new String(temp, StandardCharsets.ISO_8859_1);
+
+						if (temp[0] == '\n' && reply_header.endsWith("\r\n\r\n")) {
+
 							break;
 						}
 					}
-					
-					String[] reply_lines = reply_header.trim().split( "\r\n" );
-					
+
+					String[] reply_lines = reply_header.trim().split("\r\n");
+
 					String line1 = reply_lines[0];
-					
-					line1 = line1.substring( line1.indexOf( ' ' ) + 1).trim();
-					
-					if ( line1.startsWith( "301" ) || line1.startsWith( "302" )){
-						
-						for ( int i=1;i<reply_lines.length;i++){
-							
+
+					line1 = line1.substring(line1.indexOf(' ') + 1).trim();
+
+					if (line1.startsWith("301") || line1.startsWith("302")) {
+
+						for (int i = 1; i < reply_lines.length; i++) {
+
 							String line = reply_lines[i];
-							
-							if ( line.toLowerCase( Locale.US ).startsWith( "location:" )){
-								
-								String redirect_url = line.substring( 9  ).trim();
-									
-								String lc_redirect_url = redirect_url.toLowerCase( Locale.US );
-								
-								if ( lc_redirect_url.startsWith( "http:" ) || lc_redirect_url.startsWith( "https:" )){
-									
+
+							if (line.toLowerCase(Locale.US).startsWith("location:")) {
+
+								String redirect_url = line.substring(9).trim();
+
+								String lc_redirect_url = redirect_url.toLowerCase(Locale.US);
+
+								if (lc_redirect_url.startsWith("http:") || lc_redirect_url.startsWith("https:")) {
+
 									// absolute, nothing to do
-									
-								}else{
-									
-										// relative
-									
-									String prefix = "http" + (is_ssl?"s":"") + "://" + target_host + ":" + target_port;
-									
-									if ( redirect_url.startsWith( "/" )){
-										
+
+								} else {
+
+									// relative
+
+									String prefix = "http" + (is_ssl ? "s" : "") + "://" + target_host + ":" + target_port;
+
+									if (redirect_url.startsWith("/")) {
+
 										redirect_url = prefix + redirect_url;
-										
-									}else{
-										
+
+									} else {
+
 										String get_line = lines.get(0);
-										
-										get_line = get_line.substring( get_line.indexOf( ' ' ) + 1 ).trim();
-										
-										get_line = get_line.substring( 0, get_line.indexOf( ' ' )).trim();
-										
-										int	x_pos = get_line.indexOf( '?' );
-										
-										if ( x_pos != -1 ){
-											
-											get_line = get_line.substring( 0, x_pos );
+
+										get_line = get_line.substring(get_line.indexOf(' ') + 1).trim();
+
+										get_line = get_line.substring(0, get_line.indexOf(' ')).trim();
+
+										int x_pos = get_line.indexOf('?');
+
+										if (x_pos != -1) {
+
+											get_line = get_line.substring(0, x_pos);
 										}
-										
-										x_pos = get_line.lastIndexOf( '/' );
-										
-										if ( x_pos == -1 ){
-											
+
+										x_pos = get_line.lastIndexOf('/');
+
+										if (x_pos == -1) {
+
 											redirect_url = prefix + "/" + redirect_url;
-											
-										}else{
-											
-											redirect_url = prefix + get_line.substring( 0, x_pos + 1 ) + redirect_url;
+
+										} else {
+
+											redirect_url = prefix + get_line.substring(0, x_pos + 1) + redirect_url;
 										}
 									}
 								}
-								
-								Properties	http_properties = new Properties();
-						 		
-						 		http_properties.put( ClientIDGenerator.PR_URL, new URL( redirect_url ));
-						 	
-						 		generateHTTPProperties( hash, http_properties );
-						 			
-						 		URL updated = (URL)http_properties.get( ClientIDGenerator.PR_URL );
-						 		
-						 		reply_lines[i] = "Location: " + updated.toExternalForm();
+
+								Properties http_properties = new Properties();
+
+								http_properties.put(ClientIDGenerator.PR_URL, new URL(redirect_url));
+
+								generateHTTPProperties(hash, http_properties);
+
+								URL updated = (URL) http_properties.get(ClientIDGenerator.PR_URL);
+
+								reply_lines[i] = "Location: " + updated.toExternalForm();
 							}
 						}
 					}
-					
+
 					OutputStream os = socket.getOutputStream();
-					
-					for ( String str: reply_lines ){
-						
-						os.write((str + "\r\n" ).getBytes( "ISO-8859-1" ));
+
+					for (String str : reply_lines) {
+
+						os.write((str + "\r\n").getBytes(StandardCharsets.ISO_8859_1));
 					}
-					
-					os.write( "\r\n" .getBytes( "ISO-8859-1" ));
-					
-					while( true ){
-						
-						int	len = target_is.read( buffer );
-						
-						if ( len == -1 ){
-							
+
+					os.write("\r\n".getBytes(StandardCharsets.ISO_8859_1));
+
+					while (true) {
+
+						int len = target_is.read(buffer);
+
+						if (len == -1) {
+
 							break;
 						}
-						
-						os.write( buffer, 0,len );
-						
+
+						os.write(buffer, 0, len);
+
 						written += len;
-					}	
-				}finally{
-					
-					target.close();
+					}
 				}
-			}catch( ClientIDException e ){
-						
-				report_error = e.getMessage();
-				
-			}catch( UnknownHostException e ){
+			} catch( UnknownHostException e ){
 				
 				report_error = "Unknown host '" + e.getMessage() + "'";
 				
-			}catch( IOException e ){
-				
+			} catch( ClientIDException | UnsupportedAddressTypeException | IOException e ){
+
 				report_error = e.getMessage();
-				
-				// don't log these as common
-				
-			}catch( UnsupportedAddressTypeException e ){
-				
-				report_error = e.getMessage();
-				
-			}catch( Throwable e ){
+
+			}// don't log these as common
+			catch( Throwable e ){
 				
 				Debug.printStackTrace(e);
 					
@@ -781,10 +767,10 @@ ClientIDManagerImpl
 						
 						for ( String str: reply_lines ){
 							
-							os.write((str + "\r\n" ).getBytes( "ISO-8859-1" ));
+							os.write((str + "\r\n" ).getBytes(StandardCharsets.ISO_8859_1));
 						}
 						
-						os.write( "\r\n" .getBytes( "ISO-8859-1" ));
+						os.write( "\r\n" .getBytes(StandardCharsets.ISO_8859_1));
 						
 						os.write( x );
 						

@@ -34,156 +34,156 @@ import org.gudy.azureus2.platform.PlatformManagerPingCallback;
 public interface 
 AEWin32Access 
 {
-	public static final int	HKEY_CLASSES_ROOT		= 1;
-	public static final int	HKEY_CURRENT_CONFIG		= 2;
-	public static final int	HKEY_LOCAL_MACHINE		= 3;
-	public static final int	HKEY_CURRENT_USER		= 4;
+	int	HKEY_CLASSES_ROOT		= 1;
+	int	HKEY_CURRENT_CONFIG		= 2;
+	int	HKEY_LOCAL_MACHINE		= 3;
+	int	HKEY_CURRENT_USER		= 4;
 	
-	public static final int SW_HIDE = 0;
-	public static final int SW_NORMAL = 1;
-	public static final int SW_SHOWNORMAL = 1;
-	public static final int SW_SHOWMINIMIZED = 2;
-	public static final int SW_SHOWMAXIMIZED = 3;
-	public static final int SW_MAXIMIZE = 3;
-	public static final int SW_SHOWNOACTIVATE = 4;
-	public static final int SW_SHOW = 5;
-	public static final int SW_MINIMIZE = 6;
-	public static final int SW_SHOWMINNOACTIVE = 7;
-	public static final int SW_SHOWNA = 8;
-	public static final int SW_RESTORE = 9;
-	public static final int SW_SHOWDEFAULT = 10;
-	public static final int SW_FORCEMINIMIZE = 11;
-	public static final int SW_MAX = 11;
+	int SW_HIDE = 0;
+	int SW_NORMAL = 1;
+	int SW_SHOWNORMAL = 1;
+	int SW_SHOWMINIMIZED = 2;
+	int SW_SHOWMAXIMIZED = 3;
+	int SW_MAXIMIZE = 3;
+	int SW_SHOWNOACTIVATE = 4;
+	int SW_SHOW = 5;
+	int SW_MINIMIZE = 6;
+	int SW_SHOWMINNOACTIVE = 7;
+	int SW_SHOWNA = 8;
+	int SW_RESTORE = 9;
+	int SW_SHOWDEFAULT = 10;
+	int SW_FORCEMINIMIZE = 11;
+	int SW_MAX = 11;
 
-	public boolean
+	boolean
 	isEnabled();
 	
-	public String
+	String
 	getVersion();
 	
-	public String
+	String
 	readStringValue(
-		int		type,		// HKEY type from above
-		String	subkey,
-		String	value_name )
+            int type,        // HKEY type from above
+            String subkey,
+            String value_name)
 	
 		throws AEWin32AccessException;
 	
-	public void
+	void
 	writeStringValue(
-		int		type,		// HKEY type from above
-		String	subkey,
-		String	value_name,
-		String	value_value )
+            int type,        // HKEY type from above
+            String subkey,
+            String value_name,
+            String value_value)
 	
 		throws AEWin32AccessException;
 	
-	public int
+	int
 	readWordValue(
-		int		type,		// HKEY type from above
-		String	subkey,
-		String	value_name )
+            int type,        // HKEY type from above
+            String subkey,
+            String value_name)
 	
 		throws AEWin32AccessException;
 	
-	public void
+	void
 	writeWordValue(
-		int		type,		// HKEY type from above
-		String	subkey,
-		String	value_name,
-		int		value_value )
+            int type,        // HKEY type from above
+            String subkey,
+            String value_name,
+            int value_value)
 	
 		throws AEWin32AccessException;
 	
 
-	public void
+	void
 	deleteKey(
-		int		type,
-		String	subkey )
+            int type,
+            String subkey)
 	
 		throws AEWin32AccessException;
 	
-	public void
+	void
 	deleteKey(
-		int			type,
-		String		subkey,
-		boolean		recursuve )
+            int type,
+            String subkey,
+            boolean recursuve)
 	
 		throws AEWin32AccessException;
 	
-	public void
+	void
 	deleteValue(
-		int			type,
-		String		subkey,
-		String		value_name )
+            int type,
+            String subkey,
+            String value_name)
 	
 		throws AEWin32AccessException;
 	
-	public String
+	String
 	getUserAppData()
 	
 		throws AEWin32AccessException;
 	
-	public String
+	String
 	getProgramFilesDir()
 	
 		throws AEWin32AccessException;
 	
-	public String
+	String
 	getApplicationInstallDir(
-		String	app_name )
+            String app_name)
 		
 		throws AEWin32AccessException;
 	
-	public void
+	void
 	createProcess(
-		String		command_line,
-		boolean		inherit_handles )
+            String command_line,
+            boolean inherit_handles)
 	
 		throws AEWin32AccessException;
 	
-	public void
+	void
 	moveToRecycleBin(
-		String	file_name )
+            String file_name)
 	
 		throws AEWin32AccessException;
 	
-	public void
+	void
     copyFilePermissions(
-		String	from_file_name,
-		String	to_file_name )
+            String from_file_name,
+            String to_file_name)
 	
 		throws AEWin32AccessException;
 	
-	public boolean
+	boolean
 	testNativeAvailability(
-		String	name )
+            String name)
 		
 		throws AEWin32AccessException;
 	
-	public void
+	void
 	traceRoute(
-		InetAddress							source_address,
-		InetAddress							target_address,
-		PlatformManagerPingCallback	callback )
+            InetAddress source_address,
+            InetAddress target_address,
+            PlatformManagerPingCallback callback)
 	
 		throws AEWin32AccessException;
 	
-	public void
+	void
 	ping(
-		InetAddress							source_address,
-		InetAddress							target_address,
-		PlatformManagerPingCallback	callback )
+            InetAddress source_address,
+            InetAddress target_address,
+            PlatformManagerPingCallback callback)
 	
 		throws AEWin32AccessException;
 	
-	public void
+	void
 	addListener(
-		AEWin32AccessListener	listener );
+            AEWin32AccessListener listener);
 	
-	public void
+	void
 	removeListener(
-		AEWin32AccessListener	listener );
+            AEWin32AccessListener listener);
 
 	/**
 	 * @return
@@ -209,20 +209,20 @@ AEWin32Access
 	 */
 	String getCommonAppData() throws AEWin32AccessException;
 	
-	public int
+	int
 	shellExecute(
-		String operation, 
-		String file, 
-		String parameters, 
-		String directory, 
-		int SW_const)
+            String operation,
+            String file,
+            String parameters,
+            String directory,
+            int SW_const)
 
 		throws AEWin32AccessException;
 	
-	public int
+	int
 	shellExecuteAndWait(
-		String		file,
-		String		params )
+            String file,
+            String params)
 
 		throws AEWin32AccessException;
 
@@ -231,10 +231,10 @@ AEWin32Access
 	 *
 	 * @since 4.1.0.5
 	 */
-	public Map<File, Map> 
+    Map<File, Map>
 		getAllDrives();
 
- 	public boolean isUSBDrive(Map driveInfo);
+ 	boolean isUSBDrive(Map driveInfo);
 
 	/**
 	 * @return
@@ -248,8 +248,8 @@ AEWin32Access
 	 * @since 4713
 	 * @param state
 	 */
-	
-	public void
+
+    void
 	setThreadExecutionState(
-		int		state );
+            int state);
 }

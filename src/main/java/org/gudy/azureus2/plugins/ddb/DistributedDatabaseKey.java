@@ -27,31 +27,31 @@ package org.gudy.azureus2.plugins.ddb;
 public interface 
 DistributedDatabaseKey 
 {
-	public static final int FL_ANON 	= 0x00000001;
-	public static final int FL_BRIDGED 	= 0x00000002;
+	int FL_ANON 	= 0x00000001;
+	int FL_BRIDGED 	= 0x00000002;
 	
-	public Object
+	Object
 	getKey()
 	
 		throws DistributedDatabaseException;
 	
-	public String
+	String
 	getDescription();
 	
 		/**
 		 * @since 4901
 		 * @param flags
 		 */
-	
-	public void
+
+        void
 	setFlags(
-		int	flags );
+                int flags);
 	
 		/**
 		 * @since 4901
 		 * @return
 		 */
-	
-	public int
+
+        int
 	getFlags();
 }

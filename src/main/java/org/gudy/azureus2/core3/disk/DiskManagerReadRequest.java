@@ -32,41 +32,41 @@ public interface
 DiskManagerReadRequest
 	extends PeerReadRequest, DiskManagerRequest
 {  
-	public int getPieceNumber();
+	int getPieceNumber();
  
-	public int getOffset();
+	int getOffset();
  
-	public int getLength();
+	int getLength();
 	
-	public long getTimeCreated( long now);
+	long getTimeCreated(long now);
 	
-	public void setTimeSent( long time );
+	void setTimeSent(long time);
 	
-	public long getTimeSent();
+	long getTimeSent();
 	
 		/**
 		 * If flush is set then data held in memory will be flushed to disk during the read operation
 		 * @param flush
 		 */
-	
-	public void
+
+        void
 	setFlush(
-		boolean	flush );
+                boolean flush);
 	
-	public boolean
+	boolean
 	getFlush();
 	
-	public void
+	void
 	setUseCache(
-		boolean	cache );
+            boolean cache);
 	
-	public boolean
+	boolean
 	getUseCache();
 	
-	public void
+	void
 	setLatencyTest();
 	
-	public boolean
+	boolean
 	isLatencyTest();
 	
 	 /**
@@ -74,6 +74,6 @@ DiskManagerReadRequest
 	   * 2 requests are equals if
 	   * all their bt fields (piece number, offset, length) are equal
 	   */
-	public boolean equals(Object o);
-	public int	hashCode();
+     boolean equals(Object o);
+	int	hashCode();
 }

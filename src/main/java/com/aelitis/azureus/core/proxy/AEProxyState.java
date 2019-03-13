@@ -30,25 +30,25 @@ import java.nio.channels.SocketChannel;
 public interface 
 AEProxyState 
 {
-	public String
+	String
 	getStateName();
 	
-	public boolean
+	boolean
 	read(
-		SocketChannel 		sc )
+            SocketChannel sc)
 	
 		throws IOException;
 	
 
-	public boolean
+	boolean
 	write(
-		SocketChannel 		sc )
+            SocketChannel sc)
 	
 		throws IOException;
 		
-	public boolean
+	boolean
 	connect(
-		SocketChannel 		sc )
+            SocketChannel sc)
 	
 		throws IOException;	
 }

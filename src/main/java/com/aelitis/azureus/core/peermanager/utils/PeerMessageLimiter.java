@@ -57,7 +57,7 @@ public class PeerMessageLimiter {
     
     long now = SystemTime.getCurrentTime();
     
-    data.counts.addLast( new Long( now ) );
+    data.counts.addLast(now);
     
     if( data.counts.size() > data.max_counts ) {  //we've potentially reached our count limit
       
@@ -65,7 +65,7 @@ public class PeerMessageLimiter {
       
       //prune out any expired counts
       for( Iterator it = data.counts.iterator(); it.hasNext(); ) {
-        long time = ((Long)it.next()).longValue();
+        long time = (Long) it.next();
         
         if( time < cutoff ) {  //this count is older than the limit allows
           it.remove();  //drop it

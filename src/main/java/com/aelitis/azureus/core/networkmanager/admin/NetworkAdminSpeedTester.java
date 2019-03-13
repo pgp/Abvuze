@@ -24,25 +24,25 @@ package com.aelitis.azureus.core.networkmanager.admin;
 public interface NetworkAdminSpeedTester 
 {
 
-    public static final int TEST_TYPE_UPLOAD_ONLY 			= 0;
-    public static final int TEST_TYPE_DOWNLOAD_ONLY 		= 1;
+    int TEST_TYPE_UPLOAD_ONLY 			= 0;
+    int TEST_TYPE_DOWNLOAD_ONLY 		= 1;
 
-    public static final int[] TEST_TYPES = { TEST_TYPE_UPLOAD_ONLY, TEST_TYPE_DOWNLOAD_ONLY };
+    int[] TEST_TYPES = { TEST_TYPE_UPLOAD_ONLY, TEST_TYPE_DOWNLOAD_ONLY };
     
-    public int getTestType();
+    int getTestType();
 
-    public void setMode( int mode );
+    void setMode(int mode);
 
-    public int getMode();
+    int getMode();
     
-    public void
+    void
     setUseCrypto(
-    	boolean	use_crypto );
+            boolean use_crypto);
     
-    public boolean
+    boolean
     getUseCrypto();
     
-    public void addListener( NetworkAdminSpeedTesterListener listener);
+    void addListener(NetworkAdminSpeedTesterListener listener);
     
-    public void removeListener( NetworkAdminSpeedTesterListener listener);
+    void removeListener(NetworkAdminSpeedTesterListener listener);
 }

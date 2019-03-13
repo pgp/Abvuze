@@ -113,12 +113,12 @@ AEDiagnostics
 	private static volatile boolean	startup_complete;
 	private static boolean	enable_pending_writes;
 	
-	private static final Map<String,AEDiagnosticsLogger>		loggers	= new HashMap<String, AEDiagnosticsLogger>();
+	private static final Map<String,AEDiagnosticsLogger>		loggers	= new HashMap<>();
 	
 	protected static boolean	logging_enabled;
 	protected static boolean	loggers_enabled;
 	
-	private static final List<AEDiagnosticsEvidenceGenerator>		evidence_generators	= new ArrayList<AEDiagnosticsEvidenceGenerator>();
+	private static final List<AEDiagnosticsEvidenceGenerator>		evidence_generators	= new ArrayList<>();
 		
 	private static final AESemaphore	dump_check_done_sem = new AESemaphore( "dumpcheckcomplete" );
 	
@@ -205,31 +205,29 @@ AEDiagnostics
 				if ( files != null ){
 					
 					boolean	file_found	= false;
-					
-					for (int i=0;i<files.length;i++){
-						
-						File	file = files[i];
-						
-						if ( file.isDirectory()){
-							
-							continue;
-						}
-						
-						if ( !was_tidy ){
-				
-							file_found = true;
-							
-							if ( save_logs ){
-								
-								if ( !debug_save_dir.exists()){
-									
-									debug_save_dir.mkdir();
-								}
-								
-								FileUtil.copyFile( file, new File( debug_save_dir, now + "_" + file.getName()));
-							}
-						}
-					}
+
+                    for (File file : files) {
+
+                        if (file.isDirectory()) {
+
+                            continue;
+                        }
+
+                        if (!was_tidy) {
+
+                            file_found = true;
+
+                            if (save_logs) {
+
+                                if (!debug_save_dir.exists()) {
+
+                                    debug_save_dir.mkdir();
+                                }
+
+                                FileUtil.copyFile(file, new File(debug_save_dir, now + "_" + file.getName()));
+                            }
+                        }
+                    }
 					
 					if ( file_found ){
 						
@@ -278,20 +276,18 @@ AEDiagnostics
 
 			if (files != null) {
 
-				for (int i = 0; i < files.length; i++) {
+                for (File file : files) {
 
-					File file = files[i];
+                    if (!file.isDirectory()) {
 
-					if (!file.isDirectory()) {
+                        long last_modified = file.lastModified();
 
-						long last_modified = file.lastModified();
+                        if (now - last_modified > 10 * 24 * 60 * 60 * 1000L) {
 
-						if (now - last_modified > 10 * 24 * 60 * 60 * 1000L) {
-
-							file.delete();
-						}
-					}
-				}
+                            file.delete();
+                        }
+                    }
+                }
 			}
 
 		} catch (Exception e) {
@@ -422,44 +418,44 @@ AEDiagnostics
 			PlatformManager	p_man = PlatformManagerFactory.getPlatformManager();
 			
 			if ( 	p_man.getPlatformType() == PlatformManager.PT_WINDOWS &&
-					p_man.hasCapability( PlatformManagerCapabilities.TestNativeAvailability )){	
+					p_man.hasCapability( PlatformManagerCapabilities.TestNativeAvailability )){
 
-				for (int i=0;i<bad_dlls.length;i++){
-					
-					String	dll 	= bad_dlls[i][0];
-					String	load	= bad_dlls[i][1];
-					
-					if ( load.equalsIgnoreCase( "n" )){
-						
-						continue;
-					}
-					
-					if ( !COConfigurationManager.getBooleanParameter( "platform.win32.dll_found." + dll, false )){
-								
-						try{
-							if ( p_man.testNativeAvailability( dll + ".dll" )){
-								
-								COConfigurationManager.setParameter( "platform.win32.dll_found." + dll, true );
-	
-								String	detail = MessageText.getString( "platform.win32.baddll." + dll );
-								
-								Logger.logTextResource(
-										new LogAlert(
-												LogAlert.REPEATABLE, 
-												LogAlert.AT_WARNING,
-												"platform.win32.baddll.info" ),	
-										new String[]{ dll + ".dll", detail });
-							}
-				
-						}catch( Throwable e ){
-							
-							Debug.printStackTrace(e);
-						}
-					}
-				}
+                for (String[] bad_dll : bad_dlls) {
+
+                    String dll = bad_dll[0];
+                    String load = bad_dll[1];
+
+                    if (load.equalsIgnoreCase("n")) {
+
+                        continue;
+                    }
+
+                    if (!COConfigurationManager.getBooleanParameter("platform.win32.dll_found." + dll, false)) {
+
+                        try {
+                            if (p_man.testNativeAvailability(dll + ".dll")) {
+
+                                COConfigurationManager.setParameter("platform.win32.dll_found." + dll, true);
+
+                                String detail = MessageText.getString("platform.win32.baddll." + dll);
+
+                                Logger.logTextResource(
+                                        new LogAlert(
+                                                LogAlert.REPEATABLE,
+                                                LogAlert.AT_WARNING,
+                                                "platform.win32.baddll.info"),
+                                        new String[]{dll + ".dll", detail});
+                            }
+
+                        } catch (Throwable e) {
+
+                            Debug.printStackTrace(e);
+                        }
+                    }
+                }
 			}
 			
-			List<File>	fdirs_to_check = new ArrayList<File>();
+			List<File>	fdirs_to_check = new ArrayList<>();
 			
 			fdirs_to_check.add( new File( SystemProperties.getApplicationPath()));
 			
@@ -498,19 +494,17 @@ AEDiagnostics
 						long	now = SystemTime.getCurrentTime();
 						
 						long	one_week_ago = now - 7*24*60*60*1000;
-						
-						for (int i=0;i<files.length;i++){
-							
-							File	f = files[i];
-																						
-							long	last_mod = f.lastModified();
-							
-							if ( last_mod > most_recent_time && last_mod > one_week_ago){
-								
-								most_recent_dump 	= f;
-								most_recent_time	= last_mod;
-							}
-						}
+
+                        for (File f : files) {
+
+                            long last_mod = f.lastModified();
+
+                            if (last_mod > most_recent_time && last_mod > one_week_ago) {
+
+                                most_recent_dump = f;
+                                most_recent_time = last_mod;
+                            }
+                        }
 					}
 				}
 			}
@@ -544,127 +538,121 @@ AEDiagnostics
 		System.out.println( "Analysing " + file );
 		
 		try{
-			LineNumberReader lnr = new LineNumberReader( new FileReader( file ));
-			
-			try{
-				boolean	float_excep		= false;
-				boolean	swt_crash		= false;
-				boolean	browser_crash	= false;
-				
-				String[]	bad_dlls_uc = new String[bad_dlls.length];
-				
-				for (int i=0;i<bad_dlls.length;i++){
-					
-					String	dll 	= bad_dlls[i][0];
 
-					bad_dlls_uc[i] = (dll + ".dll" ).toUpperCase();
+			try (LineNumberReader lnr = new LineNumberReader(new FileReader(file))) {
+				boolean float_excep = false;
+				boolean swt_crash = false;
+				boolean browser_crash = false;
+
+				String[] bad_dlls_uc = new String[bad_dlls.length];
+
+				for (int i = 0; i < bad_dlls.length; i++) {
+
+					String dll = bad_dlls[i][0];
+
+					bad_dlls_uc[i] = (dll + ".dll").toUpperCase();
 				}
-				
-				String	alcohol_dll = "AxShlex";
-				
-				List<String>	matches = new ArrayList<String>();
-				
-				while( true ){
-					
-					String	line = lnr.readLine();
-					
-					if ( line == null ){
-						
+
+				String alcohol_dll = "AxShlex";
+
+				List<String> matches = new ArrayList<>();
+
+				while (true) {
+
+					String line = lnr.readLine();
+
+					if (line == null) {
+
 						break;
 					}
-					
+
 					line = line.toUpperCase();
-					
-					if (line.contains("EXCEPTION_FLT")){
-						
-						float_excep	= true;
-						
-					}else{
-						
-						if ( line.startsWith( "# C" ) && line.contains( "[SWT-WIN32" )){
-							
+
+					if (line.contains("EXCEPTION_FLT")) {
+
+						float_excep = true;
+
+					} else {
+
+						if (line.startsWith("# C") && line.contains("[SWT-WIN32")) {
+
 							swt_crash = true;
-						
-						}else if ( line.contains( "CURRENT THREAD" ) && line.contains( "SWT THREAD" )){
-							
+
+						} else if (line.contains("CURRENT THREAD") && line.contains("SWT THREAD")) {
+
 							swt_crash = true;
-							
-						}else if ( 	line.startsWith( "# C" ) && 
-									( 	line.contains( "[IEFRAME" ) || 
-										line.contains( "[JSCRIPT" ) ||
-										line.contains( "[FLASH" ) ||
-										line.contains( "[MSHTML" ))){
-								
+
+						} else if (line.startsWith("# C") &&
+								(line.contains("[IEFRAME") ||
+										line.contains("[JSCRIPT") ||
+										line.contains("[FLASH") ||
+										line.contains("[MSHTML"))) {
+
 							swt_crash = browser_crash = true;
 
-						}else if ( 	( line.startsWith( "J " ) && line.contains( "SWT.BROWSER")) ||
-									( line.startsWith( "C " ) && line.contains( "[IEFRAME" )) ||
-									( line.startsWith( "C " ) && line.contains( "[MSHTML" )) ||
-									( line.startsWith( "C " ) && line.contains( "[FLASH" )) ||
-									( line.startsWith( "C " ) && line.contains( "[JSCRIPT" ))){
-							
+						} else if ((line.startsWith("J ") && line.contains("SWT.BROWSER")) ||
+								(line.startsWith("C ") && line.contains("[IEFRAME")) ||
+								(line.startsWith("C ") && line.contains("[MSHTML")) ||
+								(line.startsWith("C ") && line.contains("[FLASH")) ||
+								(line.startsWith("C ") && line.contains("[JSCRIPT"))) {
+
 							browser_crash = true;
 						}
-						
-						for (int i=0;i<bad_dlls_uc.length;i++){
-							
+
+						for (int i = 0; i < bad_dlls_uc.length; i++) {
+
 							String b_uc = bad_dlls_uc[i];
-							
-							if (line.contains(b_uc)){
-								
-								String	dll = bad_dlls[i][0];
-								
-								if ( dll.equals( alcohol_dll )){
-									
-									if ( float_excep ){
-										
-										matches.add( dll );
+
+							if (line.contains(b_uc)) {
+
+								String dll = bad_dlls[i][0];
+
+								if (dll.equals(alcohol_dll)) {
+
+									if (float_excep) {
+
+										matches.add(dll);
 									}
-									
-								}else{
-									
-									matches.add( dll );
+
+								} else {
+
+									matches.add(dll);
 								}
 							}
 						}
 					}
 				}
-				
-				for (int i=0;i<matches.size();i++){
-					
-					String	dll = matches.get(i);
-					
-					String	detail = MessageText.getString( "platform.win32.baddll." + dll );
-					
+
+				for (String dll : matches) {
+
+					String detail = MessageText.getString("platform.win32.baddll." + dll);
+
 					Logger.logTextResource(
 							new LogAlert(
-									LogAlert.REPEATABLE, 
+									LogAlert.REPEATABLE,
 									LogAlert.AT_WARNING,
-									"platform.win32.baddll.info" ),	
-							new String[]{ dll + ".dll", detail });
+									"platform.win32.baddll.info"),
+							new String[]{dll + ".dll", detail});
 				}
-				
-				if ( swt_crash && browser_crash ){
-					
-					if ( Constants.isWindows ){
-						
-						if ( !COConfigurationManager.getBooleanParameter( "browser.internal.disable", false )){
 
-							COConfigurationManager.setParameter( "browser.internal.disable", true );
-							
+				if (swt_crash && browser_crash) {
+
+					if (Constants.isWindows) {
+
+						if (!COConfigurationManager.getBooleanParameter("browser.internal.disable", false)) {
+
+							COConfigurationManager.setParameter("browser.internal.disable", true);
+
 							COConfigurationManager.save();
-							
+
 							Logger.logTextResource(
 									new LogAlert(
-											LogAlert.REPEATABLE, 
+											LogAlert.REPEATABLE,
 											LogAlert.AT_WARNING,
-											"browser.internal.auto.disabled" ));
+											"browser.internal.auto.disabled"));
 						}
 					}
 				}
-			}finally{
-				
-				lnr.close();
 			}
 		}catch( Throwable e){
 			
@@ -707,16 +695,16 @@ AEDiagnostics
 		
 		synchronized( evidence_generators ){
 
-			for (int i=0;i<evidence_generators.size();i++){
-				
-				try{
-					evidence_generators.get(i).generate( writer );
-					
-				}catch( Throwable e ){
-					
-					e.printStackTrace( _writer );
-				}
-			}
+            for (AEDiagnosticsEvidenceGenerator evidence_generator : evidence_generators) {
+
+                try {
+                    evidence_generator.generate(writer);
+
+                } catch (Throwable e) {
+
+                    e.printStackTrace(_writer);
+                }
+            }
 		}
 		
 		writer.println( "Memory" );

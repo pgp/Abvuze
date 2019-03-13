@@ -27,9 +27,9 @@ package org.gudy.azureus2.core3.ipfilter;
  */
 public interface BlockedIp {
   
-  public String getBlockedIp();
-  public long getBlockedTime();
-  public IpRange getBlockingRange();
-  public String getTorrentName();
-  public boolean isLoggable();
+  String getBlockedIp();
+  long getBlockedTime();
+  IpRange getBlockingRange();
+  String getTorrentName();
+  boolean isLoggable();
 }

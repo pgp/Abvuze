@@ -256,7 +256,7 @@ NatPMPUPnPRootDeviceImpl
 		
 			throws UPnPException
 		{
-			return( new ArrayList<URL>(0));
+			return(new ArrayList<>(0));
 		}
 		
 		public void 

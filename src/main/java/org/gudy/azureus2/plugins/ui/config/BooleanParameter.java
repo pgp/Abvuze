@@ -27,14 +27,14 @@ public interface
 BooleanParameter 
 	extends EnablerParameter
 {
-	public boolean
+	boolean
 	getValue();
 	
-	public void
+	void
 	setValue(
-		boolean	b );
+            boolean b);
 	
-	public void
+	void
 	setDefaultValue(
-		boolean		b );
+            boolean b);
 }

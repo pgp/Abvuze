@@ -107,7 +107,7 @@ TRTrackerAnnouncerImpl
 						
 						URL			old_url 	= (URL)x[0];
 						URL			new_url 	= (URL)x[1];
-						boolean		explicit	= ((Boolean)x[2]).booleanValue();
+						boolean		explicit	= (Boolean) x[2];
 						
 						listener.urlChanged( TRTrackerAnnouncerImpl.this, old_url, new_url, explicit );
 						
@@ -236,7 +236,7 @@ TRTrackerAnnouncerImpl
 					boolean	explicit )
 				{
 					listeners.dispatch(	LDT_URL_CHANGED,
-							new Object[]{old_url, new_url, Boolean.valueOf(explicit)});
+							new Object[]{old_url, new_url, explicit});
 				}
 				
 				public void
@@ -338,39 +338,37 @@ TRTrackerAnnouncerImpl
 		
 		try{
 			tracker_peer_cache_mon.enter();
-			
-			Iterator it = tracker_peer_cache.values().iterator();
-			
-			while( it.hasNext()){
-				
-				TRTrackerAnnouncerResponsePeer	peer = (TRTrackerAnnouncerResponsePeer)it.next();		
-	
+
+			for (Object o : tracker_peer_cache.values()) {
+
+				TRTrackerAnnouncerResponsePeer peer = (TRTrackerAnnouncerResponsePeer) o;
+
 				LightHashMap entry = new LightHashMap();
-				
-				entry.put( "ip", peer.getAddress().getBytes());
-				entry.put( "src", peer.getSource().getBytes());
-				entry.put( "port", new Long(peer.getPort()));
-				
-				int	udp_port = peer.getUDPPort();
-				if ( udp_port != 0 ){
-					entry.put( "udpport", new Long( udp_port));
+
+				entry.put("ip", peer.getAddress().getBytes());
+				entry.put("src", peer.getSource().getBytes());
+				entry.put("port", (long) peer.getPort());
+
+				int udp_port = peer.getUDPPort();
+				if (udp_port != 0) {
+					entry.put("udpport", (long) udp_port);
 				}
-				int	http_port = peer.getHTTPPort();
-				if ( http_port != 0 ){
-					entry.put( "httpport", new Long( http_port));
+				int http_port = peer.getHTTPPort();
+				if (http_port != 0) {
+					entry.put("httpport", (long) http_port);
 				}
-				
-				entry.put( "prot", new Long(peer.getProtocol()));
-				
-				byte	az_ver = peer.getAZVersion();
-				
-				if ( az_ver != TRTrackerAnnouncer.AZ_TRACKER_VERSION_1 ){
-					entry.put( "azver", new Long( az_ver ));
+
+				entry.put("prot", (long) peer.getProtocol());
+
+				byte az_ver = peer.getAZVersion();
+
+				if (az_ver != TRTrackerAnnouncer.AZ_TRACKER_VERSION_1) {
+					entry.put("azver", (long) az_ver);
 				}
-				
+
 				entry.compactify(0.9f);
-				
-				peers.add( entry );
+
+				peers.add(entry);
 			}
 		
 			if (Logger.isEnabled())
@@ -409,40 +407,40 @@ TRTrackerAnnouncerImpl
 			
 			try{
 				tracker_peer_cache_mon.enter();
-				
-				for (int i=0;i<peers.size();i++){
-					
-					Map	peer = (Map)peers.get(i);
-					
-					byte[]	src_bytes = (byte[])peer.get("src");
-					String	peer_source = src_bytes==null?PEPeerSource.PS_BT_TRACKER:new String(src_bytes);
-					String	peer_ip_address = new String((byte[])peer.get("ip"));
-					int		peer_tcp_port	= ((Long)peer.get("port")).intValue();
-					byte[]	peer_peer_id	= getAnonymousPeerId( peer_ip_address, peer_tcp_port );
-					Long	l_protocol		= (Long)peer.get( "prot" );
-					short	protocol		= l_protocol==null?DownloadAnnounceResultPeer.PROTOCOL_NORMAL:l_protocol.shortValue();
-					Long	l_udp_port		= (Long)peer.get("udpport");
-					int		peer_udp_port	= l_udp_port==null?0:l_udp_port.intValue();
-					Long	l_http_port		= (Long)peer.get("httpport");
-					int		peer_http_port	= l_http_port==null?0:l_http_port.intValue();
-					Long	l_az_ver		= (Long)peer.get("azver");
-					byte	az_ver			= l_az_ver==null?TRTrackerAnnouncer.AZ_TRACKER_VERSION_1:l_az_ver.byteValue();
-				
+
+				for (Object peer1 : peers) {
+
+					Map peer = (Map) peer1;
+
+					byte[] src_bytes = (byte[]) peer.get("src");
+					String peer_source = src_bytes == null ? PEPeerSource.PS_BT_TRACKER : new String(src_bytes);
+					String peer_ip_address = new String((byte[]) peer.get("ip"));
+					int peer_tcp_port = ((Long) peer.get("port")).intValue();
+					byte[] peer_peer_id = getAnonymousPeerId(peer_ip_address, peer_tcp_port);
+					Long l_protocol = (Long) peer.get("prot");
+					short protocol = l_protocol == null ? DownloadAnnounceResultPeer.PROTOCOL_NORMAL : l_protocol.shortValue();
+					Long l_udp_port = (Long) peer.get("udpport");
+					int peer_udp_port = l_udp_port == null ? 0 : l_udp_port.intValue();
+					Long l_http_port = (Long) peer.get("httpport");
+					int peer_http_port = l_http_port == null ? 0 : l_http_port.intValue();
+					Long l_az_ver = (Long) peer.get("azver");
+					byte az_ver = l_az_ver == null ? TRTrackerAnnouncer.AZ_TRACKER_VERSION_1 : l_az_ver.byteValue();
+
 					//System.out.println( "recovered " + ip_address + ":" + port );
-	
-					TRTrackerAnnouncerResponsePeerImpl	entry =
-						new TRTrackerAnnouncerResponsePeerImpl(
-							peer_source, 
-							peer_peer_id, 
-							peer_ip_address, 
-							peer_tcp_port,
-							peer_udp_port,
-							peer_http_port,
-							protocol,
-							az_ver,
-							(short)0 );
-					
-					tracker_peer_cache.put( entry.getKey(), entry );
+
+					TRTrackerAnnouncerResponsePeerImpl entry =
+							new TRTrackerAnnouncerResponsePeerImpl(
+									peer_source,
+									peer_peer_id,
+									peer_ip_address,
+									peer_tcp_port,
+									peer_udp_port,
+									peer_http_port,
+									protocol,
+									az_ver,
+									(short) 0);
+
+					tracker_peer_cache.put(entry.getKey(), entry);
 				}
 				
 				return( tracker_peer_cache.size());
@@ -474,16 +472,14 @@ TRTrackerAnnouncerImpl
 		
 		try{
 			tracker_peer_cache_mon.enter();
-			
-			for (int i=0;i<peers.length;i++){
-				
-				TRTrackerAnnouncerResponsePeerImpl	peer = peers[i];
-				
-					// remove and reinsert to maintain most recent last
-				
-				tracker_peer_cache.remove( peer.getKey());
-				
-				tracker_peer_cache.put( peer.getKey(), peer );
+
+			for (TRTrackerAnnouncerResponsePeerImpl peer : peers) {
+
+				// remove and reinsert to maintain most recent last
+
+				tracker_peer_cache.remove(peer.getKey());
+
+				tracker_peer_cache.put(peer.getKey(), peer);
 			}
 			
 			Iterator	it = tracker_peer_cache.keySet().iterator();
@@ -558,11 +554,8 @@ TRTrackerAnnouncerImpl
 				Logger.log(new LogEvent(LOGID,
 						"TRTrackerClient: merged peer sets: p1 = " + peers.size()
 								+ ", p2 = " + p2.size()));
-		
-			for (int i=0;i<p2.size();i++){
-				
-				peers.add( p2.get( i ));
-			}
+
+			peers.addAll(p2);
 		}
 		
 		res.put( "tracker_peers", peers );
@@ -625,10 +618,10 @@ TRTrackerAnnouncerImpl
 			}
 			
 			if (Logger.isEnabled()){
-				
-				for (int i=0;i<res.length;i++){
-						
-					Logger.log(new LogEvent(getTorrent(), LOGID, "CACHED PEER: " + res[i].getString()));
+
+				for (TRTrackerAnnouncerResponsePeerImpl re : res) {
+
+					Logger.log(new LogEvent(getTorrent(), LOGID, "CACHED PEER: " + re.getString()));
 				}
 			
 				Logger.log(new LogEvent(getTorrent(), LOGID,
@@ -696,54 +689,54 @@ TRTrackerAnnouncerImpl
 	public interface
 	Helper
 	{
-		public byte[]
+		byte[]
 		getPeerID();
 		
-		public String
+		String
 		getTrackerKey();
 		
-		public int
+		int
 		getUDPKey();
 		
-		public void
+		void
 		addToTrackerCache(
-			TRTrackerAnnouncerResponsePeerImpl[]		peers );
+				TRTrackerAnnouncerResponsePeerImpl[] peers);
 
-		public TRTrackerAnnouncerResponsePeer[]
+		TRTrackerAnnouncerResponsePeer[]
       	getPeersFromCache(
-      		int			num_want );
+				int num_want);
 		
-		public void 
+		void
 		setTrackerResponseCache(
-			Map map	);
+				Map map);
 		
-		public void 
+		void
 		removeFromTrackerResponseCache(
-			String ip, int tcpPort );
+				String ip, int tcpPort);
 		
-		public Map 
+		Map
 		getTrackerResponseCache();
 		
-		public void
+		void
 		informResponse(
-			TRTrackerAnnouncerHelper		helper,
-			TRTrackerAnnouncerResponse		response );
+				TRTrackerAnnouncerHelper helper,
+				TRTrackerAnnouncerResponse response);
 		
-		public void
+		void
 		informURLChange(
-			URL			old_url,
-			URL			new_url,
-			boolean		explicit );
+				URL old_url,
+				URL new_url,
+				boolean explicit);
 		
-		public void
+		void
 		informURLRefresh();
 		
-	 	public void
+	 	void
 		addListener(
-			TRTrackerAnnouncerListener	l );
+				TRTrackerAnnouncerListener l);
 			
-		public void
+		void
 		removeListener(
-			TRTrackerAnnouncerListener	l );
+				TRTrackerAnnouncerListener l);
 	}
 }

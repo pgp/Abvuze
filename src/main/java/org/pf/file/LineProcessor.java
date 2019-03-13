@@ -33,7 +33,7 @@ public interface LineProcessor
 	 * @param line The line to process (must not be null)
 	 * @param lineNo	The linen number (starting with 1)
 	 */
-	public boolean processLine( String line, int lineNo ) ;
+    boolean processLine(String line, int lineNo) ;
 
 	// -------------------------------------------------------------------------
 	

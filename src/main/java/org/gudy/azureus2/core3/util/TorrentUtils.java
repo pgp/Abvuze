@@ -29,6 +29,7 @@ package org.gudy.azureus2.core3.util;
 
 import java.io.*;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Matcher;
@@ -81,7 +82,7 @@ TorrentUtils
 							if ( name.startsWith( prefix )){
 								
 								try{
-									String tracker = new String( Base32.decode( name.substring( prefix.length())), "UTF-8" );
+									String tracker = new String( Base32.decode( name.substring( prefix.length())), StandardCharsets.UTF_8);
 
 									String str = "";
 
@@ -91,7 +92,7 @@ TorrentUtils
 										
 										for ( byte[] txt: txts ){
 											
-											str += (str.length()==0?"":", ") + new String( txt, "UTF-8" );
+											str += (str.length()==0?"":", ") + new String( txt, StandardCharsets.UTF_8);
 										}
 									}
 									
@@ -140,7 +141,7 @@ TorrentUtils
 			public Map<String,Object>
 			initialValue()
 			{
-				return( new HashMap<String,Object>());
+				return(new HashMap<>());
 			}
 		};
 		
@@ -149,8 +150,8 @@ TorrentUtils
 	
 	private static boolean bSaveTorrentBackup;
 	
-	private static final CopyOnWriteList<torrentAttributeListener>			torrent_attribute_listeners 	= new CopyOnWriteList<torrentAttributeListener>();
-	static final CopyOnWriteList<TorrentAnnounceURLChangeListener>	torrent_url_changed_listeners 	= new CopyOnWriteList<TorrentAnnounceURLChangeListener>();
+	private static final CopyOnWriteList<torrentAttributeListener>			torrent_attribute_listeners 	= new CopyOnWriteList<>();
+	static final CopyOnWriteList<TorrentAnnounceURLChangeListener>	torrent_url_changed_listeners 	= new CopyOnWriteList<>();
 	
 	private static final AsyncDispatcher	dispatcher = new AsyncDispatcher();
 	
@@ -158,7 +159,7 @@ TorrentUtils
 	private static final boolean			TRACE_DNS 			= false;
 	private static final int						DNS_HISTORY_TIMEOUT	= 4*60*60*1000;
 	
-	private static final Map<String,DNSTXTEntry>	dns_mapping = new HashMap<String, DNSTXTEntry>();
+	private static final Map<String,DNSTXTEntry>	dns_mapping = new HashMap<>();
 	private static volatile int				dns_mapping_seq_count;
 	private static final ThreadPool				dns_threads	= new ThreadPool( "DNS:lookups", 16, true );
 
@@ -204,12 +205,10 @@ TorrentUtils
 		created_torrents = COConfigurationManager.getListParameter( "my.created.torrents", new ArrayList());
 		
 		created_torrents_set	= new HashSet();
-		
-		Iterator	it = created_torrents.iterator();
-		
-		while( it.hasNext()){
-			
-			created_torrents_set.add( new HashWrapper((byte[])it.next()));
+
+		for (byte[] created_torrent : created_torrents) {
+
+			created_torrents_set.add(new HashWrapper(created_torrent));
 		}
 	}
 
@@ -627,7 +626,7 @@ TorrentUtils
 	getUniqueTrackerHosts(
 		TOTorrent	torrent )
 	{
-		Set<String>	hosts = new HashSet<String>();
+		Set<String>	hosts = new HashSet<>();
 		
 		if ( torrent != null ){
 			
@@ -687,29 +686,27 @@ TorrentUtils
 			StringBuilder sb = new StringBuilder(1024);
 			
 			boolean	announce_found = false;
-			
-			for (int i=0;i<sets.length;i++){
-											
-				TOTorrentAnnounceURLSet	set = sets[i];
-				
-				URL[]	urls = set.getAnnounceURLs();
-				
-				if ( urls.length > 0 ){
-				
-					for (int j=0;j<urls.length;j++){
-				
-						String	str = urls[j].toString().trim();
-						
-						if ( str.equals( announce_url_str )){
-							
+
+			for (TOTorrentAnnounceURLSet set : sets) {
+
+				URL[] urls = set.getAnnounceURLs();
+
+				if (urls.length > 0) {
+
+					for (URL url : urls) {
+
+						String str = url.toString().trim();
+
+						if (str.equals(announce_url_str)) {
+
 							announce_found = true;
 						}
-						
-						sb.append( str );
-						sb.append( "\r\n" );
+
+						sb.append(str);
+						sb.append("\r\n");
 					}
-					
-					sb.append( "\r\n" );
+
+					sb.append("\r\n");
 				}
 			}
 			
@@ -761,13 +758,13 @@ TorrentUtils
 	announceTextToGroups(
 		String	text )
 	{
-		List<List<String>>	groups = new ArrayList<List<String>>();
+		List<List<String>>	groups = new ArrayList<>();
 		
 		String[]	lines = text.split( "\n" );
 		
-		List<String>	current_group = new ArrayList<String>();
+		List<String>	current_group = new ArrayList<>();
 		
-		Set<String>	hits = new HashSet<String>();
+		Set<String>	hits = new HashSet<>();
 		
 		for( String line: lines ){
 			
@@ -779,7 +776,7 @@ TorrentUtils
 					
 					groups.add( current_group );
 					
-					current_group = new ArrayList<String>();
+					current_group = new ArrayList<>();
 				}
 			}else{
 				String lc_line = line.toLowerCase();
@@ -807,7 +804,7 @@ TorrentUtils
 	announceGroupsToList(
 		TOTorrent	torrent )
 	{
-		List<List<String>>	groups = new ArrayList<List<String>>();
+		List<List<String>>	groups = new ArrayList<>();
 		
 		TOTorrentAnnounceURLGroup group = torrent.getAnnounceURLGroup();
 		
@@ -815,7 +812,7 @@ TorrentUtils
 		
 		if ( sets.length == 0 ){
 		
-			List<String>	s = new ArrayList<String>();
+			List<String>	s = new ArrayList<>();
 			
 			s.add( UrlUtils.getCanonicalString( torrent.getAnnounceURL()));
 			
@@ -823,27 +820,27 @@ TorrentUtils
 			
 		}else{
 			
-			Set<String>	all_urls = new HashSet<String>();
-			
-			for (int i=0;i<sets.length;i++){
-			
-				List<String>	s = new ArrayList<String>();
-								
-				TOTorrentAnnounceURLSet	set = sets[i];
-				
-				URL[]	urls = set.getAnnounceURLs();
-				
-				for (int j=0;j<urls.length;j++){
-				
-					String u = UrlUtils.getCanonicalString( urls[j] );
-					
-					s.add( u );
-					
-					all_urls.add( u );
+			Set<String>	all_urls = new HashSet<>();
+
+			for (TOTorrentAnnounceURLSet set1 : sets) {
+
+				List<String> s = new ArrayList<>();
+
+				TOTorrentAnnounceURLSet set = set1;
+
+				URL[] urls = set.getAnnounceURLs();
+
+				for (URL url : urls) {
+
+					String u = UrlUtils.getCanonicalString(url);
+
+					s.add(u);
+
+					all_urls.add(u);
 				}
-				
-				if ( s.size() > 0 ){
-					
+
+				if (s.size() > 0) {
+
 					groups.add(s);
 				}
 			}
@@ -852,7 +849,7 @@ TorrentUtils
 			
 			if ( !all_urls.contains( a )){
 				
-				List<String>	s = new ArrayList<String>();
+				List<String>	s = new ArrayList<>();
 
 				s.add( a );
 				
@@ -875,11 +872,11 @@ TorrentUtils
 		List<List<String>>		groups,
 		TOTorrent				torrent )
 	{
-		List<TOTorrentAnnounceURLSet> sets = new ArrayList<TOTorrentAnnounceURLSet>();
+		List<TOTorrentAnnounceURLSet> sets = new ArrayList<>();
 		
 		for ( List<String> group: groups ){
 			
-			List<URL> urls = new ArrayList<URL>( group.size());
+			List<URL> urls = new ArrayList<>(group.size());
 			
 			for ( String s: group ){
 				
@@ -892,11 +889,11 @@ TorrentUtils
 			
 			if ( urls.size() > 0 ){
 			
-				sets.add( torrent.getAnnounceURLGroup().createAnnounceURLSet(urls.toArray( new URL[urls.size()])));
+				sets.add( torrent.getAnnounceURLGroup().createAnnounceURLSet(urls.toArray(new URL[0])));
 			}
 		}
 		
-		return( sets.toArray( new TOTorrentAnnounceURLSet[sets.size()]));
+		return( sets.toArray(new TOTorrentAnnounceURLSet[0]));
 	}
 	
 	public static void
@@ -914,7 +911,7 @@ TorrentUtils
 			
 			if ( groups.size() == 1 ){
 				
-				List	set = (List)groups.get(0);
+				List	set = groups.get(0);
 				
 				if ( set.size() == 1 ){
 					
@@ -931,33 +928,31 @@ TorrentUtils
 			URL	first_url		= null;
 			
 			Vector	g = new Vector();
-			
-			for (int i=0;i<groups.size();i++){
-				
-				List<String>	set = (List<String>)groups.get(i);
-				
-				URL[]	urls = new URL[set.size()];
-				
-				for (int j=0;j<set.size();j++){
-				
+
+			for (List<String> set : groups) {
+
+				URL[] urls = new URL[set.size()];
+
+				for (int j = 0; j < set.size(); j++) {
+
 					String url_str = set.get(j);
-					
-					if ( announce_url != null && url_str.equals( announce_url )){
-						
+
+					if (announce_url != null && url_str.equals(announce_url)) {
+
 						announce_url = null;
 					}
-					
-					urls[j] = new URL((String)set.get(j));
-					
-					if ( first_url == null ){
-						
+
+					urls[j] = new URL(set.get(j));
+
+					if (first_url == null) {
+
 						first_url = urls[j];
 					}
 				}
-				
-				if ( urls.length > 0 ){
-					
-					g.add( tg.createAnnounceURLSet( urls ));
+
+				if (urls.length > 0) {
+
+					g.add(tg.createAnnounceURLSet(urls));
 				}
 			}
 
@@ -1119,16 +1114,16 @@ TorrentUtils
 		String		url )
 	{
 		List	groups = announceGroupsToList( torrent );
-		
-		for (int i=0;i<groups.size();i++){
-			
-			List	set = (List)groups.get(i);
-			
-			for (int j=0;j<set.size();j++){
-		
-				if ( url.equals(set.get(j))){
-			
-					return( true );
+
+		for (Object group : groups) {
+
+			List set = (List) group;
+
+			for (Object o : set) {
+
+				if (url.equals(o)) {
+
+					return (true);
 				}
 			}
 		}
@@ -1145,7 +1140,7 @@ TorrentUtils
 			List<List<String>>	new_groups 	= announceGroupsToList( new_torrent );
 			List<List<String>> 	dest_groups = announceGroupsToList( dest_torrent );
 			
-			Set<String>	all_dest 	= new HashSet<String>();
+			Set<String>	all_dest 	= new HashSet<>();
 			
 			for ( List<String> l: dest_groups ){
 				
@@ -1192,45 +1187,45 @@ TorrentUtils
 		List 	dest_groups = announceGroupsToList( dest_torrent );
 		
 		List	groups_to_add = new ArrayList();
-		
-		for (int i=0;i<new_groups.size();i++){
-			
-			List new_set = (List)new_groups.get(i);
-			
-			boolean	match = false;
-			
-			for (int j=0;j<dest_groups.size();j++){
-				
-				List dest_set = (List)dest_groups.get(j);
-				
+
+		for (Object new_group : new_groups) {
+
+			List new_set = (List) new_group;
+
+			boolean match = false;
+
+			for (Object dest_group : dest_groups) {
+
+				List dest_set = (List) dest_group;
+
 				boolean same = new_set.size() == dest_set.size();
-				
-				if ( same ){
-					
-					for (int k=0;k<new_set.size();k++){
-						
-						String new_url = (String)new_set.get(k);
-						
-						if ( !dest_set.contains(new_url)){
-							
+
+				if (same) {
+
+					for (Object o : new_set) {
+
+						String new_url = (String) o;
+
+						if (!dest_set.contains(new_url)) {
+
 							same = false;
-							
+
 							break;
 						}
 					}
 				}
-				
-				if ( same ){
-					
+
+				if (same) {
+
 					match = true;
-					
+
 					break;
 				}
 			}
-			
-			if ( !match ){
-		
-				groups_to_add.add( new_set );
+
+			if (!match) {
+
+				groups_to_add.add(new_set);
 			}
 		}
 		
@@ -1258,7 +1253,7 @@ TorrentUtils
 		if ( merge_urls == null ){
 			return( base_urls );
 		}
-		Set<String> mergesSet = new HashSet<String>();
+		Set<String> mergesSet = new HashSet<>();
 		mergesSet.add( NO_VALID_URL_URL );	// this results in removal of this dummy url if present
 		for ( List<String> l: merge_urls ){
 			mergesSet.addAll(l);
@@ -1296,7 +1291,7 @@ TorrentUtils
 		if ( remove_urls == null ){
 			return( base_urls );
 		}
-		Set<String> removeSet = new HashSet<String>();
+		Set<String> removeSet = new HashSet<>();
 		removeSet.add( NO_VALID_URL_URL );	// this results in removal of this dummy url if present
 		for ( List<String> l: remove_urls ){
 			for ( String s: l ){
@@ -1351,7 +1346,7 @@ TorrentUtils
 			return( getClone( base_urls ) );
 		}
 
-		List<List<String>> temp = new ArrayList<List<String>>(1);
+		List<List<String>> temp = new ArrayList<>(1);
 		
 		temp.add( remove_urls );
 		
@@ -1365,9 +1360,9 @@ TorrentUtils
 		if ( lls == null ){
 			return( lls );
 		}
-		List<List<String>>	result = new ArrayList<List<String>>( lls.size());
+		List<List<String>>	result = new ArrayList<>(lls.size());
 		for ( List<String> l: lls ){
-			result.add(new ArrayList<String>( l ));
+			result.add(new ArrayList<>(l));
 		}
 		return( result );
 	}
@@ -1384,18 +1379,18 @@ TorrentUtils
 		String	new_str = new_url.toString();
 		
 		List	l = announceGroupsToList( torrent );
-		
-		for (int i=0;i<l.size();i++){
-			
-			List	set = (List)l.get(i);
-			
-			for (int j=0;j<set.size();j++){
-		
-				if (((String)set.get(j)).equals(old_str)){
-					
-					found	= true;
-					
-					set.set( j, new_str );
+
+		for (Object o : l) {
+
+			List set = (List) o;
+
+			for (int j = 0; j < set.size(); j++) {
+
+				if (set.get(j).equals(old_str)) {
+
+					found = true;
+
+					set.set(j, new_str);
 				}
 			}
 		}
@@ -1524,7 +1519,7 @@ TorrentUtils
 	public static Object
 	getTLS()
 	{
-		return( new HashMap<String,Object>(tls.get()));
+		return(new HashMap<>(tls.get()));
 	}
 	
 	public static void
@@ -1742,7 +1737,7 @@ TorrentUtils
 				
 			}else{
 				
-				m.put( TORRENT_AZ_PROP_OBTAINED_FROM, str.getBytes( "UTF-8" ));
+				m.put( TORRENT_AZ_PROP_OBTAINED_FROM, str.getBytes(StandardCharsets.UTF_8));
 			}
 			
 			fireAttributeListener( torrent, TORRENT_AZ_PROP_OBTAINED_FROM, str );
@@ -1764,7 +1759,7 @@ TorrentUtils
 		if ( from != null ){
 			
 			try{
-				return( new String( from, "UTF-8" ));
+				return( new String( from, StandardCharsets.UTF_8));
 				
 			}catch( Throwable e ){
 			
@@ -1795,7 +1790,7 @@ TorrentUtils
 	getNetworkCache(
 		TOTorrent		torrent )
 	{
-		List<String>	result = new ArrayList<String>();
+		List<String>	result = new ArrayList<>();
 		
 		Map	m = getAzureusPrivateProperties( torrent );
 			
@@ -1812,7 +1807,7 @@ TorrentUtils
 						
 					}else if ( o instanceof byte[] ){
 						
-						String s = new String((byte[])o, "UTF-8" );
+						String s = new String((byte[])o, StandardCharsets.UTF_8);
 						
 						for ( String x: AENetworkClassifier.AT_NETWORKS ){
 							
@@ -1854,7 +1849,7 @@ TorrentUtils
 	getTagCache(
 		TOTorrent		torrent )
 	{
-		List<String>	result = new ArrayList<String>();
+		List<String>	result = new ArrayList<>();
 		
 		Map	m = getAzureusPrivateProperties( torrent );
 			
@@ -1871,7 +1866,7 @@ TorrentUtils
 						
 					}else if ( o instanceof byte[] ){
 						
-						String s = new String((byte[])o, "UTF-8" );
+						String s = new String((byte[])o, StandardCharsets.UTF_8);
 						
 						result.add( s );
 					}
@@ -1910,7 +1905,7 @@ TorrentUtils
 		Map	m = getAzureusPrivateProperties( torrent );
 			
 		try{
-			m.put( TORRENT_AZ_PROP_PEER_CACHE_VALID, new Long( PC_MARKER ));
+			m.put( TORRENT_AZ_PROP_PEER_CACHE_VALID, PC_MARKER);
 						
 		}catch( Throwable e ){
 			
@@ -1954,10 +1949,10 @@ TorrentUtils
 		
 		if ( flags == null ){
 			
-			flags = new Long(0);
+			flags = 0L;
 		}		
 		
-		m.put( TORRENT_AZ_PROP_TORRENT_FLAGS, new Long(flags.intValue() | flag ));
+		m.put( TORRENT_AZ_PROP_TORRENT_FLAGS, (long) (flags.intValue() | flag));
 	}
 		
 	public static boolean
@@ -1981,7 +1976,7 @@ TorrentUtils
 	getInitialLinkage(
 		TOTorrent		torrent )
 	{
-		Map<Integer,File>	result = new HashMap<Integer, File>();
+		Map<Integer,File>	result = new HashMap<>();
 		
 		try{
 			Map	pp = torrent.getAdditionalMapProperty( TOTorrent.AZUREUS_PRIVATE_PROPERTIES );
@@ -2143,7 +2138,7 @@ TorrentUtils
 	{
 		Map	m = getAzureusProperties( torrent );
 		
-		m.put( TORRENT_AZ_PROP_DHT_BACKUP_ENABLE, new Long(enabled?1:0));
+		m.put( TORRENT_AZ_PROP_DHT_BACKUP_ENABLE, (long) (enabled ? 1 : 0));
 	}
 	
 	public static boolean
@@ -2158,7 +2153,7 @@ TorrentUtils
 		
 		if ( obj instanceof Long ){
 		
-			return( ((Long)obj).longValue() == 1 );
+			return((Long) obj == 1 );
 		}
 		
 		return( true );
@@ -2176,7 +2171,7 @@ TorrentUtils
 		
 		if ( obj instanceof Long ){
 		
-			return( ((Long)obj).longValue() == 1 );
+			return((Long) obj == 1 );
 		}
 		
 		return( false );
@@ -2189,7 +2184,7 @@ TorrentUtils
 	{
 		Map	m = getAzureusProperties( torrent );
 		
-		m.put( TORRENT_AZ_PROP_DHT_BACKUP_REQUESTED, new Long(requested?1:0));
+		m.put( TORRENT_AZ_PROP_DHT_BACKUP_REQUESTED, (long) (requested ? 1 : 0));
 	}
 		
 	
@@ -2276,7 +2271,7 @@ TorrentUtils
 	{
 		if ( skip_extensions_set == null || force ){
 			
-			Set<String>		new_skip_set	= new HashSet<String>();
+			Set<String>		new_skip_set	= new HashSet<>();
 		    
 			String	skip_list = COConfigurationManager.getStringParameter( "File.Torrent.AutoSkipExtensions" );
 			
@@ -2357,7 +2352,7 @@ TorrentUtils
 	{
 		if ( ignore_files_set == null || force ){
 			
-			Set<String>		new_ignore_set	= new HashSet<String>();
+			Set<String>		new_ignore_set	= new HashSet<>();
 		    
 			String	ignore_list = COConfigurationManager.getStringParameter( "File.Torrent.IgnoreFiles", TOTorrent.DEFAULT_IGNORE_FILES );
 			
@@ -2433,12 +2428,10 @@ TorrentUtils
 					long	now = SystemTime.getCurrentTime();
 					
 					synchronized( torrent_delegates ){
-						
-						Iterator it = torrent_delegates.keySet().iterator();
-						
-						while( it.hasNext()){
-							
-							((torrentDelegate)it.next()).discardPieces(now,false);
+
+						for (Object o : torrent_delegates.keySet()) {
+
+							((torrentDelegate) o).discardPieces(now, false);
 						}
 					}
 				}
@@ -2466,14 +2459,14 @@ TorrentUtils
 	ExtendedTorrent
 		extends TOTorrent
 	{
-		public byte[][]
+		byte[][]
 		peekPieces()
 		    		
 			throws TOTorrentException;
 		
-		public void
+		void
 		setDiscardFluff(
-			boolean	discard );
+				boolean discard);
 	}
 	
 	public static class
@@ -2537,11 +2530,11 @@ TorrentUtils
 					   			discardPieces( SystemTime.getCurrentTime(), true );
 					   		}
 				   		}
-				   		
-				   		for(Iterator it = torrentFluffKeyset.iterator();it.hasNext();){
-				   			
-				   			delegate.setAdditionalMapProperty( (String)it.next(), fluffThombstone );
-				   		}
+
+						for (Object o : torrentFluffKeyset) {
+
+							delegate.setAdditionalMapProperty((String) o, fluffThombstone);
+						}
 			   		}catch( Throwable e ){
 			   		
 			   			Debug.printStackTrace( e );
@@ -2659,27 +2652,27 @@ TorrentUtils
 	      			Iterator<URL>	it = urlg_mod_last_pre.iterator(); 			
       			
  outer:
-	      			for (int i=0;i<sets.length;i++){
-	      					
-	      				URL[]	urls = sets[i].getAnnounceURLs();
-	  
-	   					for ( int j=0;j<urls.length;j++){
-	      						
-	   						if ( !it.hasNext()){
-	   							
-	   							match = false;
-	   							
-	   							break outer;
-	   						}
-	   						
-	   						if ( it.next() != urls[j] ){
-	   							
-	   							match = false;
-	   							
-	   							break;
-	   						}
-	      				}
-	      			}
+ for (TOTorrentAnnounceURLSet set : sets) {
+
+	 URL[] urls = set.getAnnounceURLs();
+
+	 for (URL url : urls) {
+
+		 if (!it.hasNext()) {
+
+			 match = false;
+
+			 break outer;
+		 }
+
+		 if (it.next() != url) {
+
+			 match = false;
+
+			 break;
+		 }
+	 }
+ }
 	      			
 	      			if (it.hasNext()){
 	      				
@@ -2695,16 +2688,16 @@ TorrentUtils
       			}
        		}
 
-       		List<URL>		url_list = new ArrayList<URL>();
+       		List<URL>		url_list = new ArrayList<>();
        		
  			TOTorrentAnnounceURLSet[]	sets = group.getAnnounceURLSets();
- 			   		
-  			for (int i=0;i<sets.length;i++){
-  					
-  				URL[]	urls = sets[i].getAnnounceURLs();
 
-				  Collections.addAll(url_list, urls);
-  			}
+			for (TOTorrentAnnounceURLSet set : sets) {
+
+				URL[] urls = set.getAnnounceURLs();
+
+				Collections.addAll(url_list, urls);
+			}
   			
        		urlg_mod_last_post	= applyDNSMods( getAnnounceURL(), group );
        		urlg_mod_last_pre	= url_list;
@@ -2813,12 +2806,12 @@ TorrentUtils
 		{
 	   		boolean	had_pieces = delegate.getPieces() != null;
 	   		
-	   		boolean	had_fluff = true; 
-	   		
-	   		for(Iterator it = torrentFluffKeyset.iterator();it.hasNext();){
-	   			
-	   			had_fluff &= delegate.getAdditionalMapProperty( (String)it.next() ) != fluffThombstone;
-	   		}
+	   		boolean	had_fluff = true;
+
+			for (Object o1 : torrentFluffKeyset) {
+
+				had_fluff &= delegate.getAdditionalMapProperty((String) o1) != fluffThombstone;
+			}
 
 	   		if ( had_pieces ){
 	   			
@@ -2842,16 +2835,16 @@ TorrentUtils
 		   		}
 		   		
 		   		if ( do_fluff ){
-		   			
-		   			for (Iterator it = torrentFluffKeyset.iterator(); it.hasNext();){
-					
-						String fluffKey = (String) it.next();
-						
-							// only update the discarded entries as non-discarded may be out of sync
-							// with the file contents
-						
-						if ( delegate.getAdditionalMapProperty( fluffKey ) == fluffThombstone ){
-							
+
+					for (Object o : torrentFluffKeyset) {
+
+						String fluffKey = (String) o;
+
+						// only update the discarded entries as non-discarded may be out of sync
+						// with the file contents
+
+						if (delegate.getAdditionalMapProperty(fluffKey) == fluffThombstone) {
+
 							delegate.setAdditionalMapProperty(fluffKey, temp.getAdditionalMapProperty(fluffKey));
 						}
 					}
@@ -3213,11 +3206,11 @@ TorrentUtils
 		   		}
 		   		
 		   		if ( restored[1] ){
-		   			
-		   			for (Iterator it = torrentFluffKeyset.iterator(); it.hasNext();){
-		   				
-		   				delegate.setAdditionalMapProperty( (String)it.next(), fluffThombstone );
-		   			}
+
+					for (Object o : torrentFluffKeyset) {
+
+						delegate.setAdditionalMapProperty((String) o, fluffThombstone);
+					}
 		   		}
 			}finally{
 				
@@ -3246,10 +3239,10 @@ TorrentUtils
 		   		}
 		   		
 		   		if ( restored[1]){
-				
-					for (Iterator it = torrentFluffKeyset.iterator(); it.hasNext();){
-					
-						delegate.setAdditionalMapProperty((String) it.next(), fluffThombstone);
+
+					for (Object o : torrentFluffKeyset) {
+
+						delegate.setAdditionalMapProperty((String) o, fluffThombstone);
 					}
 				}
 		   		
@@ -3283,10 +3276,10 @@ TorrentUtils
 		   		}
 		   		
 		   		if ( restored[1]){
-				
-					for (Iterator it = torrentFluffKeyset.iterator(); it.hasNext();){
-					
-						delegate.setAdditionalMapProperty((String) it.next(), fluffThombstone);
+
+					for (Object o : torrentFluffKeyset) {
+
+						delegate.setAdditionalMapProperty((String) o, fluffThombstone);
 					}
 				}
 			}finally{
@@ -3563,7 +3556,7 @@ TorrentUtils
 					try{						
 						List<DownloadManager> dms = AzureusCoreFactory.getSingleton().getGlobalManager().getDownloadManagers();
 						
-						Set<HashWrapper> actual_hashes = new HashSet<HashWrapper>();
+						Set<HashWrapper> actual_hashes = new HashSet<>();
 						
 						for ( DownloadManager dm: dms ){
 							
@@ -3753,7 +3746,7 @@ TorrentUtils
 			}
 		}catch( IOException e ){
 			
-			throw((IOException)e);
+			throw e;
 			
 		}catch( Throwable e ){
 			
@@ -3767,15 +3760,14 @@ TorrentUtils
 		String			attribute,
 		Object			value )
 	{
-		Iterator it = torrent_attribute_listeners.iterator();
-		
-		while( it.hasNext()){
-			
-			try{
-				((torrentAttributeListener)it.next()).attributeSet(torrent, attribute, value);
-				
-			}catch( Throwable e ){
-				
+
+		for (torrentAttributeListener torrent_attribute_listener : torrent_attribute_listeners) {
+
+			try {
+				(torrent_attribute_listener).attributeSet(torrent, attribute, value);
+
+			} catch (Throwable e) {
+
 				Debug.printStackTrace(e);
 			}
 		}
@@ -3837,7 +3829,7 @@ TorrentUtils
 	private static void
 	checkDNSTimeouts()
 	{
-		final List<String>	hosts = new ArrayList<String>();
+		final List<String>	hosts = new ArrayList<>();
 		
 		long now = SystemTime.getMonotonousTime();
 		
@@ -3909,7 +3901,7 @@ TorrentUtils
 			String _config_key = "";
 			
 			try{
-				_config_key = "dns.txts.cache." + Base32.encode( host.getBytes( "UTF-8" ));
+				_config_key = "dns.txts.cache." + Base32.encode( host.getBytes(StandardCharsets.UTF_8));
 				
 			}catch( Throwable e ){
 				
@@ -3967,7 +3959,7 @@ TorrentUtils
 										
 										for ( String str: txts ){
 											
-											txts_cache.add( str.getBytes( "UTF-8" ));
+											txts_cache.add( str.getBytes(StandardCharsets.UTF_8));
 										}
 										
 										List old_txts_cache = COConfigurationManager.getListParameter( config_key, null );
@@ -4034,7 +4026,7 @@ TorrentUtils
 					try{					
 						if ( txts == null ){
 						
-							txts = new ArrayList<String>();
+							txts = new ArrayList<>();
 							
 							if ( txts_cache == null ){
 								
@@ -4045,7 +4037,7 @@ TorrentUtils
 								
 								for ( Object o: txts_cache ){
 									
-									txts.add( new String((byte[])o, "UTF-8" ));
+									txts.add( new String((byte[])o, StandardCharsets.UTF_8));
 								}
 								
 								if ( TRACE_DNS ){
@@ -4058,7 +4050,7 @@ TorrentUtils
 							
 							for ( String str: txts ){
 								
-								txts_cache.add( str.getBytes( "UTF-8" ));
+								txts_cache.add( str.getBytes(StandardCharsets.UTF_8));
 							}
 							
 							COConfigurationManager.setParameter( config_key, txts_cache );
@@ -4217,7 +4209,7 @@ TorrentUtils
 					
 				}else{
 				
-					List<URL>	result = new ArrayList<URL>();
+					List<URL>	result = new ArrayList<>();
 					
 					for ( DNSTXTPortInfo port: ports ){
 							
@@ -4255,7 +4247,7 @@ TorrentUtils
 	{
 		if ( DNS_HANDLING_ENABLE ){
 
-			Map<String,Object[]>	dns_maps = new HashMap<String, Object[]>();
+			Map<String,Object[]>	dns_maps = new HashMap<>();
 	
 			DNSTXTEntry announce_txt_entry = getDNSTXTEntry( announce_url );
 	
@@ -4266,13 +4258,13 @@ TorrentUtils
 			
 			TOTorrentAnnounceURLSet[] sets = group.getAnnounceURLSets();
 			
-			List<TOTorrentAnnounceURLSet>	mod_sets = new ArrayList<TOTorrentAnnounceURLSet>();
+			List<TOTorrentAnnounceURLSet>	mod_sets = new ArrayList<>();
 						
 			for ( TOTorrentAnnounceURLSet set: sets ){
 				
 				URL[] urls = set.getAnnounceURLs();
 				
-				List<URL>	mod_urls = new ArrayList<URL>();
+				List<URL>	mod_urls = new ArrayList<>();
 				
 				for ( URL url: urls ){
 					
@@ -4294,7 +4286,7 @@ TorrentUtils
 					
 					if ( mod_urls.size() > 0 ){
 						
-						mod_sets.add( group.createAnnounceURLSet( mod_urls.toArray( new URL[ mod_urls.size()])));
+						mod_sets.add( group.createAnnounceURLSet( mod_urls.toArray(new URL[0])));
 					}
 				}else{
 					
@@ -4315,7 +4307,7 @@ TorrentUtils
 					
 					if ( ports.size() > 0 ){
 					
-						List<URL>	urls = new ArrayList<URL>();
+						List<URL>	urls = new ArrayList<>();
 						
 						for ( DNSTXTPortInfo port: ports ){
 						
@@ -4337,7 +4329,7 @@ TorrentUtils
 						
 						if ( urls.size() > 0 ){
 						
-							mod_sets.add( group.createAnnounceURLSet( urls.toArray( new URL[ urls.size()])));
+							mod_sets.add( group.createAnnounceURLSet( urls.toArray(new URL[0])));
 						}
 					}
 				}
@@ -4357,17 +4349,17 @@ TorrentUtils
 	public interface
 	torrentAttributeListener
 	{
-		public void
+		void
 		attributeSet(
-			TOTorrent	torrent,
-			String		attribute,
-			Object		value );
+				TOTorrent torrent,
+				String attribute,
+				Object value);
 	}
 	
 	public interface
 	TorrentAnnounceURLChangeListener
 	{
-		public void
+		void
 		changed();
 	}
 	
@@ -4387,7 +4379,7 @@ TorrentUtils
 		{
 			delegate	= _delegate;
 			
-			sets = mod_sets.toArray( new TOTorrentAnnounceURLSet[mod_sets.size()]);
+			sets = mod_sets.toArray(new TOTorrentAnnounceURLSet[0]);
 		}
 
 		public TOTorrentAnnounceURLSet[]
@@ -4429,7 +4421,7 @@ TorrentUtils
 		private final AESemaphore				sem = new AESemaphore( "DNSTXTEntry" );
 		
 		private boolean					has_records;
-		private final List<DNSTXTPortInfo>	ports = new ArrayList<DNSTXTPortInfo>();
+		private final List<DNSTXTPortInfo>	ports = new ArrayList<>();
 		
 		private long
 		getCreateTime()

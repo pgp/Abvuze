@@ -67,9 +67,9 @@ public class UnchokerUtil {
 	      // Potentially:
 	      // System.arraycopy(values, i, values, i + 1, values.length - 2 + 1 - i);
 
-        for( int j = values.length - 2; j >= i; j-- ) {  //shift displaced values to the right
-          values[j + 1] = values[ j ];
-        }
+		  //shift displaced values to the right
+		  // @@@ REFACTORED BY IDEA
+		  if (values.length - 1 - i >= 0) System.arraycopy(values, i, values, i + 1, values.length - 1 - i);
         
         if( items.size() == values.length ) {  //throw away last item if list too large 
             items.remove( values.length - 1 );
@@ -97,7 +97,7 @@ public class UnchokerUtil {
 	  
 	  if ( peers != null ){
 		  
-		  return((PEPeerTransport)peers.get(0));
+		  return peers.get(0);
 	  }
 	  
 	  return( null );
@@ -105,46 +105,40 @@ public class UnchokerUtil {
 
   public static ArrayList<PEPeer> getNextOptimisticPeers( ArrayList<PEPeer> all_peers, boolean factor_reciprocated, boolean allow_snubbed, int num_needed ) {
     //find all potential optimistic peers
-    ArrayList<PEPeer> optimistics = new ArrayList<PEPeer>();
-    for( int i=0; i < all_peers.size(); i++ ) {
-    	PEPeer peer = all_peers.get( i );
-      
-      if( isUnchokable( peer, false ) && peer.isChokedByMe() ) {
-        optimistics.add( peer );
-      }
-    }
+    ArrayList<PEPeer> optimistics = new ArrayList<>();
+	  for (PEPeer peer : all_peers) {
+		  if (isUnchokable(peer, false) && peer.isChokedByMe()) {
+			  optimistics.add(peer);
+		  }
+	  }
     
     if( optimistics.isEmpty() && allow_snubbed ) {  //try again, allowing snubbed peers as last resort
-      for( int i=0; i < all_peers.size(); i++ ) {
-    	  PEPeer peer = all_peers.get( i );
-        
-        if( isUnchokable( peer, true ) && peer.isChokedByMe() ) {
-          optimistics.add( peer );
-        }
-      }
+		for (PEPeer peer : all_peers) {
+			if (isUnchokable(peer, true) && peer.isChokedByMe()) {
+				optimistics.add(peer);
+			}
+		}
     }
 
     if( optimistics.isEmpty() )  return null;  //no unchokable peers avail
     
     //factor in peer reciprocation ratio when picking optimistic peers
     
-    ArrayList<PEPeer>	result = new ArrayList<PEPeer>(optimistics.size());
+    ArrayList<PEPeer>	result = new ArrayList<>(optimistics.size());
     
     if ( factor_reciprocated ){
     	
-      ArrayList<PEPeerTransport> ratioed_peers = new ArrayList<PEPeerTransport>( optimistics.size() );
+      ArrayList<PEPeerTransport> ratioed_peers = new ArrayList<>(optimistics.size());
       long[] ratios = new long[ optimistics.size() ];
       Arrays.fill( ratios, Long.MIN_VALUE );
         
       //order by upload ratio
-      for( int i=0; i < optimistics.size(); i++ ) {
-    	  PEPeer peer = optimistics.get( i );
+		for (PEPeer peer : optimistics) {
+			//score of >0 means we've uploaded more, <0 means we've downloaded more
+			long score = peer.getStats().getTotalDataBytesSent() - peer.getStats().getTotalDataBytesReceived();
 
-        //score of >0 means we've uploaded more, <0 means we've downloaded more
-        long score = peer.getStats().getTotalDataBytesSent() - peer.getStats().getTotalDataBytesReceived();
-
-        UnchokerUtil.updateLargestValueFirstSort( score, ratios, peer, ratioed_peers, 0 );  //higher value = worse score
-      }
+			UnchokerUtil.updateLargestValueFirstSort(score, ratios, peer, ratioed_peers, 0);  //higher value = worse score
+		}
       
 	  for (int i=0;i<num_needed && ratioed_peers.size() > 0;i++ ){
 
@@ -183,24 +177,22 @@ public class UnchokerUtil {
   public static void performChokes( ArrayList<PEPeer> peers_to_choke, ArrayList<PEPeer> peers_to_unchoke ) {
   	//do chokes
   	if( peers_to_choke != null ) {
-  		for( int i=0; i < peers_to_choke.size(); i++ ) {
-  			final PEPeerTransport peer = (PEPeerTransport)peers_to_choke.get( i );
-			
-  			if( !peer.isChokedByMe() ) {
-  				peer.sendChoke(); 
-  			}
-  		}
+		for (PEPeer pePeer : peers_to_choke) {
+			final PEPeerTransport peer = (PEPeerTransport) pePeer;
+
+			if (!peer.isChokedByMe()) {
+				peer.sendChoke();
+			}
+		}
   	}
 		
 		//do unchokes
   	if( peers_to_unchoke != null ) {
-  		for( int i=0; i < peers_to_unchoke.size(); i++ ) {
-  			final PEPeer peer = peers_to_unchoke.get( i );
-			
-  			if( peer.isChokedByMe() ) {   //TODO add UnchokerUtil.isUnchokable() test here to be safe?
-  				peer.sendUnChoke();
-  			}
-  		}  	
+		for (final PEPeer peer : peers_to_unchoke) {
+			if (peer.isChokedByMe()) {   //TODO add UnchokerUtil.isUnchokable() test here to be safe?
+				peer.sendUnChoke();
+			}
+		}
   	}
   }
   

@@ -292,7 +292,7 @@ public class StringPattern implements Serializable
 				return true ;
 		}
 	
-		return 	( this.getPattern().indexOf( MULTI_WILDCARD ) >= 0 ) ||
+		return 	(this.getPattern().contains(MULTI_WILDCARD)) ||
 						( this.getPattern().indexOf( SINGLECHAR_WILDCARD ) >= 0 ) ;		
 	} // hasWildcard()
 
@@ -312,7 +312,7 @@ public class StringPattern implements Serializable
 		}
 		else
 		{
-			this.digitWildcard( new Character( digitWildcard ) ) ;
+			this.digitWildcard(digitWildcard) ;
 		}
 	} // setDigitWildcardChar()
 
@@ -331,7 +331,7 @@ public class StringPattern implements Serializable
 	protected char digitWildcardChar()
 	{
 		if ( this.hasDigitWildcard() )
-			return this.digitWildcard().charValue() ;
+			return this.digitWildcard();
 		else
 			return '\0' ;
 	} // digitWildcardChar()

@@ -22,12 +22,12 @@ package com.aelitis.azureus.core;
 public interface 
 AzureusCoreOperation 
 {
-	public static final int	OP_FILE_MOVE		= 2;
-	public static final int	OP_PROGRESS			= 3;
+	int	OP_FILE_MOVE		= 2;
+	int	OP_PROGRESS			= 3;
 	
-	public int
+	int
 	getOperationType();
 	
-	public AzureusCoreOperationTask
+	AzureusCoreOperationTask
 	getTask();
 }

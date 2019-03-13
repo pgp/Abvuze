@@ -30,13 +30,13 @@ import java.io.IOException;
 public interface 
 PRUDPPacketRequestDecoder 
 {
-	public PRUDPPacketRequest
+	PRUDPPacketRequest
 	decode(
-		PRUDPPacketHandler	handler,
-		DataInputStream		is,
-		long				connection_id,
-		int					action,
-		int					transaction_id )
+            PRUDPPacketHandler handler,
+            DataInputStream is,
+            long connection_id,
+            int action,
+            int transaction_id)
 
 		throws IOException;
 }

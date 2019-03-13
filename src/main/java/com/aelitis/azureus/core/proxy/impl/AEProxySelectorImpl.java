@@ -49,7 +49,7 @@ AEProxySelectorImpl
 
 	private static final AEProxySelectorImpl		singleton = new AEProxySelectorImpl();
 	
-	private static final List<Proxy>		no_proxy_list = Arrays.asList( new Proxy[]{ Proxy.NO_PROXY });
+	private static final List<Proxy>		no_proxy_list = Arrays.asList(Proxy.NO_PROXY);
 
 	private static final ThreadLocal<Integer>		tls	=
 		new ThreadLocal<Integer>()
@@ -70,9 +70,9 @@ AEProxySelectorImpl
 	private final ProxySelector			existing_selector;
 
 	private volatile ActiveProxy		active_proxy;			
-	private volatile List<String>		alt_dns_servers	= new ArrayList<String>();
+	private volatile List<String>		alt_dns_servers	= new ArrayList<>();
 	
-	private final CopyOnWriteMap<String,List<Proxy>>	explicit_proxy_map = new CopyOnWriteMap<String, List<Proxy>>();
+	private final CopyOnWriteMap<String,List<Proxy>>	explicit_proxy_map = new CopyOnWriteMap<>();
 	
 	private
 	AEProxySelectorImpl()
@@ -109,7 +109,7 @@ AEProxySelectorImpl
 							}
 					    }
 
-					    List<String>	new_servers = new ArrayList<String>();
+					    List<String>	new_servers = new ArrayList<>();
 
 					    if ( COConfigurationManager.getBooleanParameter( "DNS Alt Servers SOCKS Enable" )){
 					    
@@ -201,8 +201,8 @@ AEProxySelectorImpl
 								// decouple SWT stuff from core
 							
 							Class.forName( "com.aelitis.azureus.core.proxy.impl.swt.AEProxySelectorSWTImpl").getConstructor(
-								new Class[]{ AzureusCore.class, AEProxySelectorImpl.class }).newInstance( 
-										new Object[]{ core,AEProxySelectorImpl.this }); 
+								new Class[]{ AzureusCore.class, AEProxySelectorImpl.class }).newInstance(
+									core,AEProxySelectorImpl.this);
 						
 							//new AEProxySelectorSWTImpl( core, AEProxySelectorImpl.this );
 							
@@ -230,7 +230,7 @@ AEProxySelectorImpl
 		InetSocketAddress		address,
 		Proxy					proxy )
 	{
-		List<Proxy> p = new ArrayList<Proxy>();
+		List<Proxy> p = new ArrayList<>();
 		
 		p.add( proxy );
 		
@@ -330,7 +330,7 @@ AEProxySelectorImpl
 				
 				if ( host.endsWith( ".i2p" ) || host.endsWith( ".onion" )){
 
-					List<Proxy> trimmed = new ArrayList<Proxy>( result.size());
+					List<Proxy> trimmed = new ArrayList<>(result.size());
 					
 					for ( Proxy p: result ){
 						
@@ -602,12 +602,12 @@ AEProxySelectorImpl
 		
 		private final InetSocketAddress		address;
 		
-		private volatile List<MyProxy>		proxy_list_cow 	= new ArrayList<MyProxy>();
+		private volatile List<MyProxy>		proxy_list_cow 	= new ArrayList<>();
 
 		private Boolean				alt_dns_enable;
 		
 		private List<String>		alt_dns_to_try;
-		private final Map<String,Long>	alt_dns_tried		= new HashMap<String,Long>();
+		private final Map<String,Long>	alt_dns_tried		= new HashMap<>();
 		
 		private long				default_dns_tried_time	= -1;
 		
@@ -646,7 +646,7 @@ AEProxySelectorImpl
 			sb.append("Total connections: ").append(connection_count).append(NL);
 			sb.append("Total failures: ").append(fail_count).append(NL);
 			
-			List<MyProxy> proxies = new ArrayList<MyProxy>( proxy_list_cow );
+			List<MyProxy> proxies = new ArrayList<>(proxy_list_cow);
 			
 			sb.append( NL );
 			
@@ -754,9 +754,9 @@ AEProxySelectorImpl
 				
 				MyProxy	matching_proxy = null;
 				
-				List<MyProxy>	new_list = new ArrayList<MyProxy>();
+				List<MyProxy>	new_list = new ArrayList<>();
 				
-				Set<InetAddress>	existing_addresses = new HashSet<InetAddress>();
+				Set<InetAddress>	existing_addresses = new HashSet<>();
 				
 					// stick the failed proxy at the end of the list
 				

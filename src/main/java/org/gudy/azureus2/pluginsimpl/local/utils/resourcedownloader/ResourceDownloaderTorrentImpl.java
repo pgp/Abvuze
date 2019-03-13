@@ -150,17 +150,17 @@ ResourceDownloaderTorrentImpl
 				ResourceDownloader	x = delegate.getClone( this );
 			
 				addReportListener( x );
-			
+
 				InputStream	is = x.download();
-				
+
 				try{
 					torrent_holder[0] = TOTorrentFactory.deserialiseFromBEncodedInputStream( is );
-					
+
 				}finally{
-					
+
 					try{
 						is.close();
-						
+
 					}catch( IOException e ){
 					}
 				}

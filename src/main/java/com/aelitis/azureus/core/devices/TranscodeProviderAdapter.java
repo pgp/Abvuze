@@ -23,22 +23,22 @@ package com.aelitis.azureus.core.devices;
 public interface 
 TranscodeProviderAdapter 
 {
-	public void
+	void
 	updateProgress(
-		int						percent,
-		int						eta_secs,
-		int						new_width,
-		int						new_height );
+            int percent,
+            int eta_secs,
+            int new_width,
+            int new_height);
 	
-	public void
+	void
 	streamStats(
-		long					connect_rate,
-		long					write_speed );
+            long connect_rate,
+            long write_speed);
 	
-	public void
+	void
 	failed(
-		TranscodeException		error );
+            TranscodeException error);
 	
-	public void
+	void
 	complete();
 }

@@ -29,14 +29,14 @@ import java.util.Properties;
 public interface 
 ClientIDGenerator 
 {
-	public static final String PR_URL			= "URL";			// in/out, the target URL
-	public static final String PR_PROXY			= "Proxy";			// if we're using a Proxy
-	public static final String PR_RAW_REQUEST	= "Raw-Request";	// in, Boolean
-	public static final String PR_USER_AGENT	= "User-Agent";		// out
-	public static final String PR_SNI_HACK		= "SNI-Hack";		// in, Boolean
+	String PR_URL			= "URL";			// in/out, the target URL
+	String PR_PROXY			= "Proxy";			// if we're using a Proxy
+	String PR_RAW_REQUEST	= "Raw-Request";	// in, Boolean
+	String PR_USER_AGENT	= "User-Agent";		// out
+	String PR_SNI_HACK		= "SNI-Hack";		// in, Boolean
 	
-	public static final String PR_CLIENT_NAME		= "Client-Name";		// out, String
-	public static final String PR_MESSAGING_MODE 	= "Messaging-Mode";		// out, Integer
+	String PR_CLIENT_NAME		= "Client-Name";		// out, String
+	String PR_MESSAGING_MODE 	= "Messaging-Mode";		// out, Integer
 	
 		/**
 		 * generate a peer id - must be exactly 20 bytes
@@ -44,11 +44,11 @@ ClientIDGenerator
 		 * @param for_tracker	generator to give to tracker or for peer-peer comms
 		 * @return
 		 */
-	
-	public byte[]
+
+        byte[]
 	generatePeerID(
-		byte[]		hash,
-		boolean		for_tracker )
+                byte[] hash,
+                boolean for_tracker)
 	
 		throws ClientIDException;
 	
@@ -60,11 +60,11 @@ ClientIDGenerator
 		 * @param torrent
 		 * @param properties
 		 */
-	
-	public void
+
+        void
 	generateHTTPProperties(
-		byte[]		hash,
-		Properties	properties )
+                byte[] hash,
+                Properties properties)
 	
 		throws ClientIDException;
 	
@@ -75,16 +75,16 @@ ClientIDGenerator
 		 * @param lines_in
 		 * @return
 		 */
-	
-	public String[]
+
+        String[]
 	filterHTTP(
-		byte[]		hash,
-		String[]	lines_in )
+                byte[] hash,
+                String[] lines_in)
 	
 		throws ClientIDException;
 	
-	public Object
+	Object
 	getProperty(
-		byte[]		hash,
-		String		property_name );
+            byte[] hash,
+            String property_name);
 }

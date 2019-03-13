@@ -176,7 +176,7 @@ public class ClientConnection {
 			}
 			closed	= true;
 			if( !sending_msgs.isEmpty() ) {
-				messages = (ClientMessage[])sending_msgs.toArray( new ClientMessage[sending_msgs.size()] );
+				messages = (ClientMessage[])sending_msgs.toArray(new ClientMessage[0]);
 			}
 		}
 		finally{ msg_mon.exit(); }
@@ -185,10 +185,9 @@ public class ClientConnection {
 			if ( reason == null ){
 				reason = new Exception( "Connection closed" );
 			}
-			for( int i=0; i < messages.length; i++ ) {
-				ClientMessage msg = messages[i];
-				msg.reportFailed( reason );
-			}
+            for (ClientMessage msg : messages) {
+                msg.reportFailed(reason);
+            }
 		}
 	
 		decoder.destroy();

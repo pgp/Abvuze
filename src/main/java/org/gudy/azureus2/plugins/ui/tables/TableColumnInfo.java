@@ -30,17 +30,17 @@ import org.gudy.azureus2.plugins.ui.config.Parameter;
  */
 public interface TableColumnInfo
 {
-	public byte PROFICIENCY_BEGINNER = Parameter.MODE_BEGINNER;
-	public byte PROFICIENCY_INTERMEDIATE = Parameter.MODE_INTERMEDIATE;
-	public byte PROFICIENCY_ADVANCED = Parameter.MODE_ADVANCED;
+	byte PROFICIENCY_BEGINNER = Parameter.MODE_BEGINNER;
+	byte PROFICIENCY_INTERMEDIATE = Parameter.MODE_INTERMEDIATE;
+	byte PROFICIENCY_ADVANCED = Parameter.MODE_ADVANCED;
 
-	public String[] getCategories();
+	String[] getCategories();
 
-	public void addCategories(String[] categories);
+	void addCategories(String[] categories);
 
-	public byte getProficiency();
+	byte getProficiency();
 
-	public void setProficiency(byte proficiency);
+	void setProficiency(byte proficiency);
 
 	TableColumn getColumn();
 }

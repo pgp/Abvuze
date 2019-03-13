@@ -29,6 +29,6 @@ import com.aelitis.net.upnp.*;
 public interface 
 UPnPSpecificService 
 {
-	public UPnPService
+	UPnPService
 	getGenericService();
 }

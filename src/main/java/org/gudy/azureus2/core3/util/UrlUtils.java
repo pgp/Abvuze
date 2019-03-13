@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -91,7 +92,7 @@ public class UrlUtils
 	decodeArgs(
 		String	args )
 	{
-		Map<String,String>	result = new HashMap<String, String>();
+		Map<String,String>	result = new HashMap<>();
 		
 		String[] bits = (args.startsWith("?")?args.substring(1):args).split( "&" );
 		
@@ -205,7 +206,7 @@ public class UrlUtils
 	{
 		String magnet_uri_in = magnet_uri[0];
 		
-		Set<String>	result = new HashSet<String>();
+		Set<String>	result = new HashSet<>();
 		
 		int	pos = magnet_uri_in.indexOf( '?' );
 		
@@ -319,7 +320,7 @@ public class UrlUtils
 		
 		magnet_str += encodeName( name);
 
-		List<String>	tracker_urls = new ArrayList<String>();
+		List<String>	tracker_urls = new ArrayList<>();
 		
 		URL announce_url = torrent.getAnnounceURL();
 		
@@ -360,14 +361,14 @@ public class UrlUtils
 			magnet_str += "&tr=" + UrlUtils.encode( str );
 		}
 		
-		List<String>	ws_urls = new ArrayList<String>();
+		List<String>	ws_urls = new ArrayList<>();
 
 		Object obj = torrent.getAdditionalProperty( "url-list" );
 							
 		if ( obj instanceof byte[] ){
             
 			try{
-				ws_urls.add( new URL( new String((byte[])obj, "UTF-8" )).toExternalForm());
+				ws_urls.add( new URL( new String((byte[])obj, StandardCharsets.UTF_8)).toExternalForm());
 				
 			}catch( Throwable e ){							
 			}
@@ -377,7 +378,7 @@ public class UrlUtils
 				
 				try{
 					if (o instanceof byte[]) {
-						ws_urls.add( new URL( new String((byte[])o, "UTF-8" )).toExternalForm());
+						ws_urls.add( new URL( new String((byte[])o, StandardCharsets.UTF_8)).toExternalForm());
 					} else if (o instanceof String) {
 						ws_urls.add( new URL((String) o).toExternalForm());
 					}
@@ -725,24 +726,21 @@ public class UrlUtils
 			byte[] decode = Base64.decode(base64);
 			if (decode != null && decode.length > 0) {
 				// Format is AA/<name>/<size>/<hash>/ZZ
-				try {
-					String decodeString = new String(decode, "utf8");
-					pattern = Pattern.compile("AA.*/(.*)/ZZ", Pattern.CASE_INSENSITIVE);
-					matcher = pattern.matcher(decodeString);
-					if (matcher.find()) {
-						String hash = matcher.group(1);
-						String magnet = parseTextForMagnets(hash);
-						if (magnet != null) {
-							pattern = Pattern.compile("AA/(.*)/[0-9]+", Pattern.CASE_INSENSITIVE);
-							matcher = pattern.matcher(decodeString);
-							if (matcher.find()) {
-								String name = matcher.group(1);
-								return magnet + "&dn=" + encode(name);
-							}
-							return magnet;
+				String decodeString = new String(decode, StandardCharsets.UTF_8);
+				pattern = Pattern.compile("AA.*/(.*)/ZZ", Pattern.CASE_INSENSITIVE);
+				matcher = pattern.matcher(decodeString);
+				if (matcher.find()) {
+					String hash = matcher.group(1);
+					String magnet = parseTextForMagnets(hash);
+					if (magnet != null) {
+						pattern = Pattern.compile("AA/(.*)/[0-9]+", Pattern.CASE_INSENSITIVE);
+						matcher = pattern.matcher(decodeString);
+						if (matcher.find()) {
+							String name = matcher.group(1);
+							return magnet + "&dn=" + encode(name);
 						}
+						return magnet;
 					}
-				} catch (UnsupportedEncodingException e) {
 				}
 			}
 		}
@@ -905,8 +903,8 @@ public class UrlUtils
 			return "";
 		}
 		String ret = s;
-		for (int i = 0; i < XMLescapes.length; i++) {
-			String[] escapeEntry = (String[])XMLescapes[i];
+		for (Object xmLescape : XMLescapes) {
+			String[] escapeEntry = (String[]) xmLescape;
 			ret = ret.replaceAll(escapeEntry[0], escapeEntry[1]);
 		}
 		return ret;
@@ -917,8 +915,8 @@ public class UrlUtils
 			return "";
 		}
 		String ret = s;
-		for (int i = 0; i < XMLescapes.length; i++) {
-			String[] escapeEntry = (String[])XMLescapes[i];
+		for (Object xmLescape : XMLescapes) {
+			String[] escapeEntry = (String[]) xmLescape;
 			ret = ret.replaceAll(escapeEntry[1], escapeEntry[0]);
 		}
 		return ret;
@@ -1014,25 +1012,23 @@ public class UrlUtils
 		String	headers_to_use = getBrowserHeadersToUse( encoded_headers );
 		
 		try{
-			String header_string = new String( Base64.decode( headers_to_use ), "UTF-8" );
+			String header_string = new String( Base64.decode( headers_to_use ), StandardCharsets.UTF_8);
 		
 			String[]	headers = header_string.split( "\n" );
-			
-			for (int i=0;i<headers.length;i++ ){
-			
-				String	header = headers[i];
-				
-				int	pos = header.indexOf( ':' );
-				
-				if ( pos != -1 ){
-					
-					String	lhs = header.substring(0,pos).trim();
-					String	rhs	= header.substring(pos+1).trim();
-					
-					if ( !( lhs.equalsIgnoreCase( "Host") || 
-							lhs.equalsIgnoreCase( "Referer" ))){
-						
-						rd.setProperty( "URL_" + lhs, rhs );
+
+			for (String header : headers) {
+
+				int pos = header.indexOf(':');
+
+				if (pos != -1) {
+
+					String lhs = header.substring(0, pos).trim();
+					String rhs = header.substring(pos + 1).trim();
+
+					if (!(lhs.equalsIgnoreCase("Host") ||
+							lhs.equalsIgnoreCase("Referer"))) {
+
+						rd.setProperty("URL_" + lhs, rhs);
 					}
 				}
 			}
@@ -1054,25 +1050,23 @@ public class UrlUtils
 		String	headers_to_use = getBrowserHeadersToUse( encoded_headers );
 		
 		try{
-			String header_string = new String( Base64.decode( headers_to_use ), "UTF-8" );
+			String header_string = new String( Base64.decode( headers_to_use ), StandardCharsets.UTF_8);
 		
 			String[]	headers = header_string.split( "\n" );
-			
-			for (int i=0;i<headers.length;i++ ){
-			
-				String	header = headers[i];
-				
-				int	pos = header.indexOf( ':' );
-				
-				if ( pos != -1 ){
-					
-					String	lhs = header.substring(0,pos).trim();
-					String	rhs	= header.substring(pos+1).trim();
-					
-					if ( !( lhs.equalsIgnoreCase( "Host") || 
-							lhs.equalsIgnoreCase( "Referer" ))){
-						
-						ru.setProperty( "URL_" + lhs, rhs );
+
+			for (String header : headers) {
+
+				int pos = header.indexOf(':');
+
+				if (pos != -1) {
+
+					String lhs = header.substring(0, pos).trim();
+					String rhs = header.substring(pos + 1).trim();
+
+					if (!(lhs.equalsIgnoreCase("Host") ||
+							lhs.equalsIgnoreCase("Referer"))) {
+
+						ru.setProperty("URL_" + lhs, rhs);
 					}
 				}
 			}
@@ -1103,25 +1097,23 @@ public class UrlUtils
 		
 		try{
 		
-			String header_string = new String( Base64.decode( headers_to_use ), "UTF-8" );
+			String header_string = new String( Base64.decode( headers_to_use ), StandardCharsets.UTF_8);
 		
 			String[]	headers = header_string.split( "\n" );
-			
-			for (int i=0;i<headers.length;i++ ){
-			
-				String	header = headers[i];
-				
-				int	pos = header.indexOf( ':' );
-				
-				if ( pos != -1 ){
-					
-					String	lhs = header.substring(0,pos).trim();
-					String	rhs	= header.substring(pos+1).trim();
-					
-					if ( !( lhs.equalsIgnoreCase( "Host") || 
-							lhs.equalsIgnoreCase( "Referer" ))){
-						
-						connection.setRequestProperty( lhs, rhs );
+
+			for (String header : headers) {
+
+				int pos = header.indexOf(':');
+
+				if (pos != -1) {
+
+					String lhs = header.substring(0, pos).trim();
+					String rhs = header.substring(pos + 1).trim();
+
+					if (!(lhs.equalsIgnoreCase("Host") ||
+							lhs.equalsIgnoreCase("Referer"))) {
+
+						connection.setRequestProperty(lhs, rhs);
 					}
 				}
 			}
@@ -1144,25 +1136,23 @@ public class UrlUtils
 		
 		try{
 		
-			String header_string = new String( Base64.decode( headers_to_use ), "UTF-8" );
+			String header_string = new String( Base64.decode( headers_to_use ), StandardCharsets.UTF_8);
 		
 			String[]	headers = header_string.split( "\n" );
-			
-			for (int i=0;i<headers.length;i++ ){
-			
-				String	header = headers[i];
-				
-				int	pos = header.indexOf( ':' );
-				
-				if ( pos != -1 ){
-					
-					String	lhs = header.substring(0,pos).trim();
-					String	rhs	= header.substring(pos+1).trim();
-					
-					if ( !( lhs.equalsIgnoreCase( "Host") || 
-							lhs.equalsIgnoreCase( "Referer" ))){
-						
-						result.put( lhs, rhs );
+
+			for (String header : headers) {
+
+				int pos = header.indexOf(':');
+
+				if (pos != -1) {
+
+					String lhs = header.substring(0, pos).trim();
+					String rhs = header.substring(pos + 1).trim();
+
+					if (!(lhs.equalsIgnoreCase("Host") ||
+							lhs.equalsIgnoreCase("Referer"))) {
+
+						result.put(lhs, rhs);
 					}
 				}
 			}
@@ -1254,7 +1244,7 @@ public class UrlUtils
 			result.append("//");
 			int pos = authority.indexOf( '@' );
 			if ( pos != -1 ){
-				result.append(authority.substring(0,pos+1));
+				result.append(authority, 0, pos+1);
 				authority = authority.substring(pos+1);
 			}
 			pos = authority.lastIndexOf(':');
@@ -1266,9 +1256,9 @@ public class UrlUtils
 				}
 			}else{
 				if ( port > 0 ){
-					result.append(authority.substring(0, pos + 1)).append(port);
+					result.append(authority, 0, pos + 1).append(port);
 				}else{
-					result.append(authority.substring(0,pos));
+					result.append(authority, 0, pos);
 				}
 			}
 		}
@@ -1304,7 +1294,7 @@ public class UrlUtils
 			result.append("//");
 			int pos = authority.indexOf( '@' );
 			if ( pos != -1 ){
-				result.append(authority.substring(0,pos+1));
+				result.append(authority, 0, pos+1);
 				authority = authority.substring(pos+1);
 			}
 			pos = authority.lastIndexOf(':');
@@ -1365,7 +1355,7 @@ public class UrlUtils
 			result.append("//");
 			int pos = authority.indexOf( '@' );
 			if ( pos != -1 ){
-				result.append(authority.substring(0,pos+1));
+				result.append(authority, 0, pos+1);
 				authority = authority.substring(pos+1);
 			}
 			pos = authority.lastIndexOf(':');
@@ -1376,7 +1366,7 @@ public class UrlUtils
 			if ( pos == -1 ){
 				result.append(authority).append(":").append(port);
 			}else{
-				result.append(authority.substring(0, pos + 1)).append(port);
+				result.append(authority, 0, pos + 1).append(port);
 			}
 		}
 
@@ -1498,7 +1488,7 @@ public class UrlUtils
 		try{
 			Object sni_host_name = Class.forName( "javax.net.ssl.SNIHostName").getConstructor( String.class ).newInstance( host_name );
 			
-			List<Object> sni_host_names = new ArrayList<Object>(1);
+			List<Object> sni_host_names = new ArrayList<>(1);
 			
 			sni_host_names.add( sni_host_name );
 			
@@ -1584,8 +1574,7 @@ public class UrlUtils
 				public Socket createSocket(
 						String host,
 						int port)
-						throws IOException,
-						UnknownHostException {
+						throws IOException {
 					Socket result = factory.createSocket( host, port );
 					
 					hack( result );
@@ -1598,8 +1587,7 @@ public class UrlUtils
 						int port,
 						InetAddress localHost,
 						int localPort)
-						throws IOException,
-						UnknownHostException {
+						throws IOException {
 					Socket result = factory.createSocket( host, port, localHost, localPort );
 					
 					hack( result );
@@ -1636,7 +1624,7 @@ public class UrlUtils
 				hack(
 					String[]	cs  )
 				{
-					List<String> new_cs = new ArrayList<String>();
+					List<String> new_cs = new ArrayList<>();
 					
 					for ( String x: cs ){
 						
@@ -1648,7 +1636,7 @@ public class UrlUtils
 						}
 					}
 
-					return( new_cs.toArray(new String[new_cs.size()]));
+					return( new_cs.toArray(new String[0]));
 				}
 			};
 			
@@ -1714,8 +1702,7 @@ public class UrlUtils
 				public Socket createSocket(
 						String host,
 						int port)
-						throws IOException,
-						UnknownHostException {
+						throws IOException {
 					Socket result = factory.createSocket( host, port );
 					
 					hack( result );
@@ -1728,8 +1715,7 @@ public class UrlUtils
 						int port,
 						InetAddress localHost,
 						int localPort)
-						throws IOException,
-						UnknownHostException {
+						throws IOException {
 					Socket result = factory.createSocket( host, port, localHost, localPort );
 					
 					hack( result );
@@ -1997,20 +1983,19 @@ public class UrlUtils
 				"aaaaaaaaaabbbbbbbbbbccccccccccdddddddddd",
 				"magnet:?dn=OpenOffice.org_2.0.3_Win32Intel_install.exe&xt=urn:sha1:PEMIGLKMNFI4HZ4CCHZNPKZJNMAAORKN&xt=urn:tree:tiger:JMIJVWHCQUX47YYH7O4XIBCORNU2KYKHBBC6DHA&xt=urn:ed2k:1c0804541f34b6583a383bb8f2cec682&xl=96793015&xs=http://mirror.switch.ch/ftp/mirror/OpenOffice/stable/2.0.3/OOo_2.0.3_Win32Intel_install.exe%3Fa%3D10%26b%3D20",
 				};
-		for (int i = 0; i < test.length; i++) {
-			System.out.println( test[i] );
-			System.out.println("URLDecoder.decode: -> " + URLDecoder.decode(test[i]));
-			System.out.println("decode:            -> " + decode(test[i]));
-			System.out.println("decodeIf:          -> " + decodeIfNeeded(test[i]));
-			System.out.println("isURL:             -> " + isURL(test[i]));
-			System.out.println("parse:             -> " + parseTextForURL(test[i], true));
+		for (String s : test) {
+			System.out.println(s);
+			System.out.println("URLDecoder.decode: -> " + URLDecoder.decode(s));
+			System.out.println("decode:            -> " + decode(s));
+			System.out.println("decodeIf:          -> " + decodeIfNeeded(s));
+			System.out.println("isURL:             -> " + isURL(s));
+			System.out.println("parse:             -> " + parseTextForURL(s, true));
 		}
 
 		String[] testEncode = {
 			"a b"
 		};
-		for (int i = 0; i < testEncode.length; i++) {
-			String txt = testEncode[i];
+		for (String txt : testEncode) {
 			try {
 				System.out.println("URLEncoder.encode: " + txt + " -> "
 						+ URLEncoder.encode(txt, "UTF8"));

@@ -152,7 +152,7 @@ public class TrackerStatus {
     
     String trackerUrl	= tracker_url.toString();
     
-    hashes = new HashMap<HashWrapper,TRTrackerScraperResponseImpl>();
+    hashes = new HashMap<>();
     
     try {
       trackerUrl = trackerUrl.replaceAll(" ", "");
@@ -210,7 +210,7 @@ public class TrackerStatus {
   	try{
   		hashes_mon.enter();
   		
-  		return (TRTrackerScraperResponseImpl) hashes.get(hash);
+  		return hashes.get(hash);
   	}finally{
   		
   		hashes_mon.exit();
@@ -246,14 +246,14 @@ public class TrackerStatus {
   		}
     
   		try {
-  			ArrayList<TRTrackerScraperResponseImpl> responsesToUpdate = new ArrayList<TRTrackerScraperResponseImpl>();
+  			ArrayList<TRTrackerScraperResponseImpl> responsesToUpdate = new ArrayList<>();
 
   			TRTrackerScraperResponseImpl response;
     
   			try{
   				hashes_mon.enter();
    		
-	    		response = (TRTrackerScraperResponseImpl)hashes.get( hash );
+	    		response = hashes.get( hash );
 		    
 	    	}finally{
 	    	
@@ -388,11 +388,11 @@ public class TrackerStatus {
 			
 			byte[]	scrape_reply = null;
 			
-			List<HashWrapper> 					hashesInQuery 		= new ArrayList<HashWrapper>(allResponses.size());
-			List<TRTrackerScraperResponseImpl> 	responsesInQuery 	= new ArrayList<TRTrackerScraperResponseImpl>(allResponses.size());
+			List<HashWrapper> 					hashesInQuery 		= new ArrayList<>(allResponses.size());
+			List<TRTrackerScraperResponseImpl> 	responsesInQuery 	= new ArrayList<>(allResponses.size());
 			
-			List<HashWrapper> 					hashesForUDP 		= new ArrayList<HashWrapper>();
-			List<TRTrackerScraperResponseImpl> 	responsesForUDP 	= new ArrayList<TRTrackerScraperResponseImpl>();
+			List<HashWrapper> 					hashesForUDP 		= new ArrayList<>();
+			List<TRTrackerScraperResponseImpl> 	responsesForUDP 	= new ArrayList<>();
 
 			List<TRTrackerScraperResponseImpl> activeResponses = responsesInQuery;
 
@@ -663,7 +663,7 @@ public class TrackerStatus {
 					if (bSingleHashScrapes && map.containsKey("complete") && map.containsKey("incomplete")) {
 						int complete = MapUtils.getMapInt(map, "complete", 0);
 						int incomplete = MapUtils.getMapInt(map, "incomplete", 0);
-						TRTrackerScraperResponseImpl response = (TRTrackerScraperResponseImpl) activeResponses
+						TRTrackerScraperResponseImpl response = activeResponses
 								.get(0);
 						response.setPeers(incomplete);
 						response.setSeeds(complete);
@@ -730,7 +730,7 @@ public class TrackerStatus {
 									+ ((iMinRequestInterval == 0) ? NOHASH_RETRY_INTERVAL
 											: iMinRequestInterval * 1000);
 							// 1 was requested, 0 returned. Therefore, hash not found.
-							TRTrackerScraperResponseImpl response = (TRTrackerScraperResponseImpl) activeResponses.get(0);
+							TRTrackerScraperResponseImpl response = activeResponses.get(0);
 							response.setNextScrapeStartTime(nextScrapeTime);
 							response.setStatus(TRTrackerScraperResponse.ST_ERROR,
 									MessageText.getString(SS + "error")
@@ -947,15 +947,7 @@ public class TrackerStatus {
 					// notifiy listeners
 					scraper.scrapeReceived(response);
 				}
-			} catch (SocketException e) {
-				setAllError(activeResponses,e);
-			} catch (SocketTimeoutException e) {
-				setAllError(activeResponses,e);
-			} catch (UnknownHostException e) {
-				setAllError(activeResponses,e);
-			} catch (PRUDPPacketHandlerException e) {
-				setAllError(activeResponses,e);
-			} catch (BEncodingException e) {
+			} catch (SocketException | BEncodingException | PRUDPPacketHandlerException | UnknownHostException | SocketTimeoutException e) {
 				setAllError(activeResponses,e);
 			} catch (Exception e) {
 				
@@ -1089,7 +1081,7 @@ public class TrackerStatus {
 			
 			if ( AENetworkClassifier.categoriseAddress( reqUrl.getHost() ) != AENetworkClassifier.AT_PUBLIC ){
 			
-				Map<String,Object>	opts = new HashMap<String, Object>();
+				Map<String,Object>	opts = new HashMap<>();
 				
 				if ( hashesInQuery.size() == 1 ){
 					
@@ -1595,9 +1587,9 @@ public class TrackerStatus {
 								
 									files.put( new String(resp_hash, Constants.BYTE_ENCODING), file );
 									
-									file.put( "complete", new Long(complete[i]));
-									file.put( "downloaded", new Long(downloaded[i]));
-									file.put( "incomplete", new Long(incomplete[i]));
+									file.put( "complete", (long) complete[i]);
+									file.put( "downloaded", (long) downloaded[i]);
+									file.put( "incomplete", (long) incomplete[i]);
 								}
 								
 								byte[] data = BEncoder.encode( rootMap );
@@ -1627,9 +1619,9 @@ public class TrackerStatus {
 								{
 									HashWrapper hash = (HashWrapper)it.next();
 									Map file = new HashMap();
-									file.put( "complete", new Long(complete[i]));
-									file.put( "downloaded", new Long(downloaded[i]));
-									file.put( "incomplete", new Long(incomplete[i]));
+									file.put( "complete", (long) complete[i]);
+									file.put( "downloaded", (long) downloaded[i]);
+									file.put( "incomplete", (long) incomplete[i]);
 									files.put( new String(hash.getBytes(), Constants.BYTE_ENCODING), file );
 								}
 								
@@ -1725,7 +1717,7 @@ public class TrackerStatus {
   	try{
   		hashes_mon.enter();
   	
-  		response = (TRTrackerScraperResponseImpl)hashes.get( hash );
+  		response = hashes.get( hash );
   		
   		if ( response == null ){
   			

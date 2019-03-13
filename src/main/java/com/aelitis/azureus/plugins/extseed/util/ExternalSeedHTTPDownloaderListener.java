@@ -24,36 +24,36 @@ import com.aelitis.azureus.plugins.extseed.ExternalSeedException;
 public interface 
 ExternalSeedHTTPDownloaderListener 
 {
-	public byte[]
+	byte[]
 	getBuffer()
 	
 		throws ExternalSeedException;
 	
-	public void
+	void
 	setBufferPosition(
-		int	position );
+            int position);
 	
-	public int
+	int
 	getBufferPosition();
 	
-	public int
+	int
 	getBufferLength();
 	
-	public int
+	int
 	getPermittedBytes()
 	
 		throws ExternalSeedException;
 	
-	public int
+	int
    	getPermittedTime();
 	
-	public void
+	void
 	reportBytesRead(
-		int		num );
+            int num);
 	
-	public boolean
+	boolean
 	isCancelled();
 	
-	public void
+	void
 	done();
 }

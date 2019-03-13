@@ -23,22 +23,22 @@ package com.aelitis.azureus.core.speedmanager;
 public interface 
 SpeedManagerLimitEstimate 
 {
-	public static final float TYPE_UNKNOWN = -0.1f;
-	public static final float TYPE_ESTIMATED =  0.0f;
-	public static final float TYPE_CHOKE_ESTIMATED =  0.5f;
-	public static final float TYPE_MEASURED_MIN =  0.8f;
-	public static final float TYPE_MEASURED =  0.9f;
-	public static final float TYPE_MANUAL =  1.0f;
+	float TYPE_UNKNOWN = -0.1f;
+	float TYPE_ESTIMATED =  0.0f;
+	float TYPE_CHOKE_ESTIMATED =  0.5f;
+	float TYPE_MEASURED_MIN =  0.8f;
+	float TYPE_MEASURED =  0.9f;
+	float TYPE_MANUAL =  1.0f;
 	
-	public int
+	int
 	getBytesPerSec();
 	
 		/**
 		 * One of the above constants
 		 * @return
 		 */
-	
-	public float
+
+        float
 	getEstimateType();
 	
 		/**
@@ -48,16 +48,16 @@ SpeedManagerLimitEstimate
 		 * <1 x > -1 = relative goodness of metric
 		 * @return
 		 */
-	
-	public float
+
+        float
 	getMetricRating();
 	
-	public int[][]
+	int[][]
 	getSegments();
 	
-	public long
+	long
 	getWhen();
 	
-	public String
+	String
 	getString();
 }

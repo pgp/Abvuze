@@ -25,27 +25,27 @@ import java.util.Map;
 public interface 
 NATTraversalObserver 
 {
-	public static final int	FT_NO_RENDEZVOUS	= 1;
-	public static final int	FT_QUEUE_FULL		= 2;
-	public static final int	FT_CANCELLED		= 3;
+	int	FT_NO_RENDEZVOUS	= 1;
+	int	FT_QUEUE_FULL		= 2;
+	int	FT_CANCELLED		= 3;
 	
-	public static String[] FT_STRINGS = {
+	String[] FT_STRINGS = {
 		"Unknown", "No rendezvous", "Queue full", "Operation cancelled" };
 	                     
-	public void
+	void
 	succeeded(
-		InetSocketAddress	rendezvous,
-		InetSocketAddress	target,
-		Map					reply );
+            InetSocketAddress rendezvous,
+            InetSocketAddress target,
+            Map reply);
 	
-	public void
+	void
 	failed(
-		int			failure_type );
+            int failure_type);
 	
-	public void
+	void
 	failed(
-		Throwable 	cause );
+            Throwable cause);
 	
-	public void
+	void
 	disabled();
 }

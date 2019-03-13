@@ -23,9 +23,9 @@ package com.aelitis.net.udp.uc;
 public interface 
 PRUDPReleasablePacketHandler 
 {
-	public PRUDPPacketHandler
+	PRUDPPacketHandler
 	getHandler();
 
-	public void
+	void
 	release();
 }

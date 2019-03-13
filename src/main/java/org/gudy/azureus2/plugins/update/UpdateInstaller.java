@@ -37,11 +37,11 @@ UpdateInstaller
 		 * 						later in actions
 		 * @param is
 		 */
-	
-	public void
+
+        void
 	addResource(
-		String			resource_name,
-		InputStream		is )
+                String resource_name,
+                InputStream is)
 	
 		throws UpdateException;
   
@@ -55,11 +55,11 @@ UpdateInstaller
    * @param closeInputStream if false, the InputStream is won't be closed 
    */
 
-  public void
+  void
   addResource(
-    String      resource_name,
-    InputStream   is,
-    boolean closeInputStream)
+          String resource_name,
+          InputStream is,
+          boolean closeInputStream)
   
     throws UpdateException;
 	
@@ -67,16 +67,16 @@ UpdateInstaller
 		 * Returns the absolute path of the Azureus install dir (i.e. where Azureus2.jar etc is located)
 		 * @return
 		 */
-	
-	public String
+
+        String
 	getInstallDir();
 	
 		/**
 		 * Returns the absolute path of the user dir (i.e. where config is stored)
 		 * @return
 		 */
-	
-	public String
+
+        String
 	getUserDir();
 	
 		/**
@@ -84,11 +84,11 @@ UpdateInstaller
 		 * @param from_file	either absolute or relative
 		 * @param to_file absolute
 		 */
-	
-	public void
+
+        void
 	addMoveAction(
-		String		from_file_or_resource,
-		String		to_file )
+                String from_file_or_resource,
+                String to_file)
 
 		throws UpdateException;
 
@@ -98,10 +98,10 @@ UpdateInstaller
    * @param rights the rights, for example "776"
    * @param to_file absolute
    */
-	public void
+  void
 	addChangeRightsAction(
-		String    rights,
-		String    to_file )
+          String rights,
+          String to_file)
 
     	throws UpdateException;
   
@@ -110,10 +110,10 @@ UpdateInstaller
 		 * @param file
 		 * @throws UpdateException
 		 */
-	
-	public void
+
+        void
 	addRemoveAction(
-		String    file )
+                String file)
 
     	throws UpdateException;
 	
@@ -121,13 +121,13 @@ UpdateInstaller
 		 * Runs the action now, not as part of a shutdown/restart of Vuze
 		 * @throws UpdateException
 		 */
-	
-	public void
+
+        void
 	installNow(
-		UpdateInstallerListener		listener )
+                UpdateInstallerListener listener)
 	
 		throws UpdateException;
 	
-	public void
+	void
 	destroy();
 }

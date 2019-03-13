@@ -34,7 +34,7 @@ RegExUtil
 			public Map<String,Object[]>
 			initialValue()
 			{
-				return( new HashMap<String,Object[]>());
+				return(new HashMap<>());
 			}
 		};
 		
@@ -56,7 +56,7 @@ RegExUtil
 		
 		Object[] entry = map.get( namespace );
 		
-		if ( entry == null || !pattern.equals((String)entry[0])){
+		if ( entry == null || !pattern.equals(entry[0])){
 		
 			Pattern result = Pattern.compile( pattern, flags );
 			
@@ -83,7 +83,7 @@ RegExUtil
 		
 		char[]	chars = str.toCharArray();
 		
-		Stack<Integer>	stack = new Stack<Integer>();
+		Stack<Integer>	stack = new Stack<>();
 		
 		for (int i=0;i<chars.length;i++){
 			

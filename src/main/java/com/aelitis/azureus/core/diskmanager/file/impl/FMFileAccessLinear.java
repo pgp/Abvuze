@@ -459,9 +459,9 @@ FMFileAccessLinear
 				boolean	partial_write	= false;
 				
 				if ( DEBUG ){
-					for (int i=0;i<buffers.length;i++){
-						expected_write += buffers[i].limit(DirectByteBuffer.SS_FILE) - buffers[i].position(DirectByteBuffer.SS_FILE);
-					}
+                    for (DirectByteBuffer buffer : buffers) {
+                        expected_write += buffer.limit(DirectByteBuffer.SS_FILE) - buffer.position(DirectByteBuffer.SS_FILE);
+                    }
 				}
 				
 				fc.position( position );

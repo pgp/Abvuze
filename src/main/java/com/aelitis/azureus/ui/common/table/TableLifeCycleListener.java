@@ -24,11 +24,11 @@ package com.aelitis.azureus.ui.common.table;
  */
 public interface TableLifeCycleListener
 {
-	public final int EVENT_INITIALIZED = 0;
+	int EVENT_INITIALIZED = 0;
 
-	public final int EVENT_DESTROYED = 1;
+	int EVENT_DESTROYED = 1;
 
-	public void tableViewInitialized();
+	void tableViewInitialized();
 
-	public void tableViewDestroyed();
+	void tableViewDestroyed();
 }

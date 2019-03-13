@@ -122,42 +122,42 @@ ExternalSeedReaderFactoryWebSeed
 				Map	params = _params instanceof Map?(Map)_params:new HashMap();
 				
 				Collections.shuffle( urls );
-				
-				for (int i=0;i<urls.size();i++){
-					
-					if ( readers.size() > 10 ){
-												
-						break;
-					}
-					
-					try{
-						String	url_str = new String((byte[])urls.get(i));
-						
-							// avoid java encoding ' ' as '+' as this is not conformant with Apache (for example)
-						
-						url_str = url_str.replaceAll( " ", "%20");
 
-						URL	url = new URL( url_str );
-						
-						String	protocol = url.getProtocol().toLowerCase();
-						
-						if ( protocol.equals( "http" )){
-							
-							readers.add( new ExternalSeedReaderWebSeed( plugin, torrent, url, params ));
-							
-						}else{
-							
-							plugin.log( name + ": WS unsupported protocol: " + url );
-						}
-					}catch( Throwable e ){
-						
-						Object o = urls.get(i);
-						
-						String str = (o instanceof byte[])?new String((byte[])o):String.valueOf(o);
+                for (Object url1 : urls) {
 
-						Debug.out( "WS seed invalid: " + str, e );
-					}
-				}
+                    if (readers.size() > 10) {
+
+                        break;
+                    }
+
+                    try {
+                        String url_str = new String((byte[]) url1);
+
+                        // avoid java encoding ' ' as '+' as this is not conformant with Apache (for example)
+
+                        url_str = url_str.replaceAll(" ", "%20");
+
+                        URL url = new URL(url_str);
+
+                        String protocol = url.getProtocol().toLowerCase();
+
+                        if (protocol.equals("http")) {
+
+                            readers.add(new ExternalSeedReaderWebSeed(plugin, torrent, url, params));
+
+                        } else {
+
+                            plugin.log(name + ": WS unsupported protocol: " + url);
+                        }
+                    } catch (Throwable e) {
+
+                        Object o = url1;
+
+                        String str = (o instanceof byte[]) ? new String((byte[]) o) : String.valueOf(o);
+
+                        Debug.out("WS seed invalid: " + str, e);
+                    }
+                }
 				
 				ExternalSeedReader[]	res = new ExternalSeedReader[ readers.size() ];
 				

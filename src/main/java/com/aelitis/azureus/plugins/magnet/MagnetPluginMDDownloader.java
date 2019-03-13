@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.RandomAccessFile;
 import java.net.InetSocketAddress;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.gudy.azureus2.core3.download.DownloadManagerState;
@@ -75,7 +76,7 @@ import com.aelitis.azureus.core.util.PlatformTorrentUtils;
 public class 
 MagnetPluginMDDownloader 
 {
-	final private static Set<String>	active_set = new HashSet<String>();
+	final private static Set<String>	active_set = new HashSet<>();
 	
 	final private PluginInterface		plugin_interface;
 	final private MagnetPlugin			plugin;
@@ -88,7 +89,7 @@ MagnetPluginMDDownloader
 	private volatile boolean		cancelled;
 	private volatile boolean		completed;
 	
-	private List<DiskManagerRequest>	requests = new ArrayList<DiskManagerRequest>();
+	private List<DiskManagerRequest>	requests = new ArrayList<>();
 	
 	private AESemaphore running_sem 	= new AESemaphore( "MPMDD:run" );
 	private AESemaphore complete_sem 	= new AESemaphore( "MPMDD:comp" );
@@ -174,7 +175,7 @@ MagnetPluginMDDownloader
 				
 				cancelled	= true;
 				
-				to_cancel = new ArrayList<DiskManagerRequest>( requests );
+				to_cancel = new ArrayList<>(requests);
 				
 				requests.clear();
 			}
@@ -239,21 +240,16 @@ MagnetPluginMDDownloader
 			data_file 		= new File( tmp_dir, hash_str + "_" + rand + ".torrent" );
 			torrent_file 	= new File( tmp_dir, hash_str + "_" + rand + ".metatorrent" );
 
-			RandomAccessFile raf = new RandomAccessFile( data_file, "rw" );
-			
-			try{
-				byte[] buffer = new byte[512*1024];
-				
-				Arrays.fill( buffer, (byte)0xff );
-				
-				for (long i=0;i<64*1024*1024;i+=buffer.length){
-					
-					raf.write( buffer );
-				}
-			}finally{
-			
-				raf.close();
-			}
+            try (RandomAccessFile raf = new RandomAccessFile(data_file, "rw")) {
+                byte[] buffer = new byte[512 * 1024];
+
+                Arrays.fill(buffer, (byte) 0xff);
+
+                for (long i = 0; i < 64 * 1024 * 1024; i += buffer.length) {
+
+                    raf.write(buffer);
+                }
+            }
 			
 			URL announce_url = TorrentUtils.getDecentralisedURL( hash );
 			
@@ -267,11 +263,11 @@ MagnetPluginMDDownloader
 			
 			String[] bits = args.split( "&" );
 			
-			List<String>	trackers 	= new ArrayList<String>();
+			List<String>	trackers 	= new ArrayList<>();
 			
 			String	name = "magnet:" + Base32.encode( hash );
 			
-			Map<String,String>	magnet_args = new HashMap<String, String>();
+			Map<String,String>	magnet_args = new HashMap<>();
 			
 			for ( String bit: bits ){
 				
@@ -306,7 +302,7 @@ MagnetPluginMDDownloader
 				
 				TOTorrentAnnounceURLGroup ag = meta_torrent.getAnnounceURLGroup();
 				
-				List<TOTorrentAnnounceURLSet> sets = new ArrayList<TOTorrentAnnounceURLSet>();
+				List<TOTorrentAnnounceURLSet> sets = new ArrayList<>();
 				
 				for ( String tracker: trackers ){
 				
@@ -323,7 +319,7 @@ MagnetPluginMDDownloader
 				
 				if ( sets.size() > 0 ){
 					
-					url_sets = sets.toArray( new TOTorrentAnnounceURLSet[ sets.size()]);
+					url_sets = sets.toArray(new TOTorrentAnnounceURLSet[0]);
 					
 					ag.setAnnounceURLSets( url_sets );
 				}
@@ -387,7 +383,7 @@ MagnetPluginMDDownloader
 				state.setNetworkEnabled( AENetworkClassifier.AT_PUBLIC, false );
 			}
 
-			final List<InetSocketAddress>	peers_to_inject = new ArrayList<InetSocketAddress>();
+			final List<InetSocketAddress>	peers_to_inject = new ArrayList<>();
 			
 			if ( addresses != null && addresses.length > 0 ){
 				
@@ -411,9 +407,9 @@ MagnetPluginMDDownloader
 				}
 			}
 			
-			final Set<String> peer_networks = new HashSet<String>();
+			final Set<String> peer_networks = new HashSet<>();
 			
-			final List<Map<String,Object>> peers_for_cache = new ArrayList<Map<String,Object>>();
+			final List<Map<String,Object>> peers_for_cache = new ArrayList<>();
 			
 			download.addPeerListener(
 				new DownloadPeerListener()
@@ -466,13 +462,13 @@ MagnetPluginMDDownloader
 											
 											peer_networks.add( network );
 											
-											Map<String,Object> map = new HashMap<String,Object>();
+											Map<String,Object> map = new HashMap<>();
 											
 											peers_for_cache.add( map );
 											
-											map.put( "ip", peer_ip.getBytes( "UTF-8" ));
+											map.put( "ip", peer_ip.getBytes(StandardCharsets.UTF_8));
 											
-											map.put( "port", new Long(peer.getPort()));
+											map.put( "port", (long) peer.getPort());
 										}
 									}catch( Throwable e ){
 										
@@ -819,7 +815,7 @@ MagnetPluginMDDownloader
 					
 						// first entry should be the decentralised one that we want to remove now
 
-					List<TOTorrentAnnounceURLSet> updated = new ArrayList<TOTorrentAnnounceURLSet>();
+					List<TOTorrentAnnounceURLSet> updated = new ArrayList<>();
 					
 					for ( TOTorrentAnnounceURLSet set: url_sets ){
 						
@@ -835,7 +831,7 @@ MagnetPluginMDDownloader
 						
 					}else{
 						
-						url_sets = updated.toArray( new TOTorrentAnnounceURLSet[updated.size()]);
+						url_sets = updated.toArray(new TOTorrentAnnounceURLSet[0]);
 					}
 				}
 				
@@ -852,7 +848,7 @@ MagnetPluginMDDownloader
 				
 				if ( peers_for_cache.size() > 0 ){
 					
-					Map<String,List<Map<String,Object>>> peer_cache = new HashMap<String, List<Map<String,Object>>>();
+					Map<String,List<Map<String,Object>>> peer_cache = new HashMap<>();
 					
 					peer_cache.put( "tracker_peers", peers_for_cache );
 					
@@ -943,7 +939,7 @@ MagnetPluginMDDownloader
 				
 				synchronized( this ){
 										
-					to_cancel = new ArrayList<DiskManagerRequest>( requests );
+					to_cancel = new ArrayList<>(requests);
 					
 					requests.clear();
 				}
@@ -986,18 +982,18 @@ MagnetPluginMDDownloader
 	protected interface
 	DownloadListener
 	{
-		public void
+		void
 		reportProgress(
-			int		downloaded,
-			int		total_size );
+                int downloaded,
+                int total_size);
 		
-		public void
+		void
 		complete(
-			TOTorrent		torrent,
-			Set<String>		peer_networks );
+                TOTorrent torrent,
+                Set<String> peer_networks);
 		
-		public void
+		void
 		failed(
-			Throwable e );
+                Throwable e);
 	}
 }

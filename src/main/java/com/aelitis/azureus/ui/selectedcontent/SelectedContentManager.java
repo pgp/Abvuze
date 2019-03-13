@@ -37,7 +37,7 @@ import com.aelitis.azureus.ui.common.table.TableView;
  */
 public class SelectedContentManager
 {
-	private static CopyOnWriteList<SelectedContentListener> listeners = new CopyOnWriteList<SelectedContentListener>();
+	private static CopyOnWriteList<SelectedContentListener> listeners = new CopyOnWriteList<>();
 
 	private static volatile ISelectedContent[] currentlySelectedContent = new ISelectedContent[0];
 
@@ -159,16 +159,15 @@ public class SelectedContentManager
 		if (sc.length > 0) {
 			int x = 0;
 			DownloadManager[] dms = new DownloadManager[sc.length];
-			for (int i = 0; i < sc.length; i++) {
-				ISelectedContent selectedContent = sc[i];
-				if (selectedContent == null) {
-					continue;
-				}
-				dms[x] = selectedContent.getDownloadManager();
-				if (dms[x] != null) {
-					x++;
-				}
-			}
+            for (ISelectedContent selectedContent : sc) {
+                if (selectedContent == null) {
+                    continue;
+                }
+                dms[x] = selectedContent.getDownloadManager();
+                if (dms[x] != null) {
+                    x++;
+                }
+            }
 			if (x > 0) {
 				System.arraycopy(dms, 0, dms, 0, x);
 				return dms;

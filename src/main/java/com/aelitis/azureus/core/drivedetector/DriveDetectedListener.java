@@ -24,7 +24,7 @@ package com.aelitis.azureus.core.drivedetector;
  */
 public interface DriveDetectedListener
 {
-	public void driveDetected(DriveDetectedInfo info);
+	void driveDetected(DriveDetectedInfo info);
 	
-	public void driveRemoved(DriveDetectedInfo info);
+	void driveRemoved(DriveDetectedInfo info);
 }

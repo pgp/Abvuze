@@ -39,7 +39,7 @@ PeerControlSchedulerBasic
 	
 	private Map<PeerControlInstance,instanceWrapper>	instance_map = new HashMap();
 	
-	private final List<instanceWrapper>	pending_registrations = new ArrayList<instanceWrapper>();
+	private final List<instanceWrapper>	pending_registrations = new ArrayList<>();
 	
 	private volatile boolean	registrations_changed;
 		
@@ -68,7 +68,7 @@ PeerControlSchedulerBasic
 			});
 						
 		
-		List<instanceWrapper>	instances = new LinkedList<instanceWrapper>();
+		List<instanceWrapper>	instances = new LinkedList<>();
 		
 		long	tick_count		= 0;
 		long 	last_stats_time	= SystemTime.getMonotonousTime();
@@ -90,10 +90,7 @@ PeerControlSchedulerBasic
 						}
 					}
 
-					for (int i=0;i<pending_registrations.size();i++){
-						
-						instances.add( pending_registrations.get(i));
-					}
+					instances.addAll(pending_registrations);
 					
 					pending_registrations.clear();
 					
@@ -186,7 +183,7 @@ PeerControlSchedulerBasic
 		try{
 			this_mon.enter();
 			
-			Map<PeerControlInstance,instanceWrapper>	new_map = new HashMap<PeerControlInstance,instanceWrapper>( instance_map );
+			Map<PeerControlInstance,instanceWrapper>	new_map = new HashMap<>(instance_map);
 			
 			new_map.put( instance, wrapper );
 			
@@ -209,7 +206,7 @@ PeerControlSchedulerBasic
 		try{
 			this_mon.enter();
 			
-			Map<PeerControlInstance,instanceWrapper>	new_map = new HashMap<PeerControlInstance,instanceWrapper>( instance_map );
+			Map<PeerControlInstance,instanceWrapper>	new_map = new HashMap<>(instance_map);
 			
 			instanceWrapper wrapper = new_map.remove(instance);
 			

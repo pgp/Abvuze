@@ -128,14 +128,14 @@ BloomFilterImpl
 		
 		x.put( "_impl", cla );
 		
-		x.put( "_max", new Long( max_entries ));
-		x.put( "_count", new Long( entry_count ));
+		x.put( "_max", (long) max_entries);
+		x.put( "_count", (long) entry_count);
 	}
 	
 	public Map<String, Object> 
 	serialiseToMap() 
 	{
-		Map<String, Object>  m = new HashMap<String, Object>();
+		Map<String, Object>  m = new HashMap<>();
 		
 		serialiseToMap( m );
 		
@@ -363,13 +363,13 @@ BloomFilterImpl
 		byte[]		data )
 	{
 		int	res = 0x51f7ac81;
-		
-		for (int i=0;i<data.length;i++){
-			
-			//res ^= (data[i]&0xff)<<((i%4)*8);
-			
-			res = res * 191 + (data[i]&0xff);
-		}
+
+        for (byte datum : data) {
+
+            //res ^= (data[i]&0xff)<<((i%4)*8);
+
+            res = res * 191 + (datum & 0xff);
+        }
 		
 		return( res );
 	}

@@ -91,7 +91,7 @@ HTTPNetworkConnection
 	private static final int	DEAD_CONNECTION_TIMEOUT_PERIOD	= 30*1000;
 	private static final int	MAX_CON_PER_ENDPOINT			= 5*1000;
 
-	static final Map<networkConnectionKey,List<HTTPNetworkConnection>>	http_connection_map = new HashMap<networkConnectionKey,List<HTTPNetworkConnection>>();
+	static final Map<networkConnectionKey,List<HTTPNetworkConnection>>	http_connection_map = new HashMap<>();
 	
 	static{
 		SimpleTimer.addPeriodicEvent(
@@ -110,16 +110,12 @@ HTTPNetworkConnection
 						while( check ){
 							
 							check = false;
-	
-							Iterator<Map.Entry<networkConnectionKey,List<HTTPNetworkConnection>>>	it = http_connection_map.entrySet().iterator();
-							
-							while( it.hasNext()){
-								
-								Map.Entry<networkConnectionKey,List<HTTPNetworkConnection>>	entry = it.next();
-								
-								networkConnectionKey	key = (networkConnectionKey)entry.getKey();
-								
-								List<HTTPNetworkConnection>	connections = entry.getValue();
+
+                            for (Map.Entry<networkConnectionKey, List<HTTPNetworkConnection>> entry : http_connection_map.entrySet()) {
+
+                                networkConnectionKey key = entry.getKey();
+
+                                List<HTTPNetworkConnection> connections = entry.getValue();
 								
 								/*
 								String	times = "";
@@ -133,19 +129,19 @@ HTTPNetworkConnection
 								
 								System.out.println( "HTTPNC: " + key.getName() + " -> " + connections.size() + " - " + times );
 								*/
-								
-								if ( checkConnections( connections )){
-									
-										// might have a concurrent mod to the iterator
-									
-									if ( !http_connection_map.containsKey( key )){
-										
-										check	= true;
-										
-										break;
-									}
-								}
-							}
+
+                                if (checkConnections(connections)) {
+
+                                    // might have a concurrent mod to the iterator
+
+                                    if (!http_connection_map.containsKey(key)) {
+
+                                        check = true;
+
+                                        break;
+                                    }
+                                }
+                            }
 						}
 					}
 				}
@@ -163,11 +159,11 @@ HTTPNetworkConnection
 		
 		Iterator<HTTPNetworkConnection>	it = connections.iterator();
 			
-		List<HTTPNetworkConnection>	timed_out = new ArrayList<HTTPNetworkConnection>();
+		List<HTTPNetworkConnection>	timed_out = new ArrayList<>();
 		
 		while( it.hasNext()){
 			
-			HTTPNetworkConnection	connection = (HTTPNetworkConnection)it.next();
+			HTTPNetworkConnection	connection = it.next();
 		
 			long	time = connection.getTimeSinceLastActivity();
 		
@@ -188,13 +184,13 @@ HTTPNetworkConnection
 				oldest	= connection;
 			}
 		}
-		
-		for (int i=0;i<timed_out.size();i++){
-			
-			((HTTPNetworkConnection)timed_out.get(i)).close( "Timeout" );
-			
-			some_closed	= true;
-		}
+
+        for (HTTPNetworkConnection httpNetworkConnection : timed_out) {
+
+            httpNetworkConnection.close("Timeout");
+
+            some_closed = true;
+        }
 		
 		if ( connections.size() - timed_out.size() > MAX_CON_PER_ENDPOINT ){
 			
@@ -219,9 +215,9 @@ HTTPNetworkConnection
 
 	private boolean	choked	= true;
 	
-	private final List<httpRequest>		http_requests			= new ArrayList<httpRequest>();
-	private final List<BTRequest>			choked_requests 		= new ArrayList<BTRequest>();
-	private final List<pendingRequest>	outstanding_requests 	= new ArrayList<pendingRequest>();
+	private final List<httpRequest>		http_requests			= new ArrayList<>();
+	private final List<BTRequest>			choked_requests 		= new ArrayList<>();
+	private final List<pendingRequest>	outstanding_requests 	= new ArrayList<>();
 	
 	private final BitSet	piece_map	= new BitSet();
 	
@@ -272,7 +268,7 @@ HTTPNetworkConnection
 			
 			if ( connections == null ){
 				
-				connections = new ArrayList<HTTPNetworkConnection>();
+				connections = new ArrayList<>();
 				
 				http_connection_map.put( network_connection_key, connections );
 			}
@@ -356,11 +352,11 @@ HTTPNetworkConnection
 		synchronized( outstanding_requests ){
 			
 			choked	= false;
-			
-			for (int i=0;i<choked_requests.size();i++){
-								
-				decoder.addMessage((BTRequest)choked_requests.get(i));
-			}
+
+            for (BTRequest choked_request : choked_requests) {
+
+                decoder.addMessage(choked_request);
+            }
 			
 			choked_requests.clear();
 		}
@@ -507,7 +503,7 @@ HTTPNetworkConnection
 
 			while( outstanding_requests.size() < MAX_OUTSTANDING_BT_REQUESTS && http_requests.size() > 0 ){
 				
-				httpRequest	http_request = (httpRequest)http_requests.get(0);
+				httpRequest	http_request = http_requests.get(0);
 				
 				long[]	offsets	= http_request.getModifiableOffsets();
 				long[]	lengths	= http_request.getModifiableLengths();
@@ -595,7 +591,7 @@ HTTPNetworkConnection
 		
 		BTPiece	piece = (BTPiece)message;
 		
-		List<pendingRequest>	ready_requests = new ArrayList<pendingRequest>();
+		List<pendingRequest>	ready_requests = new ArrayList<>();
 		
 		boolean	found = false;
 		
@@ -666,7 +662,7 @@ HTTPNetworkConnection
 			
 		}
 		
-		pendingRequest req	= (pendingRequest)ready_requests.get(0);
+		pendingRequest req	= ready_requests.get(0);
 		
 		DirectByteBuffer[]	buffers;
 		
@@ -693,7 +689,7 @@ HTTPNetworkConnection
 				buffers[0] = new DirectByteBuffer( ByteBuffer.allocate(0));
 			}
 					
-			req	= (pendingRequest)ready_requests.get(i);
+			req	= ready_requests.get(i);
 
 			BTPiece	this_piece = req.getBTPiece();
 			
@@ -714,13 +710,11 @@ HTTPNetworkConnection
 			req.logQueued();
 			
 			if ( request_listeners != null ){
-				
-				Iterator<requestListener> it = request_listeners.iterator();
-			
-				while( it.hasNext()){
-					
-					((requestListener)it.next()).requestComplete( req );
-				}
+
+                for (requestListener request_listener : request_listeners) {
+
+                    request_listener.requestComplete(req);
+                }
 			}
 			
 			raw_messages[i] = 
@@ -780,27 +774,23 @@ HTTPNetworkConnection
 		synchronized( outstanding_requests ){
 
 			destroyed	= true;
-			
-			for (int i=0;i<outstanding_requests.size();i++){
-				
-				pendingRequest	req = (pendingRequest)outstanding_requests.get(i);
-				
-				BTPiece	piece = req.getBTPiece();
-				
-				if ( piece != null ){
-					
-					piece.destroy();
-				}
-			}
+
+            for (pendingRequest req : outstanding_requests) {
+
+                BTPiece piece = req.getBTPiece();
+
+                if (piece != null) {
+
+                    piece.destroy();
+                }
+            }
 			
 			outstanding_requests.clear();
-			
-			for (int i=0;i<choked_requests.size();i++){
-				
-				BTRequest	req = (	BTRequest)choked_requests.get(i);
-								
-				req.destroy();
-			}
+
+            for (BTRequest req : choked_requests) {
+
+                req.destroy();
+            }
 			
 			choked_requests.clear();
 		}
@@ -915,7 +905,7 @@ HTTPNetworkConnection
 				
 				if ( request_listeners == null ){
 					
-					request_listeners = new CopyOnWriteList<requestListener>();
+					request_listeners = new CopyOnWriteList<>();
 				}
 				
 				request_listeners.add(
@@ -1052,11 +1042,11 @@ HTTPNetworkConnection
 			
 			mod_offsets = orig_offsets.clone();
 			mod_lengths = orig_lengths.clone();
-			
-			for (int i=0;i<orig_lengths.length;i++){
-				
-				total_length += orig_lengths[i];
-			}
+
+            for (long orig_length : orig_lengths) {
+
+                total_length += orig_length;
+            }
 		}
 				
 		protected boolean
@@ -1136,16 +1126,16 @@ HTTPNetworkConnection
 	protected interface
 	flushListener
 	{
-		public void
+		void
 		flushed();
 	}
 	
 	protected interface
 	requestListener
 	{
-		public void
+		void
 		requestComplete(
-			pendingRequest	request );
+                pendingRequest request);
 	}
 	
 	private static class

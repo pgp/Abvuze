@@ -26,6 +26,6 @@ public class Yytoken {
 	}
 	
 	public String toString(){
-		return String.valueOf(type+"=>|"+value+"|");
+		return type + "=>|" + value + "|";
 	}
 }

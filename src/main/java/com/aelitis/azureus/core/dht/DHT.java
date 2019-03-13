@@ -40,58 +40,58 @@ DHT
 {
 		// all property values are Integer values
 	
-	public static final String	PR_CONTACTS_PER_NODE					= "EntriesPerNode";
-	public static final String	PR_NODE_SPLIT_FACTOR					= "NodeSplitFactor";
-	public static final String	PR_SEARCH_CONCURRENCY					= "SearchConcurrency";
-	public static final String	PR_LOOKUP_CONCURRENCY					= "LookupConcurrency";
-	public static final String	PR_MAX_REPLACEMENTS_PER_NODE			= "ReplacementsPerNode";
-	public static final String	PR_CACHE_AT_CLOSEST_N					= "CacheClosestN";
-	public static final String	PR_ORIGINAL_REPUBLISH_INTERVAL			= "OriginalRepublishInterval";
-	public static final String	PR_CACHE_REPUBLISH_INTERVAL				= "CacheRepublishInterval";
-	public static final String	PR_ENCODE_KEYS							= "EncodeKeys";
-	public static final String	PR_ENABLE_RANDOM_LOOKUP					= "EnableRandomLookup";
+	String	PR_CONTACTS_PER_NODE					= "EntriesPerNode";
+	String	PR_NODE_SPLIT_FACTOR					= "NodeSplitFactor";
+	String	PR_SEARCH_CONCURRENCY					= "SearchConcurrency";
+	String	PR_LOOKUP_CONCURRENCY					= "LookupConcurrency";
+	String	PR_MAX_REPLACEMENTS_PER_NODE			= "ReplacementsPerNode";
+	String	PR_CACHE_AT_CLOSEST_N					= "CacheClosestN";
+	String	PR_ORIGINAL_REPUBLISH_INTERVAL			= "OriginalRepublishInterval";
+	String	PR_CACHE_REPUBLISH_INTERVAL				= "CacheRepublishInterval";
+	String	PR_ENCODE_KEYS							= "EncodeKeys";
+	String	PR_ENABLE_RANDOM_LOOKUP					= "EnableRandomLookup";
 
-	public static final short		FLAG_NONE				= 0x0000;
-	public static final short		FLAG_SINGLE_VALUE		= FLAG_NONE;
-	public static final short		FLAG_DOWNLOADING		= 0x0001;
-	public static final short		FLAG_SEEDING			= 0x0002;
-	public static final short		FLAG_MULTI_VALUE		= 0x0004;
-	public static final short		FLAG_STATS				= 0x0008;
-	public static final short		FLAG_ANON				= 0x0010;
-	public static final short		FLAG_PRECIOUS			= 0x0020;
-	public static final short		FLAG_BRIDGED			= 0x0040;
+	short		FLAG_NONE				= 0x0000;
+	short		FLAG_SINGLE_VALUE		= FLAG_NONE;
+	short		FLAG_DOWNLOADING		= 0x0001;
+	short		FLAG_SEEDING			= 0x0002;
+	short		FLAG_MULTI_VALUE		= 0x0004;
+	short		FLAG_STATS				= 0x0008;
+	short		FLAG_ANON				= 0x0010;
+	short		FLAG_PRECIOUS			= 0x0020;
+	short		FLAG_BRIDGED			= 0x0040;
 	
 		// only a single byte is serialized for flags so these ones ain't going nowhere remote!
 	
-	public static final short		FLAG_PUT_AND_FORGET		= 0x0100;			// local only
-	public static final short		FLAG_OBFUSCATE_LOOKUP	= 0x0200;			// local only
-	public static final short		FLAG_LOOKUP_FOR_STORE	= 0x0400;			// local only
-	public static final short		FLAG_HIGH_PRIORITY		= 0x0800;			// local only, used in plugin to transmit priority through call stack
+	short		FLAG_PUT_AND_FORGET		= 0x0100;			// local only
+	short		FLAG_OBFUSCATE_LOOKUP	= 0x0200;			// local only
+	short		FLAG_LOOKUP_FOR_STORE	= 0x0400;			// local only
+	short		FLAG_HIGH_PRIORITY		= 0x0800;			// local only, used in plugin to transmit priority through call stack
 
-	public static final int 	MAX_VALUE_SIZE		= 512;
+	int 	MAX_VALUE_SIZE		= 512;
 
-	public static final byte	REP_FACT_NONE			= 0;
-	public static final byte	REP_FACT_DEFAULT		= (byte)0xff;
+	byte	REP_FACT_NONE			= 0;
+	byte	REP_FACT_DEFAULT		= (byte)0xff;
 	
 		// diversification types, don't change as serialised!!!!
 	
-	public static final byte	DT_NONE			= 1;
-	public static final byte	DT_FREQUENCY	= 2;
-	public static final byte	DT_SIZE			= 3;
+	byte	DT_NONE			= 1;
+	byte	DT_FREQUENCY	= 2;
+	byte	DT_SIZE			= 3;
 	
-	public static final String[]	DT_STRINGS = { "", "None", "Freq", "Size" };
+	String[]	DT_STRINGS = { "", "None", "Freq", "Size" };
 	
-	public static final int		NW_MAIN			= 0;
-	public static final int		NW_CVS			= 1;
-	public static final int		NW_MAIN_V6		= 3;
+	int		NW_MAIN			= 0;
+	int		NW_CVS			= 1;
+	int		NW_MAIN_V6		= 3;
 	
-	public void
+	void
 	put(
-		byte[]					key,
-		String					description,
-		byte[]					value,
-		short					flags,
-		DHTOperationListener	listener );
+            byte[] key,
+            String description,
+            byte[] value,
+            short flags,
+            DHTOperationListener listener);
 	
 		/**
 		 * default is HIGH PRIORITY. if you change to low priority then do so consistently as
@@ -103,50 +103,50 @@ DHT
 		 * @param high_priority
 		 * @param listener
 		 */
-	
-	public void
-	put(
-		byte[]					key,
-		String					description,
-		byte[]					value,
-		short					flags,
-		boolean					high_priority,
-		DHTOperationListener	listener );
-	
-	public void
-	put(
-		byte[]					key,
-		String					description,
-		byte[]					value,
-		short					flags,
-		byte					life_hours,
-		boolean					high_priority,
-		DHTOperationListener	listener );
 
-	public void
+        void
 	put(
-		byte[]					key,
-		String					description,
-		byte[]					value,
-		short					flags,
-		byte					life_hours,
-		byte					replication_control,	// 4 bits 1->14 republish hours; 0=vuze default | 4 bits 0->15 maintain replicas; [ff=no replication control-use default]
-		boolean					high_priority,
-		DHTOperationListener	listener );
+                byte[] key,
+                String description,
+                byte[] value,
+                short flags,
+                boolean high_priority,
+                DHTOperationListener listener);
+	
+	void
+	put(
+            byte[] key,
+            String description,
+            byte[] value,
+            short flags,
+            byte life_hours,
+            boolean high_priority,
+            DHTOperationListener listener);
+
+	void
+	put(
+            byte[] key,
+            String description,
+            byte[] value,
+            short flags,
+            byte life_hours,
+            byte replication_control,    // 4 bits 1->14 republish hours; 0=vuze default | 4 bits 0->15 maintain replicas; [ff=no replication control-use default]
+            boolean high_priority,
+            DHTOperationListener listener);
 	
 		/**
 		 * Returns value if originated from here for key
 		 * @param key
 		 * @return
 		 */
-	
-	public DHTTransportValue
+
+        DHTTransportValue
 	getLocalValue(
-		byte[]		key );
+                byte[] key);
 	
-	public List<DHTTransportValue>
+	List<DHTTransportValue>
 	getStoredValues(
-		byte[]		key );
+            byte[] key);
 
 		/**
 		 * @param key
@@ -154,56 +154,56 @@ DHT
 		 * @param timeout
 		 * @param listener
 		 */
-	
-	public void
+
+        void
 	get(
-		byte[]					key,
-		String					description,
-		short					flags,
-		int						max_values,
-		long					timeout,
-		boolean					exhaustive,
-		boolean					high_priority,
-		DHTOperationListener	listener );
+                byte[] key,
+                String description,
+                short flags,
+                int max_values,
+                long timeout,
+                boolean exhaustive,
+                boolean high_priority,
+                DHTOperationListener listener);
 	
 		
-	public byte[]
+	byte[]
 	remove(
-		byte[]					key,
-		String					description,
-		DHTOperationListener	listener );
+            byte[] key,
+            String description,
+            DHTOperationListener listener);
 	
-	public byte[]
+	byte[]
 	remove(
-		DHTTransportContact[]	contacts,
-		byte[]					key,
-		String					description,
-		DHTOperationListener	listener );
+            DHTTransportContact[] contacts,
+            byte[] key,
+            String description,
+            DHTOperationListener listener);
 	
-	public boolean
+	boolean
 	isDiversified(
-		byte[]		key );
+            byte[] key);
 	
-	public int
+	int
 	getIntProperty(
-		String		name );
+            String name);
 	
-	public DHTTransport
+	DHTTransport
 	getTransport();
 	
-	public DHTRouter
+	DHTRouter
 	getRouter();
 	
-	public DHTControl
+	DHTControl
 	getControl();
 	
-	public DHTDB
+	DHTDB
 	getDataBase();
 	
-	public DHTNATPuncher
+	DHTNATPuncher
 	getNATPuncher();
 	
-	public DHTStorageAdapter
+	DHTStorageAdapter
 	getStorageAdapter();
 	
 		/**
@@ -213,11 +213,11 @@ DHT
 		 * @param max  maximum to export, 0 -> all
 		 * @throws IOException
 		 */
-	
-	public void
+
+        void
 	exportState(
-		DataOutputStream	os,
-		int					max )
+                DataOutputStream os,
+                int max)
 	
 		throws IOException;
 	
@@ -226,10 +226,10 @@ DHT
 		 * @param is
 		 * @throws IOException
 		 */
-	
-	public void
+
+        void
 	importState(
-		DataInputStream		is )
+                DataInputStream is)
 	
 		throws IOException;
 	
@@ -237,37 +237,37 @@ DHT
 		 * Integrate the node into the DHT
 		 * Can be invoked more than once if additional state is imported
 		 */
-	
-	public void
-	integrate(
-		boolean		full_wait );
 
-	public void
+        void
+	integrate(
+                boolean full_wait);
+
+	void
 	setSuspended(
-		boolean	susp );
+            boolean susp);
 	
-	public void
+	void
 	destroy();
 	
-	public boolean
+	boolean
 	isSleeping();
 	
-	public void
+	void
 	setLogging(
-		boolean	on );
+            boolean on);
 
-	public DHTLogger
+	DHTLogger
 	getLogger();
 	
-	public void
+	void
 	print(
-		boolean	full );
+            boolean full);
 	
-	public void
+	void
 	addListener(
-		DHTListener		listener );
+            DHTListener listener);
 	
-	public void
+	void
 	removeListener(
-		DHTListener		listener );
+            DHTListener listener);
 }

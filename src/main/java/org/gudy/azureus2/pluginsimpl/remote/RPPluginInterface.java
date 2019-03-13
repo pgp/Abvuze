@@ -145,50 +145,47 @@ RPPluginInterface
 		RPRequest	request	)
 	{
 		String	method = request.getMethod();
-		
-		if ( method.equals( "getPluginProperties")){
-				
-				// must copy properties as actual return is subtype + non serialisable
-			
-			Properties p = new Properties();
-			
-			Properties x = delegate.getPluginProperties();
-			
-			Iterator	it = x.keySet().iterator();
-			
-			while(it.hasNext()){
-				
-				Object	key = it.next();
-				
-				p.put( key, x.get(key));
-			}
-			
-			return( new RPReply( p ));
-			
-		}else if ( method.equals( "getDownloadManager")){
-			
-			return( new RPReply( RPDownloadManager.create(delegate.getDownloadManager())));
-		
-		}else if ( method.equals( "getTorrentManager")){
-			
-			return( new RPReply( RPTorrentManager.create(delegate.getTorrentManager())));
-		
-		}else if ( method.equals( "getPluginconfig")){
-			
-			return( new RPReply( RPPluginConfig.create(delegate.getPluginconfig())));
-			
-		}else if ( method.equals( "getIPFilter")){
-			
-			return( new RPReply( RPIPFilter.create(delegate.getIPFilter())));
-			
-		}else if ( method.equals( "getShortCuts")){
-			
-			return( new RPReply( RPShortCuts.create(delegate.getShortCuts())));
-			
-		}else if ( method.equals( "getTracker")){
-			
-			return( new RPReply( RPTracker.create(delegate.getTracker())));
-		}
+
+        switch (method) {
+            case "getPluginProperties":
+
+                // must copy properties as actual return is subtype + non serialisable
+
+                Properties p = new Properties();
+
+                Properties x = delegate.getPluginProperties();
+
+                for (Object key : x.keySet()) {
+
+                    p.put(key, x.get(key));
+                }
+
+                return (new RPReply(p));
+
+            case "getDownloadManager":
+
+                return (new RPReply(RPDownloadManager.create(delegate.getDownloadManager())));
+
+            case "getTorrentManager":
+
+                return (new RPReply(RPTorrentManager.create(delegate.getTorrentManager())));
+
+            case "getPluginconfig":
+
+                return (new RPReply(RPPluginConfig.create(delegate.getPluginconfig())));
+
+            case "getIPFilter":
+
+                return (new RPReply(RPIPFilter.create(delegate.getIPFilter())));
+
+            case "getShortCuts":
+
+                return (new RPReply(RPShortCuts.create(delegate.getShortCuts())));
+
+            case "getTracker":
+
+                return (new RPReply(RPTracker.create(delegate.getTracker())));
+        }
 			
 		throw( new RPException( "Unknown method: " + method ));
 	}

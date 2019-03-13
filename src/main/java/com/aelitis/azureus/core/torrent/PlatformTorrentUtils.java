@@ -86,7 +86,7 @@ public class PlatformTorrentUtils
 	
 	private static final String TOR_AZ_PROP_PRIMARY_FILE = "Primary File Index";
 
-	private static final ArrayList<HasBeenOpenedListener> hasBeenOpenedListeners = new ArrayList<HasBeenOpenedListener>(1);
+	private static final ArrayList<HasBeenOpenedListener> hasBeenOpenedListeners = new ArrayList<>(1);
 
 	private static final String TOR_AZ_PROP_VIDEO_WIDTH = "Video Width";
 
@@ -98,7 +98,7 @@ public class PlatformTorrentUtils
 
 	private static final String TOR_AZ_PROP_OPENED = "Opened";
 
-	private static ArrayList<String> listPlatformHosts = new ArrayList<String>();
+	private static ArrayList<String> listPlatformHosts = new ArrayList<>();
 
 	static{
 		for (int i = 0; i < Constants.AZUREUS_DOMAINS.length; i++) {
@@ -202,7 +202,7 @@ public class PlatformTorrentUtils
 
 		try {
 			if (obj instanceof Long) {
-				return ((Long) obj).longValue();
+				return (Long) obj;
 			} else if (obj instanceof Integer) {
 				return ((Integer) obj).longValue();
 			} else if (obj instanceof String) {
@@ -238,7 +238,7 @@ public class PlatformTorrentUtils
 		}
 
 		Map mapContent = getContentMap(torrent);
-		mapContent.put(key, new Long(value));
+		mapContent.put(key, value);
 	}
 
 	public static void setContentMapMap(TOTorrent torrent, String key,
@@ -423,20 +423,20 @@ public class PlatformTorrentUtils
 
 		host = host.toLowerCase();
 
-		for (int i = 0; i < domains.length; i++) {
+        for (Object domain1 : domains) {
 
-			String domain = (String) domains[i];
+            String domain = (String) domain1;
 
-			if (domain.equals(host)) {
+            if (domain.equals(host)) {
 
-				return (true);
-			}
+                return (true);
+            }
 
-			if (host.endsWith("." + domain)) {
+            if (host.endsWith("." + domain)) {
 
-				return (true);
-			}
-		}
+                return (true);
+            }
+        }
 
 		if ( Constants.isCVSVersion()){
 		
@@ -463,7 +463,7 @@ public class PlatformTorrentUtils
 
 			Object oCache = mapPlatformTrackerTorrents.get(torrent);
 			if (oCache instanceof Boolean) {
-				return ((Boolean) oCache).booleanValue();
+				return (Boolean) oCache;
 			}
 
 			// check them all incase someone includes one of our trackers in a multi-tracker
@@ -482,22 +482,22 @@ public class PlatformTorrentUtils
 
 			TOTorrentAnnounceURLSet[] sets = torrent.getAnnounceURLGroup().getAnnounceURLSets();
 
-			for (int i = 0; i < sets.length; i++) {
+            for (TOTorrentAnnounceURLSet set : sets) {
 
-				URL[] urls = sets[i].getAnnounceURLs();
+                URL[] urls = set.getAnnounceURLs();
 
-				for (int j = 0; j < urls.length; j++) {
+                for (URL url : urls) {
 
-					if (!isPlatformHost(urls[j].getHost())) {
+                    if (!isPlatformHost(url.getHost())) {
 
-						mapPlatformTrackerTorrents.put(torrent, Boolean.FALSE);
-						return (false);
-					}
-				}
-			}
+                        mapPlatformTrackerTorrents.put(torrent, Boolean.FALSE);
+                        return (false);
+                    }
+                }
+            }
 
 			boolean b = announceURL != null;
-			mapPlatformTrackerTorrents.put(torrent, Boolean.valueOf(b));
+			mapPlatformTrackerTorrents.put(torrent, b);
 			return b;
 
 		} catch (Throwable e) {
@@ -519,7 +519,7 @@ public class PlatformTorrentUtils
 	public static boolean isAdvancedViewOnly(DownloadManager dm) {
 		Boolean oisUpdate = (Boolean) dm.getUserData("isAdvancedViewOnly");
 		if (oisUpdate != null) {
-			return oisUpdate.booleanValue();
+			return oisUpdate;
 		}
 
 		boolean advanced_view = true;
@@ -542,26 +542,26 @@ public class PlatformTorrentUtils
 				
 				if (advanced_view) {
 					TOTorrentAnnounceURLSet[] sets = torrent.getAnnounceURLGroup().getAnnounceURLSets();
-	
-					for (int i = 0; i < sets.length; i++) {
-	
-						URL[] urls = sets[i].getAnnounceURLs();
-	
-						for (int j = 0; j < urls.length; j++) {
-	
-							String host = urls[j].getHost();
-							
-							if (!( host.endsWith(AELITIS_HOST_CORE)|| host.endsWith( VUZE_HOST_CORE ))){
-								advanced_view = false;
-								break;
-							}
-						}
-					}
+
+                    for (TOTorrentAnnounceURLSet set : sets) {
+
+                        URL[] urls = set.getAnnounceURLs();
+
+                        for (URL url : urls) {
+
+                            String host = url.getHost();
+
+                            if (!(host.endsWith(AELITIS_HOST_CORE) || host.endsWith(VUZE_HOST_CORE))) {
+                                advanced_view = false;
+                                break;
+                            }
+                        }
+                    }
 				}
 			}
 		}
 		
-		dm.setUserData("isAdvancedViewOnly", Boolean.valueOf(advanced_view));
+		dm.setUserData("isAdvancedViewOnly", advanced_view);
 		
 		return advanced_view;
 	}
@@ -584,7 +584,7 @@ public class PlatformTorrentUtils
 		if (l == null) {
 			return 0;
 		}
-		return l.longValue();
+		return l;
 	}
 
 	public static int getContentPrimaryFileIndex(TOTorrent torrent ){
@@ -701,14 +701,14 @@ public class PlatformTorrentUtils
 		setContentMapLong(torrent, TOR_AZ_PROP_OPENED, opened ? 1 : 0);
 		writeTorrentIfExists(torrent);
 		Object[] array = hasBeenOpenedListeners.toArray();
-		for (int i = 0; i < array.length; i++) {
-			try {
-				HasBeenOpenedListener l = (HasBeenOpenedListener) array[i];
-				l.hasBeenOpenedChanged(dm, opened);
-			} catch (Exception e) {
-				Debug.out(e);
-			}
-		}
+        for (Object o : array) {
+            try {
+                HasBeenOpenedListener l = (HasBeenOpenedListener) o;
+                l.hasBeenOpenedChanged(dm, opened);
+            } catch (Exception e) {
+                Debug.out(e);
+            }
+        }
 	}
 
 	public static boolean getHasBeenOpened(DownloadManager dm) {

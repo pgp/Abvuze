@@ -38,7 +38,7 @@ public class OSXAccess
 
 	private static boolean DEBUG = false;
 
-	private static List<String> parameters = new ArrayList<String>(1);
+	private static List<String> parameters = new ArrayList<>(1);
 	
 	static {
 		if (!Constants.isOSX_10_5_OrHigher || !loadLibrary("OSXAccess_10.5")) {
@@ -100,8 +100,8 @@ public class OSXAccess
 
 				Class<?> claOSXFileOpen = Class.forName("org.gudy.azureus2.ui.swt.osx.OSXFileOpen");
 				if (claOSXFileOpen != null) {
-					Method method = claOSXFileOpen.getMethod("initLight", new Class[0]);
-					method.invoke(null, new Object[0]);
+					Method method = claOSXFileOpen.getMethod("initLight");
+					method.invoke(null);
 				}
 				return;
 			}

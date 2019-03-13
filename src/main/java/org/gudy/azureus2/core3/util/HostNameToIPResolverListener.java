@@ -33,8 +33,8 @@ HostNameToIPResolverListener
 		 * 
 		 * @param address	null if resolution failed
 		 */
-	
-	public void
+
+        void
 	hostNameResolutionComplete(
-		InetAddress	address );
+                InetAddress address);
 }

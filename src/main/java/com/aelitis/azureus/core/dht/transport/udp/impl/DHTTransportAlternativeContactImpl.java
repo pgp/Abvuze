@@ -111,7 +111,7 @@ DHTTransportAlternativeContactImpl
 			
 		}catch( Throwable e ){
 			
-			return( new HashMap<String,Object>());
+			return(new HashMap<>());
 		}
 	}
 }

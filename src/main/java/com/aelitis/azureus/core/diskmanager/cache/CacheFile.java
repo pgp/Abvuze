@@ -31,105 +31,105 @@ import org.gudy.azureus2.core3.util.DirectByteBuffer;
 public interface 
 CacheFile 
 {
-	public static final int	CT_LINEAR					= 1;
-	public static final int CT_COMPACT					= 2;
-	public static final int CT_PIECE_REORDER			= 3;
-	public static final int CT_PIECE_REORDER_COMPACT	= 4;
+	int	CT_LINEAR					= 1;
+	int CT_COMPACT					= 2;
+	int CT_PIECE_REORDER			= 3;
+	int CT_PIECE_REORDER_COMPACT	= 4;
 
-	public static final int	CF_READ		= 1;
-	public static final int CF_WRITE	= 2;
+	int	CF_READ		= 1;
+	int CF_WRITE	= 2;
 	
-	public static final short CP_NONE		= 0x0000;
-	public static final short CP_READ_CACHE	= 0x0001;
-	public static final short CP_FLUSH		= 0x0002;
+	short CP_NONE		= 0x0000;
+	short CP_READ_CACHE	= 0x0001;
+	short CP_FLUSH		= 0x0002;
 	
-	public TOTorrentFile
+	TOTorrentFile
 	getTorrentFile();
 	
-	public boolean
+	boolean
 	exists();
 		
-	public void
+	void
 	moveFile(
-		File		new_file )
+            File new_file)
 	
 		throws CacheFileManagerException;
 	
-	public void
+	void
 	renameFile(
-		String		new_name )
+            String new_name)
 	
 		throws CacheFileManagerException;
 	
-	public void
+	void
 	setAccessMode(
-		int		mode )
+            int mode)
 	
 		throws CacheFileManagerException;
 	
-	public int
+	int
 	getAccessMode();
 	
-	public void
+	void
 	setStorageType(
-		int		type )
+            int type)
 	
 		throws CacheFileManagerException;
 	
-	public int
+	int
 	getStorageType();
 	
-	public long
+	long
 	getLength()
 	
 		throws CacheFileManagerException;
 
-	public long
+	long
 	compareLength(
-		long	compare_to )
+            long compare_to)
 	
 		throws CacheFileManagerException;
 	
-	public void
+	void
 	setLength(
-		long		length )
+            long length)
 	
 		throws CacheFileManagerException;
 	
-	public void
+	void
 	setPieceComplete(
-		int					piece_number,
-		DirectByteBuffer	piece_data )
+            int piece_number,
+            DirectByteBuffer piece_data)
 	
 		throws CacheFileManagerException;
 	
-	public void
+	void
 	read(
-		DirectByteBuffer	buffer,
-		long				offset,
-		short				policy )
+            DirectByteBuffer buffer,
+            long offset,
+            short policy)
 	
 		throws CacheFileManagerException;
 	
-	public void
+	void
 	read(
-		DirectByteBuffer[]	buffers,
-		long				offset,
-		short				policy )
+            DirectByteBuffer[] buffers,
+            long offset,
+            short policy)
 	
 		throws CacheFileManagerException;
 
-	public void
+	void
 	write(
-		DirectByteBuffer	buffer,
-		long				position )
+            DirectByteBuffer buffer,
+            long position)
 	
 		throws CacheFileManagerException;
 	
-	public void
+	void
 	write(
-		DirectByteBuffer[]	buffers,
-		long				position )
+            DirectByteBuffer[] buffers,
+            long position)
 	
 		throws CacheFileManagerException;
 
@@ -140,18 +140,18 @@ CacheFile
 		 * @param position
 		 * @throws CacheFileManagerException	write failed and buffer *not* taken - i.e. caller must de-allocate
 		 */
-	
-	public void
+
+        void
 	writeAndHandoverBuffer(
-		DirectByteBuffer	buffer,
-		long				position )
+                DirectByteBuffer buffer,
+                long position)
 	
 		throws CacheFileManagerException;
 	
-	public void
+	void
 	writeAndHandoverBuffers(
-		DirectByteBuffer[]	buffers,
-		long				position )
+            DirectByteBuffer[] buffers,
+            long position)
 	
 		throws CacheFileManagerException;
 
@@ -159,8 +159,8 @@ CacheFile
 		 * flushes the cache to disk but retains entries
 		 * @throws CacheFileManagerException
 		 */
-	
-	public void
+
+        void
 	flushCache()
 	
 		throws CacheFileManagerException;
@@ -169,27 +169,27 @@ CacheFile
 		 * flushes the cache and discards entries
 		 * @throws CacheFileManagerException
 		 */
-	
-	public void
+
+        void
 	clearCache()
 	
 		throws CacheFileManagerException;
 
-	public void
+	void
 	close()
 	
 		throws CacheFileManagerException;
 	
-	public boolean
+	boolean
 	isOpen();
 	
-	public long
+	long
 	getSessionBytesRead();
 	
-	public long
+	long
 	getSessionBytesWritten();
 	
-	public void
+	void
 	delete()
 
 		throws CacheFileManagerException;

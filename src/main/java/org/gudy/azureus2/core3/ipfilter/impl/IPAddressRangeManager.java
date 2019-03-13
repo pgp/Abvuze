@@ -234,16 +234,14 @@ IPAddressRangeManager
 					
 					return( null );
 				}
-				
-				for (int i=0;i<merged.length;i++){
-					
-					IpRange	me = merged[i];
-					
-					if ( me.getStartIpLong() <= address_long && me.getEndIpLong() >= address_long ){
-						
-						return( me );
-					}
-				}
+
+                for (IpRange me : merged) {
+
+                    if (me.getStartIpLong() <= address_long && me.getEndIpLong() >= address_long) {
+
+                        return (me);
+                    }
+                }
 				
 				Debug.out( "IPAddressRangeManager: inconsistent merged details - entry not found" );
 			}
@@ -319,11 +317,11 @@ IPAddressRangeManager
 		IpRange[]	ents = new IpRange[entries.size()];
 		
 		entries.toArray(ents);
-		
-		for (int i=0;i<ents.length;i++){
-			
-			ents[i].resetMergeInfo();
-		}
+
+        for (IpRange ent : ents) {
+
+            ent.resetMergeInfo();
+        }
 		
 			// sort based on start address
 		
@@ -404,17 +402,15 @@ IPAddressRangeManager
 		me.toArray( mergedRanges );
 		
 		total_span	= 0;
-		
-		for (int i=0;i<mergedRanges.length;i++){
-			
-			IpRange	e = mergedRanges[i];
-			
-				// span is inclusive
-			
-			long	span = ( e.getMergedEndLong() - e.getStartIpLong()) + 1;
-			
-			total_span	+= span;
-		}
+
+        for (IpRange e : mergedRanges) {
+
+            // span is inclusive
+
+            long span = (e.getMergedEndLong() - e.getStartIpLong()) + 1;
+
+            total_span += span;
+        }
 			//	System.out.println( "non_merged = " + merged_entries.length );
 		
 		if (Logger.isEnabled())

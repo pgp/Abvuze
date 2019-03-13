@@ -23,7 +23,7 @@ package com.aelitis.azureus.core.cnetwork;
 public interface 
 ContentNetworkPropertyChangeListener 
 {
-	public void
+	void
 	propertyChanged(
-		String		name );
+            String name);
 }

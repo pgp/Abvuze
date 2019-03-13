@@ -30,10 +30,10 @@ public interface
 UPnPWANConnection
 	extends UPnPSpecificService
 {
-	public static final int	CAP_UDP_TCP_SAME_PORT	= 0x0000001;
-	public static final int	CAP_ALL					= 0xffffffff;
+	int	CAP_UDP_TCP_SAME_PORT	= 0x0000001;
+	int	CAP_ALL					= 0xffffffff;
 	
-	public String
+	String
 	getConnectionType();
 	
 		/**
@@ -42,49 +42,49 @@ UPnPWANConnection
 		 * @param port
 		 * @param description
 		 */
-	
-	public void
+
+        void
 	addPortMapping(
-		boolean		tcp,			// false -> UDP
-		int			port,
-		String		description )
+                boolean tcp,            // false -> UDP
+                int port,
+                String description)
 	
 		throws UPnPException;
 	
-	public UPnPWANConnectionPortMapping[]
+	UPnPWANConnectionPortMapping[]
 	getPortMappings()
 	
 		throws UPnPException;
 	
-	public void
+	void
 	deletePortMapping(
-		boolean		tcp,
-		int			port )
+            boolean tcp,
+            int port)
 	
 		throws UPnPException;
 	
-	public String[]
+	String[]
 	getStatusInfo()
 	
 		throws UPnPException;
 	
-	public void
+	void
 	periodicallyRecheckMappings(
-		boolean	on );
+            boolean on);
 	
-	public int
+	int
 	getCapabilities();
 	
-	public String
+	String
 	getExternalIPAddress()
 	
 		throws UPnPException;
 	
-	public void
+	void
 	addListener(
-		UPnPWANConnectionListener	listener );
+            UPnPWANConnectionListener listener);
 	
-	public void
+	void
 	removeListener(
-		UPnPWANConnectionListener	listener );
+            UPnPWANConnectionListener listener);
 }

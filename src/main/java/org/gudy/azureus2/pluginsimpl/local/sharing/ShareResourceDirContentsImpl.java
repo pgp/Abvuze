@@ -143,13 +143,13 @@ ShareResourceDirContentsImpl
 	
 		throws ShareResourceDeletionVetoException
 	{
-		for (int i=0;i<children.length;i++){
-			
-			if ( !children[i].canBeDeleted()){
-				
-				return( false );
-			}
-		}
+        for (ShareResource child : children) {
+
+            if (!child.canBeDeleted()) {
+
+                return (false);
+            }
+        }
 		
 		return( true );
 	}
@@ -205,72 +205,68 @@ ShareResourceDirContentsImpl
 				}
 			}
 		}else{
-					
-			for (int i=0;i<files.length;i++){
-				
-				File	file = files[i];
-			
-				String	file_name = file.getName();
-				
-				if (!(file_name.equals(".") || file_name.equals(".." ))){
-					
-					if ( file.isDirectory()){
-						
-						if ( recursive ){
-							
-							List	child = checkConsistency( file );
-							
-							kids.add( new shareNode( this, file, child ));
-							
-						}else{
-							
-							try{
-								ShareResource res = manager.getDir( file );
-								
-								if ( res == null ){
-								
-									res = manager.addDir( this, file, personal_key != null, properties );
-								}
-								
-								kids.add( res );
-								
-							}catch( Throwable e ){
-								
-								Debug.printStackTrace( e );
-							}
-						}
-					}else{
-		
-						try{
-							ShareResource res = manager.getFile( file );
-							
-							if ( res == null ){
-								
-								res = manager.addFile( this, file, personal_key != null, properties );
-							}
-							
-							kids.add( res );
-							
-						}catch( Throwable e ){
-							
-							Debug.printStackTrace( e );
-						}
-					}
-				}
-			}
-			
-			for (int i=0;i<kids.size();i++){
-				
-				Object	o = kids.get(i);
-				
-				if ( o instanceof ShareResourceImpl ){
-			
-					((ShareResourceImpl)o).setParent(this);
-				}else{
-					
-					((shareNode)o).setParent(this);
-				}
-			}
+
+            for (File file : files) {
+
+                String file_name = file.getName();
+
+                if (!(file_name.equals(".") || file_name.equals(".."))) {
+
+                    if (file.isDirectory()) {
+
+                        if (recursive) {
+
+                            List child = checkConsistency(file);
+
+                            kids.add(new shareNode(this, file, child));
+
+                        } else {
+
+                            try {
+                                ShareResource res = manager.getDir(file);
+
+                                if (res == null) {
+
+                                    res = manager.addDir(this, file, personal_key != null, properties);
+                                }
+
+                                kids.add(res);
+
+                            } catch (Throwable e) {
+
+                                Debug.printStackTrace(e);
+                            }
+                        }
+                    } else {
+
+                        try {
+                            ShareResource res = manager.getFile(file);
+
+                            if (res == null) {
+
+                                res = manager.addFile(this, file, personal_key != null, properties);
+                            }
+
+                            kids.add(res);
+
+                        } catch (Throwable e) {
+
+                            Debug.printStackTrace(e);
+                        }
+                    }
+                }
+            }
+
+            for (Object o : kids) {
+
+                if (o instanceof ShareResourceImpl) {
+
+                    ((ShareResourceImpl) o).setParent(this);
+                } else {
+
+                    ((shareNode) o).setParent(this);
+                }
+            }
 		}
 		
 		return( kids );
@@ -279,22 +275,22 @@ ShareResourceDirContentsImpl
 	protected void
 	deleteInternal()
 	{
-		for (int i=0;i<children.length;i++){
-			
-			try{
-				if ( children[i] instanceof ShareResourceImpl ){
-				
-					((ShareResourceImpl)children[i]).delete(true);
-				}else{
-					
-					((shareNode)children[i]).delete(true);
-					
-				}
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace( e );
-			}
-		}
+        for (ShareResource child : children) {
+
+            try {
+                if (child instanceof ShareResourceImpl) {
+
+                    child.delete(true);
+                } else {
+
+                    child.delete(true);
+
+                }
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 	
 	protected void
@@ -303,9 +299,9 @@ ShareResourceDirContentsImpl
 	{
 		super.serialiseResource( map );
 		
-		map.put( "type", new Long(getType()));
+		map.put( "type", (long) getType());
 		
-		map.put( "recursive", new Long(recursive?1:0));
+		map.put( "recursive", (long) (recursive ? 1 : 0));
 		
 		try{
 			map.put( "file", root.toString().getBytes( Constants.DEFAULT_ENCODING));
@@ -336,7 +332,7 @@ ShareResourceDirContentsImpl
 		try{
 			File root = new File(new String((byte[])map.get("file"), Constants.DEFAULT_ENCODING));
 		
-			boolean	recursive = ((Long)map.get("recursive")).longValue() == 1;
+			boolean	recursive = (Long) map.get("recursive") == 1;
 		
 			ShareResourceImpl res  = new ShareResourceDirContentsImpl( manager, root, recursive, map );
 						
@@ -398,20 +394,18 @@ ShareResourceDirContentsImpl
 			node_children = new ShareResource[kids.size()];
 			
 			kids.toArray( node_children );
-			
-			for (int i=0;i<node_children.length;i++){
-				
-				Object	o = node_children[i];
-				
-				if ( o instanceof ShareResourceImpl ){
-					
-					((ShareResourceImpl)o).setParent( this );
-				}else{
-					
-					((shareNode)o).setParent( this );
 
-				}
-			}
+            for (Object o : node_children) {
+
+                if (o instanceof ShareResourceImpl) {
+
+                    ((ShareResourceImpl) o).setParent(this);
+                } else {
+
+                    ((shareNode) o).setParent(this);
+
+                }
+            }
 		}
 		
 		public ShareResourceDirContents
@@ -444,10 +438,10 @@ ShareResourceDirContentsImpl
 			TorrentAttribute		attribute,
 			String					value )
 		{
-			for (int i=0;i<node_children.length;i++){
-				
-				node_children[i].setAttribute( attribute, value );
-			}
+            for (ShareResource node_child : node_children) {
+
+                node_child.setAttribute(attribute, value);
+            }
 		}
 		
 		public String
@@ -477,18 +471,16 @@ ShareResourceDirContentsImpl
 		
 			throws ShareException, ShareResourceDeletionVetoException
 		{
-			for (int i=0;i<node_children.length;i++){
-				
-				Object	o = node_children[i];
-				
-				if ( o instanceof ShareResourceImpl ){
-					
-					((ShareResourceImpl)o).delete(force);
-				}else{
-					
-					((shareNode)o).delete(force);
-				}
-			}
+            for (Object o : node_children) {
+
+                if (o instanceof ShareResourceImpl) {
+
+                    ((ShareResourceImpl) o).delete(force);
+                } else {
+
+                    ((shareNode) o).delete(force);
+                }
+            }
 		}
 		
 		
@@ -497,10 +489,10 @@ ShareResourceDirContentsImpl
 		
 			throws ShareResourceDeletionVetoException
 		{
-			for (int i=0;i<node_children.length;i++){
-				
-				node_children[i].canBeDeleted();
-			}
+            for (ShareResource node_child : node_children) {
+
+                node_child.canBeDeleted();
+            }
 			
 			return( true );
 		}

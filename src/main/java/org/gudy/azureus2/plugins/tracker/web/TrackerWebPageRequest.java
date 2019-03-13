@@ -37,30 +37,30 @@ import org.gudy.azureus2.plugins.tracker.*;
 public interface 
 TrackerWebPageRequest
 {
-	public Tracker
+	Tracker
 	getTracker();
 	
-	public String
+	String
 	getClientAddress();
 	
-	public InetSocketAddress
+	InetSocketAddress
 	getClientAddress2();
 	
-	public InetSocketAddress
+	InetSocketAddress
 	getLocalAddress();
 	
-	public String
+	String
 	getUser();
 	
 		/**
 		 * This gives the relative URL of the request (e.g. /fred.html)
 		 * @return
 		 */
-	
-	public String
+
+        String
 	getURL();
 	
-	public String
+	String
 	getHeader();
 	
 		/**
@@ -68,21 +68,21 @@ TrackerWebPageRequest
 		 * @return
 		 * @since 2.3.0.7
 		 */
-	
-	public Map 
+
+        Map
 	getHeaders();
 	
-	public InputStream
+	InputStream
 	getInputStream();
 	
 		/**
 		 * Absolute URL including protocol and port e.g. https://a.b.c:1235/fred.html
 		 * @return
 		 */
-	
-	public URL
+
+        URL
 	getAbsoluteURL();
 	
-	public TrackerWebContext
+	TrackerWebContext
 	getContext();
 }

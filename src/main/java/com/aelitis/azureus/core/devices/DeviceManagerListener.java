@@ -23,22 +23,22 @@ package com.aelitis.azureus.core.devices;
 public interface 
 DeviceManagerListener 
 {
-	public void
+	void
 	deviceAdded(
-		Device		device );
+            Device device);
 	
-	public void
+	void
 	deviceChanged(
-		Device		device );
+            Device device);
 	
-	public void
+	void
 	deviceAttentionRequest(
-		Device		device );
+            Device device);
 	
-	public void
+	void
 	deviceRemoved(
-		Device		device );
+            Device device);
 
-	public void
+	void
 	deviceManagerLoaded();
 }

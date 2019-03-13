@@ -19,7 +19,6 @@ package org.gudy.azureus2.ui.common;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -89,7 +88,7 @@ public class StartServer extends Thread {
                             if (checker.equals(AzureusCoreSingleInstanceClient.ACCESS_STRING)) {
                                 if (argsList.get(0).equals("args")) {
                                     argsList.remove(0);
-                                    String newargs[] = new String[argsList.size()];
+                                    String[] newargs = new String[argsList.size()];
                                     argsList.toArray(newargs);
                                     Main.processArgs(newargs, null, null);
                                 } else {

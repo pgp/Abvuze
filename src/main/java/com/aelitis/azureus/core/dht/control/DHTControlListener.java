@@ -22,13 +22,13 @@ package com.aelitis.azureus.core.dht.control;
 public interface 
 DHTControlListener 
 {
-	public static final int	CT_ADDED	= 1;
-	public static final int	CT_CHANGED	= 2;
-	public static final int	CT_REMOVED	= 3;
+	int	CT_ADDED	= 1;
+	int	CT_CHANGED	= 2;
+	int	CT_REMOVED	= 3;
 	
-	public void
+	void
 	activityChanged(
-		DHTControlActivity	activity,
-		int					type );
+            DHTControlActivity activity,
+            int type);
 
 }

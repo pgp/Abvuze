@@ -26,11 +26,11 @@ package org.gudy.azureus2.core3.torrent;
 public interface 
 TOTorrentProgressListener 
 {
-	public void
+	void
 	reportProgress(
-		int		percent_complete );
+            int percent_complete);
 		
-	public void
+	void
 	reportCurrentTask(
-		String	task_description );
+            String task_description);
 }

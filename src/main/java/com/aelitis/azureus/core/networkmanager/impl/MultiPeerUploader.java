@@ -117,12 +117,12 @@ public class MultiPeerUploader implements RateControlledEntity {
       lists_lock.enter();
       
       //remove and cancel all connections in waiting list    
-      for( Iterator i = waiting_connections.entrySet().iterator(); i.hasNext(); ) {
-        Map.Entry entry = (Map.Entry)i.next();
-        NetworkConnectionBase conn = (NetworkConnectionBase)entry.getKey();
-        PeerData data = (PeerData)entry.getValue();
-        conn.getOutgoingMessageQueue().cancelQueueListener( data.queue_listener );
-      }
+        for (Object o : waiting_connections.entrySet()) {
+            Map.Entry entry = (Map.Entry) o;
+            NetworkConnectionBase conn = (NetworkConnectionBase) entry.getKey();
+            PeerData data = (PeerData) entry.getValue();
+            conn.getOutgoingMessageQueue().cancelQueueListener(data.queue_listener);
+        }
       waiting_connections.clear();
       
       //remove from ready list
@@ -405,18 +405,18 @@ public class MultiPeerUploader implements RateControlledEntity {
     }
     
     //manual queue listener notifications
-    for( int i=0; i < manual_notifications.size(); i++ ) {
-      NetworkConnectionBase conn = (NetworkConnectionBase)manual_notifications.get( i );
-      conn.getOutgoingMessageQueue().doListenerNotifications();
-    }
+      for (Object manual_notification : manual_notifications) {
+          NetworkConnectionBase conn = (NetworkConnectionBase) manual_notification;
+          conn.getOutgoingMessageQueue().doListenerNotifications();
+      }
     
     //exception notifications
-    for( Iterator i = connections_to_notify_of_exception.entrySet().iterator(); i.hasNext(); ) {
-      Map.Entry entry = (Map.Entry)i.next();
-      NetworkConnectionBase conn = (NetworkConnectionBase)entry.getKey();
-      Throwable exception = (Throwable)entry.getValue();
-      conn.notifyOfException( exception );
-    }
+      for (Object o : connections_to_notify_of_exception.entrySet()) {
+          Map.Entry entry = (Map.Entry) o;
+          NetworkConnectionBase conn = (NetworkConnectionBase) entry.getKey();
+          Throwable exception = (Throwable) entry.getValue();
+          conn.notifyOfException(exception);
+      }
     
     int num_bytes_written = num_bytes_to_write - num_bytes_remaining;
     if( num_bytes_written > 0 ) {
@@ -455,19 +455,19 @@ public class MultiPeerUploader implements RateControlledEntity {
 	  try {
 		  lists_lock.enter();
 
-		  for( Iterator i = waiting_connections.keySet().iterator(); i.hasNext(); ) {
-			 
-			  NetworkConnectionBase conn = (NetworkConnectionBase)i.next();
-			  
-			  total += conn.getOutgoingMessageQueue().getTotalSize();
-		  }
-		  
-		  for( Iterator i = ready_connections.iterator(); i.hasNext(); ) {
-				 
-			  NetworkConnectionBase conn = (NetworkConnectionBase)i.next();
-			  
-			  total += conn.getOutgoingMessageQueue().getTotalSize();
-		  }
+          for (Object o : waiting_connections.keySet()) {
+
+              NetworkConnectionBase conn = (NetworkConnectionBase) o;
+
+              total += conn.getOutgoingMessageQueue().getTotalSize();
+          }
+
+          for (Object ready_connection : ready_connections) {
+
+              NetworkConnectionBase conn = (NetworkConnectionBase) ready_connection;
+
+              total += conn.getOutgoingMessageQueue().getTotalSize();
+          }
 	  }finally{
 		  
 		  lists_lock.exit();
@@ -498,25 +498,25 @@ public class MultiPeerUploader implements RateControlledEntity {
 	  try {
 		  lists_lock.enter();
 
-		  for( Iterator i = waiting_connections.keySet().iterator(); i.hasNext(); ) {
-			 
-			  NetworkConnectionBase conn = (NetworkConnectionBase)i.next();
-			  
-			  if ( conn.getTransportBase().isReadyForWrite(waiter)){
-				  
-				  total++;
-			  }
-		  }
-		  
-		  for( Iterator i = ready_connections.iterator(); i.hasNext(); ) {
-				 
-			  NetworkConnectionBase conn = (NetworkConnectionBase)i.next();
-			  
-			  if ( conn.getTransportBase().isReadyForWrite(waiter)){
-				  
-				  total++;
-			  }
-		  }
+          for (Object o : waiting_connections.keySet()) {
+
+              NetworkConnectionBase conn = (NetworkConnectionBase) o;
+
+              if (conn.getTransportBase().isReadyForWrite(waiter)) {
+
+                  total++;
+              }
+          }
+
+          for (Object ready_connection : ready_connections) {
+
+              NetworkConnectionBase conn = (NetworkConnectionBase) ready_connection;
+
+              if (conn.getTransportBase().isReadyForWrite(waiter)) {
+
+                  total++;
+              }
+          }
 	  }finally{
 		  
 		  lists_lock.exit();
@@ -574,32 +574,32 @@ public class MultiPeerUploader implements RateControlledEntity {
 		  lists_lock.enter();
 
 		  int	num = 0;
-		  
-		  for( Iterator i = waiting_connections.keySet().iterator(); i.hasNext(); ) {
-			 
-			  NetworkConnectionBase conn = (NetworkConnectionBase)i.next();
-						  
-			  if ( num++ > 0 ){
-				  str.append( "," );
-			  }
-			  
-			  str.append( conn.getString());
-		  }
+
+          for (Object o : waiting_connections.keySet()) {
+
+              NetworkConnectionBase conn = (NetworkConnectionBase) o;
+
+              if (num++ > 0) {
+                  str.append(",");
+              }
+
+              str.append(conn.getString());
+          }
 		  
 		  str.append( ": ready=" );
 		  
 		  num = 0;
-		  
-		  for( Iterator i = ready_connections.iterator(); i.hasNext(); ) {
-				 
-			  NetworkConnectionBase conn = (NetworkConnectionBase)i.next();
-			
-			  if ( num++ > 0 ){
-				  str.append( "," );
-			  }
-			  
-			  str.append( conn.getString());
-		  }
+
+          for (Object ready_connection : ready_connections) {
+
+              NetworkConnectionBase conn = (NetworkConnectionBase) ready_connection;
+
+              if (num++ > 0) {
+                  str.append(",");
+              }
+
+              str.append(conn.getString());
+          }
 	  }finally{
 		  
 		  lists_lock.exit();

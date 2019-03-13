@@ -29,18 +29,18 @@ package org.gudy.azureus2.core3.ipchecker.extipchecker;
 public interface 
 ExternalIPCheckerServiceListener 
 {
-	public void
+	void
 	checkComplete(
-		ExternalIPCheckerService	service,
-		String						ip );
+            ExternalIPCheckerService service,
+            String ip);
 		
-	public void
+	void
 	checkFailed(
-		ExternalIPCheckerService	service,
-		String						reason );
+            ExternalIPCheckerService service,
+            String reason);
 		
-	public void
+	void
 	reportProgress(
-		ExternalIPCheckerService	service,
-		String						message );
+            ExternalIPCheckerService service,
+            String message);
 }

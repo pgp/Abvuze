@@ -23,31 +23,31 @@ package com.aelitis.azureus.core.networkmanager.admin;
 public interface 
 NetworkAdminSpeedTestScheduledTest 
 {
-	public NetworkAdminSpeedTester
+	NetworkAdminSpeedTester
 	getTester();
 	
 		/**
 		 * These are the limits up to which the test can run, not the result of the test
 		 * @return
 		 */
-	
-	public long
+
+        long
 	getMaxUpBytePerSec();
 
-	public long
+	long
 	getMaxDownBytePerSec();
 	    
-	public boolean
+	boolean
 	start();
 	
-	public void
+	void
 	abort();
 	
-	public void
+	void
 	addListener(
-		NetworkAdminSpeedTestScheduledTestListener	listener );
+            NetworkAdminSpeedTestScheduledTestListener listener);
 	
-	public void
+	void
 	removeListener(
-		NetworkAdminSpeedTestScheduledTestListener	listener );
+            NetworkAdminSpeedTestScheduledTestListener listener);
 }

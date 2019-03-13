@@ -111,14 +111,14 @@ SimpleXMLParserDocumentNodeImpl
 		String		name )
 	{
 		SimpleXMLParserDocumentAttribute[]	attributes = getAttributes();
-		
-		for (int i=0;i<attributes.length;i++){
-			
-			if ( attributes[i].getName().equalsIgnoreCase( name )){
-				
-				return( attributes[i] );
-			}
-		}
+
+        for (SimpleXMLParserDocumentAttribute attribute : attributes) {
+
+            if (attribute.getName().equalsIgnoreCase(name)) {
+
+                return (attribute);
+            }
+        }
 		
 		return( null );
 	}
@@ -133,11 +133,15 @@ SimpleXMLParserDocumentNodeImpl
 		
 		if ( node.getNodeType() == Node.ELEMENT_NODE ){
 			
-			NamedNodeMap atts = node.getAttributes();			
-            for (int i = 0; i < atts.getLength(); i++){				
-                Node child = atts.item(i);				
+			NamedNodeMap atts = node.getAttributes();
+			
+            for (int i = 0; i < atts.getLength(); i++){
+				
+                Node child = atts.item(i);
+				
 				v.addElement( new SimpleXMLParserDocumentAttributeImpl( child.getNodeName(), child.getNodeValue()));
-            }		}
+            }
+		}
 
         for (Node child = node.getFirstChild(); child != null;child = child.getNextSibling()){
 			
@@ -173,14 +177,14 @@ SimpleXMLParserDocumentNodeImpl
 		String		name )
 	{
 		SimpleXMLParserDocumentNode[]	kids = getChildren();
-		
-		for (int i=0;i<kids.length;i++){
-			
-			if ( kids[i].getName().equalsIgnoreCase( name )){
-				
-				return( kids[i] );
-			}
-		}
+
+        for (SimpleXMLParserDocumentNode kid : kids) {
+
+            if (kid.getName().equalsIgnoreCase(name)) {
+
+                return (kid);
+            }
+        }
 		
 		return( null );
 	}
@@ -218,11 +222,11 @@ SimpleXMLParserDocumentNodeImpl
 		pw.println( indent + getName() + ":" + attr_str + " -> " + getValue());
 		
 		SimpleXMLParserDocumentNode[]	kids = getChildren();
-		
-		for (int i=0;i<kids.length;i++){
-			
-			((SimpleXMLParserDocumentNodeImpl)kids[i]).print( pw, indent + "  " );
-		}
+
+        for (SimpleXMLParserDocumentNode kid : kids) {
+
+            ((SimpleXMLParserDocumentNodeImpl) kid).print(pw, indent + "  ");
+        }
 	}
 		
 

@@ -89,10 +89,10 @@ public class CommandCollection
 	 */
 	public void add(IConsoleCommand command)
 	{
-		for (Iterator iter = command.getCommandNames().iterator(); iter.hasNext();) {
-			String cmdName = (String) iter.next();
-			subCommands.put(cmdName, command);
-		}
+        for (Object o : command.getCommandNames()) {
+            String cmdName = (String) o;
+            subCommands.put(cmdName, command);
+        }
 	}
 	
 	/**

@@ -72,9 +72,9 @@ VersionCheckClientUDPCodecs
 				}
 			};
 					
-		Map<Integer,PRUDPPacketReplyDecoder>	reply_decoders = new HashMap<Integer,PRUDPPacketReplyDecoder>();
+		Map<Integer,PRUDPPacketReplyDecoder>	reply_decoders = new HashMap<>();
 		
-		reply_decoders.put( new Integer( ACT_VERSION_REPLY ), reply_decoder );
+		reply_decoders.put(ACT_VERSION_REPLY, reply_decoder );
 		
 		PRUDPPacketReply.registerDecoders( reply_decoders );
 		
@@ -105,9 +105,9 @@ VersionCheckClientUDPCodecs
 				}
 			};
 
-		Map<Integer,PRUDPPacketRequestDecoder>	request_decoders = new HashMap<Integer,PRUDPPacketRequestDecoder>();
+		Map<Integer,PRUDPPacketRequestDecoder>	request_decoders = new HashMap<>();
 		
-		request_decoders.put( new Integer( ACT_VERSION_REQUEST ), request_decoder );
+		request_decoders.put(ACT_VERSION_REQUEST, request_decoder );
 		
 		PRUDPPacketRequest.registerDecoders( request_decoders );
 	}

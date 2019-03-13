@@ -33,8 +33,8 @@ import java.util.Map;
 public interface 
 DownloadAnnounceResult 
 {
-	public static final int	RT_SUCCESS	= 1;
-	public static final int RT_ERROR	= 2;
+	int	RT_SUCCESS	= 1;
+	int RT_ERROR	= 2;
 
 	/**
 	 * Gives access to the Download associated with this announce result
@@ -42,8 +42,8 @@ DownloadAnnounceResult
    *
    * @since 2.0.7.0
 	 */
-	
-	public Download
+
+    Download
 	getDownload();
 	
 	/**
@@ -52,8 +52,8 @@ DownloadAnnounceResult
    *
    * @since 2.0.7.0
 	 */
-	
-	public int
+
+    int
 	getResponseType();
 	
 	/**
@@ -62,8 +62,8 @@ DownloadAnnounceResult
    *
    * @since 2.0.7.0
 	 */
-	
-	public int
+
+    int
 	getReportedPeerCount();	// number returned by the announce
 	
 	/**
@@ -79,7 +79,7 @@ DownloadAnnounceResult
    *        its announce results.  Use DownloadScrapeResult to retrieve that 
    *        value.
 	 */
-	public int
+    int
 	getSeedCount();			// seeds we know about
 	
 	/**
@@ -93,7 +93,7 @@ DownloadAnnounceResult
    *        its announce results.  Use DownloadScrapeResult to retrieve that 
    *        value.
 	 */
-	public int
+    int
 	getNonSeedCount();		// non-seeds we know about
 	
 	/**
@@ -102,24 +102,24 @@ DownloadAnnounceResult
    *
    * @since 2.0.7.0
 	 */
-	
-	public String
+
+    String
 	getError();
 	
 		/**
 		 * The URL for the tracker. 
 		 * @return WILL BE NULL if the torrent isn't running
 		 */
-	
-	public URL
+
+        URL
 	getURL();
 	
-	public DownloadAnnounceResultPeer[]
+	DownloadAnnounceResultPeer[]
 	getPeers();
 	
-	public long
+	long
 	getTimeToWait();
 	
-	public Map
+	Map
 	getExtensions();
 }

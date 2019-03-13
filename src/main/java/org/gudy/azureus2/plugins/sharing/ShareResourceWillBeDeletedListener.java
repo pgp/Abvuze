@@ -29,9 +29,9 @@ package org.gudy.azureus2.plugins.sharing;
 public interface 
 ShareResourceWillBeDeletedListener 
 {
-	public void
+	void
 	resourceWillBeDeleted(
-		ShareResource		resource )
+            ShareResource resource)
 	
 		throws ShareResourceDeletionVetoException;
 }

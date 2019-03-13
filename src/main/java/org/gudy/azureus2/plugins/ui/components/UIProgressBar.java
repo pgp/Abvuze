@@ -31,11 +31,11 @@ UIProgressBar
 		 * Setting values results in a PT_VALUE property change with an Integer value
 		 * @param precentage
 		 */
-	
-	public void
+
+        void
 	setPercentageComplete(
-		int		percentage );
+                int percentage);
 	
-	public int
+	int
 	getPercentageComplete();
 }

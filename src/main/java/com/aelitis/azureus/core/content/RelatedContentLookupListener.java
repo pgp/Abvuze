@@ -23,17 +23,17 @@ package com.aelitis.azureus.core.content;
 public interface 
 RelatedContentLookupListener 
 {
-	public void
+	void
 	lookupStart();
 	
-	public void
+	void
 	contentFound(
-		RelatedContent[]	content );
+            RelatedContent[] content);
 	
-	public void
+	void
 	lookupComplete();
 	
-	public void
+	void
 	lookupFailed(
-		ContentException 	error );
+            ContentException error);
 }

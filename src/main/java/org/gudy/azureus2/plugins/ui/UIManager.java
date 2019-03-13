@@ -46,9 +46,9 @@ UIManager
 	 * @return BasicPluginConfigModel
 	 * @since 2.1.0.0
 	 */
-	public BasicPluginConfigModel
+    BasicPluginConfigModel
 	createBasicPluginConfigModel(
-		String		section_name );
+            String section_name);
 	
 
 	/**
@@ -59,17 +59,17 @@ UIManager
 	 * @return BasicPluginConfigModel
 	 * @since 2.1.0.0
 	 */
-	public BasicPluginConfigModel
+    BasicPluginConfigModel
 	createBasicPluginConfigModel(
-		String		parent_section,
-		String		section_name );
+            String parent_section,
+            String section_name);
 
 	/**
 	 * 
 	 * @return
 	 * @since 2.5.0.1
 	 */
-	public PluginConfigModel[] getPluginConfigModels();
+    PluginConfigModel[] getPluginConfigModels();
 
 	/**
 	 * Creates a basic plugin view model and adds it to the plugin in one step.
@@ -80,9 +80,9 @@ UIManager
 	 * @return BasicPluginViewModel
 	 * @since 2.1.0.2
 	 */
-	public BasicPluginViewModel
+    BasicPluginViewModel
 	createBasicPluginViewModel(
-		String			name );
+            String name);
 	
 	/**
 	 * Creates a {@link BasicPluginViewModel} object primarily to be used for
@@ -95,9 +95,9 @@ UIManager
 	 *   the channel name.
 	 * @since 3.1.1.1
 	 */
-	public BasicPluginViewModel createLoggingViewModel(
-		LoggerChannel channel, boolean use_plugin_name
-	);
+    BasicPluginViewModel createLoggingViewModel(
+            LoggerChannel channel, boolean use_plugin_name
+    );
 	
 	/**
 	 * 
@@ -105,9 +105,9 @@ UIManager
 	 * @throws UIException
 	 * @since 2.1.0.0
 	 */
-	public void
+    void
 	copyToClipBoard(
-		String		data )
+            String data)
 	
 		throws UIException;
 
@@ -117,7 +117,7 @@ UIManager
 	 * @return Table management functions
 	 * @since 2.1.0.0
 	 */
-	public TableManager getTableManager();
+    TableManager getTableManager();
 
 	/**
 	 * 
@@ -126,11 +126,11 @@ UIManager
 	 * @param contents
 	 * @since 2.3.0.5
 	 */
-	public void
+    void
 	showTextMessage(
-		String		title_resource,
-		String		message_resource,
-		String		contents );
+            String title_resource,
+            String message_resource,
+            String contents);
 	
 	/**
 	 * 
@@ -140,12 +140,12 @@ UIManager
 	 * @return selected value
 	 * @since 3.0.5.3
 	 */
-	
-	public long
+
+    long
 	showMessageBox(
-		String					title_resource,
-		String					message_resource,
-		long					message_map );
+            String title_resource,
+            String message_resource,
+            long message_map);
 	/**
 	 * @param title_resource
 	 * @param message
@@ -154,18 +154,18 @@ UIManager
 	 * @return selected value
 	 * @since 4.8.1.3
 	 */
-	
-	public long
+
+    long
 	showMessageBox(
-		String					title_resource,
-		String					message_resource,
-		long					message_map,
-		Object[]				params );
+            String title_resource,
+            String message_resource,
+            long message_map,
+            Object[] params);
 	
-	public static final String MB_PARAM_REMEMBER_ID		= "remember-id";		// String
-	public static final String MB_PARAM_REMEMBER_BY_DEF	= "remember-by-def";	// Boolean
-	public static final String MB_PARAM_REMEMBER_RES	= "remember-res";		// String
-	public static final String MB_PARAM_AUTO_CLOSE_MS	= "auto-close-ms";		// Number
+	String MB_PARAM_REMEMBER_ID		= "remember-id";		// String
+	String MB_PARAM_REMEMBER_BY_DEF	= "remember-by-def";	// Boolean
+	String MB_PARAM_REMEMBER_RES	= "remember-res";		// String
+	String MB_PARAM_AUTO_CLOSE_MS	= "auto-close-ms";		// Number
 	
 		/**
 		 * @since 5621 
@@ -175,22 +175,22 @@ UIManager
 		 * @param params
 		 * @return
 		 */
-	
-	public long
+
+        long
 	showMessageBox(
-		String					title_resource,
-		String					message_resource,
-		long					message_map,
-		Map<String,Object>		params );
+                String title_resource,
+                String message_resource,
+                long message_map,
+                Map<String, Object> params);
 	
 		/**
 		 * @since 2.3.0.6
 		 * @param url
 		 */
-	
-	public void
+
+        void
 	openURL(
-		URL		url )
+                URL url)
 	
 		throws UIException;
 	
@@ -199,10 +199,10 @@ UIManager
 		 * @param torrent
 		 * @since 3.0.5.3
 		 */
-	
-	public void
+
+        void
 	openTorrent(
-		Torrent		torrent );
+                Torrent torrent);
 	
 	/**
 	 * Open Config View to the section specified
@@ -213,7 +213,7 @@ UIManager
 	 * 
 	 * @since 2.3.0.7
 	 */
-	public boolean showConfigSection(String sectionID);
+    boolean showConfigSection(String sectionID);
 
 	/**
 	 * Retrieve the menu manager.
@@ -221,7 +221,7 @@ UIManager
 	 * @return Menu management functions
 	 * @since 3.0.0.7
 	 */
-    public MenuManager getMenuManager();
+    MenuManager getMenuManager();
   
 		/**
 		 * UIs should support generic UI-agnostic views such as the basic config model by default. The can also
@@ -237,10 +237,10 @@ UIManager
 	 * 
 	 * @since 2.3.0.5
 	 */
-	
-	public void
+
+    void
 	attachUI(
-		UIInstanceFactory		factory )
+            UIInstanceFactory factory)
 	
 		throws UIException;
 	
@@ -252,10 +252,10 @@ UIManager
 	 * 
 	 * @since 2.3.0.5
 	 */
-	
-	public void
+
+    void
 	detachUI(
-		UIInstanceFactory		factory )
+            UIInstanceFactory factory)
 	
 		throws UIException;
 
@@ -267,9 +267,9 @@ UIManager
 	 * 
 	 * @since 2.3.0.5
 	 */
-  	public void
+    void
   	addUIListener(
-  		UIManagerListener listener );
+            UIManagerListener listener);
 
 	/**
 	 * Remove an existing {@link UIManagerListener}
@@ -278,9 +278,9 @@ UIManager
 	 * 
 	 * @since 2.3.0.5
 	 */
- 	public void
+    void
   	removeUIListener(
-  		UIManagerListener listener );
+            UIManagerListener listener);
  	
 	/**
 	 * 
@@ -288,9 +288,9 @@ UIManager
 	 * 
 	 * @since 2.3.0.5
 	 */
- 	public void
+    void
   	addUIEventListener(
-  		UIManagerEventListener listener );
+            UIManagerEventListener listener);
   	
 	/**
 	 * 
@@ -298,9 +298,9 @@ UIManager
 	 * 
 	 * @since 2.3.0.5
 	 */
- 	public void
+    void
   	removeUIEventListener(
-  		UIManagerEventListener listener );
+            UIManagerEventListener listener);
  	
  	/**
  	 * Returns <tt>true</tt> if there any user interfaces currently attached to
@@ -315,7 +315,7 @@ UIManager
  	 * 
  	 * @since 3.0.0.7
  	 */
- 	public boolean hasUIInstances();
+    boolean hasUIInstances();
  	
  	/**
  	 * Returns an array of all currently attached user interfaces.
@@ -329,7 +329,7 @@ UIManager
  	 * 
  	 * @since 3.0.0.7
  	 */
- 	public UIInstance[] getUIInstances();
+    UIInstance[] getUIInstances();
  	
  	/**
  	 * Retrieves a {@link UIInputReceiver} from any interface available, or
@@ -340,7 +340,7 @@ UIManager
  	 * @see UIInstance#getInputReceiver()
  	 * @since 3.0.5.3
  	 */
- 	public UIInputReceiver getInputReceiver();
+    UIInputReceiver getInputReceiver();
 
  	/**
  	 * Retrieves a {@link UIMessage} from any interface available, or
@@ -351,7 +351,7 @@ UIManager
  	 * @see UIInstance#createMessage()
  	 * @since 3.0.5.3
  	 */
- 	public UIMessage createMessage();
+    UIMessage createMessage();
  	
  	/**
  	 * Opens up the file using the associated application. 
@@ -359,7 +359,7 @@ UIManager
  	 * @param file The file to open.
  	 * @since 3.0.5.3
  	 */
- 	public void openFile(File file);
+    void openFile(File file);
 
  	/**
  	 * Shows the file in a file explorer application in its parent folder. 
@@ -367,11 +367,11 @@ UIManager
  	 * @param file The file to show.
  	 * @since 3.0.5.3
  	 */
- 	public void showFile(File file);
+    void showFile(File file);
 
- 	public void addDataSourceListener(UIDataSourceListener l, boolean triggerNow);
- 	public void removeDataSourceListener(UIDataSourceListener l);
- 	public Object getDataSource();
+ 	void addDataSourceListener(UIDataSourceListener l, boolean triggerNow);
+ 	void removeDataSourceListener(UIDataSourceListener l);
+ 	Object getDataSource();
  	
- 	public void setEverythingHidden( boolean hidden );
+ 	void setEverythingHidden(boolean hidden);
 }

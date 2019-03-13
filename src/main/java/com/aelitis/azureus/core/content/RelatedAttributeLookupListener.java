@@ -23,18 +23,18 @@ package com.aelitis.azureus.core.content;
 public interface 
 RelatedAttributeLookupListener 
 {
-	public void
+	void
 	lookupStart();
 	
-	public void
+	void
 	tagFound(
-		String		tag,
-		String		network );
+            String tag,
+            String network);
 
-	public void
+	void
 	lookupComplete();
 	
-	public void
+	void
 	lookupFailed(
-		ContentException 	error );
+            ContentException error);
 }

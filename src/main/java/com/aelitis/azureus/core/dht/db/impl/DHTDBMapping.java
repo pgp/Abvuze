@@ -99,7 +99,7 @@ DHTDBMapping
 	protected  Map<HashWrapper,DHTDBValueImpl>
 	createLinkedMap()
 	{		
-		return( new LinkedHashMap<HashWrapper,DHTDBValueImpl>(1, 0.75f, true ));
+		return(new LinkedHashMap<>(1, 0.75f, true));
 	}
 	
 	protected HashWrapper
@@ -126,7 +126,7 @@ DHTDBMapping
 			return;
 		}
 		
-		List<DHTDBValueImpl>	changed = new ArrayList<DHTDBValueImpl>();
+		List<DHTDBValueImpl>	changed = new ArrayList<>();
 		
 		Iterator<DHTDBValueImpl>	it = direct_originator_map_may_be_null.values().iterator();
 		
@@ -149,11 +149,11 @@ DHTDBMapping
 				informDeleted( value );
 			}
 		}
-		
-		for (int i=0;i<changed.size();i++){
-			
-			add(changed.get(i));
-		}
+
+        for (DHTDBValueImpl dhtdbValue : changed) {
+
+            add(dhtdbValue);
+        }
 	}
 	
 	// All values have
@@ -225,7 +225,7 @@ DHTDBMapping
 			
 			Iterator<Map.Entry<HashWrapper,DHTDBValueImpl>>	it = indirect_originator_value_map.entrySet().iterator();
 			
-			List<HashWrapper>	to_remove = new ArrayList<HashWrapper>();
+			List<HashWrapper>	to_remove = new ArrayList<>();
 			
 			while( it.hasNext()){
 				
@@ -240,11 +240,11 @@ DHTDBMapping
 					to_remove.add( existing_key );
 				}
 			}
-			
-			for (int i=0;i<to_remove.size();i++){
-				
-				removeIndirectValue((HashWrapper)to_remove.get(i));
-			}
+
+            for (HashWrapper hashWrapper : to_remove) {
+
+                removeIndirectValue(hashWrapper);
+            }
 		}else{
 			
 				// not direct. if we have a value already for this originator then
@@ -383,62 +383,60 @@ DHTDBMapping
 			return( new DHTDBValueImpl[0] );
 		}
 		
-		List<DHTDBValueImpl>	res 		= new ArrayList<DHTDBValueImpl>();
+		List<DHTDBValueImpl>	res 		= new ArrayList<>();
 		
-		Set<HashWrapper>		duplicate_check = new HashSet<HashWrapper>();
+		Set<HashWrapper>		duplicate_check = new HashSet<>();
 		
 		Map<HashWrapper,DHTDBValueImpl>[]	maps = new Map[]{ direct_originator_map_may_be_null, indirect_originator_value_map };
 		
 			// currently we don't filter return values by seeding/downloading flag as scraping is implemented by normal
 			// get operations and if we filtered out seeds for seeds then the caller would see zero seeds. fix oneday!
-		
-		for (int i=0;i<maps.length;i++){
-			
-			Map<HashWrapper,DHTDBValueImpl>			map	= maps[i];
-			
-			if ( map == null ){
-				
-				continue;
-			}
-			
-			List<HashWrapper>	keys_used 	= new ArrayList<HashWrapper>();
 
-			Iterator<Map.Entry<HashWrapper,DHTDBValueImpl>>	it = map.entrySet().iterator();
-		
-			while( it.hasNext() && ( max==0 || res.size()< max )){
-			
-				Map.Entry<HashWrapper,DHTDBValueImpl>	entry = it.next();
-				
-				HashWrapper		entry_key	= entry.getKey();
-				
-				DHTDBValueImpl	entry_value = entry.getValue();
-						
-				HashWrapper	x = new HashWrapper( entry_value.getValue());
-				
-				if ( duplicate_check.contains( x )){
-					
-					continue;
-				}
-				
-				duplicate_check.add( x );
-								
-					// zero length values imply deleted values so don't return them
-				
-				if ( entry_value.getValue().length > 0 ){
-					
-					res.add( entry_value );
-				
-					keys_used.add( entry_key );
-				}
-			}
-			
-				// now update the access order so values get cycled
-			
-			for (int j=0;j<keys_used.size();j++){
-				
-				map.get( keys_used.get(j));
-			}
-		}
+        for (Map<HashWrapper, DHTDBValueImpl> map : maps) {
+
+            if (map == null) {
+
+                continue;
+            }
+
+            List<HashWrapper> keys_used = new ArrayList<>();
+
+            Iterator<Map.Entry<HashWrapper, DHTDBValueImpl>> it = map.entrySet().iterator();
+
+            while (it.hasNext() && (max == 0 || res.size() < max)) {
+
+                Map.Entry<HashWrapper, DHTDBValueImpl> entry = it.next();
+
+                HashWrapper entry_key = entry.getKey();
+
+                DHTDBValueImpl entry_value = entry.getValue();
+
+                HashWrapper x = new HashWrapper(entry_value.getValue());
+
+                if (duplicate_check.contains(x)) {
+
+                    continue;
+                }
+
+                duplicate_check.add(x);
+
+                // zero length values imply deleted values so don't return them
+
+                if (entry_value.getValue().length > 0) {
+
+                    res.add(entry_value);
+
+                    keys_used.add(entry_key);
+                }
+            }
+
+            // now update the access order so values get cycled
+
+            for (HashWrapper hashWrapper : keys_used) {
+
+                map.get(hashWrapper);
+            }
+        }
 		
 		informRead( by_who );
 		
@@ -462,7 +460,7 @@ DHTDBMapping
 		
 		HashWrapper originator_id = new HashWrapper( originator.getID());
 		
-		DHTDBValueImpl	res = (DHTDBValueImpl)direct_originator_map_may_be_null.get( originator_id );
+		DHTDBValueImpl	res = direct_originator_map_may_be_null.get( originator_id );
 		
 		return( res );
 	}
@@ -480,7 +478,7 @@ DHTDBMapping
 						
 				HashWrapper originator_id = new HashWrapper( originator.getID());
 			
-				res = (DHTDBValueImpl)map.get( originator_id );
+				res = map.get( originator_id );
 			}
 			
 			if ( res == null ){
@@ -503,46 +501,40 @@ DHTDBMapping
 	getAllValues(
 		DHTTransportContact 	originator )
 	{
-		List<DHTDBValueImpl>	res 		= new ArrayList<DHTDBValueImpl>();
+		List<DHTDBValueImpl>	res 		= new ArrayList<>();
 		
-		Set<HashWrapper>		duplicate_check = new HashSet<HashWrapper>();
+		Set<HashWrapper>		duplicate_check = new HashSet<>();
 		
 		Map<HashWrapper,DHTDBValueImpl>[]	maps = new Map[]{ direct_originator_map_may_be_null, indirect_originator_value_map };
-			
-		for (int i=0;i<maps.length;i++){
-			
-			Map<HashWrapper,DHTDBValueImpl>			map	= maps[i];
-			
-			if ( map == null ){
-				
-				continue;
-			}
-				
-			Iterator<Map.Entry<HashWrapper,DHTDBValueImpl>>	it = map.entrySet().iterator();
-		
-			while( it.hasNext()){
-			
-				Map.Entry<HashWrapper,DHTDBValueImpl>	entry = it.next();
-								
-				DHTDBValueImpl	entry_value = entry.getValue();
-						
-				HashWrapper	x = new HashWrapper( entry_value.getValue());
-				
-				if ( duplicate_check.contains( x )){
-					
-					continue;
-				}
-				
-				duplicate_check.add( x );
-								
-					// zero length values imply deleted values so don't return them
-				
-				if ( entry_value.getValue().length > 0 ){
-					
-					res.add( entry_value );
-				}
-			}
-		}
+
+        for (Map<HashWrapper, DHTDBValueImpl> map : maps) {
+
+            if (map == null) {
+
+                continue;
+            }
+
+            for (Map.Entry<HashWrapper, DHTDBValueImpl> entry : map.entrySet()) {
+
+                DHTDBValueImpl entry_value = entry.getValue();
+
+                HashWrapper x = new HashWrapper(entry_value.getValue());
+
+                if (duplicate_check.contains(x)) {
+
+                    continue;
+                }
+
+                duplicate_check.add(x);
+
+                // zero length values imply deleted values so don't return them
+
+                if (entry_value.getValue().length > 0) {
+
+                    res.add(entry_value);
+                }
+            }
+        }
 				
 		return( res );
 	}
@@ -623,7 +615,7 @@ DHTDBMapping
 			direct_originator_map_may_be_null = createLinkedMap();
 		}
 		
-		DHTDBValueImpl	old = (DHTDBValueImpl)direct_originator_map_may_be_null.put( value_key, value );
+		DHTDBValueImpl	old = direct_originator_map_may_be_null.put( value_key, value );
 				
 		if ( old != null ){
 			
@@ -701,7 +693,7 @@ DHTDBMapping
 			return( null );
 		}
 		
-		DHTDBValueImpl	old = (DHTDBValueImpl)direct_originator_map_may_be_null.remove( value_key );
+		DHTDBValueImpl	old = direct_originator_map_may_be_null.remove( value_key );
 		
 		if ( old != null ){
 			
@@ -723,7 +715,7 @@ DHTDBMapping
 		HashWrapper		value_key,
 		DHTDBValueImpl	value )
 	{
-		DHTDBValueImpl	old = (DHTDBValueImpl)indirect_originator_value_map.put( value_key, value );
+		DHTDBValueImpl	old = indirect_originator_value_map.put( value_key, value );
 		
 		if ( old != null ){
 			
@@ -814,7 +806,7 @@ DHTDBMapping
 	removeIndirectValue(
 		HashWrapper		value_key )
 	{
-		DHTDBValueImpl	old = (DHTDBValueImpl)indirect_originator_value_map.remove( value_key );
+		DHTDBValueImpl	old = indirect_originator_value_map.remove( value_key );
 		
 		if ( old != null ){
 			
@@ -1139,7 +1131,7 @@ DHTDBMapping
 				
 		while( it.hasNext()){
 			
-			DHTDBValueImpl val = (DHTDBValueImpl)it.next();
+			DHTDBValueImpl val = it.next();
 			
 			System.out.println( "        " + val.getOriginator().getString() + ": " + new String( val.getValue()));
 		}
@@ -1149,7 +1141,7 @@ DHTDBMapping
 	valueIterator
 		implements Iterator<DHTDBValueImpl>
 	{
-		private final List<Map<HashWrapper,DHTDBValueImpl>>	maps 		=	new ArrayList<Map<HashWrapper,DHTDBValueImpl>>(2);
+		private final List<Map<HashWrapper,DHTDBValueImpl>>	maps 		= new ArrayList<>(2);
 		
 		private int		map_index 	= 0;
 		
@@ -1199,7 +1191,7 @@ DHTDBMapping
 		{
 			if ( hasNext()){
 			
-				value = (DHTDBValueImpl)it.next();
+				value = it.next();
 				
 				return( value );
 			}

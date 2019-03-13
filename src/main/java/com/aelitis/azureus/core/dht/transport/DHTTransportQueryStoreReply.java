@@ -25,9 +25,9 @@ import java.util.List;
 public interface 
 DHTTransportQueryStoreReply 
 {
-	public int
+	int
 	getHeaderSize();
 	
-	public List<byte[]>
+	List<byte[]>
 	getEntries();
 }

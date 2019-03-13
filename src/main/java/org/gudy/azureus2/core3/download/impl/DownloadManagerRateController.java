@@ -50,7 +50,7 @@ DownloadManagerRateController
 	private static AzureusCore		core;
 	private static SpeedManager		speed_manager;
 	
-	static final Map<PEPeerManager,PMState>		pm_map = new HashMap<PEPeerManager, PMState>();
+	static final Map<PEPeerManager,PMState>		pm_map = new HashMap<>();
 	
 	private static TimerEventPeriodic	timer;
 	

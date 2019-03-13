@@ -122,7 +122,7 @@ public class ConsoleInput extends Thread {
 		this.out = _out;
 		this.azureus_core	= _azureus_core;
 		this.userProfile 	= profile;
-		this.controlling = _controlling.booleanValue();
+		this.controlling = _controlling;
 		this.br = ConsoleInputHelperFactory.instance.getCommandReader(_in);
 		
 		
@@ -273,15 +273,12 @@ public class ConsoleInput extends Thread {
 	 */
 	private void registerPluginCommands() {
 		Class clazz;
-		for (Iterator iter = pluginCommands.iterator(); iter.hasNext();) {
-			clazz = (Class) iter.next();
+		for (Object pluginCommand : pluginCommands) {
+			clazz = (Class) pluginCommand;
 			try {
 				IConsoleCommand command = (IConsoleCommand) clazz.newInstance();
 				registerCommand(command);
-			} catch (InstantiationException e)
-			{
-				out.println("Error while registering plugin command: " + clazz.getName() + ":" + e.getMessage());
-			} catch (IllegalAccessException e) {
+			} catch (InstantiationException | IllegalAccessException e) {
 				out.println("Error while registering plugin command: " + clazz.getName() + ":" + e.getMessage());
 			}
 		}
@@ -356,19 +353,19 @@ public class ConsoleInput extends Thread {
 
 	protected void registerCommand(IConsoleCommand command) 
 	{
-		for (Iterator iter = command.getCommandNames().iterator(); iter.hasNext();) {
-			String cmdName = (String) iter.next();
-			commands.put( cmdName, command);
+		for (Object o : command.getCommandNames()) {
+			String cmdName = (String) o;
+			commands.put(cmdName, command);
 		}
 		helpItems.add(command);
 	}
 	
 	protected void unregisterCommand(IConsoleCommand command)
 	{
-		for (Iterator iter = command.getCommandNames().iterator(); iter.hasNext();) {
-			String cmdName = (String) iter.next();
-			if( command.equals(commands.get(cmdName)) )
-				commands.remove( cmdName );
+		for (Object o : command.getCommandNames()) {
+			String cmdName = (String) o;
+			if (command.equals(commands.get(cmdName)))
+				commands.remove(cmdName);
 		}
 		helpItems.remove(command);
 	}
@@ -380,9 +377,9 @@ public class ConsoleInput extends Thread {
 		// check if there are any more commands registered to this command object,
 		// otherwise remove it
 		int numCommands = 0;
-		for (Iterator iter = commands.entrySet().iterator(); iter.hasNext();) {
-			Map.Entry entry = (Map.Entry) iter.next();
-			if( cmd.equals(entry.getValue()) )
+		for (Object o : commands.entrySet()) {
+			Map.Entry entry = (Map.Entry) o;
+			if (cmd.equals(entry.getValue()))
 				numCommands++;
 		}
 		if( numCommands == 1)
@@ -464,18 +461,17 @@ public class ConsoleInput extends Thread {
 		os.println();
 		
 		ArrayList cmd_lines = new ArrayList();
-		Iterator itr = helpItems.iterator();
-		while (itr.hasNext()) {
-			StringBuilder line_so_far = new StringBuilder("[");
-			IConsoleCommand cmd = (IConsoleCommand)itr.next();
-			String short_name = cmd.getShortCommandName();
-			if (short_name != null) {
-				line_so_far.append(short_name);
-			}
-			line_so_far.append("] ");
-			line_so_far.append(cmd.getCommandName());
-			cmd_lines.add(line_so_far.toString());
-		}
+        for (Object helpItem : helpItems) {
+            StringBuilder line_so_far = new StringBuilder("[");
+            IConsoleCommand cmd = (IConsoleCommand) helpItem;
+            String short_name = cmd.getShortCommandName();
+            if (short_name != null) {
+                line_so_far.append(short_name);
+            }
+            line_so_far.append("] ");
+            line_so_far.append(cmd.getCommandName());
+            cmd_lines.add(line_so_far.toString());
+        }
 		
 		TextWrap.printList(cmd_lines.iterator(), os, "   ");
 		os.println("> -----");
@@ -630,13 +626,13 @@ public class ConsoleInput extends Thread {
 					}
 				}
 				
-				String command = ((String) comargs.get(0)).toLowerCase();
+				String command = comargs.get(0).toLowerCase();
 				if( ".".equals(command) )
 				{
 					if (oldcommand.size() > 0 ) {
 						comargs.clear();
 						comargs.addAll(oldcommand);
-						command = ((String) comargs.get(0)).toLowerCase();
+						command = comargs.get(0).toLowerCase();
 					} else {
 						out.println("No old command. Remove commands are not repeated to prevent errors");
 					}
@@ -701,13 +697,10 @@ public class ConsoleInput extends Thread {
 		out.println("Attempting to load aliases from: " + aliasesFile.getCanonicalPath());
 		if ( aliasesFile.exists() )
 		{
-			FileInputStream fr = new FileInputStream(aliasesFile);
-			aliases.clear();
-			try {
-				aliases.load(fr);
-			} finally {
-				fr.close();
-			}
+            try (FileInputStream fr = new FileInputStream(aliasesFile)) {
+                aliases.clear();
+                aliases.load(fr);
+            }
 		}
 	}
 	
@@ -718,12 +711,9 @@ public class ConsoleInput extends Thread {
 		File aliasesFile = getAliasesFile();
 		try {
 			out.println("Saving aliases to: " + aliasesFile.getCanonicalPath());
-			FileOutputStream fo = new FileOutputStream(aliasesFile);
-			try{
-				aliases.store(fo, "This aliases file was automatically written by Azureus");
-			}finally{
-				fo.close();
-			}
+            try (FileOutputStream fo = new FileOutputStream(aliasesFile)) {
+                aliases.store(fo, "This aliases file was automatically written by Azureus");
+            }
 		} catch (IOException e) {
 			out.println("> Error saving aliases to " + aliasesFile.getPath() + ":" + e.getMessage());
 		}
@@ -780,9 +770,9 @@ public class ConsoleInput extends Thread {
 
 					String[]	bits = desc.split( "\n" );
 
-					for (int i=0;i<bits.length;i++){
+					for (String bit : bits) {
 
-						out.println( "\t" + bits[i]);
+						out.println("\t" + bit);
 					}
 
 					return( true );
@@ -824,25 +814,23 @@ public class ConsoleInput extends Thread {
 					int num_updates = 0;
 					
 					Update[] 	updates = instance.getUpdates();
-					
-					for (int i=0;i<updates.length;i++){
-						
-						Update	update = updates[i];
-							
+
+					for (Update update : updates) {
+
 						num_updates++;
-						
-						out.println( "Update available for '" + update.getName() + "', new version = " + update.getNewVersion());
-												
-						String[]	descs = update.getDescription();
-						
-						for (int j=0;j<descs.length;j++){
-							
-							out.println( "\t" + descs[j] );
+
+						out.println("Update available for '" + update.getName() + "', new version = " + update.getNewVersion());
+
+						String[] descs = update.getDescription();
+
+						for (String desc : descs) {
+
+							out.println("\t" + desc);
 						}
-						
-						if ( update.isMandatory()){
-							
-							out.println( "**** This is a mandatory update, other updates can not proceed until this is performed ****" );
+
+						if (update.isMandatory()) {
+
+							out.println("**** This is a mandatory update, other updates can not proceed until this is performed ****");
 						}
 					}
 					

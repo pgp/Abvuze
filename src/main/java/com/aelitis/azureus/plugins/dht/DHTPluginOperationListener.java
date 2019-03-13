@@ -27,25 +27,25 @@ package com.aelitis.azureus.plugins.dht;
 public interface 
 DHTPluginOperationListener 
 {
-	public void
+	void
 	starts(
-		byte[]				key );
+            byte[] key);
 	
-	public boolean
+	boolean
 	diversified();
 	
-	public void
+	void
 	valueRead(
-		DHTPluginContact	originator,
-		DHTPluginValue		value );
+            DHTPluginContact originator,
+            DHTPluginValue value);
 	
-	public void
+	void
 	valueWritten(
-		DHTPluginContact	target,
-		DHTPluginValue		value );
+            DHTPluginContact target,
+            DHTPluginValue value);
 	
-	public void
+	void
 	complete(
-		byte[]				key,
-		boolean				timeout_occurred );
+            byte[] key,
+            boolean timeout_occurred);
 }

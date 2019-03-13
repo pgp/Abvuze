@@ -35,23 +35,23 @@ public interface PluginState {
 	  /**
 	   * Returns <tt>true</tt> if the plugin is set to load at startup, <tt>false</tt> otherwise.
 	   */
-	  public boolean isLoadedAtStartup();
+      boolean isLoadedAtStartup();
 	  
 	  /**
 	   * Sets whether the plugin is loaded at startup or not.
 	   */
-	  public void setLoadedAtStartup(boolean load_at_startup);
+      void setLoadedAtStartup(boolean load_at_startup);
 	  
 	  /**
 	   * Returns <tt>true</tt> if there was a problem loading or initialising the plugin. 
 	   */
-	  public boolean hasFailed();
+      boolean hasFailed();
 	  
 	  /**
 	   * Returns <tt>true</tt> if the plugin has been marked as disabled, and prevented
 	   * from initialising.
 	   */
-	  public boolean isDisabled();
+      boolean isDisabled();
 	  
 	  /**
 	   * Sets whether the plugin can be loaded or not. If you are trying to affect if the plugin
@@ -60,41 +60,41 @@ public interface PluginState {
 	   * 
 	   * @param disabled
 	   */
-	  public void setDisabled(boolean disabled);
+      void setDisabled(boolean disabled);
 	  
 	  /**
 	   * Built-in plugins are those used internally by Azureus, for example
 	   * the UPnP plugin.
 	   */
-	  public boolean isBuiltIn();
+      boolean isBuiltIn();
 	  
 	  /**
 	   * Whether or not this is a mandatory plugin. Mandatory plugins take priority over update checks, for example,
 	   * over optional ones.
 	   */
-	  public boolean isMandatory();
+      boolean isMandatory();
 	  
 	  /**
 	   * Returns <tt>true</tt> if the plugin is running, returns <tt>false</tt> if the
 	   * plugin isn't running for some reason.
 	   */
-	  public boolean isOperational();
+      boolean isOperational();
 	  
-	  public boolean isInitialisationComplete();
+	  boolean isInitialisationComplete();
 	  
 	  /**
 	   * Uninstall this plugin if it has been loaded from a plugin directory.
 	   * Deletes the plugin directory.
 	   */
-	  public void uninstall() throws PluginException;
+      void uninstall() throws PluginException;
 	
-	  public boolean isShared();
+	  boolean isShared();
 	  
-	  public boolean isUnloadable();
+	  boolean isUnloadable();
 	  
-	  public boolean isUnloaded();
+	  boolean isUnloaded();
 	  
-	  public void unload() throws PluginException;
+	  void unload() throws PluginException;
 	  
-	  public void reload() throws PluginException;
+	  void reload() throws PluginException;
 }

@@ -33,23 +33,23 @@ import org.gudy.azureus2.plugins.ui.tables.TableCellVisibilityListener;
  */
 public interface TableCellCore extends TableCell, Comparable
 {
-	static final int TOOLTIPLISTENER_HOVER = 0;
+	int TOOLTIPLISTENER_HOVER = 0;
 
-	static final int TOOLTIPLISTENER_HOVERCOMPLETE = 1;
+	int TOOLTIPLISTENER_HOVERCOMPLETE = 1;
 
-	public void invalidate(boolean bMustRefresh);
+	void invalidate(boolean bMustRefresh);
 
 	/** 
 	 * Refresh the cell
 	 * 
 	 * @param bDoGraphics Whether to update graphic cells 
 	 */
-	public boolean refresh(boolean bDoGraphics);
+    boolean refresh(boolean bDoGraphics);
 
 	/** 
 	 * Refresh the cell, including graphic types 
 	 */
-	public boolean refresh();
+    boolean refresh();
 
 	/**
 	 * Refresh the cell.  This method overide takes a bRowVisible paramater
@@ -60,8 +60,8 @@ public interface TableCellCore extends TableCell, Comparable
 	 * @param bRowVisible Assumed visibility state of row
 	 * @param bCellVisible Assumed visibility state of the cell
 	 */
-	public boolean refresh(boolean bDoGraphics, boolean bRowVisible,
-			boolean bCellVisible);
+    boolean refresh(boolean bDoGraphics, boolean bRowVisible,
+                    boolean bCellVisible);
 
 	/**
 	 * Refresh the cell.  This method override takes a bRowVisible parameter in
@@ -71,61 +71,61 @@ public interface TableCellCore extends TableCell, Comparable
 	 * @param bDoGraphics Whether to update graphic cells
 	 * @param bRowVisible Visibility state of row
 	 */
-	public boolean refresh(boolean bDoGraphics, boolean bRowVisible);
+    boolean refresh(boolean bDoGraphics, boolean bRowVisible);
 
 	/** 
 	 * dispose of the cell 
 	 */
-	public void dispose();
+    void dispose();
 
 	/** 
 	 * Retrieve whether the cell need any paint calls (graphic)
 	 *
 	 * @return whether the cell needs painting
 	 */
-	public boolean needsPainting();
+    boolean needsPainting();
 
 	/** 
 	 * Location of the cell has changed 
 	 */
-	public void locationChanged();
+    void locationChanged();
 
 	/** 
 	 * Retrieve the row that this cell belongs to
 	 *
 	 * @return the row that this cell belongs to
 	 */
-	public TableRowCore getTableRowCore();
+    TableRowCore getTableRowCore();
 	
-	public TableColumnCore getTableColumnCore();
+	TableColumnCore getTableColumnCore();
 
 	/**
 	 * Trigger all the tooltip listeners that have been added to this cell
 	 * 
 	 * @param type {@link #TOOLTIPLISTENER_HOVER}, {@link #TOOLTIPLISTENER_HOVERCOMPLETE}
 	 */
-	public void invokeToolTipListeners(int type);
+    void invokeToolTipListeners(int type);
 
 	/**
 	 * Trigger all the mouse listeners that have been addded to this cell
 	 * 
 	 * @param event event to trigger
 	 */
-	public void invokeMouseListeners(TableCellMouseEvent event);
+    void invokeMouseListeners(TableCellMouseEvent event);
 
 	/**
 	 * Trigger all the visibility listeners that have been added to this cell.<BR>
 	 * 
 	 * @param visibility See {@link TableCellVisibilityListener}.VISIBILITY_* constants
 	 */
-	public void invokeVisibilityListeners(int visibility, boolean invokeColumnListeners);
+    void invokeVisibilityListeners(int visibility, boolean invokeColumnListeners);
 
 	/**
 	 * Sets whether the cell will need updating when it's visible again
 	 * 
 	 * @param upToDate
 	 */
-	public void setUpToDate(boolean upToDate);
+    void setUpToDate(boolean upToDate);
 
 	/**
 	 * Returns whether the cell will need updating when it's visible again
@@ -148,7 +148,7 @@ public interface TableCellCore extends TableCell, Comparable
 	 * 
 	 * @return
 	 */
-	public int getCursorID();
+    int getCursorID();
 
 	/**
 	 * Set the cursor ID that should be used for the cell
@@ -156,13 +156,13 @@ public interface TableCellCore extends TableCell, Comparable
 	 * @param cursor_hand
 	 * @return changed
 	 */
-	public boolean setCursorID(int cursorID);
+    boolean setCursorID(int cursorID);
 	
 	/**
 	 * 
 	 * @since 3.0.1.7
 	 */
-	public boolean isMouseOver();
+    boolean isMouseOver();
 
 	/**
 	 * Returns whether the cell has visually changed since the last refresh call.
@@ -190,7 +190,7 @@ public interface TableCellCore extends TableCell, Comparable
 	 * Sets tooltip to be shown in absence of an explicit one
 	 * @param str
 	 */
-	public void setDefaultToolTip(Object tt);
+    void setDefaultToolTip(Object tt);
 
-	public Object getDefaultToolTip();
+	Object getDefaultToolTip();
 }

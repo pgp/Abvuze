@@ -23,6 +23,7 @@ package com.aelitis.azureus.core.subs.impl;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
 import java.util.*;
 
@@ -138,7 +139,7 @@ SubscriptionImpl
 
 	private String			id;
 
-	private List<association>			associations = new ArrayList<association>();
+	private List<association>			associations = new ArrayList<>();
 	
 	private int				fixed_random;
 	
@@ -184,7 +185,7 @@ SubscriptionImpl
 	{
 		JSONObject	map = new JSONObject();
 		
-		map.put( "engine_id", new Long( engine.getId()));
+		map.put( "engine_id", engine.getId());
 		
 		map.put( "search_term", "" );
 
@@ -194,7 +195,7 @@ SubscriptionImpl
 		
 		Map schedule = new HashMap();
 		
-		schedule.put( "interval", new Long( check_interval_mins ));
+		schedule.put( "interval", (long) check_interval_mins);
 		
 		List	days = new ArrayList();
 		
@@ -221,7 +222,7 @@ SubscriptionImpl
 	{
 		JSONObject	map = new JSONObject();
 		
-		map.put( "engine_id", new Long( engine.getId()));
+		map.put( "engine_id", engine.getId());
 		
 		map.put( "search_term", term );
 		
@@ -236,7 +237,7 @@ SubscriptionImpl
 		
 		Map schedule = new HashMap();
 		
-		schedule.put( "interval", new Long( check_interval_mins ));
+		schedule.put( "interval", (long) check_interval_mins);
 		
 		List	days = new ArrayList();
 		
@@ -405,22 +406,22 @@ SubscriptionImpl
 			
 			Map	map = new HashMap();
 			
-			map.put( "name", name.getBytes( "UTF-8" ));
+			map.put( "name", name.getBytes(StandardCharsets.UTF_8));
 			
 			map.put( "public_key", public_key );
 						
-			map.put( "version", new Long( version ));
+			map.put( "version", (long) version);
 			
-			map.put( "az_version", new Long( az_version ));
+			map.put( "az_version", (long) az_version);
 			
-			map.put( "is_public", new Long( is_public?1:0 ));
+			map.put( "is_public", (long) (is_public ? 1 : 0));
 			
-			map.put( "is_anonymous", new Long( is_anonymous?1:0 ));
+			map.put( "is_anonymous", (long) (is_anonymous ? 1 : 0));
 			
 			if ( singleton_details != null ){
 				
 				map.put( "sin_details", singleton_details );
-				map.put( "spa", new Long( singleton_sp_attempted?1:0 ));
+				map.put( "spa", (long) (singleton_sp_attempted ? 1 : 0));
 			}
 			
 			if ( local_name != null ){
@@ -431,7 +432,7 @@ SubscriptionImpl
 			
 			map.put( "hash", hash );
 			map.put( "sig", sig );
-			map.put( "sig_data_size", new Long( sig_data_size ));
+			map.put( "sig_data_size", (long) sig_data_size);
 			
 				// local data
 			
@@ -440,49 +441,47 @@ SubscriptionImpl
 				map.put( "private_key", private_key );
 			}
 
-			map.put( "add_type", new Long( add_type ));
-			map.put( "add_time", new Long( add_time ));
+			map.put( "add_type", (long) add_type);
+			map.put( "add_time", add_time);
 			
-			map.put( "subscribed", new Long( is_subscribed?1:0 ));
+			map.put( "subscribed", (long) (is_subscribed ? 1 : 0));
 			
-			map.put( "pop", new Long( popularity ));
+			map.put( "pop", popularity);
 			
-			map.put( "rand", new Long( fixed_random ));
+			map.put( "rand", (long) fixed_random);
 			
-			map.put( "hupv", new Long( highest_prompted_version ));
+			map.put( "hupv", (long) highest_prompted_version);
 			
-			map.put( "sp", new Long( server_published?1:0 ));
-			map.put( "spo", new Long( server_publication_outstanding?1:0 ));
+			map.put( "sp", (long) (server_published ? 1 : 0));
+			map.put( "spo", (long) (server_publication_outstanding ? 1 : 0));
 						
 			if ( associations.size() > 0 ){
 				
 				List	l_assoc = new ArrayList();
 				
 				map.put( "assoc", l_assoc );
-				
-				for (int i=0;i<associations.size();i++){
-					
-					association assoc = (association)associations.get(i);
-					
-					Map m = new HashMap();
-					
-					l_assoc.add( m );
-					
-					m.put( "h", assoc.getHash());
-					m.put( "w", new Long( assoc.getWhen()));
-				}
+
+                for (association assoc : associations) {
+
+                    Map m = new HashMap();
+
+                    l_assoc.add(m);
+
+                    m.put("h", assoc.getHash());
+                    m.put("w", assoc.getWhen());
+                }
 			}
 			
 			map.put( "history", history_map );
 			
 			if ( creator_ref != null ){
 				
-				map.put( "cref", creator_ref.getBytes( "UTF-8" ));
+				map.put( "cref", creator_ref.getBytes(StandardCharsets.UTF_8));
 			}
 			
 			if ( category != null ){
 				
-				map.put( "cat", category.getBytes( "UTF-8" ));
+				map.put( "cat", category.getBytes(StandardCharsets.UTF_8));
 			}
 			
 			if ( tag_id != -1 ){
@@ -492,7 +491,7 @@ SubscriptionImpl
 			
 			if ( parent != null ){
 				
-				map.put( "par", parent.getBytes( "UTF-8" ));
+				map.put( "par", parent.getBytes(StandardCharsets.UTF_8));
 			}
 			
 			return( map );
@@ -505,7 +504,7 @@ SubscriptionImpl
 	
 		throws IOException
 	{
-		name				= new String((byte[])map.get( "name"), "UTF-8" );
+		name				= new String((byte[])map.get( "name"), StandardCharsets.UTF_8);
 		public_key			= (byte[])map.get( "public_key" );
 		private_key			= (byte[])map.get( "private_key" );
 		version				= ((Long)map.get( "version" )).intValue();
@@ -522,11 +521,11 @@ SubscriptionImpl
 		fixed_random	= ((Long)map.get( "rand" )).intValue();
 		
 		add_type		= ((Long)map.get( "add_type" )).intValue();		
-		add_time		= ((Long)map.get( "add_time" )).longValue();
+		add_time		= (Long) map.get("add_time");
 		
 		is_subscribed	= ((Long)map.get( "subscribed" )).intValue()==1;
 				
-		popularity		= ((Long)map.get( "pop" )).longValue();
+		popularity		= (Long) map.get("pop");
 		
 		highest_prompted_version = ((Long)map.get( "hupv" )).intValue();
 		
@@ -536,29 +535,29 @@ SubscriptionImpl
 		Long	l_spa = (Long)map.get( "spa" );
 		
 		if ( l_spa != null ){
-			singleton_sp_attempted = l_spa.longValue()==1; 
+			singleton_sp_attempted = l_spa ==1;
 		}
 		
 		byte[]	b_local_name = (byte[])map.get( "local_name" );
 		
 		if ( b_local_name != null ){
 			
-			local_name = new String( b_local_name, "UTF-8" );
+			local_name = new String( b_local_name, StandardCharsets.UTF_8);
 		}
 		
 		List	l_assoc = (List)map.get( "assoc" );
 		
 		if ( l_assoc != null ){
-			
-			for (int i=0;i<l_assoc.size();i++){
-				
-				Map	m = (Map)l_assoc.get(i);
-				
-				byte[]		hash 	= (byte[])m.get("h");
-				long		when	= ((Long)m.get( "w" )).longValue();
-				
-				associations.add( new association( hash, when ));
-			}
+
+            for (Object o : l_assoc) {
+
+                Map m = (Map) o;
+
+                byte[] hash = (byte[]) m.get("h");
+                long when = (Long) m.get("w");
+
+                associations.add(new association(hash, when));
+            }
 		}
 		
 		history_map = (Map)map.get( "history" );
@@ -572,14 +571,14 @@ SubscriptionImpl
 		
 		if ( b_cref != null ){
 			
-			creator_ref = new String( b_cref, "UTF-8" );
+			creator_ref = new String( b_cref, StandardCharsets.UTF_8);
 		}
 		
 		byte[] b_cat = (byte[])map.get( "cat" );
 		
 		if ( b_cat != null ){
 			
-			category = new String( b_cat, "UTF-8" );
+			category = new String( b_cat, StandardCharsets.UTF_8);
 		}
 		
 		Long l_tag_id = (Long)map.get( "tag" );
@@ -593,7 +592,7 @@ SubscriptionImpl
 		
 		if ( b_parent != null ){
 			
-			parent = new String( b_parent, "UTF-8" );
+			parent = new String( b_parent, StandardCharsets.UTF_8);
 		}
 	}
 	
@@ -1047,7 +1046,7 @@ SubscriptionImpl
 		
 		Map map = JSONUtils.decodeJSON( json_in );
 		
-		long 	engine_id 	= ((Long)map.get( "engine_id" )).longValue();
+		long 	engine_id 	= (Long) map.get("engine_id");
 
 		String	json_out	= json_in;
 		
@@ -1092,7 +1091,7 @@ SubscriptionImpl
 		
 		try{
 		
-			String	engine_str = new String( Base64.encode( BEncoder.encode( engine.exportToBencodedMap())), "UTF-8" );
+			String	engine_str = new String( Base64.encode( BEncoder.encode( engine.exportToBencodedMap())), StandardCharsets.UTF_8);
 		
 			engine_map.put( "content", engine_str );
 		
@@ -1121,7 +1120,7 @@ SubscriptionImpl
 				
 				try{
 				
-					Map map = BDecoder.decode( Base64.decode( engine_str.getBytes( "UTF-8" )));
+					Map map = BDecoder.decode( Base64.decode( engine_str.getBytes(StandardCharsets.UTF_8)));
 						
 					return( MetaSearchManagerFactory.getSingleton().getMetaSearch().importFromBEncodedMap(map));
 					
@@ -1146,7 +1145,7 @@ SubscriptionImpl
 			
 			Map map = JSONUtils.decodeJSON( json );
 
-			long	id = ((Long)map.get( "engine_id" )).longValue();
+			long	id = (Long) map.get("engine_id");
 	
 			if ( id == engine.getId()){
 					
@@ -1198,7 +1197,7 @@ SubscriptionImpl
 			
 			Map map = JSONUtils.decodeJSON( json );
 
-			long	id = ((Long)map.get( "engine_id" )).longValue();
+			long	id = (Long) map.get("engine_id");
 			
 			if ( id == engine.getId()){
 								
@@ -1297,10 +1296,10 @@ SubscriptionImpl
 			
 			synchronized( this ){
 
-				for (int i=0;i<associations.size();i++){
-					
-					((association)associations.get(i)).setPublished( false );
-				}
+                for (SubscriptionImpl.association association : associations) {
+
+                    association.setPublished(false);
+                }
 			}
 		}	
 	}
@@ -1720,16 +1719,14 @@ SubscriptionImpl
 		boolean		internal )
 	{
 		synchronized( this ){
-	
-			for (int i=0;i<associations.size();i++){
-				
-				association assoc = (association)associations.get(i);
-				
-				if ( Arrays.equals( assoc.getHash(), hash )){
-					
-					return( false );
-				}
-			}
+
+            for (association assoc : associations) {
+
+                if (Arrays.equals(assoc.getHash(), hash)) {
+
+                    return (false);
+                }
+            }
 			
 			associations.add( new association( hash, SystemTime.getCurrentTime()));
 			
@@ -1754,16 +1751,14 @@ SubscriptionImpl
 		byte[]		hash )
 	{
 		synchronized( this ){
-	
-			for (int i=0;i<associations.size();i++){
-				
-				association assoc = (association)associations.get(i);
-				
-				if ( Arrays.equals( assoc.getHash(), hash )){
-					
-					return( true );
-				}
-			}
+
+            for (association assoc : associations) {
+
+                if (Arrays.equals(assoc.getHash(), hash)) {
+
+                    return (true);
+                }
+            }
 		}
 			
 		return( false );	
@@ -1797,7 +1792,7 @@ SubscriptionImpl
 			
 			for (int i=num_assoc-1;i>=Math.max( 0, num_assoc-MIN_RECENT_ASSOC_TO_RETAIN);i--){
 				
-				association assoc = (association)associations.get(i);
+				association assoc = associations.get(i);
 				
 				if ( !assoc.getPublished()){
 					
@@ -1813,21 +1808,19 @@ SubscriptionImpl
 			
 			if ( rem > 0 ){
 				
-				List<association> l = new ArrayList<association>( associations.subList( 0, rem ));
+				List<association> l = new ArrayList<>(associations.subList(0, rem));
 				
 				Collections.shuffle( l );
-				
-				for (int i=0;i<l.size();i++){
-					
-					association assoc = l.get(i);
 
-					if ( !assoc.getPublished()){
-						
-						assoc.setPublished( true );
-						
-						return( assoc );
-					}
-				}
+                for (association assoc : l) {
+
+                    if (!assoc.getPublished()) {
+
+                        assoc.setPublished(true);
+
+                        return (assoc);
+                    }
+                }
 			}
 		}
 		
@@ -1918,12 +1911,12 @@ SubscriptionImpl
 	{
 		Map	result = new HashMap();
 		
-		result.put( "v", new Long( version ));
+		result.put( "v", (long) version);
 			
 		if ( singleton_details == null ){
 			
 			result.put( "h", hash );
-			result.put( "z", new Long( sig_data_size ));
+			result.put( "z", (long) sig_data_size);
 			result.put( "s", sig );
 
 		}else{
@@ -2058,19 +2051,17 @@ SubscriptionImpl
 		int		reason )
 	{
 		manager.configDirty( this );
-		
-		Iterator it = listeners.iterator();
-		
-		while( it.hasNext()){
-			
-			try{
-				((SubscriptionListener)it.next()).subscriptionChanged( this, reason );
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace(e);
-			}
-		}
+
+        for (Object listener : listeners) {
+
+            try {
+                ((SubscriptionListener) listener).subscriptionChanged(this, reason);
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 
 	protected void
@@ -2078,18 +2069,16 @@ SubscriptionImpl
 		boolean	was_auto )
 	{
 
-		Iterator it = listeners.iterator();
-		
-		while( it.hasNext()){
-			
-			try{
-				((SubscriptionListener)it.next()).subscriptionDownloaded( this, was_auto );
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace(e);
-			}
-		}
+        for (Object listener : listeners) {
+
+            try {
+                ((SubscriptionListener) listener).subscriptionDownloaded(this, was_auto);
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 	
 	public void
@@ -2305,10 +2294,10 @@ SubscriptionImpl
 			
 			synchronized( this ){
 
-				for (int i=0;i<associations.size();i++){
-					
-					((association)associations.get(i)).generate( writer );
-				}
+                for (SubscriptionImpl.association association : associations) {
+
+                    association.generate(writer);
+                }
 			}
 		}finally{
 			

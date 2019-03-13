@@ -28,8 +28,8 @@ public interface
 TagPeer
 	extends Tag, TagFeatureRateLimit
 {
-	public static final int FEATURES = TagFeature.TF_RATE_LIMIT | TagFeature.TF_EXEC_ON_ASSIGN;
+	int FEATURES = TagFeature.TF_RATE_LIMIT | TagFeature.TF_EXEC_ON_ASSIGN;
 	
-	public List<PEPeer>
+	List<PEPeer>
 	getTaggedPeers();
 }

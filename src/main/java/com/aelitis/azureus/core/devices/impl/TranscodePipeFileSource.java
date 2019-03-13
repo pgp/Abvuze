@@ -74,7 +74,7 @@ TranscodePipeFileSource
 
 		try{
 			String	command	= null;
-			Map<String,String>		headers	= new HashMap<String, String>();
+			Map<String,String>		headers	= new HashMap<>();
 
 			InputStream		is = socket.getInputStream();
 			OutputStream	os = socket.getOutputStream();
@@ -155,7 +155,7 @@ TranscodePipeFileSource
 
 			}else{
 				
-				String	ranges = (String)headers.get( "range" );
+				String	ranges = headers.get( "range" );
 					
 				long	request_start		= 0;
 				long	request_length		= 0;

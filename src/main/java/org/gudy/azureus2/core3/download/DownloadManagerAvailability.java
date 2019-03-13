@@ -27,9 +27,9 @@ import com.aelitis.azureus.core.tracker.TrackerPeerSource;
 public interface 
 DownloadManagerAvailability 
 {
-	public List<TrackerPeerSource>
+	List<TrackerPeerSource>
 	getTrackerPeerSources();
 	
-	public void
+	void
 	destroy();
 }

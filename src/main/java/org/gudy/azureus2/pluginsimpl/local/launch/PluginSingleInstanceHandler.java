@@ -172,19 +172,15 @@ PluginSingleInstanceHandler
 		    		    				
 		    		    				throw( new Exception( "Called supplied invalid file name: " + file_name ));
 		    		    			}
-		    		    			
-		    		    			ObjectInputStream ois2 = new ObjectInputStream( new FileInputStream( cmd_file ));
-		    		    			
-		    		    			try{
-		    		    				
-		    		    				args = (String[])ois2.readObject();
-		    		    				
-		    		    			}finally{
-		    		    				
-		    		    				ois2.close();
-		    		    				
-		    		    				cmd_file.delete();
-		    		    			}
+
+                                    try (ObjectInputStream ois2 = new ObjectInputStream(new FileInputStream(cmd_file))) {
+
+                                        args = (String[]) ois2.readObject();
+
+                                    } finally {
+
+                                        cmd_file.delete();
+                                    }
 		    					}
 		    					
 		    		    		handler.processArguments( args );
@@ -234,69 +230,53 @@ PluginSingleInstanceHandler
 		LoggerChannelListener	log,
 		String[]				args )
 	{
-		Socket	socket = null;
-	
-		try{
-			socket = new Socket( "127.0.0.1", port );
-		       
-			ObjectOutputStream	oos = new ObjectOutputStream( socket.getOutputStream());
-			
-			oos.writeInt( 0 );
-			
-			oos.writeObject( getHeader());
-			
-			oos.writeObject( args );
-			
-				// if we know the config dir then use more secure mechanism to pass args by writing
-				// to a file (this proving we have write access to the directory at least)
-			
-			String config_dir = System.getProperty( SystemProperties.SYS_PROP_CONFIG_OVERRIDE, null );
-			
-			if ( config_dir != null ){
-				
-				File	file = new File( config_dir, "tmp" );
-				
-				file.mkdirs();
-				
-				file = File.createTempFile( "AZU" + RandomUtils.nextSecureAbsoluteLong(), ".tmp", file );
-				
-				ObjectOutputStream oos2 = new ObjectOutputStream( new FileOutputStream( file ));
-				
-				try{
-					oos2.writeObject( args );
-					
-				}finally{
-					
-					oos2.close();
-				}
-				
-				oos.writeObject( config_dir );
-				
-				oos.writeObject( file.getName());
-			}
-			
-			oos.flush();
-			
-			if ( log != null ){
-			
-				log.messageLogged( LoggerChannel.LT_INFORMATION, "SingleInstanceHandler: arguments passed to existing process" );
-			}
-    	}catch( Throwable e ){
-    		
-    		if ( log != null ){
-    		
-    			log.messageLogged( "SingleInstanceHandler: send error", e );
-    		}
-    	}finally{
-    		
-    		if ( socket != null ){
-    			try{
-    				socket.close();
-    				
-    			}catch( Throwable e ){
-    			}	
-    		}	
-    	}
+
+        try (Socket socket = new Socket("127.0.0.1", port)) {
+
+            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+
+            oos.writeInt(0);
+
+            oos.writeObject(getHeader());
+
+            oos.writeObject(args);
+
+            // if we know the config dir then use more secure mechanism to pass args by writing
+            // to a file (this proving we have write access to the directory at least)
+
+            String config_dir = System.getProperty(SystemProperties.SYS_PROP_CONFIG_OVERRIDE, null);
+
+            if (config_dir != null) {
+
+                File file = new File(config_dir, "tmp");
+
+                file.mkdirs();
+
+                file = File.createTempFile("AZU" + RandomUtils.nextSecureAbsoluteLong(), ".tmp", file);
+
+                try (ObjectOutputStream oos2 = new ObjectOutputStream(new FileOutputStream(file))) {
+                    oos2.writeObject(args);
+
+                }
+
+                oos.writeObject(config_dir);
+
+                oos.writeObject(file.getName());
+            }
+
+            oos.flush();
+
+            if (log != null) {
+
+                log.messageLogged(LoggerChannel.LT_INFORMATION, "SingleInstanceHandler: arguments passed to existing process");
+            }
+        } catch (Throwable e) {
+
+            if (log != null) {
+
+                log.messageLogged("SingleInstanceHandler: send error", e);
+            }
+        }
 	}
 	
 	protected static String

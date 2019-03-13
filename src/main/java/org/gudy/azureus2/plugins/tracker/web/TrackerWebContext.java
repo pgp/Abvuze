@@ -33,7 +33,7 @@ import java.net.URL;
 public interface 
 TrackerWebContext 
 {
-	public String
+	String
 	getName();
 	
 	/**
@@ -41,40 +41,40 @@ TrackerWebContext
 	 * @return
 	 */
 
-	public URL[]
+    URL[]
 	getURLs();
 	
-	public InetAddress
+	InetAddress
 	getBindIP();
 	
-	public void
+	void
 	setEnableKeepAlive(
-		boolean		enable );
+            boolean enable);
 	
-	public void
+	void
 	addPageGenerator(
-		TrackerWebPageGenerator	generator );
+            TrackerWebPageGenerator generator);
 	
-	public void
+	void
 	removePageGenerator(
-		TrackerWebPageGenerator	generator );
+            TrackerWebPageGenerator generator);
 			
-	public TrackerWebPageGenerator[]
+	TrackerWebPageGenerator[]
 	getPageGenerators();
 	
-	public void
+	void
 	addAuthenticationListener(
-		TrackerAuthenticationListener l );
+            TrackerAuthenticationListener l);
 	
-	public void
+	void
 	removeAuthenticationListener(
-		TrackerAuthenticationListener l );
+            TrackerAuthenticationListener l);
 	
 		/**
 		 * @since 3.0.2.3
 		 */
-	
-	public void
+
+        void
 	destroy();
 	
 }

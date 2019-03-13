@@ -244,7 +244,7 @@ EngineImpl
 		
 		Long l_id = (Long)map.get( "id");
 		
-		id				= l_id==null?meta_search.getManager().getLocalTemplateID():l_id.longValue();
+		id				= l_id==null?meta_search.getManager().getLocalTemplateID(): l_id;
 		last_updated	= ImportExportUtils.importLong( map, "last_updated" );
 		name			= ImportExportUtils.importString( map, "name" );
 		
@@ -289,27 +289,27 @@ EngineImpl
 	
 		throws IOException
 	{
-		map.put( "type", new Long( type ));
+		map.put( "type", (long) type);
 		
 		ImportExportUtils.exportString( map, "name", name );
 		
-		map.put( "source", new Long( source ));
+		map.put( "source", (long) source);
 
 		exportBEncodedMappings( map, "l1_map", first_level_mapping );
 		exportBEncodedMappings( map, "l2_map", second_level_mapping );
 
-		map.put( "version", new Long( version ));
-		map.put( "az_version", new Long( az_version ));
+		map.put( "version", (long) version);
+		map.put( "az_version", (long) az_version);
 
 		ImportExportUtils.exportFloat( map, "rank_bias", rank_bias );
 
 		if ( !generic ){
 			
-			map.put( "id", new Long( id ));
+			map.put( "id", id);
 			
-			map.put( "last_updated", new Long( last_updated ));
+			map.put( "last_updated", last_updated);
 		
-			map.put( "selected", new Long( selection_state ));
+			map.put( "selected", (long) selection_state);
 		
 			ImportExportUtils.exportBoolean( map, "select_rec", selection_state_recorded );
 			
@@ -324,7 +324,7 @@ EngineImpl
 		}
 		
 		if ( update_check_default_secs != DEFAULT_UPDATE_CHECK_SECS ){
-			map.put( "update_url_check_secs", new Long( update_check_default_secs ));
+			map.put( "update_url_check_secs", (long) update_check_default_secs);
 		}
 	}
 	
@@ -381,8 +381,8 @@ EngineImpl
 		exportJSONMappings( res, "value_map", first_level_mapping, true );
 		exportJSONMappings( res, "ctype_map", second_level_mapping, false );
 		
-		res.put( "version", new Long( version ));
-		res.put( "az_version", new Long( az_version ));
+		res.put( "version", (long) version);
+		res.put( "az_version", (long) az_version);
 		
 		res.put( "uid", Base32.encode( uid ));
 		
@@ -391,7 +391,7 @@ EngineImpl
 			ImportExportUtils.exportJSONString( res, "update_url", update_url );
 		}
 		
-		res.put( "update_url_check_secs", new Long( update_check_default_secs ));
+		res.put( "update_url_check_secs", (long) update_check_default_secs);
 	}
 	
 	protected List
@@ -407,65 +407,63 @@ EngineImpl
 		JSONObject	field_map = (JSONObject)map.get( str );
 		
 		if ( field_map != null ){
-			
-			Iterator	it = field_map.entrySet().iterator();
-			
-			while( it.hasNext()){
-				
-				Map.Entry	entry = (Map.Entry)it.next();
-				
-				String	key 		= (String)entry.getKey();
-				List	mappings 	= (List)entry.getValue();
-				
-					// limited support for the moment: 
-					//		level one always maps to same field
-					//		level two always maps to content type
-				
-				int	from_field 	= vuzeFieldToID( key );
-				
-				if ( from_field == -1 ){
-					
-					log( "Unrecognised remapping key '" + key + "'" );
-					
-					continue;
-				
-				}
-				
-				int	to_field	= level_1?from_field:FIELD_CONTENT_TYPE;
-				
-				List	frs_l = new ArrayList();
-				
-				for (int i=0;i<mappings.size();i++){
-					
-					JSONObject mapping = (JSONObject)mappings.get(i);
-					
-					String	from_str 	= URLDecoder.decode((String)mapping.get( level_1?"from_string":"cat_string" ),"UTF-8");
 
-					if ( from_str == null ){
-						
-						log( "'from' value missing in " + mapping );
-						
-						continue;
-					}
-					
-					from_str 	= URLDecoder.decode( from_str, "UTF-8" );
-					
-					String	to_str 		= URLDecoder.decode((String)mapping.get( level_1?"to_string":"media_type" ),"UTF-8");
-					
-					if ( to_str == null ){
-						
-						log( "'to' value missing in " + mapping );
-						
-						continue;
-					}
-					
-					frs_l.add( new FieldRemapping( from_str, to_str ));
-				}
-				
-				FieldRemapping[] frs = (FieldRemapping[])frs_l.toArray( new FieldRemapping[frs_l.size()]);
+            for (Object o : field_map.entrySet()) {
 
-				result.add( new FieldRemapper( from_field, to_field, frs ));
-			}
+                Map.Entry entry = (Map.Entry) o;
+
+                String key = (String) entry.getKey();
+                List mappings = (List) entry.getValue();
+
+                // limited support for the moment:
+                //		level one always maps to same field
+                //		level two always maps to content type
+
+                int from_field = vuzeFieldToID(key);
+
+                if (from_field == -1) {
+
+                    log("Unrecognised remapping key '" + key + "'");
+
+                    continue;
+
+                }
+
+                int to_field = level_1 ? from_field : FIELD_CONTENT_TYPE;
+
+                List frs_l = new ArrayList();
+
+                for (Object mapping1 : mappings) {
+
+                    JSONObject mapping = (JSONObject) mapping1;
+
+                    String from_str = URLDecoder.decode((String) mapping.get(level_1 ? "from_string" : "cat_string"), "UTF-8");
+
+                    if (from_str == null) {
+
+                        log("'from' value missing in " + mapping);
+
+                        continue;
+                    }
+
+                    from_str = URLDecoder.decode(from_str, "UTF-8");
+
+                    String to_str = URLDecoder.decode((String) mapping.get(level_1 ? "to_string" : "media_type"), "UTF-8");
+
+                    if (to_str == null) {
+
+                        log("'to' value missing in " + mapping);
+
+                        continue;
+                    }
+
+                    frs_l.add(new FieldRemapping(from_str, to_str));
+                }
+
+                FieldRemapping[] frs = (FieldRemapping[]) frs_l.toArray(new FieldRemapping[0]);
+
+                result.add(new FieldRemapper(from_field, to_field, frs));
+            }
 		}
 		
 		return( result );
@@ -481,38 +479,36 @@ EngineImpl
 		JSONObject	field_map = new JSONObject();
 		
 		res.put( str, field_map );
-		
-		for (int i=0;i<l.size();i++){
-			
-			FieldRemapper remapper = (FieldRemapper)l.get(i);
-			
-			int	from_field	= remapper.getInField();
-			//int	to_field	= remapper.getOutField();
-			
-			String from_field_str = vuzeIDToField( from_field );
-			
-			JSONArray	mappings = new JSONArray();
-			
-			field_map.put( from_field_str, mappings );
-			
-			FieldRemapping[] frs = remapper.getMappings();
-			
-			for (int j=0;j<frs.length;j++){
-				
-				FieldRemapping fr = frs[j];
-				
-				String from_str = UrlUtils.encode( fr.getMatchString());
-				
-				String to_str	= fr.getReplacement();
-				
-				JSONObject map = new JSONObject();
-				
-				mappings.add( map );
-				
-				map.put( level_1?"from_string":"cat_string", from_str );
-				map.put( level_1?"to_string":"media_type", to_str );
-			}
-		}
+
+        for (Object o : l) {
+
+            FieldRemapper remapper = (FieldRemapper) o;
+
+            int from_field = remapper.getInField();
+            //int	to_field	= remapper.getOutField();
+
+            String from_field_str = vuzeIDToField(from_field);
+
+            JSONArray mappings = new JSONArray();
+
+            field_map.put(from_field_str, mappings);
+
+            FieldRemapping[] frs = remapper.getMappings();
+
+            for (FieldRemapping fr : frs) {
+
+                String from_str = UrlUtils.encode(fr.getMatchString());
+
+                String to_str = fr.getReplacement();
+
+                JSONObject map = new JSONObject();
+
+                mappings.add(map);
+
+                map.put(level_1 ? "from_string" : "cat_string", from_str);
+                map.put(level_1 ? "to_string" : "media_type", to_str);
+            }
+        }
 	}
 			
 	protected List
@@ -527,30 +523,30 @@ EngineImpl
 		List	l = (List)map.get(name);
 		
 		if ( l != null ){
-			
-			for (int i=0;i<l.size();i++){
-				
-				Map	entry = (Map)l.get(i);
-				
-				int	from_field 	= ((Long)entry.get( "from" )).intValue();
-				int	to_field 	= ((Long)entry.get( "to" )).intValue();
-				
-				List	l2 = (List)entry.get( "maps" );
-				
-				FieldRemapping[]	mappings = new FieldRemapping[ l2.size() ];
-				
-				for (int j=0;j<mappings.length;j++){
-					
-					Map	entry2 = (Map)l2.get(j);
-					
-					String	from_str 	= ImportExportUtils.importString( entry2, "from" );
-					String	to_str 		= ImportExportUtils.importString( entry2, "to" );
-					
-					mappings[j] = new FieldRemapping( from_str, to_str );
-				}
-				
-				result.add( new FieldRemapper( from_field, to_field, mappings ));
-			}
+
+            for (Object o : l) {
+
+                Map entry = (Map) o;
+
+                int from_field = ((Long) entry.get("from")).intValue();
+                int to_field = ((Long) entry.get("to")).intValue();
+
+                List l2 = (List) entry.get("maps");
+
+                FieldRemapping[] mappings = new FieldRemapping[l2.size()];
+
+                for (int j = 0; j < mappings.length; j++) {
+
+                    Map entry2 = (Map) l2.get(j);
+
+                    String from_str = ImportExportUtils.importString(entry2, "from");
+                    String to_str = ImportExportUtils.importString(entry2, "to");
+
+                    mappings[j] = new FieldRemapping(from_str, to_str);
+                }
+
+                result.add(new FieldRemapper(from_field, to_field, mappings));
+            }
 		}
 		
 		return( result );
@@ -567,36 +563,34 @@ EngineImpl
 		List	l = new ArrayList();
 		
 		map.put( name, l );
-		
-		for ( int i=0;i<mappings.size();i++){
-			
-			FieldRemapper mapper = (FieldRemapper)mappings.get(i);
-			
-			Map m = new HashMap();
-			
-			l.add( m );
-			
-			m.put( "from", new Long( mapper.getInField()));
-			m.put( "to", new Long( mapper.getOutField()));
-			
-			List l2 = new ArrayList();
-			
-			m.put( "maps", l2 );
-			
-			FieldRemapping[] frs = mapper.getMappings();
-			
-			for (int j=0;j<frs.length;j++){
-				
-				FieldRemapping fr = frs[j];
-				
-				Map m2 = new HashMap();
-				
-				l2.add( m2 );
-				
-				ImportExportUtils.exportString( m2, "from", fr.getMatchString());
-				ImportExportUtils.exportString( m2, "to", fr.getReplacement());
-			}
-		}
+
+        for (Object mapping : mappings) {
+
+            FieldRemapper mapper = (FieldRemapper) mapping;
+
+            Map m = new HashMap();
+
+            l.add(m);
+
+            m.put("from", (long) mapper.getInField());
+            m.put("to", (long) mapper.getOutField());
+
+            List l2 = new ArrayList();
+
+            m.put("maps", l2);
+
+            FieldRemapping[] frs = mapper.getMappings();
+
+            for (FieldRemapping fr : frs) {
+
+                Map m2 = new HashMap();
+
+                l2.add(m2);
+
+                ImportExportUtils.exportString(m2, "from", fr.getMatchString());
+                ImportExportUtils.exportString(m2, "to", fr.getReplacement());
+            }
+        }
 	}
 	
 	public String
@@ -686,12 +680,12 @@ EngineImpl
 					"version", 
 					"az_version", 
 					"uid" };
-			
-			for (int i=0;i<to_remove.length;i++){
-				
-				m1.remove( to_remove[i] );
-				m2.remove( to_remove[i] );
-			}
+
+            for (String s : to_remove) {
+
+                m1.remove(s);
+                m2.remove(s);
+            }
 			
 			return( BEncoder.mapsAreIdentical( m1, m2 ));
 			
@@ -720,7 +714,7 @@ EngineImpl
 		}
 		
 		try{
-			final Set<Result>		results_informed 	= new HashSet<Result>();
+			final Set<Result>		results_informed 	= new HashSet<>();
 			final boolean[]			complete_informed	= { false };
 			
 			ResultListener	interceptor = 
@@ -789,7 +783,7 @@ EngineImpl
 			if ( listener != null ){
 				
 				boolean			inform_complete;
-				List<Result>	inform_result = new ArrayList<Result>();
+				List<Result>	inform_result = new ArrayList<>();
 				
 				synchronized( results_informed ){
 					
@@ -806,7 +800,7 @@ EngineImpl
 				
 				if ( inform_result.size() > 0 ){
 				
-					listener.resultsReceived( this, inform_result.toArray( new Result[ inform_result.size()] ));
+					listener.resultsReceived( this, inform_result.toArray(new Result[0]));
 				}
 				
 				if ( inform_complete ){
@@ -949,24 +943,22 @@ EngineImpl
 	mapResults(
 		Result[]	results )
 	{
-		for (int i=0;i<results.length;i++){
-			
-			Result result = results[i];
-			
-			for (int j=0;j<first_level_mapping.size();j++){
-				
-				FieldRemapper mapper = (FieldRemapper)first_level_mapping.get(j);
-				
-				mapper.remap( result );
-			}
-			
-			for (int j=0;j<second_level_mapping.size();j++){
-				
-				FieldRemapper mapper = (FieldRemapper)second_level_mapping.get(j);
-				
-				mapper.remap( result );
-			}
-		}
+        for (Result result : results) {
+
+            for (Object o1 : first_level_mapping) {
+
+                FieldRemapper mapper = (FieldRemapper) o1;
+
+                mapper.remap(result);
+            }
+
+            for (Object o : second_level_mapping) {
+
+                FieldRemapper mapper = (FieldRemapper) o;
+
+                mapper.remap(result);
+            }
+        }
 		
 		return( results );
 	}
@@ -1494,7 +1486,7 @@ EngineImpl
 			Map map = COConfigurationManager.getMapParameter( getLocalKey(), new HashMap());
 			
 			try{
-				map.put( key, new Long( value));
+				map.put( key, value);
 				
 				COConfigurationManager.setParameter( getLocalKey(), map );
 				
@@ -1604,23 +1596,14 @@ EngineImpl
 		File f = getDebugFile();
 		
 		if ( f != null ){
-			
-			PrintWriter	 pw = null;
-			
-			try{
-				pw = new PrintWriter(new FileWriter( f, true ));
-				
-				pw.println( str );
-				
-			}catch( Throwable e ){
-				
-			}finally{
-				
-				if ( pw != null ){
-					
-					pw.close();
-				}
-			}
+
+            try (PrintWriter pw = new PrintWriter(new FileWriter(f, true))) {
+
+                pw.println(str);
+
+            } catch (Throwable e) {
+
+            }
 		}
 	}
 	

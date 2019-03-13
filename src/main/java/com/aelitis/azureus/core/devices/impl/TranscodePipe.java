@@ -48,12 +48,12 @@ TranscodePipe
 	protected volatile int		bytes_available;
 	protected volatile int		max_bytes_per_sec;
 
-	protected List<Socket>		sockets 		= new ArrayList<Socket>();
+	protected List<Socket>		sockets 		= new ArrayList<>();
 
 	private ServerSocket		server_socket;
 	private AEThread2			refiller;
 
-	private LinkedList<bufferCache>		buffer_cache = new LinkedList<bufferCache>();
+	private LinkedList<bufferCache>		buffer_cache = new LinkedList<>();
 	private int							buffer_cache_size;
 	
 	private Average 	connection_speed 	= Average.getInstance(1000, 10);  //average over 10s, update every 1000ms
@@ -561,8 +561,8 @@ TranscodePipe
 	protected interface
 	errorListener
 	{
-		public void
+		void
 		error(
-			Throwable e );
+                Throwable e);
 	}
 }

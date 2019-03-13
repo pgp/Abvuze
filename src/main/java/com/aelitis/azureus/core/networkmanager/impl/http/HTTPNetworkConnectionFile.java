@@ -21,6 +21,7 @@ package com.aelitis.azureus.core.networkmanager.impl.http;
 
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -97,7 +98,7 @@ HTTPNetworkConnectionFile
 		
 		long	file_offset	= 0;
 		
-		List<long[]>	ranges = new ArrayList<long[]>();
+		List<long[]>	ranges = new ArrayList<>();
 		
 		boolean	keep_alive	= false;
 		
@@ -121,7 +122,7 @@ HTTPNetworkConnectionFile
 					
 					final byte[] old_hash = control.getHash();
 
-					final byte[] new_hash = URLDecoder.decode(line.substring(0, hash_end), "ISO-8859-1").getBytes( "ISO-8859-1" );
+					final byte[] new_hash = URLDecoder.decode(line.substring(0, hash_end), "ISO-8859-1").getBytes(StandardCharsets.ISO_8859_1);
 					
 					if ( !Arrays.equals( new_hash, old_hash )){
 						
@@ -176,11 +177,11 @@ HTTPNetworkConnectionFile
 						
 						StringTokenizer	tok = new StringTokenizer( file, "/" );
 						
-						List<byte[]>	bits = new ArrayList<byte[]>();
+						List<byte[]>	bits = new ArrayList<>();
 						
 						while( tok.hasMoreTokens()){
 							
-							bits.add( URLDecoder.decode(tok.nextToken(), "ISO-8859-1").getBytes( "ISO-8859-1" ));
+							bits.add( URLDecoder.decode(tok.nextToken(), "ISO-8859-1").getBytes(StandardCharsets.ISO_8859_1));
 						}
 						
 							// latest spec has torrent file name encoded first for non-simple torrents
@@ -188,7 +189,7 @@ HTTPNetworkConnectionFile
 						
 						if ( !to_torrent.isSimpleTorrent() && bits.size() > 1 ){
 						
-							if ( Arrays.equals( to_torrent.getName(), (byte[])bits.get(0))){
+							if ( Arrays.equals( to_torrent.getName(), bits.get(0))){
 								
 								bits.remove(0);
 							}
@@ -197,37 +198,37 @@ HTTPNetworkConnectionFile
 						DiskManagerFileInfo[]	files = dm.getFiles();
 						
 						file_offset	= 0;
-						
-						for (int j=0;j<files.length;j++){
-							
-							TOTorrentFile	torrent_file = files[j].getTorrentFile();
-							
-							byte[][]	comps = torrent_file.getPathComponents();
-							
-							if ( comps.length == bits.size()){
-								
-								boolean	match = true;
-								
-								for (int k=0;k<comps.length;k++){
-																									
-									if ( !Arrays.equals( comps[k], (byte[])bits.get(k))){
-										
-										match	= false;
-										
-										break;
-									}
-								}
-								
-								if ( match ){ 
-									
-									target_file 	= files[j];
-																	
-									break;
-								}
-							}
-							
-							file_offset += torrent_file.getLength();
-						}
+
+                        for (DiskManagerFileInfo file1 : files) {
+
+                            TOTorrentFile torrent_file = file1.getTorrentFile();
+
+                            byte[][] comps = torrent_file.getPathComponents();
+
+                            if (comps.length == bits.size()) {
+
+                                boolean match = true;
+
+                                for (int k = 0; k < comps.length; k++) {
+
+                                    if (!Arrays.equals(comps[k], bits.get(k))) {
+
+                                        match = false;
+
+                                        break;
+                                    }
+                                }
+
+                                if (match) {
+
+                                    target_file = file1;
+
+                                    break;
+                                }
+                            }
+
+                            file_offset += torrent_file.getLength();
+                        }
 					}
 				}else{
 					
@@ -339,7 +340,7 @@ HTTPNetworkConnectionFile
 				
 		for (int i=0;i<ranges.size();i++){
 			
-			long[]	range = (long[])ranges.get(i);
+			long[]	range = ranges.get(i);
 			
 			long	start 	= range[0];
 			long end		= range[1];

@@ -27,6 +27,7 @@ package org.gudy.azureus2.core3.xml.util;
  */
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -222,7 +223,7 @@ XUXmlWriter
 		String		str,
 		char		delim )
 	{
-		List<String> res = new ArrayList<String>();
+		List<String> res = new ArrayList<>();
 				
 		String	current = "";
 		
@@ -257,7 +258,7 @@ XUXmlWriter
 			res.add( current );
 		}
 		
-		return( res.toArray( new String[ res.size() ]));
+		return( res.toArray(new String[0]));
 	}
 	
 	protected void
@@ -356,15 +357,13 @@ XUXmlWriter
 		
 		try{
 			indent();
-			
-			Iterator it = map.keySet().iterator();
-			
-			while(it.hasNext()){
-				
-				String	key = (String)it.next();
-				
-				writeGenericMapEntry( key, map.get( key ));
-			}
+
+            for (Object o : map.keySet()) {
+
+                String key = (String) o;
+
+                writeGenericMapEntry(key, map.get(key));
+            }
 		}finally{
 			
 			exdent();
@@ -381,11 +380,11 @@ XUXmlWriter
 		
 		try{
 			indent();
-			
-			for (int i=0;i<list.size();i++){
-				
-				writeGeneric( list.get(i));
-			}
+
+            for (Object o : list) {
+
+                writeGeneric(o);
+            }
 		}finally{
 			
 			exdent();
@@ -401,7 +400,7 @@ XUXmlWriter
 		if ( generic_simple ){
 			
 			try{
-				writeLineRaw( escapeXML( new String(bytes, "UTF-8" )));
+				writeLineRaw( escapeXML( new String(bytes, StandardCharsets.UTF_8)));
 				
 			}catch( Throwable e ){
 				

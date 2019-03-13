@@ -33,5 +33,5 @@ public interface DownloadCompletionListener {
 	 * 
 	 * @param d Download which has been completed.
 	 */
-	public void onCompletion(Download d);
+    void onCompletion(Download d);
 }

@@ -25,6 +25,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.lang.ref.WeakReference;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.zip.GZIPInputStream;
@@ -202,20 +203,20 @@ RelatedContentManager
 	private TorrentAttribute 				ta_category;
 	private DHTPluginInterface				public_dht_plugin;
 				
-	private volatile Map<Byte,DHTPluginInterface>		i2p_dht_plugin_map = new HashMap<Byte, DHTPluginInterface>();
+	private volatile Map<Byte,DHTPluginInterface>		i2p_dht_plugin_map = new HashMap<>();
 
 	private TagManager						tag_manager;
 	
 	private long	global_random_id = -1;
 	
-	private LinkedList<DownloadInfo>			pub_download_infos1 	= new LinkedList<DownloadInfo>();
-	private LinkedList<DownloadInfo>			pub_download_infos2 	= new LinkedList<DownloadInfo>();
+	private LinkedList<DownloadInfo>			pub_download_infos1 	= new LinkedList<>();
+	private LinkedList<DownloadInfo>			pub_download_infos2 	= new LinkedList<>();
 		
-	private LinkedList<DownloadInfo>			non_pub_download_infos1 	= new LinkedList<DownloadInfo>();
-	private LinkedList<DownloadInfo>			non_pub_download_infos2 	= new LinkedList<DownloadInfo>();
+	private LinkedList<DownloadInfo>			non_pub_download_infos1 	= new LinkedList<>();
+	private LinkedList<DownloadInfo>			non_pub_download_infos2 	= new LinkedList<>();
 	
-	private ByteArrayHashMapEx<DownloadInfo>	download_info_map	= new ByteArrayHashMapEx<DownloadInfo>();
-	private Set<String>							download_priv_set	= new HashSet<String>();
+	private ByteArrayHashMapEx<DownloadInfo>	download_info_map	= new ByteArrayHashMapEx<>();
+	private Set<String>							download_priv_set	= new HashSet<>();
 
 	
 	private final boolean	enabled;
@@ -227,7 +228,7 @@ RelatedContentManager
 	
 	private int publishing_count = 0;
 	
-	private CopyOnWriteList<RelatedContentManagerListener>	listeners = new CopyOnWriteList<RelatedContentManagerListener>();
+	private CopyOnWriteList<RelatedContentManagerListener>	listeners = new CopyOnWriteList<>();
 	
 	private AESemaphore initialisation_complete_sem = new AESemaphore( "RCM:init" );
 	
@@ -244,14 +245,14 @@ RelatedContentManager
 	
 	private static final int SECONDARY_LOOKUP_CACHE_MAX = 10;
 	
-	private LinkedList<SecondaryLookup> secondary_lookups = new LinkedList<SecondaryLookup>();
+	private LinkedList<SecondaryLookup> secondary_lookups = new LinkedList<>();
 	
 	private boolean	secondary_lookup_in_progress;
 	private long	secondary_lookup_complete_time;
 	
 	private RCMSearchXFer			transfer_type = new RCMSearchXFer();
 
-	private final 	CopyOnWriteList<RelatedContentSearcher>	searchers = new CopyOnWriteList<RelatedContentSearcher>();
+	private final 	CopyOnWriteList<RelatedContentSearcher>	searchers = new CopyOnWriteList<>();
 	private boolean	added_i2p_searcher;
 	
 	private static final int MAX_TRANSIENT_CACHE	= 256;
@@ -695,7 +696,7 @@ RelatedContentManager
 	{
 		synchronized( rcm_lock ){
 	
-			List<DownloadInfo>	new_info = new ArrayList<DownloadInfo>( downloads.length );
+			List<DownloadInfo>	new_info = new ArrayList<>(downloads.length);
 			
 			for ( Download download: downloads ){
 				
@@ -772,7 +773,7 @@ RelatedContentManager
 								int seeds 		= (int)((cache>>32)&0x00ffffff);
 								int leechers 	= (int)(cache&0x00ffffff);
 								
-								seeds_leechers 	= (int)((seeds<<16)|(leechers&0xffff));
+								seeds_leechers 	= (seeds<<16)|(leechers&0xffff);
 							}
 						}else{
 							
@@ -781,7 +782,7 @@ RelatedContentManager
 							int seeds 		= aggregate_seeds_leechers[0];
 							int leechers 	= aggregate_seeds_leechers[1];
 							
-							seeds_leechers 	= (int)((seeds<<16)|(leechers&0xffff));
+							seeds_leechers 	= (seeds<<16)|(leechers&0xffff);
 						}
 						
 						byte[][] keys = getKeys( download );
@@ -840,7 +841,7 @@ RelatedContentManager
 				for ( int i=0;i<history.size() && padd > 0;i++ ){
 					
 					try{
-						DownloadInfo info = deserialiseDI((Map<String,Object>)history.get(i), null);
+						DownloadInfo info = deserialiseDI(history.get(i), null);
 						
 						if ( info != null && !download_info_map.containsKey( info.getHash())){
 							
@@ -880,7 +881,7 @@ RelatedContentManager
 				
 				if ( new_info.size() > 0 ){
 					
-					final List<String>	base32_hashes = new ArrayList<String>();
+					final List<String>	base32_hashes = new ArrayList<>();
 					
 					for ( DownloadInfo info: new_info ){
 						
@@ -914,7 +915,7 @@ RelatedContentManager
 								public void
 								runSupport()
 								{
-									List<RelatedContent>	to_remove = new ArrayList<RelatedContent>();
+									List<RelatedContent>	to_remove = new ArrayList<>();
 									
 									synchronized( rcm_lock ){
 										
@@ -933,7 +934,7 @@ RelatedContentManager
 									
 									if ( to_remove.size() > 0 ){
 										
-										delete( to_remove.toArray( new RelatedContent[ to_remove.size()] ));
+										delete( to_remove.toArray(new RelatedContent[0]));
 									}
 								}
 							});
@@ -1183,7 +1184,7 @@ RelatedContentManager
 		final String from_hash	= ByteFormatter.encodeString( from_info.getHash());
 		final String to_hash	= ByteFormatter.encodeString( to_info.getHash());
 		
-		final byte[] key_bytes	= ( "az:rcm:assoc:" + from_hash ).getBytes( "UTF-8" );
+		final byte[] key_bytes	= ( "az:rcm:assoc:" + from_hash ).getBytes(StandardCharsets.UTF_8);
 		
 		String title = to_info.getTitle(); 
 		
@@ -1192,10 +1193,10 @@ RelatedContentManager
 			title = title.substring( 0, MAX_TITLE_LENGTH );
 		}
 		
-		Map<String,Object> map = new HashMap<String,Object>();
+		Map<String,Object> map = new HashMap<>();
 		
 		map.put( "d", title );
-		map.put( "r", new Long( Math.abs( to_info.getRand()%1000 )));
+		map.put( "r", (long) Math.abs(to_info.getRand() % 1000));
 		
 		String	tracker = to_info.getTracker();
 		
@@ -1225,7 +1226,7 @@ RelatedContentManager
 						
 						if ( cnet != ContentNetwork.CONTENT_NETWORK_UNKNOWN ){
 							
-							map.put( "c", new Long( cnet ));
+							map.put( "c", cnet);
 						}
 						
 						long secs = torrent.getCreationDate();
@@ -1234,7 +1235,7 @@ RelatedContentManager
 						
 						if ( hours > 0 ){
 							
-							map.put( "p", new Long( hours ));
+							map.put( "p", hours);
 						}
 					}
 							
@@ -1263,14 +1264,14 @@ RelatedContentManager
 					}
 					
 					if ( version > 0 ){
-						map.put( "v", new Long( version ));
+						map.put( "v", (long) version);
 					}
 					
 					if ( leechers > 0 ){
-						map.put( "l", new Long( leechers ));
+						map.put( "l", (long) leechers);
 					}
 					if ( seeds > 0 ){
-						map.put( "z", new Long( seeds ));
+						map.put( "z", (long) seeds);
 					}		
 					
 					byte[][] keys = getKeys( d );
@@ -1291,14 +1292,14 @@ RelatedContentManager
 					byte nets = getNetworks( d );
 					
 					if ( nets != NET_PUBLIC ){
-						map.put( "o", new Long( nets&0xff ));
+						map.put( "o", (long) (nets & 0xff));
 					}
 				}
 			}catch( Throwable e ){		
 			}
 		}
 				
-		final Set<String>	my_tags = new HashSet<String>();
+		final Set<String>	my_tags = new HashSet<>();
 		
 		try{
 			Download d = from_info.getRelatedToDownload();
@@ -1323,7 +1324,7 @@ RelatedContentManager
 		
 		if ( size != 0 ){
 			
-			map.put( "s", new Long( size ));
+			map.put( "s", size);
 		}
 		
 		final byte[] map_bytes = BEncoder.encode( map );
@@ -1345,7 +1346,7 @@ RelatedContentManager
 					private boolean diversified;
 					private int		hits;
 					
-					private Set<String>	entries = new HashSet<String>();
+					private Set<String>	entries = new HashSet<>();
 					
 					public void
 					starts(
@@ -1367,7 +1368,7 @@ RelatedContentManager
 						DHTPluginValue		value )
 					{
 						try{
-							Map<String,Object> map = (Map<String,Object>)BDecoder.decode( value.getValue());							
+							Map<String,Object> map = BDecoder.decode( value.getValue());
 							
 							DownloadInfo info = decodeInfo( map, from_info.getHash(), 1, false, entries );
 
@@ -1515,7 +1516,7 @@ RelatedContentManager
 			
 			DiskManagerFileInfo[] files = dl.getDiskManagerFileInfo();
 			
-			List<Long>	sizes = new ArrayList<Long>();
+			List<Long>	sizes = new ArrayList<>();
 			
 			for ( DiskManagerFileInfo file: files ){
 				
@@ -1536,7 +1537,7 @@ RelatedContentManager
 	
 					final long selected_size = sizes.get( new Random().nextInt( sizes.size()));
 	
-					final byte[] key_bytes	= ( "az:rcm:size:assoc:" + selected_size ).getBytes( "UTF-8" );
+					final byte[] key_bytes	= ( "az:rcm:size:assoc:" + selected_size ).getBytes(StandardCharsets.UTF_8);
 					
 					int	max_hits = 30;
 					
@@ -1553,7 +1554,7 @@ RelatedContentManager
 								private boolean diversified;
 								private int		hits;
 								
-								private Set<String>	entries = new HashSet<String>();
+								private Set<String>	entries = new HashSet<>();
 								
 								public void
 								starts(
@@ -1674,7 +1675,7 @@ RelatedContentManager
 		Set<String>		unique_keys )
 	{
 		try{
-			String	title = new String((byte[])map.get( "d" ), "UTF-8" );
+			String	title = new String((byte[])map.get( "d" ), StandardCharsets.UTF_8);
 			
 			String	tracker	= null;
 			
@@ -1682,7 +1683,7 @@ RelatedContentManager
 			
 			if ( hash == null ){
 				
-				tracker = new String((byte[])map.get( "t" ), "UTF-8" );
+				tracker = new String((byte[])map.get( "t" ), StandardCharsets.UTF_8);
 			}
 			
 			int	rand = ((Long)map.get( "r" )).intValue();
@@ -1705,7 +1706,7 @@ RelatedContentManager
 			
 			Long	l_size = (Long)map.get( "s" );
 			
-			long	size = l_size==null?0:l_size.longValue();
+			long	size = l_size==null?0: l_size;
 			
 			Long	cnet	 	= (Long)map.get( "c" );
 			Long	published 	= (Long)map.get( "p" );
@@ -1846,7 +1847,7 @@ RelatedContentManager
 			
 			final String from_hash_str	= ByteFormatter.encodeString( from_hash );
 			
-			final byte[] key_bytes	= ( "az:rcm:assoc:" + from_hash_str ).getBytes( "UTF-8" );
+			final byte[] key_bytes	= ( "az:rcm:assoc:" + from_hash_str ).getBytes(StandardCharsets.UTF_8);
 			
 			String op_str = "Content attr read: " + from_hash_str.substring( 0, 16 );
 			
@@ -1860,7 +1861,7 @@ RelatedContentManager
 					true,
 					new DHTPluginOperationListener()
 					{
-						private Set<String>	tags = new HashSet<String>();
+						private Set<String>	tags = new HashSet<>();
 						
 						public void
 						starts(
@@ -1923,7 +1924,7 @@ RelatedContentManager
 							DHTPluginValue		value )
 						{
 							try{
-								Map<String,Object> map = (Map<String,Object>)BDecoder.decode( value.getValue());
+								Map<String,Object> map = BDecoder.decode( value.getValue());
 								
 								String[] r_tags = decodeTags((byte[]) map.get( "m" ));
 								
@@ -2212,7 +2213,7 @@ RelatedContentManager
 		}
 	
 		try{
-			final byte[] key_bytes	= ( "az:rcm:size:assoc:" + file_size ).getBytes( "UTF-8" );
+			final byte[] key_bytes	= ( "az:rcm:size:assoc:" + file_size ).getBytes(StandardCharsets.UTF_8);
 
 				// we need something to use
 			
@@ -2251,7 +2252,7 @@ RelatedContentManager
 			
 			final String from_hash_str	= ByteFormatter.encodeString( from_hash );
 		
-			final byte[] key_bytes	= ( "az:rcm:assoc:" + from_hash_str ).getBytes( "UTF-8" );
+			final byte[] key_bytes	= ( "az:rcm:assoc:" + from_hash_str ).getBytes(StandardCharsets.UTF_8);
 			
 			String op_str = "Content rel read: " + from_hash_str.substring( 0, 16 );
 
@@ -2313,12 +2314,12 @@ RelatedContentManager
 					true,
 					new DHTPluginOperationListener()
 					{
-						private Set<String>	entries = new HashSet<String>();
+						private Set<String>	entries = new HashSet<>();
 						
 						private RelatedContentManagerListener manager_listener = 
 							new RelatedContentManagerListener()
 							{
-							private Set<RelatedContent>	content_list = new HashSet<RelatedContent>();
+							private Set<RelatedContent>	content_list = new HashSet<>();
 							
 								public void
 								contentFound(
@@ -2354,7 +2355,7 @@ RelatedContentManager
 								handle(
 									RelatedContent[]	content )
 								{
-									List<RelatedContent>	new_content = new ArrayList<RelatedContent>( content.length );
+									List<RelatedContent>	new_content = new ArrayList<>(content.length);
 									
 									synchronized( content_list ){
 										
@@ -2374,7 +2375,7 @@ RelatedContentManager
 										content_list.addAll( new_content );
 									}
 									
-									listener.contentFound( new_content.toArray( new RelatedContent[new_content.size()] ));
+									listener.contentFound( new_content.toArray(new RelatedContent[0]));
 								}
 							};
 						
@@ -2406,7 +2407,7 @@ RelatedContentManager
 							DHTPluginValue		value )
 						{
 							try{
-								Map<String,Object> map = (Map<String,Object>)BDecoder.decode( value.getValue());
+								Map<String,Object> map = BDecoder.decode( value.getValue());
 								
 								DownloadInfo info = decodeInfo( map, from_hash, level+1, explicit, entries );
 								
@@ -2511,7 +2512,7 @@ RelatedContentManager
 		
 		if ( primaries_to_add > 0 ){
 			
-			Set<DownloadInfo> added = new HashSet<DownloadInfo>();
+			Set<DownloadInfo> added = new HashSet<>();
 			
 			for (int i=0;i<primaries_to_add;i++){
 				
@@ -2530,7 +2531,7 @@ RelatedContentManager
 
 		Iterator<DownloadInfo> it = related_content.values().iterator();
 		
-		List<DownloadInfo> secondary_cache_temp = new ArrayList<DownloadInfo>( related_content.size());
+		List<DownloadInfo> secondary_cache_temp = new ArrayList<>(related_content.size());
 
 		while( it.hasNext()){
 			
@@ -2809,7 +2810,7 @@ RelatedContentManager
 		
 		ByteArrayHashMapEx<ArrayList<DownloadInfo>> related_content_map = content_cache.related_content_map;
 		
-		List<byte[]> delete = new ArrayList<byte[]>();
+		List<byte[]> delete = new ArrayList<>();
 		
 		for ( byte[] key: related_content_map.keys()){
 			
@@ -2927,7 +2928,7 @@ RelatedContentManager
 						
 						if ( links == null ){
 							
-							links = new ArrayList<DownloadInfo>(1);
+							links = new ArrayList<>(1);
 							
 							content_cache.related_content_map.put( from_hash, links );
 						}
@@ -3048,7 +3049,7 @@ RelatedContentManager
 		
 			// delete oldest at highest level >= level with minimum rank
 	
-		Map<Integer,DownloadInfo>	oldest_per_rank = new HashMap<Integer, DownloadInfo>();
+		Map<Integer,DownloadInfo>	oldest_per_rank = new HashMap<>();
 		
 		int	min_rank 	= Integer.MAX_VALUE;
 		int	max_rank	= -1;
@@ -3145,7 +3146,7 @@ RelatedContentManager
 
 			ContentCache	content_cache = loadRelatedContent();
 			
-			return( content_cache.related_content.values().toArray( new DownloadInfo[ content_cache.related_content.size()]));
+			return( content_cache.related_content.values().toArray(new DownloadInfo[0]));
 		}
 	}
 	
@@ -3156,7 +3157,7 @@ RelatedContentManager
 
   			ContentCache	content_cache = loadRelatedContent();
   			
-  			return( new ArrayList<DownloadInfo>( content_cache.related_content.values()));
+  			return(new ArrayList<>(content_cache.related_content.values()));
   		}
   	}
 	
@@ -3180,8 +3181,8 @@ RelatedContentManager
 				
 			}else{
 			
-				cc.related_content 		= new HashMap<String,DownloadInfo>();
-				cc.related_content_map 	= new ByteArrayHashMapEx<ArrayList<DownloadInfo>>();
+				cc.related_content 		= new HashMap<>();
+				cc.related_content_map 	= new ByteArrayHashMapEx<>();
 			}
 					
 			pub_download_infos1.clear();
@@ -3435,7 +3436,7 @@ RelatedContentManager
 					
 					cc = new ContentCache();
 		
-					content_cache = new WeakReference<ContentCache>( cc );
+					content_cache = new WeakReference<>(cc);
 					
 					try{
 						int	new_total_unread = 0;
@@ -3470,7 +3471,7 @@ RelatedContentManager
 							
 							if ( rc_map_stuff != null && rcm_map != null ){
 								
-								Map<Integer,DownloadInfo> id_map = new HashMap<Integer, DownloadInfo>();
+								Map<Integer,DownloadInfo> id_map = new HashMap<>();
 									
 								if ( rc_map_stuff instanceof Map ){
 									
@@ -3512,7 +3513,7 @@ RelatedContentManager
 										
 										try{
 										
-											String	key = new String((byte[])info_map.get( "_k" ), "UTF-8" );
+											String	key = new String((byte[])info_map.get( "_k" ), StandardCharsets.UTF_8);
 																												
 											DownloadInfo info = deserialiseDI( info_map, cc );
 											
@@ -3549,7 +3550,7 @@ RelatedContentManager
 												
 											}else{
 												
-												ArrayList<DownloadInfo>	di_list = new ArrayList<DownloadInfo>(ids.length);
+												ArrayList<DownloadInfo>	di_list = new ArrayList<>(ids.length);
 												
 												for ( int id: ids ){
 													
@@ -3641,9 +3642,9 @@ RelatedContentManager
 				
 			COConfigurationManager.setParameter( CONFIG_TOTAL_UNREAD, total_unread.get());
 			
-			long	now = SystemTime.getMonotonousTime();;
-			
-			ContentCache cc = content_cache==null?null:content_cache.get();
+			long	now = SystemTime.getMonotonousTime();
+
+            ContentCache cc = content_cache==null?null:content_cache.get();
 			
 			if ( !content_dirty ){
 					
@@ -3702,17 +3703,17 @@ RelatedContentManager
 						
 					}else{
 						
-						Map<String,Object>	map = new HashMap<String, Object>();
+						Map<String,Object>	map = new HashMap<>();
 						
 						Set<Map.Entry<String,DownloadInfo>> rcs = related_content.entrySet();
 											
-						List<Map<String,Object>> rc_map_list = new ArrayList<Map<String, Object>>( rcs.size());
+						List<Map<String,Object>> rc_map_list = new ArrayList<>(rcs.size());
 						
 						map.put( "rc", rc_map_list );
 						
 						int		id = 0;
 						
-						Map<DownloadInfo,Integer>	info_map = new HashMap<DownloadInfo, Integer>();
+						Map<DownloadInfo,Integer>	info_map = new HashMap<>();
 						
 						for ( Map.Entry<String,DownloadInfo> entry: rcs ){
 												
@@ -3724,7 +3725,7 @@ RelatedContentManager
 								
 								info_map.put( info, id );
 	
-								di_map.put( "_i", new Long( id ));
+								di_map.put( "_i", (long) id);
 								di_map.put( "_k", entry.getKey());
 								
 								rc_map_list.add( di_map );
@@ -3733,7 +3734,7 @@ RelatedContentManager
 							}
 						}
 						
-						Map<String,Object> rcm_map = new HashMap<String, Object>();
+						Map<String,Object> rcm_map = new HashMap<>();
 						
 						map.put( "rcm", rcm_map );
 
@@ -3851,7 +3852,7 @@ RelatedContentManager
 
 			ContentCache	content_cache = loadRelatedContent();
 			
-			addPersistentlyDeleted( content_cache.related_content.values().toArray( new DownloadInfo[ content_cache.related_content.size()]));
+			addPersistentlyDeleted( content_cache.related_content.values().toArray(new DownloadInfo[0]));
 		
 			reset( false );
 		}
@@ -3906,7 +3907,7 @@ RelatedContentManager
 				
 				TOTorrent to_torrent = PluginCoreUtils.unwrap( torrent );
 				
-				Set<String>	tracker_domains = new HashSet<String>();
+				Set<String>	tracker_domains = new HashSet<>();
 				
 				addURLToDomainKeySet( tracker_domains, to_torrent.getAnnounceURL());
 				
@@ -3926,7 +3927,7 @@ RelatedContentManager
 				
 				tracker_keys = domainsToArray( tracker_domains, 8 );
 				
-				Set<String>	ws_domains = new HashSet<String>();
+				Set<String>	ws_domains = new HashSet<>();
 
 				List getright = BDecoder.decodeStrings( getURLList( to_torrent, "url-list" ));
 				List webseeds = BDecoder.decodeStrings( getURLList( to_torrent, "httpseeds" ));
@@ -4094,7 +4095,7 @@ RelatedContentManager
 		}else if ( net == (NET_PUBLIC | NET_I2P )){
 			return( NET_PUBLIC_AND_I2P_ARRAY );
 		}else{
-			List<String>	nets = new ArrayList<String>();
+			List<String>	nets = new ArrayList<>();
 			
 			if (( net & NET_PUBLIC ) != 0 ){
 				nets.add( AENetworkClassifier.AT_PUBLIC );
@@ -4106,7 +4107,7 @@ RelatedContentManager
 				nets.add( AENetworkClassifier.AT_TOR );
 			}
 			
-			return( nets.toArray( new String[ nets.size()]));
+			return( nets.toArray(new String[0]));
 		}
 	}
 	
@@ -4116,23 +4117,21 @@ RelatedContentManager
 	{
 		byte	nets = NET_NONE;
 
-		for ( int i=0;i<networks.length;i++ ){
-			
-			String n = networks[i];
-			
-			if (n.equalsIgnoreCase( AENetworkClassifier.AT_PUBLIC )){
-				
-				nets |= NET_PUBLIC;
-				
-			}else if ( n.equalsIgnoreCase( AENetworkClassifier.AT_I2P )){
-				
-				nets |= NET_I2P;
-				
-			}else if ( n.equalsIgnoreCase( AENetworkClassifier.AT_TOR )){
-				
-				nets |= NET_TOR;
-			}
-		}
+        for (String n : networks) {
+
+            if (n.equalsIgnoreCase(AENetworkClassifier.AT_PUBLIC)) {
+
+                nets |= NET_PUBLIC;
+
+            } else if (n.equalsIgnoreCase(AENetworkClassifier.AT_I2P)) {
+
+                nets |= NET_I2P;
+
+            } else if (n.equalsIgnoreCase(AENetworkClassifier.AT_TOR)) {
+
+                nets |= NET_TOR;
+            }
+        }
 		
 		return( nets );
 	}
@@ -4141,7 +4140,7 @@ RelatedContentManager
 	getTags(
 		Download	download )
 	{		
-		Set<String>	all_tags = new HashSet<String>();
+		Set<String>	all_tags = new HashSet<>();
 	
 		if ( tag_manager.isEnabled()){
 
@@ -4191,11 +4190,11 @@ RelatedContentManager
 			
 		}else{
 			
-			List<String> temp = new ArrayList<String>( all_tags );
+			List<String> temp = new ArrayList<>(all_tags);
 			
 			Collections.shuffle( temp );
 			
-			return( temp.toArray( new String[ temp.size()] ));
+			return( temp.toArray(new String[0]));
 		}
 	}
 	
@@ -4214,34 +4213,34 @@ RelatedContentManager
 		byte[]	temp 	= new byte[MAX_TAGS_TOTAL_LENGTH];
 		int		pos		= 0;
 		int		rem		= temp.length;
-		
-		for ( int i=0;i<tags.length;i++){
-			
-			String tag = tags[i];
-			
-			tag = truncateTag( tag );
-			
-			try{
-				byte[] tag_bytes = tag.getBytes( "UTF-8" );
-					
-				int	tb_len = tag_bytes.length;
-					
-				if ( rem < tb_len + 1 ){
-					
-					break;
-				}
-				
-				temp[pos++] = (byte)tb_len;
-						
-				System.arraycopy( tag_bytes, 0, temp, pos, tb_len );
-						
-				pos += tb_len;
-				rem	-= (tb_len+1);
-				
-			}catch( Throwable e ){
 
-			}
-		}
+        for (String tag1 : tags) {
+
+            String tag = tag1;
+
+            tag = truncateTag(tag);
+
+            try {
+                byte[] tag_bytes = tag.getBytes(StandardCharsets.UTF_8);
+
+                int tb_len = tag_bytes.length;
+
+                if (rem < tb_len + 1) {
+
+                    break;
+                }
+
+                temp[pos++] = (byte) tb_len;
+
+                System.arraycopy(tag_bytes, 0, temp, pos, tb_len);
+
+                pos += tb_len;
+                rem -= (tb_len + 1);
+
+            } catch (Throwable e) {
+
+            }
+        }
 		
 		if ( pos == 0 ){
 			
@@ -4269,7 +4268,7 @@ RelatedContentManager
 		while( tag.length() > 0 ){
 			
 			try{
-				byte[] tag_bytes = tag.getBytes( "UTF-8" );
+				byte[] tag_bytes = tag.getBytes(StandardCharsets.UTF_8);
 								
 				if ( tag_bytes.length <= MAX_TAG_LENGTH ){
 					
@@ -4298,7 +4297,7 @@ RelatedContentManager
 			return( null );
 		}
 		
-		List<String>	tags = new ArrayList<String>( 10 );
+		List<String>	tags = new ArrayList<>(10);
 		
 		int	pos = 0;
 		
@@ -4312,7 +4311,7 @@ RelatedContentManager
 			}
 			
 			try{
-				tags.add( new String( bytes, pos, tag_len, "UTF-8" ));
+				tags.add( new String( bytes, pos, tag_len, StandardCharsets.UTF_8));
 				
 				pos += tag_len;
 				
@@ -4328,7 +4327,7 @@ RelatedContentManager
 			
 		}else{
 				
-			return( tags.toArray( new String[ tags.size()] ));
+			return( tags.toArray(new String[0]));
 		}
 	}
 	
@@ -4347,7 +4346,7 @@ RelatedContentManager
 		if ( bytes == null ){
 			
 			try{
-				bytes = new SHA1Simple().calculateHash( getPrivateInfoKey(info).getBytes( "ISO-8859-1" ));
+				bytes = new SHA1Simple().calculateHash( getPrivateInfoKey(info).getBytes(StandardCharsets.ISO_8859_1));
 				
 			}catch( Throwable e ){
 				
@@ -4378,7 +4377,7 @@ RelatedContentManager
 	
 		if ( entries == null ){
 			
-			entries = new ArrayList<byte[]>(0);
+			entries = new ArrayList<>(0);
 		}
 		
 		return( entries );
@@ -4395,7 +4394,7 @@ RelatedContentManager
 	
 		List<byte[]> entries = loadPersistentlyDeleted();
 		
-		List<byte[]> new_keys = new ArrayList<byte[]>( content.length );
+		List<byte[]> new_keys = new ArrayList<>(content.length);
 		
 		for ( RelatedContent rc: content ){
 			
@@ -4406,7 +4405,7 @@ RelatedContentManager
 			entries.add( key );
 		}
 		
-		Map<String,Object>	map = new HashMap<String, Object>();
+		Map<String,Object>	map = new HashMap<>();
 		
 		map.put( "entries", entries );
 		
@@ -4498,7 +4497,7 @@ RelatedContentManager
 		
 		if ( num_to_remove > 0 ){
 			
-			List<DownloadInfo>	infos = new ArrayList<DownloadInfo>(related_content.values());
+			List<DownloadInfo>	infos = new ArrayList<>(related_content.values());
 				
 			if ( reset_explicit ){
 				
@@ -4538,7 +4537,7 @@ RelatedContentManager
 					}
 				});
 
-			List<RelatedContent> to_remove = new ArrayList<RelatedContent>();
+			List<RelatedContent> to_remove = new ArrayList<>();
 			
 			for (int i=0;i<Math.min( num_to_remove, infos.size());i++ ){
 				
@@ -4547,7 +4546,7 @@ RelatedContentManager
 			
 			if ( to_remove.size() > 0 ){
 					
-				delete( to_remove.toArray( new RelatedContent[to_remove.size()]), content_cache, false );
+				delete( to_remove.toArray(new RelatedContent[0]), content_cache, false );
 			}
 		}
 	}
@@ -4577,30 +4576,30 @@ RelatedContentManager
 	    	int	num = RandomUtils.nextInt( size );
 	    	
 	    	T result = null;
-	    	
-	        for (int j = 0; j < table.length; j++) {
-	        	
-		         Entry<T> e = table[j];
-		         
-		         while( e != null ){
-		        	 
-	              	T value = e.value;
-	               	
-	              	if ( value != excluded ){
-	              		
-	              		result = value;
-	              	}
-	              	
-	              	if ( num <= 0 && result != null ){
-	              		
-	              		return( result );
-	              	}
-	              	
-	              	num--;
-	              	
-	              	e = e.next;
-		        }
-		    }
+
+            for (Entry<T> tEntry : table) {
+
+                Entry<T> e = tEntry;
+
+                while (e != null) {
+
+                    T value = e.value;
+
+                    if (value != excluded) {
+
+                        result = value;
+                    }
+
+                    if (num <= 0 && result != null) {
+
+                        return (result);
+                    }
+
+                    num--;
+
+                    e = e.next;
+                }
+            }
 	    
 	        return( result );
 	    }
@@ -4612,7 +4611,7 @@ RelatedContentManager
 		ContentCache			cc )
 	{
 		try{
-			Map<String,Object> info_map = new HashMap<String,Object>();
+			Map<String,Object> info_map = new HashMap<>();
 			
 			ImportExportUtils.exportLong( info_map, "v", info.getVersion());
 
@@ -4644,7 +4643,7 @@ RelatedContentManager
 			
 			byte nets = info.getNetworksInternal();
 			if (nets != NET_PUBLIC ){
-				info_map.put( "o", new Long(nets&0x00ff ));
+				info_map.put( "o", (long) (nets & 0x00ff));
 			}
 			
 			if ( cc != null ){
@@ -4742,8 +4741,8 @@ RelatedContentManager
 	{
 		RelatedContent[] related_content = getRelatedContent();
 		
-		ByteArrayHashMap<List<String>>	tk_map = new ByteArrayHashMap<List<String>>();
-		ByteArrayHashMap<List<String>>	ws_map = new ByteArrayHashMap<List<String>>();
+		ByteArrayHashMap<List<String>>	tk_map = new ByteArrayHashMap<>();
+		ByteArrayHashMap<List<String>>	ws_map = new ByteArrayHashMap<>();
 		
 		for ( RelatedContent rc: related_content ){
 						
@@ -4761,7 +4760,7 @@ RelatedContentManager
 					
 					if ( titles == null ){
 						
-						titles = new ArrayList<String>();
+						titles = new ArrayList<>();
 						
 						tk_map.put( tk, titles );
 					}
@@ -4783,7 +4782,7 @@ RelatedContentManager
 					
 					if ( titles == null ){
 						
-						titles = new ArrayList<String>();
+						titles = new ArrayList<>();
 						
 						ws_map.put( wk, titles );
 					}
@@ -4930,16 +4929,16 @@ RelatedContentManager
 				}else{
 					
 					boolean	match = false;
-					
-					for (int i=0;i<rand_list.length;i++){
-						
-						if ( rand_list[i] == r ){
-							
-							match = true;
-							
-							break;
-						}
-					}
+
+                    for (int i1 : rand_list) {
+
+                        if (i1 == r) {
+
+                            match = true;
+
+                            break;
+                        }
+                    }
 					
 					if ( !match && rand_list.length < MAX_RANK ){
 						
@@ -5028,30 +5027,28 @@ RelatedContentManager
 						}else{
 							
 							same = true;
-							
-							for ( int i=0;i<existing_tags.length;i++ ){
-								
-								String e_tag = existing_tags[i];
-								
-								boolean	found = false;
-								
-								for ( int j=0;j<other_tags.length;j++){
-									
-									if ( e_tag.equals( other_tags[j])){
-										
-										found = true;
-										
-										break;
-									}
-								}
-								
-								if ( !found ){
-									
-									same = false;
-									
-									break;
-								}
-							}
+
+                            for (String e_tag : existing_tags) {
+
+                                boolean found = false;
+
+                                for (String other_tag : other_tags) {
+
+                                    if (e_tag.equals(other_tag)) {
+
+                                        found = true;
+
+                                        break;
+                                    }
+                                }
+
+                                if (!found) {
+
+                                    same = false;
+
+                                    break;
+                                }
+                            }
 						}
 					}else{
 					
@@ -5060,12 +5057,12 @@ RelatedContentManager
 					
 					if ( !same ){
 						
-						Set<String>	tags = new HashSet<String>();
+						Set<String>	tags = new HashSet<>();
 
 						Collections.addAll(tags, existing_tags);
 						Collections.addAll(tags, other_tags);
 						
-						setTags( tags.toArray( new String[tags.size()]));
+						setTags( tags.toArray(new String[0]));
 						
 						result = true;
 					}
@@ -5243,8 +5240,8 @@ RelatedContentManager
 	protected static class
 	ContentCache
 	{
-		protected Map<String,DownloadInfo>						related_content			= new HashMap<String, DownloadInfo>();
-		protected ByteArrayHashMapEx<ArrayList<DownloadInfo>>	related_content_map		= new ByteArrayHashMapEx<ArrayList<DownloadInfo>>();
+		protected Map<String,DownloadInfo>						related_content			= new HashMap<>();
+		protected ByteArrayHashMapEx<ArrayList<DownloadInfo>>	related_content_map		= new ByteArrayHashMapEx<>();
 	}
 	
 	private static class

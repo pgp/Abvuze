@@ -54,7 +54,7 @@ import com.aelitis.azureus.plugins.dht.DHTPluginInterface;
 public class 
 AEPluginProxyHandler 
 {
-	private static final CopyOnWriteList<PluginInterface>		plugins = new CopyOnWriteList<PluginInterface>();
+	private static final CopyOnWriteList<PluginInterface>		plugins = new CopyOnWriteList<>();
 	
 	private static final int			plugin_init_max_wait	= 30*1000;
 	private static final AESemaphore 	plugin_init_complete 	= new AESemaphore( "init:waiter" );
@@ -160,8 +160,8 @@ AEPluginProxyHandler
 		return( plugin_init_complete.reserve( max_wait ));
 	}
 	
-	private static final Map<Proxy,WeakReference<PluginProxyImpl>>	proxy_map 	= new IdentityHashMap<Proxy,WeakReference<PluginProxyImpl>>();
-	private static final CopyOnWriteSet<SocketAddress>				proxy_list	= new CopyOnWriteSet<SocketAddress>( false );
+	private static final Map<Proxy,WeakReference<PluginProxyImpl>>	proxy_map 	= new IdentityHashMap<>();
+	private static final CopyOnWriteSet<SocketAddress>				proxy_list	= new CopyOnWriteSet<>(false);
 	
 	public static boolean
 	hasPluginProxyForNetwork(
@@ -289,7 +289,7 @@ AEPluginProxyHandler
 				
 				if ( properties == null ){
 					
-					properties = new HashMap<String, Object>();
+					properties = new HashMap<>();
 				}
 				
 				for ( PluginInterface pi: plugins ){
@@ -339,7 +339,7 @@ AEPluginProxyHandler
 			
 			if ( properties == null ){
 				
-				properties = new HashMap<String, Object>();
+				properties = new HashMap<>();
 			}
 			
 			for ( PluginInterface pi: plugins ){
@@ -505,7 +505,7 @@ AEPluginProxyHandler
 			return( null );
 		}
 		
-		options = new HashMap<String,Object>( options );
+		options = new HashMap<>(options);
 		
 		options.put( "id", server_uid );
 		
@@ -565,7 +565,7 @@ AEPluginProxyHandler
 		private final Map<String,Object>	proxy_options;
 		private final Object[]				proxy_details;
 		
-		private final List<PluginProxyImpl>	children = new ArrayList<AEPluginProxyHandler.PluginProxyImpl>();
+		private final List<PluginProxyImpl>	children = new ArrayList<>();
 		
 		private
 		PluginProxyImpl(
@@ -581,9 +581,9 @@ AEPluginProxyHandler
 			proxy_options		= _proxy_options;
 			proxy_details		= _proxy_details;
 			
-			WeakReference<PluginProxyImpl>	my_ref = new WeakReference<PluginProxyImpl>( this );
+			WeakReference<PluginProxyImpl>	my_ref = new WeakReference<>(this);
 			
-			List<PluginProxyImpl>	removed = new ArrayList<PluginProxyImpl>();
+			List<PluginProxyImpl>	removed = new ArrayList<>();
 			
 			synchronized( proxy_map ){
 				
@@ -705,7 +705,7 @@ AEPluginProxyHandler
 			
 			synchronized( children ){
 			
-				kids = new ArrayList<PluginProxyImpl>( children );
+				kids = new ArrayList<>(children);
 				
 				children.clear();
 			}

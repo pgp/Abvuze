@@ -31,9 +31,9 @@ import java.net.URL;
 public interface 
 SimpleXMLParserDocumentFactory 
 {
-	public SimpleXMLParserDocument
+	SimpleXMLParserDocument
 	create(
-		File		file )
+            File file)
 		
 		throws SimpleXMLParserDocumentException;
 
@@ -43,23 +43,23 @@ SimpleXMLParserDocumentFactory
 	 * @return
 	 * @throws SimpleXMLParserDocumentException
 	 */
-	
-	public SimpleXMLParserDocument
+
+    SimpleXMLParserDocument
 	create(
-		InputStream		is )
+            InputStream is)
 		
 		throws SimpleXMLParserDocumentException;
 	
-	public SimpleXMLParserDocument
+	SimpleXMLParserDocument
 	create(
-		URL				source_url,
-		InputStream		is )
+            URL source_url,
+            InputStream is)
 		
 		throws SimpleXMLParserDocumentException;
 
-	public SimpleXMLParserDocument
+	SimpleXMLParserDocument
 	create(
-		String		data )
+            String data)
 		
 		throws SimpleXMLParserDocumentException;
 }

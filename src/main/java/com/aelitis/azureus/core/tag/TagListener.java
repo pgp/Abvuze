@@ -23,17 +23,17 @@ package com.aelitis.azureus.core.tag;
 public interface 
 TagListener 
 {
-	public void
+	void
 	taggableAdded(
-		Tag			tag,
-		Taggable	tagged );
+            Tag tag,
+            Taggable tagged);
 	
-	public void
+	void
 	taggableSync(
-		Tag			tag );
+            Tag tag);
 	
-	public void
+	void
 	taggableRemoved(
-		Tag			tag,
-		Taggable	tagged );
+            Tag tag,
+            Taggable tagged);
 }

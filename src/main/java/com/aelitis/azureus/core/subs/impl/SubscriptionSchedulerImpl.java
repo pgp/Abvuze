@@ -21,7 +21,6 @@
 package com.aelitis.azureus.core.subs.impl;
 
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -84,7 +83,7 @@ SubscriptionSchedulerImpl
 	private Map	active_subscription_downloaders = new HashMap();
 	private boolean active_subs_download_is_auto;
 	
-	private Map<String,Long>	rate_limit_map = new HashMap<String, Long>();
+	private Map<String,Long>	rate_limit_map = new HashMap<>();
 	
 	private Set	active_result_downloaders		= new HashSet();
 	
@@ -297,11 +296,11 @@ SubscriptionSchedulerImpl
 				List waiting = (List)active_subscription_downloaders.remove( subs );
 				
 				if ( waiting != null ){
-					
-					for (int i=0;i<waiting.size();i++){
-						
-						((AESemaphore)waiting.get(i)).release();
-					}
+
+                    for (Object o : waiting) {
+
+                        ((AESemaphore) o).release();
+                    }
 				}
 				
 				was_auto = active_subs_download_is_auto;
@@ -401,7 +400,7 @@ SubscriptionSchedulerImpl
 								
 											original_url = new URL( target_resource );
 																		
-											Map<String,Object>	options = new HashMap<String,Object>();
+											Map<String,Object>	options = new HashMap<>();
 										
 											options.put( AEProxyFactory.PO_PEER_NETWORKS, new String[]{ AENetworkClassifier.AT_TOR });
 										
@@ -633,29 +632,27 @@ SubscriptionSchedulerImpl
 			long	next_ready_time = Long.MAX_VALUE;
 			
 			Subscription	next_ready_subs = null;
-			
-			for (int i=0;i<subs.length;i++){
-				
-				Subscription sub = subs[i];
-								
-				SubscriptionHistory history = sub.getHistory();
-				
-				if ( !history.isEnabled()){
-					
-					continue;
-				}
-				
-				long	next_scan = getNextScan( sub );
-				
-				sub.setUserData( SCHEDULER_NEXT_SCAN_KEY, new Long( next_scan ));
-				
-				if ( next_scan < next_ready_time ){
-					
-					next_ready_time = next_scan;
-					
-					next_ready_subs = sub;
-				}
-			}
+
+            for (Subscription sub : subs) {
+
+                SubscriptionHistory history = sub.getHistory();
+
+                if (!history.isEnabled()) {
+
+                    continue;
+                }
+
+                long next_scan = getNextScan(sub);
+
+                sub.setUserData(SCHEDULER_NEXT_SCAN_KEY, next_scan);
+
+                if (next_scan < next_ready_time) {
+
+                    next_ready_time = next_scan;
+
+                    next_ready_subs = sub;
+                }
+            }
 		
 			long	 old_when = 0;
 			
@@ -801,63 +798,61 @@ SubscriptionSchedulerImpl
 					}		
 				});
 		}
-		
-		for (int i=0;i<subs.length;i++){
-			
-			Subscription sub = subs[i];
-						
-			SubscriptionHistory history = sub.getHistory();
-			
-			if ( !history.isEnabled()){
-				
-				continue;
-			}
-			
-			synchronized( this ){
-				
-				Long	scan_due = (Long)sub.getUserData( SCHEDULER_NEXT_SCAN_KEY );
-				
-				if ( scan_due == null ){
-					
-					continue;
-				}
-				
-				long diff = now - scan_due.longValue();
-				
-				if ( diff < -10*1000 ){
-				
-					continue;
-				}
-				
-				sub.setUserData( SCHEDULER_NEXT_SCAN_KEY, null );
-			}
-			
-			long	last_scan = history.getLastScanTime();
 
-			boolean	download_attempted = true;
-			
-			try{	
-				download_attempted = download( sub, true );
-				
-			}catch( Throwable e ){
-								
-			}finally{
-				
-				if ( download_attempted ){
-					
-					long	new_last_scan = history.getLastScanTime();
-	
-					if ( new_last_scan == last_scan ){
-						
-						scanFailed( sub );
-						
-					}else{
-						
-						scanSuccess( sub );
-					}
-				}
-			}
-		}
+        for (Subscription sub : subs) {
+
+            SubscriptionHistory history = sub.getHistory();
+
+            if (!history.isEnabled()) {
+
+                continue;
+            }
+
+            synchronized (this) {
+
+                Long scan_due = (Long) sub.getUserData(SCHEDULER_NEXT_SCAN_KEY);
+
+                if (scan_due == null) {
+
+                    continue;
+                }
+
+                long diff = now - scan_due;
+
+                if (diff < -10 * 1000) {
+
+                    continue;
+                }
+
+                sub.setUserData(SCHEDULER_NEXT_SCAN_KEY, null);
+            }
+
+            long last_scan = history.getLastScanTime();
+
+            boolean download_attempted = true;
+
+            try {
+                download_attempted = download(sub, true);
+
+            } catch (Throwable e) {
+
+            } finally {
+
+                if (download_attempted) {
+
+                    long new_last_scan = history.getLastScanTime();
+
+                    if (new_last_scan == last_scan) {
+
+                        scanFailed(sub);
+
+                    } else {
+
+                        scanSuccess(sub);
+                    }
+                }
+            }
+        }
 	}
 	
 	protected long
@@ -870,9 +865,9 @@ SubscriptionSchedulerImpl
 		
 		if ( fail_count != null ){
 			
-			long 	fail_time = ((Long)sub.getUserData( SCHEDULER_FAILED_SCAN_TIME_KEY )).longValue();
+			long 	fail_time = (Long) sub.getUserData(SCHEDULER_FAILED_SCAN_TIME_KEY);
 			
-			long	fails = fail_count.longValue();
+			long	fails = fail_count;
 			
 			long	backoff = FAIL_INIT_DELAY;
 			
@@ -905,17 +900,17 @@ SubscriptionSchedulerImpl
 	scanFailed(
 		Subscription		sub )
 	{
-		sub.setUserData( SCHEDULER_FAILED_SCAN_TIME_KEY, new Long( SystemTime.getCurrentTime()));
+		sub.setUserData( SCHEDULER_FAILED_SCAN_TIME_KEY, SystemTime.getCurrentTime());
 		
 		Long fail_count = (Long)sub.getUserData( SCHEDULER_FAILED_SCAN_CONSEC_KEY );
 		
 		if ( fail_count == null ){
 			
-			fail_count = new Long(1);
+			fail_count = 1L;
 			
 		}else{
 			
-			fail_count = new Long(fail_count.longValue()+1);
+			fail_count = fail_count.longValue() + 1;
 		}
 		
 		sub.setUserData( SCHEDULER_FAILED_SCAN_CONSEC_KEY, fail_count );

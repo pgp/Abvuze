@@ -28,35 +28,35 @@ import org.gudy.azureus2.core3.disk.*;
 public interface 
 DMChecker 
 {
-	public void
+	void
 	start();
 	
-	public void
+	void
 	stop();
 	
-	public DiskManagerCheckRequest
+	DiskManagerCheckRequest
 	createCheckRequest(
-		int 	pieceNumber,
-		Object	user_data );
+            int pieceNumber,
+            Object user_data);
 	
-	public void 
+	void
 	enqueueCompleteRecheckRequest(
-		DiskManagerCheckRequest				request,
-		DiskManagerCheckRequestListener 	listener );
+            DiskManagerCheckRequest request,
+            DiskManagerCheckRequestListener listener);
 
-	public void 
+	void
 	enqueueCheckRequest(
-		DiskManagerCheckRequest			request,
-		DiskManagerCheckRequestListener listener );
+            DiskManagerCheckRequest request,
+            DiskManagerCheckRequestListener listener);
 	
-	public boolean
+	boolean
 	hasOutstandingCheckRequestForPiece(
-		int		piece_number );
+            int piece_number);
 	
-	public int 
+	int
 	getCompleteRecheckStatus();
 	
-	public void
+	void
 	setCheckingEnabled(
-		boolean		enabled );
+            boolean enabled);
 }

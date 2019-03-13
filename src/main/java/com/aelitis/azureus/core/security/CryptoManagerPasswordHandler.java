@@ -25,17 +25,17 @@ CryptoManagerPasswordHandler
 	/** 
 	 * HANDLER_TYPE_UNKNOWN is not for public use 
 	 **/
+
+    int HANDLER_TYPE_UNKNOWN	= 0;
+	int HANDLER_TYPE_USER		= 1;
+	int HANDLER_TYPE_SYSTEM		= 2;
+	int HANDLER_TYPE_ALL		= 3;	// just for clearing passwords...
 	
-	public static final int HANDLER_TYPE_UNKNOWN	= 0;	
-	public static final int HANDLER_TYPE_USER		= 1;
-	public static final int HANDLER_TYPE_SYSTEM		= 2;
-	public static final int HANDLER_TYPE_ALL		= 3;	// just for clearing passwords...
+	int ACTION_ENCRYPT				= 1;
+	int	ACTION_DECRYPT				= 2;
+	int	ACTION_PASSWORD_SET			= 3;
 	
-	public static final int ACTION_ENCRYPT				= 1;
-	public static final int	ACTION_DECRYPT				= 2;
-	public static final int	ACTION_PASSWORD_SET			= 3;
-	
-	public int
+	int
 	getHandlerType();
 	
 		/**
@@ -45,31 +45,31 @@ CryptoManagerPasswordHandler
 		 * @param reason		reason for the password being sought
 		 * @return password details or null if no password available
 		 */
-	
-	public passwordDetails
+
+        passwordDetails
 	getPassword(
-		int			handler_type,
-		int			action_type,
-		boolean		last_pw_incorrect,
-		String		reason );
+                int handler_type,
+                int action_type,
+                boolean last_pw_incorrect,
+                String reason);
 	
-	public void
+	void
 	passwordOK(
-		int					handler_type,
-		passwordDetails		details );
+            int handler_type,
+            passwordDetails details);
 	
-	public interface
+	interface
 	passwordDetails
 	{
-		public char[]
+		char[]
 		getPassword();
 		
 			/**
 			 * @return	0 -> don't persist, Integer.MAX_VALUE -> persist forever
 			 * < 0 -> current session; other -> seconds to persist
 			 */
-		
-		public int
+
+            int
 		getPersistForSeconds();
 	}
 }

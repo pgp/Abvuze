@@ -30,12 +30,12 @@ package org.gudy.azureus2.plugins;
 public interface 
 PluginListener 
 {
-	public void
+	void
 	initializationComplete();
 	
-	public void
+	void
 	closedownInitiated();
 	
-	public void
+	void
 	closedownComplete();
 }

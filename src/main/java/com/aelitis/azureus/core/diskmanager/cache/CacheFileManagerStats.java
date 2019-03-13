@@ -29,49 +29,49 @@ import org.gudy.azureus2.core3.torrent.TOTorrent;
 public interface 
 CacheFileManagerStats 
 {
-	public long
+	long
 	getSize();
 	
-	public long
+	long
 	getUsedSize();
 	
-	public long
+	long
 	getBytesWrittenToCache();
 	
-	public long
+	long
 	getBytesWrittenToFile();
 	
-	public long
+	long
 	getBytesReadFromCache();
 	
-	public long
+	long
 	getBytesReadFromFile();
 	
-	public long
+	long
 	getAverageBytesWrittenToCache();
 	
-	public long
+	long
 	getAverageBytesWrittenToFile();
 	
-	public long
+	long
 	getAverageBytesReadFromCache();
 	
-	public long
+	long
 	getAverageBytesReadFromFile();
 
-	public long
+	long
 	getCacheReadCount();
 	
-	public long
+	long
 	getCacheWriteCount();
 	
-	public long
+	long
 	getFileReadCount();
 	
-	public long
+	long
 	getFileWriteCount();
 	
 		// returns the number of bytes in the requested range that are in cache
 	
-	public boolean[] getBytesInCache(TOTorrent torrent, long[] absoluteOffsets, long[] lengths);
+	boolean[] getBytesInCache(TOTorrent torrent, long[] absoluteOffsets, long[] lengths);
 }

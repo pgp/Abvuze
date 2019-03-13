@@ -242,7 +242,7 @@ Constants
 			  isWindows8OrHigher		= false;
 			  
 		  }else{
-			  float f_ver = ver.floatValue();
+			  float f_ver = ver;
 			  	
 			  isWindowsVista			= f_ver == 6;
 			  isWindowsVistaOrHigher 	= f_ver >= 6;
@@ -659,18 +659,16 @@ Constants
 	{
 		host = host.toLowerCase();
 
-		for (int i=0; i<AZUREUS_DOMAINS.length; i++) {
+		for (String domain : AZUREUS_DOMAINS) {
 
-			String domain = (String) AZUREUS_DOMAINS[i];
+			if (domain.equals(host)) {
 
-			if ( domain.equals( host )){
-
-				return( true );
+				return (true);
 			}
 
-			if ( host.endsWith("." + domain)){
+			if (host.endsWith("." + domain)) {
 
-				return( true );
+				return (true);
 			}
 		}
 		

@@ -24,7 +24,7 @@ package com.aelitis.azureus.core.pairing;
 public interface 
 PairingManagerListener 
 {
-	public void
+	void
 	somethingChanged(
-		PairingManager	pm );
+            PairingManager pm);
 }

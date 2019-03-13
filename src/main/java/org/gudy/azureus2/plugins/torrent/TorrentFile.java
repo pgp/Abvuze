@@ -29,9 +29,9 @@ package org.gudy.azureus2.plugins.torrent;
 public interface 
 TorrentFile
 {
-	public String
+	String
 	getName();
 	
-	public long
+	long
 	getSize();
 }

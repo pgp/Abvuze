@@ -62,12 +62,12 @@ public class XMLElement {
 
     public String getAttribute(String key) {
         if (this.attributes == null) {return null;}
-        return (String)this.attributes.get(key);
+        return this.attributes.get(key);
     }
 
     public void addAttribute(String key, String value) {
         if (attributes == null) {
-            this.attributes = new TreeMap<String,String>(ATTRIBUTE_COMPARATOR);
+            this.attributes = new TreeMap<>(ATTRIBUTE_COMPARATOR);
         }
         this.attributes.put(key, value);
     }
@@ -110,10 +110,10 @@ public class XMLElement {
          */
         if (this.contents == null) {
             if (!this.auto_order) {
-                this.contents = new ArrayList<XMLElement>();
+                this.contents = new ArrayList<>();
             }
             else {
-                this.contents = new TreeSet<XMLElement>(CONTENT_COMPARATOR);
+                this.contents = new TreeSet<>(CONTENT_COMPARATOR);
             }
         }
 
@@ -151,9 +151,7 @@ public class XMLElement {
 
         // Add attributes to the element.
         if (this.attributes != null) {
-            Iterator<Map.Entry<String,String>> itr = this.attributes.entrySet().iterator();
-            while (itr.hasNext()) {
-                Map.Entry<String,String> entry = itr.next();
+            for (Map.Entry<String, String> entry : this.attributes.entrySet()) {
                 pw.print(" ");
                 pw.print(entry.getKey());
                 pw.print("=\"");
@@ -186,10 +184,8 @@ public class XMLElement {
 
         // Add child sub-elements.
         if (this.contents != null) {
-            Iterator<XMLElement> itr = this.contents.iterator();
-            while (itr.hasNext()) {
-                XMLElement content_element = itr.next();
-                content_element.printTo(pw, indent+2, spaced_out);
+            for (XMLElement content_element : this.contents) {
+                content_element.printTo(pw, indent + 2, spaced_out);
             }
         }
 
@@ -235,11 +231,11 @@ public class XMLElement {
         if (this.contents == null) return;
         Collection<XMLElement> previous_contents = contents;
         if (this.auto_order) {
-            this.contents = new TreeSet<XMLElement>(CONTENT_COMPARATOR);
+            this.contents = new TreeSet<>(CONTENT_COMPARATOR);
             this.contents.addAll(previous_contents);
         }
         else {
-            this.contents = new ArrayList<XMLElement>(previous_contents);
+            this.contents = new ArrayList<>(previous_contents);
         }
     }
 
@@ -282,10 +278,7 @@ public class XMLElement {
                 xe1_index = Integer.parseInt(xe1.getAttribute("index"));
                 xe2_index = Integer.parseInt(xe2.getAttribute("index"));
             }
-            catch (NullPointerException ne) {
-                xe1_index = xe2_index = 0;
-            }
-            catch (NumberFormatException ne) {
+            catch (NullPointerException | NumberFormatException ne) {
                 xe1_index = xe2_index = 0;
             }
 

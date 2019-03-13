@@ -26,7 +26,7 @@ package org.gudy.azureus2.plugins.utils;
 public interface 
 UTTimerEventPerformer 
 {
-	public void
+	void
 	perform(
-		UTTimerEvent		event );
+            UTTimerEvent event);
 }

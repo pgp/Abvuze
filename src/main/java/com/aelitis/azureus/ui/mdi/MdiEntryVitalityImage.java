@@ -27,24 +27,24 @@ package com.aelitis.azureus.ui.mdi;
  */
 public interface MdiEntryVitalityImage
 {
-	public String getImageID();
+	String getImageID();
 
-	public void setImageID(String id );
+	void setImageID(String id);
 	
-	public MdiEntry getMdiEntry();
+	MdiEntry getMdiEntry();
 	
-	public void addListener(MdiEntryVitalityImageListener l);
+	void addListener(MdiEntryVitalityImageListener l);
 	
 	// Should really be ID
-	public void setToolTip(String tooltip);
+    void setToolTip(String tooltip);
 	
-	public void setVisible(boolean visible);
+	void setVisible(boolean visible);
 	
-	public boolean isVisible();
+	boolean isVisible();
 
-	public void triggerClickedListeners(int x, int y);
+	void triggerClickedListeners(int x, int y);
 
-	public int getAlignment();
+	int getAlignment();
 	
-	public void setAlignment(int a);
+	void setAlignment(int a);
 }

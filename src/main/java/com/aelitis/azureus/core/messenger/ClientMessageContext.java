@@ -30,15 +30,15 @@ import com.aelitis.azureus.core.messenger.browser.listeners.BrowserMessageListen
  */
 public interface ClientMessageContext
 {
-	public abstract void addMessageListener(BrowserMessageListener listener);
+	void addMessageListener(BrowserMessageListener listener);
 
-	public abstract void removeMessageListener(String listenerId);
+	void removeMessageListener(String listenerId);
 
-	public abstract void removeMessageListener(BrowserMessageListener listener);
+	void removeMessageListener(BrowserMessageListener listener);
 
-	public abstract Object getBrowserData(String key);
+	Object getBrowserData(String key);
 
-	public abstract void setBrowserData(String key, Object value);
+	void setBrowserData(String key, Object value);
 
 	/**
 	 * Sends a message to the JavaScript message dispatcher in the page.
@@ -46,7 +46,7 @@ public interface ClientMessageContext
 	 * @param key identifies the listener to receive the message
 	 * @param op identifies the operation to perform
 	 */
-	public abstract boolean sendBrowserMessage(String key, String op);
+    boolean sendBrowserMessage(String key, String op);
 
 	/**
 	 * Sends a message to the JavaScript message dispatcher in the page.
@@ -55,16 +55,16 @@ public interface ClientMessageContext
 	 * @param op identifies the operation to perform
 	 * @param params optional message parameters
 	 */
-	public abstract boolean sendBrowserMessage(String key, String op, Map params);
+    boolean sendBrowserMessage(String key, String op, Map params);
 
-	public abstract boolean executeInBrowser(final String javascript);
+	boolean executeInBrowser(final String javascript);
 
 	/**
 	 * Displays a debug message tagged with the context ID.
 	 * 
 	 * @param message sent to the debug log
 	 */
-	public abstract void debug(String message);
+    void debug(String message);
 
 	/**
 	 * Displays a debug message and exception tagged with the context ID.
@@ -72,9 +72,9 @@ public interface ClientMessageContext
 	 * @param message sent to the debug log
 	 * @param t exception to log with message
 	 */
-	public abstract void debug(String message, Throwable t);
+    void debug(String message, Throwable t);
 
-	public BrowserMessageDispatcher getDispatcher();
+	BrowserMessageDispatcher getDispatcher();
 	
 	/**
 	 * @param key
@@ -95,12 +95,12 @@ public interface ClientMessageContext
 	
 	void setTorrentURLHandler( torrentURLHandler handler );
 	
-	public interface
+	interface
 	torrentURLHandler
 	{
-		public void
+		void
 		handleTorrentURL(
-			String		url );
+                String url);
 	}
 
 	/**

@@ -54,7 +54,7 @@ public class TorrentFolderWatcher {
 
 	private volatile boolean running = false;
 
-	private final ArrayList<TOTorrent> to_delete = new ArrayList<TOTorrent>();
+	private final ArrayList<TOTorrent> to_delete = new ArrayList<>();
 
 	protected final AEMonitor this_mon = new AEMonitor("TorrentFolderWatcher");
 
@@ -104,8 +104,8 @@ public class TorrentFolderWatcher {
 							String name )
 						{
 							wait_sem.release();
-						};
-					});
+						}
+                    });
 			}
 			
 			public void 
@@ -225,8 +225,8 @@ public class TorrentFolderWatcher {
 
 	    	int num_folders = COConfigurationManager.getIntParameter( "Watch Torrent Folder Path Count", 1);
 
-	    	List<File>		folders = new ArrayList<File>();
-	    	List<String>	tags	= new ArrayList<String>();
+	    	List<File>		folders = new ArrayList<>();
+	    	List<String>	tags	= new ArrayList<>();
 	    	
 	    	for ( int i=0;i<num_folders;i++){
 				String folder_path = 
@@ -309,18 +309,16 @@ public class TorrentFolderWatcher {
 			
 			//delete torrents from the previous import run
 
-			for (int i = 0; i < to_delete.size(); i++) {
+            for (TOTorrent torrent : to_delete) {
 
-				TOTorrent torrent = (TOTorrent) to_delete.get(i);
+                try {
+                    TorrentUtils.delete(torrent);
 
-				try {
-					TorrentUtils.delete(torrent);
+                } catch (Throwable e) {
 
-				} catch (Throwable e) {
-
-					Debug.printStackTrace(e);
-				}
-			}
+                    Debug.printStackTrace(e);
+                }
+            }
 
 			to_delete.clear();
 
@@ -349,125 +347,124 @@ public class TorrentFolderWatcher {
 							"There was a problem trying to get a listing of torrents from " + folder));
 					
 				}else{
-	
-					for (int i = 0; i < currentFileList.length; i++) {
-		
-						if ( !running ){
-							
-							return;
-						}
-						
-						File file = new File(folder, currentFileList[i]);
-		
-						// make sure we've got a valid torrent file before proceeding
-		
-						try {
-		
-							TOTorrent torrent = TorrentUtils.readFromFile(file, false);
-		
-							if (global_manager.getDownloadManager(torrent) != null) {
-		
-								if (Logger.isEnabled())
-									Logger.log(new LogEvent(LOGID, file.getAbsolutePath()
-											+ " is already being downloaded"));
-		
-								// we can't touch the torrent file as it is (probably) 
-								// being used for the download
-							}else if ( plugin_dm.lookupDownloadStub( torrent.getHash()) != null ){
-								
-								// archived download
-							
-								if (Logger.isEnabled())
-									Logger.log(new LogEvent(LOGID, file.getAbsolutePath()
-											+ " is an archived download"));
-								
-								if ( !save_torrents ){
-									
-									File imported = new File(folder, file.getName() + ".imported");
-		
-									TorrentUtils.move(file, imported);
-									
-								}else{
-									
-									to_delete.add(torrent);
-								}
-								
-							} else {
-								
-								final DownloadManagerInitialisationAdapter dmia = new DownloadManagerInitialisationAdapter() {
 
-									public int 
-									getActions() 
-									{
-										return( ACT_ASSIGNS_TAGS );
-									}
-									
-									public void 
-									initialised(
-										DownloadManager 		dm, 
-										boolean 				for_seeding ) 
-									{
-										if ( tag_name != null ){
-											
-											TagManager tm = TagManagerFactory.getTagManager();
-											
-											TagType tt = tm.getTagType( TagType.TT_DOWNLOAD_MANUAL );
-																						
-											Tag	tag = tt.getTag( tag_name, true );
-											
-											try{
-												if ( tag == null ){
-													
-													tag = tt.createTag( tag_name, true );
-												}
-												
-												tag.addTaggable( dm );
-												
-											}catch( Throwable e ){
-												
-												Debug.out( e );
-											}
-										}
-									}
-								};
-								
-								byte[] hash = null;
-								try {
-									hash = torrent.getHash();
-								} catch (Exception e) { }
-		
-								if (!save_torrents) {
-		
-									File imported = new File(folder, file.getName() + ".imported");
-		
-									TorrentUtils.move(file, imported);
-		
-									global_manager.addDownloadManager(imported.getAbsolutePath(), hash,
-											data_save_path, start_state, true,false,dmia);
-		
-								} else {
-		
-									global_manager.addDownloadManager(file.getAbsolutePath(), hash,
-											data_save_path, start_state, true, false, dmia);
-		
-									// add torrent for deletion, since there will be a 
-									// saved copy elsewhere
-									to_delete.add(torrent);
-								}
-		
-								if (Logger.isEnabled())
-									Logger.log(new LogEvent(LOGID, "Auto-imported "
-											+ file.getAbsolutePath()));
-							}
-		
-						} catch (Throwable e) {
-		
-							Debug.out("Failed to auto-import torrent file '"
-									+ file.getAbsolutePath() + "' - "
-									+ Debug.getNestedExceptionMessage(e));
-							Debug.printStackTrace(e);
-						}
-					}
+                    for (String s : currentFileList) {
+
+                        if (!running) {
+
+                            return;
+                        }
+
+                        File file = new File(folder, s);
+
+                        // make sure we've got a valid torrent file before proceeding
+
+                        try {
+
+                            TOTorrent torrent = TorrentUtils.readFromFile(file, false);
+
+                            if (global_manager.getDownloadManager(torrent) != null) {
+
+                                if (Logger.isEnabled())
+                                    Logger.log(new LogEvent(LOGID, file.getAbsolutePath()
+                                            + " is already being downloaded"));
+
+                                // we can't touch the torrent file as it is (probably)
+                                // being used for the download
+                            } else if (plugin_dm.lookupDownloadStub(torrent.getHash()) != null) {
+
+                                // archived download
+
+                                if (Logger.isEnabled())
+                                    Logger.log(new LogEvent(LOGID, file.getAbsolutePath()
+                                            + " is an archived download"));
+
+                                if (!save_torrents) {
+
+                                    File imported = new File(folder, file.getName() + ".imported");
+
+                                    TorrentUtils.move(file, imported);
+
+                                } else {
+
+                                    to_delete.add(torrent);
+                                }
+
+                            } else {
+
+                                final DownloadManagerInitialisationAdapter dmia = new DownloadManagerInitialisationAdapter() {
+
+                                    public int
+                                    getActions() {
+                                        return (ACT_ASSIGNS_TAGS);
+                                    }
+
+                                    public void
+                                    initialised(
+                                            DownloadManager dm,
+                                            boolean for_seeding) {
+                                        if (tag_name != null) {
+
+                                            TagManager tm = TagManagerFactory.getTagManager();
+
+                                            TagType tt = tm.getTagType(TagType.TT_DOWNLOAD_MANUAL);
+
+                                            Tag tag = tt.getTag(tag_name, true);
+
+                                            try {
+                                                if (tag == null) {
+
+                                                    tag = tt.createTag(tag_name, true);
+                                                }
+
+                                                tag.addTaggable(dm);
+
+                                            } catch (Throwable e) {
+
+                                                Debug.out(e);
+                                            }
+                                        }
+                                    }
+                                };
+
+                                byte[] hash = null;
+                                try {
+                                    hash = torrent.getHash();
+                                } catch (Exception e) {
+                                }
+
+                                if (!save_torrents) {
+
+                                    File imported = new File(folder, file.getName() + ".imported");
+
+                                    TorrentUtils.move(file, imported);
+
+                                    global_manager.addDownloadManager(imported.getAbsolutePath(), hash,
+                                            data_save_path, start_state, true, false, dmia);
+
+                                } else {
+
+                                    global_manager.addDownloadManager(file.getAbsolutePath(), hash,
+                                            data_save_path, start_state, true, false, dmia);
+
+                                    // add torrent for deletion, since there will be a
+                                    // saved copy elsewhere
+                                    to_delete.add(torrent);
+                                }
+
+                                if (Logger.isEnabled())
+                                    Logger.log(new LogEvent(LOGID, "Auto-imported "
+                                            + file.getAbsolutePath()));
+                            }
+
+                        } catch (Throwable e) {
+
+                            Debug.out("Failed to auto-import torrent file '"
+                                    + file.getAbsolutePath() + "' - "
+                                    + Debug.getNestedExceptionMessage(e));
+                            Debug.printStackTrace(e);
+                        }
+                    }
 				}
 			}
 		} finally {

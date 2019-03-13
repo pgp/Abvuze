@@ -27,29 +27,29 @@ VivaldiPosition
 	extends DHTNetworkPosition
 {
   
-  final static int CONVERGE_EVERY = 5;
-  final static float CONVERGE_FACTOR = 50f;
+  int CONVERGE_EVERY = 5;
+  float CONVERGE_FACTOR = 50f;
   
   // controlling parameters
-  public final static float ERROR_MIN = 0.1f;
+  float ERROR_MIN = 0.1f;
   
-  public Coordinates getCoordinates();
+  Coordinates getCoordinates();
   
-  public float getErrorEstimate();
+  float getErrorEstimate();
   
-  public void  setErrorEstimate(float error);
+  void  setErrorEstimate(float error);
   
-  public void update(float rtt,Coordinates coordinates,float error);
+  void update(float rtt, Coordinates coordinates, float error);
   
-  public void update(float rtt, float[] serialised_data );
+  void update(float rtt, float[] serialised_data);
   
-  public float estimateRTT(Coordinates coordinates);
+  float estimateRTT(Coordinates coordinates);
   
   	// serialisation stuff
 
-  public static final int	FLOAT_ARRAY_SIZE	= 4;	// size of float-serialisation array size
+  int	FLOAT_ARRAY_SIZE	= 4;	// size of float-serialisation array size
   
-  public float[] toFloatArray();
+  float[] toFloatArray();
   
-  public void fromFloatArray( float[] data );
+  void fromFloatArray(float[] data);
 }

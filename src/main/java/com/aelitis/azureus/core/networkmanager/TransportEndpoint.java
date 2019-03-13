@@ -22,6 +22,6 @@ package com.aelitis.azureus.core.networkmanager;
 public interface 
 TransportEndpoint 
 {
-	public ProtocolEndpoint
+	ProtocolEndpoint
 	getProtocolEndpoint();
 }

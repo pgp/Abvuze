@@ -25,36 +25,36 @@ import org.gudy.azureus2.plugins.download.Download;
 public interface 
 DeviceOfflineDownloaderManager 
 {
-	public boolean
+	boolean
 	isOfflineDownloadingEnabled();
 	
-	public void
+	void
 	setOfflineDownloadingEnabled(
-		boolean		enabled );
+            boolean enabled);
 
-	public boolean
+	boolean
 	getOfflineDownloadingIsAuto();
 	
-	public void
+	void
 	setOfflineDownloadingIsAuto(
-		boolean		auto );
+            boolean auto);
 
-	public boolean
+	boolean
 	getOfflineDownloadingIncludePrivate();
 	
-	public void
+	void
 	setOfflineDownloadingIncludePrivate(
-		boolean		include );
+            boolean include);
 	
-	public boolean
+	boolean
 	isManualDownload(
-		Download		download );
+            Download download);
 	
-	public void
+	void
 	addManualDownloads(
-		Download[]		download );
+            Download[] download);
 
-	public void
+	void
 	removeManualDownloads(
-		Download[]		download );
+            Download[] download);
 }

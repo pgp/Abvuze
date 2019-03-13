@@ -34,63 +34,63 @@ import org.gudy.azureus2.core3.util.HashWrapper;
 public interface 
 TRTrackerScraperResponse 
 {
-	public static final int	ST_INITIALIZING    = 0;
-	public static final int ST_ERROR           = 1;
-	public static final int	ST_ONLINE          = 2;
-	public static final int	ST_SCRAPING        = 3;
+	int	ST_INITIALIZING    = 0;
+	int ST_ERROR           = 1;
+	int	ST_ONLINE          = 2;
+	int	ST_SCRAPING        = 3;
 	
-	public HashWrapper
+	HashWrapper
 	getHash();
 	
-	public int getCompleted();
+	int getCompleted();
 	
-	public void setCompleted(int completed);
+	void setCompleted(int completed);
 	
-	public int
+	int
 	getSeeds();
 	
-	public int
+	int
 	getPeers();
 	
-	public void 
+	void
 	setSeedsPeers(int iSeeds, int iPeers);
   
-	public int
+	int
  	getStatus();
 
 		// time status last set in seconds
 	
-	public int
+	int
 	getScrapeTime();
 	
 	/**
 	 * When the scrape started (in ms)
 	 */
-	public long
+    long
 	getScrapeStartTime();
 
-	public void
+	void
 	setScrapeStartTime(
-			long		time );
+            long time);
   
-	public long
+	long
 	getNextScrapeStartTime();
 
-	public void
+	void
 	setNextScrapeStartTime(
-		long nextScrapeStartTime );
+            long nextScrapeStartTime);
 
-	public String
+	String
 	getStatusString();
 
-	public boolean isValid();
+	boolean isValid();
 	
-	public URL
+	URL
 	getURL();
 	
-	public boolean
+	boolean
 	isDHTBackup();
 	
-	public String
+	String
 	getString();
 }

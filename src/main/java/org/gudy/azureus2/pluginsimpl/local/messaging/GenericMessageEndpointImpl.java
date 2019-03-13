@@ -72,14 +72,14 @@ GenericMessageEndpointImpl
 	getTCP()
 	{
 		ProtocolEndpoint[]	pes = ce.getProtocols();
-		
-		for (int i=0;i<pes.length;i++){
-			
-			if ( pes[i] instanceof ProtocolEndpointTCP ){
-				
-				return( ((ProtocolEndpointTCP)pes[i]).getAddress());
-			}
-		}
+
+        for (ProtocolEndpoint pe : pes) {
+
+            if (pe instanceof ProtocolEndpointTCP) {
+
+                return (pe.getAddress());
+            }
+        }
 			
 		return( null );
 	}
@@ -95,14 +95,14 @@ GenericMessageEndpointImpl
 	getUDP()
 	{
 		ProtocolEndpoint[]	pes = ce.getProtocols();
-		
-		for (int i=0;i<pes.length;i++){
-			
-			if ( pes[i] instanceof ProtocolEndpointUDP ){
-				
-				return( ((ProtocolEndpointUDP)pes[i]).getAddress());
-			}
-		}
+
+        for (ProtocolEndpoint pe : pes) {
+
+            if (pe instanceof ProtocolEndpointUDP) {
+
+                return (pe.getAddress());
+            }
+        }
 			
 		return( null );
 	}

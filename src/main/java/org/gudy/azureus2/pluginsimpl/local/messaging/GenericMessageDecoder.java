@@ -164,7 +164,7 @@ GenericMessageDecoder
 	{
 		if( messages.isEmpty() )  return null;
 	      
-		Message[] msgs = (Message[])messages.toArray( new Message[messages.size()] );
+		Message[] msgs = (Message[])messages.toArray(new Message[0]);
 		
 		messages.clear();
 		    

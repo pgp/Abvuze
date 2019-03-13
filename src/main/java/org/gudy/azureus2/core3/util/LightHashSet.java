@@ -62,7 +62,7 @@ public class LightHashSet extends AbstractSet implements Cloneable {
 		{
 			final LightHashSet lightMap = (LightHashSet)c;
 			this.size = lightMap.size;
-			this.data = (Object[])lightMap.data.clone();
+			this.data = lightMap.data.clone();
 		} else
 			addAll(c);
 	}
@@ -71,7 +71,7 @@ public class LightHashSet extends AbstractSet implements Cloneable {
 		try
 		{
 			final LightHashMap newMap = (LightHashMap) super.clone();
-			newMap.data = (Object[])data.clone();
+			newMap.data = data.clone();
 			return newMap;
 		} catch (CloneNotSupportedException e)
 		{
@@ -153,10 +153,9 @@ public class LightHashSet extends AbstractSet implements Cloneable {
 	public boolean addAll(final Collection c) {
 		checkCapacity(c.size());
 		boolean changed = false;
-		for (final Iterator it = c.iterator(); it.hasNext();)
-		{
-			changed |= addInternal(it.next(), true);
-		}
+        for (Object o : c) {
+            changed |= addInternal(o, true);
+        }
 		// compactify in case we overestimated the new size due to redundant entries
 		//compactify(0.f);
 		return changed;
@@ -328,12 +327,11 @@ public class LightHashSet extends AbstractSet implements Cloneable {
 		final Object[] oldData = data;
 		data = new Object[newSize];
 		size = 0;
-		for (int i = 0; i < oldData.length; i++)
-		{
-			if (oldData[i] == null || oldData[i] == THOMBSTONE)
-				continue;
-			addInternal(oldData[i], true);
-		}
+        for (Object oldDatum : oldData) {
+            if (oldDatum == null || oldDatum == THOMBSTONE)
+                continue;
+            addInternal(oldDatum, true);
+        }
 	}
 
 	static void test() {
@@ -365,12 +363,10 @@ public class LightHashSet extends AbstractSet implements Cloneable {
 		System.out.println(System.currentTimeMillis() - time);
 		System.out.println("get:");
 		time = System.currentTimeMillis();
-		for (int i = 0; i < fillData.length; i++)
-			s1.contains(fillData[i]);
+        for (String fillDatum3 : fillData) s1.contains(fillDatum3);
 		System.out.println(System.currentTimeMillis() - time);
 		time = System.currentTimeMillis();
-		for (int i = 0; i < fillData.length; i++)
-			s2.contains(fillData[i]);
+        for (String fillDatum2 : fillData) s2.contains(fillDatum2);
 		System.out.println(System.currentTimeMillis() - time);
 		System.out.println("compactify light map");
 		time = System.currentTimeMillis();
@@ -392,12 +388,10 @@ public class LightHashSet extends AbstractSet implements Cloneable {
 		System.out.println(System.currentTimeMillis() - time);
 		System.out.println("remove entry by entry");
 		time = System.currentTimeMillis();
-		for (int i = 0; i < fillData.length; i++)
-			s1.remove(fillData[i]);
+        for (String fillDatum1 : fillData) s1.remove(fillDatum1);
 		System.out.println(System.currentTimeMillis() - time);
 		time = System.currentTimeMillis();
-		for (int i = 0; i < fillData.length; i++)
-			s2.remove(fillData[i]);
+        for (String fillDatum : fillData) s2.remove(fillDatum);
 		System.out.println(System.currentTimeMillis() - time);
 	}
 

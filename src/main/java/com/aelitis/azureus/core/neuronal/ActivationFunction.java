@@ -19,8 +19,8 @@ package com.aelitis.azureus.core.neuronal;
 
 public interface ActivationFunction {
 	
-	public double getValueFor(double x);
+	double getValueFor(double x);
 	
-	public double getDerivedFunctionValueFor(double x);
+	double getDerivedFunctionValueFor(double x);
 
 }

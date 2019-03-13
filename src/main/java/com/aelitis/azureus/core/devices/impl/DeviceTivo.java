@@ -29,6 +29,7 @@ import java.net.Socket;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 
@@ -50,7 +51,7 @@ DeviceTivo
 	
 	private static final String		NL				= "\r\n";
 	
-	private static Map<String,Comparator<ItemInfo>>	sort_comparators = new HashMap<String, Comparator<ItemInfo>>();
+	private static Map<String,Comparator<ItemInfo>>	sort_comparators = new HashMap<>();
 	
 	static {
 		sort_comparators.put(
@@ -225,46 +226,42 @@ DeviceTivo
 		if ( _machine == null && !tried_tcp_beacon ){
 			
 			try{
-				Socket socket = new Socket();
-			
-				try{
-					socket.connect( new InetSocketAddress( _address, 2190 ), 5000 );
-					
-					socket.setSoTimeout( 5000 );
-	
-					DataOutputStream dos = new DataOutputStream( socket.getOutputStream());
-					
-					byte[]	beacon_out = _tivo_manager.encodeBeacon( false, 0 );
-					
-					dos.writeInt( beacon_out.length );		
-				
-					dos.write( beacon_out );				
-						
-					DataInputStream dis = new DataInputStream( socket.getInputStream());
-					
-					int len = dis.readInt();
-				
-					if ( len < 65536 ){
-						
-						byte[] bytes = new byte[len];
-	
-						int	pos = 0;
-						
-						while( pos < len ){
-						
-							int read = dis.read( bytes, pos, len-pos );
-							
-							pos += read;
-						}
-						
-						Map<String,String> beacon_in = _tivo_manager.decodeBeacon( bytes, len );
-						
-						_machine = beacon_in.get( "machine" );
-					}	
-				}finally{
-					
-					socket.close();
-				}
+
+                try (Socket socket = new Socket()) {
+                    socket.connect(new InetSocketAddress(_address, 2190), 5000);
+
+                    socket.setSoTimeout(5000);
+
+                    DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+
+                    byte[] beacon_out = _tivo_manager.encodeBeacon(false, 0);
+
+                    dos.writeInt(beacon_out.length);
+
+                    dos.write(beacon_out);
+
+                    DataInputStream dis = new DataInputStream(socket.getInputStream());
+
+                    int len = dis.readInt();
+
+                    if (len < 65536) {
+
+                        byte[] bytes = new byte[len];
+
+                        int pos = 0;
+
+                        while (pos < len) {
+
+                            int read = dis.read(bytes, pos, len - pos);
+
+                            pos += read;
+                        }
+
+                        Map<String, String> beacon_in = _tivo_manager.decodeBeacon(bytes, len);
+
+                        _machine = beacon_in.get("machine");
+                    }
+                }
 			}catch( Throwable e ){
 				
 			}finally{
@@ -330,7 +327,7 @@ DeviceTivo
 		
 		String[]	bits = url.substring( pos+1 ).split( "&" );
 		
-		Map<String,String>	args = new HashMap<String, String>();
+		Map<String,String>	args = new HashMap<>();
 		
 		for ( String bit: bits ){
 			
@@ -416,13 +413,13 @@ DeviceTivo
 						
 					}else{
 						
-						categories_or_tags = new HashMap<String,ContainerInfo>();
+						categories_or_tags = new HashMap<>();
 					}
 				}
 				
 					// build list of applicable items
 				
-				List<ItemInfo> items = new ArrayList<ItemInfo>( tfs.length );
+				List<ItemInfo> items = new ArrayList<>(tfs.length);
 									
 				for ( TranscodeFileImpl file: tfs ){
 						
@@ -510,8 +507,8 @@ DeviceTivo
 					
 					String[] keys = Constants.PAT_SPLIT_COMMA.split(sort_order);
 					
-					final List<Comparator<ItemInfo>> 	comparators = new  ArrayList<Comparator<ItemInfo>>();
-					final List<Boolean>					reverses	= new ArrayList<Boolean>();
+					final List<Comparator<ItemInfo>> 	comparators = new ArrayList<>();
+					final List<Boolean>					reverses	= new ArrayList<>();
 					
 					for ( String key: keys ){
 						
@@ -833,7 +830,7 @@ DeviceTivo
 		
 		response.setContentType( "text/xml" );
 		
-		response.getOutputStream().write( reply.getBytes( "UTF-8" ));
+		response.getOutputStream().write( reply.getBytes(StandardCharsets.UTF_8));
 		
 		return( true );
 	}

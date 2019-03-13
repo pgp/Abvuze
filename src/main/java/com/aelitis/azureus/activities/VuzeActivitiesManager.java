@@ -47,23 +47,23 @@ public class VuzeActivitiesManager
 
 	private static final String SAVE_FILENAME = "VuzeActivities.config";
 
-	private static ArrayList<VuzeActivitiesListener> listeners = new ArrayList<VuzeActivitiesListener>();
+	private static ArrayList<VuzeActivitiesListener> listeners = new ArrayList<>();
 
-	private static ArrayList<VuzeActivitiesLoadedListener> listenersLoaded = new ArrayList<VuzeActivitiesLoadedListener>();
+	private static ArrayList<VuzeActivitiesLoadedListener> listenersLoaded = new ArrayList<>();
 	private static final Object listenersLoadedLock = new Object();
 			
-	private static CopyOnWriteList<VuzeActivitiesEntry> allEntries = new CopyOnWriteList<VuzeActivitiesEntry>();
+	private static CopyOnWriteList<VuzeActivitiesEntry> allEntries = new CopyOnWriteList<>();
 
 	private static AEMonitor allEntries_mon = new AEMonitor("VuzeActivityMan");
 
-	private static List<VuzeActivitiesEntry> removedEntries = new ArrayList<VuzeActivitiesEntry>();
+	private static List<VuzeActivitiesEntry> removedEntries = new ArrayList<>();
 
 	private static PlatformVuzeActivitiesMessenger.GetEntriesReplyListener replyListener;
 
 	private static AEDiagnosticsLogger diag_logger;
 
 	/** Key: NetworkID, Value: last time we pulled news **/ 
-	private static Map<String, Long> lastNewsAt = new HashMap<String, Long>();
+	private static Map<String, Long> lastNewsAt = new HashMap<>();
 
 	private static boolean skipAutoSave = true;
 
@@ -167,7 +167,7 @@ public class VuzeActivitiesManager
 				}
 				Object oIsActive = cn.getPersistentProperty(ContentNetwork.PP_ACTIVE);
 				boolean isActive = (oIsActive instanceof Boolean)
-						? ((Boolean) oIsActive).booleanValue() : false;
+						? (Boolean) oIsActive : false;
 				if (isActive) {
 					pullActivitiesNow(2000, "CN:PropChange", false);
 				}
@@ -230,7 +230,7 @@ public class VuzeActivitiesManager
 			
 			String id = "" + cn.getID();
 			Long oLastPullTime = lastNewsAt.get(id);
-			long lastPullTime = oLastPullTime != null ? oLastPullTime.longValue() : 0;
+			long lastPullTime = oLastPullTime != null ? oLastPullTime : 0;
 			long now = SystemTime.getCurrentTime();
 			long diff = now - lastPullTime;
 			if (!alwaysPull && diff < 5000) {
@@ -247,7 +247,7 @@ public class VuzeActivitiesManager
 	}
 	
 	public static void clearLastPullTimes() {
-		lastNewsAt = new HashMap<String, Long>();
+		lastNewsAt = new HashMap<>();
 	}
 
 	/**
@@ -310,8 +310,7 @@ public class VuzeActivitiesManager
     			if (lastVuzeNewsAt < cutoffTime) {
     				lastVuzeNewsAt = cutoffTime;
     			}
-  				lastNewsAt.put("" + ContentNetwork.CONTENT_NETWORK_VUZE, new Long(
-  						lastVuzeNewsAt));
+  				lastNewsAt.put("" + ContentNetwork.CONTENT_NETWORK_VUZE, lastVuzeNewsAt);
   			}
 			}
 			
@@ -320,17 +319,17 @@ public class VuzeActivitiesManager
 			List newRemovedEntries = (List) MapUtils.getMapObject(map,
 					"removed-entries", null, List.class);
 			if (newRemovedEntries != null) {
-				for (Iterator iter = newRemovedEntries.iterator(); iter.hasNext();) {
-					value = iter.next();
-					if (!(value instanceof Map)) {
-						continue;
-					}
-					VuzeActivitiesEntry entry = createEntryFromMap((Map) value, true);
+                for (Object newRemovedEntry : newRemovedEntries) {
+                    value = newRemovedEntry;
+                    if (!(value instanceof Map)) {
+                        continue;
+                    }
+                    VuzeActivitiesEntry entry = createEntryFromMap((Map) value, true);
 
-					if (entry != null && entry.getTimestamp() > cutoffTime) {
-						removedEntries.add(entry);
-					}
-				}
+                    if (entry != null && entry.getTimestamp() > cutoffTime) {
+                        removedEntries.add(entry);
+                    }
+                }
 			}
 
 			value = map.get("entries");
@@ -339,25 +338,25 @@ public class VuzeActivitiesManager
 			}
 
 			List entries = (List) value;
-			List<VuzeActivitiesEntry> entriesToAdd = new ArrayList<VuzeActivitiesEntry>(entries.size());
-			for (Iterator iter = entries.iterator(); iter.hasNext();) {
-				value = iter.next();
-				if (!(value instanceof Map)) {
-					continue;
-				}
+			List<VuzeActivitiesEntry> entriesToAdd = new ArrayList<>(entries.size());
+            for (Object entry1 : entries) {
+                value = entry1;
+                if (!(value instanceof Map)) {
+                    continue;
+                }
 
-				VuzeActivitiesEntry entry = createEntryFromMap((Map) value, true);
+                VuzeActivitiesEntry entry = createEntryFromMap((Map) value, true);
 
-				if (entry != null) {
-					if (entry.getTimestamp() > cutoffTime) {
-						entriesToAdd.add(entry);
-					}
-				}
-			}
+                if (entry != null) {
+                    if (entry.getTimestamp() > cutoffTime) {
+                        entriesToAdd.add(entry);
+                    }
+                }
+            }
 
 			int num = entriesToAdd.size();
 			if (num > 0) {
-				addEntries((VuzeActivitiesEntry[]) entriesToAdd.toArray(new VuzeActivitiesEntry[num]));
+				addEntries(entriesToAdd.toArray(new VuzeActivitiesEntry[num]));
 			}
 		} finally {
 			skipAutoSave = false;
@@ -386,11 +385,11 @@ public class VuzeActivitiesManager
 		try {
 			config_mon.enter();
 
-			Map<String, Object> mapSave = new HashMap<String, Object>();
+			Map<String, Object> mapSave = new HashMap<>();
 			mapSave.put("LastChecks", lastNewsAt);
-			mapSave.put("version", new Long(2));
+			mapSave.put("version", 2L);
 
-			List<Object> entriesList = new ArrayList<Object>();
+			List<Object> entriesList = new ArrayList<>();
 
 			List<VuzeActivitiesEntry> allEntries = getAllEntries();
 			for ( VuzeActivitiesEntry entry: allEntries ){
@@ -405,11 +404,10 @@ public class VuzeActivitiesManager
 			}
 			mapSave.put("entries", entriesList);
 
-			List<Object> removedEntriesList = new ArrayList<Object>();
-			for (Iterator<VuzeActivitiesEntry> iter = removedEntries.iterator(); iter.hasNext();) {
-				VuzeActivitiesEntry entry = iter.next();
-				removedEntriesList.add(entry.toDeletedMap());
-			}
+			List<Object> removedEntriesList = new ArrayList<>();
+            for (VuzeActivitiesEntry entry : removedEntries) {
+                removedEntriesList.add(entry.toDeletedMap());
+            }
 			mapSave.put("removed-entries", removedEntriesList);
 
 			FileUtil.writeResilientConfigFile(SAVE_FILENAME, mapSave);
@@ -465,44 +463,43 @@ public class VuzeActivitiesManager
 	public static VuzeActivitiesEntry[] addEntries(VuzeActivitiesEntry[] entries) {
 		long cutoffTime = getCutoffTime();
 
-		ArrayList<VuzeActivitiesEntry> newEntries = new ArrayList<VuzeActivitiesEntry>(entries.length);
-		ArrayList<VuzeActivitiesEntry> existingEntries = new ArrayList<VuzeActivitiesEntry>(0);
+		ArrayList<VuzeActivitiesEntry> newEntries = new ArrayList<>(entries.length);
+		ArrayList<VuzeActivitiesEntry> existingEntries = new ArrayList<>(0);
 
 		try {
 			allEntries_mon.enter();
 
-			for (int i = 0; i < entries.length; i++) {
-				VuzeActivitiesEntry entry = entries[i];
-				boolean isHeader = VuzeActivitiesConstants.TYPEID_HEADER.equals(entry.getTypeID());
-				if ((entry.getTimestamp() >= cutoffTime || isHeader)
-						&& !removedEntries.contains(entry)) {
-					
-					VuzeActivitiesEntry existing_entry = allEntries.get( entry );
-					if (existing_entry != null) {
-						existingEntries.add(existing_entry);
-						if ( existing_entry.getTimestamp() < entry.getTimestamp()){
-							existing_entry.updateFrom( entry );
-						}
-					} else {
-						newEntries.add(entry);
-						allEntries.add(entry);
-					}
-				}
-			}
+            for (VuzeActivitiesEntry entry : entries) {
+                boolean isHeader = VuzeActivitiesConstants.TYPEID_HEADER.equals(entry.getTypeID());
+                if ((entry.getTimestamp() >= cutoffTime || isHeader)
+                        && !removedEntries.contains(entry)) {
+
+                    VuzeActivitiesEntry existing_entry = allEntries.get(entry);
+                    if (existing_entry != null) {
+                        existingEntries.add(existing_entry);
+                        if (existing_entry.getTimestamp() < entry.getTimestamp()) {
+                            existing_entry.updateFrom(entry);
+                        }
+                    } else {
+                        newEntries.add(entry);
+                        allEntries.add(entry);
+                    }
+                }
+            }
 		} finally {
 			allEntries_mon.exit();
 		}
 
-		VuzeActivitiesEntry[] newEntriesArray = (VuzeActivitiesEntry[]) newEntries.toArray(new VuzeActivitiesEntry[newEntries.size()]);
+		VuzeActivitiesEntry[] newEntriesArray = newEntries.toArray(new VuzeActivitiesEntry[0]);
 
 		if (newEntriesArray.length > 0) {
 			saveEventsNow();
 
 			Object[] listenersArray = listeners.toArray();
-			for (int i = 0; i < listenersArray.length; i++) {
-				VuzeActivitiesListener l = (VuzeActivitiesListener) listenersArray[i];
-				l.vuzeNewsEntriesAdded(newEntriesArray);
-			}
+            for (Object o : listenersArray) {
+                VuzeActivitiesListener l = (VuzeActivitiesListener) o;
+                l.vuzeNewsEntriesAdded(newEntriesArray);
+            }
 		}
 
 		if (existingEntries.size() > 0) {
@@ -510,10 +507,9 @@ public class VuzeActivitiesManager
 				saveEvents();
 			}
 
-  		for (Iterator<VuzeActivitiesEntry> iter = existingEntries.iterator(); iter.hasNext();) {
-  			VuzeActivitiesEntry entry = iter.next();
-  			triggerEntryChanged(entry);
-  		}
+            for (VuzeActivitiesEntry entry : existingEntries) {
+                triggerEntryChanged(entry);
+            }
 		}
 
 		return newEntriesArray;
@@ -529,29 +525,28 @@ public class VuzeActivitiesManager
 		try {
 			allEntries_mon.enter();
 
-			for (int i = 0; i < entries.length; i++) {
-				VuzeActivitiesEntry entry = entries[i];
-				if (entry == null) {
-					continue;
-				}
-				allEntries.remove(entry);
-				boolean isHeader = VuzeActivitiesConstants.TYPEID_HEADER.equals(entry.getTypeID());
-				if (!allowReAdd && entry.getTimestamp() > cutoffTime && !isHeader) {
-					if ( !entry.allowReAdd()){ 
-						
-						removedEntries.add(entry);
-					}
-				}
-			}
+            for (VuzeActivitiesEntry entry : entries) {
+                if (entry == null) {
+                    continue;
+                }
+                allEntries.remove(entry);
+                boolean isHeader = VuzeActivitiesConstants.TYPEID_HEADER.equals(entry.getTypeID());
+                if (!allowReAdd && entry.getTimestamp() > cutoffTime && !isHeader) {
+                    if (!entry.allowReAdd()) {
+
+                        removedEntries.add(entry);
+                    }
+                }
+            }
 		} finally {
 			allEntries_mon.exit();
 		}
 
 		Object[] listenersArray = listeners.toArray();
-		for (int i = 0; i < listenersArray.length; i++) {
-			VuzeActivitiesListener l = (VuzeActivitiesListener) listenersArray[i];
-			l.vuzeNewsEntriesRemoved(entries);
-		}
+        for (Object o : listenersArray) {
+            VuzeActivitiesListener l = (VuzeActivitiesListener) o;
+            l.vuzeNewsEntriesRemoved(entries);
+        }
 		saveEventsNow();
 	}
 
@@ -559,16 +554,15 @@ public class VuzeActivitiesManager
 		try {
 			allEntries_mon.enter();
 
-			for (Iterator<VuzeActivitiesEntry> iter = allEntries.iterator(); iter.hasNext();) {
-				VuzeActivitiesEntry entry = iter.next();
-				if (entry == null) {
-					continue;
-				}
-				String entryID = entry.getID();
-				if (entryID != null && entryID.equals(id)) {
-					return entry;
-				}
-			}
+            for (VuzeActivitiesEntry entry : allEntries) {
+                if (entry == null) {
+                    continue;
+                }
+                String entryID = entry.getID();
+                if (entryID != null && entryID.equals(id)) {
+                    return entry;
+                }
+            }
 		} finally {
 			allEntries_mon.exit();
 		}
@@ -633,10 +627,10 @@ public class VuzeActivitiesManager
 	 */
 	public static void triggerEntryChanged(VuzeActivitiesEntry entry) {
 		Object[] listenersArray = listeners.toArray();
-		for (int i = 0; i < listenersArray.length; i++) {
-			VuzeActivitiesListener l = (VuzeActivitiesListener) listenersArray[i];
-			l.vuzeNewsEntryChanged(entry);
-		}
+        for (Object o : listenersArray) {
+            VuzeActivitiesListener l = (VuzeActivitiesListener) o;
+            l.vuzeNewsEntryChanged(entry);
+        }
 		saveEvents();
 	}
 

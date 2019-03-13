@@ -20,6 +20,7 @@
 
 package com.aelitis.azureus.core.tag.impl;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -52,7 +53,7 @@ TagWithState
 {
 	private static final String TP_KEY = "TagWithState:tp_key";
 
-	private final CopyOnWriteSet<Taggable>	objects = new CopyOnWriteSet<Taggable>( true );
+	private final CopyOnWriteSet<Taggable>	objects = new CopyOnWriteSet<>(true);
 
 	private final String	TP_KEY_TAG_ADDED_TIME;
 	
@@ -103,7 +104,7 @@ TagWithState
 				for ( byte[] b: list ){
 					
 					try{
-						String id = new String( b, "UTF-8" );
+						String id = new String( b, StandardCharsets.UTF_8);
 						
 						Taggable taggable = tt.resolveTaggable( id );
 						
@@ -155,8 +156,8 @@ TagWithState
 			
 			Iterator<Taggable> it = objects.iterator();
 			
-			List<byte[]> 	l = new ArrayList<byte[]>( objects.size());
-			List<Map> 		p = new ArrayList<Map>( objects.size());
+			List<byte[]> 	l = new ArrayList<>(objects.size());
+			List<Map> 		p = new ArrayList<>(objects.size());
 			
 			while( it.hasNext()){
 				
@@ -167,7 +168,7 @@ TagWithState
 					
 					if ( id != null ){
 					
-						l.add( id.getBytes( "UTF-8" ));
+						l.add( id.getBytes(StandardCharsets.UTF_8));
 						
 						Map all_props = (Map)taggable.getTaggableTransientProperty( TP_KEY );
 						
@@ -338,7 +339,7 @@ TagWithState
 									getTagName( true ),
 								});
 					
-					Map<String,String>	cb_data = new HashMap<String, String>();
+					Map<String,String>	cb_data = new HashMap<>();
 					
 					cb_data.put( "allowReAdd", "true" );
 					cb_data.put( "taguid", String.valueOf( getTagUID() ));

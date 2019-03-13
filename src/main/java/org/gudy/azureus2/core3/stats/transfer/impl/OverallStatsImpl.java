@@ -189,7 +189,7 @@ OverallStatsImpl
 		return(0);
 	  }
 	
-	  return(((Long)obj).longValue());
+	  return((Long) obj);
   }
   
   public 
@@ -228,26 +228,26 @@ OverallStatsImpl
 						if ( types.contains( AzureusCoreStats.ST_XFER_UPLOADED_PROTOCOL_BYTES )){
 							
 							values.put( 
-								AzureusCoreStats.ST_XFER_UPLOADED_PROTOCOL_BYTES, 
-								new Long( totalProtocolUploaded + ( gm_stats.getTotalProtocolBytesSent() - lastProtocolUploaded )));
+								AzureusCoreStats.ST_XFER_UPLOADED_PROTOCOL_BYTES,
+                                    totalProtocolUploaded + (gm_stats.getTotalProtocolBytesSent() - lastProtocolUploaded));
 						}
 						if ( types.contains( AzureusCoreStats.ST_XFER_UPLOADED_DATA_BYTES )){
 							
 							values.put( 
-								AzureusCoreStats.ST_XFER_UPLOADED_DATA_BYTES, 
-								new Long( totalDataUploaded + ( gm_stats.getTotalDataBytesSent() - lastDataUploaded )));
+								AzureusCoreStats.ST_XFER_UPLOADED_DATA_BYTES,
+                                    totalDataUploaded + (gm_stats.getTotalDataBytesSent() - lastDataUploaded));
 						}
 						if ( types.contains( AzureusCoreStats.ST_XFER_DOWNLOADED_PROTOCOL_BYTES )){
 							
 							values.put( 
-								AzureusCoreStats.ST_XFER_DOWNLOADED_PROTOCOL_BYTES, 
-								new Long( totalProtocolDownloaded + ( gm_stats.getTotalProtocolBytesReceived() - lastProtocolDownloaded )));
+								AzureusCoreStats.ST_XFER_DOWNLOADED_PROTOCOL_BYTES,
+                                    totalProtocolDownloaded + (gm_stats.getTotalProtocolBytesReceived() - lastProtocolDownloaded));
 						}
 						if ( types.contains( AzureusCoreStats.ST_XFER_DOWNLOADED_DATA_BYTES )){
 							
 							values.put( 
-								AzureusCoreStats.ST_XFER_DOWNLOADED_DATA_BYTES, 
-								new Long( totalDataDownloaded + ( gm_stats.getTotalDataBytesReceived() - lastDataDownloaded )));
+								AzureusCoreStats.ST_XFER_DOWNLOADED_DATA_BYTES,
+                                    totalDataDownloaded + (gm_stats.getTotalDataBytesReceived() - lastDataDownloaded));
 						}
 			  		}
 			  	}finally{
@@ -556,23 +556,23 @@ OverallStatsImpl
 	    
 	    HashMap	overallMap = new HashMap();
 	    
-	    overallMap.put("downloaded",new Long(totalDownloaded));
-	    overallMap.put("uploaded",new Long(totalUploaded));
-	    overallMap.put("uptime",new Long(totalUptime));
+	    overallMap.put("downloaded", totalDownloaded);
+	    overallMap.put("uploaded", totalUploaded);
+	    overallMap.put("uptime", totalUptime);
 
-	    overallMap.put("mark_time",new Long(markTime));
-	    overallMap.put("mark_downloaded",new Long(markTotalDownloaded));
-	    overallMap.put("mark_uploaded",new Long(markTotalUploaded));
-	    overallMap.put("mark_uptime",new Long(markTotalUptime));
+	    overallMap.put("mark_time", markTime);
+	    overallMap.put("mark_downloaded", markTotalDownloaded);
+	    overallMap.put("mark_uploaded", markTotalUploaded);
+	    overallMap.put("mark_uptime", markTotalUptime);
 
 	    
-	    overallMap.put("dht_down",new Long(totalDHTDownloaded));
-	    overallMap.put("dht_up",new Long(totalDHTUploaded));
+	    overallMap.put("dht_down", totalDHTDownloaded);
+	    overallMap.put("dht_up", totalDHTUploaded);
 
-	    overallMap.put("p_uploaded",new Long(totalProtocolUploaded));
-	    overallMap.put("d_uploaded",new Long(totalDataUploaded));
-	    overallMap.put("p_downloaded",new Long(totalProtocolDownloaded));
-	    overallMap.put("d_downloaded",new Long(totalDataDownloaded));
+	    overallMap.put("p_uploaded", totalProtocolUploaded);
+	    overallMap.put("d_uploaded", totalDataUploaded);
+	    overallMap.put("p_downloaded", totalProtocolDownloaded);
+	    overallMap.put("d_downloaded", totalDataDownloaded);
 
 	    Map	map = new HashMap();
 	    

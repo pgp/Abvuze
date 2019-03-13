@@ -24,12 +24,12 @@ import java.net.InetSocketAddress;
 public interface 
 SpeedManagerPingSource 
 {
-	public InetSocketAddress
+	InetSocketAddress
 	getAddress();
 	
-	public int
+	int
 	getPingTime();
 	
-	public void
+	void
 	destroy();
 }

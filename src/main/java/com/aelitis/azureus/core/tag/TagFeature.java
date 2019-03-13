@@ -23,18 +23,18 @@ package com.aelitis.azureus.core.tag;
 public interface 
 TagFeature 
 {
-	public static final int TF_NONE				= 0x00000000;
-	public static final int TF_RATE_LIMIT		= 0x00000001;
-	public static final int TF_RSS_FEED			= 0x00000002;
-	public static final int TF_RUN_STATE		= 0x00000004;
-	public static final int TF_XCODE			= 0x00000008;
-	public static final int TF_FILE_LOCATION	= 0x00000010;
-	public static final int TF_PROPERTIES		= 0x00000020;
-	public static final int TF_EXEC_ON_ASSIGN	= 0x00000040;
-	public static final int TF_LIMITS			= 0x00000080;
-	public static final int TF_NOTIFICATIONS	= 0x00000100;
+	int TF_NONE				= 0x00000000;
+	int TF_RATE_LIMIT		= 0x00000001;
+	int TF_RSS_FEED			= 0x00000002;
+	int TF_RUN_STATE		= 0x00000004;
+	int TF_XCODE			= 0x00000008;
+	int TF_FILE_LOCATION	= 0x00000010;
+	int TF_PROPERTIES		= 0x00000020;
+	int TF_EXEC_ON_ASSIGN	= 0x00000040;
+	int TF_LIMITS			= 0x00000080;
+	int TF_NOTIFICATIONS	= 0x00000100;
 	
-	public Tag
+	Tag
 	getTag();
 	
 }

@@ -25,10 +25,10 @@ import java.util.Map;
 public interface 
 MagnetPluginListener 
 {
-	public boolean
+	boolean
 	set(
-		String		name,
-		Map			values );
+            String name,
+            Map values);
 	
 		/**
 		 * 
@@ -36,9 +36,9 @@ MagnetPluginListener
 		 * @param values
 		 * @return Integer.MIN_VALUE if not handled
 		 */
-	
-	public int
+
+        int
 	get(
-		String		name,
-		Map			values );
+                String name,
+                Map values);
 }

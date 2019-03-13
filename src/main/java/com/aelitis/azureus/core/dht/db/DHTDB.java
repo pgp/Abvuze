@@ -38,9 +38,9 @@ import com.aelitis.azureus.core.dht.transport.DHTTransportValue;
 public interface 
 DHTDB 
 {
-	public void
+	void
 	setControl(
-		DHTControl		control );
+            DHTControl control);
 	
 		/**
 		 * Local store
@@ -49,14 +49,14 @@ DHTDB
 		 * @param flags
 		 * @return
 		 */
-	
-	public DHTDBValue
+
+        DHTDBValue
 	store(
-		HashWrapper		key,
-		byte[]			value,
-		short			flags,
-		byte			life_hours,
-		byte			replication_control );
+                HashWrapper key,
+                byte[] value,
+                short flags,
+                byte life_hours,
+                byte replication_control);
 	
 		/**
 		 * Remote store
@@ -66,54 +66,54 @@ DHTDB
 		 * @param values
 		 * @return diversification state
 		 */
-	
-	public byte
+
+        byte
 	store(
-		DHTTransportContact 	sender, 
-		HashWrapper				key,
-		DHTTransportValue[]		values );
+                DHTTransportContact sender,
+                HashWrapper key,
+                DHTTransportValue[] values);
 	
-	public DHTTransportQueryStoreReply
+	DHTTransportQueryStoreReply
 	queryStore(
-		DHTTransportContact 		originating_contact, 
-		int							header_len,
-		List<Object[]>				keys );
+            DHTTransportContact originating_contact,
+            int header_len,
+            List<Object[]> keys);
 	
 		/**
 		 * Internal lookup for locally originated values
 		 * @param key
 		 * @return
 		 */
-	
-	public DHTDBValue
+
+        DHTDBValue
 	get(
-		HashWrapper		key );
+                HashWrapper key);
 	
 		/**
 		 * Returns a value for the given key (local or remote) if found
 		 * @param key
 		 * @return
 		 */
-	
-	public DHTDBValue
+
+        DHTDBValue
 	getAnyValue(
-		HashWrapper		key );
+                HashWrapper key);
 	
-	public List<DHTDBValue>
+	List<DHTDBValue>
 	getAllValues(
-		HashWrapper		key );
+            HashWrapper key);
 	
-	public boolean
+	boolean
 	hasKey(
-		HashWrapper		key );
+            HashWrapper key);
 	
-	public DHTDBLookupResult
+	DHTDBLookupResult
 	get(
-		DHTTransportContact		reader,
-		HashWrapper				key,
-		int						max_values,
-		short					flags,
-		boolean					external_request );
+            DHTTransportContact reader,
+            HashWrapper key,
+            int max_values,
+            short flags,
+            boolean external_request);
 		
 		/**
 		 * Local remove - returns a value suitable for putting in the DHT
@@ -121,30 +121,30 @@ DHTDB
 		 * @param key
 		 * @return
 		 */
+
+        DHTDBValue
+	remove(
+                DHTTransportContact sender,
+                HashWrapper key);
 	
-	public DHTDBValue
-	remove(	
-		DHTTransportContact 	sender,
-		HashWrapper				key );
-	
-	public DHTStorageBlock
+	DHTStorageBlock
 	keyBlockRequest(
-		DHTTransportContact		direct_sender,
-		byte[]					request,
-		byte[]					signature );
+            DHTTransportContact direct_sender,
+            byte[] request,
+            byte[] signature);
 	
-	public DHTStorageBlock
+	DHTStorageBlock
 	getKeyBlockDetails(
-		byte[]			key );
+            byte[] key);
 	
-	public boolean
+	boolean
 	isKeyBlocked(
-		byte[]			key );
+            byte[] key);
 	
-	public DHTStorageBlock[]
+	DHTStorageBlock[]
 	getDirectKeyBlocks();
 	
-	public boolean
+	boolean
 	isEmpty();
 		
 		/**
@@ -152,25 +152,25 @@ DHTDB
 		 * Thus by the time a key is used the entry may no longer exist
 		 * @return
 		 */
-	
-	public Iterator<HashWrapper>
+
+        Iterator<HashWrapper>
 	getKeys();
 	
-	public DHTDBStats
+	DHTDBStats
 	getStats();
 	
-	public void
+	void
 	setSleeping(
-		boolean	asleep );
+            boolean asleep);
 	
-	public void
+	void
 	setSuspended(
-		boolean			susp );
+            boolean susp);
 	
-	public void
+	void
 	destroy();
 	
-	public void
+	void
 	print(
-		boolean		full );
+            boolean full);
 }

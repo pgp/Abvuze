@@ -29,7 +29,7 @@ import java.util.List;
 public interface 
 AggregatedListAcceptor 
 {
-	public void
+	void
 	accept(
-		List		l );
+            List l);
 }

@@ -34,18 +34,18 @@ DHTControlStats
 		 * Uptime of the latest router instance
 		 * @return
 		 */
-	
-	public long
+
+        long
 	getRouterUptime();
 	
 		/**
 		 * Number of routers instantiated - new one created if our external IP changes
 		 * @return
 		 */
-	
-	public int
+
+        int
 	getRouterCount();
 	
-	public long
+	long
 	getEstimatedDHTSize();
 }

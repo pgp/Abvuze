@@ -22,15 +22,15 @@ package com.aelitis.azureus.plugins.dht;
 public interface 
 DHTPluginKeyStats 
 {
-	public int
+	int
 	getEntryCount();
 	
-	public int
+	int
 	getSize();
 	
-	public int
+	int
 	getReadsPerMinute();
 	
-	public byte
+	byte
 	getDiversification();
 }

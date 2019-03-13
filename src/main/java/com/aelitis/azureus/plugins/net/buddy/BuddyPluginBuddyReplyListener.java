@@ -25,13 +25,13 @@ import java.util.Map;
 public interface 
 BuddyPluginBuddyReplyListener 
 {
-	public void
+	void
 	replyReceived(
-		BuddyPluginBuddy		from_buddy,
-		Map						reply );
+            BuddyPluginBuddy from_buddy,
+            Map reply);
 	
-	public void
+	void
 	sendFailed(
-		BuddyPluginBuddy		to_buddy,
-		BuddyPluginException	cause );
+            BuddyPluginBuddy to_buddy,
+            BuddyPluginException cause);
 }

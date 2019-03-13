@@ -64,10 +64,10 @@ public abstract class OptionsConsoleCommand extends IConsoleCommand
 		{
 			String []args = new String[arguments.size()];
 			int i = 0;
-			for (Iterator iter = arguments.iterator(); iter.hasNext();) {
-				String arg = (String) iter.next();
-				args[i++] = arg;
-			}
+            for (Object argument : arguments) {
+                String arg = (String) argument;
+                args[i++] = arg;
+            }
 			CommandLine line = parser.parse(getOptions(), args);
 			execute( commandName, console, line );
 		} catch (ParseException e) 

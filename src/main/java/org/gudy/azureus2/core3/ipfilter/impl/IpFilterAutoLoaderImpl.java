@@ -20,6 +20,7 @@ package org.gudy.azureus2.core3.ipfilter.impl;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -93,7 +94,7 @@ public class IpFilterAutoLoaderImpl
 
 				//open the file
 				// TODO: test charset fallback (should fallback to ascii)
-				streamReader = new InputStreamReader(fin, "utf8");
+				streamReader = new InputStreamReader(fin, StandardCharsets.UTF_8);
 				reader = new BufferedReader(streamReader);
 
 				int numConsecutiveUnknowns = 0;
@@ -215,12 +216,10 @@ public class IpFilterAutoLoaderImpl
 					}
 				}
 
-				Iterator it = new_ipRanges.iterator();
+                for (Object new_ipRange : new_ipRanges) {
 
-				while (it.hasNext()) {
-
-					((IpRange) it.next()).checkValid();
-				}
+                    ((IpRange) new_ipRange).checkValid();
+                }
 
 				ipFilter.markAsUpToDate();
 			}
@@ -246,12 +245,11 @@ public class IpFilterAutoLoaderImpl
 				'2',
 				'B'
 			};
-			for (int i = 0; i < MAGIC.length; i++) {
-				byte b = MAGIC[i];
-				if (b != is.read()) {
-					return -1;
-				}
-			}
+            for (byte b : MAGIC) {
+                if (b != is.read()) {
+                    return -1;
+                }
+            }
 
 			// next: version no
 			int p2bVersion = is.read();
@@ -449,12 +447,10 @@ public class IpFilterAutoLoaderImpl
 					}
 				}
 
-				Iterator it = new_ipRanges.iterator();
+                for (Object new_ipRange : new_ipRanges) {
 
-				while (it.hasNext()) {
-
-					((IpRange) it.next()).checkValid();
-				}
+                    ((IpRange) new_ipRange).checkValid();
+                }
 
 				ipFilter.markAsUpToDate();
 

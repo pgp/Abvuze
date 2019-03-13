@@ -111,31 +111,29 @@ LocaleUtil
 	if ( show_all ){
 		
 		Map m = Charset.availableCharsets();
-	  	
-		Iterator it = m.keySet().iterator();
-	
-		while(it.hasNext()){
-	  		
-			String	charset_name = (String)it.next();
-	  		
-			if ( !decoder_names.contains( charset_name)){
-	  		
-				try {
-				  CharsetDecoder decoder = Charset.forName(charset_name).newDecoder();
-				 
-				  if ( decoder != null ){
-				  	
-				  	LocaleUtilDecoder	lu_decoder = new LocaleUtilDecoderReal(decoders.size(),decoder);
-				  
-				  	decoders.add( lu_decoder);
-				  
-				  	decoder_names.add( lu_decoder.getName());
-				  }
-				 
-				} catch (Exception ignore) {
-				}
-			}
-		}
+
+        for (Object o : m.keySet()) {
+
+            String charset_name = (String) o;
+
+            if (!decoder_names.contains(charset_name)) {
+
+                try {
+                    CharsetDecoder decoder = Charset.forName(charset_name).newDecoder();
+
+                    if (decoder != null) {
+
+                        LocaleUtilDecoder lu_decoder = new LocaleUtilDecoderReal(decoders.size(), decoder);
+
+                        decoders.add(lu_decoder);
+
+                        decoder_names.add(lu_decoder.getName());
+                    }
+
+                } catch (Exception ignore) {
+                }
+            }
+        }
 	}
     
 	fallback_decoder = new LocaleUtilDecoderFallback(decoders.size());
@@ -244,14 +242,14 @@ LocaleUtil
   	LocaleUtilDecoderCandidate[] 	candidates = getCandidates( array );
   	
   	List	decoders = new ArrayList();
-  	
-  	for (int i=0;i<candidates.length;i++){
-  	
-  		LocaleUtilDecoder	d = candidates[i].getDecoder();
-  		
-  		if (d != null)
-  			decoders.add(d);
-  	}
+
+      for (LocaleUtilDecoderCandidate candidate : candidates) {
+
+          LocaleUtilDecoder d = candidate.getDecoder();
+
+          if (d != null)
+              decoders.add(d);
+      }
   	
   	return decoders;
   }
@@ -266,10 +264,10 @@ LocaleUtil
 
 		List candidatesList = new ArrayList();
 
-		for (int i = 0; i < candidates.length; i++) {
-			if (candidates[i].getDecoder() != null)
-				candidatesList.add(candidates[i]);
-		}
+      for (LocaleUtilDecoderCandidate candidate : candidates) {
+          if (candidate.getDecoder() != null)
+              candidatesList.add(candidate);
+      }
 
 		return candidatesList;
 	}

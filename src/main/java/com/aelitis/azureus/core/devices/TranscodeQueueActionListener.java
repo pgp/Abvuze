@@ -23,12 +23,12 @@ package com.aelitis.azureus.core.devices;
 public interface 
 TranscodeQueueActionListener 
 {
-	public static final int	ACT_REMOVE	= 1;
+	int	ACT_REMOVE	= 1;
 	
-	public void
+	void
 	jobWillBeActioned(
-		TranscodeJob		job,
-		int					action )
+            TranscodeJob job,
+            int action)
 	
 		throws TranscodeActionVetoException;
 }

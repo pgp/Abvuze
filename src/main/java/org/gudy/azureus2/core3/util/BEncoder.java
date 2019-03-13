@@ -22,6 +22,7 @@ package org.gudy.azureus2.core3.util;
 import java.io.*;
 import java.net.URLEncoder;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.gudy.azureus2.core3.xml.util.XUXmlWriter;
@@ -166,59 +167,50 @@ BEncoder
                 
             }else{
             		tempTree = new TreeMap(tempMap);
-            }            
-                   
-            Iterator	it = tempTree.entrySet().iterator();
-            
-            while( it.hasNext()){
-            	
-            	Map.Entry	entry = (Map.Entry)it.next();
-			
-            	Object o_key = entry.getKey();
-   			   		           	
-   			   	Object value = entry.getValue();
+            }
 
-   			   	if (value != null)
-				{
-					if (o_key instanceof byte[])
-					{
+			for (Object o : tempTree.entrySet()) {
+
+				Map.Entry entry = (Map.Entry) o;
+
+				Object o_key = entry.getKey();
+
+				Object value = entry.getValue();
+
+				if (value != null) {
+					if (o_key instanceof byte[]) {
 						encodeObject(o_key);
 						if (!encodeObject(value))
 							encodeObject("");
-					} else if(o_key instanceof String)
-					{
+					} else if (o_key instanceof String) {
 						String key = (String) o_key;
-						if (byte_keys)
-						{
-							try
-							{
+						if (byte_keys) {
+							try {
 								encodeObject(Constants.BYTE_CHARSET.encode(key));
 								if (!encodeObject(value))
 									encodeObject("");
-							} catch (UnsupportedEncodingException e)
-							{
+							} catch (UnsupportedEncodingException e) {
 								throw (new IOException("BEncoder: unsupport encoding: " + e.getMessage()));
 							}
-						} else
-						{
-								// if we put non-ascii chars in as keys we can get horrible expanding
-								// config issues as we cycle through decode/encode cycles with certain
-								// characters
-							
-							if ( Constants.IS_CVS_VERSION ){
-								char[]	chars = key.toCharArray();
-								
-								for ( char c: chars ){
+						} else {
+							// if we put non-ascii chars in as keys we can get horrible expanding
+							// config issues as we cycle through decode/encode cycles with certain
+							// characters
 
-									if (c >= '\u0080'){
+							if (Constants.IS_CVS_VERSION) {
+								char[] chars = key.toCharArray();
 
-										if ( non_ascii_logs < 50 ){
-											
+								for (char c : chars) {
+
+									if (c >= '\u0080') {
+
+										if (non_ascii_logs < 50) {
+
 											non_ascii_logs++;
-											
-											Debug.out( "Non-ASCII key: " + key );
+
+											Debug.out("Non-ASCII key: " + key);
 										}
-										
+
 										break;
 									}
 								}
@@ -228,9 +220,9 @@ BEncoder
 								encodeObject("");
 						}
 					} else
-						Debug.out( "Attempt to encode an unsupported map key type: " + object.getClass() + ";value=" + object);
-				}     
-            }
+						Debug.out("Attempt to encode an unsupported map key type: " + object.getClass() + ";value=" + object);
+				}
+			}
             
             writeChar('e');
             
@@ -241,12 +233,12 @@ BEncoder
             
             	//write out the l
             
-            writeChar('l');                                   
-            
-            for(int i = 0; i<tempList.size(); i++){
-                
-            	encodeObject( tempList.get(i));                            
-            }   
+            writeChar('l');
+
+			for (Object o : tempList) {
+
+				encodeObject(o);
+			}
             
             writeChar('e');                          
             
@@ -255,7 +247,7 @@ BEncoder
             Long tempLong = (Long)object;         
             //write out the l       
             writeChar('i');
-            writeLong(tempLong.longValue());
+            writeLong(tempLong);
             writeChar('e');
 			
        }else if(object instanceof byte[]){
@@ -274,7 +266,7 @@ BEncoder
 			Integer tempInteger = (Integer)object;         
 			//write out the l       
 			writeChar('i');
-			writeInt(tempInteger.intValue());
+			writeInt(tempInteger);
 			writeChar('e');
 
        }else if (object instanceof Byte ){
@@ -465,30 +457,28 @@ BEncoder
     	}else{
     		
     		int	total = current_buffer_pos;
-    		
-    		for (int i=0;i<old_buffers.length;i++){
-    			
-    			total += old_buffers[i].length;
-    		}
+
+			for (byte[] old_buffer : old_buffers) {
+
+				total += old_buffer.length;
+			}
     		
     		byte[] res = new byte[total];
     		
     		int	pos = 0;
     		
     		//String str = "";
-    		
-    		for (int i=0;i<old_buffers.length;i++){
 
-    			byte[] buffer = old_buffers[i];
-    			
-    			int	len = buffer.length;
-    			
-    			System.arraycopy( buffer, 0, res, pos, len );
-    			
-    			pos += len;
-    			
-    			//str += (str.length()==0?"":",") + len;
-    		}
+			for (byte[] buffer : old_buffers) {
+
+				int len = buffer.length;
+
+				System.arraycopy(buffer, 0, res, pos, len);
+
+				pos += len;
+
+				//str += (str.length()==0?"":",") + len;
+			}
     		
       		System.arraycopy( current_buffer, 0, res, pos, current_buffer_pos );
       		 
@@ -504,20 +494,20 @@ BEncoder
     	Object		o )
     {
     	if ( o instanceof Integer ){
-       		o = new Long(((Integer)o).longValue());
+       		o = ((Integer) o).longValue();
       	}else if ( o instanceof Boolean ){
-       		o = new Long(((Boolean)o).booleanValue()?1:0);
+       		o = (long) ((Boolean) o ? 1 : 0);
      	}else if ( o instanceof Float ){
-       		o = String.valueOf((Float)o);
+       		o = String.valueOf(o);
      	}else if ( o instanceof Double ){
-       		o = String.valueOf((Double)o);
+       		o = String.valueOf(o);
        	}else if ( o instanceof byte[] ){    		
        		try{
        			byte[] b = (byte[])o;
        			
-       			String s = new String(b,"UTF-8");		
+       			String s = new String(b, StandardCharsets.UTF_8);
        			
-       			byte[] temp = s.getBytes( "UTF-8" );
+       			byte[] temp = s.getBytes(StandardCharsets.UTF_8);
        			
        				// if converting the raw byte array into a UTF string and back again doesn't result in
        				// the same bytes then things ain't gonna work dump as a demarked hex string that
@@ -557,9 +547,8 @@ BEncoder
 			return true;
 		if (toCheck instanceof Map)
 		{
-			for (Iterator it = ((Map) toCheck).keySet().iterator(); it.hasNext();)
-			{
-				Map.Entry entry = (Map.Entry) it.next();
+			for (Object o : ((Map) toCheck).keySet()) {
+				Map.Entry entry = (Map.Entry) o;
 				Object key = entry.getKey();
 				if (!(key instanceof String || key instanceof byte[]) || !isEncodable(entry.getValue()))
 					return false;
@@ -568,8 +557,8 @@ BEncoder
 		}
 		if (toCheck instanceof List)
 		{
-			for (Iterator it = ((List) toCheck).iterator(); it.hasNext();)
-				if (!isEncodable(it.next()))
+			for (Object o : ((List) toCheck))
+				if (!isEncodable(o))
 					return false;
 			return true;
 		}
@@ -719,25 +708,23 @@ BEncoder
     	}
     	
     	Map res = new TreeMap();
-    	
-    	Iterator	it = map.entrySet().iterator();
-    	
-    	while( it.hasNext()){
-    		
-    		Map.Entry	entry = (Map.Entry)it.next();
-    		
-    		Object	key 	= entry.getKey();
-    		Object	value	= entry.getValue();
 
-    			// keys must be String (or very rarely byte[])
-    		
-    		if ( key instanceof byte[] ){
-    			
-    			key = ((byte[])key).clone();
-    		}
-    		
-    		res.put( key, clone( value ));
-    	}
+		for (Object o : map.entrySet()) {
+
+			Map.Entry entry = (Map.Entry) o;
+
+			Object key = entry.getKey();
+			Object value = entry.getValue();
+
+			// keys must be String (or very rarely byte[])
+
+			if (key instanceof byte[]) {
+
+				key = ((byte[]) key).clone();
+			}
+
+			res.put(key, clone(value));
+		}
     	
     	return( res );
     }
@@ -752,13 +739,11 @@ BEncoder
     	}
     	
     	List	res = new ArrayList(list.size());
-    	
-    	Iterator	it = list.iterator();
-    	
-    	while( it.hasNext()){
-    		
-    		res.add( clone( it.next()));
-    	}
+
+		for (Object o : list) {
+
+			res.add(clone(o));
+		}
     	
     	return( res );
     }
@@ -852,7 +837,7 @@ BEncoder
     		Object	key = entry.getKey();
     		Object	val	= entry.getValue();
     		
-    		j_map.put((String)key, encodeToJSONGeneric( val ));
+    		j_map.put(key, encodeToJSONGeneric( val ));
     	}
     	
     	return( j_map );
@@ -988,7 +973,7 @@ BEncoder
     {
     	Map map = new HashMap();
     	
-    	map.put( "a", new Float(1.2));
+    	map.put( "a", 1.2f);
     	map.put( "b", true );
     	map.put( "c", "fred".getBytes());
     	

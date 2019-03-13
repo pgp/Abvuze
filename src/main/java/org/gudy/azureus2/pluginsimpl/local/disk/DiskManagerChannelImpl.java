@@ -124,7 +124,7 @@ DiskManagerChannelImpl
 	
 		// hack to allow other components to be informed when channels are created
 	
-	private static CopyOnWriteList<channelCreateListener>	listeners = new CopyOnWriteList<channelCreateListener>();
+	private static CopyOnWriteList<channelCreateListener>	listeners = new CopyOnWriteList<>();
 	
 	public static void 
 	addListener(
@@ -144,26 +144,25 @@ DiskManagerChannelImpl
 	reportCreated(
 		DiskManagerChannel	channel )
 	{
-		Iterator<channelCreateListener> it = listeners.iterator();
-		
-		while( it.hasNext()){
-			
-			try{
-				it.next().channelCreated( channel );
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace(e);
-			}
-		}
+
+        for (channelCreateListener listener : listeners) {
+
+            try {
+                listener.channelCreated(channel);
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 	
-	public static interface
+	public interface
 	channelCreateListener
 	{
-		public void
+		void
 		channelCreated(
-			DiskManagerChannel	channel );
+                DiskManagerChannel channel);
 	}
 	
 	private DownloadImpl	download;
@@ -171,11 +170,11 @@ DiskManagerChannelImpl
 	private org.gudy.azureus2.pluginsimpl.local.disk.DiskManagerFileInfoImpl	plugin_file;
 	private org.gudy.azureus2.core3.disk.DiskManagerFileInfo					core_file;
 	
-	private Set<dataEntry>	data_written = new TreeSet<dataEntry>( comparator );
+	private Set<dataEntry>	data_written = new TreeSet<>(comparator);
 	
 	private int compact_delay	= COMPACT_DELAY;
 	
-	private List<AESemaphore>	waiters	= new ArrayList<AESemaphore>();
+	private List<AESemaphore>	waiters	= new ArrayList<>();
 
 	private long	file_offset_in_torrent;
 	private long	piece_size;
@@ -380,11 +379,11 @@ DiskManagerChannelImpl
 					}
 				}
 			}
-		
-			for (int i=0;i<waiters.size();i++){
-					
-				waiters.get(i).release();
-			}
+
+            for (AESemaphore waiter : waiters) {
+
+                waiter.release();
+            }
 		}
 	}
 	
@@ -575,7 +574,7 @@ DiskManagerChannelImpl
 		private int		request_type;
 		private long	request_offset;
 		private long	request_length;
-		private List<DiskManagerListener>	listeners	= new ArrayList<DiskManagerListener>();
+		private List<DiskManagerListener>	listeners	= new ArrayList<>();
 		
 		private String	user_agent;
 		
@@ -734,31 +733,27 @@ DiskManagerChannelImpl
 					synchronized( data_written ){
 						
 						current_position = pos;
-						
-						Iterator<dataEntry>	it = data_written.iterator();
-						
-						while( it.hasNext()){
-							
-							dataEntry	entry = it.next();
-							
-							long	entry_offset = entry.getOffset();
-							
-							if ( entry_offset > pos ){
-																
-								break;
-							}
-							
-							long	entry_length = entry.getLength();
-							
-							long	available = entry_offset + entry_length - pos;
-							
-							if ( available > 0 ){
-								
-								len = available;
-								
-								break;
-							}
-						}
+
+                        for (dataEntry entry : data_written) {
+
+                            long entry_offset = entry.getOffset();
+
+                            if (entry_offset > pos) {
+
+                                break;
+                            }
+
+                            long entry_length = entry.getLength();
+
+                            long available = entry_offset + entry_length - pos;
+
+                            if (available > 0) {
+
+                                len = available;
+
+                                break;
+                            }
+                        }
 					}				
 					
 					if ( len > 0 ){
@@ -889,16 +884,16 @@ DiskManagerChannelImpl
 		inform(
 			event		ev )
 		{
-			for (int i=0;i<listeners.size();i++){
-				
-				try{
-					((DiskManagerListener)listeners.get(i)).eventOccurred( ev );
-					
-				}catch( Throwable e ){
-					
-					Debug.printStackTrace(e);
-				}
-			}
+            for (DiskManagerListener listener : listeners) {
+
+                try {
+                    listener.eventOccurred(ev);
+
+                } catch (Throwable e) {
+
+                    Debug.printStackTrace(e);
+                }
+            }
 		}
 		
 		public void

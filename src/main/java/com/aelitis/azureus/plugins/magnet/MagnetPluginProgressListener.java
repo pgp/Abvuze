@@ -29,25 +29,25 @@ import java.net.InetSocketAddress;
 public interface 
 MagnetPluginProgressListener 
 {
-	public void
+	void
 	reportSize(
-		long	size );
+            long size);
 	
-	public void
+	void
 	reportActivity(
-		String	str );
+            String str);
 	
-	public void
+	void
 	reportCompleteness(
-		int		percent );
+            int percent);
 	
-	public void
+	void
 	reportContributor(
-		InetSocketAddress	address );
+            InetSocketAddress address);
 	
-	public boolean
+	boolean
 	cancelled();
 	
-	public boolean
+	boolean
 	verbose();
 }

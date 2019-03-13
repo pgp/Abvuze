@@ -28,16 +28,16 @@ public interface
 TRTrackerAnnouncerResponsePeer
 	extends DownloadAnnounceResultPeer
 {
-	public int
+	int
 	getHTTPPort();
 	
-	public byte
+	byte
 	getAZVersion();
 	
-	public int
+	int
 	getUploadSpeed();
 	
-	public int
-	compareTo( 
-		TRTrackerAnnouncerResponsePeer	other );
+	int
+	compareTo(
+            TRTrackerAnnouncerResponsePeer other);
 }

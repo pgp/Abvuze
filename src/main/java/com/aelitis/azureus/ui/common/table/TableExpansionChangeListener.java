@@ -23,7 +23,7 @@ package com.aelitis.azureus.ui.common.table;
  */
 public interface TableExpansionChangeListener
 {
-	public abstract void rowExpanded(TableRowCore row);
+	void rowExpanded(TableRowCore row);
 	
-	public abstract void rowCollapsed(TableRowCore row);
+	void rowCollapsed(TableRowCore row);
 }

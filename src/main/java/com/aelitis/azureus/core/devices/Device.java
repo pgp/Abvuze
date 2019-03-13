@@ -29,165 +29,165 @@ import com.aelitis.azureus.core.vuzefile.VuzeFile;
 public interface 
 Device 
 {
-	public static final int DT_UNKNOWN				= 0;
-	public static final int DT_INTERNET_GATEWAY		= 1;
-	public static final int DT_CONTENT_DIRECTORY	= 2;
-	public static final int DT_MEDIA_RENDERER		= 3;
-	public static final int DT_INTERNET				= 4;
-	public static final int DT_OFFLINE_DOWNLOADER	= 5;
+	int DT_UNKNOWN				= 0;
+	int DT_INTERNET_GATEWAY		= 1;
+	int DT_CONTENT_DIRECTORY	= 2;
+	int DT_MEDIA_RENDERER		= 3;
+	int DT_INTERNET				= 4;
+	int DT_OFFLINE_DOWNLOADER	= 5;
 		
-	public int
+	int
 	getType();
 	
-	public String
+	String
 	getID();
 	
-	public String
+	String
 	getName();
 	
-	public void
+	void
 	setName(
-		String		name,
-		boolean isAutomaticName);
+            String name,
+            boolean isAutomaticName);
 	
-	public String
+	String
 	getClassification();
 		
-	public String
+	String
 	getShortDescription();
 	
-	public void
+	void
 	alive();
 	
-	public boolean
+	boolean
 	isAlive();
 	
-	public boolean
+	boolean
 	isLivenessDetectable();
 	
-	public boolean
+	boolean
 	isBusy();
 	
-	public boolean
+	boolean
 	isManual();
 	
-	public void
+	void
 	setHidden(
-		boolean		is_hidden );
+            boolean is_hidden);
 	
-	public boolean
+	boolean
 	isHidden();
 	
-	public void
+	void
 	setTagged(
-		boolean	is_tagged );
+            boolean is_tagged);
 	
-	public boolean 
+	boolean
 	isTagged();
 	
-	public boolean
+	boolean
 	isBrowsable();
 	
-	public browseLocation[]
+	browseLocation[]
 	getBrowseLocations();
 		
-	public InetAddress
+	InetAddress
 	getAddress();
 	
-	public void
+	void
 	setAddress(
-		InetAddress	address );
+            InetAddress address);
 	
-	public void
+	void
 	setTransientProperty(
-		Object		key,
-		Object		value );
+            Object key,
+            Object value);
 	
-	public Object
+	Object
 	getTransientProperty(
-		Object		key );
+            Object key);
 	
 		/**
 		 * Array of resource strings and their associated values
 		 * @return
 		 */
-	
-	public String[][]
+
+        String[][]
 	getDisplayProperties();
 	
-	public void
+	void
 	requestAttention();
 	
-	public void
+	void
 	remove();
 	
-	public void
+	void
 	setCanRemove(
-		boolean	can );
+            boolean can);
 	
-	public boolean
+	boolean
 	canRemove();
 	
-	public String
+	String
 	getInfo();
 	
-	public String
+	String
 	getError();
 	
-	public String
+	String
 	getStatus();
 	
-	public void
+	void
 	addListener(
-		DeviceListener		listener );
+            DeviceListener listener);
 	
-	public void
+	void
 	removeListener(
-		DeviceListener		listener );
+            DeviceListener listener);
 	
-	public String
+	String
 	getString();
 	
 	interface
 	browseLocation
 	{
-		public String
+		String
 		getName();
 		
-		public URL
+		URL
 		getURL();
 	}
 
-	public boolean 
+	boolean
 	isGenericUSB();
 	
-	public void
+	void
 	setGenericUSB(boolean b);
 	
-	public String
+	String
 	getImageID();
 	
-	public void
+	void
 	setImageID(String id);
 
-	public boolean
+	boolean
 	isNameAutomatic();
 	
-	public void
+	void
 	setExportable(
-		boolean		b );
+            boolean b);
 	
-	public boolean
+	boolean
 	isExportable();
 	
-	public URL
+	URL
 	getWikiURL();
 	
-	public VuzeFile
+	VuzeFile
 	getVuzeFile()
 	
 		throws IOException;
 
-	public TranscodeProfile[] 
+	TranscodeProfile[]
 	getDirectTranscodeProfiles();
 }

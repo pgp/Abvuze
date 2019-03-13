@@ -22,6 +22,6 @@ package com.aelitis.azureus.core.peermanager.nat;
 public interface 
 PeerNATInitiator 
 {
-	public String
+	String
 	getDisplayName();
 }

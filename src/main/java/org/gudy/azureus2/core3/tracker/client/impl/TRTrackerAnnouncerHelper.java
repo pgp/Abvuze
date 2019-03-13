@@ -27,18 +27,18 @@ public interface
 TRTrackerAnnouncerHelper
 	extends TRTrackerAnnouncer
 {
-	public TOTorrentAnnounceURLSet[]
+	TOTorrentAnnounceURLSet[]
 	getAnnounceSets();
 		
-	public boolean
+	boolean
 	isUpdating();
 	
-	public long
+	long
 	getInterval();
 	
-	public long
+	long
 	getMinInterval();
 	
-	public int
+	int
 	getTimeUntilNextUpdate();
 }

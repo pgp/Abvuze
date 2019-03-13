@@ -18,6 +18,7 @@
 package org.gudy.azureus2.core3.config.impl;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.gudy.azureus2.core3.util.*;
@@ -47,10 +48,10 @@ ConfigurationManager
   private ConcurrentHashMapWrapper<String,Object> propertiesMap;	// leave this NULL - it picks up errors caused by initialisation sequence errors
   private final List transient_properties     = new ArrayList();
   
-  private final List<COConfigurationListener>		listenerz 			= new ArrayList<COConfigurationListener>();
-  private final Map<String,ParameterListener[]> 	parameterListenerz 	= new HashMap<String,ParameterListener[]>();
+  private final List<COConfigurationListener>		listenerz 			= new ArrayList<>();
+  private final Map<String,ParameterListener[]> 	parameterListenerz 	= new HashMap<>();
     
-  private final List<ResetToDefaultsListener>	reset_to_def_listeners = new ArrayList<ResetToDefaultsListener>();
+  private final List<ResetToDefaultsListener>	reset_to_def_listeners = new ArrayList<>();
   
   private static final FrequencyLimitedDispatcher dirty_dispatcher =
 	  new FrequencyLimitedDispatcher(
@@ -76,8 +77,8 @@ ConfigurationManager
 			}
 		};
 	
-  private final Map<String,String[]>	exported_parameters = new HashMap<String, String[]>();
-  private final Map<String,String>	imported_parameters	= new HashMap<String, String>();
+  private final Map<String,String[]>	exported_parameters = new HashMap<>();
+  private final Map<String,String>	imported_parameters	= new HashMap<>();
   private volatile boolean		exported_parameters_dirty;
 
 
@@ -152,7 +153,7 @@ ConfigurationManager
 	  
 	  if ( data.get("Logger.DebugFiles.Enabled") == null ){
 		  
-		  data.put( "Logger.DebugFiles.Enabled", new Long(0));
+		  data.put( "Logger.DebugFiles.Enabled", 0L);
 	  }
 	  
 	  propertiesMap	= new ConcurrentHashMapWrapper<String,Object>( data );
@@ -182,7 +183,7 @@ ConfigurationManager
   	
   	if ( propertiesMap == null ){
   		
-  		ConcurrentHashMapWrapper<String,Object> c_map = new ConcurrentHashMapWrapper<String,Object>( data.size() + 256, 0.75f, 8 );
+  		ConcurrentHashMapWrapper<String,Object> c_map = new ConcurrentHashMapWrapper<>(data.size() + 256, 0.75f, 8);
   		
   		c_map.putAll( data );
   		
@@ -274,27 +275,25 @@ ConfigurationManager
   	
   	synchronized( listenerz ){
     
-    	listeners_copy = new ArrayList<COConfigurationListener>( listenerz );
+    	listeners_copy = new ArrayList<>(listenerz);
     }
-    
-	for (int i=0;i<listeners_copy.size();i++){
-		
-		COConfigurationListener l = (COConfigurationListener)listeners_copy.get(i);
-		
-		if (l != null){
-			
-			try{
-				l.configurationSaved();
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace( e );
-			}
-		}else{
-			
-			Debug.out("COConfigurationListener is null");
-		}
-	}
+
+	  for (COConfigurationListener l : listeners_copy) {
+
+		  if (l != null) {
+
+			  try {
+				  l.configurationSaved();
+
+			  } catch (Throwable e) {
+
+				  Debug.printStackTrace(e);
+			  }
+		  } else {
+
+			  Debug.out("COConfigurationListener is null");
+		  }
+	  }
 	
 	if ( exported_parameters_dirty ){
 		
@@ -321,13 +320,13 @@ ConfigurationManager
 	public Set<String>
 	getDefinedParameters()
 	{
-		return( new HashSet<String>( propertiesMap.keySet()));
+		return(new HashSet<>(propertiesMap.keySet()));
 	}
 	
   public boolean getBooleanParameter(String parameter, boolean defaultValue) {
     int defaultInt = defaultValue ? 1 : 0;
     int result = getIntParameter(parameter, defaultInt);
-    return result == 0 ? false : true;
+    return result != 0;
   }
   
   public boolean getBooleanParameter(String parameter) {
@@ -338,7 +337,7 @@ ConfigurationManager
     } catch (ConfigurationParameterNotFoundException e) {
       result = getIntParameter(parameter, ConfigurationDefaults.def_boolean);
     }
-    return result == 0 ? false : true;
+    return result != 0;
   }
   
   public boolean setParameter(String parameter, boolean value) {
@@ -372,7 +371,7 @@ ConfigurationManager
   
   public long getLongParameter(String parameter, long defaultValue) {
     Long tempValue = getLongParameterRaw(parameter);
-    return tempValue != null ? tempValue.longValue() : defaultValue;
+    return tempValue != null ? tempValue : defaultValue;
   }
   
   public long getLongParameter(String parameter) {
@@ -451,11 +450,11 @@ ConfigurationManager
   		List	encoded = new ArrayList();
   		
   		List	l = ((StringListImpl)value).getList();
-  		
-  		for (int i=0;i<l.size();i++){
-  			
-  			encoded.add( stringToBytes((String)l.get(i)));
-  		}
+
+		for (Object o : l) {
+
+			encoded.add(stringToBytes((String) o));
+		}
   		propertiesMap.put(parameter,encoded);
   		notifyParameterListeners(parameter);
   	} catch(Exception e) {
@@ -565,7 +564,7 @@ ConfigurationManager
   }
 
   public boolean setParameter(String parameter, int defaultValue) {
-		Long newValue = new Long(defaultValue);
+		Long newValue = (long) defaultValue;
 		try {
 			Long oldValue = (Long) propertiesMap.put(parameter, newValue);
 			return notifyParameterListenersIfChanged(parameter, newValue, oldValue);
@@ -578,7 +577,7 @@ ConfigurationManager
 	}
 
 	public boolean setParameter(String parameter, long defaultValue) {
-		Long newValue = new Long(defaultValue);
+		Long newValue = defaultValue;
 		try {
 			Long oldValue = (Long) propertiesMap.put(parameter, newValue);
 			return notifyParameterListenersIfChanged(parameter, newValue, oldValue);
@@ -620,11 +619,8 @@ ConfigurationManager
 	  if (propertiesMap.containsKey(key)) {return true;}
 	  
 	  // We have a default value set.
-	  if ((!explicit) && ConfigurationDefaults.getInstance().hasParameter(key)) {
-		  return true;
-	  }
-	  
-	  return false;
+	  return (!explicit) && ConfigurationDefaults.getInstance().hasParameter(key);
+
   }
 
   public boolean 
@@ -636,20 +632,20 @@ ConfigurationManager
 	  
 	  if ( verifiers != null ){
 		  try{
-			  for (int i=0;i<verifiers.size();i++){
+			  for (Object verifier1 : verifiers) {
 
-				  ParameterVerifier	verifier = (ParameterVerifier)verifiers.get(i);
+				  ParameterVerifier verifier = (ParameterVerifier) verifier1;
 
-				  if ( verifier != null ){
-					  
-					  try{
-						  if ( !verifier.verify(parameter,value)){
-							  
-							  return( false );
+				  if (verifier != null) {
+
+					  try {
+						  if (!verifier.verify(parameter, value)) {
+
+							  return (false);
 						  }
-					  }catch( Throwable e ){
-						  
-						  Debug.printStackTrace( e );
+					  } catch (Throwable e) {
+
+						  Debug.printStackTrace(e);
 					  }
 				  }
 			  }
@@ -842,14 +838,9 @@ ConfigurationManager
 		  value = null;
 		  
 	  }else if ( o_value instanceof byte[] ){
-		  
-		  try{
-			  value = new String((byte[])o_value, "UTF-8" );
-			  
-		  }catch( UnsupportedEncodingException e ){
-			  
-			  value = null;
-		  }
+
+		  value = new String((byte[])o_value, StandardCharsets.UTF_8);
+
 	  }else{
 		  
 		  value = String.valueOf( o_value );
@@ -906,9 +897,9 @@ ConfigurationManager
 		  exported_parameters_dirty = false;
 		  
 		  try{
-			  TreeMap<String,String> tm  = new TreeMap<String,String>();
+			  TreeMap<String,String> tm  = new TreeMap<>();
 			  
-			  Set<String>	exported_keys = new HashSet<String>();
+			  Set<String>	exported_keys = new HashSet<>();
 			  
 			  for ( String[] entry: exported_parameters.values()){
 				  
@@ -936,18 +927,13 @@ ConfigurationManager
 			  File parent_dir = new File(SystemProperties.getUserPath());
 			  
 			  File props = new File( parent_dir, "exported_params.properties" );
-			  
-			  PrintWriter pw = new PrintWriter( new OutputStreamWriter( new FileOutputStream( props ), "UTF-8" ));
-			  
-			  try{
-				  for ( Map.Entry<String, String> entry: tm.entrySet()){
-					  
-					  pw.println( entry.getKey() + "=" + entry.getValue());
+
+			  try (PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(props), StandardCharsets.UTF_8))) {
+				  for (Map.Entry<String, String> entry : tm.entrySet()) {
+
+					  pw.println(entry.getKey() + "=" + entry.getValue());
 				  }
-				  
-			  }finally{
-				  
-				  pw.close();
+
 			  }
 		  }catch( Throwable e ){
 			  
@@ -967,35 +953,30 @@ ConfigurationManager
 			  File props = new File( parent_dir, "exported_params.properties" );
 	
 			  if ( props.exists()){
-				  
-				  LineNumberReader lnr = new LineNumberReader( new InputStreamReader( new FileInputStream( props ), "UTF-8" ));
-				  
-				  try{
-					  while( true ){
-						  
-						  String	line = lnr.readLine();
-						  
-						  if ( line == null ){
-							  
+
+				  try (LineNumberReader lnr = new LineNumberReader(new InputStreamReader(new FileInputStream(props), StandardCharsets.UTF_8))) {
+					  while (true) {
+
+						  String line = lnr.readLine();
+
+						  if (line == null) {
+
 							  break;
 						  }
-						  
-						  String[] bits = line.split( "=" );
-						  
-						  if ( bits.length == 2 ){
-							  
-							  String	key 	= bits[0].trim();
-							  String	value	= bits[1].trim();
-							  
-							  if ( key.length() > 0 && value.length() > 0 ){
-								  
-								  imported_parameters.put( key, value );
+
+						  String[] bits = line.split("=");
+
+						  if (bits.length == 2) {
+
+							  String key = bits[0].trim();
+							  String value = bits[1].trim();
+
+							  if (key.length() > 0 && value.length() > 0) {
+
+								  imported_parameters.put(key, value);
 							  }
 						  }
 					  }
-				  }finally{
-					  
-					  lnr.close();
 				  }
 			  }
 		  }catch( Throwable e ){
@@ -1014,7 +995,7 @@ ConfigurationManager
   {
 	  ConfigurationDefaults def = ConfigurationDefaults.getInstance();
 	  
-	  List<String> def_names = new ArrayList<String>((Set<String>)def.getAllowedParameters());
+	  List<String> def_names = new ArrayList<>(def.getAllowedParameters());
 	  
 	  for ( String s: def_names ){
 	  
@@ -1028,7 +1009,7 @@ ConfigurationManager
 	  
 	  synchronized( reset_to_def_listeners ){
 		
-		  listeners = new ArrayList<ResetToDefaultsListener>( reset_to_def_listeners );
+		  listeners = new ArrayList<>(reset_to_def_listeners);
 	  }
 	  
 	  for ( ResetToDefaultsListener l: listeners ){
@@ -1115,18 +1096,16 @@ ConfigurationManager
 	    		
 	    		pos = 0;
 	    	}
-	    	
-	    	for ( int i=0;i<listeners.length;i++){
-	    		
-	    		ParameterListener existing_listener = listeners[i];
-	    		
-	    		if ( existing_listener == new_listener ){
-	    			
-	    			return;
-	    		}
-	    		
-	    		new_listeners[pos++] = existing_listener;
-	    	}
+
+			for (ParameterListener existing_listener : listeners) {
+
+				if (existing_listener == new_listener) {
+
+					return;
+				}
+
+				new_listeners[pos++] = existing_listener;
+			}
 	    	
 	    	if ( DEBUG_PARAMETER_LISTENERS ){
 	    	
@@ -1163,21 +1142,19 @@ ConfigurationManager
 	    	ParameterListener[] new_listeners = new ParameterListener[ listeners.length - 1 ];
 	    	
 	    	int	pos = 0;
-	    	
-	    	for ( int i=0;i<listeners.length;i++){
-	    		
-	    		ParameterListener existing_listener = listeners[i];
 
-	    		if ( existing_listener != listener ){
-	    			
-	    			if ( pos == new_listeners.length ){
-	    				
-	    				return;
-	    			}
-	    			
-	    			new_listeners[pos++] = existing_listener;
-	    		}
-	    	}
+			for (ParameterListener existing_listener : listeners) {
+
+				if (existing_listener != listener) {
+
+					if (pos == new_listeners.length) {
+
+						return;
+					}
+
+					new_listeners[pos++] = existing_listener;
+				}
+			}
 	    	
 	    	if ( DEBUG_PARAMETER_LISTENERS ){
 	    	
@@ -1241,7 +1218,7 @@ ConfigurationManager
 		if ( value instanceof byte[] ){
 			
 			try{
-				value = new String((byte[])value, "UTF-8" );
+				value = new String((byte[])value, StandardCharsets.UTF_8);
 				
 			}catch( Throwable e ){
 				
@@ -1249,11 +1226,8 @@ ConfigurationManager
 		}
 		
 		if ( value instanceof String ){
-			
-			if (((String)value).toLowerCase( Locale.US ).endsWith( ".b32.i2p" )){
-				
-				return( true );
-			}
+
+			return ((String) value).toLowerCase(Locale.US).endsWith(".b32.i2p");
 		}
 		
 		return( false );
@@ -1276,14 +1250,12 @@ ConfigurationManager
 				writer.indent();
 			
 				Properties props = System.getProperties();
-				
-				Iterator	it = new TreeSet( props.keySet()).iterator();
-				
-				while(it.hasNext()){
-					
-					String	key = (String)it.next();
-					
-					writer.println( key + "=" + props.get( key ));
+
+				for (Object o : new TreeSet(props.keySet())) {
+
+					String key = (String) o;
+
+					writer.println(key + "=" + props.get(key));
 				}
 			}finally{
 				
@@ -1302,14 +1274,12 @@ ConfigurationManager
 					writer.println( "Not supported" );
 					
 				}else{
-					
-					Iterator	it = new TreeSet( env.keySet()).iterator();
-					
-					while(it.hasNext()){
-						
-						String	key = (String)it.next();
-						
-						writer.println( key + "=" + env.get( key ));
+
+					for (Object o : new TreeSet(env.keySet())) {
+
+						String key = (String) o;
+
+						writer.println(key + "=" + env.get(key));
 					}
 				}
 			}finally{
@@ -1325,88 +1295,82 @@ ConfigurationManager
 				writer.indent();
 			
 				Set<String> keys =
-					new TreeSet<String>(
-						new Comparator<String>()
-						{
-							public int 
-							compare(
-								String o1, 
-								String o2) 
-							{
-								return( o1.compareToIgnoreCase( o2 ));
-							}
-						});
+						new TreeSet<>(
+								new Comparator<String>() {
+									public int
+									compare(
+											String o1,
+											String o2) {
+										return (o1.compareToIgnoreCase(o2));
+									}
+								});
 			
 				keys.addAll( propertiesMap.keySet());
-				
-				Iterator<String> it = keys.iterator();
-				
-				while( it.hasNext()){
-					
-					String	key 	= it.next();
-					
-						// don't dump crypto stuff
-					
-					if ( ignoreKeyForDump( key )){
-						
+
+				for (String key : keys) {
+
+					// don't dump crypto stuff
+
+					if (ignoreKeyForDump(key)) {
+
 						continue;
 					}
-					
-					Object	value	= propertiesMap.get(key);
-					
-					boolean bParamExists = defaults.doesParameterDefaultExist(key.toString());
-					
-					if (!bParamExists){
-						
+
+					Object value = propertiesMap.get(key);
+
+					boolean bParamExists = defaults.doesParameterDefaultExist(key);
+
+					if (!bParamExists) {
+
 						key = "[NoDef] " + key;
-					}else{
-						
-						Object def = defaults.getParameter( key );
-						
-						if ( def != null && value != null ){
-							
-							if ( !BEncoder.objectsAreIdentical( def, value )){
-								
+					} else {
+
+						Object def = defaults.getParameter(key);
+
+						if (def != null && value != null) {
+
+							if (!BEncoder.objectsAreIdentical(def, value)) {
+
 								key = "-> " + key;
 							}
 						}
 					}
-					
-					if ( value instanceof Long ){
-						
-						writer.println( key + "=" + value );
-						
-					}else if ( value instanceof List ){
-						
-						writer.println( key + "=" + BDecoder.decodeStrings((List)BEncoder.clone(value)) + "[list]" );
-						
-					}else if ( value instanceof Map ){
-						
-						writer.println( key + "=" + BDecoder.decodeStrings((Map)BEncoder.clone(value)) + "[map]" );
-						
-					}else if ( value instanceof byte[] ){
-						
-						byte[]	b = (byte[])value;
-					
-						boolean	hex	= false;
-						
-						for (int i=0;i<b.length;i++){
-							
-							char	c = (char)b[i];
-							
-							if ( !	( 	Character.isLetterOrDigit(c) ||
-										"\\ `¬\"£$%^&*()-_=+[{]};:'@#~,<.>/?'".indexOf(c) != -1 )){
-								
-								hex	= true;
-								
+
+					if (value instanceof Long) {
+
+						writer.println(key + "=" + value);
+
+					} else if (value instanceof List) {
+
+						writer.println(key + "=" + BDecoder.decodeStrings((List) BEncoder.clone(value)) + "[list]");
+
+					} else if (value instanceof Map) {
+
+						writer.println(key + "=" + BDecoder.decodeStrings((Map) BEncoder.clone(value)) + "[map]");
+
+					} else if (value instanceof byte[]) {
+
+						byte[] b = (byte[]) value;
+
+						boolean hex = false;
+
+						for (byte b1 : b) {
+
+							char c = (char) b1;
+
+							if (!(Character.isLetterOrDigit(c) ||
+									"\\ `¬\"£$%^&*()-_=+[{]};:'@#~,<.>/?'".indexOf(c) != -1)) {
+
+								hex = true;
+
 								break;
 							}
 						}
-						writer.println( key + "=" + (hex?ByteFormatter.nicePrint(b):bytesToString((byte[])value)));
-						
-					}else{
-						
-						writer.println( key + "=" + value + "[unknown]" );
+						writer.println(key + "=" + (hex ? ByteFormatter.nicePrint(b) : bytesToString((byte[]) value)));
+
+					} else {
+
+						writer.println(key + "=" + value + "[unknown]");
 					}
 				}
 			}finally{
@@ -1426,80 +1390,74 @@ ConfigurationManager
 		ConfigurationDefaults defaults = ConfigurationDefaults.getInstance();
 		
 		Set<String> keys =
-			new TreeSet<String>(
-				new Comparator<String>()
-				{
-					public int 
-					compare(
-						String o1, 
-						String o2) 
-					{
-						return( o1.compareToIgnoreCase( o2 ));
-					}
-				});
+				new TreeSet<>(
+						new Comparator<String>() {
+							public int
+							compare(
+									String o1,
+									String o2) {
+								return (o1.compareToIgnoreCase(o2));
+							}
+						});
 	
 		keys.addAll( propertiesMap.keySet());
-		
-		Iterator<String> it = keys.iterator();
-		
-		while( it.hasNext()){
-			
-			String	key 	= it.next();
-			
-				// don't dump crypto stuff
-			
-			if ( ignoreKeyForDump( key )){
-				
+
+		for (String key : keys) {
+
+			// don't dump crypto stuff
+
+			if (ignoreKeyForDump(key)) {
+
 				continue;
 			}
-			
-			Object	value	= propertiesMap.get(key);
-			
-			boolean bParamExists = defaults.doesParameterDefaultExist(key.toString());
-			
-			if ( bParamExists ){
-				
-				Object def = defaults.getParameter( key );
-				
-				if ( def != null && value != null ){
-					
-					if ( !BEncoder.objectsAreIdentical( def, value )){
-												
-						if ( value instanceof Long ){
-							
-							writer.println( key + "=" + value );
-							
-						}else if ( value instanceof List ){
-							
-							writer.println( key + "=" + BDecoder.decodeStrings((List)BEncoder.clone(value)) + "[list]" );
-							
-						}else if ( value instanceof Map ){
-							
-							writer.println( key + "=" + BDecoder.decodeStrings((Map)BEncoder.clone(value)) + "[map]" );
-							
-						}else if ( value instanceof byte[] ){
-							
-							byte[]	b = (byte[])value;
-						
-							boolean	hex	= false;
-							
-							for (int i=0;i<b.length;i++){
-								
-								char	c = (char)b[i];
-								
-								if ( !	( 	Character.isLetterOrDigit(c) ||
-											"\\ `¬\"£$%^&*()-_=+[{]};:'@#~,<.>/?'".indexOf(c) != -1 )){
-									
-									hex	= true;
-									
+
+			Object value = propertiesMap.get(key);
+
+			boolean bParamExists = defaults.doesParameterDefaultExist(key);
+
+			if (bParamExists) {
+
+				Object def = defaults.getParameter(key);
+
+				if (def != null && value != null) {
+
+					if (!BEncoder.objectsAreIdentical(def, value)) {
+
+						if (value instanceof Long) {
+
+							writer.println(key + "=" + value);
+
+						} else if (value instanceof List) {
+
+							writer.println(key + "=" + BDecoder.decodeStrings((List) BEncoder.clone(value)) + "[list]");
+
+						} else if (value instanceof Map) {
+
+							writer.println(key + "=" + BDecoder.decodeStrings((Map) BEncoder.clone(value)) + "[map]");
+
+						} else if (value instanceof byte[]) {
+
+							byte[] b = (byte[]) value;
+
+							boolean hex = false;
+
+							for (byte b1 : b) {
+
+								char c = (char) b1;
+
+								if (!(Character.isLetterOrDigit(c) ||
+										"\\ `¬\"£$%^&*()-_=+[{]};:'@#~,<.>/?'".indexOf(c) != -1)) {
+
+									hex = true;
+
 									break;
 								}
 							}
-							writer.println( key + "=" + (hex?ByteFormatter.nicePrint(b):bytesToString((byte[])value)));
-							
-						}else{
-							
-							writer.println( key + "=" + value + "[unknown]" );
+							writer.println(key + "=" + (hex ? ByteFormatter.nicePrint(b) : bytesToString((byte[]) value)));
+
+						} else {
+
+							writer.println(key + "=" + value + "[unknown]");
 						}
 					}
 				}

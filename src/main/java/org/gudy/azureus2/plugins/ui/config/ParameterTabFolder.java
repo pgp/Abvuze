@@ -26,11 +26,11 @@ public interface
 ParameterTabFolder
 	extends Parameter
 {
-	public void
+	void
 	addTab(
-		ParameterGroup		group );
+            ParameterGroup group);
 	
-	public void
+	void
 	removeTab(
-		ParameterGroup		group );
+            ParameterGroup group);
 }

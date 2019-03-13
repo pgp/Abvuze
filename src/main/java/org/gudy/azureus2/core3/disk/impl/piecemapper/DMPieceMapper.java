@@ -25,25 +25,25 @@ import org.gudy.azureus2.core3.internat.LocaleUtilDecoder;
 public interface 
 DMPieceMapper 
 {
-	public void
+	void
 	construct(
-		LocaleUtilDecoder	_locale_decoder,
-		String				_save_name )
+            LocaleUtilDecoder _locale_decoder,
+            String _save_name)
 	
 		throws UnsupportedEncodingException;
 	
-	public DMPieceMap
+	DMPieceMap
 	getPieceMap();
 	
-	public DMPieceMapperFile[]
+	DMPieceMapperFile[]
 	getFiles();
 	
-	public int
+	int
 	getPieceLength();
 	
-	public int
+	int
 	getLastPieceLength();
 	
-	public long
+	long
 	getTotalLength();
 }

@@ -21,6 +21,7 @@ package com.aelitis.azureus.core.impl;
 
 import java.net.*;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 import org.gudy.azureus2.core3.util.Constants;
 
@@ -64,62 +65,50 @@ AzureusCoreSingleInstanceClient
 				
 				return( false );
 			}
-			
-			Socket	sock = null;
-			
-			try{
-				sock = new Socket();
-				
-				sock.connect( new InetSocketAddress( "127.0.0.1", Constants.INSTANCE_PORT ), CONNECT_TIMEOUT );
-				
-				sock.setSoTimeout( READ_TIMEOUT );
-				
-		   		PrintWriter pw = new PrintWriter(new OutputStreamWriter(sock.getOutputStream(),"UTF-8"));
-		   	 
-		  		StringBuilder buffer = new StringBuilder( ACCESS_STRING + ";args;");
-		         
-	    		for ( int i = 0 ; i < args.length ; i++ ){
-	    			
-	    			String arg = args[i].replaceAll("&","&&").replaceAll(";","&;");
-	    			
-	    			buffer.append(arg);
-	    			
-	    			buffer.append(';');
-	    		}
-	        
-	    		pw.println(buffer.toString());
-	    		
-	    		pw.flush();
-	    		
-	    		if ( !receiveReply( sock )){
-	    			
-	    			return( false );
-	    		}
-	    		
-	    		return( true );
-	    		
-			}catch( Throwable e ){
-				
-				long connect_end = System.currentTimeMillis();
-				
-				long time_taken = connect_end - connect_start;
-				
-				if ( time_taken < CONNECT_TIMEOUT ){
-				
-					try{
-						Thread.sleep( CONNECT_TIMEOUT - time_taken );
-						
-					}catch( Throwable f ){
-					}
+
+			try (Socket sock = new Socket()) {
+
+				sock.connect(new InetSocketAddress("127.0.0.1", Constants.INSTANCE_PORT), CONNECT_TIMEOUT);
+
+				sock.setSoTimeout(READ_TIMEOUT);
+
+				PrintWriter pw = new PrintWriter(new OutputStreamWriter(sock.getOutputStream(), StandardCharsets.UTF_8));
+
+				StringBuilder buffer = new StringBuilder(ACCESS_STRING + ";args;");
+
+				for (String arg1 : args) {
+
+					String arg = arg1.replaceAll("&", "&&").replaceAll(";", "&;");
+
+					buffer.append(arg);
+
+					buffer.append(';');
 				}
-			}finally{
-				
-				try{
-					if ( sock != null ){
-						
-						sock.close();
+
+				pw.println(buffer.toString());
+
+				pw.flush();
+
+				if (!receiveReply(sock)) {
+
+					return (false);
+				}
+
+				return (true);
+
+			} catch (Throwable e) {
+
+				long connect_end = System.currentTimeMillis();
+
+				long time_taken = connect_end - connect_start;
+
+				if (time_taken < CONNECT_TIMEOUT) {
+
+					try {
+						Thread.sleep(CONNECT_TIMEOUT - time_taken);
+
+					} catch (Throwable f) {
 					}
-				}catch( Throwable e ){
 				}
 			}
 			
@@ -136,7 +125,7 @@ AzureusCoreSingleInstanceClient
     	   
         	OutputStream os = socket.getOutputStream();
         	
-        	os.write( ( ACCESS_STRING + ";" ).getBytes( "UTF-8" ));
+        	os.write( ( ACCESS_STRING + ";" ).getBytes(StandardCharsets.UTF_8));
         	
         	os.flush();
         	
@@ -172,7 +161,7 @@ AzureusCoreSingleInstanceClient
 				
 				if ( b == ';' ){
 					
-					String str = new String( baos.toByteArray(), "UTF-8" );
+					String str = new String( baos.toByteArray(), StandardCharsets.UTF_8);
 					
 					return( str.equals( ACCESS_STRING ));
 					

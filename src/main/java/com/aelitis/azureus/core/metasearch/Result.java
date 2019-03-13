@@ -169,7 +169,7 @@ public abstract class Result {
 			
 			String	token = "";
 			
-			List<String>	tokens = new ArrayList<String>();
+			List<String>	tokens = new ArrayList<>();
 			
 			char[] chars = queryString.toCharArray();
 			

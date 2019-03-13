@@ -28,12 +28,12 @@ package org.gudy.azureus2.core3.disk;
 public interface 
 DiskManagerWriteRequestListener 
 {
-	public void 
-	writeCompleted( 
-		DiskManagerWriteRequest 	request );
+	void
+	writeCompleted(
+            DiskManagerWriteRequest request);
 	  
-	public void 
-	writeFailed( 
-		DiskManagerWriteRequest 	request, 
-		Throwable		 			cause );
+	void
+	writeFailed(
+            DiskManagerWriteRequest request,
+            Throwable cause);
 }

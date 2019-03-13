@@ -117,7 +117,7 @@ public class NetworkManager {
     				 seeding_only_mode_allowed = COConfigurationManager.getBooleanParameter( "enable.seedingonly.upload.rate" );
     			
     				 
-    				 external_max_download_rate_bps = max_download_rate_bps = (int)(COConfigurationManager.getIntParameter( "Max Download Speed KBs" ) * 1024); // leave 5KiB/s room for the request limiting  
+    				 external_max_download_rate_bps = max_download_rate_bps = COConfigurationManager.getIntParameter( "Max Download Speed KBs" ) * 1024; // leave 5KiB/s room for the request limiting
     				 if( max_download_rate_bps < 1024 || max_download_rate_bps > UNLIMITED_RATE)
     					 max_download_rate_bps = UNLIMITED_RATE;
     				 else if(USE_REQUEST_LIMITING && FeatureAvailability.isRequestLimitingEnabled())
@@ -141,7 +141,7 @@ public class NetworkManager {
   {
 	 int	num_read = COConfigurationManager.getIntParameter( "network.control.read.processor.count" );
 	 
-	 read_controllers = new ArrayList<ReadController>(num_read);
+	 read_controllers = new ArrayList<>(num_read);
 	 
 	 for (int i=0;i<num_read;i++){
 		 
@@ -150,7 +150,7 @@ public class NetworkManager {
 	 
 	 int	num_write = COConfigurationManager.getIntParameter( "network.control.write.processor.count" );
 	 
-	 write_controllers = new ArrayList<WriteController>(num_write);
+	 write_controllers = new ArrayList<>(num_write);
 	 
 	 for (int i=0;i<num_write;i++){
 		 
@@ -504,7 +504,7 @@ public class NetworkManager {
   public Set<NetworkConnectionBase>
   getConnections()
   {
-	  Set<NetworkConnectionBase>	result = new HashSet<NetworkConnectionBase>();
+	  Set<NetworkConnectionBase>	result = new HashSet<>();
 	  
 	  result.addAll( lan_upload_processor.getConnections());
 	  result.addAll( lan_download_processor.getConnections());
@@ -702,23 +702,23 @@ public class NetworkManager {
 	 * Number of bytes of buffer at or beyond which the "match" method will be called to test for a match
 	 * @return
 	 */
-	  
-	public int matchThisSizeOrBigger();
+
+    int matchThisSizeOrBigger();
 	
     /**
      * Get the max number of bytes this matcher requires. If it fails with this (or more) bytes then
      * the connection will be dropped
      * @return size in bytes
      */
-	
-    public int maxSize();
+
+    int maxSize();
     
     /**
      * Get the minimum number of bytes required to determine if this matcher applies
      * @return
      */
-    
-    public int minSize();
+
+    int minSize();
     
     /**
      * Check byte stream for match.
@@ -726,18 +726,18 @@ public class NetworkManager {
      * @param to_compare
      * @return  return "routing data" in case of a match, null otherwise
      */
-    public Object matches( TransportHelper transport, ByteBuffer to_compare, int port );
+    Object matches(TransportHelper transport, ByteBuffer to_compare, int port);
     
     /**
      * Check for a minimum match
      * @param to_compare
      * @return return "routing data" in case of a match, null otherwise
      */
-    public Object minMatches( TransportHelper transport, ByteBuffer to_compare, int port );
+    Object minMatches(TransportHelper transport, ByteBuffer to_compare, int port);
     
-    public byte[][] getSharedSecrets();
+    byte[][] getSharedSecrets();
     
-    public int getSpecificPort();
+    int getSpecificPort();
   }
   
   
@@ -754,14 +754,14 @@ public class NetworkManager {
 	   * This method allows auto-fallback for such transports
 	   * @return
 	   */
-	public boolean
+      boolean
 	autoCryptoFallback();
 	
     /**
      * The given incoming connection has been accepted.
      * @param connection accepted
      */
-    public void connectionRouted( NetworkConnection connection, Object routing_data );
+    void connectionRouted(NetworkConnection connection, Object routing_data);
   }
   
 }

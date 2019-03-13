@@ -26,9 +26,9 @@ package com.aelitis.net.upnp;
 public interface 
 UPnPActionArgument 
 {
-	public String
+	String
 	getName();
 	
-	public String
+	String
 	getValue();
 }

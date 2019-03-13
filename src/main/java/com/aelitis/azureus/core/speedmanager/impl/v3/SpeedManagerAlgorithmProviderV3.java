@@ -238,16 +238,16 @@ SpeedManagerAlgorithmProviderV3
 		SpeedManagerPingSource[]	sources )
 	{
 		int	min_rtt	= UNLIMITED;
-		
-		for (int i=0;i<sources.length;i++){
-			
-			int	rtt =  sources[i].getPingTime();
 
-			if ( rtt >= 0 && rtt < min_rtt ){
-				
-				min_rtt	= rtt;
-			}
-		}
+        for (SpeedManagerPingSource source : sources) {
+
+            int rtt = source.getPingTime();
+
+            if (rtt >= 0 && rtt < min_rtt) {
+
+                min_rtt = rtt;
+            }
+        }
 		
 		String	str = "";
 		

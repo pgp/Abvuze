@@ -28,5 +28,5 @@ public interface ParameterListener {
    * Or the listener can just read all parameters again.
    * @param parameterName the name of the parameter that has changed
    */
-  public void parameterChanged(String parameterName);
+  void parameterChanged(String parameterName);
 }

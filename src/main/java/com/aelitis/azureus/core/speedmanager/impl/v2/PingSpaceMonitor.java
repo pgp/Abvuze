@@ -174,12 +174,11 @@ public class PingSpaceMonitor
     public void reset(TransferMode mode){
 
         //log results.
-        StringBuilder sb = new StringBuilder("ping-monitor:");
-        sb.append("good=").append(nGoodPings).append(":");
-        sb.append("bad=").append(nBadPings).append(":");
-        sb.append("neutral=").append(nNeutralPings);
 
-        SpeedManagerLogger.log( sb.toString() );
+        String sb = "ping-monitor:" + "good=" + nGoodPings + ":" +
+                "bad=" + nBadPings + ":" +
+                "neutral=" + nNeutralPings;
+        SpeedManagerLogger.log(sb);
 
         //reset all the counters.
         nBadPings=nGoodPings=nNeutralPings=0;

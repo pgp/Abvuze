@@ -161,17 +161,15 @@ DMReaderImpl
 		try{
 			this_mon.enter();
 
-			Iterator	it = read_requests.iterator();
-			
-			while( it.hasNext()){
-				
-				DiskManagerReadRequest	request = (DiskManagerReadRequest)((Object[])it.next())[0];
-				
-				if ( request.getPieceNumber() == piece_number ){
-					
-					return( true );
-				}
-			}
+            for (Object read_request : read_requests) {
+
+                DiskManagerReadRequest request = (DiskManagerReadRequest) ((Object[]) read_request)[0];
+
+                if (request.getPieceNumber() == piece_number) {
+
+                    return (true);
+                }
+            }
 			
 			return( false );
 			
@@ -355,7 +353,7 @@ DMReaderImpl
 				
 					// this chunk denotes a read up to buffer offset "entry_read_limit"
 				
-				chunks.add( new Object[]{ map_entry.getFile().getCacheFile(), new Long(fileOffset), new Integer( entry_read_limit )});
+				chunks.add( new Object[]{ map_entry.getFile().getCacheFile(), fileOffset, entry_read_limit});
 				
 				buffer_position = entry_read_limit;
 	      
@@ -629,7 +627,7 @@ DMReaderImpl
 				buffer.position( DirectByteBuffer.SS_DR, chunk_limit );
 			}
 			
-			chunk_limit = ((Integer)stuff[2]).intValue();
+			chunk_limit = (Integer) stuff[2];
 			
 			buffer.limit( DirectByteBuffer.SS_DR, chunk_limit );
 			
@@ -642,7 +640,7 @@ DMReaderImpl
 			
 			disk_access.queueReadRequest(
 				(CacheFile)stuff[0],
-				((Long)stuff[1]).longValue(),
+                    (Long) stuff[1],
 				buffer,
 				cache_policy,
 				l );

@@ -21,6 +21,7 @@
 package com.aelitis.azureus.core.subs.impl;
 
 import java.lang.ref.WeakReference;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
@@ -80,7 +81,7 @@ SubscriptionResultImpl
 		String	key1_str =  result.getEngine().getId() + ":" + result.getName();
 		
 		try{
-			byte[] sha1 = new SHA1Simple().calculateHash( key1_str.getBytes( "UTF-8" ));
+			byte[] sha1 = new SHA1Simple().calculateHash( key1_str.getBytes(StandardCharsets.UTF_8));
 			
 			key1 = new byte[10];
 			
@@ -98,7 +99,7 @@ SubscriptionResultImpl
 			String	key2_str = result.getEngine().getId() + ":" + uid;
 			
 			try{
-				byte[] sha1 = new SHA1Simple().calculateHash( key2_str.getBytes( "UTF-8" ));
+				byte[] sha1 = new SHA1Simple().calculateHash( key2_str.getBytes(StandardCharsets.UTF_8));
 				
 				key2 = new byte[10];
 				
@@ -132,7 +133,7 @@ SubscriptionResultImpl
 		}else{
 		
 			try{
-				result_json	= new String((byte[])map.get( "result_json" ), "UTF-8" );
+				result_json	= new String((byte[])map.get( "result_json" ), StandardCharsets.UTF_8);
 				
 			}catch( Throwable e ){
 				
@@ -268,16 +269,16 @@ SubscriptionResultImpl
 			map.put( "key2", key2 );
 		}
 		
-		map.put( "read", new Long(read?1:0));
+		map.put( "read", (long) (read ? 1 : 0));
 		
 		if ( deleted ){
 			
-			map.put( "deleted", new Long(1));
+			map.put( "deleted", 1L);
 			
 		}else{
 		
 			try{
-				map.put( "result_json", result_json.getBytes( "UTF-8" ));
+				map.put( "result_json", result_json.getBytes(StandardCharsets.UTF_8));
 				
 			}catch( Throwable e ){
 				
@@ -293,7 +294,7 @@ SubscriptionResultImpl
 	{
 		Map	map = JSONUtils.decodeJSON( result_json );
 		
-		map.put( "subs_is_read", Boolean.valueOf(read));
+		map.put( "subs_is_read", read);
 		map.put( "subs_id", getID());
 		
 		Result.adjustRelativeTerms( map );
@@ -392,7 +393,7 @@ SubscriptionResultImpl
 		
 			Map map = toJSONMap();
 			
-			Map<Integer,Object>	result = new HashMap<Integer, Object>();
+			Map<Integer,Object>	result = new HashMap<>();
 			
 			String title = (String)map.get( "n" );
 			
@@ -470,7 +471,7 @@ SubscriptionResultImpl
 				result.put( SearchResult.PR_CONTENT_TYPE, contentType );
 			}
 			
-			props_ref = new WeakReference<Map<Integer,Object>>( result );
+			props_ref = new WeakReference<>(result);
 			
 			return( result );
 		}

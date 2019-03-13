@@ -22,8 +22,8 @@ package org.gudy.azureus2.plugins.ui.config;
  *
  */
 public interface ColorParameter extends Parameter {
-	public int getRedValue();
-	public int getGreenValue();
-	public int getBlueValue();
-	public void setRGBValue(int r, int g, int b);
+	int getRedValue();
+	int getGreenValue();
+	int getBlueValue();
+	void setRGBValue(int r, int g, int b);
 }

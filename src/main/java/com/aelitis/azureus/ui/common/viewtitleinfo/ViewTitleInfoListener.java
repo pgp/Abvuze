@@ -28,5 +28,5 @@ package com.aelitis.azureus.ui.common.viewtitleinfo;
  */
 public interface ViewTitleInfoListener
 {
-	public void viewTitleInfoRefresh(ViewTitleInfo titleInfo);
+	void viewTitleInfoRefresh(ViewTitleInfo titleInfo);
 }

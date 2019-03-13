@@ -23,15 +23,15 @@ package org.gudy.azureus2.core3.tracker.server;
 public interface 
 TRTrackerServerPeerBase 
 {
-	public String
+	String
 	getIP();
 	
-	public int
+	int
 	getTCPPort();
 	
-	public int
+	int
 	getHTTPPort();
 	
-	public int
+	int
 	getSecsToLive();
 }

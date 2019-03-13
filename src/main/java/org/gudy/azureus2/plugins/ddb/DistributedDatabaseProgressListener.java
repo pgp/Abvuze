@@ -27,15 +27,15 @@ package org.gudy.azureus2.plugins.ddb;
 public interface 
 DistributedDatabaseProgressListener 
 {
-	public void
+	void
 	reportSize(
-		long	size );
+            long size);
 	
-	public void
+	void
 	reportActivity(
-		String	str );
+            String str);
 	
-	public void
+	void
 	reportCompleteness(
-		int		percent );
+            int percent);
 }

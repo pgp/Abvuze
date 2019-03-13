@@ -28,12 +28,12 @@ import org.gudy.azureus2.plugins.PluginInterface;
 public interface 
 PluginViewModel 
 {
-	public String
+	String
 	getName();
 	
-	public PluginInterface
+	PluginInterface
 	getPluginInterface();
 	
-	public void
+	void
 	destroy();
 }

@@ -32,7 +32,7 @@ import org.gudy.azureus2.core3.torrent.*;
 public interface 
 TRHostTorrentFinder 
 {
-	public TOTorrent
+	TOTorrent
 	lookupTorrent(
-		byte[]		hash );
+            byte[] hash);
 }

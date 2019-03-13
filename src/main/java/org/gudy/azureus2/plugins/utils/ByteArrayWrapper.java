@@ -27,9 +27,9 @@ package org.gudy.azureus2.plugins.utils;
 public interface 
 ByteArrayWrapper 
 {
-	public byte[]
+	byte[]
 	getBytes();
 
-	public String
+	String
 	toBase32String();
 }

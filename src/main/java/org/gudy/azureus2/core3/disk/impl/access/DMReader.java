@@ -32,38 +32,38 @@ import org.gudy.azureus2.core3.util.DirectByteBuffer;
 public interface 
 DMReader 
 {
-	public void
+	void
 	start();
 	
-	public void
+	void
 	stop();
 	
-	public DirectByteBuffer 
+	DirectByteBuffer
 	readBlock(
-		int pieceNumber, 
-		int offset, 
-		int length );
+            int pieceNumber,
+            int offset,
+            int length);
 
-	public DiskManagerReadRequest
+	DiskManagerReadRequest
 	createReadRequest(
-		int pieceNumber,
-		int offset,
-		int length );
+            int pieceNumber,
+            int offset,
+            int length);
 	
-	public void 
-	readBlock( 
-		DiskManagerReadRequest 			request, 
-		DiskManagerReadRequestListener 	listener );
+	void
+	readBlock(
+            DiskManagerReadRequest request,
+            DiskManagerReadRequestListener listener);
 	
-	public boolean
+	boolean
 	hasOutstandingReadRequestForPiece(
-		int		piece_number );
+            int piece_number);
 	
 		/**
 		 * 2 entries, first = read-ops, second = read-bytes
 		 * @return
 		 */
-	
-	public long[]
+
+        long[]
 	getStats();
 }

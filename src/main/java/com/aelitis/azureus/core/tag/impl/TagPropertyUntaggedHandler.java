@@ -55,9 +55,9 @@ TagPropertyUntaggedHandler
 	private boolean	is_initialised;
 	private boolean	is_enabled;
 	
-	final Set<Tag>	untagged_tags = new HashSet<Tag>();
+	final Set<Tag>	untagged_tags = new HashSet<>();
 	
-	final Map<Taggable,int[]>		taggable_counts = new IdentityHashMap<Taggable, int[]>();
+	final Map<Taggable,int[]>		taggable_counts = new IdentityHashMap<>();
 	
 	
 	protected
@@ -145,7 +145,7 @@ TagPropertyUntaggedHandler
 				taggableCreated(
 					Taggable		taggable )
 				{
-					addDownloads( Arrays.asList( new DownloadManager[]{ (DownloadManager)taggable }));
+					addDownloads( Arrays.asList((DownloadManager)taggable));
 				}
 			});
 	}
@@ -357,7 +357,7 @@ TagPropertyUntaggedHandler
 					current_tag.removeTaggable( t );
 				}
 				
-				Tag[] temp = untagged_tags.toArray(new Tag[untagged_tags.size()]);
+				Tag[] temp = untagged_tags.toArray(new Tag[0]);
 				
 				Tag copy_from = temp[0]==current_tag?temp[1]:temp[0];
 				
@@ -456,7 +456,7 @@ TagPropertyUntaggedHandler
 	{
 		synchronized( taggable_counts ){
 			
-			return( new ArrayList<Tag>( untagged_tags ));
+			return(new ArrayList<>(untagged_tags));
 		}
 	}
 }

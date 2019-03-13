@@ -42,7 +42,7 @@ LongTermStatsWrapper
 	
 	private LongTermStatsWrapperHelper	delegate;
 	
-	private final Map<LongTermStatsListener,Long>	listeners = new IdentityHashMap<LongTermStatsListener,Long>();
+	private final Map<LongTermStatsListener,Long>	listeners = new IdentityHashMap<>();
 	
 	public
 	LongTermStatsWrapper(
@@ -146,7 +146,7 @@ LongTermStatsWrapper
 	LongTermStatsWrapperHelper
 		extends LongTermStats
 	{
-		public void
+		void
 		destroyAndDeleteData();
 	}
 }

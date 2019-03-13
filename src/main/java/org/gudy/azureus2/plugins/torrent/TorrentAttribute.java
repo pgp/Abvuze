@@ -27,26 +27,26 @@ package org.gudy.azureus2.plugins.torrent;
 public interface 
 TorrentAttribute 
 {
-	public static final String	TA_CATEGORY						= "Category";
-	public static final String	TA_NETWORKS						= "Networks";
-	public static final String	TA_PEER_SOURCES					= "PeerSources";
-	public static final String	TA_TRACKER_CLIENT_EXTENSIONS	= "TrackerClientExtensions";
-	public static final String	TA_SHARE_PROPERTIES				= "ShareProperties";	// private=true/false;dht_backup=true/false
-	public static final String  TA_CONTENT_MAP                  = "ContentMap";
+	String	TA_CATEGORY						= "Category";
+	String	TA_NETWORKS						= "Networks";
+	String	TA_PEER_SOURCES					= "PeerSources";
+	String	TA_TRACKER_CLIENT_EXTENSIONS	= "TrackerClientExtensions";
+	String	TA_SHARE_PROPERTIES				= "ShareProperties";	// private=true/false;dht_backup=true/false
+	String  TA_CONTENT_MAP                  = "ContentMap";
 	
 	/**
 	 * Controls the displayed name of a download.
 	 * 
 	 * @since 2.5.0.0
 	 */
-	public static final String  TA_DISPLAY_NAME                 = "DisplayName";
+    String  TA_DISPLAY_NAME                 = "DisplayName";
 
 	/**
 	 * The user-defined comment for a download.
 	 * 
 	 * @since 2.5.0.1
 	 */
-	public static final String  TA_USER_COMMENT                 = "UserComment";
+    String  TA_USER_COMMENT                 = "UserComment";
 	
 	/**
 	 * Defines a relative file path for this download - this attribute is used
@@ -55,45 +55,45 @@ TorrentAttribute
 	 * 
 	 * @since 2.5.0.1
 	 */
-	public static final String  TA_RELATIVE_SAVE_PATH           = "RelativePath";
+    String  TA_RELATIVE_SAVE_PATH           = "RelativePath";
 	
 
-	public String
+	String
 	getName();
 	
 		/**
 		 * Returns the currently defined values for this attribute
 		 * @return
 		 */
-	
-	public String[]
+
+        String[]
 	getDefinedValues();
 	
 		/**
 		 * Adds a new value to the attribute set
 		 * @param name
 		 */
-	
-	public void
+
+        void
 	addDefinedValue(
-		String		name );
+                String name);
 	
 		/**
 		 * Removes a value from the attribute set
 		 * @param name
 		 */
-	
-	public void
+
+        void
 	removeDefinedValue(
-		String		name );
+                String name);
 	
-	public void
+	void
 	addTorrentAttributeListener(
-		TorrentAttributeListener	l );
+            TorrentAttributeListener l);
 	
-	public void
+	void
 	removeTorrentAttributeListener(
-		TorrentAttributeListener	l );
+            TorrentAttributeListener l);
 	
 	
 }

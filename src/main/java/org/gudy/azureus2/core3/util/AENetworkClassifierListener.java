@@ -27,8 +27,8 @@ package org.gudy.azureus2.core3.util;
 public interface 
 AENetworkClassifierListener 
 {
-	public String[]
+	String[]
 	selectNetworks(
-		String		description,
-		String[]	tracker_networks );
+            String description,
+            String[] tracker_networks);
 }

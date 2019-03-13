@@ -29,57 +29,57 @@ import java.util.Map;
 public interface 
 UPnP 
 {
-	public UPnPRootDevice[]
+	UPnPRootDevice[]
 	getRootDevices();
 	
 		/**
 		 * resets by removing all root devices and then rediscovering them
 		 *
 		 */
-	
-	public void
+
+        void
 	reset();
 	
 		/**
 		 * scan for new
 		 */
-	
-	public void
+
+        void
 	search();
 	
-	public void
+	void
 	search(
-		String[]		STs );
+            String[] STs);
 	
-	public void
+	void
 	injectDiscoveryCache(
-		Map				cache );
+            Map cache);
 	
-	public UPnPSSDP
+	UPnPSSDP
 	getSSDP();
 	
 		/**
 		 * Logs a message to all registered log listeners
 		 * @param str
 		 */
-	
-	public void
+
+        void
 	log(
-		String	str );
+                String str);
 	
-	public void
+	void
 	addRootDeviceListener(
-		UPnPListener	l );
+            UPnPListener l);
 	
-	public void
+	void
 	removeRootDeviceListener(
-		UPnPListener	l );
+            UPnPListener l);
 	
-	public void
+	void
 	addLogListener(
-		UPnPLogListener	l );
+            UPnPLogListener l);
 		
-	public void
+	void
 	removeLogListener(
-		UPnPLogListener	l );
+            UPnPLogListener l);
 }

@@ -32,7 +32,7 @@ public class
 DeviceMediaRendererTemplateImpl
 	implements DeviceMediaRendererTemplate
 {
-	private List<TranscodeProfile>		profiles = new ArrayList<TranscodeProfile>();
+	private List<TranscodeProfile>		profiles = new ArrayList<>();
 	
 	private final DeviceManagerImpl		manager;
 	private final String				classification;
@@ -83,7 +83,7 @@ DeviceMediaRendererTemplateImpl
 	public TranscodeProfile[]
 	getProfiles()
 	{
-		return( profiles.toArray(new TranscodeProfile[profiles.size()]));
+		return( profiles.toArray(new TranscodeProfile[0]));
 	}
 	
 	public int

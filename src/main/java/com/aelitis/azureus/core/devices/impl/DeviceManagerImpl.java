@@ -126,35 +126,31 @@ DeviceManagerImpl
 					VuzeFile[]		files,
 					int				expected_types )
 				{
-					for (int i=0;i<files.length;i++){
-						
-						VuzeFile	vf = files[i];
-						
-						VuzeFileComponent[] comps = vf.getComponents();
-						
-						for (int j=0;j<comps.length;j++){
-							
-							VuzeFileComponent comp = comps[j];
-							
-							int	type = comp.getType();
-							
-							if ( type == VuzeFileComponent.COMP_TYPE_DEVICE ){
-								
-								try{
-									((DeviceManagerImpl)getSingleton()).importVuzeFile(
-											comp.getContent(),
-											( expected_types & 
-												( VuzeFileComponent.COMP_TYPE_DEVICE )) == 0 );
-									
-									comp.setProcessed();
-									
-								}catch( Throwable e ){
-									
-									Debug.printStackTrace(e);
-								}
-							}
-						}
-					}
+                    for (VuzeFile vf : files) {
+
+                        VuzeFileComponent[] comps = vf.getComponents();
+
+                        for (VuzeFileComponent comp : comps) {
+
+                            int type = comp.getType();
+
+                            if (type == VuzeFileComponent.COMP_TYPE_DEVICE) {
+
+                                try {
+                                    ((DeviceManagerImpl) getSingleton()).importVuzeFile(
+                                            comp.getContent(),
+                                            (expected_types &
+                                                    (VuzeFileComponent.COMP_TYPE_DEVICE)) == 0);
+
+                                    comp.setProcessed();
+
+                                } catch (Throwable e) {
+
+                                    Debug.printStackTrace(e);
+                                }
+                            }
+                        }
+                    }
 				}
 			});		
 	}
@@ -178,14 +174,14 @@ DeviceManagerImpl
 	
 	private TorrentAttribute			od_manual_ta;
 	
-	private List<DeviceImpl>			device_list = new ArrayList<DeviceImpl>();
-	private Map<String,DeviceImpl>		device_map	= new HashMap<String, DeviceImpl>();
+	private List<DeviceImpl>			device_list = new ArrayList<>();
+	private Map<String,DeviceImpl>		device_map	= new HashMap<>();
 	
 	private DeviceTivoManager		tivo_manager;
 	private DeviceManagerUPnPImpl	upnp_manager;
 	private DeviceDriveManager		drive_manager;
 		
-	private Set<Device>				disable_events	= Collections.synchronizedSet( new HashSet<Device>());
+	private Set<Device>				disable_events	= Collections.synchronizedSet(new HashSet<>());
 	
 		// have to go async on this as there are situations where we end up firing listeners
 		// while holding monitors and this can result in deadlock if sync
@@ -283,7 +279,7 @@ DeviceManagerImpl
 	
 	private volatile TranscodeManagerImpl	transcode_manager;
 	
-	private CopyOnWriteList<DeviceManagerDiscoveryListener>	discovery_listeners = new CopyOnWriteList<DeviceManagerDiscoveryListener>();
+	private CopyOnWriteList<DeviceManagerDiscoveryListener>	discovery_listeners = new CopyOnWriteList<>();
 	
 	private int						getMimeType_fails;
 	
@@ -494,7 +490,7 @@ DeviceManagerImpl
 									return;
 								}
 								
-								copy = new ArrayList<DeviceImpl>( device_list );
+								copy = new ArrayList<>(device_list);
 							}
 							
 							for ( DeviceImpl device: copy ){
@@ -707,13 +703,13 @@ DeviceManagerImpl
 		
 		TranscodeProvider[] providers = transcode_manager.getProviders();
 		
-		List<DeviceTemplate> result = new ArrayList<DeviceTemplate>();
+		List<DeviceTemplate> result = new ArrayList<>();
 		
 		for ( TranscodeProvider provider: providers ){
 			
 			TranscodeProfile[] profiles = provider.getProfiles();
 			
-			Map<String,DeviceMediaRendererTemplateImpl>	class_map = new HashMap<String, DeviceMediaRendererTemplateImpl>();
+			Map<String,DeviceMediaRendererTemplateImpl>	class_map = new HashMap<>();
 			
 			for ( TranscodeProfile profile: profiles ){
 				
@@ -746,7 +742,7 @@ DeviceManagerImpl
 			}
 		}
 		
-		return( result.toArray( new DeviceTemplate[ result.size() ]));
+		return( result.toArray(new DeviceTemplate[0]));
 	}
 	
 	public DeviceManufacturer[] 
@@ -755,7 +751,7 @@ DeviceManagerImpl
 	{
 		DeviceTemplate[] templates = getDeviceTemplates( device_type );
 		
-		Map<String,DeviceManufacturerImpl>	map = new HashMap<String, DeviceManufacturerImpl>();
+		Map<String,DeviceManufacturerImpl>	map = new HashMap<>();
 		
 		for ( DeviceTemplate template: templates ){
 			
@@ -778,7 +774,7 @@ DeviceManagerImpl
 			man.addTemplate( template );
 		}
 		
-		return( map.values().toArray( new DeviceManufacturer[ map.size() ] ));
+		return( map.values().toArray(new DeviceManufacturer[0]));
 	}
 	
 	public Device 
@@ -1190,7 +1186,7 @@ DeviceManagerImpl
 	{
 		synchronized( this ){
 			
-			return( device_list.toArray( new DeviceImpl[ device_list.size()] ));
+			return( device_list.toArray(new DeviceImpl[0]));
 		}
 	}
   		
@@ -1354,34 +1350,34 @@ DeviceManagerImpl
 			List	l_devices = (List)map.get( "devices" );
 			
 			if ( l_devices != null ){
-				
-				for (int i=0;i<l_devices.size();i++){
-					
-					Map	m = (Map)l_devices.get(i);
-					
-					try{
-						DeviceImpl device = DeviceImpl.importFromBEncodedMapStatic(this,  m );
-						
-						device_list.add( device );
-						
-						device_map.put( device.getID(), device );
-						
-						String secondary_id = device.getSecondaryID();
-						
-						if ( secondary_id != null ){
-							
-							device_map.put( secondary_id, device );
-						}
-							
-						device.initialise();
-					
-						log( "    loaded " + device.getString());
-						
-					}catch( Throwable e ){
-						
-						log( "Failed to import subscription from " + m, e );
-					}
-				}
+
+                for (Object l_device : l_devices) {
+
+                    Map m = (Map) l_device;
+
+                    try {
+                        DeviceImpl device = DeviceImpl.importFromBEncodedMapStatic(this, m);
+
+                        device_list.add(device);
+
+                        device_map.put(device.getID(), device);
+
+                        String secondary_id = device.getSecondaryID();
+
+                        if (secondary_id != null) {
+
+                            device_map.put(secondary_id, device);
+                        }
+
+                        device.initialise();
+
+                        log("    loaded " + device.getString());
+
+                    } catch (Throwable e) {
+
+                        log("Failed to import subscription from " + m, e);
+                    }
+                }
 			}
 		}
 	}
@@ -1455,25 +1451,21 @@ DeviceManagerImpl
 				List	l_devices = new ArrayList();
 				
 				map.put( "devices", l_devices );
-				
-				Iterator<DeviceImpl>	it = device_list.iterator();
-				
-				while( it.hasNext()){
-					
-					DeviceImpl device = it.next();
-						
-					try{
-						Map d = new HashMap();
-						
-						device.exportToBEncodedMap( d, false );
-						
-						l_devices.add( d );
-						
-					}catch( Throwable e ){
-						
-						log( "Failed to save device " + device.getString(), e );
-					}
-				}
+
+                for (DeviceImpl device : device_list) {
+
+                    try {
+                        Map d = new HashMap();
+
+                        device.exportToBEncodedMap(d, false);
+
+                        l_devices.add(d);
+
+                    } catch (Throwable e) {
+
+                        log("Failed to save device " + device.getString(), e);
+                    }
+                }
 				
 				FileUtil.writeResilientConfigFile( CONFIG_FILE, map );
 			}
@@ -1950,7 +1942,7 @@ DeviceManagerImpl
 	{
 		private String 	name;
 		
-		private List<DeviceTemplate>	templates = new ArrayList<DeviceTemplate>();
+		private List<DeviceTemplate>	templates = new ArrayList<>();
 		
 		protected
 		DeviceManufacturerImpl(
@@ -1975,7 +1967,7 @@ DeviceManagerImpl
 		public DeviceTemplate[]
 		getDeviceTemplates()
 		{
-			return( templates.toArray( new DeviceTemplate[ templates.size()] ));
+			return( templates.toArray(new DeviceTemplate[0]));
 		}
 	}
 }

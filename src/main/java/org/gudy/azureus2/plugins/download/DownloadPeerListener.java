@@ -33,13 +33,13 @@ import org.gudy.azureus2.plugins.peers.*;
 public interface 
 DownloadPeerListener 
 {
-	public void
+	void
 	peerManagerAdded(
-		Download		download,
-		PeerManager		peer_manager );
+            Download download,
+            PeerManager peer_manager);
 	
-	public void
+	void
 	peerManagerRemoved(
-		Download		download,
-		PeerManager		peer_manager );
+            Download download,
+            PeerManager peer_manager);
 }

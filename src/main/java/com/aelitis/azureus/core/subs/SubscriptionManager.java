@@ -29,68 +29,68 @@ public interface
 SubscriptionManager
 	extends UtilitiesImpl.PluginSubscriptionManager
 {
-	public Subscription
+	Subscription
 	create(
-		String		name,
-		boolean		is_public,
-		String		json )
+            String name,
+            boolean is_public,
+            String json)
 		
 		throws SubscriptionException;
 	
-	public Subscription
+	Subscription
 	createRSS(
-		String		name,
-		URL			url,
-		int			check_interval_mins,
-		Map			user_data )
+            String name,
+            URL url,
+            int check_interval_mins,
+            Map user_data)
 		
 		throws SubscriptionException;
 	
-	public Subscription
+	Subscription
 	createRSS(
-		String		name,
-		URL			url,
-		int			check_interval_mins,
-		boolean		anonymous,
-		Map			user_data )
+            String name,
+            URL url,
+            int check_interval_mins,
+            boolean anonymous,
+            Map user_data)
 		
 		throws SubscriptionException;
 	
 		// creates a subscription that will always have the same identity for the given parameters
 		// and can't be updated
 	
-	public Subscription
+	Subscription
 	createSingletonRSS(
-		String		name,
-		URL			url,
-		int			check_interval_mins,
-		boolean		is_anon )
+            String name,
+            URL url,
+            int check_interval_mins,
+            boolean is_anon)
 	
 		throws SubscriptionException;
 	
-	public Subscription
+	Subscription
 	createFromURI(
-		String		uri )
+            String uri)
 	
 		throws SubscriptionException;
 	
-	public int
+	int
 	getKnownSubscriptionCount();
 	
-	public int
+	int
 	getSubscriptionCount(
-		boolean	subscribed_only );
+            boolean subscribed_only);
 	
-	public Subscription[]
+	Subscription[]
 	getSubscriptions();
 	
-	public Subscription[]
+	Subscription[]
    	getSubscriptions(
-   		boolean	subscribed_only );
+            boolean subscribed_only);
 
-	public Subscription
+	Subscription
 	getSubscriptionByID(
-		String			id );
+            String id);
 	
 		/**
 		 * Full lookup
@@ -99,19 +99,19 @@ SubscriptionManager
 		 * @return
 		 * @throws SubscriptionException
 		 */
-	
-	public SubscriptionAssociationLookup
+
+        SubscriptionAssociationLookup
 	lookupAssociations(
-		byte[]						hash,
-		SubscriptionLookupListener	listener )
+                byte[] hash,
+                SubscriptionLookupListener listener)
 	
 		throws SubscriptionException;
 	
-	public SubscriptionAssociationLookup
+	SubscriptionAssociationLookup
 	lookupAssociations(
-		byte[]						hash,
-		String[]					networks,
-		SubscriptionLookupListener	listener )
+            byte[] hash,
+            String[] networks,
+            SubscriptionLookupListener listener)
 	
 		throws SubscriptionException;
 	
@@ -120,99 +120,99 @@ SubscriptionManager
 		 * @param hash
 		 * @return
 		 */
-	
-	public Subscription[]
+
+        Subscription[]
 	getKnownSubscriptions(
-		byte[]						hash );
+                byte[] hash);
 	
-	public Subscription[]
+	Subscription[]
 	getLinkedSubscriptions(
-		byte[]						hash );
+            byte[] hash);
 	
-	public SubscriptionScheduler
+	SubscriptionScheduler
 	getScheduler();
 	
-	public int
+	int
 	getMaxNonDeletedResults();
 	
-	public void
+	void
 	setMaxNonDeletedResults(
-		int			max );
+            int max);
 	
-	public boolean
+	boolean
 	getAutoStartDownloads();
 	
-	public void
+	void
 	setAutoStartDownloads(
-		boolean		auto_start );
+            boolean auto_start);
 
-	public int
+	int
 	getAutoStartMinMB();
 	
-	public void
+	void
 	setAutoStartMinMB(
-		int			mb );
+            int mb);
 
-	public int
+	int
 	getAutoStartMaxMB();
 	
-	public void
+	void
 	setAutoStartMaxMB(
-		int			mb );
+            int mb);
 
-	public int
+	int
 	getAutoDownloadMarkReadAfterDays();
 	
-	public void
+	void
 	setAutoDownloadMarkReadAfterDays(
-		int		days );
+            int days);
 	
-	public boolean
+	boolean
 	isRSSPublishEnabled();
 	
-	public void
+	void
 	setRSSPublishEnabled(
-		boolean		enabled );
+            boolean enabled);
 	
-	public boolean
+	boolean
 	isSearchEnabled();
 	
-	public void
+	void
 	setSearchEnabled(
-		boolean		enabled );
+            boolean enabled);
 	
-	public boolean
+	boolean
 	isSubsDownloadEnabled();
 	
-	public void
+	void
 	setSubsDownloadEnabled(
-		boolean		enabled );
+            boolean enabled);
 	
-	public boolean
+	boolean
 	hideSearchTemplates();
 	
-	public void
+	void
 	setActivateSubscriptionOnChange(
-		boolean		b );
+            boolean b);
 	
-	public boolean
+	boolean
 	getActivateSubscriptionOnChange();
 	
-	public String
+	String
 	getRSSLink();
 	
-	public void
+	void
 	setRateLimits(
-		String		limits );
+            String limits);
 	
-	public String
+	String
 	getRateLimits();
 	
-	public void
+	void
 	addListener(
-		SubscriptionManagerListener	listener );
+            SubscriptionManagerListener listener);
 	
-	public void
+	void
 	removeListener(
-		SubscriptionManagerListener	listener );
+            SubscriptionManagerListener listener);
 }

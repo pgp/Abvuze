@@ -22,17 +22,17 @@ package com.aelitis.azureus.core.clientmessageservice.secure;
 public interface 
 SecureMessageServiceClientListener 
 {
-	public void
+	void
 	complete(
-		SecureMessageServiceClientMessage	message );
+            SecureMessageServiceClientMessage message);
 	
-	public void
+	void
 	cancelled(
-		SecureMessageServiceClientMessage	message );
+            SecureMessageServiceClientMessage message);
 	
-	public void
+	void
 	aborted(
-		SecureMessageServiceClientMessage	message,
-		String								reason );
+            SecureMessageServiceClientMessage message,
+            String reason);
 	
 }

@@ -35,22 +35,22 @@ import java.util.SimpleTimeZone;
 public class MomentsAgoDateFormatter {
 
    // A list of id's that we use in the two maps to ensure we have valid refs
-   private static final Integer ID_YEAR = new Integer(Calendar.YEAR);
-   private static final Integer ID_MONTH = new Integer(Calendar.MONTH);
-   private static final Integer ID_WEEK_OF_YEAR = new Integer(Calendar.WEEK_OF_YEAR);
-   private static final Integer ID_DAY = new Integer(Calendar.DAY_OF_MONTH);
-   private static final Integer ID_HOUR_OF_DAY = new Integer(Calendar.HOUR_OF_DAY);
-   private static final Integer ID_MINUTE = new Integer(Calendar.MINUTE);
-   private static final Integer ID_SECOND = new Integer(Calendar.SECOND);
+   private static final Integer ID_YEAR = Calendar.YEAR;
+   private static final Integer ID_MONTH = Calendar.MONTH;
+   private static final Integer ID_WEEK_OF_YEAR = Calendar.WEEK_OF_YEAR;
+   private static final Integer ID_DAY = Calendar.DAY_OF_MONTH;
+   private static final Integer ID_HOUR_OF_DAY = Calendar.HOUR_OF_DAY;
+   private static final Integer ID_MINUTE = Calendar.MINUTE;
+   private static final Integer ID_SECOND = Calendar.SECOND;
 
    // A list of units we're comparing.
-   private static final Long MS_IN_YEAR   = new Long(31536000000L);
-   private static final Long MS_IN_MONTH  = new Long(2678400000L);
-   private static final Long MS_IN_WEEK   = new Long(604800000L);
-   private static final Long MS_IN_DAY    = new Long(86400000L);
-   private static final Long MS_IN_HOUR   = new Long(3600000L);
-   private static final Long MS_IN_MINUTE = new Long(60000L);
-   private static final Long MS_IN_SECOND = new Long(1000L);
+   private static final Long MS_IN_YEAR   = 31536000000L;
+   private static final Long MS_IN_MONTH  = 2678400000L;
+   private static final Long MS_IN_WEEK   = 604800000L;
+   private static final Long MS_IN_DAY    = 86400000L;
+   private static final Long MS_IN_HOUR   = 3600000L;
+   private static final Long MS_IN_MINUTE = 60000L;
+   private static final Long MS_IN_SECOND = 1000L;
 
    // A few externalized strings to display to the user
    private static final String AGO = " ago";
@@ -141,7 +141,7 @@ public class MomentsAgoDateFormatter {
            Integer field) {
        String result = null;
        long diff = now.getTimeInMillis() - then.getTimeInMillis();
-       long comparison = ((Long)CONVERSION_MAP.get(field)).longValue();
+       long comparison = (Long) CONVERSION_MAP.get(field);
        if (diff > comparison) {
            long timeAgo = diff / comparison;
            result = String.valueOf(timeAgo).concat((String)UNIT_MAP.get(field));

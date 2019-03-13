@@ -36,33 +36,33 @@ import org.gudy.azureus2.plugins.tracker.*;
 public interface 
 TrackerWebPageResponse 
 {
-	public OutputStream
+	OutputStream
 	getOutputStream();
 	
-	public void
+	void
 	setReplyStatus(
-		int		status );
+            int status);
 	
-	public void
+	void
 	setContentType(
-		String		type );
+            String type);
 	
-	public void
+	void
 	setLastModified(
-		long		time );
+            long time);
 	
-	public void
+	void
 	setExpires(
-		long		time );
+            long time);
 	
-	public void
+	void
 	setHeader(
-		String		name,
-		String		value );
+            String name,
+            String value);
 	
-	public void
+	void
 	setGZIP(
-		boolean		gzip );
+            boolean gzip);
 	
 		/**
 		 * use a file contents as the response. returns true of loaded ok, false if doesn't exist
@@ -72,24 +72,24 @@ TrackerWebPageResponse
 		 * @return
 		 * @throws IOException
 		 */
-	
-	public boolean
+
+        boolean
 	useFile(
-		String		root_dir,
-		String		relative_url )
+                String root_dir,
+                String relative_url)
 	
 		throws IOException;
 	
-	public void
+	void
 	useStream(
-		String		file_type,
-		InputStream	stream )
+            String file_type,
+            InputStream stream)
 	
 		throws IOException;
 	
-	public void
+	void
 	writeTorrent(
-		TrackerTorrent	torrent )
+            TrackerTorrent torrent)
 	
 		throws IOException;
 	
@@ -98,14 +98,14 @@ TrackerWebPageResponse
 		 * by setting async=true and then, when complete, setting it to false
 		 * @param async
 		 */
-	
-	public void
+
+        void
 	setAsynchronous(
-		boolean		async )
+                boolean async)
 	
 		throws IOException;
 	
-	public boolean
+	boolean
 	getAsynchronous();
 	
 		/**
@@ -114,12 +114,12 @@ TrackerWebPageResponse
 		 * @return
 		 * @throws IOException
 		 */
-	
-	public OutputStream
+
+        OutputStream
 	getRawOutputStream()
 	
 		throws IOException;
 	
-	public boolean
+	boolean
 	isActive();
 }

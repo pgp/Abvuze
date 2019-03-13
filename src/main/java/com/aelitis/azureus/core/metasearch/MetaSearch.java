@@ -27,102 +27,102 @@ import java.util.Map;
 public interface 
 MetaSearch 
 {	
-	public MetaSearchManager
+	MetaSearchManager
 	getManager();
 	
-	public Engine
+	Engine
 	importFromBEncodedMap(
-		Map<String,Object>		map )
+            Map<String, Object> map)
 	
 		throws IOException;
 	
-	public Engine[] 
+	Engine[]
 	search(
-		ResultListener 		listener,
-		SearchParameter[] 	searchParameters,
-		String				headers,
-		int					max_per_engine );
+            ResultListener listener,
+            SearchParameter[] searchParameters,
+            String headers,
+            int max_per_engine);
 	
-	public Engine[] 
+	Engine[]
   	search(
-  		ResultListener 		listener,
-  		SearchParameter[] 	searchParameters,
-  		String				headers,
-  		Map<String,String>	context,
-  		int					max_per_engine );
+            ResultListener listener,
+            SearchParameter[] searchParameters,
+            String headers,
+            Map<String, String> context,
+            int max_per_engine);
 	
-	public Engine[] 
+	Engine[]
 	search(
-		Engine[]			engine,
-		ResultListener 		listener,
-		SearchParameter[] 	searchParameters,
-		String				headers,
-		int					max_per_engine );
+            Engine[] engine,
+            ResultListener listener,
+            SearchParameter[] searchParameters,
+            String headers,
+            int max_per_engine);
 	
-	public Engine[] 
+	Engine[]
   	search(
-  		Engine[]			engine,
-  		ResultListener 		listener,
-  		SearchParameter[] 	searchParameters,
-  		String				headers,
-  		Map<String,String>	context,
-  		int					max_per_engine );
+            Engine[] engine,
+            ResultListener listener,
+            SearchParameter[] searchParameters,
+            String headers,
+            Map<String, String> context,
+            int max_per_engine);
 	
-	public String
+	String
 	getFUD();
 	
-	public Engine[] 
+	Engine[]
 	getEngines(
-		boolean		active_only,
-		boolean		ensure_up_to_date );
+            boolean active_only,
+            boolean ensure_up_to_date);
 	
-	public Engine
+	Engine
 	getEngine(
-		long		id );
+            long id);
 	
-	public Engine
+	Engine
 	getEngineByUID(
-		String		uid );
+            String uid);
 	
-	public void 
-	addEngine( 
-		Engine 		engine );
+	void
+	addEngine(
+            Engine engine);
 	
-	public Engine 
-	addEngine( 
-		long		id )
+	Engine
+	addEngine(
+            long id)
 	
 		throws MetaSearchException;
 	
-	public Engine
+	Engine
 	createRSSEngine(
-		String	name,
-		URL		url )
+            String name,
+            URL url)
 	
 		throws MetaSearchException;
 	
-	public void 
+	void
 	removeEngine(
-		Engine 		engine );
+            Engine engine);
 	
-	public int
+	int
 	getEngineCount();
 	
-	public void
+	void
 	enginePreferred(
-		Engine		engine );
+            Engine engine);
 	
-	public void
+	void
 	exportEngines(
-		File	to_file )
+            File to_file)
 	
 		throws MetaSearchException;
 	
-	public void
+	void
 	addListener(
-		MetaSearchListener		listener );
+            MetaSearchListener listener);
 	
-	public void
+	void
 	removeListener(
-		MetaSearchListener		listener );
+            MetaSearchListener listener);
 }

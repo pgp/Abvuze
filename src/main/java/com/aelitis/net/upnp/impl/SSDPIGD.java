@@ -29,26 +29,26 @@ import com.aelitis.net.upnp.*;
 public interface 
 SSDPIGD 
 {
-	public UPnPSSDP
+	UPnPSSDP
 	getSSDP();
 	
-	public void
+	void
 	start()
 	
 		throws UPnPException;
 	
-	public void
+	void
 	searchNow();
 	
-	public void
+	void
 	searchNow(
-		String[]	STs );
+            String[] STs);
 	
-	public void
+	void
 	addListener(
-		SSDPIGDListener	l );
+            SSDPIGDListener l);
 	
-	public void
+	void
 	removeListener(
-		SSDPIGDListener	l );
+            SSDPIGDListener l);
 }

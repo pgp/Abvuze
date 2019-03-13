@@ -22,6 +22,6 @@ package org.gudy.azureus2.core3.tracker.util;
 public interface
 TRTrackerUtilsListener 
 {
-	public void
+	void
 	announceDetailsChanged();
 }

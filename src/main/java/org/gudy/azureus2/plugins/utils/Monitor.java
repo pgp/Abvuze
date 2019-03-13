@@ -21,11 +21,11 @@ package org.gudy.azureus2.plugins.utils;
 
 public interface Monitor {
   
-  public void enter();
+  void enter();
   
-  public void exit();
+  void exit();
   
-  public boolean isOwned();
+  boolean isOwned();
   
-  public boolean hasWaiters();
+  boolean hasWaiters();
 }

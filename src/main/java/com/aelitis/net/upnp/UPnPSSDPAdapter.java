@@ -24,29 +24,29 @@ import org.gudy.azureus2.plugins.utils.UTTimer;
 public interface 
 UPnPSSDPAdapter 
 {
-	public UTTimer
+	UTTimer
 	createTimer(
-		String	name );
+            String name);
 
-	public void
+	void
 	createThread(
-		String		name,
-		Runnable	runnable );
+            String name,
+            Runnable runnable);
 	
-	public void
+	void
 	trace(
-		String	str );
+            String str);
 	
 		/**
 		 * Logs are generally more informative for the user than trace
 		 * @param str
 		 */
-	
-	public void
+
+        void
 	log(
-		String	str );
+                String str);
 	
-	public void
+	void
 	log(
-		Throwable	e );
+            Throwable e);
 }

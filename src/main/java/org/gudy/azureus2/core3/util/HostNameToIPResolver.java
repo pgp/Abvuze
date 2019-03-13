@@ -80,16 +80,16 @@ HostNameToIPResolver
 		char[]	chars = host.toCharArray();
 		
 		boolean	resolve = false;
-		
-		for (int i=0;i<chars.length;i++){
-			
-			if ( !( chars[i] == '.' || Character.isDigit(chars[i]))){
-				
-				resolve	= true;
-				
-				break;
-			}
-		}
+
+        for (char aChar : chars) {
+
+            if (!(aChar == '.' || Character.isDigit(aChar))) {
+
+                resolve = true;
+
+                break;
+            }
+        }
 		
 		if ( resolve && host.startsWith( "websocket." )){
 			

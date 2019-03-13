@@ -36,12 +36,12 @@ TrackerAuthenticationListener
 		 * @param password
 		 * @return true - access OK, false access denied
 		 */
-	
-	public boolean
+
+        boolean
 	authenticate(
-		URL			resource,
-		String		user,
-		String		password );
+                URL resource,
+                String user,
+                String password);
 	
 		/**
 		 * For the UDP tracker protocol it is necessary to return the SHA1 hash of the
@@ -50,9 +50,9 @@ TrackerAuthenticationListener
 		 * @param user
 		 * @return SHA1 password hash or null if either user unknown of user can't access the resource
 		 */
-	
-	public byte[]
+
+        byte[]
 	authenticate(
-		URL			resource,
-		String		user );
+                URL resource,
+                String user);
 }

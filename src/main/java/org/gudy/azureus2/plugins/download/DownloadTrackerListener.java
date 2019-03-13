@@ -47,7 +47,7 @@ public interface DownloadTrackerListener {
 	 *        getDownload().getTorrent().getAnnounceURL() to determine if it's
 	 *        from the currently selected tracker.
 	 */
-	public void scrapeResult(DownloadScrapeResult result);
+    void scrapeResult(DownloadScrapeResult result);
 
 	/**
 	 * An announce result has been returned from the tracker
@@ -56,5 +56,5 @@ public interface DownloadTrackerListener {
 	 * 
 	 * @since 2.0.7.0
 	 */
-	public void announceResult(DownloadAnnounceResult result);
+    void announceResult(DownloadAnnounceResult result);
 }

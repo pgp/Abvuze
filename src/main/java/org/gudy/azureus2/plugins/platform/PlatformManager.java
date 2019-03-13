@@ -25,10 +25,10 @@ import java.io.File;
 public interface 
 PlatformManager 
 {
-	public static final int	LOC_USER_DATA		= 1;
-	public static final int	LOC_MUSIC			= 2;
-	public static final int	LOC_DOCUMENTS			= 3;
-	public static final int	LOC_VIDEO			= 4;
+	int	LOC_USER_DATA		= 1;
+	int	LOC_MUSIC			= 2;
+	int	LOC_DOCUMENTS			= 3;
+	int	LOC_VIDEO			= 4;
 	
 		/**
 		 * Checks to see if the supplied file type is registered with this application
@@ -37,11 +37,11 @@ PlatformManager
 		 * @return
 		 * @throws PlatformManagerException
 		 */
-		
-	public boolean
+
+        boolean
 	isAdditionalFileTypeRegistered(
-		String		name,				// e.g. "Wibble"
-		String		type )				// e.g. ".wib"
+                String name,                // e.g. "Wibble"
+                String type)				// e.g. ".wib"
 	
 		throws PlatformManagerException;
 	
@@ -53,13 +53,13 @@ PlatformManager
 		 * @param content_type
 		 * @throws PlatformManagerException
 		 */
-	
-	public void
+
+        void
 	registerAdditionalFileType(
-		String		name,				// e.g. "Wibble"
-		String		description,		// e.g. "Wibble File"
-		String		type,				// e.g. ".wib"
-		String		content_type )		// e.g. "application/x-wibble"
+                String name,                // e.g. "Wibble"
+                String description,        // e.g. "Wibble File"
+                String type,                // e.g. ".wib"
+                String content_type)		// e.g. "application/x-wibble"
 	
 		throws PlatformManagerException;
 	
@@ -70,11 +70,11 @@ PlatformManager
 		 * @return
 		 * @throws PlatformManagerException
 		 */
-	
-	public void
+
+        void
 	unregisterAdditionalFileType(
-		String		name,				// e.g. "Wibble"
-		String		type )				// e.g. ".wib"
+                String name,                // e.g. "Wibble"
+                String type)				// e.g. ".wib"
 	
 		throws PlatformManagerException;
 	
@@ -83,10 +83,10 @@ PlatformManager
 	    * @param file_name The full path to a file or directory
 	    * @throws PlatformManagerException If this operation fails
 	    */
-	
-	public void
+
+       void
     showFile(
-		String	file_name )
+               String file_name)
 
 		throws PlatformManagerException;
 	
@@ -96,10 +96,10 @@ PlatformManager
 		 * @return
 		 * @since 2.3.0.6
 		 */
-	
-	public File
+
+        File
 	getLocation(
-		long	location_id )
+                long location_id)
 	
 		throws PlatformManagerException;
 	
@@ -108,7 +108,7 @@ PlatformManager
 		 * 
 		 * @return	null if can't be found
 		 */
-	
-	public String
+
+        String
 	getComputerName();
 }

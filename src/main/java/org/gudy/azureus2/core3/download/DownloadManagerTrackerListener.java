@@ -32,11 +32,11 @@ import org.gudy.azureus2.core3.tracker.client.*;
 public interface 
 DownloadManagerTrackerListener 
 {
-	public void
+	void
 	scrapeResult(
-		TRTrackerScraperResponse	response );
+            TRTrackerScraperResponse response);
 	
-	public void
+	void
 	announceResult(
-		TRTrackerAnnouncerResponse			response );
+            TRTrackerAnnouncerResponse response);
 }

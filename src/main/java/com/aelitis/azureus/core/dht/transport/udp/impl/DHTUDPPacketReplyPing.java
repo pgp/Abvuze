@@ -103,7 +103,7 @@ DHTUDPPacketReplyPing
 		
 		if ( _contacts.size() < MAX_CONTACTS ){
 		
-			alt_contacts = _contacts.toArray( new DHTTransportAlternativeContact[ _contacts.size()]);
+			alt_contacts = _contacts.toArray(new DHTTransportAlternativeContact[0]);
 			
 		}else{
 			

@@ -24,22 +24,22 @@ package com.aelitis.azureus.core.networkmanager;
  */
 public interface LimitedRateGroup {
 	
-  public String getName();
+  String getName();
   
   /**
    * Get the current rate limit.
    * @return rate in bytes per second, 0 for unlimited, -1 for disabled (BUT it is better to use isDisabled as some
    * rate limiters implement logical disablement via other means (e.g. a download can implement it by disabling individual peers....)
    */
+
+  int getRateLimitBytesPerSecond();
   
-  public int getRateLimitBytesPerSecond();
-  
-  public void updateBytesUsed( int num );
+  void updateBytesUsed(int num);
   
   /**
    * Best way to check if rate limiter is effectively disabled
    * @return
    */
-  
-  public boolean isDisabled();
+
+  boolean isDisabled();
 }

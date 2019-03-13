@@ -67,12 +67,12 @@ UIManagerImpl
 	
 	protected static boolean				initialisation_complete;
 	
-	protected static CopyOnWriteList<Object[]>					ui_listeners		= new CopyOnWriteList<Object[]>();
-	protected static CopyOnWriteList<UIManagerEventListener>	ui_event_listeners	= new CopyOnWriteList<UIManagerEventListener>();
+	protected static CopyOnWriteList<Object[]>					ui_listeners		= new CopyOnWriteList<>();
+	protected static CopyOnWriteList<UIManagerEventListener>	ui_event_listeners	= new CopyOnWriteList<>();
 	
-	protected static List<UIInstanceFactory>		ui_factories		= new ArrayList<UIInstanceFactory>();
-	protected static List<UIManagerEventAdapter>	ui_event_history	= new ArrayList<UIManagerEventAdapter>();
-	protected static List<BasicPluginConfigModel>	configModels 		= new ArrayList<BasicPluginConfigModel>();
+	protected static List<UIInstanceFactory>		ui_factories		= new ArrayList<>();
+	protected static List<UIManagerEventAdapter>	ui_event_history	= new ArrayList<>();
+	protected static List<BasicPluginConfigModel>	configModels 		= new ArrayList<>();
 	
 	
 	protected PluginInterface		pi;
@@ -169,7 +169,7 @@ UIManagerImpl
 		try{
   			class_mon.enter();
 		
-			return (PluginConfigModel[]) configModels.toArray(new PluginConfigModel[0]);
+			return configModels.toArray(new PluginConfigModel[0]);
 			
 		}finally{
 			
@@ -223,33 +223,27 @@ UIManagerImpl
   			}
   		});
 
-  		List<Object[]> to_fire = new ArrayList<Object[]>();
+  		List<Object[]> to_fire = new ArrayList<>();
   		
   		try{
   			class_mon.enter();
   			
   			initialisation_complete	= true;
-  			
-			for (int j=0;j<ui_factories.size();j++){
 
-				UIInstanceFactory	factory = (UIInstanceFactory)ui_factories.get(j);
-				
-  				Iterator<Object[]> it = ui_listeners.iterator();
+            for (UIInstanceFactory factory : ui_factories) {
 
-  				while( it.hasNext()){
-  					
- 					Object[]	entry = it.next();
-  					
- 					List<UIInstanceFactory> fired = (List<UIInstanceFactory>)entry[2];
- 					
- 					if ( !fired.contains( factory )){
- 						
- 						fired.add( factory );
- 						
- 						to_fire.add( new Object[]{ entry[0], factory.getInstance((PluginInterface)entry[1])});
- 					}
-				}  				
-			}
+                for (Object[] entry : ui_listeners) {
+
+                    List<UIInstanceFactory> fired = (List<UIInstanceFactory>) entry[2];
+
+                    if (!fired.contains(factory)) {
+
+                        fired.add(factory);
+
+                        to_fire.add(new Object[]{entry[0], factory.getInstance((PluginInterface) entry[1])});
+                    }
+                }
+            }
   		}finally{
   			
   			class_mon.exit();
@@ -290,7 +284,7 @@ UIManagerImpl
 		UIInstanceFactory		factory, 
 		IUIIntializer 			init )
 	{
- 		List<Object[]> to_fire = new ArrayList<Object[]>();
+ 		List<Object[]> to_fire = new ArrayList<>();
 
 		try{
   			class_mon.enter();
@@ -298,19 +292,15 @@ UIManagerImpl
   			ui_factories.add( factory );
   			
   			if ( initialisation_complete ){
-  				
-  				Iterator<Object[]> it = ui_listeners.iterator();
 
-  				while( it.hasNext()){
-  					
-  					Object[]	entry = (Object[])it.next();
-  					
-					List<UIInstanceFactory> fired = (List<UIInstanceFactory>)entry[2];
+                for (Object[] entry : ui_listeners) {
 
-					fired.add( factory );
-						
-					to_fire.add( new Object[]{ entry[0], entry[1], factory.getInstance((PluginInterface)entry[1])});
-  				}
+                    List<UIInstanceFactory> fired = (List<UIInstanceFactory>) entry[2];
+
+                    fired.add(factory);
+
+                    to_fire.add(new Object[]{entry[0], entry[1], factory.getInstance((PluginInterface) entry[1])});
+                }
   			}
   		}finally{
   			
@@ -364,7 +354,7 @@ UIManagerImpl
 	{
 		factory.detach();
 
- 		List<Object[]> to_fire = new ArrayList<Object[]>();
+ 		List<Object[]> to_fire = new ArrayList<>();
 
 		try{
   			class_mon.enter();
@@ -372,19 +362,15 @@ UIManagerImpl
   			ui_factories.remove( factory );
   			
   			if ( initialisation_complete ){
-  				
-  				Iterator<Object[]> it = ui_listeners.iterator();
 
-  				while( it.hasNext()){
-  					
- 					Object[]	entry = (Object[])it.next();
-  					
-					List<UIInstanceFactory> fired = (List<UIInstanceFactory>)entry[2];
+                for (Object[] entry : ui_listeners) {
 
-					fired.remove( factory );
-					
- 					to_fire.add( new Object[]{ entry[0], factory.getInstance((PluginInterface)entry[1])});
-  				}
+                    List<UIInstanceFactory> fired = (List<UIInstanceFactory>) entry[2];
+
+                    fired.remove(factory);
+
+                    to_fire.add(new Object[]{entry[0], factory.getInstance((PluginInterface) entry[1])});
+                }
   			}
   		}finally{
   			
@@ -407,23 +393,21 @@ UIManagerImpl
   	addUIListener(
   		UIManagerListener listener )
   	{
- 		List<UIInstance> to_fire = new ArrayList<UIInstance>();
+ 		List<UIInstance> to_fire = new ArrayList<>();
 
 		try{
   			class_mon.enter();
   			
-  			List<UIInstanceFactory> fired = new ArrayList<UIInstanceFactory>();
+  			List<UIInstanceFactory> fired = new ArrayList<>();
   			
   			ui_listeners.add( new Object[]{ listener, pi, fired });
   			
  			if ( initialisation_complete ){
-  				
-  				for (int i=0;i<ui_factories.size();i++){
-  					
-  					UIInstanceFactory	factory = (UIInstanceFactory)ui_factories.get(i);
 
-  					to_fire.add( factory.getInstance( pi ));
-  				}
+                for (UIInstanceFactory factory : ui_factories) {
+
+                    to_fire.add(factory.getInstance(pi));
+                }
   			}
   		}finally{
   			
@@ -492,23 +476,23 @@ UIManagerImpl
   			
   			ui_event_listeners.add( listener );
   			
-  			ui_event_history_copy = new ArrayList<UIManagerEventAdapter>( ui_event_history );
+  			ui_event_history_copy = new ArrayList<>(ui_event_history);
   			
   		}finally{
   			
   			class_mon.exit();
-  		} 
-	
-  		for (int i=0;i<ui_event_history_copy.size();i++){
-  			
-  			try{
-  				listener.eventOccurred((UIManagerEvent)ui_event_history_copy.get(i));
-  				
-  			}catch( Throwable e ){
-  				
-  				Debug.printStackTrace(e);
-  			}
   		}
+
+        for (UIManagerEventAdapter uiManagerEventAdapter : ui_event_history_copy) {
+
+            try {
+                listener.eventOccurred(uiManagerEventAdapter);
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
   	}
   	
  	public void
@@ -531,12 +515,11 @@ UIManagerImpl
  	public UIInstance[] getUIInstances() {
  		try {
   			class_mon.enter();
-  			ArrayList<UIInstance> result = new ArrayList<UIInstance>(ui_factories.size());
-  			for (int i=0;i<ui_factories.size();i++){
-  				UIInstanceFactory instance = ui_factories.get(i);
-  				result.add(instance.getInstance(pi));
-  			}
-  			return result.toArray(new UIInstance[result.size()]);
+  			ArrayList<UIInstance> result = new ArrayList<>(ui_factories.size());
+            for (UIInstanceFactory instance : ui_factories) {
+                result.add(instance.getInstance(pi));
+            }
+  			return result.toArray(new UIInstance[0]);
  		}
  		finally {
  			class_mon.exit();
@@ -557,24 +540,22 @@ UIManagerImpl
  		UIManagerEventAdapter	event )
  	{
  		boolean	delivered	= false;
- 		
-		Iterator<UIManagerEventListener> event_it = ui_event_listeners.iterator();
 
-		while( event_it.hasNext()){
- 			
- 			try{
- 				if ( event_it.next().eventOccurred( event )){
- 					
- 					delivered = true;
- 					
- 					break;
- 				}
- 				
- 			}catch( Throwable e ){
- 				
- 				e.printStackTrace();
- 			}
- 		}
+        for (UIManagerEventListener ui_event_listener : ui_event_listeners) {
+
+            try {
+                if (ui_event_listener.eventOccurred(event)) {
+
+                    delivered = true;
+
+                    break;
+                }
+
+            } catch (Throwable e) {
+
+                e.printStackTrace();
+            }
+        }
  		
  		int	type = event.getType();
  		
@@ -666,7 +647,7 @@ UIManagerImpl
 		
 		all_params[0]	= title_resource;
 		all_params[1]	= message_resource;
-		all_params[2]	= new Long( message_map );
+		all_params[2]	= message_map;
 
 		System.arraycopy(params, 0, all_params, 3, params.length);
 		
@@ -681,7 +662,7 @@ UIManagerImpl
 			return( UIManagerEvent.MT_NONE );
 		}
 		
-		return(((Long)event.getResult()).longValue());
+		return((Long) event.getResult());
 	}		
 
 	public long
@@ -695,7 +676,7 @@ UIManagerImpl
 		
 		all_params[0]	= title_resource;
 		all_params[1]	= message_resource;
-		all_params[2]	= new Long( message_map );
+		all_params[2]	= message_map;
 		all_params[3]	= params;
 		
 		UIManagerEventAdapter event = 
@@ -709,7 +690,7 @@ UIManagerImpl
 			return( UIManagerEvent.MT_NONE );
 		}
 		
-		return(((Long)event.getResult()).longValue());
+		return((Long) event.getResult());
 	}
 	
 	public void 
@@ -731,26 +712,30 @@ UIManagerImpl
 		if (event.getResult() instanceof Boolean)
 			return false;
 
-		return ((Boolean)event.getResult()).booleanValue();
+		return (Boolean) event.getResult();
 	}
 	
  	public UIInputReceiver getInputReceiver() {
  		UIInstance[] instances = this.getUIInstances();
  		UIInputReceiver r = null;
- 		for (int i=0; i<instances.length; i++) {
- 			r = instances[i].getInputReceiver();
- 			if (r != null) {return r;}
- 		}
+        for (UIInstance instance : instances) {
+            r = instance.getInputReceiver();
+            if (r != null) {
+                return r;
+            }
+        }
  		return null;
  	}
  	
  	public UIMessage createMessage() {
  		UIInstance[] instances = this.getUIInstances();
  		UIMessage r = null;
- 		for (int i=0; i<instances.length; i++) {
- 			r = instances[i].createMessage();
- 			if (r != null) {return r;}
- 		}
+        for (UIInstance instance : instances) {
+            r = instance.createMessage();
+            if (r != null) {
+                return r;
+            }
+        }
  		return null;
  	}
  	
@@ -786,7 +771,7 @@ UIManagerImpl
 				
 				Object[]	entry = it.next();
 				
-				if ( pi == (PluginInterface)entry[1] ){
+				if ( pi == entry[1]){
 										
 					it.remove();
 				}
@@ -821,7 +806,7 @@ UIManagerImpl
 		class_mon.enter();
 		try {
 			if (listDSListeners == null) {
-				listDSListeners = new ArrayList<UIDataSourceListener>();
+				listDSListeners = new ArrayList<>();
 			}
 			listDSListeners.add(l);
 		} finally {

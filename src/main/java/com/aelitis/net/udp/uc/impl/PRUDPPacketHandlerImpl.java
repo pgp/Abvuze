@@ -100,7 +100,7 @@ PRUDPPacketHandlerImpl
 	private int				port;
 	private DatagramSocket	socket;
 	
-	private CopyOnWriteList<PRUDPPrimordialHandler>	primordial_handlers = new CopyOnWriteList<PRUDPPrimordialHandler>();
+	private CopyOnWriteList<PRUDPPrimordialHandler>	primordial_handlers = new CopyOnWriteList<>();
 	private PRUDPRequestHandler				request_handler;
 	
 	private PRUDPPacketHandlerStatsImpl	stats = new PRUDPPacketHandlerStatsImpl( this );
@@ -808,26 +808,26 @@ PRUDPPacketHandlerImpl
 			
 			requests_mon.exit();
 		}
-		
-		for (int i=0;i<timed_out.size();i++){
-			
-			PRUDPPacketHandlerRequestImpl	request = (PRUDPPacketHandlerRequestImpl)timed_out.get(i);
-			
-			if ( TRACE_REQUESTS ){
-				if (Logger.isEnabled())
-					Logger.log(new LogEvent(LOGID, LogEvent.LT_ERROR,
-							"PRUDPPacketHandler: request timeout")); 
-			}
-				// don't change the text of this message, it's used elsewhere
-			
-			try{
-				request.setException(new PRUDPPacketHandlerException("timed out"));
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace(e);
-			}
-		}
+
+        for (Object o : timed_out) {
+
+            PRUDPPacketHandlerRequestImpl request = (PRUDPPacketHandlerRequestImpl) o;
+
+            if (TRACE_REQUESTS) {
+                if (Logger.isEnabled())
+                    Logger.log(new LogEvent(LOGID, LogEvent.LT_ERROR,
+                            "PRUDPPacketHandler: request timeout"));
+            }
+            // don't change the text of this message, it's used elsewhere
+
+            try {
+                request.setException(new PRUDPPacketHandlerException("timed out"));
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 	
 	protected void
@@ -931,7 +931,7 @@ PRUDPPacketHandlerImpl
 							
 						}else{
 							
-							recv_queue.add( new Object[]{ packet, new Integer( dg_packet.getLength()) });
+							recv_queue.add( new Object[]{ packet, dg_packet.getLength()});
 											
 							recv_queue_data_size	+= dg_packet.getLength();
 														
@@ -959,7 +959,7 @@ PRUDPPacketHandlerImpl
 														
 														total_requests_processed++;
 													
-														recv_queue_data_size -= ((Integer)data[1]).intValue();
+														recv_queue_data_size -= (Integer) data[1];
 
 														request_receive_average.addValue( 1 );
 																												
@@ -1047,11 +1047,11 @@ PRUDPPacketHandlerImpl
 					
 							// don't remove the request if there are more replies to come
 						
-						request = (PRUDPPacketHandlerRequestImpl)requests.get(new Integer(packet.getTransactionId()));
+						request = (PRUDPPacketHandlerRequestImpl)requests.get(packet.getTransactionId());
 
 					}else{
 					
-						request = (PRUDPPacketHandlerRequestImpl)requests.remove(new Integer(packet.getTransactionId()));
+						request = (PRUDPPacketHandlerRequestImpl)requests.remove(packet.getTransactionId());
 					}
 
 				}finally{
@@ -1249,7 +1249,7 @@ PRUDPPacketHandlerImpl
 			try{
 				requests_mon.enter();
 					
-				requests.put( new Integer( request_packet.getTransactionId()), request );
+				requests.put(request_packet.getTransactionId(), request );
 				
 			}finally{
 				
@@ -1447,7 +1447,7 @@ PRUDPPacketHandlerImpl
 				try{
 					requests_mon.enter();
 					
-					requests.remove( new Integer( request_packet.getTransactionId()));
+					requests.remove(request_packet.getTransactionId());
 					
 				}finally{
 					
@@ -1601,9 +1601,9 @@ PRUDPPacketHandlerImpl
 	getSendQueueLength()
 	{
 		int	res = 0;
-		for (int i=0;i<send_queues.length;i++){
-			res += send_queues[i].size();
-		}
+        for (List send_queue : send_queues) {
+            res += send_queue.size();
+        }
 
 		PRUDPPacketHandlerImpl delegate = altProtocolDelegate;
 		
@@ -1773,13 +1773,13 @@ PRUDPPacketHandlerImpl
 	protected interface
 	PacketTransformer
 	{
-		public void
+		void
 		transformSend(
-			DatagramPacket	packet );
+                DatagramPacket packet);
 			
-		public void
+		void
 		transformReceive(
-			DatagramPacket	packet );
+                DatagramPacket packet);
 			
 	}
 }

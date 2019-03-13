@@ -382,7 +382,7 @@ ResourceDownloaderURLImpl
 							
 							int response = con.getResponseCode();
 							
-							setProperty( "URL_HTTP_Response", new Long( response ));
+							setProperty( "URL_HTTP_Response", (long) response);
 
 							if ((response != HttpURLConnection.HTTP_ACCEPTED) && (response != HttpURLConnection.HTTP_OK)) {
 								
@@ -405,7 +405,7 @@ ResourceDownloaderURLImpl
 									}
 								}
 								
-								throw( new ResourceDownloaderException( this, "Error on connect for '" + trimForDisplay( dest ) + "': " + Integer.toString(response) + " " + con.getResponseMessage()));    
+								throw( new ResourceDownloaderException( this, "Error on connect for '" + trimForDisplay( dest ) + "': " + response + " " + con.getResponseMessage()));
 							}
 															
 							getRequestProperties( con );
@@ -684,7 +684,7 @@ ResourceDownloaderURLImpl
 					boolean	dh_hack 			= false;
 					boolean	internal_error_hack	= false;
 					
-					Set<String>	redirect_urls = new HashSet<String>();
+					Set<String>	redirect_urls = new HashSet<>();
 
 					URL		current_url		= outer_url;
 					Proxy 	current_proxy 	= force_proxy;
@@ -767,7 +767,7 @@ redirect_label:
 											
 											TrustManagerFactory tmf = SESecurityManager.getTrustManagerFactory();
 											
-											final List<X509TrustManager>	default_tms = new ArrayList<X509TrustManager>();
+											final List<X509TrustManager>	default_tms = new ArrayList<>();
 											
 											if ( tmf != null ){
 												
@@ -786,14 +786,14 @@ redirect_label:
 														public X509Certificate[] 
 														getAcceptedIssuers() 
 														{
-															List<X509Certificate> result = new ArrayList<X509Certificate>();
+															List<X509Certificate> result = new ArrayList<>();
 															
 															for ( X509TrustManager tm: default_tms ){
 																
 																result.addAll( Arrays.asList(tm.getAcceptedIssuers()));
 															}
 															
-															return( result.toArray(new X509Certificate[result.size()]));
+															return( result.toArray(new X509Certificate[0]));
 														}
 														
 														public void 
@@ -917,7 +917,7 @@ redirect_label:
 										
 										con.setDoOutput(true);
 										
-										String verb = (String)getStringProperty( "URL_HTTP_VERB" );
+										String verb = getStringProperty( "URL_HTTP_VERB" );
 										
 										if ( verb == null ){
 											
@@ -1016,19 +1016,19 @@ redirect_label:
 													try{
 														List<String>	cookies_list = con.getHeaderFields().get( "Set-cookie" );
 														
-														List<String>	cookies_set = new ArrayList<String>();
+														List<String>	cookies_set = new ArrayList<>();
 														
 														if ( cookies_list != null ){
-															
-															for (int i=0;i<cookies_list.size();i++){
-																
-																String[] cookie_bits = ((String)cookies_list.get(i)).split(";");
-																
-																if ( cookie_bits.length > 0 ){
-																
-																	cookies_set.add( cookie_bits[0] );
-																}
-															}
+
+                                                            for (String s : cookies_list) {
+
+                                                                String[] cookie_bits = s.split(";");
+
+                                                                if (cookie_bits.length > 0) {
+
+                                                                    cookies_set.add(cookie_bits[0]);
+                                                                }
+                                                            }
 														}
 														
 														if ( cookies_set.size() > 0 ){
@@ -1066,7 +1066,7 @@ redirect_label:
 										}
 									}
 									
-									setProperty( "URL_HTTP_Response", new Long( response ));
+									setProperty( "URL_HTTP_Response", (long) response);
 	
 									if ( 	response != HttpURLConnection.HTTP_CREATED && 
 											response != HttpURLConnection.HTTP_ACCEPTED && 
@@ -1113,7 +1113,7 @@ redirect_label:
 											}
 										}
 										
-										throw( new ResourceDownloaderException( this, "Error on connect for '" + trimForDisplay( dest ) + "': " + Integer.toString(response) + " " + http_con.getResponseMessage() + (error_str==null?"":( ": error=" + error_str ))));    
+										throw( new ResourceDownloaderException( this, "Error on connect for '" + trimForDisplay( dest ) + "': " + response + " " + http_con.getResponseMessage() + (error_str==null?"":( ": error=" + error_str ))));
 									}
 									
 									getRequestProperties( con );
@@ -1465,56 +1465,54 @@ redirect_label:
 		boolean				use_compression )
 	{
 		Map properties = getLCKeyProperties();
-		
-		Iterator	it = properties.entrySet().iterator();
-		
-		while( it.hasNext()){
-			
-			Map.Entry entry = (Map.Entry)it.next();
-			
-			String	key 	= (String)entry.getKey();
-			Object	value	= entry.getValue();
-			
-			if ( key.startsWith( "url_" ) && value instanceof String ){
-			
-				if ( value.equals( "skip" )){
-					
-					continue;
-				}
-				
-				if ( key.equalsIgnoreCase( "URL_HTTP_VERB" )){
-					
-					continue;
-				}
-				
-				key = key.substring(4);
-				
-				if ( key.equals( "accept-encoding" ) && !use_compression ){
-					
-					//skip
-					
-				}else{
-					
-					String nice_key = "";
-					
-					boolean	upper = true;
-					
-					for ( char c: key.toCharArray()){
-					
-						if ( upper ){
-							c = Character.toUpperCase(c);
-							upper = false;
-						}else if ( c == '-' ){
-							upper = true;
-						}
-						
-						nice_key += c;
-					}
-					
-					con.setRequestProperty(nice_key,(String)value);
-				}
-			}
-		}
+
+        for (Object o : properties.entrySet()) {
+
+            Map.Entry entry = (Map.Entry) o;
+
+            String key = (String) entry.getKey();
+            Object value = entry.getValue();
+
+            if (key.startsWith("url_") && value instanceof String) {
+
+                if (value.equals("skip")) {
+
+                    continue;
+                }
+
+                if (key.equalsIgnoreCase("URL_HTTP_VERB")) {
+
+                    continue;
+                }
+
+                key = key.substring(4);
+
+                if (key.equals("accept-encoding") && !use_compression) {
+
+                    //skip
+
+                } else {
+
+                    String nice_key = "";
+
+                    boolean upper = true;
+
+                    for (char c : key.toCharArray()) {
+
+                        if (upper) {
+                            c = Character.toUpperCase(c);
+                            upper = false;
+                        } else if (c == '-') {
+                            upper = true;
+                        }
+
+                        nice_key += c;
+                    }
+
+                    con.setRequestProperty(nice_key, (String) value);
+                }
+            }
+        }
 	}
 	
 	protected void
@@ -1527,21 +1525,19 @@ redirect_label:
 			setProperty( "URL_URL", con.getURL());
 			
 			Map	headers = con.getHeaderFields();
-			
-			Iterator it = headers.entrySet().iterator();
-			
-			while( it.hasNext()){
-				
-				Map.Entry	entry = (Map.Entry)it.next();
-				
-				String	key = (String)entry.getKey();
-				Object	val	= entry.getValue();
-				
-				if ( key != null ){
-					
-					setProperty( "URL_" + key, val );
-				}
-			}
+
+            for (Object o : headers.entrySet()) {
+
+                Map.Entry entry = (Map.Entry) o;
+
+                String key = (String) entry.getKey();
+                Object val = entry.getValue();
+
+                if (key != null) {
+
+                    setProperty("URL_" + key, val);
+                }
+            }
 			
 			setPropertiesSet();
 			

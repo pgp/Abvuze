@@ -156,7 +156,7 @@ DownloadManagerImpl
 					
 					if ( type == LDT_STATECHANGED ){
 												
-						listener.stateChanged(dm, ((Integer)value[1]).intValue());
+						listener.stateChanged(dm, (Integer) value[1]);
 						
 					}else if ( type == LDT_DOWNLOADCOMPLETE ){
 						
@@ -164,7 +164,7 @@ DownloadManagerImpl
 
 					}else if ( type == LDT_COMPLETIONCHANGED ){
 
-						listener.completionChanged(dm, ((Boolean)value[1]).booleanValue());
+						listener.completionChanged(dm, (Boolean) value[1]);
 
 					}else if ( type == LDT_FILEPRIORITYCHANGED ){
 											
@@ -172,12 +172,12 @@ DownloadManagerImpl
 
 					}else if ( type == LDT_POSITIONCHANGED ){
 																		
-						listener.positionChanged( dm, ((Integer)value[1]).intValue(), ((Integer)value[2]).intValue());	                         
+						listener.positionChanged( dm, (Integer) value[1], (Integer) value[2]);
 					}
 				}
 			});		
 	
-	static final CopyOnWriteList<DownloadManagerListener>	global_dm_listeners = new CopyOnWriteList<DownloadManagerListener>();
+	static final CopyOnWriteList<DownloadManagerListener>	global_dm_listeners = new CopyOnWriteList<>();
 
     private static final DownloadManagerListener global_dm_listener =
 		new DownloadManagerListener() {
@@ -423,8 +423,8 @@ DownloadManagerImpl
 	
 	final AEMonitor	peer_listeners_mon	= new AEMonitor( "DM:DownloadManager:PeerL" );
 	
-	final Map<PEPeer,String>	current_peers 						= new IdentityHashMap<PEPeer, String>();
-	private final Map<PEPeer,Long>	current_peers_unmatched_removal 	= new IdentityHashMap<PEPeer, Long>();
+	final Map<PEPeer,String>	current_peers 						= new IdentityHashMap<>();
+	private final Map<PEPeer,Long>	current_peers_unmatched_removal 	= new IdentityHashMap<>();
 	
 		// PieceListeners
 	
@@ -566,7 +566,7 @@ DownloadManagerImpl
 							try{
 								peer_listeners_mon.enter();
 					 	
-								peers = new ArrayList<PEPeer>( current_peers.keySet());
+								peers = new ArrayList<>(current_peers.keySet());
 					 
 							}finally{
 								
@@ -578,11 +578,9 @@ DownloadManagerImpl
 								public void
 								run()
 								{
-									for (int i=0;i<peers.size();i++){
-										
-										PEPeer	peer = (PEPeer)peers.get(i);
-										
-										peer.getManager().removePeer( peer, "Private torrent: tracker changed" );
+									for (PEPeer peer : peers) {
+
+										peer.getManager().removePeer(peer, "Private torrent: tracker changed");
 									}
 								}
 							}.start();
@@ -827,37 +825,41 @@ DownloadManagerImpl
 					 	attributeEventOccurred(
 							DownloadManager dm, String attribute_name, int event_type) 
 					 	{
-					 		if (attribute_name.equals(DownloadManagerState.AT_FILE_LINKS2)){
-					 							 				
-				 				if ( links_changing.get()){
-					 					
-					 				System.out.println( "recursive!" );
-					 					
-					 				return;
-					 			}
-					 				
-					 			links_changing.set( true );
-					 			
-					 			try{
-					 			
-					 				setFileLinks();
-					 				
-					 			}finally{
-					 				
-					 				links_changing.set( false );
-					 			}
-					 		}else if (attribute_name.equals(DownloadManagerState.AT_PARAMETERS)){
-					 			
-					 			readParameters();
-					 			
-					 		}else if (attribute_name.equals(DownloadManagerState.AT_NETWORKS)){
-					 		
-					 			TRTrackerAnnouncer tc = tracker_client;
-					 			
-					 			if ( tc != null ){
-					 			
-					 				tc.resetTrackerUrl( false );
-					 			}
+							switch (attribute_name) {
+								case DownloadManagerState.AT_FILE_LINKS2:
+
+									if (links_changing.get()) {
+
+										System.out.println("recursive!");
+
+										return;
+									}
+
+									links_changing.set(true);
+
+									try {
+
+										setFileLinks();
+
+									} finally {
+
+										links_changing.set(false);
+									}
+									break;
+								case DownloadManagerState.AT_PARAMETERS:
+
+									readParameters();
+
+									break;
+								case DownloadManagerState.AT_NETWORKS:
+
+									TRTrackerAnnouncer tc = tracker_client;
+
+									if (tc != null) {
+
+										tc.resetTrackerUrl(false);
+									}
+									break;
 							}
 						}
 					};
@@ -945,7 +947,7 @@ DownloadManagerImpl
 				 				
 				 			}else{
 				 				
-				 				torrent_save_dir	= save_dir_file.getParent().toString();
+				 				torrent_save_dir	= save_dir_file.getParent();
 				 				
 				 				torrent_save_file	= save_dir_file.getName();
 				 			}
@@ -959,7 +961,7 @@ DownloadManagerImpl
 	
 				 			}
 				 			
-			 				torrent_save_dir	= save_dir_file.getParent().toString();
+			 				torrent_save_dir	= save_dir_file.getParent();
 			 				
 			 				torrent_save_file	= save_dir_file.getName(); 			
 				 		}
@@ -979,7 +981,7 @@ DownloadManagerImpl
 				 			}
 				 			
 				 			if ( save_dir_file.getName().equals( display_name )){
-				 				torrent_save_dir	= save_dir_file.getParent().toString();
+				 				torrent_save_dir	= save_dir_file.getParent();
 				 			}
 				 		}
 				 		
@@ -1204,8 +1206,8 @@ DownloadManagerImpl
 				read_torrent_state = 
 					new Object[]{ 	
 						torrent_save_dir, torrent_save_file, torrent_hash,
-						Boolean.valueOf(new_torrent), Boolean.valueOf(for_seeding), Boolean.valueOf(has_ever_been_started),
-						new Integer( initial_state )
+							new_torrent, for_seeding, has_ever_been_started,
+							initial_state
 					};
 	
 					// torrent's stuffed - create a dummy "null object" to simplify use
@@ -1304,10 +1306,10 @@ DownloadManagerImpl
 				(String)read_torrent_state[0],
 				(String)read_torrent_state[1],
 				(byte[])read_torrent_state[2],
-				((Boolean)read_torrent_state[3]).booleanValue(),
-				((Boolean)read_torrent_state[4]).booleanValue(),
-				((Boolean)read_torrent_state[5]).booleanValue(),
-				((Integer)read_torrent_state[6]).intValue());
+				(Boolean) read_torrent_state[3],
+				(Boolean) read_torrent_state[4],
+				(Boolean) read_torrent_state[5],
+				(Integer) read_torrent_state[6]);
 
 	}
 	
@@ -1585,9 +1587,9 @@ DownloadManagerImpl
 		
 		Iterator<LinkFileMap.Entry> it = links.entryIterator();
 		
-		List<Integer>	from_indexes 	= new ArrayList<Integer>();
-		List<File>		from_links 		= new ArrayList<File>();
-		List<File>		to_links		= new ArrayList<File>();
+		List<Integer>	from_indexes 	= new ArrayList<>();
+		List<File>		from_links 		= new ArrayList<>();
+		List<File>		to_links		= new ArrayList<>();
 		
 		while(it.hasNext()){
 			
@@ -2212,7 +2214,7 @@ DownloadManagerImpl
 
 		listeners.dispatch(LDT_COMPLETIONCHANGED, new Object[] {
 				this,
-			Boolean.valueOf(_assumedComplete)
+				_assumedComplete
 		});
 	}
   
@@ -2617,14 +2619,12 @@ DownloadManagerImpl
 					URL[]	urls = set.getAnnounceURLs();
     			
 					List	rand_urls = new ArrayList();
-    							 	
-					for (int j=0;j<urls.length;j++ ){
-			  		
-						URL url = urls[j];
-					            									
-						int pos = (int)(scrape_random.nextDouble() *  (rand_urls.size()+1));
-					
-						rand_urls.add(pos,url);
+
+					for (URL url : urls) {
+
+						int pos = (int) (scrape_random.nextDouble() * (rand_urls.size() + 1));
+
+						rand_urls.add(pos, url);
 					}
 			 	
 					for (int j=0;response==null && j<rand_urls.size();j++){
@@ -2705,7 +2705,7 @@ DownloadManagerImpl
 	public List<TRTrackerScraperResponse>
 	getGoodTrackerScrapeResponses()
 	{
-		List<TRTrackerScraperResponse> 	responses	= new ArrayList<TRTrackerScraperResponse>();
+		List<TRTrackerScraperResponse> 	responses	= new ArrayList<>();
 		
 		if ( torrent != null){
 			
@@ -2736,25 +2736,23 @@ DownloadManagerImpl
 					}
 				}
 			}else{
-    			       		
-				for (int i=0; i<sets.length;i++){
-    			
-					TOTorrentAnnounceURLSet	set = sets[i];
-    			
-					URL[]	urls = set.getAnnounceURLs();
-    			   							 				 	
-					for ( URL url: urls ){
-												
-						TRTrackerScraperResponse response = scraper.peekScrape( torrent, url );
-			 		
-						if ( response!= null ){
-							
-							int status = response.getStatus();
-														
-							if ( status == TRTrackerScraperResponse.ST_ONLINE ) {
-								
 
-								responses.add( response );
+				for (TOTorrentAnnounceURLSet set : sets) {
+
+					URL[] urls = set.getAnnounceURLs();
+
+					for (URL url : urls) {
+
+						TRTrackerScraperResponse response = scraper.peekScrape(torrent, url);
+
+						if (response != null) {
+
+							int status = response.getStatus();
+
+							if (status == TRTrackerScraperResponse.ST_ONLINE) {
+
+
+								responses.add(response);
 							}
 						}
 					}
@@ -2806,19 +2804,19 @@ DownloadManagerImpl
 		int		count )
 	{
 			// activation request for a queued torrent
-				
-		for (Iterator it = activation_listeners.iterator();it.hasNext();){
-			
-			DownloadManagerActivationListener	listener = (DownloadManagerActivationListener)it.next();
-			
-			try{
-				
-				if ( listener.activateRequest( count )){
-					
-					return( true );
+
+		for (Object activation_listener : activation_listeners) {
+
+			DownloadManagerActivationListener listener = (DownloadManagerActivationListener) activation_listener;
+
+			try {
+
+				if (listener.activateRequest(count)) {
+
+					return (true);
 				}
-			}catch( Throwable e ){
-				
+			} catch (Throwable e) {
+
 				Debug.printStackTrace(e);
 			}
 		}
@@ -2924,7 +2922,7 @@ DownloadManagerImpl
 				
 			if ( triggerStateChange ){
 				
-				listeners.dispatch( listener, LDT_STATECHANGED, new Object[]{ this, new Integer( getState() )});
+				listeners.dispatch( listener, LDT_STATECHANGED, new Object[]{ this, getState()});
 			}
 
 				// we DON'T dispatch a downloadComplete event here as this event is used to mark the
@@ -2987,7 +2985,7 @@ DownloadManagerImpl
 				}
 				
 				
-				listeners.dispatch( LDT_STATECHANGED, new Object[]{ this, new Integer( new_state )});
+				listeners.dispatch( LDT_STATECHANGED, new Object[]{ this, new_state});
 			}
 			
 		}finally{
@@ -3018,8 +3016,7 @@ DownloadManagerImpl
 			try{
 				listeners_mon.enter();
 
-				for(int i=0;i<files.size();i++)
-					listeners.dispatch( LDT_FILEPRIORITYCHANGED, new Object[]{ this, (DiskManagerFileInfo)files.get(i) });
+				for (Object file : files) listeners.dispatch(LDT_FILEPRIORITYCHANGED, new Object[]{this, file});
 			
 			}finally{
 				
@@ -3052,7 +3049,7 @@ DownloadManagerImpl
 				
 				listeners.dispatch( 
 					LDT_POSITIONCHANGED, 
-					new Object[]{ this, new Integer( old_position ), new Integer( new_position )});
+					new Object[]{ this, old_position, new_position});
 				
 				// an active torrent changed its position, scheduling needs to be updated
 				if(getState() == DownloadManager.STATE_SEEDING || getState() == DownloadManager.STATE_DOWNLOADING)
@@ -3130,10 +3127,10 @@ DownloadManagerImpl
 			
 			if (!bDispatchForExisting)
 				return; // finally will call
-		
-			for (int i=0;i<current_pieces.size();i++){
-  			
-				piece_listeners.dispatch( listener, LDT_PE_PIECE_ADDED, current_pieces.get(i));
+
+			for (Object current_piece : current_pieces) {
+
+				piece_listeners.dispatch(listener, LDT_PE_PIECE_ADDED, current_piece);
 			}
   	
 		}finally{
@@ -3229,7 +3226,7 @@ DownloadManagerImpl
 		try{
 			peer_listeners_mon.enter();
 
-			return( current_peers.keySet().toArray(new PEPeer[current_peers.size()]));
+			return( current_peers.keySet().toArray(new PEPeer[0]));
 			
 		}finally{
 			
@@ -3278,7 +3275,7 @@ DownloadManagerImpl
 		try{
 			piece_listeners_mon.enter();
 
-			return (PEPiece[])current_pieces.toArray(new PEPiece[current_pieces.size()]);
+			return (PEPiece[])current_pieces.toArray(new PEPiece[0]);
 			
 		}finally{
 			
@@ -3295,14 +3292,14 @@ DownloadManagerImpl
 			// creation before it actually starts
 		
 		List l = peer_listeners.getListenersCopy();
-		
-		for (int i=0;i<l.size();i++){
-			
-			try{
-				((DownloadManagerPeerListener)l.get(i)).peerManagerWillBeAdded( pm );
-				
-			}catch( Throwable e ){
-				
+
+		for (Object o : l) {
+
+			try {
+				((DownloadManagerPeerListener) o).peerManagerWillBeAdded(pm);
+
+			} catch (Throwable e) {
+
 				Debug.printStackTrace(e);
 			}
 		}
@@ -3820,7 +3817,7 @@ DownloadManagerImpl
 						
 					}else{
 						
-						data_ref = new LightHashMap<Object,Object>( data_ref );
+						data_ref = new LightHashMap<>(data_ref);
 						
 						data_ref.remove( key );
 					}
@@ -3832,11 +3829,11 @@ DownloadManagerImpl
 
 				if ( data_ref == null ){
 					
-					data_ref = new LightHashMap<Object,Object>();
+					data_ref = new LightHashMap<>();
 					
 				}else{
 				
-					data_ref = new LightHashMap<Object,Object>( data_ref );
+					data_ref = new LightHashMap<>(data_ref);
 				}
 				
 				data_ref.put( key, value );
@@ -3886,7 +3883,7 @@ DownloadManagerImpl
 					return;
 				}
 				
-				map = new LightHashMap<String, Object>();
+				map = new LightHashMap<>();
 				
 				map.put( key, value );
 				
@@ -4147,7 +4144,7 @@ DownloadManagerImpl
 				  
 		  	FileUtil.mkdirs(new_save_location.getParentFile());
 				  
-			  setTorrentSaveDir(new_save_location.getParent().toString(), new_save_location.getName());
+			  setTorrentSaveDir(new_save_location.getParent(), new_save_location.getName());
 			  
 			  return;
 		  }
@@ -4201,24 +4198,27 @@ DownloadManagerImpl
               // Required for the adding of parent directories logic.
               files_to_move.add(null);
               DiskManagerFileInfo[] info_files = controller.getDiskManagerFileInfo();
-              for (int i=0; i<info_files.length; i++) {
-                  File f = info_files[i].getFile(true);
-                  try {f = f.getCanonicalFile();}
-                  catch (IOException ioe) {f = f.getAbsoluteFile();}
-                  boolean added_entry = files_to_move.add(f);
+			  for (DiskManagerFileInfo info_file : info_files) {
+				  File f = info_file.getFile(true);
+				  try {
+					  f = f.getCanonicalFile();
+				  } catch (IOException ioe) {
+					  f = f.getAbsoluteFile();
+				  }
+				  boolean added_entry = files_to_move.add(f);
 
-                  /**
-                   * Start adding all the parent directories to the
-                   * files_to_move list. Doesn't matter if we include
-                   * files which are outside of the file path, the
-                   * renameFile call won't try to move those directories
-                   * anyway.
-                   */
-                  while (added_entry) {
-                      f = f.getParentFile();
-                      added_entry = files_to_move.add(f);
-                  }
-              }
+				  /**
+				   * Start adding all the parent directories to the
+				   * files_to_move list. Doesn't matter if we include
+				   * files which are outside of the file path, the
+				   * renameFile call won't try to move those directories
+				   * anyway.
+				   */
+				  while (added_entry) {
+					  f = f.getParentFile();
+					  added_entry = files_to_move.add(f);
+				  }
+			  }
 			  FileFilter ff = new FileFilter() {
 				  public boolean accept(File f) {return files_to_move.contains(f);}
 			  };
@@ -4548,7 +4548,7 @@ DownloadManagerImpl
   			
   			if ( tps_data == null ){
 
-  				tps = new ArrayList<TrackerPeerSource>();
+  				tps = new ArrayList<>();
 
   				TOTorrentListener tol =
   					new TOTorrentListener()
@@ -4571,7 +4571,7 @@ DownloadManagerImpl
 
 						  			if ( tps_listeners != null ){
 						  				
-						  				to_inform = new ArrayList<DownloadManagerTPSListener>( tps_listeners );
+						  				to_inform = new ArrayList<>(tps_listeners);
 						  			}
 						  		}finally{
 
@@ -4993,7 +4993,7 @@ DownloadManagerImpl
 								{
 									List<List<String>> lists = TorrentUtils.announceGroupsToList( t );
 
-									List<String>	rem = new ArrayList<String>();
+									List<String>	rem = new ArrayList<>();
 									
 									for ( URL u: urls ){
 										rem.add( u.toExternalForm());
@@ -5357,7 +5357,7 @@ DownloadManagerImpl
     		
     		if ( tps_listeners == null ){
     			
-    			tps_listeners = new ArrayList<DownloadManagerTPSListener>(1);
+    			tps_listeners = new ArrayList<>(1);
     		}
     		
     		tps_listeners.add( listener );

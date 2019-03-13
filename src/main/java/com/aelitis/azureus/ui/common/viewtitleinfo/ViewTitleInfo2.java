@@ -31,5 +31,5 @@ import com.aelitis.azureus.ui.mdi.MultipleDocumentInterface;
 public interface ViewTitleInfo2
 	extends ViewTitleInfo
 {
-	public void titleInfoLinked(MultipleDocumentInterface mdi, MdiEntry mdiEntry);
+	void titleInfoLinked(MultipleDocumentInterface mdi, MdiEntry mdiEntry);
 }

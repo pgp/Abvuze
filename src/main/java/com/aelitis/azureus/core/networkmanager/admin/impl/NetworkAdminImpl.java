@@ -25,6 +25,7 @@ import java.io.PrintWriter;
 import java.net.*;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.UnsupportedAddressTypeException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -109,7 +110,7 @@ NetworkAdminImpl
 	
 	
 	private Set<NetworkInterface>				old_network_interfaces;
-	private final Map<String,AddressHistoryRecord>	address_history			= new HashMap<String,AddressHistoryRecord>();
+	private final Map<String,AddressHistoryRecord>	address_history			= new HashMap<>();
 	private long								address_history_update_time;
 	
 	private InetAddress[]				currentBindIPs			= new InetAddress[] { null };
@@ -265,7 +266,7 @@ NetworkAdminImpl
 					try{
 						Class.forName( "com.aelitis.azureus.core.networkmanager.admin.impl.swt.NetworkAdminSWTImpl" ).getConstructor(
 							new Class[]{ AzureusCore.class, NetworkAdminImpl.class }).newInstance(
-								new Object[]{ core, NetworkAdminImpl.this });
+								core, NetworkAdminImpl.this);
 						
 					}catch( Throwable e ){
 					}
@@ -363,18 +364,14 @@ NetworkAdminImpl
 						changed = true;
 							
 					}else if ( old_network_interfaces == null ){
-						
-						Set<NetworkInterface>	new_network_interfaces = new HashSet<NetworkInterface>();
-						
-						new_network_interfaces.addAll( x );
-						
-						old_network_interfaces = new_network_interfaces;
+
+						old_network_interfaces = new HashSet<>(x);
 						
 						changed = true;
 						
 					}else{
 						
-						Set<NetworkInterface>	new_network_interfaces = new HashSet<NetworkInterface>();
+						Set<NetworkInterface>	new_network_interfaces = new HashSet<>();
 						
 						for ( NetworkInterface ni: x ){
 							
@@ -405,29 +402,25 @@ NetworkAdminImpl
 						
 						long now = SystemTime.getMonotonousTime();
 		
-						List<AddressHistoryRecord>	a_history = new ArrayList<AddressHistoryRecord>();
+						List<AddressHistoryRecord>	a_history = new ArrayList<>();
 						
 						if (interfaces != null)
 						{
-							Iterator<NetworkInterface> it = interfaces.iterator();
-							while (it.hasNext())
-							{
-								NetworkInterface ni = it.next();
+							for (NetworkInterface ni : interfaces) {
 								Enumeration addresses = ni.getInetAddresses();
-								while (addresses.hasMoreElements())
-								{
+								while (addresses.hasMoreElements()) {
 									InetAddress ia = (InetAddress) addresses.nextElement();
-									
-									a_history.add( new AddressHistoryRecord( ni, ia, now ));
-									
-									if (ia.isLoopbackAddress()){
+
+									a_history.add(new AddressHistoryRecord(ni, ia, now));
+
+									if (ia.isLoopbackAddress()) {
 										continue;
 									}
-									if (ia instanceof Inet6Address && !ia.isLinkLocalAddress()){
-										if ( IPv6_enabled ){
+									if (ia instanceof Inet6Address && !ia.isLinkLocalAddress()) {
+										if (IPv6_enabled) {
 											newV6 = true;
 										}
-									}else if (ia instanceof Inet4Address){
+									} else if (ia instanceof Inet4Address) {
 										newV4 = true;
 									}
 								}
@@ -553,10 +546,9 @@ NetworkAdminImpl
 	public InetAddress[] getMultiHomedServiceBindAddresses(boolean nio)
 	{
 		InetAddress[] bindIPs = currentBindIPs;
-		for(int i=0;i<bindIPs.length;i++)
-		{
-			if(bindIPs[i].isAnyLocalAddress())
-				return new InetAddress[] {nio && !supportsIPv6withNIO && bindIPs[i] instanceof Inet6Address ? anyLocalAddressIPv4 : bindIPs[i]};
+		for (InetAddress bindIP : bindIPs) {
+			if (bindIP.isAnyLocalAddress())
+				return new InetAddress[]{nio && !supportsIPv6withNIO && bindIP instanceof Inet6Address ? anyLocalAddressIPv4 : bindIP};
 		}
 		return bindIPs;
 	}
@@ -603,7 +595,7 @@ NetworkAdminImpl
 			
 		}else{
 			
-			List<InetAddress> res = new ArrayList<InetAddress>();
+			List<InetAddress> res = new ArrayList<>();
 			
 			InetAddress[] bind_ips = currentBindIPs;
 			
@@ -615,7 +607,7 @@ NetworkAdminImpl
 				}
 			}
 			
-			return( res.toArray( new InetAddress[ res.size()]));
+			return( res.toArray(new InetAddress[0]));
 		}
 	}
 	
@@ -628,81 +620,73 @@ NetworkAdminImpl
 	
 	private InetAddress[] calcBindAddresses(final String addressString, boolean enforceBind)
 	{
-		ArrayList<InetAddress> addrs = new ArrayList<InetAddress>();
+		ArrayList<InetAddress> addrs = new ArrayList<>();
 		
 		Pattern addressSplitter = Pattern.compile(";");
 		Pattern interfaceSplitter = Pattern.compile("[\\]\\[]");
 		
 		String[] tokens = addressSplitter.split(addressString);
 
-addressLoop: 
-		for(int i=0;i<tokens.length;i++)
-		{
-			String currentAddress = tokens[i];
-			
-			currentAddress = currentAddress.trim();
-			
-			if ( currentAddress.length() == 0 ){
-				continue;
-			}
-			
-			InetAddress parsedAddress = null;
-			
-			try
-			{ // literal ipv4 or ipv6 address
-				if(currentAddress.indexOf('.') != -1 || currentAddress.indexOf(':') != -1)
-					parsedAddress = InetAddress.getByName(currentAddress);
-			} catch (Exception e)
-			{ // ignore, could be an interface name containing a ':'
-			}
-			
-			if(parsedAddress != null)
-			{
-				try
-				{
-					// allow wildcard address as 1st address, otherwise only interface addresses
-					if((!parsedAddress.isAnyLocalAddress() || addrs.size() > 0) && NetUtils.getByInetAddress(parsedAddress) == null)
-						continue;
-				} catch ( Throwable e)
-				{
-					Debug.printStackTrace(e);
-					continue;
-				}
-				addrs.add(parsedAddress);
-				continue;
-			}
-				
-			// interface name
-			String[] ifaces = interfaceSplitter.split(currentAddress);
+addressLoop:
+for (String token : tokens) {
+	String currentAddress = token;
 
-			NetworkInterface netInterface = null;
-			try
-			{
-				netInterface = NetUtils.getByName(ifaces[0]);
-			} catch (Throwable e)
-			{
-				e.printStackTrace(); // should not happen
-			}
-			if(netInterface == null)
-				continue;
+	currentAddress = currentAddress.trim();
 
-			Enumeration interfaceAddresses = netInterface.getInetAddresses();
-			if(ifaces.length != 2)
-				while(interfaceAddresses.hasMoreElements())
-					addrs.add((InetAddress)interfaceAddresses.nextElement());
-			else
-			{
-				int selectedAddress = 0;
-				try { selectedAddress = Integer.parseInt(ifaces[1]); }
-				catch (NumberFormatException e) {} // ignore, user could by typing atm
-				for(int j=0;interfaceAddresses.hasMoreElements();j++,interfaceAddresses.nextElement())
-					if(j==selectedAddress)
-					{
-						addrs.add((InetAddress)interfaceAddresses.nextElement());
-						continue addressLoop;						
-					}
-			}
+	if (currentAddress.length() == 0) {
+		continue;
+	}
+
+	InetAddress parsedAddress = null;
+
+	try { // literal ipv4 or ipv6 address
+		if (currentAddress.indexOf('.') != -1 || currentAddress.indexOf(':') != -1)
+			parsedAddress = InetAddress.getByName(currentAddress);
+	} catch (Exception e) { // ignore, could be an interface name containing a ':'
+	}
+
+	if (parsedAddress != null) {
+		try {
+			// allow wildcard address as 1st address, otherwise only interface addresses
+			if ((!parsedAddress.isAnyLocalAddress() || addrs.size() > 0) && NetUtils.getByInetAddress(parsedAddress) == null)
+				continue;
+		} catch (Throwable e) {
+			Debug.printStackTrace(e);
+			continue;
 		}
+		addrs.add(parsedAddress);
+		continue;
+	}
+
+	// interface name
+	String[] ifaces = interfaceSplitter.split(currentAddress);
+
+	NetworkInterface netInterface = null;
+	try {
+		netInterface = NetUtils.getByName(ifaces[0]);
+	} catch (Throwable e) {
+		e.printStackTrace(); // should not happen
+	}
+	if (netInterface == null)
+		continue;
+
+	Enumeration interfaceAddresses = netInterface.getInetAddresses();
+	if (ifaces.length != 2)
+		while (interfaceAddresses.hasMoreElements())
+			addrs.add((InetAddress) interfaceAddresses.nextElement());
+	else {
+		int selectedAddress = 0;
+		try {
+			selectedAddress = Integer.parseInt(ifaces[1]);
+		} catch (NumberFormatException e) {
+		} // ignore, user could by typing atm
+		for (int j = 0; interfaceAddresses.hasMoreElements(); j++, interfaceAddresses.nextElement())
+			if (j == selectedAddress) {
+				addrs.add((InetAddress) interfaceAddresses.nextElement());
+				continue addressLoop;
+			}
+	}
+}
 		
 		if ( !IPv6_enabled ){
 			
@@ -721,7 +705,7 @@ addressLoop:
 			return new InetAddress[] {enforceBind ? localhostV4 : (hasIPV6Potential() ? anyLocalAddressIPv6 : anyLocalAddressIPv4)};
 		}
 		
-		return( addrs.toArray(new InetAddress[addrs.size()]));
+		return( addrs.toArray(new InetAddress[0]));
 
 	}
 	
@@ -750,86 +734,86 @@ addressLoop:
 		String[] tokens = addressSplitter.split( bind_ips );
 
 		String	failed_entries = "";
-		
-		for ( int i=0;i<tokens.length;i++ ){
-			
-			String currentAddress = tokens[i];
-			
+
+		for (String token : tokens) {
+
+			String currentAddress = token;
+
 			currentAddress = currentAddress.trim();
-			
-			if ( currentAddress.length() == 0 ){
-				
+
+			if (currentAddress.length() == 0) {
+
 				continue;
 			}
-			
+
 			boolean ok = false;
-			
+
 			InetAddress parsedAddress = null;
-			
-			try{
-				if ( currentAddress.indexOf('.') != -1 || currentAddress.indexOf(':') != -1 ){
-					
+
+			try {
+				if (currentAddress.indexOf('.') != -1 || currentAddress.indexOf(':') != -1) {
+
 					parsedAddress = InetAddress.getByName(currentAddress);
 				}
-			}catch ( Throwable e){
+			} catch (Throwable e) {
 			}
-			
-			if ( parsedAddress != null ){
-				
-				try{	
-					if (  	parsedAddress.isAnyLocalAddress() || 
-							NetUtils.getByInetAddress( parsedAddress ) != null ){
-						
+
+			if (parsedAddress != null) {
+
+				try {
+					if (parsedAddress.isAnyLocalAddress() ||
+							NetUtils.getByInetAddress(parsedAddress) != null) {
+
 						ok = true;
 					}
-					
-				}catch( Throwable e ){	
+
+				} catch (Throwable e) {
 				}
-			}else{
-				
-					// interface name
-				
-				String[] ifaces = interfaceSplitter.split( currentAddress );
-	
+			} else {
+
+				// interface name
+
+				String[] ifaces = interfaceSplitter.split(currentAddress);
+
 				NetworkInterface netInterface = null;
-				
-				try{
-					netInterface = NetUtils.getByName( ifaces[0] );
-					
-				}catch( Throwable e ){
+
+				try {
+					netInterface = NetUtils.getByName(ifaces[0]);
+
+				} catch (Throwable e) {
 				}
-				
-				if ( netInterface != null ){
-	
+
+				if (netInterface != null) {
+
 					Enumeration interfaceAddresses = netInterface.getInetAddresses();
-				
-					if ( ifaces.length != 2 ){
-				
+
+					if (ifaces.length != 2) {
+
 						ok = interfaceAddresses.hasMoreElements();
-						
-					}else{
-				
-						try{ 
-							int selectedAddress = Integer.parseInt(ifaces[1]); 
-							
-							for( int j=0; interfaceAddresses.hasMoreElements(); j++, interfaceAddresses.nextElement()){
-						
-								if (j == selectedAddress ){
-									
+
+					} else {
+
+						try {
+							int selectedAddress = Integer.parseInt(ifaces[1]);
+
+							for (int j = 0; interfaceAddresses.hasMoreElements(); j++, interfaceAddresses.nextElement()) {
+
+								if (j == selectedAddress) {
+
 									ok = true;
-									
+
 									break;
 								}
 							}
-						}catch( Throwable e ){						
+						} catch (Throwable e) {
 						}
 					}
 				}
 			}
-			
-			if ( !ok ){
-				
-				failed_entries += (failed_entries.length()==0?"":", " ) + currentAddress;
+
+			if (!ok) {
+
+				failed_entries += (failed_entries.length() == 0 ? "" : ", ") + currentAddress;
 			}
 		}
 		
@@ -959,7 +943,7 @@ addressLoop:
 		boolean	ignore_loopback,
 		boolean	ignore_link_local )
 	{
-  		List<InetAddress>	bindable = new ArrayList<InetAddress>();
+  		List<InetAddress>	bindable = new ArrayList<>();
   		
   		NetworkAdminNetworkInterface[] interfaces = NetworkAdmin.getSingleton().getInterfaces();
   		
@@ -984,7 +968,7 @@ addressLoop:
   			}
   		}
   		
-  		return( bindable.toArray( new InetAddress[ bindable.size()]));
+  		return( bindable.toArray(new InetAddress[0]));
   	}
   	
   	protected boolean
@@ -1108,37 +1092,33 @@ addressLoop:
 				NetworkAdminNetworkInterface[] interfaces = getInterfaces();
 				
 				List possible = new ArrayList();
-				
-				for (int i=0;i<interfaces.length;i++){
-					
-					NetworkAdminNetworkInterface intf = interfaces[i];
-					
+
+				for (NetworkAdminNetworkInterface intf : interfaces) {
+
 					NetworkAdminNetworkInterfaceAddress[] addresses = intf.getAddresses();
-					
-					for (int j=0;j<addresses.length;j++){
-						
-						NetworkAdminNetworkInterfaceAddress address = addresses[j];
-						
+
+					for (NetworkAdminNetworkInterfaceAddress address : addresses) {
+
 						InetAddress ia = address.getAddress();
-						
-						if ( ia.isLoopbackAddress()){
-							
+
+						if (ia.isLoopbackAddress()) {
+
 							continue;
 						}
-						
-						if ( ia.isLinkLocalAddress() ||	ia.isSiteLocalAddress()){
-							
-							local_addresses.add( ia );
-							
-						}else{
-							
-							non_local_addresses.add( ia );
+
+						if (ia.isLinkLocalAddress() || ia.isSiteLocalAddress()) {
+
+							local_addresses.add(ia);
+
+						} else {
+
+							non_local_addresses.add(ia);
 						}
-						
-						if ( 	( hasIPV4Potential() && ia instanceof Inet4Address ) ||
-								( hasIPV6Potential() && ia instanceof Inet6Address )){
-							
-							possible.add( ia );
+
+						if ((hasIPV4Potential() && ia instanceof Inet4Address) ||
+								(hasIPV6Potential() && ia instanceof Inet6Address)) {
+
+							possible.add(ia);
 						}
 					}
 				}
@@ -1179,20 +1159,18 @@ addressLoop:
 				final InetAddress[]	can_connect = { null };
 				
 				final int	timeout = 10*1000;
-				
-				for (int i=0;i<local_addresses.size();i++){
-					
-					final InetAddress address = (InetAddress)local_addresses.get(i);
-					
-					new AEThread2( "NA:conTest", true )
-					{
+
+				for (Object local_address : local_addresses) {
+
+					final InetAddress address = (InetAddress) local_address;
+
+					new AEThread2("NA:conTest", true) {
 						public void
-						run()
-						{
-							if ( canConnectWithBind( address, timeout )){
-								
+						run() {
+							if (canConnectWithBind(address, timeout)) {
+
 								can_connect[0] = address;
-								
+
 								sem.release();
 							}
 						}
@@ -1238,33 +1216,21 @@ addressLoop:
 		InetAddress	bind_address,
 		int			timeout )
 	{
-		Socket	socket = null;
-	
-		try{
-			socket = new Socket();
 
-			socket.bind( new InetSocketAddress( bind_address, 0 ));
+		try (Socket socket = new Socket()) {
 
-			socket.setSoTimeout( timeout );
+			socket.bind(new InetSocketAddress(bind_address, 0));
 
-			socket.connect( new InetSocketAddress( "www.google.com", 80 ), timeout );
-			
-			return( true );
-			
-		}catch( Throwable e ){
-			
-			return( false );
-			
-		}finally{
-			
-			if ( socket != null ){
-				
-				try{
-					socket.close();
-					
-				}catch( Throwable f ){
-				}
-			}
+			socket.setSoTimeout(timeout);
+
+			socket.connect(new InetSocketAddress("www.google.com", 80), timeout);
+
+			return (true);
+
+		} catch (Throwable e) {
+
+			return (false);
+
 		}
 	}
 	
@@ -1278,37 +1244,33 @@ addressLoop:
 		
 		InetAddress	best_bind_address	= null;
 		int			best_prefix			= 0;
-		
-		for (int i=0;i<interfaces.length;i++){
-			
-			NetworkAdminNetworkInterface intf = interfaces[i];
-			
+
+		for (NetworkAdminNetworkInterface intf : interfaces) {
+
 			NetworkAdminNetworkInterfaceAddress[] addresses = intf.getAddresses();
-			
-			for (int j=0;j<addresses.length;j++){
-				
-				NetworkAdminNetworkInterfaceAddress bind_address = addresses[j];
-				
+
+			for (NetworkAdminNetworkInterfaceAddress bind_address : addresses) {
+
 				InetAddress ba = bind_address.getAddress();
 
-				byte[]	bind_bytes = ba.getAddress();
-		
-				if ( address_bits.length == bind_bytes.length ){
-			
-					boolean[]	bind_bits = bytesToBits( bind_bytes );
+				byte[] bind_bytes = ba.getAddress();
 
-					for (int k=0;k<bind_bits.length;k++){
-				
-						if ( address_bits[k] != bind_bits[k] ){
-					
+				if (address_bits.length == bind_bytes.length) {
+
+					boolean[] bind_bits = bytesToBits(bind_bytes);
+
+					for (int k = 0; k < bind_bits.length; k++) {
+
+						if (address_bits[k] != bind_bits[k]) {
+
 							break;
 						}
-				
-						if ( k > best_prefix ){
-					
-							best_prefix	= k;
-					
-							best_bind_address	= ba;
+
+						if (k > best_prefix) {
+
+							best_prefix = k;
+
+							best_bind_address = ba;
 						}
 					}
 				}
@@ -1343,36 +1305,36 @@ addressLoop:
 	{
 			// prioritise 192.168.0.* and 192.168.1.* as common
 			// then ipv4 over ipv6
-		
-		for (int i=0;i<addresses.size();i++){
-			
-			InetAddress address = (InetAddress)addresses.get(i);
-			
+
+		for (Object address3 : addresses) {
+
+			InetAddress address = (InetAddress) address3;
+
 			String str = address.getHostAddress();
-			
-			if ( str.startsWith( "192.168.0." ) || str.startsWith( "192.168.1." )){
-				
-				return( address );
+
+			if (str.startsWith("192.168.0.") || str.startsWith("192.168.1.")) {
+
+				return (address);
 			}
 		}
-		
-		for (int i=0;i<addresses.size();i++){
-			
-			InetAddress address = (InetAddress)addresses.get(i);
-			
-			if ( address instanceof Inet4Address ){
-				
-				return( address );
+
+		for (Object address2 : addresses) {
+
+			InetAddress address = (InetAddress) address2;
+
+			if (address instanceof Inet4Address) {
+
+				return (address);
 			}
 		}
-		
-		for (int i=0;i<addresses.size();i++){
-			
-			InetAddress address = (InetAddress)addresses.get(i);
-			
-			if ( address instanceof Inet6Address ){
-				
-				return( address );
+
+		for (Object address1 : addresses) {
+
+			InetAddress address = (InetAddress) address1;
+
+			if (address instanceof Inet6Address) {
+
+				return (address);
 			}
 		}
 		
@@ -1533,7 +1495,7 @@ addressLoop:
 			// found v6 any-local address, check interfaces for a best match
 			if(addr instanceof Inet6Address && addr.isAnyLocalAddress())
 			{
-				ArrayList<InetAddress> addrs = new ArrayList<InetAddress>();
+				ArrayList<InetAddress> addrs = new ArrayList<>();
 				for(NetworkInterface iface : old_network_interfaces)
 					addrs.addAll(Collections.list(iface.getInetAddresses()));
 				
@@ -1573,15 +1535,14 @@ addressLoop:
 	firePropertyChange(
 		String	property )
 	{
-		Iterator it = listeners.iterator();
-		
-		while( it.hasNext()){
-			
-			try{
-				((NetworkAdminPropertyChangeListener)it.next()).propertyChanged( property );
-				
-			}catch( Throwable e ){
-				
+
+		for (Object listener : listeners) {
+
+			try {
+				((NetworkAdminPropertyChangeListener) listener).propertyChanged(property);
+
+			} catch (Throwable e) {
+
 				Debug.printStackTrace(e);
 			}
 		}
@@ -1696,7 +1657,7 @@ addressLoop:
 							http_manager.getHTTPListeningPortNumber()));
 		}
 	      
-		return((NetworkAdminProtocol[])protocols.toArray( new NetworkAdminProtocol[protocols.size()]));
+		return((NetworkAdminProtocol[])protocols.toArray(new NetworkAdminProtocol[0]));
  	}
  	
 	public InetAddress
@@ -1765,7 +1726,7 @@ addressLoop:
 			}			
 		}
 
-		return((NetworkAdminSocksProxy[])res.toArray(new NetworkAdminSocksProxy[res.size()]));
+		return((NetworkAdminSocksProxy[])res.toArray(new NetworkAdminSocksProxy[0]));
 	}
 	
 	public NetworkAdminHTTPProxy
@@ -1785,7 +1746,7 @@ addressLoop:
 	getNATDevices(
 			AzureusCore azureus_core )
 	{
-		List<NetworkAdminNATDeviceImpl>	devices = new ArrayList<NetworkAdminNATDeviceImpl>();
+		List<NetworkAdminNATDeviceImpl>	devices = new ArrayList<>();
 		
 		try{
 	
@@ -1824,7 +1785,7 @@ addressLoop:
 			Debug.printStackTrace( e );
 		}
 		
-		return((NetworkAdminNATDevice[])devices.toArray(new NetworkAdminNATDevice[devices.size()]));
+		return devices.toArray(new NetworkAdminNATDevice[devices.size()]);
 	}
 	
 	public NetworkAdminASN 
@@ -1881,9 +1842,9 @@ addressLoop:
 		byte[]	bgp	= new byte[0];
 		
 		try{	
-			as	= x.getAS().getBytes("UTF-8");
-			asn	= x.getASName().getBytes("UTF-8");
-			bgp	= x.getBGPPrefix().getBytes("UTF-8");
+			as	= x.getAS().getBytes(StandardCharsets.UTF_8);
+			asn	= x.getASName().getBytes(StandardCharsets.UTF_8);
+			bgp	= x.getBGPPrefix().getBytes(StandardCharsets.UTF_8);
 	
 		}catch( Throwable e ){
 			
@@ -1906,9 +1867,9 @@ addressLoop:
 		String	bgp		= "";
 		
 		try{
-			as	= new String((byte[])m.get("as"),"UTF-8");
-			asn	= new String((byte[])m.get("name"),"UTF-8");
-			bgp	= new String((byte[])m.get("bgp"),"UTF-8");
+			as	= new String((byte[])m.get("as"), StandardCharsets.UTF_8);
+			asn	= new String((byte[])m.get("name"), StandardCharsets.UTF_8);
+			bgp	= new String((byte[])m.get("bgp"), StandardCharsets.UTF_8);
 			
 		}catch( Throwable e ){
 			
@@ -2073,17 +2034,17 @@ addressLoop:
 		synchronized( as_history ){
 			
 			boolean	found = false;
-			
-			for (int i=0;i<as_history.size();i++){
-				
-				 NetworkAdminASN x = (NetworkAdminASN)as_history.get(i);
-				 
-				 if ( asn.getAS().equals( x.getAS())){
-					 
-					 found = true;
-					 
-					 break;
-				 }
+
+			for (Object o : as_history) {
+
+				NetworkAdminASN x = (NetworkAdminASN) o;
+
+				if (asn.getAS().equals(x.getAS())) {
+
+					found = true;
+
+					break;
+				}
 			}
 			
 			if ( !found ){
@@ -2103,15 +2064,15 @@ addressLoop:
 		InetAddress	address )
 	{
 		synchronized( as_history ){
-			
-			for (int i=0;i<as_history.size();i++){
-				
-				 NetworkAdminASN x = (NetworkAdminASN)as_history.get(i);
-				 
-				 if ( x.matchesCIDR( address )){
-					 
-					 return( x );
-				 }
+
+			for (Object o : as_history) {
+
+				NetworkAdminASN x = (NetworkAdminASN) o;
+
+				if (x.matchesCIDR(address)) {
+
+					return (x);
+				}
 			}
 		}
 		
@@ -2176,23 +2137,21 @@ addressLoop:
 		if ( COConfigurationManager.getBooleanParameter( "Proxy.Check.On.Start" )){
 			
 			NetworkAdminSocksProxy[]	socks = getSocksProxies();
-		
-			for (int i=0;i<socks.length;i++){
-				
-				NetworkAdminSocksProxy	sock = socks[i];
-				
-				try{
+
+			for (NetworkAdminSocksProxy sock : socks) {
+
+				try {
 					sock.getVersionsSupported();
-			
-				}catch( Throwable e ){
-				
-					Debug.printStackTrace( e );
-					
+
+				} catch (Throwable e) {
+
+					Debug.printStackTrace(e);
+
 					Logger.log(
-						new LogAlert(
-							true,
-							LogAlert.AT_WARNING,
-							"Socks proxy " + sock.getName() + " check failed: " + Debug.getNestedExceptionMessage( e )));
+							new LogAlert(
+									true,
+									LogAlert.AT_WARNING,
+									"Socks proxy " + sock.getName() + " check failed: " + Debug.getNestedExceptionMessage(e)));
 				}
 			}
 			
@@ -2319,7 +2278,7 @@ addressLoop:
 			throw( new NetworkAdminException( "trace-route failed", e ));
 		}
 		
-		return((NetworkAdminNode[])nodes.toArray( new NetworkAdminNode[nodes.size()]));
+		return((NetworkAdminNode[])nodes.toArray(new NetworkAdminNode[0]));
 	}
 	
 	public boolean
@@ -2431,76 +2390,67 @@ addressLoop:
 		
 		NetworkAdminNetworkInterface[] interfaces = getInterfaces();
 
-		for (int i=0;i<interfaces.length;i++){
-			
-			NetworkAdminNetworkInterface	interf = (NetworkAdminNetworkInterface)interfaces[i];
+		for (NetworkAdminNetworkInterface interf : interfaces) {
 
 			NetworkAdminNetworkInterfaceAddress[] addresses = interf.getAddresses();
-			
-			for (int j=0;j<addresses.length;j++){
-				
-				final NetworkAdminNetworkInterfaceAddress	address = addresses[j];
-				
-				InetAddress ia = address.getAddress();
-				
-				if ( ia.isLoopbackAddress() || ia instanceof Inet6Address ){
-					
-						// ignore
-					
-				}else{
-					
-					final AESemaphore sem = new AESemaphore( "parallelRouter" );
-					
-					final List		trace = new ArrayList();
-					
-					sems.add( sem );
-					
-					traces.add( trace );
-					
-					new AEThread2( "parallelRouter", true )
-					{
-						public void
-						run()
-						{
-							try{
-								address.getRoute( 
-									target, 
-									30000,
-									new NetworkAdminRouteListener()
-									{
-										public boolean 
-										foundNode(
-											NetworkAdminNode 	node, 
-											int 				distance, 
-											int 				rtt ) 
-										{
-											trace.add( node );
-											
-											NetworkAdminNode[]	route = new NetworkAdminNode[trace.size()];
-											
-											trace.toArray( route );
-											
-											return( listener.foundNode( address, route, distance, rtt) );
-										}
-										
-										public boolean 
-										timeout(
-											int distance )
-										{
-											NetworkAdminNode[]	route = new NetworkAdminNode[trace.size()];
-											
-											trace.toArray( route );
 
-											return( listener.timeout( address, route, distance ));
-										}
-									});
-								
-							}catch( Throwable e ){
-							
+			for (final NetworkAdminNetworkInterfaceAddress address : addresses) {
+
+				InetAddress ia = address.getAddress();
+
+				if (ia.isLoopbackAddress() || ia instanceof Inet6Address) {
+
+					// ignore
+
+				} else {
+
+					final AESemaphore sem = new AESemaphore("parallelRouter");
+
+					final List trace = new ArrayList();
+
+					sems.add(sem);
+
+					traces.add(trace);
+
+					new AEThread2("parallelRouter", true) {
+						public void
+						run() {
+							try {
+								address.getRoute(
+										target,
+										30000,
+										new NetworkAdminRouteListener() {
+											public boolean
+											foundNode(
+													NetworkAdminNode node,
+													int distance,
+													int rtt) {
+												trace.add(node);
+
+												NetworkAdminNode[] route = new NetworkAdminNode[trace.size()];
+
+												trace.toArray(route);
+
+												return (listener.foundNode(address, route, distance, rtt));
+											}
+
+											public boolean
+											timeout(
+													int distance) {
+												NetworkAdminNode[] route = new NetworkAdminNode[trace.size()];
+
+												trace.toArray(route);
+
+												return (listener.timeout(address, route, distance));
+											}
+										});
+
+							} catch (Throwable e) {
+
 								e.printStackTrace();
-								
-							}finally{
-								
+
+							} finally {
+
 								sem.release();
 							}
 						}
@@ -2508,10 +2458,10 @@ addressLoop:
 				}
 			}
 		}
-		
-		for (int i=0;i<sems.size();i++){
-			
-			((AESemaphore)sems.get(i)).reserve();
+
+		for (Object sem : sems) {
+
+			((AESemaphore) sem).reserve();
 		}
 	}
 	
@@ -2528,76 +2478,67 @@ addressLoop:
 		
 		NetworkAdminNetworkInterface[] interfaces = getInterfaces();
 
-		for (int i=0;i<interfaces.length;i++){
-			
-			NetworkAdminNetworkInterface	interf = (NetworkAdminNetworkInterface)interfaces[i];
+		for (NetworkAdminNetworkInterface interf : interfaces) {
 
 			NetworkAdminNetworkInterfaceAddress[] addresses = interf.getAddresses();
-			
-			for (int j=0;j<addresses.length;j++){
-				
-				final NetworkAdminNetworkInterfaceAddress	address = addresses[j];
-				
-				InetAddress ia = address.getAddress();
-				
-				if ( ia.isLoopbackAddress() || ia instanceof Inet6Address ){
-					
-						// ignore
-					
-				}else{
-					
-					final AESemaphore sem = new AESemaphore( "parallelPinger" );
-					
-					final List		trace = new ArrayList();
-					
-					sems.add( sem );
-					
-					traces.add( trace );
-					
-					new AEThread2( "parallelPinger", true )
-					{
-						public void
-						run()
-						{
-							try{
-								address.pingTarget( 
-									target, 
-									30000,
-									new NetworkAdminRouteListener()
-									{
-										public boolean 
-										foundNode(
-											NetworkAdminNode 	node, 
-											int 				distance, 
-											int 				rtt ) 
-										{
-											trace.add( node );
-											
-											NetworkAdminNode[]	route = new NetworkAdminNode[trace.size()];
-											
-											trace.toArray( route );
-											
-											return( listener.foundNode( address, route, distance, rtt) );
-										}
-										
-										public boolean 
-										timeout(
-											int distance )
-										{
-											NetworkAdminNode[]	route = new NetworkAdminNode[trace.size()];
-											
-											trace.toArray( route );
 
-											return( listener.timeout( address, route, distance ));
-										}
-									});
-								
-							}catch( Throwable e ){
-							
+			for (final NetworkAdminNetworkInterfaceAddress address : addresses) {
+
+				InetAddress ia = address.getAddress();
+
+				if (ia.isLoopbackAddress() || ia instanceof Inet6Address) {
+
+					// ignore
+
+				} else {
+
+					final AESemaphore sem = new AESemaphore("parallelPinger");
+
+					final List trace = new ArrayList();
+
+					sems.add(sem);
+
+					traces.add(trace);
+
+					new AEThread2("parallelPinger", true) {
+						public void
+						run() {
+							try {
+								address.pingTarget(
+										target,
+										30000,
+										new NetworkAdminRouteListener() {
+											public boolean
+											foundNode(
+													NetworkAdminNode node,
+													int distance,
+													int rtt) {
+												trace.add(node);
+
+												NetworkAdminNode[] route = new NetworkAdminNode[trace.size()];
+
+												trace.toArray(route);
+
+												return (listener.foundNode(address, route, distance, rtt));
+											}
+
+											public boolean
+											timeout(
+													int distance) {
+												NetworkAdminNode[] route = new NetworkAdminNode[trace.size()];
+
+												trace.toArray(route);
+
+												return (listener.timeout(address, route, distance));
+											}
+										});
+
+							} catch (Throwable e) {
+
 								e.printStackTrace();
-								
-							}finally{
-								
+
+							} finally {
+
 								sem.release();
 							}
 						}
@@ -2605,10 +2546,10 @@ addressLoop:
 				}
 			}
 		}
-		
-		for (int i=0;i<sems.size();i++){
-			
-			((AESemaphore)sems.get(i)).reserve();
+
+		for (Object sem : sems) {
+
+			((AESemaphore) sem).reserve();
 		}
 	}
 	
@@ -2699,8 +2640,8 @@ addressLoop:
 		
 		InetAddress[] binds = getAllBindAddresses( false );
 		
-		List<InetAddress> bindable 		= new ArrayList<InetAddress>();
-		List<InetAddress> unbindable 	= new ArrayList<InetAddress>();
+		List<InetAddress> bindable 		= new ArrayList<>();
+		List<InetAddress> unbindable 	= new ArrayList<>();
 		
 		for ( InetAddress b: binds ){
 			
@@ -2719,7 +2660,7 @@ addressLoop:
 		
 		Set<NetworkConnectionBase> connections = NetworkManager.getSingleton().getConnections();
 						
-		Map<InetAddress,int[]>	lookup_map 	= new HashMap<InetAddress, int[]>();
+		Map<InetAddress,int[]>	lookup_map 	= new HashMap<>();
 		
 		for ( NetworkConnectionBase connection: connections ){
 					
@@ -2871,8 +2812,8 @@ addressLoop:
 		boolean	found_wildcard 	= false;
 		int		tcp_found		= 0;
 		
-		Map<InetAddress,Object[]>	lookup_map 	= new HashMap<InetAddress, Object[]>();
-		Map<String,Object[]>		bind_map 	= new HashMap<String, Object[]>();
+		Map<InetAddress,Object[]>	lookup_map 	= new HashMap<>();
+		Map<String,Object[]>		bind_map 	= new HashMap<>();
 		
 		for ( NetworkConnectionBase connection: connections ){
 			
@@ -2963,7 +2904,7 @@ addressLoop:
 				
 				if ( bindable_addresses.length > 1 ){
 				
-					Map<String, NetworkInterface> intf_map = new HashMap<String, NetworkInterface>();
+					Map<String, NetworkInterface> intf_map = new HashMap<>();
 					
 					for ( InetAddress address: bindable_addresses ){
 												
@@ -2981,7 +2922,7 @@ addressLoop:
 												
 						int	eth_like = 0;
 						
-						Map<String,NetworkInterface>	vpn_like = new HashMap<String, NetworkInterface>();
+						Map<String,NetworkInterface>	vpn_like = new HashMap<>();
 						
 						for ( Map.Entry<String,NetworkInterface> entry: intf_map.entrySet()){
 							
@@ -3134,7 +3075,7 @@ addressLoop:
 					try{
 						Set<NetworkConnectionBase> connections = NetworkManager.getSingleton().getConnections();
 	
-						Map<InetAddress,Object[]>	lookup_map 	= new HashMap<InetAddress, Object[]>();
+						Map<InetAddress,Object[]>	lookup_map 	= new HashMap<>();
 	
 						for ( NetworkConnectionBase connection: connections ){
 												
@@ -3205,7 +3146,7 @@ addressLoop:
 		NetworkInterface	intf )
 	{
 		try{
-			return( Base32.encode( intf.getName().getBytes( "UTF-8" )));
+			return( Base32.encode( intf.getName().getBytes(StandardCharsets.UTF_8)));
 			
 		}catch( Throwable e ){
 			
@@ -3420,14 +3361,14 @@ addressLoop:
 		NetworkAdminPropertyChangeListener	listener )
 	{
 		listeners.add( listener );
-		
-		for (int i=0;i<NetworkAdmin.PR_NAMES.length;i++){
-			
-			try{
-				listener.propertyChanged( PR_NAMES[i] );
-				
-			}catch( Throwable e ){
-				
+
+		for (String prName : NetworkAdmin.PR_NAMES) {
+
+			try {
+				listener.propertyChanged(prName);
+
+			} catch (Throwable e) {
+
 				Debug.printStackTrace(e);
 			}
 		}
@@ -3522,28 +3463,26 @@ addressLoop:
 				writer.println( "Socks proxy: none" );
 				
 			}else{
-				
-				for (int i=0;i<socks.length;i++){
-					
-					NetworkAdminSocksProxy	sock = socks[i];
-					
-					writer.println( "Socks proxy: " + sock.getName());
-					
-					try{
+
+				for (NetworkAdminSocksProxy sock : socks) {
+
+					writer.println("Socks proxy: " + sock.getName());
+
+					try {
 						String[] versions = sock.getVersionsSupported();
-						
-						String	str = "";
-						
-						for (int j=0;j<versions.length;j++){
-							
-							str += (j==0?"":",") + versions[j];
+
+						String str = "";
+
+						for (int j = 0; j < versions.length; j++) {
+
+							str += (j == 0 ? "" : ",") + versions[j];
 						}
-						
-						writer.println( "   version: " + str );
-						
-					}catch( NetworkAdminException e ){
-						
-						writer.println( "    failed: " + e.getLocalizedMessage());
+
+						writer.println("   version: " + str);
+
+					} catch (NetworkAdminException e) {
+
+						writer.println("    failed: " + e.getLocalizedMessage());
 					}
 				}
 			}
@@ -3553,11 +3492,9 @@ addressLoop:
 
 				writer.println( "NAT Devices: " + nat_devices.length );
 
-				for (int i=0;i<nat_devices.length;i++){
+				for (NetworkAdminNATDevice device : nat_devices) {
 
-					NetworkAdminNATDevice	device = nat_devices[i];
-
-					writer.println( "    " + device.getName() + ",address=" + device.getAddress().getHostAddress() + ":" + device.getPort() + ",ext=" + device.getExternalAddress());
+					writer.println("    " + device.getName() + ",address=" + device.getAddress().getHostAddress() + ":" + device.getPort() + ",ext=" + device.getExternalAddress());
 				}
 			}catch (Exception e){
 				
@@ -3625,28 +3562,26 @@ addressLoop:
 			iw.println( "Socks proxy: none" );
 			
 		}else{
-			
-			for (int i=0;i<socks.length;i++){
-				
-				NetworkAdminSocksProxy	sock = socks[i];
-				
-				iw.println( "Socks proxy: " + sock.getName());
-				
-				try{
+
+			for (NetworkAdminSocksProxy sock : socks) {
+
+				iw.println("Socks proxy: " + sock.getName());
+
+				try {
 					String[] versions = sock.getVersionsSupported();
-					
-					String	str = "";
-					
-					for (int j=0;j<versions.length;j++){
-						
-						str += (j==0?"":",") + versions[j];
+
+					String str = "";
+
+					for (int j = 0; j < versions.length; j++) {
+
+						str += (j == 0 ? "" : ",") + versions[j];
 					}
-					
-					iw.println( "   version: " + str );
-					
-				}catch( NetworkAdminException e ){
-					
-					iw.println( "    failed: " + e.getLocalizedMessage());
+
+					iw.println("   version: " + str);
+
+				} catch (NetworkAdminException e) {
+
+					iw.println("    failed: " + e.getLocalizedMessage());
 				}
 			}
 		}
@@ -3656,13 +3591,11 @@ addressLoop:
 
 			iw.println( "NAT Devices: " + nat_devices.length );
 
-			for (int i=0;i<nat_devices.length;i++){
+			for (NetworkAdminNATDevice device : nat_devices) {
 
-				NetworkAdminNATDevice	device = nat_devices[i];
+				iw.println("    " + device.getName() + ",address=" + device.getAddress().getHostAddress() + ":" + device.getPort() + ",ext=" + device.getExternalAddress());
 
-				iw.println( "    " + device.getName() + ",address=" + device.getAddress().getHostAddress() + ":" + device.getPort() + ",ext=" + device.getExternalAddress());
-
-				public_addresses.add( device.getExternalAddress());
+				public_addresses.add(device.getExternalAddress());
 			}
 		} catch (Exception e) {
 			iw.println( "Nat Devices: Can't get -> " + e.toString());
@@ -3677,19 +3610,19 @@ addressLoop:
 			if ( interfaces.length > 0 ){
 				
 				if ( interfaces.length > 1 || interfaces[0].getAddresses().length > 1 ){
-					
-					for (int i=0;i<interfaces.length;i++){
-						
-						networkInterface	interf = (networkInterface)interfaces[i];
-						
+
+					for (NetworkAdminNetworkInterface anInterface : interfaces) {
+
+						networkInterface interf = (networkInterface) anInterface;
+
 						iw.indent();
-						
-						try{
-							
-							interf.generateDiagnostics( iw, public_addresses );
-							
-						}finally{
-							
+
+						try {
+
+							interf.generateDiagnostics(iw, public_addresses);
+
+						} finally {
+
 							iw.exdent();
 						}
 					}
@@ -3701,12 +3634,12 @@ addressLoop:
 						
 						try{
 							NetworkAdminNode[] nodes = address.getRoute( InetAddress.getByName("www.google.com"), 30000, trace_route_listener  );
-							
-							for (int i=0;i<nodes.length;i++){
-								
-								networkNode	node = (networkNode)nodes[i];
-																
-								iw.println( node.getString());
+
+							for (NetworkAdminNode node1 : nodes) {
+
+								networkNode node = (networkNode) node1;
+
+								iw.println(node.getString());
 							}
 						}catch( Throwable e ){
 							
@@ -3764,51 +3697,47 @@ addressLoop:
 			AzureusCore azureus_core = AzureusCoreFactory.getSingleton();
 
 			NetworkAdminProtocol[]	protocols = getInboundProtocols(azureus_core);
-		
-  		for (int i=0;i<protocols.length;i++){
-  			
-  			NetworkAdminProtocol	protocol = protocols[i];
-  			
-  			try{
-  				InetAddress	ext_addr = testProtocol( protocol );
-  	
-  				if ( ext_addr != null ){
-  					
-  					public_addresses.add( ext_addr );
-  				}
-  	
-  				iw.println( "    " + protocol.getName() + " - " + ext_addr );
-  				
-  			}catch( NetworkAdminException e ){
-  				
-  				iw.println( "    " + protocol.getName() + " - " + Debug.getNestedExceptionMessage(e));
-  			}
-  		}
+
+			for (NetworkAdminProtocol protocol : protocols) {
+
+				try {
+					InetAddress ext_addr = testProtocol(protocol);
+
+					if (ext_addr != null) {
+
+						public_addresses.add(ext_addr);
+					}
+
+					iw.println("    " + protocol.getName() + " - " + ext_addr);
+
+				} catch (NetworkAdminException e) {
+
+					iw.println("    " + protocol.getName() + " - " + Debug.getNestedExceptionMessage(e));
+				}
+			}
   		
   		iw.println( "Outbound protocols: default routing" );
   		
   		protocols = getOutboundProtocols(azureus_core);
-  		
-  		for (int i=0;i<protocols.length;i++){
-  			
-  			NetworkAdminProtocol	protocol = protocols[i];
-  			
-  			try{
-  
-  				InetAddress	ext_addr = testProtocol( protocol );
-  				
-  				if ( ext_addr != null ){
-  				
-  					public_addresses.add( ext_addr );
-  				}
-  				
-  				iw.println( "    " + protocol.getName() + " - " + ext_addr );
-  				
-  			}catch( NetworkAdminException e ){
-  				
-  				iw.println( "    " + protocol.getName() + " - " + Debug.getNestedExceptionMessage(e));
-  			}
-  		}
+
+			for (NetworkAdminProtocol protocol : protocols) {
+
+				try {
+
+					InetAddress ext_addr = testProtocol(protocol);
+
+					if (ext_addr != null) {
+
+						public_addresses.add(ext_addr);
+					}
+
+					iw.println("    " + protocol.getName() + " - " + ext_addr);
+
+				} catch (NetworkAdminException e) {
+
+					iw.println("    " + protocol.getName() + " - " + Debug.getNestedExceptionMessage(e));
+				}
+			}
 		}
 		
 		Iterator	it = public_addresses.iterator();
@@ -3877,7 +3806,7 @@ addressLoop:
 				addresses.add( new networkAddress(address));
 			}
 	
-			return((NetworkAdminNetworkInterfaceAddress[])addresses.toArray( new NetworkAdminNetworkInterfaceAddress[addresses.size()]));
+			return((NetworkAdminNetworkInterfaceAddress[])addresses.toArray(new NetworkAdminNetworkInterfaceAddress[0]));
 		}
 	
 		public String
@@ -3905,19 +3834,19 @@ addressLoop:
 			iw.println( getDisplayName() + "/" + getName());
 			
 			NetworkAdminNetworkInterfaceAddress[] addresses = getAddresses();
-			
-			for (int i=0;i<addresses.length;i++){
-				
-				networkAddress	addr = (networkAddress)addresses[i];
-				
+
+			for (NetworkAdminNetworkInterfaceAddress address : addresses) {
+
+				networkAddress addr = (networkAddress) address;
+
 				iw.indent();
-				
-				try{
-					
-					addr.generateDiagnostics( iw, public_addresses );
-					
-				}finally{
-					
+
+				try {
+
+					addr.generateDiagnostics(iw, public_addresses);
+
+				} finally {
+
 					iw.exdent();
 				}
 			}
@@ -4007,12 +3936,12 @@ addressLoop:
 						
 						try{
 							NetworkAdminNode[] nodes = getRoute( InetAddress.getByName("www.google.com"), 30000, trace_route_listener );
-							
-							for (int i=0;i<nodes.length;i++){
-								
-								networkNode	node = (networkNode)nodes[i];
-																
-								iw.println( node.getString());
+
+							for (NetworkAdminNode node1 : nodes) {
+
+								networkNode node = (networkNode) node1;
+
+								iw.println(node.getString());
 							}
 						}catch( Throwable e ){
 							
@@ -4024,48 +3953,44 @@ addressLoop:
 						AzureusCore azureus_core = AzureusCoreFactory.getSingleton();
 						
 						NetworkAdminProtocol[]	protocols = getOutboundProtocols(azureus_core);
-						
-						for (int i=0;i<protocols.length;i++){
-							
-							NetworkAdminProtocol	protocol = protocols[i];
-							
-							try{
-								InetAddress	res = testProtocol( protocol );
-								
-								if ( res != null ){
-									
-									public_addresses.add( res );
+
+						for (NetworkAdminProtocol protocol : protocols) {
+
+							try {
+								InetAddress res = testProtocol(protocol);
+
+								if (res != null) {
+
+									public_addresses.add(res);
 								}
-								
-								iw.println( "    " + protocol.getName() + " - " + res );
-								
-							}catch( NetworkAdminException e ){
-								
-								iw.println( "    " + protocol.getName() + " - " + Debug.getNestedExceptionMessage(e));
+
+								iw.println("    " + protocol.getName() + " - " + res);
+
+							} catch (NetworkAdminException e) {
+
+								iw.println("    " + protocol.getName() + " - " + Debug.getNestedExceptionMessage(e));
 							}
 						}
 						
 						iw.println( "Inbound protocols: bound" );
 						
 						protocols = getInboundProtocols(azureus_core);
-						
-						for (int i=0;i<protocols.length;i++){
-							
-							NetworkAdminProtocol	protocol = protocols[i];
-							
-							try{
-								InetAddress	res = testProtocol( protocol );
-								
-								if ( res != null ){
-									
-									public_addresses.add( res );
+
+						for (NetworkAdminProtocol protocol : protocols) {
+
+							try {
+								InetAddress res = testProtocol(protocol);
+
+								if (res != null) {
+
+									public_addresses.add(res);
 								}
-								
-								iw.println( "    " + protocol.getName() + " - " + res );
-								
-							}catch( NetworkAdminException e ){
-								
-								iw.println( "    " + protocol.getName() + " - " + Debug.getNestedExceptionMessage(e));
+
+								iw.println("    " + protocol.getName() + " - " + res);
+
+							} catch (NetworkAdminException e) {
+
+								iw.println("    " + protocol.getName() + " - " + Debug.getNestedExceptionMessage(e));
 							}
 						}
 					}
@@ -4139,20 +4064,18 @@ addressLoop:
 		IndentWriter			iw,
 		NetworkAdminProtocol[]	protocols )
 	{
-		for (int i=0;i<protocols.length;i++){
-			
-			NetworkAdminProtocol	protocol = protocols[i];
-			
-			iw.println( "Testing " + protocol.getName());
-			
-			try{
-				InetAddress	ext_addr = testProtocol( protocol );
-	
-				iw.println( "    -> OK, public address=" + ext_addr );
-				
-			}catch( NetworkAdminException e ){
-				
-				iw.println( "    -> Failed: " + Debug.getNestedExceptionMessage(e));
+		for (NetworkAdminProtocol protocol : protocols) {
+
+			iw.println("Testing " + protocol.getName());
+
+			try {
+				InetAddress ext_addr = testProtocol(protocol);
+
+				iw.println("    -> OK, public address=" + ext_addr);
+
+			} catch (NetworkAdminException e) {
+
+				iw.println("    -> Failed: " + Debug.getNestedExceptionMessage(e));
 			}
 		}
 	}

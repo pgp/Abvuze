@@ -97,7 +97,7 @@ RPTracker
 					throw( new RPException( "Invalid torrent" ));
 				}
 				
-				TrackerTorrent tt = delegate.host(torrent,((Boolean)params[1]).booleanValue());
+				TrackerTorrent tt = delegate.host(torrent, (Boolean) params[1]);
 				
 				RPTrackerTorrent res = RPTrackerTorrent.create( tt );
 			
@@ -135,7 +135,7 @@ RPTracker
 	{
 		try{
 			RPTrackerTorrent resp = (RPTrackerTorrent)_dispatcher.dispatch( new RPRequest( this, "host[Torrent,boolean]", new Object[]{torrent,
-				Boolean.valueOf(persistent)
+                    persistent
 			})).getResponse();
 			
 			resp._setRemote( _dispatcher );
@@ -181,11 +181,11 @@ RPTracker
     getTorrents()
     {
 		RPTrackerTorrent[]	res = (RPTrackerTorrent[])_dispatcher.dispatch( new RPRequest( this, "getTorrents", null )).getResponse();
-		
-		for (int i=0;i<res.length;i++){
-			
-			res[i]._setRemote( _dispatcher );
-		}
+
+        for (RPTrackerTorrent re : res) {
+
+            re._setRemote(_dispatcher);
+        }
 		
 		return( res ); 	
     }

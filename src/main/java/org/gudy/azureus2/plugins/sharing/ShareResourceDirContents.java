@@ -33,12 +33,12 @@ public interface
 ShareResourceDirContents 
 	extends ShareResource
 {
-	public File
+	File
 	getRoot();
 	
-	public boolean
+	boolean
 	isRecursive();
 		
-	public ShareResource[]
+	ShareResource[]
 	getChildren();
 }

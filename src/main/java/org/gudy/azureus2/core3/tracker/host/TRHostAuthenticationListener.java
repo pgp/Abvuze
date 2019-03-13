@@ -29,15 +29,15 @@ import java.net.URL;
 public interface 
 TRHostAuthenticationListener 
 {
-	public boolean
+	boolean
 	authenticate(
-		String		headers,
-		URL			resource,
-		String		user,
-		String		password );
+            String headers,
+            URL resource,
+            String user,
+            String password);
 	
-	public byte[]
+	byte[]
 	authenticate(
-		URL			resource,
-		String		user );
+            URL resource,
+            String user);
 }

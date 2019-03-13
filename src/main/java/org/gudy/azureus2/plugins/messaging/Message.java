@@ -32,12 +32,12 @@ public interface Message {
   /**
    * Is a protocol-bearing message, i.e. messaging/overhead data.
    */
-  public static final int TYPE_PROTOCOL_PAYLOAD = 0;
+  int TYPE_PROTOCOL_PAYLOAD = 0;
   
   /**
    * Is a data-bearing message, i.e. file data.
    */
-  public static final int TYPE_DATA_PAYLOAD     = 1;
+  int TYPE_DATA_PAYLOAD     = 1;
 
   
   
@@ -46,26 +46,26 @@ public interface Message {
    * Get message id.
    * @return id
    */
-  public String getID();
+  String getID();
   
   
   /**
    * Get message type.
    * @return type
    */
-  public int getType();
+  int getType();
     
   /**
    * Get textual description of this particular message.
    * @return description
    */
-  public String getDescription();
+  String getDescription();
   
   /**
    * Get message payload data.
    * @return message data buffers
    */
-  public ByteBuffer[] getPayload();
+  ByteBuffer[] getPayload();
   
   
   /**
@@ -74,12 +74,12 @@ public interface Message {
    * @return decoded message instance
    * @throws MessageException if the decoding process fails
    */
-  public Message create( ByteBuffer data ) throws MessageException;
+  Message create(ByteBuffer data) throws MessageException;
     
   
   /**
    * Destroy the message; i.e. perform cleanup actions.
    */
-  public void destroy();
+  void destroy();
   
 }

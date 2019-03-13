@@ -27,24 +27,24 @@ package com.aelitis.azureus.core.dht.transport;
 public interface 
 DHTTransportFindValueReply 
 {
-	public byte
+	byte
 	getDiversificationType();
 	
-	public boolean
+	boolean
 	hit();
 	
-	public DHTTransportValue[]
+	DHTTransportValue[]
 	getValues();
 	
-	public DHTTransportContact[]
+	DHTTransportContact[]
 	getContacts();
 	
-	public boolean
+	boolean
 	blocked();
 	
-	public byte[]
+	byte[]
 	getBlockedKey();
 	
-	public byte[]
+	byte[]
 	getBlockedSignature();
 }

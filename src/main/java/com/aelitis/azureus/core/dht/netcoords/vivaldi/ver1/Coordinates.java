@@ -22,28 +22,28 @@ package com.aelitis.azureus.core.dht.netcoords.vivaldi.ver1;
 
 public interface Coordinates {
   
-  public static final float MAX_X = 30000f;
-  public static final float MAX_Y = 30000f;
-  public static final float MAX_H = 30000f;
+  float MAX_X = 30000f;
+  float MAX_Y = 30000f;
+  float MAX_H = 30000f;
   
-  public Coordinates add(Coordinates other);
+  Coordinates add(Coordinates other);
   
-  public Coordinates sub(Coordinates other);
+  Coordinates sub(Coordinates other);
   
-  public Coordinates scale(float scale);
+  Coordinates scale(float scale);
   
-  public float measure();
+  float measure();
   
-  public float distance(Coordinates other);
+  float distance(Coordinates other);
   
-  public Coordinates unity();
+  Coordinates unity();
   
-  public double[]
+  double[]
   getCoordinates();
   
-  public boolean
+  boolean
   atOrigin();
   
-  public boolean
+  boolean
   isValid();
 }

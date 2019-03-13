@@ -522,27 +522,27 @@ TRTrackerServerPeerImpl
 		Map map = new HashMap();
 		
 		map.put( "peer_id", 		peer_id.getBytes());
-		map.put( "key_hash_code", 	new Long( key_hash_code ));
+		map.put( "key_hash_code", (long) key_hash_code);
 		map.put( "ip", 				ip );
-		map.put( "ip_override",		new Long( ip_override?1:0 ));
-		map.put( "tcp_port", 		new Long( tcp_port ));
-		map.put( "udp_port", 		new Long( udp_port ));
-		map.put( "http_port", 		new Long( http_port ));
-		map.put( "crypto_level", 	new Long( crypto_level ));
-		map.put( "az_ver", 			new Long( az_ver ));
+		map.put( "ip_override", (long) (ip_override ? 1 : 0));
+		map.put( "tcp_port", (long) tcp_port);
+		map.put( "udp_port", (long) udp_port);
+		map.put( "http_port", (long) http_port);
+		map.put( "crypto_level", (long) crypto_level);
+		map.put( "az_ver", (long) az_ver);
 		map.put( "ip_str", 			ip_str );
 		if ( ip_bytes != null ){
 			map.put( "ip_bytes", ip_bytes );
 		}
-		map.put( "NAT_status", 		new Long( NAT_status ));
-		map.put( "timeout", 		new Long( timeout ));
-		map.put( "uploaded", 		new Long( uploaded ));
-		map.put( "downloaded", 		new Long( downloaded ));
-		map.put( "amount_left", 	new Long( amount_left ));
-		map.put( "last_contact_time", 	new Long( last_contact_time ));
-		map.put( "download_completed", 	new Long( download_completed?1:0 ));
-		map.put( "biased", 			new Long( biased?1:0 ));
-		map.put( "up_speed", 		new Long( up_speed ));
+		map.put( "NAT_status", (long) NAT_status);
+		map.put( "timeout", timeout);
+		map.put( "uploaded", uploaded);
+		map.put( "downloaded", downloaded);
+		map.put( "amount_left", amount_left);
+		map.put( "last_contact_time", last_contact_time);
+		map.put( "download_completed", (long) (download_completed ? 1 : 0));
+		map.put( "biased", (long) (biased ? 1 : 0));
+		map.put( "up_speed", (long) up_speed);
 		
 		return( map );
 	}
@@ -564,11 +564,11 @@ TRTrackerServerPeerImpl
 			String			ip_str			= new String( (byte[])map.get( "ip_str" ));
 			byte[]			ip_bytes		= (byte[])map.get( "ip_bytes" );
 			byte			NAT_status		= ((Long)map.get( "NAT_status" )).byteValue();
-			long			timeout			= ((Long)map.get( "timeout" )).longValue();
-			long			uploaded		= ((Long)map.get( "uploaded" )).longValue();
-			long			downloaded		= ((Long)map.get( "downloaded" )).longValue();
-			long			amount_left		= ((Long)map.get( "amount_left" )).longValue();
-			long			last_contact_time	= ((Long)map.get( "last_contact_time" )).longValue();
+			long			timeout			= (Long) map.get("timeout");
+			long			uploaded		= (Long) map.get("uploaded");
+			long			downloaded		= (Long) map.get("downloaded");
+			long			amount_left		= (Long) map.get("amount_left");
+			long			last_contact_time	= (Long) map.get("last_contact_time");
 			boolean			download_completed	= ((Long)map.get( "download_completed" )).intValue() == 1;
 			boolean			biased			= ((Long)map.get( "biased" )).intValue() == 1;
 			short			up_speed		= ((Long)map.get( "up_speed" )).shortValue();

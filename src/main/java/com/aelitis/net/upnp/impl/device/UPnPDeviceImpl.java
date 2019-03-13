@@ -53,7 +53,7 @@ UPnPDeviceImpl
 	
 	private List		devices		= new ArrayList();
 	private List		services	= new ArrayList();
-	private List<UPnPDeviceImage>		images	= new ArrayList<UPnPDeviceImage>();
+	private List<UPnPDeviceImage>		images	= new ArrayList<>();
 	
 	protected
 	UPnPDeviceImpl(
@@ -111,11 +111,11 @@ UPnPDeviceImpl
 		if ( service_list != null ){
 				
 			SimpleXMLParserDocumentNode[] service_nodes = service_list.getChildren();
-			
-			for (int i=0;i<service_nodes.length;i++){
-				
-				services.add( new UPnPServiceImpl( this, indent + "  ", service_nodes[i]));
-			}
+
+            for (SimpleXMLParserDocumentNode service_node : service_nodes) {
+
+                services.add(new UPnPServiceImpl(this, indent + "  ", service_node));
+            }
 		}
 		
 		SimpleXMLParserDocumentNode	dev_list = device_node.getChild( "DeviceList" );
@@ -123,11 +123,11 @@ UPnPDeviceImpl
 		if ( dev_list != null ){
 				
 			SimpleXMLParserDocumentNode[] device_nodes = dev_list.getChildren();
-			
-			for (int i=0;i<device_nodes.length;i++){
-				
-				devices.add( new UPnPDeviceImpl( root_device, indent + "  ", device_nodes[i]));
-			}
+
+            for (SimpleXMLParserDocumentNode device_node1 : device_nodes) {
+
+                devices.add(new UPnPDeviceImpl(root_device, indent + "  ", device_node1));
+            }
 		}
 		
 		SimpleXMLParserDocumentNode	icon_list = device_node.getChild( "iconList" );

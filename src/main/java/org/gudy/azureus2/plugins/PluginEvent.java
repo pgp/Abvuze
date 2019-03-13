@@ -33,23 +33,23 @@ PluginEvent
 	/**
 	 * Not guaranteed to trigger.  Used to be triggered at startup
 	 */
-	public static final int	PEV_CONFIGURATION_WIZARD_STARTS			= 1;
+    int	PEV_CONFIGURATION_WIZARD_STARTS			= 1;
 	/**
 	 * Not guaranteed to trigger.  Used to be triggered at startup
 	 */
-	public static final int	PEV_CONFIGURATION_WIZARD_COMPLETES		= 2;
+    int	PEV_CONFIGURATION_WIZARD_COMPLETES		= 2;
 	/**
 	 * No longer triggered.  Used to be core tasks
 	 */
-	public static final int	PEV_INITIALISATION_PROGRESS_TASK		= 3;
+    int	PEV_INITIALISATION_PROGRESS_TASK		= 3;
 	/**
 	 * No longer triggered.  Used to be core tasks
 	 */
-	public static final int	PEV_INITIALISATION_PROGRESS_PERCENT		= 4;
+    int	PEV_INITIALISATION_PROGRESS_PERCENT		= 4;
 		/**
 		 * @since 2403
 		 */
-	public static final int	PEV_INITIAL_SHARING_COMPLETE			= 5;
+        int	PEV_INITIAL_SHARING_COMPLETE			= 5;
 	
 	/**
 	 * Triggered when UI Initialization is complete.  This is after the UI
@@ -58,7 +58,7 @@ PluginEvent
 	 *   
 	 * @since 2403
 	 */
-	public static final int	PEV_INITIALISATION_UI_COMPLETES		= 6;
+    int	PEV_INITIALISATION_UI_COMPLETES		= 6;
 
 	/**
 	 * This event is triggered when all plugins have had their 'initialize' method called
@@ -66,31 +66,31 @@ PluginEvent
 	 * in that it is *guranteed* to be triggered before any other initialisation actions
 	 * take place.
 	 */
-	
-	public static final int	PEV_ALL_PLUGINS_INITIALISED			= 7;
+
+    int	PEV_ALL_PLUGINS_INITIALISED			= 7;
 
 		/**
 		 * Data is the PluginInterface of installed plugin
 		 * @since 4.1.0.1
 		 */
-	public static final int	PEV_PLUGIN_OPERATIONAL				= 8;
+        int	PEV_PLUGIN_OPERATIONAL				= 8;
 
-	public static final int	PEV_PLUGIN_NOT_OPERATIONAL			= 9;
+	int	PEV_PLUGIN_NOT_OPERATIONAL			= 9;
 
-	public static final int	PEV_PLUGIN_INSTALLED				= 10;	// value is String plugin_id
-	public static final int	PEV_PLUGIN_UPDATED					= 11;	// value is String plugin_id
-	public static final int	PEV_PLUGIN_UNINSTALLED				= 12;	// value is String plugin_id
+	int	PEV_PLUGIN_INSTALLED				= 10;	// value is String plugin_id
+	int	PEV_PLUGIN_UPDATED					= 11;	// value is String plugin_id
+	int	PEV_PLUGIN_UNINSTALLED				= 12;	// value is String plugin_id
 
 		/**
 		 * Plugin specific events can be raised by a plugin to communicate with
 		 * other components. The event type must start from the number below
 		 */
-	
-	public static final int	PEV_FIRST_USER_EVENT					= 1024;
 
-	public int
+        int	PEV_FIRST_USER_EVENT					= 1024;
+
+	int
 	getType();
 	
-	public Object
+	Object
 	getValue();
 }

@@ -32,7 +32,7 @@ import com.aelitis.azureus.core.util.AZ3Functions;
 public class 
 LocalActivityManager 
 {
-	private static List<VuzeActivitiesEntry>	pending = new ArrayList<VuzeActivitiesEntry>(1);
+	private static List<VuzeActivitiesEntry>	pending = new ArrayList<>(1);
 	
 	static{
 		VuzeActivitiesManager.addListener(

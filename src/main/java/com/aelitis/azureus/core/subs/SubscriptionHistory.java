@@ -23,112 +23,112 @@ package com.aelitis.azureus.core.subs;
 public interface 
 SubscriptionHistory 
 {
-	public static final int	DEFAULT_CHECK_INTERVAL_MINS		= 120;
+	int	DEFAULT_CHECK_INTERVAL_MINS		= 120;
 
-	public boolean
+	boolean
 	isEnabled();
 	
-	public void
+	void
 	setEnabled(
-		boolean		enabled );
+            boolean enabled);
 	
-	public boolean
+	boolean
 	isAutoDownload();
 	
-	public void
+	void
 	setAutoDownload(
-		boolean		auto_dl );
+            boolean auto_dl);
 
-	public void
+	void
 	setDetails(
-		boolean		enabled,
-		boolean		auto_dl );
+            boolean enabled,
+            boolean auto_dl);
 	
-	public void
+	void
 	deleteResults(
-		String[]		result_ids );
+            String[] result_ids);
 	
-	public void
+	void
 	deleteAllResults();
 	
-	public void
+	void
 	markAllResultsRead();
 	
-	public void
+	void
 	markAllResultsUnread();
 	
-	public void
+	void
 	markResults(
-		String[]		result_ids,
-		boolean[]		read );
+            String[] result_ids,
+            boolean[] read);
 	
-	public void
+	void
 	reset();
 	
-	public long
+	long
 	getLastScanTime();
 	
-	public long
+	long
 	getLastNewResultTime();
 	
-	public long
+	long
 	getNextScanTime();
 	
-	public int
+	int
 	getNumUnread();
 	
-	public int
+	int
 	getNumRead();
 	
-	public int
+	int
 	getCheckFrequencyMins();
 	
-	public void
+	void
 	setCheckFrequencyMins(
-		int		mins );
+            int mins);
 	
-	public String
+	String
 	getLastError();
 	
-	public boolean
+	boolean
 	isAuthFail();
 	
-	public int
+	int
 	getConsecFails();
 	
-	public SubscriptionResult[]
+	SubscriptionResult[]
 	getResults(
-		boolean		include_deleted );
+            boolean include_deleted);
 	
-	public SubscriptionResult
+	SubscriptionResult
 	getResult(
-		String		result_id );
+            String result_id);
 	
-	public boolean
+	boolean
 	getDownloadWithReferer();
 	
-	public void
+	void
 	setDownloadWithReferer(
-		boolean		b );
+            boolean b);
 	
-	public int
+	int
 	getMaxNonDeletedResults();
 	
-	public void
+	void
 	setMaxNonDeletedResults(
-		int			max );
+            int max);
 	
-	public String[]
+	String[]
 	getDownloadNetworks();
 	
-	public void
+	void
 	setDownloadNetworks(
-		String[]	nets );
+            String[] nets);
 	
-	public boolean
+	boolean
 	getNotificationPostEnabled();
 	
-	public void
+	void
 	setNotificationPostEnabled(
-		boolean	enabled );
+            boolean enabled);
 }

@@ -22,21 +22,21 @@ package com.aelitis.azureus.core.dht.speed;
 public interface 
 DHTSpeedTester 
 {
-	public int
+	int
 	getContactNumber();
 	
-	public void
+	void
 	setContactNumber(
-		int		number );
+            int number);
 	
-	public void
+	void
 	destroy();
 	
-	public void
+	void
 	addListener(
-		DHTSpeedTesterListener	listener );
+            DHTSpeedTesterListener listener);
 	
-	public void
+	void
 	removeListener(
-		DHTSpeedTesterListener	listener );
+            DHTSpeedTesterListener listener);
 }

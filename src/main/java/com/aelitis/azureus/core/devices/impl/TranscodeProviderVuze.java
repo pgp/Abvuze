@@ -48,7 +48,7 @@ TranscodeProviderVuze
 	private PluginInterface			plugin_interface;
 	
 	private volatile TranscodeProfile[]		profiles;
-	private Map<String,TranscodeProfile[]>	profile_classification_map = new HashMap<String, TranscodeProfile[]>();
+	private Map<String,TranscodeProfile[]>	profile_classification_map = new HashMap<>();
 	
 	protected
 	TranscodeProviderVuze(
@@ -161,7 +161,7 @@ TranscodeProviderVuze
 			}
 		}
 			
-		List<TranscodeProfile> c_profiles = new ArrayList<TranscodeProfile>();
+		List<TranscodeProfile> c_profiles = new ArrayList<>();
 		
 		for ( TranscodeProfile p : profs ){
 			
@@ -180,7 +180,7 @@ TranscodeProviderVuze
 			}
 		}
 		
-		TranscodeProfile[] res = c_profiles.toArray( new TranscodeProfile[ c_profiles.size()]);
+		TranscodeProfile[] res = c_profiles.toArray(new TranscodeProfile[0]);
 		 
 		synchronized( profile_classification_map ){
 			
@@ -217,7 +217,7 @@ TranscodeProviderVuze
 		throws TranscodeException
 	{
 		try{
-			String uid = PROFILE_PREFIX + (String)plugin_interface.getIPC().invoke( "addProfile", new Object[]{ file } );
+			String uid = PROFILE_PREFIX + plugin_interface.getIPC().invoke( "addProfile", new Object[]{ file } );
 			
 			resetProfiles();
 			
@@ -336,7 +336,7 @@ TranscodeProviderVuze
 							profile.getName() });
 				}
 				
-				final Map<String,Object>	result = new HashMap<String, Object>();
+				final Map<String,Object>	result = new HashMap<>();
 				
 				final TranscodeProviderAnalysisImpl analysis = 
 					new TranscodeProviderAnalysisImpl()
@@ -920,7 +920,7 @@ TranscodeProviderVuze
 	TranscodeProviderAnalysisImpl
 		extends TranscodeProviderAnalysis
 	{
-		public Map<String,Object>
+		Map<String,Object>
 		getResult();
 	}
 }

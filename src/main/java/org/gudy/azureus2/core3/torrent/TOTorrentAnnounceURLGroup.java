@@ -31,17 +31,17 @@ TOTorrentAnnounceURLGroup
 	  * Gets the current sets defined for this group, 0 length if none defined
 	  * @return
 	  */
-	 
-	public TOTorrentAnnounceURLSet[]
+
+     TOTorrentAnnounceURLSet[]
 	getAnnounceURLSets();
 	
 	 /**
 	  * Sets the group's URL sets to the supplied values.
 	  * @param sets
 	  */
-	public void
+     void
 	setAnnounceURLSets(
-		TOTorrentAnnounceURLSet[]	sets );
+             TOTorrentAnnounceURLSet[] sets);
 		
 		/**
 		 * This method will create a new set. It is not added into the current set, this 
@@ -51,8 +51,8 @@ TOTorrentAnnounceURLGroup
 		 * @param urls the URLs for the new set
 		 * @return	the newly created set
 		 */
-		
-	public TOTorrentAnnounceURLSet
+
+        TOTorrentAnnounceURLSet
 	createAnnounceURLSet(
-		URL[]	urls );
+                URL[] urls);
 }

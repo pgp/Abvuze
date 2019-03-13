@@ -26,17 +26,17 @@ import org.gudy.azureus2.plugins.messaging.MessageException;
 public interface 
 GenericMessageRegistration 
 {
-	public GenericMessageEndpoint
+	GenericMessageEndpoint
 	createEndpoint(
-		InetSocketAddress	notional_target );
+            InetSocketAddress notional_target);
 	
 	
-	public GenericMessageConnection
+	GenericMessageConnection
 	createConnection(
-		GenericMessageEndpoint	endpoint )
+            GenericMessageEndpoint endpoint)
 	
 		throws MessageException;
 	
-	public void
+	void
 	cancel();
 }

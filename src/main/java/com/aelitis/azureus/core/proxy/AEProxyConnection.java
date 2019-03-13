@@ -29,7 +29,7 @@ import java.nio.channels.SocketChannel;
 public interface 
 AEProxyConnection 
 {
-	public String
+	String
 	getName();
 	
 		/**
@@ -37,91 +37,91 @@ AEProxyConnection
 		 * connection
 		 * @return
 		 */
-	
-	public SocketChannel
+
+        SocketChannel
 	getSourceChannel();
 	
 		// state manipulation methods
 	
-	public void
+	void
 	setReadState(
-		AEProxyState	state );
+            AEProxyState state);
 	
-	public void
+	void
 	setWriteState(
-		AEProxyState	state );
+            AEProxyState state);
 	
-	public void
+	void
 	setConnectState(
-		AEProxyState	state );
+            AEProxyState state);
 	
 		// selector manipulation
 	
-	public void
+	void
 	requestReadSelect(
-		SocketChannel	channel );
+            SocketChannel channel);
 	
-	public void
+	void
 	cancelReadSelect(
-		SocketChannel	channel );
+            SocketChannel channel);
 	
-	public void
+	void
 	requestWriteSelect(
-		SocketChannel	channel );
+            SocketChannel channel);
 	
-	public void
+	void
 	cancelWriteSelect(
-		SocketChannel	channel );
+            SocketChannel channel);
 	
-	public void
+	void
 	requestConnectSelect(
-		SocketChannel	channel );
+            SocketChannel channel);
 	
-	public void
+	void
 	cancelConnectSelect(
-		SocketChannel	channel );
+            SocketChannel channel);
 	
 		/**
 		 * marks the transition between connecting and connected
 		 *
 		 */
-	
-	public void
+
+        void
 	setConnected();
 	
 		/**
 		 * marks the last time that something happened on the connection for read timeout
 		 * purposes
 		 */
-	
-	public void
+
+        void
 	setTimeStamp();
 	
 		/**
 		 * indicate that the connection has failed
 		 * @param cause
 		 */
-	
-	public void
+
+        void
 	failed(
-		Throwable	cause );
+                Throwable cause);
 	
 		/**
 		 * close the connection
 		 *
 		 */
-	
-	public void
+
+        void
 	close();
 	
-	public boolean
+	boolean
 	isClosed();
 	
-	public void
+	void
 	addListener(
-		AEProxyConnectionListener	l );
+            AEProxyConnectionListener l);
 	
-	public void
+	void
 	removeListener(
-		AEProxyConnectionListener	l );
+            AEProxyConnectionListener l);
 }

@@ -33,46 +33,46 @@ import com.aelitis.azureus.core.tag.Tag;
  * @author TuxPaper
  */
 public interface Category extends Tag{
-  /** User created Category */  
-  public static final int TYPE_USER = 0;
-  /** Category which contains all DownloadManagers */  
-  public static final int TYPE_ALL  = 1;
+  /** User created Category */
+  int TYPE_USER = 0;
+  /** Category which contains all DownloadManagers */
+  int TYPE_ALL  = 1;
   /** Category which contains DownloadManagers that do not have a category assigned to
    * them.
    *
    * Currently not used.
-   */  
-  public static final int TYPE_UNCATEGORIZED = 2;
+   */
+  int TYPE_UNCATEGORIZED = 2;
 
   /** Add a Category Listener
    * @param l Listener to add
-   */  
-  public void addCategoryListener(CategoryListener l);
+   */
+  void addCategoryListener(CategoryListener l);
 
   /** Remove a Category Listener
    * @param l Listener to remove
-   */  
-  public void removeCategoryListener(CategoryListener l);
+   */
+  void removeCategoryListener(CategoryListener l);
 
-  public boolean
+  boolean
   hasCategoryListener(
-	 CategoryListener	l );
+          CategoryListener l);
   
   /** Retrieve the name of the category.  All category names are unique.
    * @return If type is TYPE_USER, returns name of the category
    *         Otherwise, returns ID in MessageBundle.
-   */  
-  public String getName();
+   */
+  String getName();
   
   /** Retrieves what type of Category this is
    * @return TYPE_* constant
-   */  
-  public int getType();
+   */
+  int getType();
   
   /** Retrieve a list of DownloadManagers for this category
    * @return DownloadManager List
-   */  
-  public List<DownloadManager> getDownloadManagers(List<DownloadManager> all_download_managers);
+   */
+  List<DownloadManager> getDownloadManagers(List<DownloadManager> all_download_managers);
   
   /** Add a DownloadManager to this category.
    *
@@ -80,8 +80,8 @@ public interface Category extends Tag{
    * manually. If you wish to change a DownloadManager's category, use
    * DownloadManager.setCategory(..) instead.
    * @param manager DownloadManager object to add to Category
-   */  
-  public void addManager(DownloadManagerState manager);
+   */
+  void addManager(DownloadManagerState manager);
 
   /** Remove a DownloadManager object from this Category.
    *
@@ -89,55 +89,55 @@ public interface Category extends Tag{
    * manually.  If you wish to change a DownloadManager's category, use
    * DownloadManager.setCategory(..) instead.
    * @param manager DownloadManager object to remove from Category
-   */  
-  public void removeManager(DownloadManagerState manager);
+   */
+  void removeManager(DownloadManagerState manager);
 
   // Other things like stats, settings, etc?
   
-  public void
+  void
   setDownloadSpeed(
-	int		speed );
+          int speed);
   
-  public int
+  int
   getDownloadSpeed();
   
-  public void
+  void
   setUploadSpeed(
-	int		speed );
+          int speed);
   
-  public int
+  int
   getUploadSpeed();
   
-  public static final String AT_AUTO_TRANSCODE_TARGET 	= "at_att";
-  public static final String AT_RSS_GEN					= "at_rss_gen";
-  public static final String AT_UPLOAD_PRIORITY			= "at_up_pri";
+  String AT_AUTO_TRANSCODE_TARGET 	= "at_att";
+  String AT_RSS_GEN					= "at_rss_gen";
+  String AT_UPLOAD_PRIORITY			= "at_up_pri";
   
-  public String
+  String
   getStringAttribute(
-	String		name );
+          String name);
   
-  public void
+  void
   setStringAttribute(
-	String		name,
-	String		value );
+          String name,
+          String value);
   
-  public boolean
+  boolean
   getBooleanAttribute(
-	String		name );
+          String name);
   
-  public void
+  void
   setBooleanAttribute(
-	String		name,
-	boolean		value );
+          String name,
+          boolean value);
   
-  public int
+  int
   getIntAttribute(
-	String		name );
+          String name);
   
-  public void
+  void
   setIntAttribute(
-	String		name,
-	int			value );
+          String name,
+          int value);
   
-  public void dump( IndentWriter writer );
+  void dump(IndentWriter writer);
 }

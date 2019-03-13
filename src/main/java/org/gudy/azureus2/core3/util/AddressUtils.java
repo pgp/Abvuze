@@ -217,7 +217,7 @@ AddressUtils
 	getLANAddresses(
 		String		address )
 	{
-		List<String>	result = new ArrayList<String>();
+		List<String>	result = new ArrayList<>();
 		
 		result.add( address );
 		
@@ -234,28 +234,26 @@ AddressUtils
 				}
 			
 				AZInstance[] instances = im.getOtherInstances();
-				
-				for (int i=0;i<instances.length;i++){
-					
-					AZInstance instance = instances[i];
-					
-					List addresses = instance.getInternalAddresses();
-					
-					if ( addresses.contains( ad )){
-						
-						for ( int j=0; j<addresses.size();j++){
-							
-							InetAddress ia = (InetAddress)addresses.get(j);
-							
-							String str = ia.getHostAddress();
-							
-							if ( !result.contains( str )){
-								
-								result.add( str );
-							}
-						}
-					}
-				}
+
+                for (AZInstance instance : instances) {
+
+                    List addresses = instance.getInternalAddresses();
+
+                    if (addresses.contains(ad)) {
+
+                        for (Object address1 : addresses) {
+
+                            InetAddress ia = (InetAddress) address1;
+
+                            String str = ia.getHostAddress();
+
+                            if (!result.contains(str)) {
+
+                                result.add(str);
+                            }
+                        }
+                    }
+                }
 			}
 		}catch( Throwable e ){
 			
@@ -314,7 +312,7 @@ AddressUtils
 		return is_lan_local;
 	}
 	
-	private static Set<InetAddress>	pending_addresses = new HashSet<InetAddress>();
+	private static Set<InetAddress>	pending_addresses = new HashSet<>();
 	private static TimerEventPeriodic	pa_timer;
 	
 	public static void

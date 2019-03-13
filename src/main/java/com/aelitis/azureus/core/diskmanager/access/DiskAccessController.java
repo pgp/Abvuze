@@ -26,25 +26,25 @@ import com.aelitis.azureus.core.diskmanager.cache.CacheFile;
 public interface 
 DiskAccessController 
 {
-	public DiskAccessRequest
+	DiskAccessRequest
 	queueReadRequest(
-		CacheFile					file,
-		long						offset,
-		DirectByteBuffer			buffer,
-		short						cache_policy,
-		DiskAccessRequestListener	listener );
+            CacheFile file,
+            long offset,
+            DirectByteBuffer buffer,
+            short cache_policy,
+            DiskAccessRequestListener listener);
 	
-	public DiskAccessRequest
+	DiskAccessRequest
 	queueWriteRequest(
-		CacheFile					file,
-		long						offset,
-		DirectByteBuffer			buffer,
-		boolean						free_buffer,
-		DiskAccessRequestListener	listener );
+            CacheFile file,
+            long offset,
+            DirectByteBuffer buffer,
+            boolean free_buffer,
+            DiskAccessRequestListener listener);
 	
-	public DiskAccessControllerStats
+	DiskAccessControllerStats
 	getStats();
 	
-	public String
+	String
 	getString();
 }

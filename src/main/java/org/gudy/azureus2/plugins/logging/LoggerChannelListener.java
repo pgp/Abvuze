@@ -29,13 +29,13 @@ package org.gudy.azureus2.plugins.logging;
 public interface 
 LoggerChannelListener 
 {
-	public void
+	void
 	messageLogged(
-		int		type,
-		String	content );
+            int type,
+            String content);
 	
-	public void
+	void
 	messageLogged(
-		String		str,
-		Throwable	error );
+            String str,
+            Throwable error);
 }

@@ -24,13 +24,13 @@ package com.aelitis.azureus.core.networkmanager.admin;
 public interface 
 NetworkAdminRouteListener 
 {
-	public boolean
+	boolean
 	foundNode(
-		NetworkAdminNode	node,
-		int					distance,
-		int					rtt );
+            NetworkAdminNode node,
+            int distance,
+            int rtt);
 	
-	public boolean
+	boolean
 	timeout(
-		int					distance );
+            int distance);
 }

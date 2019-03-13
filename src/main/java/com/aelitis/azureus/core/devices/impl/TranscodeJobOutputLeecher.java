@@ -21,6 +21,7 @@
 package com.aelitis.azureus.core.devices.impl;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 import org.gudy.azureus2.core3.util.Debug;
 import org.gudy.azureus2.core3.util.SHA1Simple;
@@ -62,7 +63,7 @@ TranscodeJobOutputLeecher
 		save_to = file.getCacheFile();
 		
 		try{
-			hash = new SHA1Simple().calculateHash( save_to.getAbsolutePath().getBytes( "UTF-8" ));
+			hash = new SHA1Simple().calculateHash( save_to.getAbsolutePath().getBytes(StandardCharsets.UTF_8));
 			
 		}catch( Throwable e ){
 			
@@ -378,11 +379,11 @@ TranscodeJobOutputLeecher
 			
 			private long		position;
 			
-			private int			max_read_chunk = 128*1024;;
+			private int			max_read_chunk = 128*1024;
+
+            private volatile boolean	request_cancelled;
 			
-			private volatile boolean	request_cancelled;
-			
-			private CopyOnWriteList<DiskManagerListener>		listeners = new CopyOnWriteList<DiskManagerListener>();
+			private CopyOnWriteList<DiskManagerListener>		listeners = new CopyOnWriteList<>();
 			
 			public void
 			setType(

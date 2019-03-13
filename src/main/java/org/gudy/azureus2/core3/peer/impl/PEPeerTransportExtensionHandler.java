@@ -37,9 +37,9 @@ PEPeerTransportExtensionHandler
 	 * @param details
 	 * @return all PEPeerTransport instances for this extension
 	 */
-	
-	public List
+
+    List
 	handleExtension(
-		PEPeerControl	manager,
-		Map				details );
+            PEPeerControl manager,
+            Map details);
 }

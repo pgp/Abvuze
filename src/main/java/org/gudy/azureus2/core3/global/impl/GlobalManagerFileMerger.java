@@ -85,9 +85,9 @@ GlobalManagerFileMerger
 	private boolean	enabled;
 	private boolean	enabled_extended;
 	
-	final Map<HashWrapper,DownloadManager>		dm_map = new HashMap<HashWrapper, DownloadManager>();
+	final Map<HashWrapper,DownloadManager>		dm_map = new HashMap<>();
 	
-	final List<SameSizeFiles>				sames = new ArrayList<SameSizeFiles>();
+	final List<SameSizeFiles>				sames = new ArrayList<>();
 	
 	final AsyncDispatcher		read_write_dispatcher = new AsyncDispatcher( "GMFM" );
 	
@@ -211,7 +211,7 @@ GlobalManagerFileMerger
 
 			boolean	changed = false;
 
-			Set<HashWrapper>	existing_dm_hashes = new HashSet<HashWrapper>( dm_map.keySet());
+			Set<HashWrapper>	existing_dm_hashes = new HashSet<>(dm_map.keySet());
 			
 			if ( enabled ){
 				
@@ -268,9 +268,9 @@ GlobalManagerFileMerger
 		
 			if ( changed ){
 							
-				List<Set<DiskManagerFileInfo>>	interesting = new LinkedList<Set<DiskManagerFileInfo>>();
+				List<Set<DiskManagerFileInfo>>	interesting = new LinkedList<>();
 				
-				Map<Long,Set<DiskManagerFileInfo>>		size_map = new HashMap<Long, Set<DiskManagerFileInfo>>();
+				Map<Long,Set<DiskManagerFileInfo>>		size_map = new HashMap<>();
 				
 				for ( DownloadManager dm: dm_map.values()){
 					
@@ -298,7 +298,7 @@ GlobalManagerFileMerger
 						
 						if ( set == null ){
 							
-							set = new HashSet<DiskManagerFileInfo>();
+							set = new HashSet<>();
 							
 							size_map.put( len, set );
 						}
@@ -353,7 +353,7 @@ GlobalManagerFileMerger
 					}
 				}
 				
-				List<SameSizeFiles>	sames_copy = new LinkedList<SameSizeFiles>( sames );
+				List<SameSizeFiles>	sames_copy = new LinkedList<>(sames);
 
 				for ( Set<DiskManagerFileInfo> set: interesting ){
 					
@@ -435,7 +435,7 @@ GlobalManagerFileMerger
 		final private Set<DiskManagerFileInfo>		files;
 		final private Set<SameSizeFileWrapper>		file_wrappers;
 		
-		final private Set<DownloadManager>			dm_set = new IdentityHashSet<DownloadManager>();
+		final private Set<DownloadManager>			dm_set = new IdentityHashSet<>();
 		
 		private boolean	completion_logged;
 		
@@ -449,7 +449,7 @@ GlobalManagerFileMerger
 		{
 			files 	= _files;
 			
-			file_wrappers = new HashSet<SameSizeFileWrapper>();
+			file_wrappers = new HashSet<>();
 			
 			for ( final DiskManagerFileInfo file: files ){
 				
@@ -691,7 +691,7 @@ GlobalManagerFileMerger
 				return;
 			}
 			
-			Set<DiskManagerFileInfo>	active = new HashSet<DiskManagerFileInfo>();
+			Set<DiskManagerFileInfo>	active = new HashSet<>();
 			
 			int		num_incomplete	= 0;
 			
@@ -1666,7 +1666,7 @@ GlobalManagerFileMerger
 	DownloadManagerPeerListenerEx
 		extends DownloadManagerPeerListener
 	{
-		public void
+		void
 		sync();
 	}
 }

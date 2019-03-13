@@ -27,6 +27,6 @@ package com.aelitis.azureus.ui.mdi;
  */
 public interface MdiChildCloseListener
 {
-	public void mdiChildEntryClosed(MdiEntry parent, MdiEntry child,
-			boolean user);
+	void mdiChildEntryClosed(MdiEntry parent, MdiEntry child,
+                             boolean user);
 }

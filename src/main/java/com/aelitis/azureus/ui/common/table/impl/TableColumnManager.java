@@ -93,14 +93,14 @@ public class TableColumnManager {
 	private long lastTableConfigAccess;
 	private static Comparator<TableColumn> orderComparator;
 	
-	private Map<String, TableColumnCreationListener> mapColumnIDsToListener = new LightHashMap<String, TableColumnCreationListener>();
-	private Map<Class, List> mapDataSourceTypeToColumnIDs = new LightHashMap<Class, List>();
+	private Map<String, TableColumnCreationListener> mapColumnIDsToListener = new LightHashMap<>();
+	private Map<Class, List> mapDataSourceTypeToColumnIDs = new LightHashMap<>();
 
 	/**
 	 * key = TableID; value = table column ids
 	 */
-	private Map<String, String[]> mapTableDefaultColumns = new LightHashMap<String, String[]>();
-	private Map<String, Class[]> mapTableIDsDSTs = new LightHashMap<String, Class[]>();
+	private Map<String, String[]> mapTableDefaultColumns = new LightHashMap<>();
+	private Map<String, Class[]> mapTableIDsDSTs = new LightHashMap<>();
 
 	private static final Map<String, String> mapResetTable_Version;
 	private static final boolean RERESET = false;
@@ -142,7 +142,7 @@ public class TableColumnManager {
 			}
 		};
 		
-		mapResetTable_Version = new HashMap<String, String>();
+		mapResetTable_Version = new HashMap<>();
 		mapResetTable_Version.put("DeviceLibrary", "4.4.0.7");
 		mapResetTable_Version.put("TranscodeQueue", "4.4.0.7");
 		mapResetTable_Version.put(TableManager.TABLE_MYTORRENTS_COMPLETE_BIG, "4.4.0.7");
@@ -154,7 +154,7 @@ public class TableColumnManager {
 
   
   private TableColumnManager() {
-   items = new HashMap<String,Map>();
+   items = new HashMap<>();
   }
   
   /** Retrieve the static TableColumnManager instance
@@ -179,32 +179,29 @@ public class TableColumnManager {
   public void addColumns(TableColumnCore[] itemsToAdd) {
 		try {
 			items_mon.enter();
-			for (int i = 0; i < itemsToAdd.length; i++) {
-				TableColumnCore item = itemsToAdd[i];
-				if (item == null || item.isRemoved()){
-					continue;
-				}
-				String name = item.getName();
-				String sTableID = item.getTableID();
-				Map mTypes = (Map) items.get(sTableID);
-				if (mTypes == null) {
-					// LinkedHashMap to preserve order
-					mTypes = new LinkedHashMap();
-					items.put(sTableID, mTypes);
-				}
-				if (!mTypes.containsKey(name)) {
-					mTypes.put(name, item);
-					Map mapColumnConfig = getTableConfigMap(sTableID);
-					item.loadSettings(mapColumnConfig);
-				}
-			}
-			for (int i = 0; i < itemsToAdd.length; i++) {
-				TableColumnCore item = itemsToAdd[i];
-				
-				if (item != null && !item.isRemoved() && !item.getColumnAdded()) {
-					item.setColumnAdded();
-				}
-			}
+            for (TableColumnCore item : itemsToAdd) {
+                if (item == null || item.isRemoved()) {
+                    continue;
+                }
+                String name = item.getName();
+                String sTableID = item.getTableID();
+                Map mTypes = items.get(sTableID);
+                if (mTypes == null) {
+                    // LinkedHashMap to preserve order
+                    mTypes = new LinkedHashMap();
+                    items.put(sTableID, mTypes);
+                }
+                if (!mTypes.containsKey(name)) {
+                    mTypes.put(name, item);
+                    Map mapColumnConfig = getTableConfigMap(sTableID);
+                    item.loadSettings(mapColumnConfig);
+                }
+            }
+            for (TableColumnCore item : itemsToAdd) {
+                if (item != null && !item.isRemoved() && !item.getColumnAdded()) {
+                    item.setColumnAdded();
+                }
+            }
 		} catch (Exception e) {
 			System.out.println("Error while adding Table Column Extension");
 			Debug.printStackTrace(e);
@@ -219,16 +216,15 @@ public class TableColumnManager {
   public void removeColumns(TableColumnCore[] itemsToRemove) {
 		try {
 			items_mon.enter();
-			for (int i = 0; i < itemsToRemove.length; i++) {
-				TableColumnCore item = itemsToRemove[i];
-				String name = item.getName();
-				String sTableID = item.getTableID();
-				Map mTypes = (Map) items.get(sTableID);
-				if (mTypes != null) {
-					if ( mTypes.remove(name) != null ){
-					}
-				}
-			}
+            for (TableColumnCore item : itemsToRemove) {
+                String name = item.getName();
+                String sTableID = item.getTableID();
+                Map mTypes = items.get(sTableID);
+                if (mTypes != null) {
+                    if (mTypes.remove(name) != null) {
+                    }
+                }
+            }
 		} catch (Exception e) {
 			System.out.println("Error while adding Table Column Extension");
 			Debug.printStackTrace(e);
@@ -266,7 +262,7 @@ public class TableColumnManager {
   }
   
   public int getTableColumnCount(String sTableID) {
-    Map mTypes = (Map)items.get(sTableID);
+    Map mTypes = items.get(sTableID);
     if (mTypes == null) {
     	return 0;
     }
@@ -279,7 +275,7 @@ public class TableColumnManager {
 	{
   	Map mTypes = getAllTableColumnCore(forDataSourceType, tableID);
   	TableColumnCore[] columns = (TableColumnCore[]) mTypes.values().toArray(
-				new TableColumnCore[mTypes.values().size()]);
+            new TableColumnCore[0]);
   	return columns;
 	}
   
@@ -289,13 +285,13 @@ public class TableColumnManager {
   }
   
   public void setDefaultColumnNames(String tableID, TableColumn[] columns) {
-	List<String>names = new ArrayList<String>( columns.length );
+	List<String>names = new ArrayList<>(columns.length);
 	for ( TableColumn column: columns ){
 		if ( column.isVisible()){
 			names.add( column.getName());
 		}
 	}
-	setDefaultColumnNames( tableID, names.toArray( new String[ names.size()] ));
+	setDefaultColumnNames( tableID, names.toArray(new String[0]));
   }
   
   public void setDefaultColumnNames(String tableID, String[] columnNames) {
@@ -393,7 +389,7 @@ public class TableColumnManager {
 			}
 
 			if (forDataSourceType != null) {
-				Map<Class<?>, List> mapDST = new HashMap<Class<?>, List>();
+				Map<Class<?>, List> mapDST = new HashMap<>();
 				List listDST = mapDataSourceTypeToColumnIDs.get(forDataSourceType);
 				if (listDST != null && listDST.size() > 0) {
 					mapDST.put(forDataSourceType, listDST);
@@ -435,36 +431,36 @@ public class TableColumnManager {
 	private void doAddCreate(Map mTypes, String tableID, Map<Class<?>, List> mapDST) {
 		
 		mapTableIDsDSTs.put(tableID, mapDST.keySet().toArray(new Class[0]));
-		ArrayList<TableColumnCore> listAdded = new ArrayList<TableColumnCore>();
+		ArrayList<TableColumnCore> listAdded = new ArrayList<>();
 		for (Class forDataSourceType : mapDST.keySet()) {
 			List listDST = mapDST.get(forDataSourceType);
 
-			for (Iterator iter = listDST.iterator(); iter.hasNext();) {
-				String columnID = (String) iter.next();
-				if (!mTypes.containsKey(columnID)) {
-					try {
-						TableColumnCreationListener l = mapColumnIDsToListener.get(forDataSourceType
-								+ "." + columnID);
-						TableColumnCore tc = null;
-						if (l instanceof TableColumnCoreCreationListener) {
-							tc = ((TableColumnCoreCreationListener) l).createTableColumnCore(
-									forDataSourceType, tableID, columnID);
-						}
-						if (tc == null) {
-							tc = new TableColumnImpl(tableID, columnID);
-							tc.addDataSourceType(forDataSourceType);
-						}
+            for (Object o : listDST) {
+                String columnID = (String) o;
+                if (!mTypes.containsKey(columnID)) {
+                    try {
+                        TableColumnCreationListener l = mapColumnIDsToListener.get(forDataSourceType
+                                + "." + columnID);
+                        TableColumnCore tc = null;
+                        if (l instanceof TableColumnCoreCreationListener) {
+                            tc = ((TableColumnCoreCreationListener) l).createTableColumnCore(
+                                    forDataSourceType, tableID, columnID);
+                        }
+                        if (tc == null) {
+                            tc = new TableColumnImpl(tableID, columnID);
+                            tc.addDataSourceType(forDataSourceType);
+                        }
 
-						if (l != null) {
-							l.tableColumnCreated(tc);
-						}
+                        if (l != null) {
+                            l.tableColumnCreated(tc);
+                        }
 
-						listAdded.add(tc);
-					} catch (Exception e) {
-						Debug.out(e);
-					}
-				}
-			}
+                        listAdded.add(tc);
+                    } catch (Exception e) {
+                        Debug.out(e);
+                    }
+                }
+            }
 		}
 		// this adds it to #items (among other things)
 		addColumns(listAdded.toArray(new TableColumnCore[0]));
@@ -478,7 +474,7 @@ public class TableColumnManager {
 
 			Set<String> ids = items.keySet();
 			
-			return( ids.toArray( new String[ids.size()]));
+			return( ids.toArray(new String[0]));
 			
 		} finally {
 			items_mon.exit();
@@ -495,31 +491,31 @@ public class TableColumnManager {
   
   public TableColumnCore getTableColumnCore(String sTableID,
                                             String sColumnName) {
-    Map mTypes = (Map)items.get(sTableID);
+    Map mTypes = items.get(sTableID);
     if (mTypes == null)
       return null;
     return (TableColumnCore)mTypes.get(sColumnName);
   }
   
   public void ensureIntegrety(Class dataSourceType, String sTableID) {
-    Map mTypes = (Map)items.get(sTableID);
+    Map mTypes = items.get(sTableID);
     if (mTypes == null)
       return;
 
     TableColumnCore[] tableColumns = 
-      (TableColumnCore[])mTypes.values().toArray(new TableColumnCore[mTypes.values().size()]);
+      (TableColumnCore[])mTypes.values().toArray(new TableColumnCore[0]);
 
     Arrays.sort(tableColumns, getTableColumnOrderComparator());
 
     int iPos = 0;
-    for (int i = 0; i < tableColumns.length; i++) {
-      int iCurPos = tableColumns[i].getPosition();
-      if (iCurPos == TableColumnCore.POSITION_INVISIBLE) {
-      	tableColumns[i].setVisible(false);
-      } else {
-        tableColumns[i].setPositionNoShift(iPos++);
+      for (TableColumnCore tableColumn : tableColumns) {
+          int iCurPos = tableColumn.getPosition();
+          if (iCurPos == TableColumnCore.POSITION_INVISIBLE) {
+              tableColumn.setVisible(false);
+          } else {
+              tableColumn.setPositionNoShift(iPos++);
+          }
       }
-    }
 
   	if (iPos == 0) {
   		// no columns?  Something must have went wrong, so reset them all
@@ -582,10 +578,10 @@ public class TableColumnManager {
   		Map mapTableConfig = getTableConfigMap(sTableID);
       TableColumnCore[] tcs = getAllTableColumnCoreAsArray(forDataSourceType,
 					sTableID);
-      for (int i = 0; i < tcs.length; i++) {
-        if (tcs[i] != null)
-          tcs[i].saveSettings(mapTableConfig);
-      }
+        for (TableColumnCore tc : tcs) {
+            if (tc != null)
+                tc.saveSettings(mapTableConfig);
+        }
       saveTableConfigs();
   	} catch (Exception e) {
   		Debug.out(e);
@@ -613,10 +609,10 @@ public class TableColumnManager {
   		}
       TableColumnCore[] tcs = getAllTableColumnCoreAsArray(forDataSourceType,
 					sTableID);
-      for (int i = 0; i < tcs.length; i++) {
-        if (tcs[i] != null)
-          tcs[i].loadSettings(mapTableConfig);
-      }
+        for (TableColumnCore tc : tcs) {
+            if (tc != null)
+                tc.loadSettings(mapTableConfig);
+        }
   	} catch (Exception e) {
   		Debug.out(e);
   	}
@@ -697,13 +693,12 @@ public class TableColumnManager {
   
   public void setAutoHideOrder(String sTableID, String[] autoHideOrderColumnIDs) {
   	ArrayList autoHideOrderList = new ArrayList(autoHideOrderColumnIDs.length);
-  	for (int i = 0; i < autoHideOrderColumnIDs.length; i++) {
-			String sColumnID = autoHideOrderColumnIDs[i];
-			TableColumnCore column = getTableColumnCore(sTableID, sColumnID);
-			if (column != null) {
-				autoHideOrderList.add(column);
-			}
-		}
+      for (String sColumnID : autoHideOrderColumnIDs) {
+          TableColumnCore column = getTableColumnCore(sTableID, sColumnID);
+          if (column != null) {
+              autoHideOrderList.add(column);
+          }
+      }
   	
   	autoHideOrder.put(sTableID, autoHideOrderList);
   }
@@ -725,22 +720,21 @@ public class TableColumnManager {
      	
      	writer.println("TableColumns");
 
-     	for (Iterator iter = items.keySet().iterator(); iter.hasNext();) {
-     		String sTableID = (String)iter.next();
-        Map mTypes = (Map)items.get(sTableID);
+        for (String sTableID : items.keySet()) {
+            Map mTypes = items.get(sTableID);
 
-        writer.indent();
-     		writer.println(sTableID + ": " + mTypes.size() + " columns:");
-     		
-     		writer.indent();
-       	for (Iterator iter2 = mTypes.values().iterator(); iter2.hasNext();) {
-       		TableColumnCore tc = (TableColumnCore)iter2.next();
-       		tc.generateDiagnostics(writer);
-       	}
-        writer.exdent();
+            writer.indent();
+            writer.println(sTableID + ": " + mTypes.size() + " columns:");
 
-        writer.exdent();
-			}
+            writer.indent();
+            for (Object o : mTypes.values()) {
+                TableColumnCore tc = (TableColumnCore) o;
+                tc.generateDiagnostics(writer);
+            }
+            writer.exdent();
+
+            writer.exdent();
+        }
     } catch (Exception e) {
     	e.printStackTrace();
     } finally {
@@ -768,7 +762,7 @@ public class TableColumnManager {
 		try {
 			items_mon.enter();
 
-  		List list = (List) mapDataSourceTypeToColumnIDs.get(forDataSourceType);
+  		List list = mapDataSourceTypeToColumnIDs.get(forDataSourceType);
   		if (list == null) {
   			list = new ArrayList(1);
   			mapDataSourceTypeToColumnIDs.put(forDataSourceType, list);
@@ -787,7 +781,7 @@ public class TableColumnManager {
 			items_mon.enter();
 
 			mapColumnIDsToListener.remove(forDataSourceType + "." + columnID);
-			List list = (List) mapDataSourceTypeToColumnIDs.get(forDataSourceType);
+			List list = mapDataSourceTypeToColumnIDs.get(forDataSourceType);
 			if (list != null) {
 				list.remove(columnID);
 			}
@@ -822,7 +816,7 @@ public class TableColumnManager {
 	private void
 	resetAllTables()
 	{
-		for ( String tableID: new ArrayList<String>( mapTableDefaultColumns.keySet())){
+		for ( String tableID: new ArrayList<>(mapTableDefaultColumns.keySet())){
 
 			Class[] dataSourceTypes = mapTableIDsDSTs.get(tableID);
 

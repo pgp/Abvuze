@@ -29,25 +29,25 @@ import java.net.*;
 public interface 
 SSDPIGDListener 
 {
-	public void
+	void
 	rootDiscovered(
-		NetworkInterface	network_interface,
-		InetAddress			local_address,
-		String				usn,
-		URL					location );
+            NetworkInterface network_interface,
+            InetAddress local_address,
+            String usn,
+            URL location);
 	
-	public void
+	void
 	rootAlive(
-		String				usn,
-		URL					location );
+            String usn,
+            URL location);
 	
-	public void
+	void
 	rootLost(
-		InetAddress			local_address,
-		String				usn );
+            InetAddress local_address,
+            String usn);
 	
-	public void
+	void
 	interfaceChanged(
-		NetworkInterface	network_interface );
+            NetworkInterface network_interface);
 
 }

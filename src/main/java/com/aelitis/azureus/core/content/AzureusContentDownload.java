@@ -26,10 +26,10 @@ import org.gudy.azureus2.plugins.download.Download;
 public interface 
 AzureusContentDownload 
 {
-	public Download
+	Download
 	getDownload();
 	
-	public Object
+	Object
 	getProperty(
-		String		name );
+            String name);
 }

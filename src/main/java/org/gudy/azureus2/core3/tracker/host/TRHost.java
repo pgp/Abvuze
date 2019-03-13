@@ -34,44 +34,44 @@ import org.gudy.azureus2.core3.tracker.server.*;
 public interface 
 TRHost
 {
-	public static final int DEFAULT_MIN_RETRY_DELAY 		= TRTrackerServer.DEFAULT_MIN_RETRY_DELAY;
-	public static final int DEFAULT_MAX_RETRY_DELAY 		= TRTrackerServer.DEFAULT_MAX_RETRY_DELAY;
-	public static final int DEFAULT_INC_BY					= TRTrackerServer.DEFAULT_INC_BY;
-	public static final int DEFAULT_INC_PER			 		= TRTrackerServer.DEFAULT_INC_PER;
-	public static final int DEFAULT_SCRAPE_RETRY_PERCENTAGE	= TRTrackerServer.DEFAULT_SCRAPE_RETRY_PERCENTAGE;
+	int DEFAULT_MIN_RETRY_DELAY 		= TRTrackerServer.DEFAULT_MIN_RETRY_DELAY;
+	int DEFAULT_MAX_RETRY_DELAY 		= TRTrackerServer.DEFAULT_MAX_RETRY_DELAY;
+	int DEFAULT_INC_BY					= TRTrackerServer.DEFAULT_INC_BY;
+	int DEFAULT_INC_PER			 		= TRTrackerServer.DEFAULT_INC_PER;
+	int DEFAULT_SCRAPE_RETRY_PERCENTAGE	= TRTrackerServer.DEFAULT_SCRAPE_RETRY_PERCENTAGE;
 
-	public static final int	DEFAULT_SCRAPE_CACHE_PERIOD				= TRTrackerServer.DEFAULT_SCRAPE_CACHE_PERIOD;
-	public static final int	DEFAULT_ANNOUNCE_CACHE_PERIOD			= TRTrackerServer.DEFAULT_ANNOUNCE_CACHE_PERIOD;
-	public static final int	DEFAULT_ANNOUNCE_CACHE_PEER_THRESHOLD	= TRTrackerServer.DEFAULT_ANNOUNCE_CACHE_PEER_THRESHOLD;
+	int	DEFAULT_SCRAPE_CACHE_PERIOD				= TRTrackerServer.DEFAULT_SCRAPE_CACHE_PERIOD;
+	int	DEFAULT_ANNOUNCE_CACHE_PERIOD			= TRTrackerServer.DEFAULT_ANNOUNCE_CACHE_PERIOD;
+	int	DEFAULT_ANNOUNCE_CACHE_PEER_THRESHOLD	= TRTrackerServer.DEFAULT_ANNOUNCE_CACHE_PEER_THRESHOLD;
 	
-	public static final int DEFAULT_PORT 					= TRTrackerServer.DEFAULT_TRACKER_PORT;
-	public static final int DEFAULT_PORT_SSL				= TRTrackerServer.DEFAULT_TRACKER_PORT_SSL;
+	int DEFAULT_PORT 					= TRTrackerServer.DEFAULT_TRACKER_PORT;
+	int DEFAULT_PORT_SSL				= TRTrackerServer.DEFAULT_TRACKER_PORT_SSL;
 
-	public void
+	void
 	initialise(
-		TRHostTorrentFinder	finder );
+            TRHostTorrentFinder finder);
 		
-	public String
+	String
 	getName();
 	
-	public InetAddress
+	InetAddress
 	getBindIP();
 	
-	public TRHostTorrent
+	TRHostTorrent
 	hostTorrent(
-		TOTorrent		torrent,
-		boolean			persistent,
-		boolean			passive )
+            TOTorrent torrent,
+            boolean persistent,
+            boolean passive)
 	
 		throws TRHostException;
 	
-	public TRHostTorrent
+	TRHostTorrent
 	publishTorrent(
-		TOTorrent		torrent )
+            TOTorrent torrent)
 		
 		throws TRHostException;
 				
-	public TRHostTorrent[]
+	TRHostTorrent[]
 	getTorrents();
 	
 		/**
@@ -79,35 +79,35 @@ TRHost
 		 * @param torrent
 		 * @return
 		 */
-	
-	public TRHostTorrent
+
+        TRHostTorrent
 	getHostTorrent(
-		TOTorrent		torrent );
+                TOTorrent torrent);
 	
-	public void
+	void
 	addListener(
-		TRHostListener	l );
+            TRHostListener l);
 		
-	public void
+	void
 	removeListener(
-		TRHostListener	l );
+            TRHostListener l);
 	
-	public void
+	void
 	addListener2(
-		TRHostListener2	l );
+            TRHostListener2 l);
 		
-	public void
+	void
 	removeListener2(
-		TRHostListener2	l );
+            TRHostListener2 l);
 	
-	public void
+	void
 	addAuthenticationListener(
-		TRHostAuthenticationListener	l );
+            TRHostAuthenticationListener l);
 	
-	public void
+	void
 	removeAuthenticationListener(
-		TRHostAuthenticationListener	l );
+            TRHostAuthenticationListener l);
 	
-	public void
+	void
 	close();
 }

@@ -30,16 +30,16 @@ package org.gudy.azureus2.core3.tracker.server;
 public interface 
 TRTrackerServerRequestListener
 {
-	public void
+	void
 	preProcess(
-		TRTrackerServerRequest	request )
+            TRTrackerServerRequest request)
 
 	
 		throws TRTrackerServerException;
 	
-	public void
+	void
 	postProcess(
-		TRTrackerServerRequest	request )
+            TRTrackerServerRequest request)
 	
 		throws TRTrackerServerException;
 }

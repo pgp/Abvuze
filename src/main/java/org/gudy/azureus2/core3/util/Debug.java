@@ -146,7 +146,7 @@ public class Debug {
       // [0] = our throw
       // [1] = the line that called getLastCaller
       // [2] = the line that called the function that has getLastCaller
-      StackTraceElement st[] = e.getStackTrace();
+        StackTraceElement[] st = e.getStackTrace();
       if (st == null || st.length == 0)
       	return "??";
       if (st.length > 3 + numToGoBackFurther)
@@ -168,7 +168,7 @@ public class Debug {
 	      // [0] = our throw
 	      // [1] = the line that called getLastCaller
 	      // [2] = the line that called the function that has getLastCaller
-	      StackTraceElement st[] = e.getStackTrace();
+            StackTraceElement[] st = e.getStackTrace();
 	      StackTraceElement ste;
 	      if (st == null || st.length == 0)
 	      	return "??";
@@ -197,7 +197,7 @@ public class Debug {
       throw new Exception();
     }
     catch (Exception e) {
-      StackTraceElement st[] = e.getStackTrace();
+        StackTraceElement[] st = e.getStackTrace();
       for (int i = 1; i < st.length - endNumToSkip; i++) {
         if (!st[i].getMethodName().endsWith("StackTrace"))
         	sStackTrace += st[i].toString() + "\n";
@@ -332,23 +332,21 @@ public class Debug {
 		 Thread[] threadList = new Thread[threadGroup.activeCount()];
 			
 		 threadGroup.enumerate(threadList);
-			
-		 for (int i = 0;	i < threadList.length;	i++){
 
-		 	Thread t = 	threadList[i];
-		 	
-		 	if ( t != null ){
-		 		
-		 		String 	name = t.getName();
-		 		
-		 		if ( name.startsWith( "AWT" )){
-		 			
-		 			out( "Interrupting thread '".concat(t.toString()).concat("'" ));
-		 			
-		 			t.interrupt();
-		 		}
-			}
-		}
+        for (Thread t : threadList) {
+
+            if (t != null) {
+
+                String name = t.getName();
+
+                if (name.startsWith("AWT")) {
+
+                    out("Interrupting thread '".concat(t.toString()).concat("'"));
+
+                    t.interrupt();
+                }
+            }
+        }
 		
 		if ( threadGroup.getParent() != null ){
 	  	
@@ -375,16 +373,14 @@ public class Debug {
 	  Thread[] threadList = new Thread[threadGroup.activeCount()];
 			
 	  threadGroup.enumerate(threadList);
-			
-	  for (int i = 0;	i < threadList.length;	i++){
 
-		Thread t = 	threadList[i];
-		
-		if ( t != null ){		
-		
-		   out( indent.concat("active thread = ").concat(t.toString()).concat(", daemon = ").concat(String.valueOf(t.isDaemon())));
-		}
-	  }
+       for (Thread t : threadList) {
+
+           if (t != null) {
+
+               out(indent.concat("active thread = ").concat(t.toString()).concat(", daemon = ").concat(String.valueOf(t.isDaemon())));
+           }
+       }
 	  
 	  if ( threadGroup.getParent() != null ){
 	  	
@@ -420,15 +416,13 @@ public class Debug {
 		out( "System Properties:");
 		
  		Properties props = System.getProperties();
- 		
- 		Iterator it = props.keySet().iterator();
- 		
- 		while(it.hasNext()){
- 			
- 			String	name = (String)it.next();
- 			
- 			out( "\t".concat(name).concat(" = '").concat(props.get(name).toString()).concat("'" ));
- 		}
+
+        for (Object o : props.keySet()) {
+
+            String name = (String) o;
+
+            out("\t".concat(name).concat(" = '").concat(props.get(name).toString()).concat("'"));
+        }
 	}
 	
 	public static String

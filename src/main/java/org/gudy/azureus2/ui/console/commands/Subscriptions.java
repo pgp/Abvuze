@@ -23,7 +23,6 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import org.gudy.azureus2.core3.util.Debug;
-import org.gudy.azureus2.core3.util.TimeFormatter;
 import org.gudy.azureus2.ui.console.ConsoleInput;
 
 import com.aelitis.azureus.core.subs.*;
@@ -77,322 +76,339 @@ public class Subscriptions extends IConsoleCommand {
 		String cmd = args.get(0);
 			
 		SubscriptionManager sub_man = SubscriptionManagerFactory.getSingleton();
-		
-		if ( cmd.equals( "list" )){
-			
-			ci.out.println("> -----");
 
-			current_subs = sub_man.getSubscriptions( true );
-			
-			int index = 1;
-			
-			for ( Subscription sub: current_subs ){
-				
-				SubscriptionHistory history = sub.getHistory();
-				
-				String index_str = "" + index++;
-				
-				while( index_str.length() < 3 ){
-					index_str += " ";
-				}
-				
-				String str = index_str + sub.getName() + ", unread=" + history.getNumUnread() + ", auto_download=" + (history.isAutoDownload()?"yes":"no");
-				
-				str += ", check_period=" + history.getCheckFrequencyMins() + " mins";
-				
-				long	last_check = history.getLastScanTime();
-				
-				str += ", last_check=" + (last_check<=0?"never":new SimpleDateFormat("yy/MM/dd HH:mm" ).format( last_check ));
-				
-				String last_error = history.getLastError();
-				
-				if ( last_error != null && last_error.length() > 0 ){
-					
-					str += ", last_error=" + last_error;
-				}
-				
-				ci.out.println( str );
-			}
-					
-			if ( current_subs.length==0 ){
-				
-				ci.out.println( "No Subscriptions" );
-			}
-		}else if ( cmd.equals( "create" )){
-	
-			if ( args.size() < 3 ){
-				
-				ci.out.println( "Usage: subs create <name> <rss_feed_url>" );
-				
-			}else{
-				
-				try{
-					sub_man.createRSS( args.get(1), new URL(args.get(2)), SubscriptionHistory.DEFAULT_CHECK_INTERVAL_MINS, new HashMap());
-					
-					ci.out.println( "Subscription created" );
-					
-				}catch( Throwable e ){
-					
-					ci.out.println( "Failed to create subscription: " + Debug.getNestedExceptionMessage( e ));
-				}
-			}
-			
-		}else if ( cmd.equals( "select" )){
-			
-			if ( args.size() < 2 ){
-				
-				ci.out.println( "Usage: subs select <number>" );
-				
-			}else{
-				
-				try{
-					int	index = Integer.parseInt( args.get(1));
-					
-					if ( current_subs == null ){
-						
-						throw( new Exception( "subscriptions must be listed prior to being selected" ));
-						
-					}else if ( current_subs.length == 0 ){
-						
-						throw( new Exception( "no subscriptions exist" ));
-						
-					}else if ( index < 0 || index > current_subs.length ){
-						
-						throw( new Exception( "subscription index '" + index + "' is out of range" ));
+        switch (cmd) {
+            case "list":
 
-					}else{
-						current_sub = current_subs[index-1];
-						
-						current_results = null;
-						
-						ci.out.println( "Selected subscription '" + current_sub.getName() + "'" );
-					}
-				}catch( Throwable e ){
-				
-					ci.out.println( "Failed to select subscription: " + Debug.getNestedExceptionMessage( e ));
+                ci.out.println("> -----");
 
-				}
-			}
-			
-		}else if ( 	cmd.equals( "update" ) || 
-					cmd.equals( "results" ) || 
-					cmd.equals( "set_autodownload" ) ||
-					cmd.equals( "set_updatemins" ) ||
-					cmd.equals( "set_read" ) || 
-					cmd.equals( "set_unread" )|| 
-					cmd.equals( "download" )|| 
-					cmd.equals( "delete" )){
-			
-			if ( current_sub == null ){
-				
-				ci.out.println( "No current subscription - select one!" );
-				
-			}else{
-						
-				if ( cmd.equals( "update" )){
-					
-					try{
-						sub_man.getScheduler().downloadAsync( current_sub, true );
-						
-						ci.out.println( "Subscription scheduled for update" );
-						
-					}catch( Throwable e ){
-						
-						ci.out.println( "Subscription update failed: " + Debug.getNestedExceptionMessage(e));
-					}
-					
-				}else if ( cmd.equals( "results" )){
-					
-					boolean do_all = args.size() > 1 && args.get(1).equals( "all" );
-						
-					int	index = 1;
-					
-					int	total_read		= 0;
-					int total_unread	= 0;
-					
-					current_results = new ArrayList<SubscriptionResult>();
+                current_subs = sub_man.getSubscriptions(true);
 
-					SubscriptionResult[] results = current_sub.getHistory().getResults( false );
+                int index = 1;
 
-					for ( SubscriptionResult result: results ){
-						
-						boolean is_read = result.getRead();
-						
-						if ( is_read ){
-							
-							total_read++;
-							
-						}else{
-							
-							total_unread++;
-						}
-						
-						if ( is_read && !do_all ){
-							
-							continue;
-						}
-							
-						current_results.add( result );
-						
-						Map map = result.toJSONMap();
-						
-						String index_str = "" + index++;
-						
-						while( index_str.length() < 3 ){
-							index_str += " ";
-						}
-						
-						String str = index_str + map.get("n") + ", size=" + map.get("l") + ", seeds=" + map.get("s") + ", peers=" + map.get("p");
-						
-						if ( do_all ){
-							
-							str += ", read=" + (is_read?"yes":"no" );
-						}
-						
-						ci.out.println( str );
-					}
-					
-					ci.out.println("> -----");
-					ci.out.println("Total read=" + total_read + ", unread=" + total_unread );
-				
-				}else if ( 	cmd.equals( "set_autodownload" )){
-					
-					if ( args.size() < 2 ){
-						
-						ci.out.println( "Usage: " + cmd + " [yes|no]" );
-						
-					}else if ( !current_sub.isAutoDownloadSupported()){
-						
-						ci.out.println( "Auto-download not supported for this subscription" );
-						
-					}else{
-						
-						String temp = args.get(1);
-						
-						if ( temp.equals( "yes" )){
-							
-							current_sub.getHistory().setAutoDownload( true );
-							
-						}else if ( temp.equals( "no" )){
-							
-							current_sub.getHistory().setAutoDownload( false );
-							
-						}else{
-							
-							ci.out.println( "Usage: " + cmd + " [yes|no]" );
-						}
-					}
-					
-				}else if ( 	cmd.equals( "set_updatemins" )){
-					
-					if ( args.size() < 2 ){
-						
-						ci.out.println( "Usage: " + cmd + " <minutes>" );
-					
-						
-					}else{
-						
-						try{
-							int	mins = Integer.parseInt( args.get(1));
-						
-							current_sub.getHistory().setCheckFrequencyMins( mins );
-							
-						}catch( Throwable e ){
-							
-							ci.out.println( "Usage: " + cmd + " <minutes>" );
-						}
-					}
-				}else if ( 	cmd.equals( "set_read" ) || 
-							cmd.equals( "set_unread" )|| 
-							cmd.equals( "download" )){
-					
-					if ( args.size() < 2 ){
-						
-						ci.out.println( "Usage: " + cmd + " <result_number>|all" );
-						
-					}else if ( current_results == null ){
-						
-						ci.out.println( "results must be listed before operating on them" );
-						
-					}else{
-						try{
-							String temp = args.get(1);
-							
-							int		do_index = -1;
-							
-							if ( !temp.equals( "all" )){
-							
-								do_index = Integer.parseInt( temp );
-								
-								if ( do_index < 1 || do_index > current_results.size()){
-									
-									throw( new Exception( "Invalid result index" ));
-								}
-							}
-							
-							
-							List<SubscriptionResult> to_do = new ArrayList<SubscriptionResult>();
-							
-							if ( do_index == -1 ){
-								
-								to_do.addAll( current_results );
-								
-							}else{
-								
-								to_do.add( current_results.get( do_index-1 ));
-							}
-							
-							for ( SubscriptionResult result: to_do ){
-								
-								if ( cmd.equals( "set_read" )){
-									
-									result.setRead( true );
-									
-								}else if ( cmd.equals( "set_unread" )){
-									
-									result.setRead( false );
-									
-								}else if ( cmd.equals( "download" )){
-									
-									String download_link = result.getDownloadLink();
-									
-									try{
-										URL url = new URL( result.getDownloadLink());
-									
-										ci.downloadRemoteTorrent( url.toExternalForm());
-										
-										ci.out.println( "Queueing '" + download_link + "' for download" );
-										
-										result.setRead( true );
-										
-									}catch( Throwable e ){
-										
-										ci.out.println( "Failed to add download from URL '" + download_link + "': " + Debug.getNestedExceptionMessage(e));
-									}
-								}
-								
-							}
-						}catch( Throwable e ){
-							
-							ci.out.println( "Operation failed: " + Debug.getNestedExceptionMessage( e ));
+                for (Subscription sub : current_subs) {
 
-						}
-					}
-					
-				}else if ( cmd.equals( "delete" )){
-										
-					ci.out.println( "Subscription '" + current_sub.getName() + "' deleted" );
-					
-					current_sub.remove();
+                    SubscriptionHistory history = sub.getHistory();
 
-					current_sub		= null;
-					current_results	= null;
-				}
-			}
-		}else{
-			
-			ci.out.println( "Unsupported sub-command: " + cmd );
-		}
+                    String index_str = "" + index++;
+
+                    while (index_str.length() < 3) {
+                        index_str += " ";
+                    }
+
+                    String str = index_str + sub.getName() + ", unread=" + history.getNumUnread() + ", auto_download=" + (history.isAutoDownload() ? "yes" : "no");
+
+                    str += ", check_period=" + history.getCheckFrequencyMins() + " mins";
+
+                    long last_check = history.getLastScanTime();
+
+                    str += ", last_check=" + (last_check <= 0 ? "never" : new SimpleDateFormat("yy/MM/dd HH:mm").format(last_check));
+
+                    String last_error = history.getLastError();
+
+                    if (last_error != null && last_error.length() > 0) {
+
+                        str += ", last_error=" + last_error;
+                    }
+
+                    ci.out.println(str);
+                }
+
+                if (current_subs.length == 0) {
+
+                    ci.out.println("No Subscriptions");
+                }
+                break;
+            case "create":
+
+                if (args.size() < 3) {
+
+                    ci.out.println("Usage: subs create <name> <rss_feed_url>");
+
+                } else {
+
+                    try {
+                        sub_man.createRSS(args.get(1), new URL(args.get(2)), SubscriptionHistory.DEFAULT_CHECK_INTERVAL_MINS, new HashMap());
+
+                        ci.out.println("Subscription created");
+
+                    } catch (Throwable e) {
+
+                        ci.out.println("Failed to create subscription: " + Debug.getNestedExceptionMessage(e));
+                    }
+                }
+
+                break;
+            case "select":
+
+                if (args.size() < 2) {
+
+                    ci.out.println("Usage: subs select <number>");
+
+                } else {
+
+                    try {
+                        index = Integer.parseInt(args.get(1));
+
+                        if (current_subs == null) {
+
+                            throw (new Exception("subscriptions must be listed prior to being selected"));
+
+                        } else if (current_subs.length == 0) {
+
+                            throw (new Exception("no subscriptions exist"));
+
+                        } else if (index < 0 || index > current_subs.length) {
+
+                            throw (new Exception("subscription index '" + index + "' is out of range"));
+
+                        } else {
+                            current_sub = current_subs[index - 1];
+
+                            current_results = null;
+
+                            ci.out.println("Selected subscription '" + current_sub.getName() + "'");
+                        }
+                    } catch (Throwable e) {
+
+                        ci.out.println("Failed to select subscription: " + Debug.getNestedExceptionMessage(e));
+
+                    }
+                }
+
+                break;
+            case "update":
+            case "results":
+            case "set_autodownload":
+            case "set_updatemins":
+            case "set_read":
+            case "set_unread":
+            case "download":
+            case "delete":
+
+                if (current_sub == null) {
+
+                    ci.out.println("No current subscription - select one!");
+
+                } else {
+
+                    switch (cmd) {
+                        case "update":
+
+                            try {
+                                sub_man.getScheduler().downloadAsync(current_sub, true);
+
+                                ci.out.println("Subscription scheduled for update");
+
+                            } catch (Throwable e) {
+
+                                ci.out.println("Subscription update failed: " + Debug.getNestedExceptionMessage(e));
+                            }
+
+                            break;
+                        case "results":
+
+                            boolean do_all = args.size() > 1 && args.get(1).equals("all");
+
+                            index = 1;
+
+                            int total_read = 0;
+                            int total_unread = 0;
+
+                            current_results = new ArrayList<>();
+
+                            SubscriptionResult[] results = current_sub.getHistory().getResults(false);
+
+                            for (SubscriptionResult result : results) {
+
+                                boolean is_read = result.getRead();
+
+                                if (is_read) {
+
+                                    total_read++;
+
+                                } else {
+
+                                    total_unread++;
+                                }
+
+                                if (is_read && !do_all) {
+
+                                    continue;
+                                }
+
+                                current_results.add(result);
+
+                                Map map = result.toJSONMap();
+
+                                String index_str = "" + index++;
+
+                                while (index_str.length() < 3) {
+                                    index_str += " ";
+                                }
+
+                                String str = index_str + map.get("n") + ", size=" + map.get("l") + ", seeds=" + map.get("s") + ", peers=" + map.get("p");
+
+                                if (do_all) {
+
+                                    str += ", read=" + (is_read ? "yes" : "no");
+                                }
+
+                                ci.out.println(str);
+                            }
+
+                            ci.out.println("> -----");
+                            ci.out.println("Total read=" + total_read + ", unread=" + total_unread);
+
+                            break;
+                        case "set_autodownload":
+
+                            if (args.size() < 2) {
+
+                                ci.out.println("Usage: " + cmd + " [yes|no]");
+
+                            } else if (!current_sub.isAutoDownloadSupported()) {
+
+                                ci.out.println("Auto-download not supported for this subscription");
+
+                            } else {
+
+                                String temp = args.get(1);
+
+                                if (temp.equals("yes")) {
+
+                                    current_sub.getHistory().setAutoDownload(true);
+
+                                } else if (temp.equals("no")) {
+
+                                    current_sub.getHistory().setAutoDownload(false);
+
+                                } else {
+
+                                    ci.out.println("Usage: " + cmd + " [yes|no]");
+                                }
+                            }
+
+                            break;
+                        case "set_updatemins":
+
+                            if (args.size() < 2) {
+
+                                ci.out.println("Usage: " + cmd + " <minutes>");
+
+
+                            } else {
+
+                                try {
+                                    int mins = Integer.parseInt(args.get(1));
+
+                                    current_sub.getHistory().setCheckFrequencyMins(mins);
+
+                                } catch (Throwable e) {
+
+                                    ci.out.println("Usage: " + cmd + " <minutes>");
+                                }
+                            }
+                            break;
+                        case "set_read":
+                        case "set_unread":
+                        case "download":
+
+                            if (args.size() < 2) {
+
+                                ci.out.println("Usage: " + cmd + " <result_number>|all");
+
+                            } else if (current_results == null) {
+
+                                ci.out.println("results must be listed before operating on them");
+
+                            } else {
+                                try {
+                                    String temp = args.get(1);
+
+                                    int do_index = -1;
+
+                                    if (!temp.equals("all")) {
+
+                                        do_index = Integer.parseInt(temp);
+
+                                        if (do_index < 1 || do_index > current_results.size()) {
+
+                                            throw (new Exception("Invalid result index"));
+                                        }
+                                    }
+
+
+                                    List<SubscriptionResult> to_do = new ArrayList<>();
+
+                                    if (do_index == -1) {
+
+                                        to_do.addAll(current_results);
+
+                                    } else {
+
+                                        to_do.add(current_results.get(do_index - 1));
+                                    }
+
+                                    for (SubscriptionResult result : to_do) {
+
+                                        switch (cmd) {
+                                            case "set_read":
+
+                                                result.setRead(true);
+
+                                                break;
+                                            case "set_unread":
+
+                                                result.setRead(false);
+
+                                                break;
+                                            case "download":
+
+                                                String download_link = result.getDownloadLink();
+
+                                                try {
+                                                    URL url = new URL(result.getDownloadLink());
+
+                                                    ci.downloadRemoteTorrent(url.toExternalForm());
+
+                                                    ci.out.println("Queueing '" + download_link + "' for download");
+
+                                                    result.setRead(true);
+
+                                                } catch (Throwable e) {
+
+                                                    ci.out.println("Failed to add download from URL '" + download_link + "': " + Debug.getNestedExceptionMessage(e));
+                                                }
+                                                break;
+                                        }
+
+                                    }
+                                } catch (Throwable e) {
+
+                                    ci.out.println("Operation failed: " + Debug.getNestedExceptionMessage(e));
+
+                                }
+                            }
+
+                            break;
+                        case "delete":
+
+                            ci.out.println("Subscription '" + current_sub.getName() + "' deleted");
+
+                            current_sub.remove();
+
+                            current_sub = null;
+                            current_results = null;
+                            break;
+                    }
+                }
+                break;
+            default:
+
+                ci.out.println("Unsupported sub-command: " + cmd);
+                break;
+        }
 		
 		ci.out.println("> -----");
 	}

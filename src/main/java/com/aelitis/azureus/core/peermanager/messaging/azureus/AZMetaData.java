@@ -122,9 +122,9 @@ AZMetaData
 	getVersion() 
 	{ 
 		return( version ); 
-	};
+	}
 
-	public String 
+    public String
 	getDescription()
 	{
 		return( getID() + " piece #" + piece + ", mt=" + msg_type );
@@ -162,8 +162,8 @@ AZMetaData
 			
 			Map payload_map = new HashMap();
 
-			payload_map.put( "msg_type", new Long( msg_type ));
-			payload_map.put( "piece", new Long(piece));
+			payload_map.put( "msg_type", (long) msg_type);
+			payload_map.put( "piece", (long) piece);
 			
 			if ( total_size > 0 ){
 				

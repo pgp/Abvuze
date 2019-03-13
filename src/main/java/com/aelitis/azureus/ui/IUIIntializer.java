@@ -24,9 +24,9 @@ package com.aelitis.azureus.ui;
  */
 public interface IUIIntializer
 {
-	public void stopIt(boolean isForRestart, boolean isCloseAreadyInProgress);
+	void stopIt(boolean isForRestart, boolean isCloseAreadyInProgress);
 
-	public void run();
+	void run();
 
 	/**
 	 * Add a listener that gets triggered on progress changes (tasks, percent)
@@ -35,7 +35,7 @@ public interface IUIIntializer
 	 *
 	 * @since 3.0.1.3
 	 */
-	public void addListener(InitializerListener listener);
+    void addListener(InitializerListener listener);
 
 	/**
 	 * Remove listener that gets triggered on progress changes (tasks, percent)
@@ -44,7 +44,7 @@ public interface IUIIntializer
 	 *
 	 * @since 3.0.1.3
 	 */
-	public void removeListener(InitializerListener listener);
+    void removeListener(InitializerListener listener);
 
 	/**
 	 * 
@@ -76,5 +76,5 @@ public interface IUIIntializer
 	 * 
 	 * @since 4.2.0.1
 	 */
-	public void runInSWTThread();
+    void runInSWTThread();
 }

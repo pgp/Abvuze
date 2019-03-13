@@ -219,7 +219,7 @@ PluginInitializer
   private static List		initThreads = new ArrayList(1);
   
   private static AsyncDispatcher	async_dispatcher = new AsyncDispatcher();
-  private static List<PluginEvent>	plugin_event_history = new ArrayList<PluginEvent>();
+  private static List<PluginEvent>	plugin_event_history = new ArrayList<>();
   
   
   
@@ -234,8 +234,8 @@ PluginInitializer
   
   private static boolean	loading_builtin;
   
-  private List<Plugin>					s_plugins				= new ArrayList<Plugin>();
-  private List<PluginInterfaceImpl>		s_plugin_interfaces		= new ArrayList<PluginInterfaceImpl>();
+  private List<Plugin>					s_plugins				= new ArrayList<>();
+  private List<PluginInterfaceImpl>		s_plugin_interfaces		= new ArrayList<>();
   
   private boolean	initialisation_complete;
   
@@ -552,18 +552,18 @@ PluginInitializer
   				
   				pis = new ArrayList( s_plugin_interfaces );
   			}
-  			
-  			for (int i=0;i<pis.size();i++){
-  		  		
-  				PluginInterfaceImpl pi = (PluginInterfaceImpl)pis.get(i);
-  				
-  		  		Plugin p = pi.getPlugin();
-  		  		
-  		  		if ( p instanceof FailedPlugin ){
-  		  			
-  		  			unloadPlugin( pi );
-  		  		}
-  		  	} 
+
+            for (Object pi1 : pis) {
+
+                PluginInterfaceImpl pi = (PluginInterfaceImpl) pi1;
+
+                Plugin p = pi.getPlugin();
+
+                if (p instanceof FailedPlugin) {
+
+                    unloadPlugin(pi);
+                }
+            }
   			
   		}
   		
@@ -616,93 +616,91 @@ PluginInitializer
 	    	Logger.log(new LogEvent(LOGID, "Loading built-in plugins"));
 	    
   		PluginManagerDefaults	def = PluginManager.getDefaults();
-    
-  		for (int i=0;i<builtin_plugins.length;i++){
-    		
-  			if ( def.isDefaultPluginEnabled( builtin_plugins[i][0])){
-    		
-  				try{
-  					loading_builtin	= true;
-  					
-  						// lazyness here, for builtin we use static load method with default plugin interface
-  						// if we need to improve on this then we'll have to move to a system more akin to
-  						// the dir-loaded plugins
-  					
-  					Class	cla = root_class_loader.loadClass( builtin_plugins[i][1]);
-							      
-  			      	Method	load_method = cla.getMethod( "load", new Class[]{ PluginInterface.class });
-  			      	
-  			      	load_method.invoke( null, new Object[]{ getDefaultInterfaceSupport() });
-  			      	
-					Logger.log(new LogEvent(LOGID, LogEvent.LT_WARNING,
-							"Built-in plugin '" + builtin_plugins[i][0] + "' ok"));
-  			      }catch( NoSuchMethodException e ){
-  			      	
-  			      }catch( Throwable e ){
-  			      	
-					if ( builtin_plugins[i][4].equalsIgnoreCase("true" )){
-							
-						Debug.printStackTrace( e );
-	  			
-						Logger.log(new LogAlert(LogAlert.UNREPEATABLE,
-								"Load of built in plugin '" + builtin_plugins[i][2] + "' fails", e));
-					}
-  				}finally{
-  					
-  					loading_builtin = false;
-  				}
-  			}else{
-  				if (Logger.isEnabled())
-						Logger.log(new LogEvent(LOGID, LogEvent.LT_WARNING,
-								"Built-in plugin '" + builtin_plugins[i][2] + "' is disabled"));
-  			}
-  		}
+
+        for (String[] builtin_plugin : builtin_plugins) {
+
+            if (def.isDefaultPluginEnabled(builtin_plugin[0])) {
+
+                try {
+                    loading_builtin = true;
+
+                    // lazyness here, for builtin we use static load method with default plugin interface
+                    // if we need to improve on this then we'll have to move to a system more akin to
+                    // the dir-loaded plugins
+
+                    Class cla = root_class_loader.loadClass(builtin_plugin[1]);
+
+                    Method load_method = cla.getMethod("load", PluginInterface.class);
+
+                    load_method.invoke(null, getDefaultInterfaceSupport());
+
+                    Logger.log(new LogEvent(LOGID, LogEvent.LT_WARNING,
+                            "Built-in plugin '" + builtin_plugin[0] + "' ok"));
+                } catch (NoSuchMethodException e) {
+
+                } catch (Throwable e) {
+
+                    if (builtin_plugin[4].equalsIgnoreCase("true")) {
+
+                        Debug.printStackTrace(e);
+
+                        Logger.log(new LogAlert(LogAlert.UNREPEATABLE,
+                                "Load of built in plugin '" + builtin_plugin[2] + "' fails", e));
+                    }
+                } finally {
+
+                    loading_builtin = false;
+                }
+            } else {
+                if (Logger.isEnabled())
+                    Logger.log(new LogEvent(LOGID, LogEvent.LT_WARNING,
+                            "Built-in plugin '" + builtin_plugin[2] + "' is disabled"));
+            }
+        }
   		
  		if (Logger.isEnabled())
 			Logger.log(new LogEvent(LOGID, "Loading dynamically registered plugins"));
-		 
-		for (int i=0;i<registration_queue.size();i++){
-			
-			Object	entry = registration_queue.get(i);
-				
-			Class	cla;
-			String	id;
-			
-			if ( entry instanceof Class ){
-				
-  				cla = (Class)entry;
-  				
-  				id	= cla.getName();			
-			}else{
-				
-				Object[]	x = (Object[])entry;
-				
-				Plugin	plugin = (Plugin)x[0];
-				
-				cla	= plugin.getClass();
-				
-				id	= (String)x[1];
-			}
-			
-			try{
-					// lazyness here, for dynamic we use static load method with default plugin interface
-					// if we need to improve on this then we'll have to move to a system more akin to
-					// the dir-loaded plugins
-										      
-				Method	load_method = cla.getMethod( "load", new Class[]{ PluginInterface.class });
-		      	
-		      	load_method.invoke( null, new Object[]{ getDefaultInterfaceSupport() });
-		      	
-		    }catch( NoSuchMethodException e ){
-		      	
-		    }catch( Throwable e ){
-		      	
-				Debug.printStackTrace( e );
-		
-				Logger.log(new LogAlert(LogAlert.UNREPEATABLE,
-						"Load of dynamic plugin '" + id + "' fails", e));
-			}
-		}
+
+        for (Object entry : registration_queue) {
+
+            Class cla;
+            String id;
+
+            if (entry instanceof Class) {
+
+                cla = (Class) entry;
+
+                id = cla.getName();
+            } else {
+
+                Object[] x = (Object[]) entry;
+
+                Plugin plugin = (Plugin) x[0];
+
+                cla = plugin.getClass();
+
+                id = (String) x[1];
+            }
+
+            try {
+                // lazyness here, for dynamic we use static load method with default plugin interface
+                // if we need to improve on this then we'll have to move to a system more akin to
+                // the dir-loaded plugins
+
+                Method load_method = cla.getMethod("load", PluginInterface.class);
+
+                load_method.invoke(null, getDefaultInterfaceSupport());
+
+            } catch (NoSuchMethodException e) {
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+
+                Logger.log(new LogAlert(LogAlert.UNREPEATABLE,
+                        "Load of dynamic plugin '" + id + "' fails", e));
+            }
+        }
 		
 		return pluginLoaded;
   	}
@@ -737,17 +735,17 @@ PluginInitializer
  			if ( files != null ){
  				
  				files = PluginLauncherImpl.getHighestJarVersions( files, new String[]{ null }, new String[]{ null }, false );
- 				
- 				for (int i=0;i<files.length;i++){
- 					
- 				 	if (Logger.isEnabled())
- 						Logger.log(new LogEvent(LOGID, "Share class loader extended by " + files[i].toString()));
 
- 				 	root_class_loader = 
- 				 		PluginLauncherImpl.addFileToClassPath(
- 				 				PluginInitializer.class.getClassLoader(),
- 				 				root_class_loader, files[i] );
- 				}
+                for (File file : files) {
+
+                    if (Logger.isEnabled())
+                        Logger.log(new LogEvent(LOGID, "Share class loader extended by " + file.toString()));
+
+                    root_class_loader =
+                            PluginLauncherImpl.addFileToClassPath(
+                                    PluginInitializer.class.getClassLoader(),
+                                    root_class_loader, file);
+                }
  			}
  		}
   	}
@@ -774,38 +772,38 @@ PluginInitializer
     if( pluginDirectory.isDirectory()){
     	
 	    File[] pluginsDirectory = pluginDirectory.listFiles();
-	    
-	    for(int i = 0 ; i < pluginsDirectory.length ; i++) {
-        
-        if( pluginsDirectory[i].getName().equals( "CVS" ) ) {
-        	
-        	if (Logger.isEnabled())
-						Logger.log(new LogEvent(LOGID, "Skipping plugin "
-								+ pluginsDirectory[i].getName()));
-          
-          continue;
-        }
-        
-	    	
-      if (Logger.isEnabled())
-				Logger.log(new LogEvent(LOGID, "Loading plugin "
-						+ pluginsDirectory[i].getName()));
 
-	    try{
-	    
-	    	List	loaded_pis = loadPluginFromDir(pluginsDirectory[i], bSkipAlreadyLoaded, loading_for_startup, initialise);
-	      	
-	    		// save details for later initialisation
-	    	
-	    	loaded_pi_list.add( loaded_pis );
-	    	dirLoadedPIs.addAll( loaded_pis );
-	    	
-	      }catch( PluginException e ){
-	      	
-	      		// already handled
-	      }
-	      
-	    }
+        for (File file : pluginsDirectory) {
+
+            if (file.getName().equals("CVS")) {
+
+                if (Logger.isEnabled())
+                    Logger.log(new LogEvent(LOGID, "Skipping plugin "
+                            + file.getName()));
+
+                continue;
+            }
+
+
+            if (Logger.isEnabled())
+                Logger.log(new LogEvent(LOGID, "Loading plugin "
+                        + file.getName()));
+
+            try {
+
+                List loaded_pis = loadPluginFromDir(file, bSkipAlreadyLoaded, loading_for_startup, initialise);
+
+                // save details for later initialisation
+
+                loaded_pi_list.add(loaded_pis);
+                dirLoadedPIs.addAll(loaded_pis);
+
+            } catch (PluginException e) {
+
+                // already handled
+            }
+
+        }
     } 
     return dirLoadedPIs;
   }
@@ -842,17 +840,17 @@ PluginInitializer
 
 	  boolean	looks_like_plugin	= false;
 
-	  for (int i=0;i<pluginContents.length;i++){
+      for (File pluginContent : pluginContents) {
 
-		  String	name = pluginContents[i].getName().toLowerCase();
+          String name = pluginContent.getName().toLowerCase();
 
-		  if ( name.endsWith( ".jar") || name.equals( "plugin.properties" )){
+          if (name.endsWith(".jar") || name.equals("plugin.properties")) {
 
-			  looks_like_plugin = true;
+              looks_like_plugin = true;
 
-			  break;
-		  }
-	  }
+              break;
+          }
+      }
 
 	  if ( !looks_like_plugin ){
 
@@ -871,32 +869,30 @@ PluginInitializer
 
 	  pluginContents	= PluginLauncherImpl.getHighestJarVersions( pluginContents, plugin_version, plugin_id, true );
 
-	  for( int i = 0 ; i < pluginContents.length ; i++){
+      for (File jar_file : pluginContents) {
 
-		  File	jar_file = pluginContents[i];
+          // migration hack for i18nAZ_1.0.jar
 
-		  // migration hack for i18nAZ_1.0.jar
+          if (pluginContents.length > 1) {
 
-		  if ( pluginContents.length > 1 ){
+              String name = jar_file.getName();
 
-			  String	name = jar_file.getName();
+              if (name.startsWith("i18nPlugin_")) {
 
-			  if ( name.startsWith( "i18nPlugin_" )){
+                  // non-versioned version still there, rename it
 
-				  // non-versioned version still there, rename it
+                  if (Logger.isEnabled())
+                      Logger.log(new LogEvent(LOGID, "renaming '" + name
+                              + "' to conform with versioning system"));
 
-				  if (Logger.isEnabled())
-					  Logger.log(new LogEvent(LOGID, "renaming '" + name
-							  + "' to conform with versioning system"));
+                  jar_file.renameTo(new File(jar_file.getParent(), "i18nAZ_0.1.jar  "));
 
-				  jar_file.renameTo( new File( jar_file.getParent(), "i18nAZ_0.1.jar  " ));
+                  continue;
+              }
+          }
 
-				  continue;
-			  }
-		  }
-
-		  plugin_class_loader = PluginLauncherImpl.addFileToClassPath( root_class_loader, plugin_class_loader, jar_file);
-	  }
+          plugin_class_loader = PluginLauncherImpl.addFileToClassPath(root_class_loader, plugin_class_loader, jar_file);
+      }
 
 	  String plugin_class_string = null;
 
@@ -912,20 +908,11 @@ PluginInitializer
 
 			  if ( properties_file.exists()){
 
-				  FileInputStream	fis = null;
+                  try (FileInputStream fis = new FileInputStream(properties_file)) {
 
-				  try{
-					  fis = new FileInputStream( properties_file );
+                      props.load(fis);
 
-					  props.load( fis );
-
-				  }finally{
-
-					  if ( fis != null ){
-
-						  fis.close();
-					  }
-				  }
+                  }
 
 			  }else{
 
@@ -1060,35 +1047,35 @@ PluginInitializer
 
 				  Properties new_props = (Properties)props.clone();
 
-				  for (int j=0;j<default_version_details.length;j++){
+                  for (String[] default_version_detail : default_version_details) {
 
-					  if ( plugin_class.equals( default_version_details[j][0] )){
+                      if (plugin_class.equals(default_version_detail[0])) {
 
-						  if ( new_props.get( "plugin.id") == null ){
+                          if (new_props.get("plugin.id") == null) {
 
-							  new_props.put( "plugin.id", default_version_details[j][1]);  
-						  }
+                              new_props.put("plugin.id", default_version_detail[1]);
+                          }
 
-						  if ( plugin_name == null ){
+                          if (plugin_name == null) {
 
-							  plugin_name	= default_version_details[j][2];
-						  }
+                              plugin_name = default_version_detail[2];
+                          }
 
-						  if ( new_props.get( "plugin.version") == null ){
+                          if (new_props.get("plugin.version") == null) {
 
-							  // no explicit version. If we've derived one then use that, otherwise defaults
+                              // no explicit version. If we've derived one then use that, otherwise defaults
 
-							  if ( plugin_version[0] != null ){
+                              if (plugin_version[0] != null) {
 
-								  new_props.put( "plugin.version", plugin_version[0]);
+                                  new_props.put("plugin.version", plugin_version[0]);
 
-							  }else{
+                              } else {
 
-								  new_props.put( "plugin.version", default_version_details[j][3]);
-							  }
-						  }
-					  }
-				  }
+                                  new_props.put("plugin.version", default_version_detail[3]);
+                              }
+                          }
+                      }
+                  }
 
 				  new_props.put( "plugin.class", plugin_class );
 
@@ -1132,37 +1119,35 @@ PluginInitializer
 
 					  if ( pid.endsWith( "_v" )){
 
-						  verified_files = new ArrayList<File>();
+						  verified_files = new ArrayList<>();
 
 						  // re-verify jar files
 
 						  log( "Re-verifying " + pid );
 
-						  for( int i = 0 ; i < pluginContents.length ; i++){
+                          for (File jar_file : pluginContents) {
 
-							  File	jar_file = pluginContents[i];
+                              if (jar_file.getName().endsWith(".jar")) {
 
-							  if ( jar_file.getName().endsWith( ".jar" )){
+                                  try {
+                                      log("    verifying " + jar_file);
 
-								  try{
-									  log( "    verifying " + jar_file );
+                                      AEVerifier.verifyData(jar_file);
 
-									  AEVerifier.verifyData( jar_file );
+                                      verified_files.add(jar_file);
 
-									  verified_files.add( jar_file );
+                                      log("    OK");
 
-									  log( "    OK" );
+                                  } catch (Throwable e) {
 
-								  }catch( Throwable e ){
+                                      String msg = "Error loading plugin '" + pluginName + "' / '" + plugin_class_string + "'";
 
-									  String	msg = "Error loading plugin '" + pluginName + "' / '" + plugin_class_string + "'";
+                                      Logger.log(new LogAlert(LogAlert.UNREPEATABLE, msg, e));
 
-									  Logger.log(new LogAlert(LogAlert.UNREPEATABLE, msg, e));
-
-									  plugin = new FailedPlugin(plugin_name,directory.getAbsolutePath());
-								  }
-							  }
-						  }
+                                      plugin = new FailedPlugin(plugin_name, directory.getAbsolutePath());
+                                  }
+                              }
+                          }
 					  }
 
 					  if ( plugin == null ){
@@ -1275,9 +1260,9 @@ PluginInitializer
 
 					  try{
 
-						  Method	load_method = plugin.getClass().getMethod( "load", new Class[]{ PluginInterface.class });
+						  Method	load_method = plugin.getClass().getMethod( "load", PluginInterface.class);
 
-						  load_method.invoke( plugin, new Object[]{ plugin_interface });
+						  load_method.invoke( plugin, plugin_interface);
 
 					  }catch( NoSuchMethodException e ){
 
@@ -1367,7 +1352,7 @@ PluginInitializer
 	  try{
 		  addInitThread();
 		  
-		  final LinkedList<Runnable> initQueue = new LinkedList<Runnable>();
+		  final LinkedList<Runnable> initQueue = new LinkedList<>();
 		  
 			for (int i = 0; i < loaded_pi_list.size(); i++) {
 				final int idx = i;
@@ -1523,7 +1508,7 @@ PluginInitializer
 										break;
 									}
 									
-									toRun = (Runnable)initQueue.remove(0);
+									toRun = initQueue.remove(0);
 								}
 								
 								try{
@@ -1553,7 +1538,7 @@ PluginInitializer
 						break;
 					}
 					
-					toRun = (Runnable)initQueue.remove(0);
+					toRun = initQueue.remove(0);
 				}
 				
 				try{
@@ -1601,76 +1586,74 @@ PluginInitializer
   		throws PluginException
   	{
   		PluginException	last_load_failure = null;
-  		
-  		for (int i=0;i<l.size();i++){
-  	
-  			final PluginInterfaceImpl	plugin_interface = (PluginInterfaceImpl)l.get(i);
-  			
-  			if (plugin_interface.getPluginState().isDisabled()) {
-  				
-  				synchronized( s_plugin_interfaces ){
-  					
-  					s_plugin_interfaces.add( plugin_interface );
-  				}
-  				
-  				continue;
-  			}
-  	  			
-  			if ( plugin_interface.getPluginState().isOperational()){
-  				
-  				continue;
-  			}
-  			
-  			Throwable	load_failure = null;
-  	
- 			final Plugin	plugin = plugin_interface.getPlugin();
 
-  			try{
-      	
-  				UtilitiesImpl.callWithPluginThreadContext(
-  					plugin_interface,
-  					new runnableWithException<PluginException>()
-  					{
-  						public void 
-  						run() 
-  							throws PluginException 
-  						{
-  							fireCreated( plugin_interface );
-				
-  							plugin.initialize(plugin_interface);
-      	  				
-  							if (!(plugin instanceof FailedPlugin)){
-  					
-  								plugin_interface.getPluginStateImpl().setOperational( true, false );
-  							}
-  						}
-  					});
-  				
-  			}catch( Throwable e ){
-      	
-  				load_failure	= e;
-  			}
-     
-  			synchronized( s_plugin_interfaces ){
-  				
-  				s_plugins.add( plugin );
-	      
-  				s_plugin_interfaces.add( plugin_interface );
-  			}
-  			
-  			if ( load_failure != null ){
-	      	
-  				Debug.printStackTrace( load_failure );
-	        
-  				String	msg = "Error initializing plugin '" + plugin_interface.getPluginName() + "'";
-	   	 
-  				Logger.log(new LogAlert(LogAlert.UNREPEATABLE, msg, load_failure));
-	
-  				System.out.println( msg + " : " + load_failure);
-	      	
-  				last_load_failure = new PluginException( msg, load_failure );
-  			}
-  		}
+        for (Object o : l) {
+
+            final PluginInterfaceImpl plugin_interface = (PluginInterfaceImpl) o;
+
+            if (plugin_interface.getPluginState().isDisabled()) {
+
+                synchronized (s_plugin_interfaces) {
+
+                    s_plugin_interfaces.add(plugin_interface);
+                }
+
+                continue;
+            }
+
+            if (plugin_interface.getPluginState().isOperational()) {
+
+                continue;
+            }
+
+            Throwable load_failure = null;
+
+            final Plugin plugin = plugin_interface.getPlugin();
+
+            try {
+
+                UtilitiesImpl.callWithPluginThreadContext(
+                        plugin_interface,
+                        new runnableWithException<PluginException>() {
+                            public void
+                            run()
+                                    throws PluginException {
+                                fireCreated(plugin_interface);
+
+                                plugin.initialize(plugin_interface);
+
+                                if (!(plugin instanceof FailedPlugin)) {
+
+                                    plugin_interface.getPluginStateImpl().setOperational(true, false);
+                                }
+                            }
+                        });
+
+            } catch (Throwable e) {
+
+                load_failure = e;
+            }
+
+            synchronized (s_plugin_interfaces) {
+
+                s_plugins.add(plugin);
+
+                s_plugin_interfaces.add(plugin_interface);
+            }
+
+            if (load_failure != null) {
+
+                Debug.printStackTrace(load_failure);
+
+                String msg = "Error initializing plugin '" + plugin_interface.getPluginName() + "'";
+
+                Logger.log(new LogAlert(LogAlert.UNREPEATABLE, msg, load_failure));
+
+                System.out.println(msg + " : " + load_failure);
+
+                last_load_failure = new PluginException(msg, load_failure);
+            }
+        }
       
   		if ( last_load_failure != null ){
       	
@@ -1767,9 +1750,9 @@ PluginInitializer
 	    			 {
 	    				 try{
 
-	    					 Method	load_method = plugin_class.getMethod( "load", new Class[]{ PluginInterface.class });
+	    					 Method	load_method = plugin_class.getMethod( "load", PluginInterface.class);
 
-	    					 load_method.invoke( plugin, new Object[]{ plugin_interface });
+	    					 load_method.invoke( plugin, plugin_interface);
 
 	    				 }catch( NoSuchMethodException e ){
 
@@ -2014,11 +1997,11 @@ PluginInitializer
 
 		  plugin_interfaces = new ArrayList( s_plugin_interfaces );
 	  }
-		
-	  for (int i=0;i<plugin_interfaces.size();i++){
 
-		  ((PluginInterfaceImpl)plugin_interfaces.get(i)).closedownInitiated();
-	  } 
+      for (Object plugin_interface : plugin_interfaces) {
+
+          ((PluginInterfaceImpl) plugin_interface).closedownInitiated();
+      }
 
 	  if ( default_plugin != null ){
 
@@ -2036,10 +2019,10 @@ PluginInitializer
 		  plugin_interfaces = new ArrayList( s_plugin_interfaces );
 	  }
 
-	  for (int i=0;i<plugin_interfaces.size();i++){
+      for (Object plugin_interface : plugin_interfaces) {
 
-		  ((PluginInterfaceImpl)plugin_interfaces.get(i)).closedownComplete();
-	  }  
+          ((PluginInterfaceImpl) plugin_interface).closedownComplete();
+      }
 
 	  if ( default_plugin != null ){
 
@@ -2115,17 +2098,17 @@ PluginInitializer
 			  			
 			  		plugin_interfaces = new ArrayList( s_plugin_interfaces );
 			  	}
-			  	
-			  	for (int i=0;i<plugin_interfaces.size();i++){
-			  		
-			  		try{
-			  			((PluginInterfaceImpl)plugin_interfaces.get(i)).firePluginEventSupport(ev);
-			  			
-			  		}catch(Throwable e ){
-			  			
-			  			Debug.printStackTrace(e);
-			  		}
-			  	} 
+
+                 for (Object plugin_interface : plugin_interfaces) {
+
+                     try {
+                         ((PluginInterfaceImpl) plugin_interface).firePluginEventSupport(ev);
+
+                     } catch (Throwable e) {
+
+                         Debug.printStackTrace(e);
+                     }
+                 }
 			  	
 			 	if ( default_plugin != null ){
 			  		
@@ -2198,11 +2181,11 @@ PluginInitializer
 		
 		plugin_interfaces = new ArrayList( s_plugin_interfaces );
 	}
-	
-  	for (int i=0;i<plugin_interfaces.size();i++){
-  		
-  		((PluginInterfaceImpl)plugin_interfaces.get(i)).initialisationComplete();
-  	}
+
+      for (Object plugin_interface : plugin_interfaces) {
+
+          ((PluginInterfaceImpl) plugin_interface).initialisationComplete();
+      }
   	
   		// keep this last as there are things out there that rely on the init complete of the
   		// default interface meaning that everything else is complete and informed complete
@@ -2233,7 +2216,7 @@ PluginInitializer
 	
 	synchronized( s_plugin_interfaces ){
 		
-		return( new ArrayList<PluginInterfaceImpl>( s_plugin_interfaces ));
+		return(new ArrayList<>(s_plugin_interfaces));
 	}
   }
   
@@ -2279,33 +2262,33 @@ PluginInitializer
 		
 		plugin_interfaces = new ArrayList( s_plugin_interfaces );
 	}
-	
-  	for (int i=0;i<plugin_interfaces.size();i++){
-  		
-  		PluginInterfaceImpl	pi = (PluginInterfaceImpl)plugin_interfaces.get(i);
-  		
-  		if ( pi.getPlugin().getClass().getName().equals( class_name )){
-  		
-  			return( pi );
-  		}
-  	}
+
+      for (Object plugin_interface : plugin_interfaces) {
+
+          PluginInterfaceImpl pi = (PluginInterfaceImpl) plugin_interface;
+
+          if (pi.getPlugin().getClass().getName().equals(class_name)) {
+
+              return (pi);
+          }
+      }
   	
   		// fall back to the loaded but not-yet-initialised list
-  	
-  	for (int i=0;i<loaded_pi_list.size();i++){
-  		
-  		List	l = (List)loaded_pi_list.get(i);
-  		
-  		for (int j=0;j<l.size();j++){
-  			
-  			PluginInterfaceImpl	pi = (PluginInterfaceImpl)l.get(j);
-  			
-  			if ( pi.getPlugin().getClass().getName().equals( class_name )){
-  		  		
-  	  			return( pi );
-  	  		}
-  		}
-  	}
+
+      for (Object o1 : loaded_pi_list) {
+
+          List l = (List) o1;
+
+          for (Object o : l) {
+
+              PluginInterfaceImpl pi = (PluginInterfaceImpl) o;
+
+              if (pi.getPlugin().getClass().getName().equals(class_name)) {
+
+                  return (pi);
+              }
+          }
+      }
   	
   	return( null );
   }
@@ -2326,13 +2309,13 @@ PluginInitializer
 				
 				plugin_interfaces = new ArrayList( s_plugin_interfaces );
 			}
-			
-		 	for (int i=0;i<plugin_interfaces.size();i++){
-		  		
-		  		PluginInterfaceImpl	pi = (PluginInterfaceImpl)plugin_interfaces.get(i);
 
-		  		pi.generateEvidence( writer );
-		 	}
+            for (Object plugin_interface : plugin_interfaces) {
+
+                PluginInterfaceImpl pi = (PluginInterfaceImpl) plugin_interface;
+
+                pi.generateEvidence(writer);
+            }
 		 	
 		}finally{
 			
@@ -2404,7 +2387,7 @@ PluginInitializer
 		
 		PluginInterface[] pis = singleton==null?new PluginInterface[0]:singleton.getPlugins();
 
-		Set<ClassLoader>	ok_loaders = new HashSet<ClassLoader>();
+		Set<ClassLoader>	ok_loaders = new HashSet<>();
 		
 		ok_loaders.add( core );
 		
@@ -2454,7 +2437,7 @@ PluginInitializer
 		
 		private AESemaphore	request_sem = new AESemaphore( "ValueHolder" );
 		
-		private List<Object[]>	request_queue = new ArrayList<Object[]>();
+		private List<Object[]>	request_queue = new ArrayList<>();
 				
 		private
 		VerifiedPluginHolder()
@@ -2479,7 +2462,7 @@ PluginInitializer
 					public void
 					run()
 					{
-						Map<Object,Object> values = new IdentityHashMap<Object,Object>();
+						Map<Object,Object> values = new IdentityHashMap<>();
 												
 						while( true ){
 														

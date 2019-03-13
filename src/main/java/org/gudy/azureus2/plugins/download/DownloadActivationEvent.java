@@ -22,9 +22,9 @@ package org.gudy.azureus2.plugins.download;
 public interface 
 DownloadActivationEvent 
 {
-	public Download
+	Download
 	getDownload();
 	
-	public int
+	int
 	getActivationCount();
 }

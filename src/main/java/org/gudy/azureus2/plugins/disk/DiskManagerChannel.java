@@ -22,18 +22,18 @@ package org.gudy.azureus2.plugins.disk;
 public interface 
 DiskManagerChannel 
 {
-	public DiskManagerRequest
+	DiskManagerRequest
 	createRequest();
 	
-	public DiskManagerFileInfo
+	DiskManagerFileInfo
 	getFile();
 	
-	public long
+	long
 	getPosition();
 	
-	public boolean
+	boolean
 	isDestroyed();
 	
-	public void
+	void
 	destroy();
 }

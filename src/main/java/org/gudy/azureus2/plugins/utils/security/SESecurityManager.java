@@ -36,8 +36,8 @@ import org.gudy.azureus2.plugins.messaging.generic.GenericMessageConnection;
 public interface 
 SESecurityManager 
 {
-	public static final int	BLOCK_ENCRYPTION_NONE		= 1;
-	public static final int	BLOCK_ENCRYPTION_AES		= 2;
+	int	BLOCK_ENCRYPTION_NONE		= 1;
+	int	BLOCK_ENCRYPTION_AES		= 2;
 	
 		// runs the given task with the supplied Authenticator. Note that the 
 		// scope of the authenticator is "vm-wide" so that if by chance another
@@ -45,52 +45,52 @@ SESecurityManager
 		// which the supplied one is in force, the request will be directed to the
 		// authenticator
 	
-	public void
+	void
 	runWithAuthenticator(
-		Authenticator	authenticator,
-		Runnable		task );
+            Authenticator authenticator,
+            Runnable task);
 	
-	public void
+	void
 	addPasswordListener(
-		PasswordListener	listener );
+            PasswordListener listener);
 		
-	public void
+	void
 	removePasswordListener(
-		PasswordListener	listener );
+            PasswordListener listener);
 	
-	public void
+	void
 	addCertificateListener(
-		CertificateListener	listener );
+            CertificateListener listener);
 		
-	public void
+	void
 	removeCertificateListener(
-		CertificateListener	listener );
+            CertificateListener listener);
 
 		/**
 		 * returns the SHA1 hash of the input data
 		 * @param data_in
 		 * @return
 		 */
-	
-	public byte[]
+
+        byte[]
 	calculateSHA1(
-		byte[]		data_in );
+                byte[] data_in);
 	
 		/**
 		 * Installs the SSL certificate necessary to support the connection 
 		 * @param url
 		 */
-	
-	public SSLSocketFactory
+
+        SSLSocketFactory
 	installServerCertificate(
-		URL		url );
+                URL url);
 	
-	public KeyStore
+	KeyStore
 	getKeyStore()
 	
 		throws Exception;
 	
-	public KeyStore
+	KeyStore
 	getTrustStore()
 	
 		throws Exception;
@@ -103,12 +103,12 @@ SESecurityManager
 		 * @return
 		 * @throws Exception
 		 */
-	
-	public Certificate
+
+        Certificate
 	createSelfSignedCertificate(
-		String		alias,
-		String		cert_dn,
-		int			strength )
+                String alias,
+                String cert_dn,
+                int strength)
 	
 		throws Exception;
 	
@@ -116,8 +116,8 @@ SESecurityManager
 		 * Gets this azureus instance's unique random identity
 		 * @return
 		 */
-	
-	public byte[]
+
+        byte[]
 	getIdentity();
 	
 		/**
@@ -126,17 +126,17 @@ SESecurityManager
 		 * @param reason_resource a message text resource giving the reason for the key being required
 		 * @return
 		 */
-	
-	public SEPublicKey
+
+        SEPublicKey
 	getPublicKey(
-		int		key_type,
-		String	reason_resource )
+                int key_type,
+                String reason_resource)
 	
 		throws Exception;
 	
-	public SEPublicKey
+	SEPublicKey
 	decodePublicKey(
-		byte[]	encoded )
+            byte[] encoded)
 	
 		throws Exception;
 	
@@ -148,14 +148,14 @@ SESecurityManager
 		 * @return
 		 * @throws Exception
 		 */
-	
-	public GenericMessageConnection
+
+        GenericMessageConnection
 	getSTSConnection(
-		GenericMessageConnection	connection,
-		SEPublicKey					my_public_key,
-		SEPublicKeyLocator			key_locator,
-		String						reason_resource,
-		int							block_encryption )
+                GenericMessageConnection connection,
+                SEPublicKey my_public_key,
+                SEPublicKeyLocator key_locator,
+                String reason_resource,
+                int block_encryption)
 	
 		throws Exception;
 }

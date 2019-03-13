@@ -26,35 +26,35 @@ import com.aelitis.azureus.core.speedmanager.SpeedManagerPingMapper;
 public interface 
 SpeedManagerAlgorithmProviderAdapter 
 {
-	public SpeedManager
+	SpeedManager
 	getSpeedManager();
 	
-	public int
+	int
 	getCurrentProtocolUploadSpeed();
 	
-	public int
+	int
 	getCurrentDataUploadSpeed();
 	
-	public int
+	int
 	getCurrentUploadLimit();
 	
-	public void
+	void
 	setCurrentUploadLimit(
-		int		bytes_per_second );
+            int bytes_per_second);
 
-    public int
+    int
     getCurrentProtocolDownloadSpeed();
 
-    public int
+    int
     getCurrentDataDownloadSpeed();    
 
-    public int
+    int
 	getCurrentDownloadLimit();
 
-    public void
+    void
     setCurrentDownloadLimit(int bytes_per_second);
 	
-    public SpeedManagerPingMapper
+    SpeedManagerPingMapper
     getPingMapper();
     
     	/**
@@ -62,10 +62,10 @@ SpeedManagerAlgorithmProviderAdapter
     	 * done with
     	 * @return
     	 */
-    public SpeedManagerPingMapper
+        SpeedManagerPingMapper
     createTransientPingMapper();
 	
-	public void
+	void
 	log(
-		String	str );
+            String str);
 }

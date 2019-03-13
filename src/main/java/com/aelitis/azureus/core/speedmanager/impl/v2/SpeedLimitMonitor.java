@@ -1400,13 +1400,9 @@ public class SpeedLimitMonitor implements PSMonitorListener
             int downLimGuess = pingMapOfDownloadMode.guessDownloadLimit();
             int upLimGuess = pingMapOfDownloadMode.guessUploadLimit();
             int seedingUpLimGuess = pingMapOfSeedingMode.guessUploadLimit();
-
-            StringBuilder sb = new StringBuilder("ping-map: ");
-            sb.append(":down=").append(downLimGuess);
-            sb.append(":up=").append(upLimGuess);
-            sb.append(":(seed)up=").append(seedingUpLimGuess);
-
-            SpeedManagerLogger.log( sb.toString()  );
+            SpeedManagerLogger.log("ping-map: " + ":down=" + downLimGuess +
+                    ":up=" + upLimGuess +
+                    ":(seed)up=" + seedingUpLimGuess);
         }else{
             SMInstance pm = SMInstance.getInstance();
             SpeedManagerAlgorithmProviderAdapter adapter = pm.getAdapter();
@@ -1421,15 +1417,11 @@ public class SpeedLimitMonitor implements PSMonitorListener
             float upConf = estUp.getMetricRating();
 
             String name = persistentMap.getName();
-
-            StringBuilder sb = new StringBuilder("new-ping-map: ");
-            sb.append(" name=").append(name);
-            sb.append(", down=").append(downLimGuess);
-            sb.append(", down-conf=").append(downConf);
-            sb.append(", up=").append(upLimGuess);
-            sb.append(", up-conf=").append(upConf);
-
-            SpeedManagerLogger.log( sb.toString() );
+            SpeedManagerLogger.log("new-ping-map: " + " name=" + name +
+                    ", down=" + downLimGuess +
+                    ", down-conf=" + downConf +
+                    ", up=" + upLimGuess +
+                    ", up-conf=" + upConf);
         }
     }//logPingMapData
 

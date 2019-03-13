@@ -48,9 +48,9 @@ public class TrackersUtil {
   
   
   private TrackersUtil() {
-    trackers = new ArrayList<String>();
-    multiTrackers = new HashMap<String,List<List<String>>>();
-    webseeds = new HashMap<String,Map>();
+    trackers = new ArrayList<>();
+    multiTrackers = new HashMap<>();
+    webseeds = new HashMap<>();
     loadList();
   }
   
@@ -71,7 +71,7 @@ public class TrackersUtil {
   
   public List<String> getTrackersList() {
     if(trackers != null)
-      return new ArrayList<String>(trackers);
+      return new ArrayList<>(trackers);
     else
       return null;
   }
@@ -94,7 +94,7 @@ public class TrackersUtil {
   }
   
   public Map<String,List<List<String>>> getMultiTrackers() {
-    return new HashMap<String,List<List<String>>>(multiTrackers);
+    return new HashMap<>(multiTrackers);
   }
   public void addWebSeed(String configName, Map ws) {
 	  webseeds.put(configName,ws);
@@ -107,80 +107,58 @@ public class TrackersUtil {
   }
 
   public Map<String,Map> getWebSeeds() {
-	  return new HashMap<String,Map>(webseeds);
+	  return new HashMap<>(webseeds);
   }
 
   public void clearAllTrackers(boolean save) {
-	  trackers = new ArrayList<String>();
-	  multiTrackers = new HashMap<String,List<List<String>>>();
-	  webseeds = new HashMap<String,Map>();
+	  trackers = new ArrayList<>();
+	  multiTrackers = new HashMap<>();
+	  webseeds = new HashMap<>();
 	  if (save) {saveList();}
   }
   
   private void loadList() {    
     File fTrackers = FileUtil.getUserFile("trackers.config");
     if(fTrackers.exists() && fTrackers.isFile()) {
-      FileInputStream fin = null;
-      BufferedInputStream bin = null;
-      try {
-        fin = new FileInputStream(fTrackers);
-        bin = new BufferedInputStream(fin, 8192);
-        Map map = BDecoder.decode(bin);
-        List list = (List) map.get("trackers");
-        if(list != null) {
-	        Iterator iter = list.iterator();
-	        while(iter.hasNext()) {
-	          String tracker =  new String((byte[])iter.next());
-	          trackers.add(tracker);
-	        }
-        }
-        Map mapMT = (Map) map.get("multi-trackers");
-        if(mapMT != null) {
-          Iterator iter = mapMT.keySet().iterator();
-          while(iter.hasNext()) {
-            String configName =  (String) iter.next();            
-            List groups = (List) mapMT.get(configName);
-            List resGroups = new ArrayList(groups.size());
-            Iterator iterGroups = groups.iterator();
-            while(iterGroups.hasNext()) {
-              List theseTrackers = (List) iterGroups.next();
-              List resTrackers = new ArrayList(theseTrackers.size());
-              Iterator iterTrackers = theseTrackers.iterator();
-              while(iterTrackers.hasNext()) {
-                String tracker = new String((byte[]) iterTrackers.next());
-                resTrackers.add(tracker);
-              }
-              resGroups.add(resTrackers);
+        try (FileInputStream fin = new FileInputStream(fTrackers); BufferedInputStream bin = new BufferedInputStream(fin, 8192)) {
+            Map map = BDecoder.decode(bin);
+            List list = (List) map.get("trackers");
+            if (list != null) {
+                for (Object o : list) {
+                    String tracker = new String((byte[]) o);
+                    trackers.add(tracker);
+                }
             }
-            this.multiTrackers.put(configName,resGroups);
-          }
+            Map mapMT = (Map) map.get("multi-trackers");
+            if (mapMT != null) {
+                for (Object o : mapMT.keySet()) {
+                    String configName = (String) o;
+                    List groups = (List) mapMT.get(configName);
+                    List resGroups = new ArrayList(groups.size());
+                    for (Object group : groups) {
+                        List theseTrackers = (List) group;
+                        List resTrackers = new ArrayList(theseTrackers.size());
+                        for (Object theseTracker : theseTrackers) {
+                            String tracker = new String((byte[]) theseTracker);
+                            resTrackers.add(tracker);
+                        }
+                        resGroups.add(resTrackers);
+                    }
+                    this.multiTrackers.put(configName, resGroups);
+                }
+            }
+            webseeds = (Map) map.get("webseeds");
+
+            if (webseeds == null) {
+                webseeds = new HashMap();
+            } else {
+                BDecoder.decodeStrings(webseeds);
+            }
+        } catch (Exception e) {
+
+            Debug.printStackTrace(e);
+
         }
-        webseeds = (Map)map.get( "webseeds" );
-        
-        if ( webseeds == null ){
-        	webseeds = new HashMap();
-        }else{
-        	BDecoder.decodeStrings( webseeds );
-        }
-      } catch(Exception e) {
-    	  
-      	Debug.printStackTrace( e );
-      	
-	  }finally{
-		  
-		if ( bin != null ){
-			try{
-			    bin.close();
-			}catch( Throwable e ){
-			}
-		}
-		if ( fin != null ){
-			try{
-				fin.close();
-			}catch( Throwable e ){
-			}
-		}
-	  }
     }
   }
   

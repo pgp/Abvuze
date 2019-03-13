@@ -25,26 +25,26 @@ import java.util.Map;
 public interface 
 AzureusContentDirectory 
 {
-	public static final String	AT_BTIH			= "btih";			// byte[]
-	public static final String	AT_FILE_INDEX	= "file_index";		// Integer
+	String	AT_BTIH			= "btih";			// byte[]
+	String	AT_FILE_INDEX	= "file_index";		// Integer
 	
-	public AzureusContent
+	AzureusContent
 	lookupContent(
-		Map		attributes );
+            Map attributes);
 	
-	public AzureusContentFile
+	AzureusContentFile
 	lookupContentFile(
-		Map		attributes );
+            Map attributes);
 	
-	public AzureusContentDownload
+	AzureusContentDownload
 	lookupContentDownload(
-		Map		attributes );
+            Map attributes);
 	
-	public void
+	void
 	addListener(
-		AzureusContentDirectoryListener		listener );
+            AzureusContentDirectoryListener listener);
 	
-	public void
+	void
 	removeListener(
-		AzureusContentDirectoryListener		listener );
+            AzureusContentDirectoryListener listener);
 }

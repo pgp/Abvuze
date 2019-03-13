@@ -55,7 +55,7 @@ AERunStateHandler
 	
 	private static final AsyncDispatcher	dispatcher = new AsyncDispatcher(2500);
 	
-	private static final CopyOnWriteList<RunStateChangeListener>	listeners = new CopyOnWriteList<RunStateChangeListener>();
+	private static final CopyOnWriteList<RunStateChangeListener>	listeners = new CopyOnWriteList<>();
 	
 	public static boolean
 	isDelayedUI()
@@ -161,8 +161,8 @@ AERunStateHandler
 	public interface
 	RunStateChangeListener
 	{
-		public void
+		void
 		runStateChanged(
-			long		run_state );
+                long run_state);
 	}
 }

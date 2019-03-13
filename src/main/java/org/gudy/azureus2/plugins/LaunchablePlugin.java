@@ -26,10 +26,10 @@ LaunchablePlugin
 		/**
 		 * Invoked before azureus core is started to set defaults such as application details
 		 */
-	
-	public void
+
+        void
 	setDefaults(
-		String[]	args );
+                String[] args);
 	
 		/**
 		 * Some environments have requirements regarding the main application thread and processing
@@ -37,7 +37,7 @@ LaunchablePlugin
 		 * is returned from Azureus is either stopper or restarted, depending on the return value
 		 * @return whether to close down or restart (true->restart) 
 		 */
-	
-	public boolean
+
+        boolean
 	process();
 }

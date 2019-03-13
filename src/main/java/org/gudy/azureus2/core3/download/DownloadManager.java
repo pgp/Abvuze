@@ -47,52 +47,52 @@ public interface
 DownloadManager
 	extends Taggable
 {
-    public static final int STATE_START_OF_DAY  = -1;   // should never actually see this one
+    int STATE_START_OF_DAY  = -1;   // should never actually see this one
 
-    public static final int STATE_WAITING       = 0;
-    public static final int STATE_INITIALIZING  = 5;
-    public static final int STATE_INITIALIZED   = 10;
+    int STATE_WAITING       = 0;
+    int STATE_INITIALIZING  = 5;
+    int STATE_INITIALIZED   = 10;
 
-    public static final int STATE_ALLOCATING = 20;
-    public static final int STATE_CHECKING = 30;
+    int STATE_ALLOCATING = 20;
+    int STATE_CHECKING = 30;
 
     // Ready: Resources allocated
 
-    public static final int STATE_READY = 40;
-    public static final int STATE_DOWNLOADING = 50;
-    public static final int STATE_FINISHING = 55;
-    public static final int STATE_SEEDING = 60;
-    public static final int STATE_STOPPING = 65;
+    int STATE_READY = 40;
+    int STATE_DOWNLOADING = 50;
+    int STATE_FINISHING = 55;
+    int STATE_SEEDING = 60;
+    int STATE_STOPPING = 65;
 
     // Stopped: can't be automatically started
 
-    public static final int STATE_STOPPED 	= 70;
-    public static final int STATE_CLOSED	= 71;	// download never *has* this state, just used to inform 
+    int STATE_STOPPED 	= 70;
+    int STATE_CLOSED	= 71;	// download never *has* this state, just used to inform
     												// when stopping for az closedown
 
     // Queued: Same as stopped, except can be automatically started
 
-    public static final int STATE_QUEUED = 75;
+    int STATE_QUEUED = 75;
 
-    public static final int STATE_ERROR = 100;
+    int STATE_ERROR = 100;
 
 
 
-    public static final int WEALTH_STOPPED          = 1;
-    public static final int WEALTH_NO_TRACKER       = 2;
-    public static final int WEALTH_NO_REMOTE        = 3;
-    public static final int WEALTH_OK               = 4;
-    public static final int WEALTH_KO               = 5;
-    public static final int WEALTH_ERROR          	= 6;
+    int WEALTH_STOPPED          = 1;
+    int WEALTH_NO_TRACKER       = 2;
+    int WEALTH_NO_REMOTE        = 3;
+    int WEALTH_OK               = 4;
+    int WEALTH_KO               = 5;
+    int WEALTH_ERROR          	= 6;
 
-	public static final int ET_NONE						= DiskManager.ET_NONE;
-	public static final int ET_OTHER					= DiskManager.ET_OTHER;
-	public static final int ET_INSUFFICIENT_SPACE		= DiskManager.ET_INSUFFICIENT_SPACE;
+	int ET_NONE						= DiskManager.ET_NONE;
+	int ET_OTHER					= DiskManager.ET_OTHER;
+	int ET_INSUFFICIENT_SPACE		= DiskManager.ET_INSUFFICIENT_SPACE;
 
-    public void
+    void
     initialize();
 
-    public int
+    int
     getState();
 
         /**
@@ -100,21 +100,21 @@ DownloadManager
          * @return
          */
 
-    public int
+        int
     getSubState();
 
-    public void
+    void
     setStateWaiting();
 
-    public void
+    void
     setStateQueued();
 
-    public void
+    void
     startDownload();
 
-    public boolean canForceRecheck();
+    boolean canForceRecheck();
 
-    public void forceRecheck();
+    void forceRecheck();
 
 		/**
 		 * @param l
@@ -128,28 +128,28 @@ DownloadManager
          * @param file
          */
 
-    public void
+        void
     resetFile(
-        DiskManagerFileInfo     file );
+                DiskManagerFileInfo file);
 
         /**
          * Recheck a particular file. Download must be stopped
          * @param file
          */
 
-    public void
+        void
     recheckFile(
-        DiskManagerFileInfo     file );
+                DiskManagerFileInfo file);
     	
     	/**
     	 * Use with care - introduced to support speed tests whereby we want to avoid checking the
     	 * virtual torrent used for the test
     	 * @param enabled
     	 */
-    
-    public void
+
+        void
     setPieceCheckingEnabled(
-    	boolean	enabled );
+                boolean enabled);
 
   /**
    * Stop the download manager, and do any file/torrent removals.
@@ -158,11 +158,11 @@ DownloadManager
    * @param remove_data remove the data file after stopping
    */
 
-    public void
+  void
     stopIt(
-        int     stateAfterStopping,
-        boolean remove_torrent,
-        boolean remove_data );
+          int stateAfterStopping,
+          boolean remove_torrent,
+          boolean remove_data);
     
     /**
      * As above but definitely indicates that the stop is for removal (if for_removal is true) and therefore that any removal specific actions
@@ -173,76 +173,76 @@ DownloadManager
      * @param remove_data
      * @param for_removal
      */
-    public void
+    void
     stopIt(
-        int     stateAfterStopping,
-        boolean remove_torrent,
-        boolean remove_data,
-        boolean	for_removal );
+            int stateAfterStopping,
+            boolean remove_torrent,
+            boolean remove_data,
+            boolean for_removal);
 
-    public boolean
+    boolean
     pause();
 
-    public boolean
+    boolean
     pause(
-    	long	auto_resume_time );
+            long auto_resume_time);
   
-    public boolean
+    boolean
     isPaused();
 
-    public void
+    void
     resume();
 
-    public long
+    long
     getAutoResumeTime();
     
-    public GlobalManager
+    GlobalManager
     getGlobalManager();
 
-    public DiskManager
+    DiskManager
     getDiskManager();
 
   	/**
   	 * @deprecated use getDiskManagerFileInfoSet() instead 
   	 */
-    public DiskManagerFileInfo[]
+    DiskManagerFileInfo[]
     getDiskManagerFileInfo();
     
-    public DiskManagerFileInfoSet getDiskManagerFileInfoSet();
+    DiskManagerFileInfoSet getDiskManagerFileInfoSet();
     
-    public int getNumFileInfos();
+    int getNumFileInfos();
 
-    public PEPeerManager
+    PEPeerManager
     getPeerManager();
 
-    public DownloadManagerState
+    DownloadManagerState
     getDownloadState();
 
-    public TOTorrent
+    TOTorrent
     getTorrent();
 
-    public TRTrackerAnnouncer
+    TRTrackerAnnouncer
     getTrackerClient();
 
-    public void
+    void
     requestTrackerAnnounce(
-        boolean     immediate );
+            boolean immediate);
 
-    public void
+    void
     requestTrackerScrape(
-        boolean     immediate );
+            boolean immediate);
 
-    public TRTrackerScraperResponse
+    TRTrackerScraperResponse
     getTrackerScrapeResponse();
 
-	public List<TRTrackerScraperResponse>
+	List<TRTrackerScraperResponse>
 	getGoodTrackerScrapeResponses();
 	
-    public void
+    void
     setTrackerScrapeResponse(
-        TRTrackerScraperResponse    response );
+            TRTrackerScraperResponse response);
 
-    public String
+    String
     getDisplayName();
 
         /**
@@ -250,30 +250,30 @@ DownloadManager
          * @return
          */
 
-    public String
+        String
     getInternalName();
 
-    public long
+    long
     getSize();
 
     /**
      * This includes the full path to the torrent file.
      * @return
      */
-    public String
+    String
     getTorrentFileName();
 
-    public void
+    void
     setTorrentFileName(String string);
 
     /**
      * Returns the file location where we save the torrent, this includes the parent
      * directory and the actual file name.
      */
-    public File
+    File
     getAbsoluteSaveLocation();
 
-    public File
+    File
     getSaveLocation();
 
         /**
@@ -281,20 +281,20 @@ DownloadManager
          * @param sPath
          */
 
-    public void
+        void
     setTorrentSaveDir(
-        String sPath );
+                String sPath);
 
     /**
      * changes the save directory. Only call this if you know what you are doing!!!!
      */
-    public void setTorrentSaveDir(String parent_dir, String dl_name);
+    void setTorrentSaveDir(String parent_dir, String dl_name);
 
-    public boolean isForceStart();
+    boolean isForceStart();
 
-    public void setForceStart(boolean forceStart);
+    void setForceStart(boolean forceStart);
 
-    public boolean
+    boolean
     isPersistent();
 
     /**
@@ -307,37 +307,37 @@ DownloadManager
      *                       returned.
      * @return whether download is complete
      */
-    public boolean
+    boolean
     isDownloadComplete(boolean bIncludingDND);
 
-    public String
+    String
     getTrackerStatus();
 
     /**
      * When the next call to the tracker will occur (in seconds)
      */
-    public int
+    int
     getTrackerTime();
 
-    public String
+    String
     getTorrentComment();
 
-    public String
+    String
     getTorrentCreatedBy();
 
-    public long
+    long
     getTorrentCreationDate();
 
-    public int
+    int
     getNbPieces();
 
-    public String
+    String
     getPieceLength();
 
-    public int
+    int
     getNbSeeds();
 
-    public int
+    int
     getNbPeers();
 
     /**
@@ -345,8 +345,8 @@ DownloadManager
      * @deprecated Use {@link #filesExist(boolean)} - to be removed when EMP dependency removed
      * @return
      */
-    
-    public boolean
+
+    boolean
     filesExist();
     
     /**
@@ -357,26 +357,26 @@ DownloadManager
      * @param expected_to_be_allocated if this is false and allocation <b>hasn't<b> been attempted then the method will return with false without marking the download as in an error state
      * @return Whether all the non-skipped (non-DND) files exist
      */
-    
-    public boolean
-    filesExist(
-    	boolean	expected_to_be_allocated );
 
-    public String
+    boolean
+    filesExist(
+            boolean expected_to_be_allocated);
+
+    String
     getErrorDetails();
 
-    public int
+    int
     getErrorType();
     
-    public DownloadManagerStats
+    DownloadManagerStats
     getStats();
 
-    public int
+    int
     getPosition();
 
-    public void
+    void
     setPosition(
-        int     newPosition );
+            int newPosition);
 
   	/**
   	 * Retrieve whether this download is assumed complete.
@@ -393,7 +393,7 @@ DownloadManager
   	 * 
   	 * @see {@link #requestAssumedCompleteMode()}
   	 */
-    public boolean
+    boolean
     getAssumedComplete();
 
     /**
@@ -402,20 +402,20 @@ DownloadManager
      * 
      * @return true- success; false- failure, download not complete
      */
-    public boolean
+    boolean
     requestAssumedCompleteMode();
 
     /**
      * @return the wealthy status of this download
      */
-    public int getHealthStatus();
+    int getHealthStatus();
 
     /**
      * See plugin ConnectionManager.NAT_ constants for return values
      * @return
      */
 
-     public int
+    int
      getNATStatus();
 
         /**
@@ -423,7 +423,7 @@ DownloadManager
          *
          */
 
-    public void
+        void
     saveResumeData();
 
         /**
@@ -431,30 +431,30 @@ DownloadManager
          * managed separately by saveResumeData
          */
 
-    public void
+        void
     saveDownload();
 
       /** 
        * To retreive arbitrary objects against this object. 
        * @deprecated Use getUserData */
-    
-    public Object getData (String key);
+
+      Object getData(String key);
       /** To store arbitrary objects against this object.
        *  @deprecated @deprecated Use setUserData
        *  */
-    
-    public void setData (String key, Object value);
 
-    public Object getUserData (Object key);
+      void setData(String key, Object value);
+
+    Object getUserData(Object key);
     /** To store arbitrary objects against this object. */
- 	public void setUserData (Object key, Object value);
+    void setUserData(Object key, Object value);
 
       /**
        * Determine whether disk allocation has already been done.
        * Used for checking if data is missing on a previously-loaded torrent.
        * @return true if data files have already been allocated
        */
-    public boolean isDataAlreadyAllocated();
+      boolean isDataAlreadyAllocated();
 
       /**
        * Set whether data allocation has already been done, so we know
@@ -462,20 +462,20 @@ DownloadManager
        * @param already_allocated
        */
 
-    public void setDataAlreadyAllocated( boolean already_allocated );
+      void setDataAlreadyAllocated(boolean already_allocated);
 
 
-    public void setSeedingRank(int rank);
+    void setSeedingRank(int rank);
 
-    public int getSeedingRank();
+    int getSeedingRank();
 
-    public String isSwarmMerging();
+    String isSwarmMerging();
     
-    public void setMaxUploads( int max_slots );
+    void setMaxUploads(int max_slots);
     
-    public int getMaxUploads();
+    int getMaxUploads();
     
-    public void updateAutoUploadPriority( Object key, boolean inc );
+    void updateAutoUploadPriority(Object key, boolean inc);
     
 	/**
 	 * Returns the max uploads depending on whether the download is seeding and it has a separate
@@ -483,7 +483,7 @@ DownloadManager
 	 * @return
 	 */
 
-	public int
+    int
 	getEffectiveMaxUploads();
 
         /**
@@ -492,14 +492,14 @@ DownloadManager
          * @return
          */
 
-    public int
+        int
     getEffectiveUploadRateLimitBytesPerSecond();
 
-    public void
+    void
     setCryptoLevel(
-    	int	level );
+            int level);
     
-    public int
+    int
     getCryptoLevel();
     
         /**
@@ -508,9 +508,9 @@ DownloadManager
          * @return
          */
 
-    public void
+        void
     moveDataFiles(
-        File    new_parent_dir )
+                File new_parent_dir)
 
         throws DownloadManagerException;
     
@@ -522,16 +522,16 @@ DownloadManager
     	 * @param new_parent_dir
     	 * @throws DownloadManagerException
     	 */
-    
-    public void
+
+        void
     moveDataFilesLive(
-        File    new_parent_dir )
+                File new_parent_dir)
 
         throws DownloadManagerException;
     
-    public void
+    void
     copyDataFiles(
-    	File	parent_dir )
+            File parent_dir)
     
     	throws DownloadManagerException;
     
@@ -544,7 +544,7 @@ DownloadManager
      * @param new_name
      * @throws DownloadManagerException
      */
-    public void renameDownload(String new_name) throws DownloadManagerException;
+    void renameDownload(String new_name) throws DownloadManagerException;
     
     /**
      * Move the files and rename a download in one go.
@@ -554,7 +554,7 @@ DownloadManager
      * @see #moveDataFiles(File)
      * @see #renameDownload(String)
      */
-    public void moveDataFiles(File new_parent_dir, String new_name) throws DownloadManagerException;
+    void moveDataFiles(File new_parent_dir, String new_name) throws DownloadManagerException;
 
         /**
          * Move torrent file to new location. Download must be stopped/error
@@ -562,9 +562,9 @@ DownloadManager
          * @return
          */
 
-    public void
+        void
     moveTorrentFile(
-        File    new_parent_dir )
+                File new_parent_dir)
 
         throws DownloadManagerException;
     
@@ -574,39 +574,39 @@ DownloadManager
      * 
      * @since 2.5.0.2
      */
-    public boolean isInDefaultSaveDir();
+    boolean isInDefaultSaveDir();
     
         /**
          * gives the time this download was created (not the torrent but the download itself)
          * @return
          */
 
-    public long
+        long
     getCreationTime();
 
-    public void
+    void
     setCreationTime(
-            long        t );
+            long t);
 
-    public void
+    void
     setAnnounceResult(
-        DownloadAnnounceResult  result );
+            DownloadAnnounceResult result);
 
-    public void
+    void
     setScrapeResult(
-        DownloadScrapeResult    result );
+            DownloadScrapeResult result);
     
-    public boolean
+    boolean
     isUnauthorisedOnTracker();
 
-    public boolean
+    boolean
     isTrackerError();
     
 	    /**
 	     * 
 	     * @return messaging mode = az, lt or bt
 	     */
-    public int getExtendedMessagingMode();
+        int getExtendedMessagingMode();
 
 
         /**
@@ -614,43 +614,43 @@ DownloadManager
          * @param is_duplicate indicates whether this dm is being destroyed because it is a duplicate 
          */
 
-    public void
+        void
     destroy(
-    	boolean	is_duplicate );
+                boolean is_duplicate);
 
-    public boolean
+    boolean
     isDestroyed();
     
-    public PEPiece[]
+    PEPiece[]
     getCurrentPieces();
 
-    public PEPeer[]
+    PEPeer[]
     getCurrentPeers();
 
-    public List<TrackerPeerSource>
+    List<TrackerPeerSource>
     getTrackerPeerSources();
     
     	/**
     	 * Gives the download an opportunity to schedule seeding mode piece rechecks if desired
     	 * @return true if a piece has been rechecked
     	 */
-    
-	public boolean
+
+        boolean
 	seedPieceRecheck();
 	
-	public void
+	void
 	addRateLimiter(
-		LimitedRateGroup	group,
-		boolean				upload );
+            LimitedRateGroup group,
+            boolean upload);
 	
-	public LimitedRateGroup[]
+	LimitedRateGroup[]
 	getRateLimiters(
-		boolean				upload );
+            boolean upload);
 	
-	public void
+	void
 	removeRateLimiter(
-		LimitedRateGroup	group,
-		boolean				upload );
+            LimitedRateGroup group,
+            boolean upload);
 	
 
 	/**
@@ -659,120 +659,120 @@ DownloadManager
 	 *
 	 * @since 3.1.1.1
 	 */
-	public void
+    void
 	addListener(
-		DownloadManagerListener listener,
-		boolean triggerStateChange );
+            DownloadManagerListener listener,
+            boolean triggerStateChange);
 
-    public void
+    void
     addListener(
-            DownloadManagerListener listener );
+            DownloadManagerListener listener);
 
-    public void
+    void
     removeListener(
-            DownloadManagerListener listener );
+            DownloadManagerListener listener);
 
     	// tracker listeners
     
-    public void
+    void
     addTrackerListener(
-        DownloadManagerTrackerListener  listener );
+            DownloadManagerTrackerListener listener);
 
-    public void
+    void
     removeTrackerListener(
-        DownloadManagerTrackerListener  listener );
+            DownloadManagerTrackerListener listener);
 
     	// peer listeners
     
-    public void
+    void
     addPeerListener(
-        DownloadManagerPeerListener listener );
+            DownloadManagerPeerListener listener);
 
-    public void
+    void
     addPeerListener(
-        DownloadManagerPeerListener listener,
-        boolean bDispatchForExisting );
+            DownloadManagerPeerListener listener,
+            boolean bDispatchForExisting);
 
-    public void
+    void
     removePeerListener(
-        DownloadManagerPeerListener listener );
+            DownloadManagerPeerListener listener);
 
 		// piece listeners
 
-    public void
+    void
     addPieceListener(
-    		DownloadManagerPieceListener listener );
+            DownloadManagerPieceListener listener);
 
-    public void
+    void
     addPieceListener(
-        DownloadManagerPieceListener listener,
-        boolean bDispatchForExisting );
+            DownloadManagerPieceListener listener,
+            boolean bDispatchForExisting);
 
-    public void
+    void
     removePieceListener(
-    		DownloadManagerPieceListener listener );
+            DownloadManagerPieceListener listener);
 
     	// disk listeners
     
-    public void
+    void
     addDiskListener(
-        DownloadManagerDiskListener listener );
+            DownloadManagerDiskListener listener);
 
-    public void
+    void
     removeDiskListener(
-        DownloadManagerDiskListener listener );
+            DownloadManagerDiskListener listener);
 
-    public int
+    int
     getActivationCount();
     
-    public void
+    void
     addActivationListener(
-    	DownloadManagerActivationListener listener );
+            DownloadManagerActivationListener listener);
 
-    public void
+    void
     removeActivationListener(
-    	DownloadManagerActivationListener listener );
+            DownloadManagerActivationListener listener);
 
-    public void
+    void
     addTPSListener(
-    	DownloadManagerTPSListener		listener );
+            DownloadManagerTPSListener listener);
     
-    public void
+    void
     removeTPSListener(
-    	DownloadManagerTPSListener		listener );
+            DownloadManagerTPSListener listener);
     
-    public void
+    void
     generateEvidence(
-        IndentWriter        writer );
+            IndentWriter writer);
     
-    public int[] getStorageType(DiskManagerFileInfo[] infos);
+    int[] getStorageType(DiskManagerFileInfo[] infos);
     
     /**
      * @since 3.0.5.1
      */
-    public boolean canMoveDataFiles();
+    boolean canMoveDataFiles();
     
     /**
      * Renames the save file, torrent file and the displayed name.
      */
-    public void rename(String new_name) throws DownloadManagerException;
+    void rename(String new_name) throws DownloadManagerException;
 
     /**
      * @since 3.0.5.1
      */
-    public void renameTorrent(String new_name) throws DownloadManagerException;
+    void renameTorrent(String new_name) throws DownloadManagerException;
 
 
 		/**
 		 * Same as renameTorrent, but appends numbers if torrent already exists 
 		 * @since 4.2.0.9
 		 */
-		public void renameTorrentSafe(String name) throws DownloadManagerException;
+        void renameTorrentSafe(String name) throws DownloadManagerException;
     
     /**
      * @since 3.0.5.1
      */
-    public void moveTorrentFile(File parent_dir, String new_name) throws DownloadManagerException;
+    void moveTorrentFile(File parent_dir, String new_name) throws DownloadManagerException;
     
     /**
      * Sets the torrent file name (will perform a move of the torrent file) - 
@@ -781,11 +781,11 @@ DownloadManager
      * 
      * @since 3.0.5.3
      */
-    public void setTorrentFile(File new_parent_dir, String new_name) throws DownloadManagerException;
+    void setTorrentFile(File new_parent_dir, String new_name) throws DownloadManagerException;
     
-    public void
+    void
     fireGlobalManagerEvent(
-    	int		event_type );
+            int event_type);
 
 		/**
 		 * Sets the priority for an array for files
@@ -794,8 +794,8 @@ DownloadManager
 		 * @param type
 		 * @since 5.6.2.1
 		 */
-	public void setFilePriorities(DiskManagerFileInfo[] fileInfos, int type);
+        void setFilePriorities(DiskManagerFileInfo[] fileInfos, int type);
 	
-	public void
+	void
 	requestAttention();
 }

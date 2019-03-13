@@ -29,13 +29,13 @@ import java.util.Map;
 public interface 
 UserManagerPersister 
 {
-	public void 
-	doLoad( 
-		InputStream 	in,
-		Map				usersMap );
+	void
+	doLoad(
+            InputStream in,
+            Map usersMap);
 	
-	public void 
-	doSave( 
-		OutputStream 	out,
-		Map				usersMap );
+	void
+	doSave(
+            OutputStream out,
+            Map usersMap);
 }

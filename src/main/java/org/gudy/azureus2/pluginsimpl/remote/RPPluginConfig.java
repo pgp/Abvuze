@@ -91,16 +91,16 @@ RPPluginConfig
 			};
 		
 		cached_property_values 	= new Object[]{
-				new Integer( delegate.getIntParameter( cached_property_names[0] )),
-				new Integer( delegate.getIntParameter( cached_property_names[1] )),
-				new Integer( delegate.getIntParameter( cached_property_names[2] )),
-				new Integer( delegate.getIntParameter( cached_property_names[3] )),
-				new Integer( delegate.getIntParameter( cached_property_names[4] )),
-				new Integer( delegate.getIntParameter( cached_property_names[5] )),
-				new Integer( delegate.getIntParameter( cached_property_names[6] )),
-				new Integer( delegate.getIntParameter( cached_property_names[7] )),
-				new Integer( delegate.getIntParameter( cached_property_names[8] )),
-				new Integer( delegate.getIntParameter( cached_property_names[9] ))
+                delegate.getIntParameter(cached_property_names[0]),
+                delegate.getIntParameter(cached_property_names[1]),
+                delegate.getIntParameter(cached_property_names[2]),
+                delegate.getIntParameter(cached_property_names[3]),
+                delegate.getIntParameter(cached_property_names[4]),
+                delegate.getIntParameter(cached_property_names[5]),
+                delegate.getIntParameter(cached_property_names[6]),
+                delegate.getIntParameter(cached_property_names[7]),
+                delegate.getIntParameter(cached_property_names[8]),
+                delegate.getIntParameter(cached_property_names[9])
 		};		
 	}
 	
@@ -134,45 +134,46 @@ RPPluginConfig
 	{
 		String	method = request.getMethod();
 		
-		Object[] params = (Object[])request.getParams();
-		
-		if ( method.equals( "getPluginIntParameter[String,int]")){
-			
-			return( new RPReply( new Integer( delegate.getPluginIntParameter((String)params[0],((Integer)params[1]).intValue()))));
-			
-		}else if ( method.equals( "getPluginStringParameter[String,String]")){
-				
-			return( new RPReply( delegate.getPluginStringParameter((String)params[0],(String)params[1])));
-		
-		}else if ( method.equals( "setPluginParameter[String,int]")){
-				
-			delegate.setPluginParameter((String)params[0],((Integer)params[1]).intValue());
-				
-			return( null );
-			
-		}else if ( 	method.equals( "getIntParameter[String,int]") ||
-				 	method.equals( "getParameter[String,int]")){
-				
-			return( new RPReply( new Integer( delegate.getIntParameter((String)params[0],((Integer)params[1]).intValue()))));
-				
-		}else if ( method.equals( "setParameter[String,int]")){
-					
-			delegate.setIntParameter((String)params[0],((Integer)params[1]).intValue());
-			
-			return( null );
-			
-		}else if ( method.equals( "save")){
-			
-			try{ 
-				delegate.save();
-				
-				return( null );
-				
-			}catch( PluginException e ){
-				
-				return( new RPReply( e ));
-			}
-		}			
+		Object[] params = request.getParams();
+
+        switch (method) {
+            case "getPluginIntParameter[String,int]":
+
+                return (new RPReply(delegate.getPluginIntParameter((String) params[0], ((Integer) params[1]).intValue())));
+
+            case "getPluginStringParameter[String,String]":
+
+                return (new RPReply(delegate.getPluginStringParameter((String) params[0], (String) params[1])));
+
+            case "setPluginParameter[String,int]":
+
+                delegate.setPluginParameter((String) params[0], (Integer) params[1]);
+
+                return (null);
+
+            case "getIntParameter[String,int]":
+            case "getParameter[String,int]":
+
+                return (new RPReply(delegate.getIntParameter((String) params[0], ((Integer) params[1]).intValue())));
+
+            case "setParameter[String,int]":
+
+                delegate.setIntParameter((String) params[0], (Integer) params[1]);
+
+                return (null);
+
+            case "save":
+
+                try {
+                    delegate.save();
+
+                    return (null);
+
+                } catch (PluginException e) {
+
+                    return (new RPReply(e));
+                }
+        }
 	
 			
 		throw( new RPException( "Unknown method: " + method ));
@@ -215,10 +216,10 @@ RPPluginConfig
 		
 		if ( res == null ){
 			
-			res = (Integer)_dispatcher.dispatch( new RPRequest( this, "getIntParameter[String,int]", new Object[]{key,new Integer(default_value)} )).getResponse();
+			res = (Integer)_dispatcher.dispatch( new RPRequest( this, "getIntParameter[String,int]", new Object[]{key, default_value} )).getResponse();
 		}
 		
-		return( res.intValue());
+		return(res);
 	  }
 		
 	  public void
@@ -226,9 +227,9 @@ RPPluginConfig
 		String	key, 
 		int		value )
 	  {
-	  	property_cache.put( key, new Integer( value ));
+	  	property_cache.put( key, value);
 	  	
-		_dispatcher.dispatch( new RPRequest( this, "setParameter[String,int]", new Object[]{key,new Integer(value)} )).getResponse();
+		_dispatcher.dispatch( new RPRequest( this, "setParameter[String,int]", new Object[]{key, value} )).getResponse();
 	  }
 	  
 	  public String getStringParameter(String key)
@@ -307,9 +308,9 @@ RPPluginConfig
 	  
 	  public int getPluginIntParameter(String key,int defaultValue)
 	  {
-		Integer	res = (Integer)_dispatcher.dispatch( new RPRequest( this, "getPluginIntParameter[String,int]", new Object[]{key,new Integer(defaultValue)} )).getResponse();
+		Integer	res = (Integer)_dispatcher.dispatch( new RPRequest( this, "getPluginIntParameter[String,int]", new Object[]{key, defaultValue} )).getResponse();
 		
-		return( res.intValue());
+		return(res);
 	  }
 	  
 	  public String getPluginStringParameter(String key)
@@ -349,7 +350,7 @@ RPPluginConfig
 	    
 	  public void setPluginParameter(String key,int value)
 	  {
-		_dispatcher.dispatch( new RPRequest( this, "setPluginParameter[String,int]", new Object[]{key,new Integer(value)} ));
+		_dispatcher.dispatch( new RPRequest( this, "setPluginParameter[String,int]", new Object[]{key, value} ));
 	  }
 	  
 	  public void setPluginParameter(String key,int value,boolean global)

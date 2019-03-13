@@ -104,29 +104,27 @@ TOTorrentXMLSerialiser
 				
 				try{			
 					indent();
-					
-					for (int i=0;i<sets.length;i++){
-					
-						TOTorrentAnnounceURLSet	set = sets[i];
-					
-						URL[]	urls = set.getAnnounceURLs();
-															
-						writeLineRaw( "<ANNOUNCE_ENTRY>");
-					
-						try{
-							indent();
-						
-							for (int j=0;j<urls.length;j++){
-							
-								writeTag( "ANNOUNCE_URL",  urls[j].toString());
-							}
-						}finally{
-							
-							exdent();
-						}
-						
-						writeLineRaw( "</ANNOUNCE_ENTRY>");
-					}
+
+                    for (TOTorrentAnnounceURLSet set : sets) {
+
+                        URL[] urls = set.getAnnounceURLs();
+
+                        writeLineRaw("<ANNOUNCE_ENTRY>");
+
+                        try {
+                            indent();
+
+                            for (URL url : urls) {
+
+                                writeTag("ANNOUNCE_URL", url.toString());
+                            }
+                        } finally {
+
+                            exdent();
+                        }
+
+                        writeLineRaw("</ANNOUNCE_ENTRY>");
+                    }
 				}finally{
 					exdent();
 				}
@@ -167,15 +165,13 @@ TOTorrentXMLSerialiser
 			writeInfo();
 			
 			Map additional_properties = torrent.getAdditionalProperties();
-		
-			Iterator it = additional_properties.keySet().iterator();
-		
-			while( it.hasNext()){
-		
-				String	key = (String)it.next();
-			
-				writeGenericMapEntry( key, additional_properties.get( key ));	
-			}
+
+            for (Object o : additional_properties.keySet()) {
+
+                String key = (String) o;
+
+                writeGenericMapEntry(key, additional_properties.get(key));
+            }
 			
 		}finally{
 			
@@ -210,59 +206,57 @@ TOTorrentXMLSerialiser
 		
 				try{
 					indent();
-				
-					for (int i=0;i<files.length;i++){
-					
-						writeLineRaw( "<FILE>");
-						
-						try{
-							
-							indent();
-							
-							TOTorrentFileImpl	file	= files[i];
-											
-							writeTag( "LENGTH", file.getLength());
-						
-							writeLineRaw( "<PATH>");
-							
-							try{				
-								
-								indent();
-								
-								byte[][]	path_comps = file.getPathComponents();
-							
-								for (int j=0;j<path_comps.length;j++){
-	
-									writeLocalisableTag( "COMPONENT", path_comps[j] );							
-								}
-						
-							}finally{
-								
-								exdent();
-							}
-							
-							writeLineRaw( "</PATH>");
-				
-							Map additional_properties = file.getAdditionalProperties();
-						
-							if ( additional_properties != null ){
-								
-								Iterator prop_it = additional_properties.keySet().iterator();
-								
-								while( prop_it.hasNext()){
-									
-									String	key = (String)prop_it.next();
-								
-									writeGenericMapEntry( key, additional_properties.get( key ));
-								}
-							}
-						}finally{
-							
-							exdent();
-						}
-						
-						writeLineRaw( "</FILE>");
-					}
+
+                    for (TOTorrentFileImpl file1 : files) {
+
+                        writeLineRaw("<FILE>");
+
+                        try {
+
+                            indent();
+
+                            TOTorrentFileImpl file = file1;
+
+                            writeTag("LENGTH", file.getLength());
+
+                            writeLineRaw("<PATH>");
+
+                            try {
+
+                                indent();
+
+                                byte[][] path_comps = file.getPathComponents();
+
+                                for (byte[] path_comp : path_comps) {
+
+                                    writeLocalisableTag("COMPONENT", path_comp);
+                                }
+
+                            } finally {
+
+                                exdent();
+                            }
+
+                            writeLineRaw("</PATH>");
+
+                            Map additional_properties = file.getAdditionalProperties();
+
+                            if (additional_properties != null) {
+
+                                for (Object o : additional_properties.keySet()) {
+
+                                    String key = (String) o;
+
+                                    writeGenericMapEntry(key, additional_properties.get(key));
+                                }
+                            }
+                        } finally {
+
+                            exdent();
+                        }
+
+                        writeLineRaw("</FILE>");
+                    }
 				}finally{
 					
 					exdent();
@@ -277,11 +271,11 @@ TOTorrentXMLSerialiser
 				indent();
 				
 				byte[][]	pieces = torrent.getPieces();
-				
-				for (int i=0;i<pieces.length;i++){
-				
-					writeGeneric( pieces[i] );
-				}
+
+                for (byte[] piece : pieces) {
+
+                    writeGeneric(piece);
+                }
 			}finally{
 				exdent();
 			}
@@ -289,15 +283,13 @@ TOTorrentXMLSerialiser
 			writeLineRaw( "</PIECES>");
 
 			Map additional_properties = torrent.getAdditionalInfoProperties();
-		
-			Iterator it = additional_properties.keySet().iterator();
-		
-			while( it.hasNext()){
-		
-				String	key = (String)it.next();
-			
-				writeGenericMapEntry( key, additional_properties.get( key ));	
-			}
+
+            for (Object o : additional_properties.keySet()) {
+
+                String key = (String) o;
+
+                writeGenericMapEntry(key, additional_properties.get(key));
+            }
 			
 			
 		}finally{

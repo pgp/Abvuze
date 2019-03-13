@@ -162,27 +162,27 @@ FeatureUtils
 			return null;
 		}
 
-		TreeMap<Long, Object[]> mapOrder = new TreeMap<Long, Object[]>(
-				Collections.reverseOrder());
+		TreeMap<Long, Object[]> mapOrder = new TreeMap<>(
+                Collections.reverseOrder());
 		FeatureDetails[] featureDetails = featman.getFeatureDetails( feature );
 		// if any of the feature details are still valid, we have a full
 		for (FeatureDetails fd : featureDetails) {
 			Licence licence = fd.getLicence();
 			int state = licence.getState();
 			if (state == Licence.LS_ACTIVATION_DENIED) {
-				mapOrder.put(-1L, new Object[] { licence, Long.valueOf(0) });
+				mapOrder.put(-1L, new Object[] { licence, 0L});
 				continue;
 			} else if (state == Licence.LS_CANCELLED) {
-				mapOrder.put(-2L, new Object[] { licence, Long.valueOf(0) });
+				mapOrder.put(-2L, new Object[] { licence, 0L});
 				continue;
 			} else if (state == Licence.LS_INVALID_KEY) {
-				mapOrder.put(-3L, new Object[] { licence, Long.valueOf(0) });
+				mapOrder.put(-3L, new Object[] { licence, 0L});
 				continue;
 			} else if (state == Licence.LS_REVOKED) {
-				mapOrder.put(-4L, new Object[] { licence, Long.valueOf(0) });
+				mapOrder.put(-4L, new Object[] { licence, 0L});
 				continue;
 			} else if (state == Licence.LS_PENDING_AUTHENTICATION) {
-				mapOrder.put(-6L, new Object[] { licence, Long.valueOf(0) });
+				mapOrder.put(-6L, new Object[] { licence, 0L});
 				continue;
 			}
 
@@ -197,16 +197,16 @@ FeatureUtils
 			long minValidUntil = -1;
 			long maxValidUntil = -1;
 			if (lValidUntil != null) {
-				minValidUntil = maxValidUntil = lValidUntil.longValue();
+				minValidUntil = maxValidUntil = lValidUntil;
 				if (minValidUntil < now) {
-					mapOrder.put(minValidUntil, new Object[] { licence, Long.valueOf(minValidUntil) });
+					mapOrder.put(minValidUntil, new Object[] { licence, minValidUntil});
 					continue;
 				}
 			}
 			if (lValidOfflineUntil != null) {
-				long validOfflineUntil = lValidOfflineUntil.longValue();
+				long validOfflineUntil = lValidOfflineUntil;
 				if (validOfflineUntil < now) {
-					mapOrder.put(validOfflineUntil, new Object[] { licence, Long.valueOf(maxValidUntil) });
+					mapOrder.put(validOfflineUntil, new Object[] { licence, maxValidUntil});
 					continue;
 				}
 				if (maxValidUntil == -1 || validOfflineUntil > maxValidUntil) {
@@ -224,7 +224,7 @@ FeatureUtils
 		Long firstKey = mapOrder.firstKey();
 		Object[] objects = mapOrder.get(firstKey);
 		Licence licence = (Licence) objects[0];
-		return new licenceDetails(firstKey.longValue(), ((Long) objects[1]).longValue(), licence, feature );
+		return new licenceDetails(firstKey, (Long) objects[1], licence, feature );
 	}
 	
 	public static boolean isTrialLicence(Licence licence) {
@@ -248,7 +248,7 @@ FeatureUtils
 
 	public static boolean isTrial(FeatureDetails fd) {
 		Long lIsTrial = (Long) fd.getProperty(FeatureDetails.PR_IS_TRIAL);
-		return lIsTrial == null ? false : lIsTrial.longValue() != 0;
+		return lIsTrial == null ? false : lIsTrial != 0;
 	}
 	
 	public static long getRemaining() {
@@ -271,7 +271,7 @@ FeatureUtils
 		}
 		Long lRemainingUses = (Long) fd.getProperty(FeatureDetails.PR_TRIAL_USES_REMAINING);
 		long remainingUses = lRemainingUses == null ? -1
-				: lRemainingUses.longValue();
+				: lRemainingUses;
 		return remainingUses;
 	}
 

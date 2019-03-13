@@ -154,7 +154,7 @@ DHTRouterNodeImpl
 			
 			try_ping	= true;
 			
-			replacements = new ArrayList<DHTRouterContactImpl>();
+			replacements = new ArrayList<>();
 			
 		}else{
 				
@@ -167,7 +167,7 @@ DHTRouterNodeImpl
 					
 					for (int i=0;i<replacements.size();i++){
 						
-						DHTRouterContactImpl	r = (DHTRouterContactImpl)replacements.get(i);
+						DHTRouterContactImpl	r = replacements.get(i);
 				
 						if ( !r.hasBeenAlive()){
 							
@@ -187,7 +187,7 @@ DHTRouterNodeImpl
 					
 					if ( replacements.size() == max_rep_per_node ){
 						
-						DHTRouterContactImpl removed = (DHTRouterContactImpl) replacements.remove(0);
+						DHTRouterContactImpl removed = replacements.remove(0);
 						
 						// MGP: kicking out the oldest replacement
 						router.notifyRemoved(removed);
@@ -198,7 +198,7 @@ DHTRouterNodeImpl
 					
 					for (int i=0;i<replacements.size();i++){
 						
-						DHTRouterContactImpl	r = (DHTRouterContactImpl)replacements.get(i);
+						DHTRouterContactImpl	r = replacements.get(i);
 				
 						if ( !r.hasBeenAlive()){
 							
@@ -231,22 +231,20 @@ DHTRouterNodeImpl
 		replacements.add( replacement );
 			
 		if ( try_ping ){
-			
-			for (int i=0;i<buckets.size();i++){
-				
-				DHTRouterContactImpl	c = (DHTRouterContactImpl)buckets.get(i);
-				
-					// don't ping ourselves or someone already being pinged
-				
-				if ( !( router.isID(c.getID()) || c.getPingOutstanding())){
-			
-					c.setPingOutstanding( true );
-					
-					router.requestPing( c );
-					
-					break;
-				}
-			}
+
+            for (DHTRouterContactImpl c : buckets) {
+
+                // don't ping ourselves or someone already being pinged
+
+                if (!(router.isID(c.getID()) || c.getPingOutstanding())) {
+
+                    c.setPingOutstanding(true);
+
+                    router.requestPing(c);
+
+                    break;
+                }
+            }
 		}
 		
 		return( replacement );
@@ -258,72 +256,68 @@ DHTRouterNodeImpl
 		DHTRouterContactAttachment	attachment,
 		boolean						known_to_be_alive )
 	{
-		for (int k=0;k<buckets.size();k++){
-			
-			DHTRouterContactImpl	contact = (DHTRouterContactImpl)buckets.get(k);
-			
-			if ( Arrays.equals(node_id, contact.getID())){
+        for (DHTRouterContactImpl contact : buckets) {
 
-				if ( known_to_be_alive ){
-					
-					// MGP: will update observers of updated status in this method
-					alive( contact );
-				}
-				
-					// might be the same node but back after a restart. we need to
-					// treat this differently as we need to kick off the "store"
-					// events as required. 
-		
-				int	new_id	= attachment.getInstanceID();
+            if (Arrays.equals(node_id, contact.getID())) {
 
-					// if the new-id is zero this represents us hearing about a contact
-					// indirectly (imported or returned as a query). In this case we 
-					// don't use this information as an indication of the target's
-					// instance identity because it isn't!
-				
-				if ( new_id != 0 ){
-					
-					int	old_id 	= contact.getAttachment().getInstanceID();
-					
-					if (  old_id != new_id ){
-						
-						DHTLog.log( "Instance ID changed for " + 
-									DHTLog.getString( contact.getID())+ 
-									": old = " + old_id + ", new = " + new_id );
-											
-						contact.setAttachment( attachment );
-						
-							// if the instance id was 0, this means that it was unknown
-							// (e.g. contact imported). We still need to go ahead and treat 
-							// as a new node 
-						
-						requestNodeAdd( contact, old_id != 0 );
-					}
-				}
+                if (known_to_be_alive) {
 
-				return( contact );
-			}
-		}
+                    // MGP: will update observers of updated status in this method
+                    alive(contact);
+                }
+
+                // might be the same node but back after a restart. we need to
+                // treat this differently as we need to kick off the "store"
+                // events as required.
+
+                int new_id = attachment.getInstanceID();
+
+                // if the new-id is zero this represents us hearing about a contact
+                // indirectly (imported or returned as a query). In this case we
+                // don't use this information as an indication of the target's
+                // instance identity because it isn't!
+
+                if (new_id != 0) {
+
+                    int old_id = contact.getAttachment().getInstanceID();
+
+                    if (old_id != new_id) {
+
+                        DHTLog.log("Instance ID changed for " +
+                                DHTLog.getString(contact.getID()) +
+                                ": old = " + old_id + ", new = " + new_id);
+
+                        contact.setAttachment(attachment);
+
+                        // if the instance id was 0, this means that it was unknown
+                        // (e.g. contact imported). We still need to go ahead and treat
+                        // as a new node
+
+                        requestNodeAdd(contact, old_id != 0);
+                    }
+                }
+
+                return (contact);
+            }
+        }
 		
 			// check replacements as well
 			
 		if ( replacements != null ){
-			
-			for (int k=0;k<replacements.size();k++){
-				
-				DHTRouterContactImpl	contact = (DHTRouterContactImpl)replacements.get(k);
-				
-				if ( Arrays.equals(node_id, contact.getID())){
-	
-					if ( known_to_be_alive ){
-						
-						// MGP: will update observers of updated status in this method
-						alive( contact );
-					}
-	
-					return( contact );
-				}
-			}
+
+            for (DHTRouterContactImpl contact : replacements) {
+
+                if (Arrays.equals(node_id, contact.getID())) {
+
+                    if (known_to_be_alive) {
+
+                        // MGP: will update observers of updated status in this method
+                        alive(contact);
+                    }
+
+                    return (contact);
+                }
+            }
 		}
 		
 		return( null );
@@ -369,22 +363,20 @@ DHTRouterNodeImpl
 				// recently
 			
 			if ( contact.getLastAliveTime() - last_time > 30000 ){
-			
-				for (int i=0;i<buckets.size();i++){
-					
-					DHTRouterContactImpl	c = (DHTRouterContactImpl)buckets.get(i);
-					
-						// don't ping ourselves or someone already being pinged
-					
-					if ( !( router.isID(c.getID()) || c.getPingOutstanding())){
-				
-						c.setPingOutstanding( true );
-						
-						router.requestPing( c );
-						
-						break;
-					}
-				}
+
+                for (DHTRouterContactImpl c : buckets) {
+
+                    // don't ping ourselves or someone already being pinged
+
+                    if (!(router.isID(c.getID()) || c.getPingOutstanding())) {
+
+                        c.setPingOutstanding(true);
+
+                        router.requestPing(c);
+
+                        break;
+                    }
+                }
 			}
 			
 			// MGP: simply reinserting, so do not notify observers that added to replacments
@@ -426,7 +418,7 @@ DHTRouterNodeImpl
 					
 					for (int i=replacements.size()-1;i>=0;i--){
 						
-						DHTRouterContactImpl	rep = (DHTRouterContactImpl)replacements.get(i);
+						DHTRouterContactImpl	rep = replacements.get(i);
 						
 						if ( rep.hasBeenAlive()){
 							
@@ -452,7 +444,7 @@ DHTRouterNodeImpl
 					
 					if ( !replaced ){
 						
-						DHTRouterContactImpl	rep = (DHTRouterContactImpl)replacements.remove( replacements.size() - 1 );
+						DHTRouterContactImpl	rep = replacements.remove( replacements.size() - 1 );
 					
 						DHTLog.log( DHTLog.getString( contact.getID()) + ": using unknown replacement " + DHTLog.getString(rep.getID()));
 

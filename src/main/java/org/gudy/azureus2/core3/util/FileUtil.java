@@ -24,6 +24,7 @@ import java.lang.reflect.Method;
 import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -163,12 +164,12 @@ public class FileUtil {
       
       if (f.isDirectory()) {
         File[] files = f.listFiles();
-        for (int i = 0; i < files.length; i++) {
-          if ( !recursiveDelete(files[i])){
-        	  
-        	  return( false );
+          for (File file : files) {
+              if (!recursiveDelete(file)) {
+
+                  return (false);
+              }
           }
-        }
         if ( !f.delete()){
         	
         	return( false );
@@ -189,12 +190,12 @@ public class FileUtil {
     try {
       if (f.isDirectory()) {
         File[] files = f.listFiles();
-        for (int i = 0; i < files.length; i++) {
-          if ( !recursiveDeleteNoCheck(files[i])){
-        	  
-        	  return( false );
+          for (File file : files) {
+              if (!recursiveDeleteNoCheck(file)) {
+
+                  return (false);
+              }
           }
-        }
         if ( !f.delete()){
         	
         	return( false );
@@ -226,11 +227,11 @@ public class FileUtil {
   		File[] files = file.listFiles();
   		
   		if ( files != null ){
-  			
-  			for (int i=0;i<files.length;i++){
-  				
-  				res += getFileOrDirectorySize( files[i] );
-  			}
+
+            for (File file1 : files) {
+
+                res += getFileOrDirectorySize(file1);
+            }
   		}
   		
   		return( res );
@@ -269,28 +270,26 @@ public class FileUtil {
           	 
           	return;
         }
-        
-        for (int i = 0; i < files.length; i++) {
-        	
-        	File	x = files[i];
-        	
-        	if ( x.isDirectory()){
-        		
-        		recursiveEmptyDirDelete(files[i],ignore_set,log_warnings);
-        		
-        	}else{
-        		
-        		if ( ignore_set.contains( x.getName().toLowerCase())){
-        			
-        			if ( !x.delete()){
-        				
-        				if ( log_warnings ){
-        					Debug.out("Empty folder delete: failed to delete file " + x );
-        				}
-        			}
-        		}
-        	}
-        }
+
+          for (File x : files) {
+
+              if (x.isDirectory()) {
+
+                  recursiveEmptyDirDelete(x, ignore_set, log_warnings);
+
+              } else {
+
+                  if (ignore_set.contains(x.getName().toLowerCase())) {
+
+                      if (!x.delete()) {
+
+                          if (log_warnings) {
+                              Debug.out("Empty folder delete: failed to delete file " + x);
+                          }
+                      }
+                  }
+              }
+          }
 
         if (f.getCanonicalPath().equals(moveToDir)) {
         	
@@ -351,7 +350,7 @@ public class FileUtil {
 
 								 String[] bits = map.split( "," );
 
-								 List<Character> chars = new ArrayList<Character>();
+								 List<Character> chars = new ArrayList<>();
 
 								 for ( String bit: bits ){
 									 bit = bit.trim();
@@ -1218,33 +1217,26 @@ public class FileUtil {
     
     	throws IOException
     {
-    	FileOutputStream	dest = null;
-    
-    	boolean	close_input = true;
-    	
-    	try{
-    		dest = new FileOutputStream(_dest);
-   
-    			// copyFile will close from now on, we don't need to
-    		
-    		close_input = false;
-    		
-    		copyFile( _source, dest, true );
-    		
-    	}finally{
-    		
-       		try{
-    			if(close_input){
-    				_source.close();
-    			}
-    		}catch( IOException e ){
-     		}
-    		
-    		if ( dest != null ){
-    			
-    			dest.close();
-    		}
-    	}
+
+        boolean	close_input = true;
+        try (FileOutputStream dest = new FileOutputStream(_dest)) {
+
+            // copyFile will close from now on, we don't need to
+
+            close_input = false;
+
+            copyFile(_source, dest, true);
+
+        } finally {
+
+            try {
+                if (close_input) {
+                    _source.close();
+                }
+            } catch (IOException e) {
+            }
+
+        }
     }
     
     public static void 
@@ -1255,32 +1247,25 @@ public class FileUtil {
     
     	throws IOException
     {
-    	FileOutputStream	dest = null;
-        	
-    	boolean	close_input = _close_input_stream;
-    	
-    	try{
-    		dest = new FileOutputStream(_dest);
-       		
-    		close_input = false;
-    		
-    		copyFile( _source, dest, close_input );
-    		
-    	}finally{
-    		
-       		try{
-    			if( close_input ){
-    				
-    				_source.close();
-    			}
-    		}catch( IOException e ){
-     		}
-    		
-    		if ( dest != null ){
-    			
-    			dest.close();
-    		}
-    	}
+
+        boolean	close_input = _close_input_stream;
+        try (FileOutputStream dest = new FileOutputStream(_dest)) {
+
+            close_input = false;
+
+            copyFile(_source, dest, close_input);
+
+        } finally {
+
+            try {
+                if (close_input) {
+
+                    _source.close();
+                }
+            } catch (IOException e) {
+            }
+
+        }
     }
     
     public static void 
@@ -1363,13 +1348,11 @@ public class FileUtil {
     		File	new_parent = new File( to_parent_dir, from_file_or_dir.getName());
     		
     		FileUtil.mkdirs(new_parent);
-    		
-    		for (int i=0;i<files.length;i++){
-    			
-    			File	from_file	= files[i];
-    			
-    			copyFileOrDirectory( from_file, new_parent );
-    		}
+
+            for (File from_file : files) {
+
+                copyFileOrDirectory(from_file, new_parent);
+            }
     	}else{
     		
     		File target = new File( to_parent_dir, from_file_or_dir.getName());
@@ -1561,29 +1544,28 @@ public class FileUtil {
     		int	last_ok = 0;
     		
     		if (!to_file.exists()) {to_file.mkdir();}
-    		
-    		for (int i=0;i<files.length;i++){
-    			
-  				File	ff = files[i];
-				File	tf = new File( to_file, ff.getName());
 
-    			try{
-     				if ( renameFile( ff, tf, fail_on_existing_directory, file_filter )){
-    					
-    					last_ok++;
-    					
-    				}else{
-    					
-    					break;
-    				}
-    			}catch( Throwable e ){
-    				
-    				Debug.out( "renameFile: failed to rename file '" + ff.toString() + "' to '"
-									+ tf.toString() + "'", e );
+            for (File ff : files) {
 
-    				break;
-    			}
-    		}
+                File tf = new File(to_file, ff.getName());
+
+                try {
+                    if (renameFile(ff, tf, fail_on_existing_directory, file_filter)) {
+
+                        last_ok++;
+
+                    } else {
+
+                        break;
+                    }
+                } catch (Throwable e) {
+
+                    Debug.out("renameFile: failed to rename file '" + ff.toString() + "' to '"
+                            + tf.toString() + "'", e);
+
+                    break;
+                }
+            }
     		
     		if ( last_ok == files.length ){
     			
@@ -1773,7 +1755,7 @@ public class FileUtil {
     	String		text )
     {
     	try{
-    		return( writeBytesAsFile2( file.getAbsolutePath(), text.getBytes( "UTF-8" )));
+    		return( writeBytesAsFile2( file.getAbsolutePath(), text.getBytes(StandardCharsets.UTF_8)));
     		
     	}catch( Throwable e ){
     		
@@ -1805,16 +1787,11 @@ public class FileUtil {
     			
     			file.getParentFile().mkdirs();
     		}
-    		
-    		FileOutputStream out = new FileOutputStream( file );
 
-    		try{
-    			out.write( file_data );
+            try (FileOutputStream out = new FileOutputStream(file)) {
+                out.write(file_data);
 
-     		}finally{
-     			
-       			out.close();
-    		}
+            }
      		
     		return( true );
     		
@@ -1976,13 +1953,9 @@ public class FileUtil {
 	
 		throws IOException
 	{
-		FileInputStream fis = new FileInputStream(file);
-		try {
-			return readInputStreamAsString(fis, size_limit, charset);
-		} finally {
-
-			fis.close();
-		}
+        try (FileInputStream fis = new FileInputStream(file)) {
+            return readInputStreamAsString(fis, size_limit, charset);
+        }
 	}
 
 	public static String
@@ -1992,13 +1965,9 @@ public class FileUtil {
 	
 		throws IOException
 	{
-		FileInputStream fis = new FileInputStream(file);
-		try {
-			return readInputStreamAsString(fis, size_limit);
-		} finally {
-
-			fis.close();
-		}
+        try (FileInputStream fis = new FileInputStream(file)) {
+            return readInputStreamAsString(fis, size_limit);
+        }
 	}
 		
 	public static String
@@ -2008,16 +1977,12 @@ public class FileUtil {
 	
 		throws IOException
 	{
-		FileInputStream fis = new FileInputStream(file);
-				
-		try {
-			GZIPInputStream zis = new GZIPInputStream( fis );
 
-			return readInputStreamAsString(zis, size_limit);
-		} finally {
+        try (FileInputStream fis = new FileInputStream(file)) {
+            GZIPInputStream zis = new GZIPInputStream(fis);
 
-			fis.close();
-		}
+            return readInputStreamAsString(zis, size_limit);
+        }
 	}
 	public static String
 	readInputStreamAsString(
@@ -2084,7 +2049,7 @@ public class FileUtil {
 					break;
 				}
 	
-				result.append(new String(buffer, 0, len, "ISO-8859-1"));
+				result.append(new String(buffer, 0, len, StandardCharsets.ISO_8859_1));
 	
 				if (size_limit >= 0 && result.length() > size_limit) {
 	
@@ -2117,47 +2082,43 @@ public class FileUtil {
 	
 		throws IOException
 	{
-		FileInputStream	fis = new FileInputStream( file );
-		
-		try{
-			if ( file.length() > size_limit){
-				
-					// doesn't really work with multi-byte chars but woreva
-				
-				fis.skip(file.length() - size_limit);
-			}
-			
-			StringBuilder result = new StringBuilder(1024);
-			
-			byte[]	buffer = new byte[64*1024];
-			
-			while( true ){
-			
-				int	len = fis.read( buffer );
-			
-				if ( len <= 0 ){
-					
-					break;
-				}
-			
-					// doesn't really work with multi-byte chars but woreva
-				
-				result.append( new String( buffer, 0, len, charset ));
-				
-				if ( result.length() > size_limit ){
-					
-					result.setLength( size_limit );
-					
-					break;
-				}
-			}
-			
-			return( result.toString());
-			
-		}finally{
-			
-			fis.close();
-		}
+
+        try (FileInputStream fis = new FileInputStream(file)) {
+            if (file.length() > size_limit) {
+
+                // doesn't really work with multi-byte chars but woreva
+
+                fis.skip(file.length() - size_limit);
+            }
+
+            StringBuilder result = new StringBuilder(1024);
+
+            byte[] buffer = new byte[64 * 1024];
+
+            while (true) {
+
+                int len = fis.read(buffer);
+
+                if (len <= 0) {
+
+                    break;
+                }
+
+                // doesn't really work with multi-byte chars but woreva
+
+                result.append(new String(buffer, 0, len, charset));
+
+                if (result.length() > size_limit) {
+
+                    result.setLength(size_limit);
+
+                    break;
+                }
+            }
+
+            return (result.toString());
+
+        }
 	}
 	
 	public static byte[]
@@ -2209,28 +2170,23 @@ public class FileUtil {
    		ByteArrayOutputStream	baos = new ByteArrayOutputStream((int)file.length());
    		
    		byte[]	buffer = new byte[32*1024];
-   		
-   		InputStream is = new FileInputStream( file );
-   		
-   		try{
-	   		while( true ){
-	   			
-	   			int	len = is.read( buffer );
-	   			
-	   			if ( len <= 0 ){
-	   				
-	   				break;
-	   			}
-	   			
-	   			baos.write( buffer, 0, len );
-	   		}
-	   		
-	   		return( baos.toByteArray());
-	   		
-   		}finally{
-   			
-   			is.close();
-   		}
+
+        try (InputStream is = new FileInputStream(file)) {
+            while (true) {
+
+                int len = is.read(buffer);
+
+                if (len <= 0) {
+
+                    break;
+                }
+
+                baos.write(buffer, 0, len);
+            }
+
+            return (baos.toByteArray());
+
+        }
    	}
 	
 	public final static boolean getUsableSpaceSupported()
@@ -2241,7 +2197,7 @@ public class FileUtil {
 	public final static long getUsableSpace(File f)
 	{
 		try{
-			return ((Long)reflectOnUsableSpace.invoke(f)).longValue();
+			return (Long) reflectOnUsableSpace.invoke(f);
 			
 		}catch ( Throwable e){
 			
@@ -2266,16 +2222,11 @@ public class FileUtil {
 					
 					// should fail if no perms, but sometimes it's created in
 					// virtualstore (if ran from java(w).exe for example)
-				
-				FileOutputStream fos = new FileOutputStream( write_test );
-				
-				try{
-					fos.write(32);
-					
-				}finally{
-					
-					fos.close();
-				}
+
+                try (FileOutputStream fos = new FileOutputStream(write_test)) {
+                    fos.write(32);
+
+                }
 
 				write_test.delete();
 
@@ -2427,7 +2378,7 @@ public class FileUtil {
 			return( null );
 		}
 		
-		List<String>	comps = new ArrayList<String>(100);
+		List<String>	comps = new ArrayList<>(100);
 	
 		File comp = file;
 
@@ -2452,7 +2403,7 @@ public class FileUtil {
 			comp = comp.getParentFile();
 		}
 		
-		InternedFile res = new InternedFile(comps.toArray( new String[comps.size()]));
+		InternedFile res = new InternedFile(comps.toArray(new String[0]));
 		
 		if ( !res.getFile().equals( file )){
 			

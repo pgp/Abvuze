@@ -24,47 +24,47 @@ import java.io.*;
 public interface 
 DHTNetworkPosition 
 {
-	public static byte	POSITION_TYPE_NONE				= 0;
-	public static byte	POSITION_TYPE_VIVALDI_V1		= 1;
+	byte	POSITION_TYPE_NONE				= 0;
+	byte	POSITION_TYPE_VIVALDI_V1		= 1;
 	//public static byte	POSITION_TYPE_VIVALDI_V2	= 3;	// was 2 but serialisation format changed to include header and 5-dimensions
 	//public static byte	POSITION_TYPE_VIVALDI_V2	= 4;	// staleness added
-	public static byte	POSITION_TYPE_VIVALDI_V2		= 5;	// another increment
+    byte	POSITION_TYPE_VIVALDI_V2		= 5;	// another increment
 	
-	public byte
+	byte
 	getPositionType();
 	
 		/**
 		 * number of bytes on wire
 		 * @return
 		 */
-	
-	public int
+
+        int
 	getSerialisedSize();
 	
 		/**
 		 * @param other
 		 * @return Float.NaN if no value available
 		 */
-	
-	public float
+
+        float
 	estimateRTT(
-		DHTNetworkPosition	other );
+                DHTNetworkPosition other);
 	
-	public void
+	void
 	update(
-		byte[]				other_id,
-		DHTNetworkPosition	other,
-		float				rtt );
+            byte[] other_id,
+            DHTNetworkPosition other,
+            float rtt);
 	
-	public boolean
+	boolean
 	isValid();
 	
-	public double[]
+	double[]
 	getLocation();
 	
-	public void
+	void
 	serialise(
-		DataOutputStream	os )
+            DataOutputStream os)
 	
 		throws IOException;
 }

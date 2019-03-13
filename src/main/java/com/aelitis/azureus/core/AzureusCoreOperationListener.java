@@ -27,8 +27,8 @@ AzureusCoreOperationListener
 		 * @param operation
 		 * @return true if the listener has taken responsibility for running an operation task
 		 */
-	
-	public boolean
+
+        boolean
 	operationCreated(
-		AzureusCoreOperation	operation );
+                AzureusCoreOperation operation);
 }

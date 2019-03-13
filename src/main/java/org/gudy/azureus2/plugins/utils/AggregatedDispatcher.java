@@ -27,14 +27,14 @@ package org.gudy.azureus2.plugins.utils;
 public interface 
 AggregatedDispatcher 
 {
-	public void
+	void
 	add(
-		Runnable	runnable );
+            Runnable runnable);
 	
-	public Runnable
+	Runnable
 	remove(
-		Runnable		obj );
+            Runnable obj);
 	
-	public void
+	void
 	destroy();
 }

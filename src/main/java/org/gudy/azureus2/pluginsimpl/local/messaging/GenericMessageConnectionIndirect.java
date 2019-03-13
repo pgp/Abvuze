@@ -137,26 +137,22 @@ GenericMessageConnectionIndirect
 					if ( tick_count % KEEP_ALIVE_CHECK_TICKS == 0 ){
 												
 						synchronized( local_connections ){
-						
-							Iterator	it = local_connections.values().iterator();
-							
-							while( it.hasNext()){
-								
-								final GenericMessageConnectionIndirect con = (GenericMessageConnectionIndirect)it.next();
-								
-								if ( con.prepareForKeepAlive( false )){
-									
-									keep_alive_pool.run(
-										new AERunnable()
-										{
-											public void
-											runSupport()
-											{
-												con.keepAlive();
-											}
-										});
-								}
-							}
+
+                            for (Object o : local_connections.values()) {
+
+                                final GenericMessageConnectionIndirect con = (GenericMessageConnectionIndirect) o;
+
+                                if (con.prepareForKeepAlive(false)) {
+
+                                    keep_alive_pool.run(
+                                            new AERunnable() {
+                                                public void
+                                                runSupport() {
+                                                    con.keepAlive();
+                                                }
+                                            });
+                                }
+                            }
 						}
 						
 						long	now = SystemTime.getCurrentTime();
@@ -166,26 +162,24 @@ GenericMessageConnectionIndirect
 							if ( remote_connections.size() > 0 ){
 								
 									// copy the connections here as we can recursively modify  the set when closing
-								
-								Iterator	it = new ArrayList( remote_connections.values()).iterator();
-								
-								while( it.hasNext()){
-									
-									GenericMessageConnectionIndirect con = (GenericMessageConnectionIndirect)it.next();
-							
-									long	last_receive = con.getLastMessageReceivedTime();
-									
-									if ( now - last_receive > KEEP_ALIVE_MIN * 3 ){
-										
-										try{
-											con.close( new Throwable( "Timeout" ));
-											
-										}catch( Throwable e ){
-											
-											Debug.printStackTrace(e);
-										}
-									}
-								}
+
+                                for (Object o : new ArrayList(remote_connections.values())) {
+
+                                    GenericMessageConnectionIndirect con = (GenericMessageConnectionIndirect) o;
+
+                                    long last_receive = con.getLastMessageReceivedTime();
+
+                                    if (now - last_receive > KEEP_ALIVE_MIN * 3) {
+
+                                        try {
+                                            con.close(new Throwable("Timeout"));
+
+                                        } catch (Throwable e) {
+
+                                            Debug.printStackTrace(e);
+                                        }
+                                    }
+                                }
 							}
 						}
 					}
@@ -242,18 +236,16 @@ GenericMessageConnectionIndirect
 					}
 					
 					int	num_from_this_ip = 0;
-									
-					Iterator	it = remote_connections.values().iterator();
-					
-					while( it.hasNext()){
-						
-						GenericMessageConnectionIndirect con = (GenericMessageConnectionIndirect)it.next();
-						
-						if ( con.getEndpoint().getNotionalAddress().getAddress().equals( originator.getAddress())){
-							
-							num_from_this_ip++;
-						}
-					}
+
+                    for (Object o : remote_connections.values()) {
+
+                        GenericMessageConnectionIndirect con = (GenericMessageConnectionIndirect) o;
+
+                        if (con.getEndpoint().getNotionalAddress().getAddress().equals(originator.getAddress())) {
+
+                            num_from_this_ip++;
+                        }
+                    }
 					
 					if ( num_from_this_ip >= MAX_REMOTE_CONNECTIONS_PER_IP ){
 						
@@ -262,12 +254,12 @@ GenericMessageConnectionIndirect
 						return( null );
 
 					}
-					con_id = new Long( connection_id_next++ );
+					con_id = connection_id_next++;
 				}
 				
 				GenericMessageConnectionIndirect indirect_connection = 
 					new GenericMessageConnectionIndirect( 
-							message_manager, msg_id, msg_desc, endpoint, con_id.longValue());
+							message_manager, msg_id, msg_desc, endpoint, con_id);
 
 				GenericMessageConnectionImpl new_connection = new GenericMessageConnectionImpl( message_manager, indirect_connection );
 
@@ -284,7 +276,7 @@ GenericMessageConnectionIndirect
 				
 					Map	reply = new HashMap();
 					
-					reply.put( "type", new Long( MESSAGE_TYPE_CONNECT ));
+					reply.put( "type", (long) MESSAGE_TYPE_CONNECT);
 					reply.put( "con_id", con_id );
 					reply.put( "data", replies );
 					
@@ -322,18 +314,18 @@ GenericMessageConnectionIndirect
 
 			if ( indirect_connection.isClosed()){
 				
-				reply.put( "type", new Long( MESSAGE_TYPE_DISCONNECT ));
+				reply.put( "type", (long) MESSAGE_TYPE_DISCONNECT);
 
 			}else{
 				
 				List replies = indirect_connection.receive((List)message.get( "data" ));
 				
-				reply.put( "type", new Long( MESSAGE_TYPE_DATA ));
+				reply.put( "type", (long) MESSAGE_TYPE_DATA);
 				reply.put( "data", replies );	
 								
 				if ( indirect_connection.receiveIncomplete()){
 					
-					reply.put( "more_data", new Long(1));
+					reply.put( "more_data", 1L);
 				}
 			}
 			
@@ -386,40 +378,36 @@ GenericMessageConnectionIndirect
 		Map totals = new HashMap();	
 	
 		synchronized( connections ){
-			
-			Iterator	it = connections.values().iterator();
-			
-			while( it.hasNext()){
-				
-				GenericMessageConnectionIndirect con = (GenericMessageConnectionIndirect)it.next();
-	
-				InetAddress	originator = con.getEndpoint().getNotionalAddress().getAddress();
-				
-				Integer	i = (Integer)totals.get( originator );
-				
-				if ( i == null ){
-					
-					i = new Integer(1);
-					
-				}else{
-					
-					i = new Integer(i.intValue() + 1 );
-				}
-				
-				totals.put( originator, i );
-			}
+
+            for (Object o : connections.values()) {
+
+                GenericMessageConnectionIndirect con = (GenericMessageConnectionIndirect) o;
+
+                InetAddress originator = con.getEndpoint().getNotionalAddress().getAddress();
+
+                Integer i = (Integer) totals.get(originator);
+
+                if (i == null) {
+
+                    i = 1;
+
+                } else {
+
+                    i = i.intValue() + 1;
+                }
+
+                totals.put(originator, i);
+            }
 		}
 		
 		String	str = "";
-		
-		Iterator it = totals.entrySet().iterator();
-		
-		while( it.hasNext()){
-			
-			Map.Entry entry = (Map.Entry)it.next();
-			
-			str += (str.length()==0?"":",") + entry.getKey() + ":" + entry.getValue();
-		}
+
+        for (Object o : totals.entrySet()) {
+
+            Map.Entry entry = (Map.Entry) o;
+
+            str += (str.length() == 0 ? "" : ",") + entry.getKey() + ":" + entry.getValue();
+        }
 		
 		return( str );
 	}
@@ -442,7 +430,7 @@ GenericMessageConnectionIndirect
 	private boolean					incoming;
 	private boolean					closed;
 	
-	private LinkedList<byte[]>	send_queue		= new LinkedList<byte[]>();
+	private LinkedList<byte[]>	send_queue		= new LinkedList<>();
 	
 	private AESemaphore	send_queue_sem	= new AESemaphore( "GenericMessageConnectionIndirect:sendq" );
 	
@@ -593,7 +581,7 @@ GenericMessageConnectionIndirect
 			
 			initial_messages.add( initial_data_bytes );
 			
-			message.put( "type", new Long( MESSAGE_TYPE_CONNECT ));
+			message.put( "type", (long) MESSAGE_TYPE_CONNECT);
 			message.put( "msg_id", msg_id );
 			message.put( "msg_desc", msg_desc );
 			message.put( "data", initial_messages );
@@ -620,21 +608,21 @@ GenericMessageConnectionIndirect
 
 				}else if ( reply_type == MESSAGE_TYPE_CONNECT ){
 										
-					connection_id = ((Long)reply.get( "con_id" )).longValue();
+					connection_id = (Long) reply.get("con_id");
 					
 					synchronized( local_connections ){
 						
-						local_connections.put( new Long( connection_id ), this );
+						local_connections.put(connection_id, this );
 					}
 					
 					listener.connectSuccess();
 
 					List<byte[]>	replies = (List<byte[]>)reply.get( "data" );
-					
-					for (int i=0;i<replies.size();i++){
-							
-						owner.receive( new GenericMessage(msg_id, msg_desc, new DirectByteBuffer(ByteBuffer.wrap(replies.get(i))), false ));
-					}
+
+                    for (byte[] reply1 : replies) {
+
+                        owner.receive(new GenericMessage(msg_id, msg_desc, new DirectByteBuffer(ByteBuffer.wrap(reply1)), false));
+                    }
 					
 				}else{
 					
@@ -701,8 +689,8 @@ GenericMessageConnectionIndirect
 		try{
 			Map	message = new HashMap();
 			
-			message.put( "con_id", new Long( connection_id ));
-			message.put( "type", new Long( MESSAGE_TYPE_DATA ));
+			message.put( "con_id", connection_id);
+			message.put( "type", (long) MESSAGE_TYPE_DATA);
 			message.put( "data", messages );
 			
 			Map reply = nat_traverser.sendMessage( message_manager, rendezvous, target, message );
@@ -724,11 +712,11 @@ GenericMessageConnectionIndirect
 				}else if ( reply_type == MESSAGE_TYPE_DATA ){
 					
 					List<byte[]>	replies = (List<byte[]>)reply.get( "data" );
-											
-					for (int i=0;i<replies.size();i++){
-							
-						owner.receive( new GenericMessage(msg_id, msg_desc, new DirectByteBuffer(ByteBuffer.wrap(replies.get(i))), false ));
-					}
+
+                    for (byte[] reply1 : replies) {
+
+                        owner.receive(new GenericMessage(msg_id, msg_desc, new DirectByteBuffer(ByteBuffer.wrap(reply1)), false));
+                    }
 					
 						// if there's more data queued force a keep alive to pick it up but delay 
 						// a little to give the rendezvous a breather
@@ -782,13 +770,13 @@ GenericMessageConnectionIndirect
 		}
 		
 		last_message_received	= SystemTime.getCurrentTime();
+
+        for (byte[] message : messages) {
+
+            owner.receive(new GenericMessage(msg_id, msg_desc, new DirectByteBuffer(ByteBuffer.wrap(message)), false));
+        }
 		
-		for (int i=0;i<messages.size();i++){
-			
-			owner.receive( new GenericMessage(msg_id, msg_desc, new DirectByteBuffer(ByteBuffer.wrap(messages.get(i))), false ));
-		}
-		
-		List<byte[]>	reply = new ArrayList<byte[]>();
+		List<byte[]>	reply = new ArrayList<>();
 		
 			// hang around a bit to see if we can piggyback a reply
 		
@@ -892,20 +880,20 @@ GenericMessageConnectionIndirect
 				
 				synchronized( remote_connections ){
 					
-					remote_connections.remove( new Long( connection_id ));
+					remote_connections.remove(connection_id);
 				}
 			}else{
 				
 				
 				synchronized( local_connections ){
 					
-					local_connections.remove( new Long( connection_id ));
+					local_connections.remove(connection_id);
 				}
 				
 				Map	message = new HashMap();
 				
-				message.put( "con_id", new Long( connection_id ));
-				message.put( "type", new Long( MESSAGE_TYPE_DISCONNECT ));
+				message.put( "con_id", connection_id);
+				message.put( "type", (long) MESSAGE_TYPE_DISCONNECT);
 				
 				try{
 					nat_traverser.sendMessage( message_manager, rendezvous, target, message );

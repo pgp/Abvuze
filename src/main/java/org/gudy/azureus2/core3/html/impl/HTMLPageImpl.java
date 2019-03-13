@@ -104,61 +104,59 @@ HTMLPageImpl
 	       // <META HTTP-EQUIV="refresh" content="5; URL=xxxxxxx">;
 	       
 		String[]	tags = getTags( "META" );
-		
-		for (int i=0;i<tags.length;i++){
-			
-			String	tag 	= tags[i];
-			
-			String	lc_tag	= tag.toLowerCase( MessageText.LOCALE_ENGLISH );
-			
-			int pos = lc_tag.indexOf("http-equiv=\"refresh\"");
-							
-			int	url_start = lc_tag.indexOf( "url=" );
-			
-			if ( pos != -1 && url_start != -1 ){
-				
-				url_start += 4;
-				
-				int	e1 = lc_tag.indexOf( "\"", url_start );
-				
-				if ( e1 != -1 ){
-									
-					try{
-						String mr_url = tag.substring(url_start, e1).trim();
-						
-						String lc = mr_url.toLowerCase();
-						
-						if ( ! ( lc.startsWith( "http:" ) || lc.startsWith( "https:" ))){
-							
-							if ( base_url != null ){
-								
-								String s = base_url.toExternalForm();
-								
-								int p = s.indexOf( '?' );
-								
-								if ( p != -1 ){
-									
-									s = s.substring( 0, p );
-								}
-								
-								if ( s.endsWith( "/" ) && mr_url.startsWith( "/" )){
-									
-									mr_url = mr_url.substring( 1 );
-								}
-								
-								mr_url = s + mr_url;
-							}
-						}
-						
-						return( new URL( mr_url ));
-						
-					}catch( MalformedURLException e ){
-						
-						Debug.printStackTrace( e );
-					}
-				}
-			}
-		}
+
+        for (String tag : tags) {
+
+            String lc_tag = tag.toLowerCase(MessageText.LOCALE_ENGLISH);
+
+            int pos = lc_tag.indexOf("http-equiv=\"refresh\"");
+
+            int url_start = lc_tag.indexOf("url=");
+
+            if (pos != -1 && url_start != -1) {
+
+                url_start += 4;
+
+                int e1 = lc_tag.indexOf("\"", url_start);
+
+                if (e1 != -1) {
+
+                    try {
+                        String mr_url = tag.substring(url_start, e1).trim();
+
+                        String lc = mr_url.toLowerCase();
+
+                        if (!(lc.startsWith("http:") || lc.startsWith("https:"))) {
+
+                            if (base_url != null) {
+
+                                String s = base_url.toExternalForm();
+
+                                int p = s.indexOf('?');
+
+                                if (p != -1) {
+
+                                    s = s.substring(0, p);
+                                }
+
+                                if (s.endsWith("/") && mr_url.startsWith("/")) {
+
+                                    mr_url = mr_url.substring(1);
+                                }
+
+                                mr_url = s + mr_url;
+                            }
+                        }
+
+                        return (new URL(mr_url));
+
+                    } catch (MalformedURLException e) {
+
+                        Debug.printStackTrace(e);
+                    }
+                }
+            }
+        }
 				
 		return( null );
 	}

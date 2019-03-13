@@ -24,6 +24,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.PasswordAuthentication;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import javax.net.ssl.HostnameVerifier;
@@ -104,7 +105,7 @@ DiskManagerFileInfoURL
 		}
 		
 		try{
-			hash		= new SHA1Simple().calculateHash( ( "DiskManagerFileInfoURL" +  url.toExternalForm()).getBytes( "UTF-8" ));
+			hash		= new SHA1Simple().calculateHash( ( "DiskManagerFileInfoURL" +  url.toExternalForm()).getBytes(StandardCharsets.UTF_8));
 			
 		}catch( Throwable e ){
 			
@@ -491,11 +492,11 @@ DiskManagerFileInfoURL
 			
 			private long		position;
 			
-			private int			max_read_chunk = 128*1024;;
+			private int			max_read_chunk = 128*1024;
+
+            private volatile boolean	request_cancelled;
 			
-			private volatile boolean	request_cancelled;
-			
-			private CopyOnWriteList<DiskManagerListener>		listeners = new CopyOnWriteList<DiskManagerListener>();
+			private CopyOnWriteList<DiskManagerListener>		listeners = new CopyOnWriteList<>();
 			
 			public void
 			setType(
@@ -572,7 +573,7 @@ DiskManagerFileInfoURL
 							HttpURLConnection	connection;
 							int					response;
 							
-							Set<String>	redirect_urls = new HashSet<String>();
+							Set<String>	redirect_urls = new HashSet<>();
 							
 redirect_loop:
 							while( true ){

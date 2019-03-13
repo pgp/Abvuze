@@ -21,6 +21,7 @@
 package com.aelitis.azureus.core.download;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.gudy.azureus2.core3.util.AESemaphore;
@@ -61,7 +62,7 @@ DiskManagerFileInfoStream
 		save_to				= _save_to;
 		
 		try{
-			hash		= new SHA1Simple().calculateHash( _save_to.getAbsolutePath().getBytes( "UTF-8" ));
+			hash		= new SHA1Simple().calculateHash( _save_to.getAbsolutePath().getBytes(StandardCharsets.UTF_8));
 			
 		}catch( Throwable e ){
 			
@@ -288,9 +289,9 @@ DiskManagerFileInfoStream
 		
 		private boolean				stream_got_eof;
 		
-		private List<channel>		channels	= new ArrayList<channel>();
+		private List<channel>		channels	= new ArrayList<>();
 
-		private List<AESemaphore>	waiters 	= new ArrayList<AESemaphore>();
+		private List<AESemaphore>	waiters 	= new ArrayList<>();
 		
 		private boolean				context_destroyed;
 		
@@ -499,7 +500,7 @@ DiskManagerFileInfoStream
 				
 				if ( channels != null ){
 					
-					List<channel> channels_copy = new ArrayList<channel>( channels );
+					List<channel> channels_copy = new ArrayList<>(channels);
 					
 					for ( channel c: channels_copy ){
 						
@@ -587,11 +588,11 @@ DiskManagerFileInfoStream
 				
 				private long		position;
 				
-				private int			max_read_chunk = 128*1024;;
+				private int			max_read_chunk = 128*1024;
+
+                private volatile boolean	request_cancelled;
 				
-				private volatile boolean	request_cancelled;
-				
-				private CopyOnWriteList<DiskManagerListener>		listeners = new CopyOnWriteList<DiskManagerListener>();
+				private CopyOnWriteList<DiskManagerListener>		listeners = new CopyOnWriteList<>();
 				
 				public void
 				setType(
@@ -815,23 +816,23 @@ DiskManagerFileInfoStream
 	public interface
 	StreamFactory
 	{
-		public StreamDetails
+		StreamDetails
 		getStream(
-			Object		requester )
+                Object requester)
 		
 			throws IOException;
 		
-		public void
+		void
 		destroyed(
-			Object		requester );
+                Object requester);
 		
-		public interface
+		interface
 		StreamDetails
 		{
-			public InputStream
+			InputStream
 			getStream();
 			
-			public boolean
+			boolean
 			hasFailed();
 		}
 	}

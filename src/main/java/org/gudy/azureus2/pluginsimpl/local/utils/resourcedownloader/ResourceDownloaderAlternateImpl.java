@@ -60,11 +60,11 @@ ResourceDownloaderAlternateImpl
 		delegates		= _delegates;
 		max_to_try		= _max_to_try;
 		random			= _random;
-		
-		for (int i=0;i<delegates.length;i++){
-			
-			((ResourceDownloaderBaseImpl)delegates[i]).setParent( this );
-		}
+
+        for (ResourceDownloader delegate : delegates) {
+
+            ((ResourceDownloaderBaseImpl) delegate).setParent(this);
+        }
 
 		if ( max_to_try < 0 ){
 			
@@ -163,11 +163,11 @@ ResourceDownloaderAlternateImpl
 		size	= l;
 		
 		if ( size >= 0 ){
-			
-			for (int i=0;i<delegates.length;i++){
-				
-				((ResourceDownloaderBaseImpl)delegates[i]).setSize( size );
-			}
+
+            for (ResourceDownloader delegate : delegates) {
+
+                ((ResourceDownloaderBaseImpl) delegate).setSize(size);
+            }
 		}
 	}
 	
@@ -179,11 +179,11 @@ ResourceDownloaderAlternateImpl
 		throws ResourceDownloaderException
 	{
 		setPropertySupport( name, value );
-		
-		for (int i=0;i<delegates.length;i++){
-			
-			((ResourceDownloaderBaseImpl)delegates[i]).setProperty( name, value );
-		}
+
+        for (ResourceDownloader delegate : delegates) {
+
+            delegate.setProperty(name, value);
+        }
 	}
 	
 	public ResourceDownloaderBaseImpl

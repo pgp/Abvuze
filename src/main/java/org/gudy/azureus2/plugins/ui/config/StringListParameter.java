@@ -27,14 +27,14 @@ public interface
 StringListParameter
 	extends Parameter
 {
-	public void
+	void
 	setValue(
-		String	value );
+            String value);
 	
-	public String
+	String
 	getValue();
 	
-	public void
+	void
 	setLabels(
-		String[]	labels );
+            String[] labels);
 }

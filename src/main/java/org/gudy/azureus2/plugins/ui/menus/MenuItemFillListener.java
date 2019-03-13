@@ -31,5 +31,5 @@ public interface MenuItemFillListener
 	 * For {@link MenuManager#MENU_DOWNLOAD_CONTEXT} this will be an array of {@link Download} <BR>
 	 */
 
-	public void menuWillBeShown(MenuItem menu, Object data);
+    void menuWillBeShown(MenuItem menu, Object data);
 }

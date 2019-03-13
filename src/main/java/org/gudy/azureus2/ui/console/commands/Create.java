@@ -76,7 +76,7 @@ public class Create extends IConsoleCommand {
 			return;
 		}
 		
-		List<URL>	urls = new ArrayList<URL>();
+		List<URL>	urls = new ArrayList<>();
 		
 		for ( int i=2; i<args.size();i++){
 		

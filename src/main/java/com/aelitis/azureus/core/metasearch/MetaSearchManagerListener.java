@@ -23,7 +23,7 @@ package com.aelitis.azureus.core.metasearch;
 public interface 
 MetaSearchManagerListener 
 {
-	public void
+	void
 	searchRequest(
-		String		term );
+            String term);
 }

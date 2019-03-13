@@ -25,5 +25,5 @@ public interface UIDataSourceListener
 	 * 
 	 * @param datasource Selected object or array of selected objects
 	 */
-	public void dataSourceChanged(Object datasource);
+    void dataSourceChanged(Object datasource);
 }

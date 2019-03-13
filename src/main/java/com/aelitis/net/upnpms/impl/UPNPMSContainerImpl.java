@@ -74,7 +74,7 @@ UPNPMSContainerImpl
 			
 			if ( children == null ){
 				
-				children 	= new ArrayList<UPNPMSNode>();
+				children 	= new ArrayList<>();
 				
 				List<SimpleXMLParserDocumentNode> results = browser.getContainerContents( id );
 				

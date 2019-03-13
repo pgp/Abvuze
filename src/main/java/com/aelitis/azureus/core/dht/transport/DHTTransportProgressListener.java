@@ -27,15 +27,15 @@ package com.aelitis.azureus.core.dht.transport;
 public interface 
 DHTTransportProgressListener 
 {
-	public void
+	void
 	reportSize(
-		long	size );
+            long size);
 	
-	public void
+	void
 	reportActivity(
-		String	str );
+            String str);
 	
-	public void
+	void
 	reportCompleteness(
-		int		percent );
+            int percent);
 }

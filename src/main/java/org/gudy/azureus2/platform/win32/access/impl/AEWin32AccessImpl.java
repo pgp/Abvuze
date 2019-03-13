@@ -108,26 +108,26 @@ AEWin32AccessImpl
 		int	result = -1;
 		
 		if ( type != -1 ){
-					
-			for (int i=0;i<listeners.size();i++){
-				
-				try{
-					int temp = ((AEWin32AccessListener)listeners.get(i)).eventOccurred( type );
-					
-					if ( temp != result ){
-						
-						if ( result != -1 ){
-							
-							Debug.out( "Incompatible results received: " + result + "/" + temp );
-						}
-						
-						result 	= temp;
-					}
-				}catch( Throwable e ){
-					
-					e.printStackTrace();
-				}
-			}
+
+            for (Object listener : listeners) {
+
+                try {
+                    int temp = ((AEWin32AccessListener) listener).eventOccurred(type);
+
+                    if (temp != result) {
+
+                        if (result != -1) {
+
+                            Debug.out("Incompatible results received: " + result + "/" + temp);
+                        }
+
+                        result = temp;
+                    }
+                } catch (Throwable e) {
+
+                    e.printStackTrace();
+                }
+            }
 		}
 		
 		if ( result == AEWin32AccessListener.RT_SUSPEND_DENY ){
@@ -605,7 +605,7 @@ AEWin32AccessImpl
     		
     		Debug.out( "Not enumerating system drives as it crashed last time we tried" );
     		
-    		return( new HashMap<File,Map>());
+    		return(new HashMap<>());
     	}
     	
     	try{
@@ -613,7 +613,7 @@ AEWin32AccessImpl
     	
     		COConfigurationManager.save();
     		
-	    	Map<File, Map> mapDrives = new HashMap<File, Map>();
+	    	Map<File, Map> mapDrives = new HashMap<>();
 	    	try {
 					List availableDrives = AEWin32AccessInterface.getAvailableDrives();
 					if (availableDrives != null) {

@@ -30,44 +30,44 @@ Transport
 	extends TransportBase
 {
 	
-  public static final int TRANSPORT_MODE_NORMAL = 0;
-  public static final int TRANSPORT_MODE_FAST   = 1;
-  public static final int TRANSPORT_MODE_TURBO  = 2;
+  int TRANSPORT_MODE_NORMAL = 0;
+  int TRANSPORT_MODE_FAST   = 1;
+  int TRANSPORT_MODE_TURBO  = 2;
 
-  public int
+  int
   getMssSize();
   
   /**
    * Inject the given already-read data back into the read stream.
    * @param bytes_already_read data
    */
-  public void setAlreadyRead( ByteBuffer bytes_already_read );
+  void setAlreadyRead(ByteBuffer bytes_already_read);
   
-  public TransportStartpoint getTransportStartpoint();
+  TransportStartpoint getTransportStartpoint();
   
   /**
    * Get the socket channel used by the transport.
    * @return the socket channel
    */
-  public TransportEndpoint getTransportEndpoint();  
+  TransportEndpoint getTransportEndpoint();
   
-  public boolean isEncrypted();
+  boolean isEncrypted();
   
   /**
    * Return a textual description of the encryption for this transport
    * @return
    */
-  public String getEncryption( boolean verbose );
+  String getEncryption(boolean verbose);
      
-  public String getProtocol();
+  String getProtocol();
   
-  public boolean isSOCKS();
+  boolean isSOCKS();
   
   /**
    * fake a wakeup so that a read cycle is attempted
    */
-  
-  public void setReadyForRead();
+
+  void setReadyForRead();
   
   /**
    * Write data to the transport from the given buffers.
@@ -78,7 +78,7 @@ Transport
    * @return number of bytes written
    * @throws IOException on write error
    */
-  public long write( ByteBuffer[] buffers, int array_offset, int length ) throws IOException;
+  long write(ByteBuffer[] buffers, int array_offset, int length) throws IOException;
 
   
   
@@ -91,81 +91,81 @@ Transport
    * @return number of bytes read
    * @throws IOException on read error
    */
-  
-  public long read( ByteBuffer[] buffers, int array_offset, int length ) throws IOException;
+
+  long read(ByteBuffer[] buffers, int array_offset, int length) throws IOException;
   
   /**
    * Set the transport to the given speed mode.
    * @param mode to change to
    */
-  public void setTransportMode( int mode );
+  void setTransportMode(int mode);
  
   /**
    * Get the transport's speed mode.
    * @return current mode
    */
-  public int getTransportMode();
+  int getTransportMode();
   
   
   /**
    * Kick off an outbound connection
    * @param listener
    */
-  public void
+  void
   connectOutbound(
-		ByteBuffer			initial_data,
-		ConnectListener 	listener,
-		int					priority );
+          ByteBuffer initial_data,
+          ConnectListener listener,
+          int priority);
    
   /**
    * Indicate that inbound connection is complete 
    */
-  
-  public void
+
+  void
   connectedInbound();
   
   /**
    * Close the transport connection.
    */
-  public void close( String reason );
+  void close(String reason);
   
-  public void
+  void
   bindConnection(
-		NetworkConnection	connection );
+          NetworkConnection connection);
   
-  public void
+  void
   unbindConnection(
-		NetworkConnection	connection );
+          NetworkConnection connection);
   
-  public void
+  void
   setTrace(
-		boolean	on );
+          boolean on);
   
   /**
    * Listener for notification of connection establishment.
    */
-  public interface ConnectListener {
+  interface ConnectListener {
     /**
      * The connection establishment process has started,
      * i.e. the connection is actively being attempted.
      * @return modified timeout
      */
-    public int connectAttemptStarted( int default_connect_timeout );   
+    int connectAttemptStarted(int default_connect_timeout);
      
     /**
      * The connection attempt succeeded.
      * The connection is now established.
      */
-    public void connectSuccess(Transport	transport, ByteBuffer remaining_initial_data );
+    void connectSuccess(Transport transport, ByteBuffer remaining_initial_data);
     
     /**
      * The connection attempt failed.
      * @param failure_msg failure reason
      */
-    public void connectFailure( Throwable failure_msg );
+    void connectFailure(Throwable failure_msg);
     
-    public Object
+    Object
     getConnectionProperty(
-    	String		property_name );
+            String property_name);
   }
 }

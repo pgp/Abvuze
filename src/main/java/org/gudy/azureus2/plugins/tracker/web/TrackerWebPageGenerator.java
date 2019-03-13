@@ -38,11 +38,11 @@ TrackerWebPageGenerator
 	 * @param response
 	 * @return	true if the request was handled
 	 */
-	
-	public boolean
+
+    boolean
 	generate(
-		TrackerWebPageRequest		request,
-		TrackerWebPageResponse		response )
+            TrackerWebPageRequest request,
+            TrackerWebPageResponse response)
 	
 		throws IOException;
 }

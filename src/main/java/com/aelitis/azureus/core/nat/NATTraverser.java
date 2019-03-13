@@ -66,7 +66,7 @@ NATTraverser
 	{
 		synchronized( handlers ){
 			
-			handlers.put( new Integer(handler.getType()), handler );
+			handlers.put(handler.getType(), handler );
 		}
 	}
 	
@@ -190,7 +190,7 @@ NATTraverser
 				request = new HashMap();
 			}
 			
-			request.put( "_travreas", new Long( type ));
+			request.put( "_travreas", (long) type);
 			
 			InetSocketAddress[]	target_a = { target };
 			
@@ -233,7 +233,7 @@ NATTraverser
 			throw( new NATTraversalException( "Puncher unavailable" ));
 		}
 		
-		message.put( "_travreas", new Long( handler.getType()));
+		message.put( "_travreas", (long) handler.getType());
 
 		Map	reply = puncher.sendMessage( rendezvous, target, message );
 		
@@ -258,7 +258,7 @@ NATTraverser
 			
 			synchronized( handlers ){
 				
-				handler = (NATTraversalHandler)handlers.get( new Integer( type.intValue()));
+				handler = (NATTraversalHandler)handlers.get(type.intValue());
 			}
 			
 			

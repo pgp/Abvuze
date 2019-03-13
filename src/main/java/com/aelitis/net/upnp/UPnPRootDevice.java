@@ -33,38 +33,38 @@ import java.util.Map;
 public interface 
 UPnPRootDevice
 {
-	public UPnP
+	UPnP
 	getUPnP();
 	
-	public String
+	String
 	getUSN();
 	
-	public URL
+	URL
 	getLocation();
 	
-	public InetAddress
+	InetAddress
 	getLocalAddress();
 	
-	public NetworkInterface
+	NetworkInterface
 	getNetworkInterface();
 	
-	public String
+	String
 	getInfo();
 	
-	public UPnPDevice
+	UPnPDevice
 	getDevice();
 	
-	public boolean
+	boolean
 	isDestroyed();
 	
-	public Map
+	Map
 	getDiscoveryCache();
 	
-	public void
+	void
 	addListener(
-		UPnPRootDeviceListener	l );
+            UPnPRootDeviceListener l);
 	
-	public void
+	void
 	removeListener(
-		UPnPRootDeviceListener	l );
+            UPnPRootDeviceListener l);
 }

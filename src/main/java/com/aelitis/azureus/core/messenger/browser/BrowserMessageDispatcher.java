@@ -39,7 +39,7 @@ public interface BrowserMessageDispatcher
 	 * @throws IllegalStateException
 	 *              if another listener is already registered under the same ID
 	 */
-	public abstract void addListener(BrowserMessageListener listener);
+    void addListener(BrowserMessageListener listener);
 
 	/**
 	 * Dispatches the given message to the appropriate listener.
@@ -49,7 +49,7 @@ public interface BrowserMessageDispatcher
 	 * @throws IllegalArgumentException
 	 *              if no listener is registered with the given ID
 	 */
-	public abstract void dispatch(final BrowserMessage message);
+    void dispatch(final BrowserMessage message);
 
 	/**
 	 * Returns the listener with the given ID.
@@ -57,7 +57,7 @@ public interface BrowserMessageDispatcher
 	 * @param id unique identifier of the listener to be returned
 	 * @return the located listener
 	 */
-	public abstract BrowserMessageListener getListener(String id);
+    BrowserMessageListener getListener(String id);
 
 	/**
 	 * Deregisters the listener with the given ID.

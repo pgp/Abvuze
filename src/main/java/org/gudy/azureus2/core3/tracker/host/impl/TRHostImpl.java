@@ -83,7 +83,7 @@ TRHostImpl
 				int				type,
 				Object			value )
 			{
-				TRHostListener	target = (TRHostListener)_listener;
+				TRHostListener	target = _listener;
 		
 				if ( type == LDT_TORRENT_ADDED ){
 					
@@ -100,7 +100,7 @@ TRHostImpl
 			}
 		});	
 	
-	private final CopyOnWriteList<TRHostListener2>	listeners2 = new CopyOnWriteList<TRHostListener2>();
+	private final CopyOnWriteList<TRHostListener2>	listeners2 = new CopyOnWriteList<>();
 	
 	private static boolean host_add_announce_urls;
 	
@@ -118,7 +118,7 @@ TRHostImpl
 				});
 	}
 	
-	private final List<TRHostAuthenticationListener>	auth_listeners		= new ArrayList<TRHostAuthenticationListener>();
+	private final List<TRHostAuthenticationListener>	auth_listeners		= new ArrayList<>();
 	
 	private boolean	server_factory_listener_added;
 	
@@ -176,57 +176,58 @@ TRHostImpl
 									try{	
 										
 										URL[][]	url_sets = TRTrackerUtils.getAnnounceURLs();
-										
-										for (int i=0;i<url_sets.length;i++){
-											
-											URL[]	urls = url_sets[i];
-											
-											for (int j=0;j<urls.length;j++){
-												
-												URL	url = urls[j];
-														
-												int port = url.getPort();
-												
-												if ( port == -1 ){
-													
-													port = url.getDefaultPort();
-												}
-												
-												String	protocol = url.getProtocol().toLowerCase();
-												
-												try{
-													if ( protocol.equals( "http" )){
-												
-														startServer( TRTrackerServerFactory.PR_TCP, port, false );
-													
-													}else if ( protocol.equals( "udp" )){
-														
-														startServer( TRTrackerServerFactory.PR_UDP, port, false );
 
-													}else if ( protocol.equals( "https" )){
-														
-														startServer( TRTrackerServerFactory.PR_TCP, port, true );
+                                        for (URL[] urls : url_sets) {
 
-													}else{
-														
-														Debug.out( "Unknown protocol '" + protocol + "'" );
-													}
-													
-												}catch( Throwable e ){
-											
-													Integer port_i = new Integer(port);
-													
-													if ( !failed_ports.contains(port_i)){
-														
-														failed_ports.add( port_i );
-														
-														Logger.log(
-																new LogEvent(LOGID,
-																"Tracker Host: failed to start server", e));
-													}
-												}
-											}
-										}
+                                            for (URL url : urls) {
+
+                                                int port = url.getPort();
+
+                                                if (port == -1) {
+
+                                                    port = url.getDefaultPort();
+                                                }
+
+                                                String protocol = url.getProtocol().toLowerCase();
+
+                                                try {
+                                                    switch (protocol) {
+                                                        case "http":
+
+                                                            startServer(TRTrackerServerFactory.PR_TCP, port, false);
+
+                                                            break;
+                                                        case "udp":
+
+                                                            startServer(TRTrackerServerFactory.PR_UDP, port, false);
+
+                                                            break;
+                                                        case "https":
+
+                                                            startServer(TRTrackerServerFactory.PR_TCP, port, true);
+
+                                                            break;
+                                                        default:
+
+                                                            Debug.out("Unknown protocol '" + protocol + "'");
+                                                            break;
+                                                    }
+
+                                                } catch (Throwable e) {
+
+                                                    Integer port_i = port;
+
+                                                    if (!failed_ports.contains(port_i)) {
+
+                                                        failed_ports.add(port_i);
+
+                                                        Logger.log(
+                                                                new LogEvent(LOGID,
+                                                                        "Tracker Host: failed to start server", e));
+                                                    }
+                                                }
+                                            }
+                                        }
 										
 										Thread.sleep( TICK_PERIOD_SECS*1000 );
 										
@@ -239,21 +240,21 @@ TRHostImpl
 											
 											try{
 												this_mon.enter();
-												
-												for (int i=0;i<host_torrents.size();i++){
-					
-													TRHostTorrent	ht = (TRHostTorrent)host_torrents.get(i);
-													
-													if ( ht instanceof TRHostTorrentHostImpl ){
-																						
-														((TRHostTorrentHostImpl)ht).updateStats();
-														
-													}else{
-														
-														((TRHostTorrentPublishImpl)ht).updateStats();
-														
-													}
-												}
+
+                                                for (Object host_torrent : host_torrents) {
+
+                                                    TRHostTorrent ht = (TRHostTorrent) host_torrent;
+
+                                                    if (ht instanceof TRHostTorrentHostImpl) {
+
+                                                        ((TRHostTorrentHostImpl) ht).updateStats();
+
+                                                    } else {
+
+                                                        ((TRHostTorrentPublishImpl) ht).updateStats();
+
+                                                    }
+                                                }
 											}finally{
 												
 												this_mon.exit();
@@ -1035,21 +1036,19 @@ TRHostImpl
 		throws IOException
 	{
 		List<TRHostListener>	listeners_copy = listeners.getListenersCopy();
-		
-		for (int i=0;i<listeners_copy.size();i++){
 
-			TRHostListener	listener = listeners_copy.get(i);
-			
-			try{
-				if ( listener.handleExternalRequest( client_address, user, url, absolute_url, header, is, os, async )){
-					
-					return( true );
-				}
-			}catch( Throwable e ){
-				
-				Debug.out( e );
-			}
-		}
+        for (TRHostListener listener : listeners_copy) {
+
+            try {
+                if (listener.handleExternalRequest(client_address, user, url, absolute_url, header, is, os, async)) {
+
+                    return (true);
+                }
+            } catch (Throwable e) {
+
+                Debug.out(e);
+            }
+        }
 		
 		return( false );
 	}
@@ -1060,20 +1059,19 @@ TRHostImpl
 	
 			throws IOException 
 	{
-		Iterator<TRHostListener2> it = listeners2.iterator();
-		
-		while( it.hasNext()){
-			
-			try{
-				if ( it.next().handleExternalRequest(request)){
-					
-					return( true );
-				}
-			}catch( Throwable e ){
-				
-				Debug.out( e );
-			}
-		}
+
+        for (TRHostListener2 trHostListener2 : listeners2) {
+
+            try {
+                if (trHostListener2.handleExternalRequest(request)) {
+
+                    return (true);
+                }
+            } catch (Throwable e) {
+
+                Debug.out(e);
+            }
+        }
 		
 		return( false );
 	}
@@ -1096,11 +1094,11 @@ TRHostImpl
 			this_mon.enter();
 		
 			listeners.addListener( l );
-			
-			for (int i=0;i<host_torrents.size();i++){
-				
-				listeners.dispatch( l, LDT_TORRENT_ADDED, host_torrents.get(i));
-			}
+
+            for (Object host_torrent : host_torrents) {
+
+                listeners.dispatch(l, LDT_TORRENT_ADDED, host_torrent);
+            }
 		}finally{
 			
 			this_mon.exit();
@@ -1254,20 +1252,20 @@ TRHostImpl
 		String		user,
 		String		password )
 	{
-		for (int i=0;i<auth_listeners.size();i++){
-			
-			try{
-				boolean res = auth_listeners.get(i).authenticate( headers, resource, user, password );
-				
-				if ( res ){
-					
-					return(true );
-				}
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace( e );
-			}
-		}
+        for (TRHostAuthenticationListener auth_listener : auth_listeners) {
+
+            try {
+                boolean res = auth_listener.authenticate(headers, resource, user, password);
+
+                if (res) {
+
+                    return (true);
+                }
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 		
 		return( false );
 	}
@@ -1277,20 +1275,20 @@ TRHostImpl
 		URL			resource,
 		String		user )
 	{
-		for (int i=0;i<auth_listeners.size();i++){
-			
-			try{
-				byte[] res = auth_listeners.get(i).authenticate( resource, user );
-				
-				if ( res != null ){
-					
-					return( res );
-				}
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace( e );
-			}
-		}
+        for (TRHostAuthenticationListener auth_listener : auth_listeners) {
+
+            try {
+                byte[] res = auth_listener.authenticate(resource, user);
+
+                if (res != null) {
+
+                    return (res);
+                }
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 		
 		return( null );
 	}
@@ -1305,13 +1303,11 @@ TRHostImpl
 			auth_listeners.add(l);
 			
 			if ( auth_listeners.size() == 1 ){
-				
-				Iterator it = server_map.values().iterator();
-				
-				while( it.hasNext()){
-					
-					((TRTrackerServer)it.next()).addAuthenticationListener( this );
-				}			
+
+                for (Object o : server_map.values()) {
+
+                    ((TRTrackerServer) o).addAuthenticationListener(this);
+                }
 			}
 		}finally{
 			
@@ -1329,13 +1325,11 @@ TRHostImpl
 			auth_listeners.remove(l);
 			
 			if ( auth_listeners.size() == 0 ){
-				
-				Iterator it = server_map.values().iterator();
-				
-				while( it.hasNext()){
-					
-					((TRTrackerServer)it.next()).removeAuthenticationListener( this );
-				}
+
+                for (Object o : server_map.values()) {
+
+                    ((TRTrackerServer) o).removeAuthenticationListener(this);
+                }
 			}
 		}finally{
 			

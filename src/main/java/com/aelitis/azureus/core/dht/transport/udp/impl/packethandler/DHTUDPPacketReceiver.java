@@ -26,13 +26,13 @@ import com.aelitis.azureus.core.dht.transport.udp.impl.DHTUDPPacketReply;
 public interface 
 DHTUDPPacketReceiver 
 {
-	public void
+	void
 	packetReceived(
-		DHTUDPPacketReply		packet,
-		InetSocketAddress		from_address,
-		long					elapsed_time );
+            DHTUDPPacketReply packet,
+            InetSocketAddress from_address,
+            long elapsed_time);
 	
-	public void
+	void
 	error(
-		DHTUDPPacketHandlerException	e );
+            DHTUDPPacketHandlerException e);
 }

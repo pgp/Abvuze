@@ -31,10 +31,10 @@ PlatformManagerPingCallback
 		 * @param millis  elapsed time for successful op
 		 * @return true -> continue (where destination not reached)
 		 */
-	
-	public boolean
+
+        boolean
 	reportNode(
-		int				distance,
-		InetAddress		address,
-		int				millis );
+                int distance,
+                InetAddress address,
+                int millis);
 }

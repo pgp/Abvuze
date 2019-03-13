@@ -141,9 +141,9 @@ public class BTHandshake implements BTMessage, RawMessage {
   
   public int getType() {  return Message.TYPE_PROTOCOL_PAYLOAD;  }
     
-  public byte getVersion() { return version; };
+  public byte getVersion() { return version; }
 
-  public String getDescription() {
+    public String getDescription() {
     if( description == null ) {
       description = BTMessage.ID_BT_HANDSHAKE + " of dataID: " +ByteFormatter.nicePrint( datahash_bytes, true ) + " peerID: " +PeerClassifier.getPrintablePeerID( peer_id_bytes );
     }

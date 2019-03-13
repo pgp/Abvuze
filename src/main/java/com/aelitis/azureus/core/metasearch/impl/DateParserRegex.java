@@ -37,7 +37,7 @@ public class DateParserRegex extends DateParser {
 	
 	private static final Pattern hasLettersPattern = Pattern.compile("(?i).*[a-z]");
 	private static final Pattern isAgeBasedPattern = Pattern.compile("(?i)(ago)|(min)|(hour)|(day)|(week)|(month)|(year)|([0-9](h|d|w|m|y))");
-	private static final Map<String, Pattern> isAgeBasedPatternCN = new HashMap<String, Pattern>();
+	private static final Map<String, Pattern> isAgeBasedPatternCN = new HashMap<>();
 	private static final Pattern getTimeComponent = Pattern.compile("(?i)([0-9]{2}):([0-9]{2})(:([0-9]{2}))?( ?(a|p)m)?");
 	private static final Pattern timeBasedDateWithLettersPattern = Pattern.compile("(?i)([0-9]{1,2})[^ ]{0,2}(?: |-)([a-z]{3,10})\\.?(?: |-)?([0-9]{2,4})?");
 	private static final Pattern timeBasedDateWithLettersPatternMonthFirst = Pattern.compile("(?i)([a-z]{3,10})\\.?(?: |-)?([0-9]{1,2})[^ ]{0,2}(?: |-)([0-9]{2,4})?");
@@ -442,7 +442,7 @@ public class DateParserRegex extends DateParser {
 		}
 	}
 
-	public static void main(String args[]) {
+	public static void main(String[] args) {
 		DEBUG = true;
 		DateParserRegex dateParser = new DateParserRegex();
 

@@ -27,85 +27,85 @@ import java.util.regex.PatternSyntaxException;
 public interface 
 AZInstanceManager 
 {
-	public static final int	AT_TCP				= 1;
-	public static final int	AT_UDP				= 2;
-	public static final int	AT_UDP_NON_DATA		= 3;
+	int	AT_TCP				= 1;
+	int	AT_UDP				= 2;
+	int	AT_UDP_NON_DATA		= 3;
 	
-	public void
+	void
 	initialize();
 	
-	public boolean
+	boolean
 	isInitialized();
 	
-	public AZInstance
+	AZInstance
 	getMyInstance();
 	
-	public int
+	int
 	getOtherInstanceCount(
-		boolean	block_if_needed );
+            boolean block_if_needed);
 	
-	public AZInstance[]
+	AZInstance[]
 	getOtherInstances();
 	
-	public void
+	void
 	updateNow();
 	
-	public AZInstanceTracked[]
+	AZInstanceTracked[]
 	track(
-		byte[]								hash,
-		AZInstanceTracked.TrackTarget		target );
+            byte[] hash,
+            AZInstanceTracked.TrackTarget target);
 	
-	public InetSocketAddress
+	InetSocketAddress
 	getLANAddress(
-		InetSocketAddress	external_address,
-		int					address_type );
+            InetSocketAddress external_address,
+            int address_type);
 	
-	public InetSocketAddress
+	InetSocketAddress
 	getExternalAddress(
-		InetSocketAddress	lan_address,
-		int					address_type );
+            InetSocketAddress lan_address,
+            int address_type);
 	
-	public boolean
+	boolean
 	isLANAddress(
-		InetAddress			address );
+            InetAddress address);
 	
-	public boolean
+	boolean
 	isExternalAddress(
-		InetAddress			address );
+            InetAddress address);
 	
-	public boolean
+	boolean
 	addLANSubnet(
-		String				subnet )
+            String subnet)
 	
 		throws PatternSyntaxException;
 	
-	public void
+	void
 	addLANAddress(
-		InetAddress			address );
+            InetAddress address);
 	
-	public void
+	void
 	removeLANAddress(
-		InetAddress			address );
+            InetAddress address);
 	
-	public boolean
+	boolean
 	getIncludeWellKnownLANs();
 	
-	public void
+	void
 	setIncludeWellKnownLANs(
-		boolean		include );
+            boolean include);
 	
-	public long
+	long
 	getClockSkew();
 	
-	public boolean
+	boolean
 	addInstance(
-		InetAddress			explicit_address );
+            InetAddress explicit_address);
 	
-	public void
+	void
 	addListener(
-		AZInstanceManagerListener	l );
+            AZInstanceManagerListener l);
 	
-	public void
+	void
 	removeListener(
-		AZInstanceManagerListener	l );
+            AZInstanceManagerListener l);
 }

@@ -109,104 +109,104 @@ DiskAccessControllerImpl
 		
 		if ( types.contains( AzureusCoreStats.ST_DISK_READ_QUEUE_LENGTH )){
 			
-			values.put( AzureusCoreStats.ST_DISK_READ_QUEUE_LENGTH, new Long( read_dispatcher.getQueueSize()));
+			values.put( AzureusCoreStats.ST_DISK_READ_QUEUE_LENGTH, read_dispatcher.getQueueSize());
 		}
 		
 		if ( types.contains( AzureusCoreStats.ST_DISK_READ_QUEUE_BYTES )){
 			
-			values.put( AzureusCoreStats.ST_DISK_READ_QUEUE_BYTES, new Long( read_dispatcher.getQueuedBytes()));
+			values.put( AzureusCoreStats.ST_DISK_READ_QUEUE_BYTES, read_dispatcher.getQueuedBytes());
 		}
 		
 		if ( types.contains( AzureusCoreStats.ST_DISK_READ_REQUEST_COUNT )){
 			
-			values.put( AzureusCoreStats.ST_DISK_READ_REQUEST_COUNT, new Long( read_dispatcher.getTotalRequests()));
+			values.put( AzureusCoreStats.ST_DISK_READ_REQUEST_COUNT, read_dispatcher.getTotalRequests());
 		}
 		
 		if ( types.contains( AzureusCoreStats.ST_DISK_READ_REQUEST_SINGLE )){
 			
-			values.put( AzureusCoreStats.ST_DISK_READ_REQUEST_SINGLE, new Long( read_dispatcher.getTotalSingleRequests()));
+			values.put( AzureusCoreStats.ST_DISK_READ_REQUEST_SINGLE, read_dispatcher.getTotalSingleRequests());
 		}
 		
 		if ( types.contains( AzureusCoreStats.ST_DISK_READ_REQUEST_MULTIPLE )){
 			
-			values.put( AzureusCoreStats.ST_DISK_READ_REQUEST_MULTIPLE, new Long( read_dispatcher.getTotalAggregatedRequests()));
+			values.put( AzureusCoreStats.ST_DISK_READ_REQUEST_MULTIPLE, read_dispatcher.getTotalAggregatedRequests());
 		}
 		
 		if ( types.contains( AzureusCoreStats.ST_DISK_READ_REQUEST_BLOCKS )){
 			
-			values.put( AzureusCoreStats.ST_DISK_READ_REQUEST_BLOCKS, new Long( read_dispatcher.getBlockCount()));
+			values.put( AzureusCoreStats.ST_DISK_READ_REQUEST_BLOCKS, read_dispatcher.getBlockCount());
 		}
 		
 		if ( types.contains( AzureusCoreStats.ST_DISK_READ_BYTES_TOTAL )){
 			
-			values.put( AzureusCoreStats.ST_DISK_READ_BYTES_TOTAL, new Long( read_dispatcher.getTotalBytes()));
+			values.put( AzureusCoreStats.ST_DISK_READ_BYTES_TOTAL, read_dispatcher.getTotalBytes());
 		}
 
 		if ( types.contains( AzureusCoreStats.ST_DISK_READ_BYTES_SINGLE )){
 			
-			values.put( AzureusCoreStats.ST_DISK_READ_BYTES_SINGLE, new Long( read_dispatcher.getTotalSingleBytes()));
+			values.put( AzureusCoreStats.ST_DISK_READ_BYTES_SINGLE, read_dispatcher.getTotalSingleBytes());
 		}
 
 		if ( types.contains( AzureusCoreStats.ST_DISK_READ_BYTES_MULTIPLE )){
 			
-			values.put( AzureusCoreStats.ST_DISK_READ_BYTES_MULTIPLE, new Long( read_dispatcher.getTotalAggregatedBytes()));
+			values.put( AzureusCoreStats.ST_DISK_READ_BYTES_MULTIPLE, read_dispatcher.getTotalAggregatedBytes());
 		}
 
 		if ( types.contains( AzureusCoreStats.ST_DISK_READ_IO_TIME )){
 			
-			values.put( AzureusCoreStats.ST_DISK_READ_IO_TIME, new Long( read_dispatcher.getIOTime()));
+			values.put( AzureusCoreStats.ST_DISK_READ_IO_TIME, read_dispatcher.getIOTime());
 		}
 
 		if ( types.contains( AzureusCoreStats.ST_DISK_READ_IO_COUNT )){
 			
-			values.put( AzureusCoreStats.ST_DISK_READ_IO_COUNT, new Long( read_dispatcher.getIOCount()));
+			values.put( AzureusCoreStats.ST_DISK_READ_IO_COUNT, read_dispatcher.getIOCount());
 		}
 
 			// write
 		
 		if ( types.contains( AzureusCoreStats.ST_DISK_WRITE_QUEUE_LENGTH )){
 			
-			values.put( AzureusCoreStats.ST_DISK_WRITE_QUEUE_LENGTH, new Long( write_dispatcher.getQueueSize()));
+			values.put( AzureusCoreStats.ST_DISK_WRITE_QUEUE_LENGTH, write_dispatcher.getQueueSize());
 		}
 		
 		if ( types.contains( AzureusCoreStats.ST_DISK_WRITE_QUEUE_BYTES )){
 			
-			values.put( AzureusCoreStats.ST_DISK_WRITE_QUEUE_BYTES, new Long( write_dispatcher.getQueuedBytes()));
+			values.put( AzureusCoreStats.ST_DISK_WRITE_QUEUE_BYTES, write_dispatcher.getQueuedBytes());
 		}
 		
 		if ( types.contains( AzureusCoreStats.ST_DISK_WRITE_REQUEST_COUNT )){
 			
-			values.put( AzureusCoreStats.ST_DISK_WRITE_REQUEST_COUNT, new Long( write_dispatcher.getTotalRequests()));
+			values.put( AzureusCoreStats.ST_DISK_WRITE_REQUEST_COUNT, write_dispatcher.getTotalRequests());
 		}
 		
 		if ( types.contains( AzureusCoreStats.ST_DISK_WRITE_REQUEST_BLOCKS )){
 			
-			values.put( AzureusCoreStats.ST_DISK_WRITE_REQUEST_BLOCKS, new Long( write_dispatcher.getBlockCount()));
+			values.put( AzureusCoreStats.ST_DISK_WRITE_REQUEST_BLOCKS, write_dispatcher.getBlockCount());
 		}
 		
 		if ( types.contains( AzureusCoreStats.ST_DISK_WRITE_BYTES_TOTAL )){
 			
-			values.put( AzureusCoreStats.ST_DISK_WRITE_BYTES_TOTAL, new Long( write_dispatcher.getTotalBytes()));
+			values.put( AzureusCoreStats.ST_DISK_WRITE_BYTES_TOTAL, write_dispatcher.getTotalBytes());
 		}
 
 		if ( types.contains( AzureusCoreStats.ST_DISK_WRITE_BYTES_SINGLE )){
 			
-			values.put( AzureusCoreStats.ST_DISK_WRITE_BYTES_SINGLE, new Long( write_dispatcher.getTotalSingleBytes()));
+			values.put( AzureusCoreStats.ST_DISK_WRITE_BYTES_SINGLE, write_dispatcher.getTotalSingleBytes());
 		}
 
 		if ( types.contains( AzureusCoreStats.ST_DISK_WRITE_BYTES_MULTIPLE )){
 			
-			values.put( AzureusCoreStats.ST_DISK_WRITE_BYTES_MULTIPLE, new Long( write_dispatcher.getTotalAggregatedBytes()));
+			values.put( AzureusCoreStats.ST_DISK_WRITE_BYTES_MULTIPLE, write_dispatcher.getTotalAggregatedBytes());
 		}
 		
 		if ( types.contains( AzureusCoreStats.ST_DISK_WRITE_IO_TIME )){
 			
-			values.put( AzureusCoreStats.ST_DISK_WRITE_IO_TIME, new Long( write_dispatcher.getIOTime()));
+			values.put( AzureusCoreStats.ST_DISK_WRITE_IO_TIME, write_dispatcher.getIOTime());
 		}
 		
 		if ( types.contains( AzureusCoreStats.ST_DISK_WRITE_IO_COUNT )){
 			
-			values.put( AzureusCoreStats.ST_DISK_WRITE_IO_COUNT, new Long( write_dispatcher.getIOCount()));
+			values.put( AzureusCoreStats.ST_DISK_WRITE_IO_COUNT, write_dispatcher.getIOCount());
 		}
 
 	}

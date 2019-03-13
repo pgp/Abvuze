@@ -265,7 +265,7 @@ public class Hack extends TorrentCommand
 			}
 			try {
 				DiskManager disk = dm.getDiskManager();
-				DiskManagerFileInfo files[] = disk.getFiles();
+                DiskManagerFileInfo[] files = disk.getFiles();
 				int file = Integer.parseInt((String) args.get(0));
 				String c = (String) args.get(1);
 				if (c.equalsIgnoreCase("normal") || c.equalsIgnoreCase("n")) {

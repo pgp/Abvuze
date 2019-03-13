@@ -79,9 +79,9 @@ AZHave
 		return( Message.TYPE_PROTOCOL_PAYLOAD );
 	}
 
-	public byte getVersion() { return version; };
+	public byte getVersion() { return version; }
 
-	public String 
+    public String
 	getDescription() 
 	{   
 		StringBuilder str = new StringBuilder(piece_numbers.length*10);
@@ -112,11 +112,11 @@ AZHave
 			Map	map = new HashMap();
 			
 			List l = new ArrayList( piece_numbers.length );
-			
-			for (int i=0;i<piece_numbers.length;i++){
-			
-				l.add( new Long( piece_numbers[i] ));
-			}
+
+            for (int piece_number : piece_numbers) {
+
+                l.add((long) piece_number);
+            }
 			
 			map.put( "pieces", l );
 			

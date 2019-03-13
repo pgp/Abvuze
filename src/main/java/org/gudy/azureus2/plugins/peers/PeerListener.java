@@ -29,12 +29,12 @@ public interface PeerListener {
    * The peer has changed to the given state.
    * @param new_state of peer
    */
-  public void stateChanged( int new_state );
+  void stateChanged(int new_state);
   
   /**
    * The peer has sent us a bad piece data chunk.
    * @param piece_num piece that failed hash check
    * @param total_bad_chunks total number of bad chunks sent by this peer so far
    */
-  public void sentBadChunk( int piece_num, int total_bad_chunks );
+  void sentBadChunk(int piece_num, int total_bad_chunks);
 }

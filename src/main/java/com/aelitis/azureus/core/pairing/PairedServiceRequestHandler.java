@@ -26,11 +26,11 @@ import java.net.InetAddress;
 public interface 
 PairedServiceRequestHandler 
 {
-	public byte[]
+	byte[]
 	handleRequest(
-		InetAddress		originator,
-		String			endpoint_url,
-		byte[]			request )
+            InetAddress originator,
+            String endpoint_url,
+            byte[] request)
 	
 		throws IOException;
 }

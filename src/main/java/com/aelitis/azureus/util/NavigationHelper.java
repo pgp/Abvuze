@@ -21,6 +21,7 @@
 package com.aelitis.azureus.util;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.gudy.azureus2.core3.util.Debug;
@@ -52,59 +53,55 @@ NavigationHelper
 					VuzeFile[]		files,
 					int				expected_types )
 				{
-					for (int i=0;i<files.length;i++){
-						
-						VuzeFile	vf = files[i];
-						
-						VuzeFileComponent[] comps = vf.getComponents();
-						
-						for (int j=0;j<comps.length;j++){
-							
-							VuzeFileComponent comp = comps[j];
-								
-							if ( 	comp.getType() == VuzeFileComponent.COMP_TYPE_V3_NAVIGATION ||
-									comp.getType() == VuzeFileComponent.COMP_TYPE_V3_CONDITION_CHECK ){
+                    for (VuzeFile vf : files) {
 
-								try{
+                        VuzeFileComponent[] comps = vf.getComponents();
 
-									List commands = (List)comp.getContent().get("commands");
-									
-									for ( int k=0;k<commands.size();k++){
-										
-										Map	command = (Map)commands.get(k);
-										
-										int	command_type = ((Long)command.get("type")).intValue();
-										
-										List	l_args = (List)command.get( "args" );
-										
-										String[]	args;
-										
-										if ( l_args == null ){
-											
-											args = new String[0];
-											
-										}else{
-										
-											args = new String[l_args.size()];
-											
-											for (int l=0;l<args.length;l++){
-												
-												args[l] = new String((byte[])l_args.get(l), "UTF-8" );
-											}
-										}
-										
-										addCommand( command_type, args );
-									}
-									
-									comp.setProcessed();
-							
-								}catch( Throwable e ){
-									
-									Debug.printStackTrace(e);
-								}
-							}
-						}
-					}
+                        for (VuzeFileComponent comp : comps) {
+
+                            if (comp.getType() == VuzeFileComponent.COMP_TYPE_V3_NAVIGATION ||
+                                    comp.getType() == VuzeFileComponent.COMP_TYPE_V3_CONDITION_CHECK) {
+
+                                try {
+
+                                    List commands = (List) comp.getContent().get("commands");
+
+                                    for (Object command1 : commands) {
+
+                                        Map command = (Map) command1;
+
+                                        int command_type = ((Long) command.get("type")).intValue();
+
+                                        List l_args = (List) command.get("args");
+
+                                        String[] args;
+
+                                        if (l_args == null) {
+
+                                            args = new String[0];
+
+                                        } else {
+
+                                            args = new String[l_args.size()];
+
+                                            for (int l = 0; l < args.length; l++) {
+
+                                                args[l] = new String((byte[]) l_args.get(l), StandardCharsets.UTF_8);
+                                            }
+                                        }
+
+                                        addCommand(command_type, args);
+                                    }
+
+                                    comp.setProcessed();
+
+                                } catch (Throwable e) {
+
+                                    Debug.printStackTrace(e);
+                                }
+                            }
+                        }
+                    }
 				}
 			});
 	}
@@ -125,26 +122,24 @@ NavigationHelper
 					command_queue = new ArrayList();
 				}
 				
-				command_queue.add( new Object[]{ new Integer( type ), args });
+				command_queue.add( new Object[]{type, args });
 			}
 		}
 		
 			// possible duplicate delivery - assumed not a problem
-		
-		Iterator	it = listeners.iterator();
-		
-		while( it.hasNext()){
-							
-			navigationListener l = (navigationListener)it.next();
-			
-			try{
-				l.processCommand( type, args );
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace(e);
-			}
-		}
+
+        for (Object listener : listeners) {
+
+            navigationListener l = (navigationListener) listener;
+
+            try {
+                l.processCommand(type, args);
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 	
 	public static void
@@ -163,32 +158,32 @@ NavigationHelper
 		}
 		
 		if ( queue != null ){
-			
-			for (int i=0;i<queue.size();i++){
-				
-				Object[]	entry = (Object[])queue.get(i);
-				
-				int			type = ((Integer)entry[0]).intValue();
-				String[]	args = (String[])entry[1];
-				
-				try{
-					l.processCommand( type, args );
-					
-				}catch( Throwable e ){
-					
-					Debug.printStackTrace( e );	
-				}
-			}
+
+            for (Object o : queue) {
+
+                Object[] entry = (Object[]) o;
+
+                int type = (Integer) entry[0];
+                String[] args = (String[]) entry[1];
+
+                try {
+                    l.processCommand(type, args);
+
+                } catch (Throwable e) {
+
+                    Debug.printStackTrace(e);
+                }
+            }
 		}
 	}
 	
 	public interface
 	navigationListener
 	{
-		public void
+		void
 		processCommand(
-			int			type,
-			String[]	args );
+                int type,
+                String[] args);
 	}
 	
 	public static void
@@ -214,7 +209,7 @@ NavigationHelper
 			
 			//l_args1.add( SkinConstants.VIEWID_HOME_TAB  );
 			
-			command1.put( "type", new Long( COMMAND_SWITCH_TO_TAB ));
+			command1.put( "type", (long) COMMAND_SWITCH_TO_TAB);
 			command1.put( "args", l_args1 );
 
 				// activity tab
@@ -227,7 +222,7 @@ NavigationHelper
 			
 			//l_args2.add( SkinConstants.VIEWID_ACTIVITY_TAB );
 			
-			command2.put( "type", new Long( COMMAND_SWITCH_TO_TAB ));
+			command2.put( "type", (long) COMMAND_SWITCH_TO_TAB);
 			command2.put( "args", l_args2 );
 			
 				// check plugin available
@@ -238,7 +233,7 @@ NavigationHelper
 			
 			List	l_args3 = new ArrayList();
 			
-			command3.put( "type", new Long( COMMAND_CONDITION_CHECK ));
+			command3.put( "type", (long) COMMAND_CONDITION_CHECK);
 			command3.put( "args", l_args3 );
 			
 			vf.addComponent( VuzeFileComponent.COMP_TYPE_V3_NAVIGATION, content );

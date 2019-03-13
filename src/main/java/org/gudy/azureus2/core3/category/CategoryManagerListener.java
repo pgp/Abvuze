@@ -33,20 +33,20 @@ CategoryManagerListener
   /**
    * A category has been added to the CategoryManager
    * @param category the category that was added
-   */    
-	public void
+   */
+  void
 	categoryAdded(
-		Category category );
+          Category category);
 		
   /**
    * A category has been removed from the CategoryManager
    * @param category Category that was removed
-   */  
-	public void
+   */
+  void
 	categoryRemoved(
-		Category category );
+          Category category);
 	
-	public void
+	void
 	categoryChanged(
-		Category category );
+            Category category);
 }

@@ -28,7 +28,7 @@ public interface
 ParameterGroup 
 	extends Parameter
 {
-	public void
+	void
 	setNumberOfColumns(
-		int		num );
+            int num);
 }

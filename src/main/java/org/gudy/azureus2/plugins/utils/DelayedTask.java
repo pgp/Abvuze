@@ -28,11 +28,11 @@ DelayedTask
 		 * this will result in the runnable target being invoked when all prior delayed tasks
 		 * have completed
 		 */
-	
-	public void
+
+        void
 	queue();
 
-	public void 
+	void
 	queueFirst();
 	
 }

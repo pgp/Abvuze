@@ -73,7 +73,7 @@ public class BitFlags
         start =other.start;
         end =other.end;
         nbSet =other.nbSet;
-        flags =(boolean[])other.flags.clone();
+        flags = other.flags.clone();
     }
 
     public Object clone()

@@ -88,7 +88,7 @@ DeleteFileOnCloseInputStream
 
 	public int 
 	read(
-		byte 	b[] ) 
+            byte[] b)
 	
 		throws IOException 
 	{
@@ -105,7 +105,7 @@ DeleteFileOnCloseInputStream
 
 	public int 
 	read(
-		byte	b[], 
+            byte[] b,
 		int 	off, 
 		int 	len )
 	

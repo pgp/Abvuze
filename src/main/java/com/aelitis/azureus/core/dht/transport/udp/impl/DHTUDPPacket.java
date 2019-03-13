@@ -22,15 +22,15 @@ package com.aelitis.azureus.core.dht.transport.udp.impl;
 public interface 
 DHTUDPPacket 
 {	
-	public DHTTransportUDPImpl
+	DHTTransportUDPImpl
 	getTransport();
 	
-	public byte
+	byte
 	getProtocolVersion();
 	
-	public byte
+	byte
 	getGenericFlags();
 	
-	public byte
+	byte
 	getGenericFlags2();
 }

@@ -35,14 +35,14 @@ import org.gudy.azureus2.plugins.utils.PooledByteBuffer;
 public interface 
 PeerManager 
 {
-	public Download
+	Download
 	getDownload()
 	
 		throws DownloadException;
 	
-	public void
+	void
 	addPeer(
-		Peer		peer );
+            Peer peer);
   
   
 	  /**
@@ -52,46 +52,46 @@ PeerManager
 	   * @param ip_address of peer to inject
 	   * @param port of peer to inject
 	   */
+
+      void
+	addPeer(
+              String ip_address,
+              int port);
 	
-	public void 
-	addPeer( 
-		String 		ip_address, 
-		int 		port );
-	
-	public void 
-	addPeer( 
-		String 		ip_address, 
-		int 		tcp_port, 
-		boolean 	use_crypto );
+	void
+	addPeer(
+            String ip_address,
+            int tcp_port,
+            boolean use_crypto);
   
-	public void 
-	addPeer( 
-		String 		ip_address, 
-		int 		tcp_port, 
-		int			udp_port,
-		boolean 	use_crypto );
+	void
+	addPeer(
+            String ip_address,
+            int tcp_port,
+            int udp_port,
+            boolean use_crypto);
   
-	public void 
-	addPeer( 
-		String 				ip_address, 
-		int 				tcp_port, 
-		int					udp_port,
-		boolean 			use_crypto,
-		Map<Object,Object>	user_data );
+	void
+	addPeer(
+            String ip_address,
+            int tcp_port,
+            int udp_port,
+            boolean use_crypto,
+            Map<Object, Object> user_data);
 	
-	public void 
-	peerDiscovered( 
-		String				peer_source,
-		String 				ip_address, 
-		int 				tcp_port, 
-		int					udp_port,
-		boolean 			use_crypto );
+	void
+	peerDiscovered(
+            String peer_source,
+            String ip_address,
+            int tcp_port,
+            int udp_port,
+            boolean use_crypto);
 	
-	public void
+	void
 	removePeer(
-		Peer		peer );
+            Peer peer);
 	
-	public Peer[]
+	Peer[]
 	getPeers();
 	
 		/**
@@ -99,76 +99,76 @@ PeerManager
 		 * @param address
 		 * @return
 		 */
-	
-	public Peer[]
+
+        Peer[]
 	getPeers(
-		String		address );
+                String address);
 	
 		/**
 		 * Get the list of currently pending peers
 		 * @since 4005
 		 * @return
 		 */
-	
-	public PeerDescriptor[]
+
+        PeerDescriptor[]
    	getPendingPeers();
 		/**
 		 * returns the pending connections to the given address
 		 * @param address
 		 * @return
 		 */
-	
-	public PeerDescriptor[]
+
+        PeerDescriptor[]
 	getPendingPeers(
-		String		address );
+                String address);
 	
-	public DiskManager
+	DiskManager
 	getDiskManager();
 	
-	public PeerManagerStats
+	PeerManagerStats
 	getStats();
 	
-	public boolean
+	boolean
 	isSeeding();
 	
-	public boolean
+	boolean
 	isSuperSeeding();
 	
-	public PeerStats
+	PeerStats
 	createPeerStats(
-		Peer		peer );
+            Peer peer);
 	
-	public void 
+	void
 	requestComplete(
-		PeerReadRequest		request,
-		PooledByteBuffer 	data,
-		Peer 				sender);
+            PeerReadRequest request,
+            PooledByteBuffer data,
+            Peer sender);
 	
-	public void
+	void
 	requestCancelled(
-		PeerReadRequest		request,
-		Peer				sender );
+            PeerReadRequest request,
+            Peer sender);
 	
-	public Piece[]
+	Piece[]
 	getPieces();
 	
-    public int getUploadRateLimitBytesPerSecond();
+    int getUploadRateLimitBytesPerSecond();
     
-    public int getDownloadRateLimitBytesPerSecond();
+    int getDownloadRateLimitBytesPerSecond();
 
-	public void
+	void
 	addListener(
-		PeerManagerListener	l );
+            PeerManagerListener l);
 	
-	public void
+	void
 	removeListener(
-		PeerManagerListener	l );
+            PeerManagerListener l);
 	
-	public void
+	void
 	addListener(
-		PeerManagerListener2	l );
+            PeerManagerListener2 l);
 	
-	public void
+	void
 	removeListener(
-		PeerManagerListener2	l );
+            PeerManagerListener2 l);
 }

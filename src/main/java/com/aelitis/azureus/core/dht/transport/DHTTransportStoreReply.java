@@ -22,15 +22,15 @@ package com.aelitis.azureus.core.dht.transport;
 public interface 
 DHTTransportStoreReply 
 {
-	public byte[]
+	byte[]
 	getDiversificationTypes();
 	
-	public boolean
+	boolean
 	blocked();
 	
-	public byte[]
+	byte[]
 	getBlockRequest();
 	
-	public byte[]
+	byte[]
 	getBlockSignature();
 }

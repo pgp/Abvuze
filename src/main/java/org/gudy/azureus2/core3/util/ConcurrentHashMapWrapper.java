@@ -44,7 +44,7 @@ ConcurrentHashMapWrapper<S,T>
 	ConcurrentHashMapWrapper(
 		int	initialCapacity )
 	{
-		map = new ConcurrentHashMap<S,T>( initialCapacity );
+		map = new ConcurrentHashMap<>(initialCapacity);
 	}
 	
 	public 
@@ -53,20 +53,20 @@ ConcurrentHashMapWrapper<S,T>
 		float	loadFactor,
 		int 	concurrencyLevel )
 	{
-		map = new ConcurrentHashMap<S,T>( initialCapacity, loadFactor, concurrencyLevel );
+		map = new ConcurrentHashMap<>(initialCapacity, loadFactor, concurrencyLevel);
 	}
 	
 	public 
 	ConcurrentHashMapWrapper()
 	{
-		map = new ConcurrentHashMap<S,T>();
+		map = new ConcurrentHashMap<>();
 	}
 	
 	public 
 	ConcurrentHashMapWrapper(
 		Map<S,T>	init_map )
 	{
-		map = new ConcurrentHashMap<S,T>( init_map.size());
+		map = new ConcurrentHashMap<>(init_map.size());
 		
 		putAll( init_map );
 	}
@@ -203,7 +203,7 @@ ConcurrentHashMapWrapper<S,T>
 	public TreeMap<S,T>
 	toTreeMap()
 	{
-		TreeMap<S,T>	result = new TreeMap<S,T>();
+		TreeMap<S,T>	result = new TreeMap<>();
 		
 		for ( Map.Entry<S,T> entry: map.entrySet()){
 			

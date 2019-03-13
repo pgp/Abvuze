@@ -78,9 +78,9 @@ UTUploadOnly
 	getVersion() 
 	{ 
 		return version; 
-	};
+	}
 
-	public String 
+    public String
 	getDescription()
 	{
 		return( ID_UT_UPLOAD_ONLY);

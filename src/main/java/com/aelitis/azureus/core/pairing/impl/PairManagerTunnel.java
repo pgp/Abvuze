@@ -179,7 +179,7 @@ PairManagerTunnel
 											
 											int	data_pos = 0;
 			
-											List<byte[]>	replies 		= new ArrayList<byte[]>();
+											List<byte[]>	replies 		= new ArrayList<>();
 											int				reply_length 	= 0;
 											
 											for ( String bit: bits ){

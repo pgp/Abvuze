@@ -27,8 +27,8 @@ package org.gudy.azureus2.core3.util;
 public interface 
 IPToHostNameResolverListener 
 {
-	public void
+	void
 	IPResolutionComplete(
-		String	result,
-		boolean	succeeded );
+            String result,
+            boolean succeeded);
 }

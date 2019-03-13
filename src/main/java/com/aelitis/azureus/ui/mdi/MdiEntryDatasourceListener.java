@@ -24,5 +24,5 @@ package com.aelitis.azureus.ui.mdi;
  */
 public interface MdiEntryDatasourceListener
 {
-	public void mdiEntryDatasourceChanged(MdiEntry entry);
+	void mdiEntryDatasourceChanged(MdiEntry entry);
 }

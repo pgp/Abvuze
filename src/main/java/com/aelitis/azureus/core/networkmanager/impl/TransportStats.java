@@ -66,19 +66,19 @@ public class TransportStats {
     Integer size_key;
     
     if( num_bytes == 0 ) {
-      size_key = new Integer( 0 );
+      size_key = 0;
     }
     else {
-      size_key = new Integer( (num_bytes / GRANULARITY) +1 );
+      size_key = (num_bytes / GRANULARITY) + 1;
     }
       
     Long count = (Long)io_sizes.get( size_key );
     
     if( count == null ) {
-      io_sizes.put( size_key, new Long( 1 ) );
+      io_sizes.put( size_key, 1L);
     }
     else {
-      io_sizes.put( size_key, new Long( count.longValue() +1 ) );
+      io_sizes.put( size_key, count.longValue() + 1);
     }
   }
   
@@ -97,29 +97,28 @@ public class TransportStats {
   
   private void printSizes( TreeMap size_map, long num_total ) {
     int prev_high = 1;
-    
-    for( Iterator it = size_map.entrySet().iterator(); it.hasNext(); ) {
-      Map.Entry entry = (Map.Entry)it.next();
-      int key = ((Integer)entry.getKey()).intValue();
-      long count = ((Long)entry.getValue()).longValue();
-      
-      long percentage = (count *100) / num_total;
-      
-      if( key == 0 ) {   
-        if( percentage > 3 ) {
-          System.out.println( "[0 bytes]= x" +percentage+ "%" );
-        }
+
+      for (Object o : size_map.entrySet()) {
+          Map.Entry entry = (Map.Entry) o;
+          int key = (Integer) entry.getKey();
+          long count = (Long) entry.getValue();
+
+          long percentage = (count * 100) / num_total;
+
+          if (key == 0) {
+              if (percentage > 3) {
+                  System.out.println("[0 bytes]= x" + percentage + "%");
+              }
+          } else {
+              int high = key * GRANULARITY;
+
+              if (percentage > 3) {
+                  System.out.println("[" + prev_high + "-" + (high - 1) + " bytes]= x" + percentage + "%");
+              }
+
+              prev_high = high;
+          }
       }
-      else {
-        int high = key * GRANULARITY;
-        
-        if( percentage > 3 ) {
-          System.out.println( "[" +prev_high+ "-" +(high -1)+ " bytes]= x" +percentage+ "%" );
-        }
-        
-        prev_high = high;
-      }
-    }
   }
 
   

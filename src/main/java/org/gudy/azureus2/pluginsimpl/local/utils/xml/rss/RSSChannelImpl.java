@@ -55,16 +55,14 @@ RSSChannelImpl
 		SimpleXMLParserDocumentNode[]	xml_items = node.getChildren();
 		
 		List	its = new ArrayList();
-		
-		for (int i=0;i<xml_items.length;i++){
-			
-			SimpleXMLParserDocumentNode	xml_item = xml_items[i];
-			
-			if ( xml_item.getName().equalsIgnoreCase(is_atom?"entry":"item")){
-				
-				its.add( new RSSItemImpl( xml_item, is_atom ));
-			}
-		}
+
+        for (SimpleXMLParserDocumentNode xml_item : xml_items) {
+
+            if (xml_item.getName().equalsIgnoreCase(is_atom ? "entry" : "item")) {
+
+                its.add(new RSSItemImpl(xml_item, is_atom));
+            }
+        }
 		
 		items	= new RSSItem[ its.size()];
 		

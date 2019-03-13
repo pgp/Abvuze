@@ -34,19 +34,19 @@ import org.gudy.azureus2.core3.util.DirectByteBuffer;
 public interface 
 DiskManagerFileInfo 
 {
-	public static final int READ 	= 1;
-	public static final int WRITE 	= 2;
+	int READ 	= 1;
+	int WRITE 	= 2;
 
-	public static final int	ST_LINEAR			= 1;
-	public static final int	ST_COMPACT			= 2;
-	public static final int	ST_REORDER			= 3;
-	public static final int	ST_REORDER_COMPACT	= 4;
+	int	ST_LINEAR			= 1;
+	int	ST_COMPACT			= 2;
+	int	ST_REORDER			= 3;
+	int	ST_REORDER_COMPACT	= 4;
 	
 		// set methods
 		
-	public void setPriority(int p);
+	void setPriority(int p);
 	
-	public void setSkipped(boolean b);
+	void setSkipped(boolean b);
 	 
 	/**
 	 * Relink the file to the destination given - this method deals with if the file
@@ -56,88 +56,88 @@ DiskManagerFileInfo
 	 * @param link_destination
 	 * @return
 	 */
-	public boolean
+    boolean
 	setLink(
-		File	link_destination );
+            File link_destination);
 	
-	public boolean setLinkAtomic(File link_destination);
+	boolean setLinkAtomic(File link_destination);
 	
 		// gets the current link, null if none
 	
-	public File
+	File
 	getLink();
 	
 		/**
 		 * Download must be stopped before calling this!
 		 * @param type	one of ST_LINEAR or ST_COMPACT
 		 */
+
+        boolean setStorageType(int type);
 	
-	public boolean setStorageType(int type );
-	
-	public int
+	int
 	getStorageType();
 	
 	 	// get methods
 	 	
-	public int getAccessMode();
+	int getAccessMode();
 	
-	public long getDownloaded();
+	long getDownloaded();
 	
-	public String getExtension();
+	String getExtension();
 		
-	public int getFirstPieceNumber();
+	int getFirstPieceNumber();
   
-	public int getLastPieceNumber();
+	int getLastPieceNumber();
 	
-	public long getLength();
+	long getLength();
 		
-	public int getNbPieces();
+	int getNbPieces();
 			
-	public int getPriority();
+	int getPriority();
 	
-	public boolean isSkipped();
+	boolean isSkipped();
 	
-	public int	getIndex();
+	int	getIndex();
 	
-	public DownloadManager	getDownloadManager();
+	DownloadManager	getDownloadManager();
 	
-	public DiskManager getDiskManager();
+	DiskManager getDiskManager();
 	
-	public File getFile( boolean follow_link );
+	File getFile(boolean follow_link);
 	
-	public TOTorrentFile
+	TOTorrentFile
 	getTorrentFile();
 	
-	public DirectByteBuffer
+	DirectByteBuffer
 	read(
-		long	offset,
-		int		length )
+            long offset,
+            int length)
 	
 		throws IOException;
 	
-	public void
+	void
 	flushCache()
 	
 		throws	Exception;
 	
-	public int
+	int
 	getReadBytesPerSecond();
 	
-	public int
+	int
 	getWriteBytesPerSecond();
 	
-	public long
+	long
 	getETA();
 	
-	public void
+	void
 	close();
 	
-	public void
+	void
 	addListener(
-		DiskManagerFileInfoListener	listener );
+            DiskManagerFileInfoListener listener);
 	
-	public void
+	void
 	removeListener(
-		DiskManagerFileInfoListener	listener );
+            DiskManagerFileInfoListener listener);
 	
 }

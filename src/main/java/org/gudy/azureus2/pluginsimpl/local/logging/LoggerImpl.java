@@ -187,14 +187,14 @@ LoggerImpl
 
 		// find listener and remove
 		Object[] listeners = fileLogging.getListeners().toArray();
-		for (int i = 0; i < listeners.length; i++) {
-			if (listeners[i] instanceof PluginFileLoggerAdapater) {
-				PluginFileLoggerAdapater l = (PluginFileLoggerAdapater) listeners[i];
-				if (l.listener == listener) {
-					fileLogging.removeListener(l);
-				}
-			}
-		}
+        for (Object listener1 : listeners) {
+            if (listener1 instanceof PluginFileLoggerAdapater) {
+                PluginFileLoggerAdapater l = (PluginFileLoggerAdapater) listener1;
+                if (l.listener == listener) {
+                    fileLogging.removeListener(l);
+                }
+            }
+        }
 	}
 	
 	private static class PluginFileLoggerAdapater extends FileLoggingAdapter {

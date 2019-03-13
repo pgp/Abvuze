@@ -23,7 +23,7 @@ package com.aelitis.azureus.ui.common.table;
  */
 public interface TableCountChangeListener
 {
-	public abstract void rowAdded(TableRowCore row);
+	void rowAdded(TableRowCore row);
 
-	public abstract void rowRemoved(TableRowCore row);
+	void rowRemoved(TableRowCore row);
 }

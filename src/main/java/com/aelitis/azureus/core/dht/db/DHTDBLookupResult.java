@@ -27,9 +27,9 @@ package com.aelitis.azureus.core.dht.db;
 public interface 
 DHTDBLookupResult 
 {
-	public DHTDBValue[]
+	DHTDBValue[]
 	getValues();
 	
-	public byte
+	byte
 	getDiversificationType();
 }

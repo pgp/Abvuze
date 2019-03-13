@@ -25,7 +25,7 @@ import java.net.URL;
 public interface 
 UPNPMSBrowserListener 
 {
-	public void
+	void
 	setPreferredURL(
-		URL			url );
+            URL url);
 }

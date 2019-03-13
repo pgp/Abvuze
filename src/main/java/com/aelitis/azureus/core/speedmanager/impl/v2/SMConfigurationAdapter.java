@@ -24,12 +24,12 @@ public interface SMConfigurationAdapter
 {
 
 
-    public SpeedManagerLimitEstimate getUploadLimit();
-    public SpeedManagerLimitEstimate getDownloadLimit();
+    SpeedManagerLimitEstimate getUploadLimit();
+    SpeedManagerLimitEstimate getDownloadLimit();
 
 
-    public void setUploadLimit(SpeedManagerLimitEstimate est);
-    public void setDownloadLimit(SpeedManagerLimitEstimate est);
+    void setUploadLimit(SpeedManagerLimitEstimate est);
+    void setDownloadLimit(SpeedManagerLimitEstimate est);
     
 
 }

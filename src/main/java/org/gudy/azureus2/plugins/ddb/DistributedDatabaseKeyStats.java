@@ -22,20 +22,20 @@ package org.gudy.azureus2.plugins.ddb;
 public interface 
 DistributedDatabaseKeyStats 
 {
-	public int
+	int
 	getEntryCount();
 	
-	public int
+	int
 	getSize();
 	
-	public int
+	int
 	getReadsPerMinute();
 	
 		/**
 		 * See {@link DistributedDatabase#DT_FREQUENCY) etc}
 		 * @return
 		 */
-	
-	public byte
+
+        byte
 	getDiversification();
 }

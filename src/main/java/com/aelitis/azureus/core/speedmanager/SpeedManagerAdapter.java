@@ -22,42 +22,42 @@ package com.aelitis.azureus.core.speedmanager;
 public interface 
 SpeedManagerAdapter 
 {
-	public int
+	int
 	getCurrentProtocolUploadSpeed(
-		int	average_period );
+            int average_period);
 	
-	public int
+	int
 	getCurrentDataUploadSpeed(
-		int	average_period );
+            int average_period);
 	
-	public int
+	int
 	getCurrentUploadLimit();
 	
-	public void
+	void
 	setCurrentUploadLimit(
-		int		bytes_per_second );
+            int bytes_per_second);
 	
-	public int
+	int
 	getCurrentDownloadLimit();
 
-	public void
+	void
 	setCurrentDownloadLimit(
-		int		bytes_per_second );
+            int bytes_per_second);
 
-    public int
+    int
     getCurrentProtocolDownloadSpeed(
-    	int	average_period );
+            int average_period);
 
-    public int
+    int
     getCurrentDataDownloadSpeed(
-    	int	average_period );
+            int average_period);
 
-    public Object
+    Object
 	getLimits();
 	
-	public void
+	void
 	setLimits(
-		Object		limits,
-		boolean		do_up,
-		boolean		do_down );
+            Object limits,
+            boolean do_up,
+            boolean do_down);
 }

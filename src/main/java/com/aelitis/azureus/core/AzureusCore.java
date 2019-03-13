@@ -41,34 +41,34 @@ import com.aelitis.azureus.core.speedmanager.SpeedManager;
 public interface 
 AzureusCore 
 {	
-	public static final String	CA_QUIT_VUZE	= PluginManager.CA_QUIT_VUZE;
-	public static final String	CA_SLEEP		= PluginManager.CA_SLEEP;
-	public static final String	CA_HIBERNATE	= PluginManager.CA_HIBERNATE;
-	public static final String	CA_SHUTDOWN		= PluginManager.CA_SHUTDOWN;
+	String	CA_QUIT_VUZE	= PluginManager.CA_QUIT_VUZE;
+	String	CA_SLEEP		= PluginManager.CA_SLEEP;
+	String	CA_HIBERNATE	= PluginManager.CA_HIBERNATE;
+	String	CA_SHUTDOWN		= PluginManager.CA_SHUTDOWN;
 	
-	public long
+	long
 	getCreateTime();
 
-	public boolean
+	boolean
 	canStart();
 	
-	public void
+	void
 	start()
 	
 		throws AzureusCoreException;
 		
-	public boolean
+	boolean
 	isStarted();
 	
-	public boolean
+	boolean
 	isInitThread();
 	
 		/**
 		 * stop the core and inform lifecycle listeners of stopping
 		 * @throws AzureusCoreException
 		 */
-	
-	public void
+
+        void
 	stop()
 	
 		throws AzureusCoreException;
@@ -78,8 +78,8 @@ AzureusCore
 		 * if nothing is done then it will be stopped as per "stop" above
 		 * @throws AzureusCoreException
 		 */
-	
-	public void
+
+        void
 	requestStop()
 	
 		throws AzureusCoreException;
@@ -88,8 +88,8 @@ AzureusCore
 		 * checks if restart operation is supported - if not an alert will be raised and an exception thrown
 		 * @throws AzureusCoreException
 		 */
-	
-	public void
+
+        void
 	checkRestartSupported()
 	
 		throws AzureusCoreException;
@@ -97,16 +97,16 @@ AzureusCore
 		/**
 		 * restart the system
 		 */
-	
-	public void
+
+        void
 	restart();
 	
 		/**
 		 * request a restart of the system - currently only available for swt based systems 
 		 * @throws AzureusCoreException
 		 */
-	
-	public void
+
+        void
 	requestRestart()
 	
 		throws AzureusCoreException;
@@ -116,92 +116,92 @@ AzureusCore
 	 * @return
 	 * @since 3053
 	 */
-	
-	public boolean
+
+    boolean
 	isRestarting();
 	
-	public void
+	void
 	executeCloseAction(
-		String		action,			// see CA_ constants above
-		String		reason );
+            String action,            // see CA_ constants above
+            String reason);
 	
-	public void
+	void
 	saveState();
 	
-	public LocaleUtil
+	LocaleUtil
 	getLocaleUtil();
 	
-	public GlobalManager
+	GlobalManager
 	getGlobalManager()
 	
 		throws AzureusCoreException;
 	
-	public PluginManagerDefaults
+	PluginManagerDefaults
 	getPluginManagerDefaults()
 	
 		throws AzureusCoreException;
 	
-	public PluginManager
+	PluginManager
 	getPluginManager()
 	
 		throws AzureusCoreException;
 	
-	public TRHost
+	TRHost
 	getTrackerHost()
 	
 		throws AzureusCoreException;
 	
-	public IpFilterManager
+	IpFilterManager
 	getIpFilterManager()
 	
 		throws AzureusCoreException;
 	
-	public AZInstanceManager
+	AZInstanceManager
 	getInstanceManager();
 	
-	public SpeedManager
+	SpeedManager
 	getSpeedManager();
 	
-	public CryptoManager
+	CryptoManager
 	getCryptoManager();
 	
-	public NATTraverser
+	NATTraverser
 	getNATTraverser();
 	
-	public File
+	File
 	getLockFile();
 	
-	public void
+	void
 	createOperation(
-		int							type,
-		AzureusCoreOperationTask	task );
+            int type,
+            AzureusCoreOperationTask task);
 
-	public void
+	void
 	addLifecycleListener(
-		AzureusCoreLifecycleListener	l );
+            AzureusCoreLifecycleListener l);
 	
-	public void
+	void
 	removeLifecycleListener(
-		AzureusCoreLifecycleListener	l );
+            AzureusCoreLifecycleListener l);
 	
-	public void
+	void
 	addOperationListener(
-		AzureusCoreOperationListener	l );
+            AzureusCoreOperationListener l);
 	
-	public void
+	void
 	removeOperationListener(
-		AzureusCoreOperationListener	l );
+            AzureusCoreOperationListener l);
 	
 	/**
 	 * @param component
 	 */
 	void triggerLifeCycleComponentCreated(AzureusCoreComponent component);
 	
-	public void
+	void
 	addPowerManagementListener(
-		PowerManagementListener	listener );
+            PowerManagementListener listener);
 		
-	public void
+	void
 	removePowerManagementListener(
-		PowerManagementListener	listener );
+            PowerManagementListener listener);
 }

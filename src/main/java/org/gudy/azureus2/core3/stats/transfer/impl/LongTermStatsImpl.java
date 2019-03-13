@@ -142,7 +142,7 @@ LongTermStatsImpl
 	
 	private long	session_total;
 	
-	private final CopyOnWriteList<Object[]>	listeners = new CopyOnWriteList<Object[]>();
+	private final CopyOnWriteList<Object[]>	listeners = new CopyOnWriteList<>();
 	
 	private final AsyncDispatcher	dispatcher = new AsyncDispatcher( "lts", 5000 );
 	
@@ -703,7 +703,7 @@ outer:
 		
 		if ( record_type != RT_SESSION_END ){
 			
-			final List<LongTermStatsListener> to_fire = new ArrayList<LongTermStatsListener>();
+			final List<LongTermStatsListener> to_fire = new ArrayList<>();
 			
 			for ( Object[] entry: listeners ){
 				
@@ -913,159 +913,145 @@ outer:
 						month_cache.setTotals( day, cache_offset, new long[0] );
 					}
 				}else{
-					
-					LineNumberReader lnr = null;
-					
-					try{
-						//System.out.println( "Reading " + stats_file );
-						
-						lnr = new LineNumberReader( new FileReader( stats_file ));
-						
-						long	file_start_time	= 0;
-						
-						long[]	file_totals = null;
-						
-						long[]	file_result_totals  = new long[STAT_ENTRY_COUNT];
-						
-						long[]	session_start_stats = null;
-						long	session_start_time	= 0;
-						long	session_time		= 0;
-						
-						while( true ){
-							
-							String line = lnr.readLine();
-							
-							if ( line == null ){
-								
-								break;
-							}
-							
-							//System.out.println( line );
-							
-							String[] fields = line.split( "," );
-							
-							if ( fields.length < 6 ){
-								
-								continue;
-							}
-							
-							try{
-								String first_field = fields[0];
-								
-								if ( first_field.equals("s")){
-																
-									session_start_time = Long.parseLong( fields[2] )*MIN_IN_MILLIS;
-									
-									if ( file_totals == null ){
-										
-										file_totals = new long[STAT_ENTRY_COUNT];
-										
-										file_start_time = session_start_time;
-									}
-		
-									session_time = session_start_time;
-									
-									session_start_stats = new long[STAT_ENTRY_COUNT];
-									
-									for ( int i=3;i<9;i++){
-										
-										session_start_stats[i-3] = Long.parseLong( fields[i] );
-									}
-								}else if ( session_start_time > 0 ){
-									
-									session_time += MIN_IN_MILLIS;
-									
-									int	field_offset = 0;
-									
-									if ( first_field.equals( "e" )){
-										
-										field_offset = 3;
-									}
-									
-									long[] line_stats = new long[STAT_ENTRY_COUNT];
-									
-									for ( int i=0;i<6;i++){
-										
-										line_stats[i] = Long.parseLong( fields[i+field_offset] );
-										
-										file_totals[i] += line_stats[i];
-									}
-									
-									if ( 	session_time >= start_millis && 
-											session_time <= end_millis ){
-										
-										if ( accepter == null || accepter.acceptRecord( session_time )){
-											
-											for ( int i=0;i<6;i++){
-												
-												result[i] += line_stats[i];
-												
-												file_result_totals[i] += line_stats[i];
-											}
-										}
-									}
-									
-									//System.out.println( getString( line_stats ));
-								}
-							}catch( Throwable e ){
-								
-								// skip the record, not much else that can be done
-							}
-						}
-						
-						if ( file_totals == null ){
-							
-							file_totals = new long[0];
-						}
-						
-						//System.out.println( "File total: start=" + debug_utc_format.format(file_start_time) + ", end=" + debug_utc_format.format(session_time) + " - " + getString( file_totals ));
-						
-						if ( can_cache ){
-							
-							month_cache.setTotals( day, cache_offset, file_result_totals );
-							
-							if ( cache_offset != 0 ){
-								
-								month_cache.setTotals( day, 0, file_totals );
-							}
-						}else{
-							
-							if ( enable_caching ){
-								
-								if ( this_day == now_day ){
-									
-									if ( day_cache == null ){
-										
-										//System.out.println( "Creating day cache" );
-										
-										day_cache = new DayCache( year_str, month_str, day_str );
-									}
-									
-									day_cache.setTotals( cache_offset, file_result_totals );
-									
-									if ( cache_offset != 0 ){
-										
-										day_cache.setTotals( 0, file_totals );
-									}
-								}
-							}
-						}
-						
-					}catch( Throwable e ){
-						
-						Debug.out( e );
-						
-					}finally{
-						
-						if ( lnr != null ){
-							
-							try{
-								lnr.close();
-								
-							}catch( Throwable e ){
-							}
-						}
-					}
+
+                    try (LineNumberReader lnr = new LineNumberReader(new FileReader(stats_file))) {
+                        //System.out.println( "Reading " + stats_file );
+
+                        long file_start_time = 0;
+
+                        long[] file_totals = null;
+
+                        long[] file_result_totals = new long[STAT_ENTRY_COUNT];
+
+                        long[] session_start_stats = null;
+                        long session_start_time = 0;
+                        long session_time = 0;
+
+                        while (true) {
+
+                            String line = lnr.readLine();
+
+                            if (line == null) {
+
+                                break;
+                            }
+
+                            //System.out.println( line );
+
+                            String[] fields = line.split(",");
+
+                            if (fields.length < 6) {
+
+                                continue;
+                            }
+
+                            try {
+                                String first_field = fields[0];
+
+                                if (first_field.equals("s")) {
+
+                                    session_start_time = Long.parseLong(fields[2]) * MIN_IN_MILLIS;
+
+                                    if (file_totals == null) {
+
+                                        file_totals = new long[STAT_ENTRY_COUNT];
+
+                                        file_start_time = session_start_time;
+                                    }
+
+                                    session_time = session_start_time;
+
+                                    session_start_stats = new long[STAT_ENTRY_COUNT];
+
+                                    for (int i = 3; i < 9; i++) {
+
+                                        session_start_stats[i - 3] = Long.parseLong(fields[i]);
+                                    }
+                                } else if (session_start_time > 0) {
+
+                                    session_time += MIN_IN_MILLIS;
+
+                                    int field_offset = 0;
+
+                                    if (first_field.equals("e")) {
+
+                                        field_offset = 3;
+                                    }
+
+                                    long[] line_stats = new long[STAT_ENTRY_COUNT];
+
+                                    for (int i = 0; i < 6; i++) {
+
+                                        line_stats[i] = Long.parseLong(fields[i + field_offset]);
+
+                                        file_totals[i] += line_stats[i];
+                                    }
+
+                                    if (session_time >= start_millis &&
+                                            session_time <= end_millis) {
+
+                                        if (accepter == null || accepter.acceptRecord(session_time)) {
+
+                                            for (int i = 0; i < 6; i++) {
+
+                                                result[i] += line_stats[i];
+
+                                                file_result_totals[i] += line_stats[i];
+                                            }
+                                        }
+                                    }
+
+                                    //System.out.println( getString( line_stats ));
+                                }
+                            } catch (Throwable e) {
+
+                                // skip the record, not much else that can be done
+                            }
+                        }
+
+                        if (file_totals == null) {
+
+                            file_totals = new long[0];
+                        }
+
+                        //System.out.println( "File total: start=" + debug_utc_format.format(file_start_time) + ", end=" + debug_utc_format.format(session_time) + " - " + getString( file_totals ));
+
+                        if (can_cache) {
+
+                            month_cache.setTotals(day, cache_offset, file_result_totals);
+
+                            if (cache_offset != 0) {
+
+                                month_cache.setTotals(day, 0, file_totals);
+                            }
+                        } else {
+
+                            if (enable_caching) {
+
+                                if (this_day == now_day) {
+
+                                    if (day_cache == null) {
+
+                                        //System.out.println( "Creating day cache" );
+
+                                        day_cache = new DayCache(year_str, month_str, day_str);
+                                    }
+
+                                    day_cache.setTotals(cache_offset, file_result_totals);
+
+                                    if (cache_offset != 0) {
+
+                                        day_cache.setTotals(0, file_totals);
+                                    }
+                                }
+                            }
+                        }
+
+                    } catch (Throwable e) {
+
+                        Debug.out(e);
+
+                    }
 				}
 			}
 			
@@ -1253,7 +1239,7 @@ outer:
 		private final String			month;
 		private final String			day;
 		
-		private final Map<Long,long[]>	contents = new HashMap<Long, long[]>();
+		private final Map<Long,long[]>	contents = new HashMap<>();
 
 		private
 		DayCache(
@@ -1358,7 +1344,7 @@ outer:
 					
 				}else{
 					
-					contents = new HashMap<String, List<Long>>();
+					contents = new HashMap<>();
 				}
 			}
 			
@@ -1379,7 +1365,7 @@ outer:
 				
 					for ( int i=0;i<STAT_ENTRY_COUNT;i++){
 						
-						result[i] = (Long)records.get(i);
+						result[i] = records.get(i);
 					}
 				}
 				
@@ -1410,7 +1396,7 @@ outer:
 	 				
 	 					for ( int i=0;i<STAT_ENTRY_COUNT;i++){
 	 						
-	 						result[i] = (Long)records.get(i);
+	 						result[i] = records.get(i);
 	 					}
 	 				}
 	 				
@@ -1426,7 +1412,7 @@ outer:
 			int		day,
 			long[]	totals )
 		{
-			List<Long>	records = new ArrayList<Long>();
+			List<Long>	records = new ArrayList<>();
 			
 			for ( Long l: totals ){
 				
@@ -1450,7 +1436,7 @@ outer:
 				
 			}else{
 				
-				List<Long>	records = new ArrayList<Long>();
+				List<Long>	records = new ArrayList<>();
 				
 				for ( Long l: totals ){
 					

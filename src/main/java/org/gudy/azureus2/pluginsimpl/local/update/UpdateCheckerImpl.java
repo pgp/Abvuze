@@ -122,17 +122,17 @@ UpdateCheckerImpl
 			if ( !sem_released ){
 				
 				completed	= true;
-				
-				for (int i=0;i<listeners.size();i++){
-					
-					try{
-						((UpdateCheckerListener)listeners.get(i)).completed( this );
-						
-					}catch( Throwable e ){
-						
-						Debug.printStackTrace( e );
-					}
-				}
+
+                for (Object listener : listeners) {
+
+                    try {
+                        ((UpdateCheckerListener) listener).completed(this);
+
+                    } catch (Throwable e) {
+
+                        Debug.printStackTrace(e);
+                    }
+                }
 				
 				sem_released	= true;
 				
@@ -153,17 +153,17 @@ UpdateCheckerImpl
 			if ( !sem_released ){
 				
 				failed	= true;
-	
-				for (int i=0;i<listeners.size();i++){
-					
-					try{
-						((UpdateCheckerListener)listeners.get(i)).failed( this );
-						
-					}catch( Throwable e ){
-						
-						Debug.printStackTrace( e );
-					}
-				}
+
+                for (Object listener : listeners) {
+
+                    try {
+                        ((UpdateCheckerListener) listener).failed(this);
+
+                    } catch (Throwable e) {
+
+                        Debug.printStackTrace(e);
+                    }
+                }
 	
 				sem_released	= true;
 				
@@ -185,17 +185,17 @@ UpdateCheckerImpl
 	cancel()
 	{
 		cancelled	= true;
-		
-		for (int i=0;i<listeners.size();i++){
-			
-			try{
-				((UpdateCheckerListener)listeners.get(i)).cancelled( this );
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace(e);
-			}
-		}
+
+        for (Object listener : listeners) {
+
+            try {
+                ((UpdateCheckerListener) listener).cancelled(this);
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 	
 	public void
@@ -247,17 +247,17 @@ UpdateCheckerImpl
 		String		str )
 	{
 		List	ref = progress_listeners;
-		
-		for (int i=0;i<ref.size();i++){
-			
-			try{
-				((UpdateProgressListener)ref.get(i)).reportProgress( str );
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace(e);
-			}
-		}
+
+        for (Object o : ref) {
+
+            try {
+                ((UpdateProgressListener) o).reportProgress(str);
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 	
 	public void

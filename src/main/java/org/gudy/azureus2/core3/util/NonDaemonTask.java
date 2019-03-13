@@ -29,12 +29,12 @@ package org.gudy.azureus2.core3.util;
 public interface 
 NonDaemonTask 
 {
-	public Object
+	Object
 	run()
 	
 		throws Throwable;
 	
-	public String
+	String
 	getName();
 }
 		

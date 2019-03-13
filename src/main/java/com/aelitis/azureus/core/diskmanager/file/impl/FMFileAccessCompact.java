@@ -299,24 +299,22 @@ FMFileAccessCompact
 		long					position )
 	
 		throws FMFileManagerException
-	{		
-		for (int i=0;i<buffers.length;i++){
-			
-			DirectByteBuffer	buffer = buffers[i];
-			
-			int	len = buffers[i].limit(SS) - buffers[i].position(SS);
-		
-			read( raf, buffer, position );
-			
-			int	rem = buffers[i].remaining( SS );
-			
-			position += len - rem;
-			
-			if ( rem > 0 ){
-				
-				break;
-			}
-		}
+	{
+        for (DirectByteBuffer buffer : buffers) {
+
+            int len = buffer.limit(SS) - buffer.position(SS);
+
+            read(raf, buffer, position);
+
+            int rem = buffer.remaining(SS);
+
+            position += len - rem;
+
+            if (rem > 0) {
+
+                break;
+            }
+        }
 		
 		if ( position > current_length ){
 			
@@ -432,17 +430,15 @@ FMFileAccessCompact
 		long					position )
 	
 		throws FMFileManagerException
-	{		
-		for (int i=0;i<buffers.length;i++){
-			
-			DirectByteBuffer	buffer = buffers[i];
-			
-			int	len = buffers[i].limit(SS) - buffers[i].position(SS);
-		
-			write( raf, buffer, position );
-			
-			position += len;
-		}
+	{
+        for (DirectByteBuffer buffer : buffers) {
+
+            int len = buffer.limit(SS) - buffer.position(SS);
+
+            write(raf, buffer, position);
+
+            position += len;
+        }
 		
 		if ( position > current_length ){
 			
@@ -490,7 +486,7 @@ FMFileAccessCompact
 				
 				Long	length = (Long)data.get( "length" );
 				
-				current_length	= length.longValue();
+				current_length	= length;
 			}
 		}catch( Throwable e ){
 			
@@ -512,9 +508,9 @@ FMFileAccessCompact
 			try{
 				Map	data = new HashMap();
 				
-				data.put( "version", new Long( version ));
+				data.put( "version", version);
 				
-				data.put( "length", new Long( current_length ));
+				data.put( "length", current_length);
 				
 				FileUtil.writeResilientFile(
 						controlFileDir, controlFileName, data, false );

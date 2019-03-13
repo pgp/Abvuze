@@ -25,18 +25,18 @@ import java.net.InetAddress;
 public interface 
 NetworkAdminNATDevice 
 {
-	public String
+	String
 	getName();
 	
-	public InetAddress
+	InetAddress
 	getAddress();
 	
-	public int
+	int
 	getPort();
 	
-	public InetAddress
+	InetAddress
 	getExternalAddress();
 	
-	public String
+	String
 	getString();
 }

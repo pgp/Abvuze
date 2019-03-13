@@ -171,211 +171,207 @@ StatsWriterImpl
 							return( d1_index - d2_index );
 						}
 					});
-				
-				for (int i=0;i<dms.length;i++){
-					
-					DownloadManager	dm = (DownloadManager)dms[i];
-					
-					DownloadManagerStats	dm_stats = dm.getStats();
-					
-					writeLineRaw( "<DOWNLOAD>");
-					
-					try{
-						indent();
-						
-						writeLineRaw( "<TORRENT>" );
 
-							// torrent can be null if broken torrent!
-						
-						TOTorrent torrent = dm.getTorrent();
-															
-						try{
-							indent();
-					
-							writeTag( "NAME", dm.getDisplayName());
-                                                                
-							writeTag( "TORRENT_FILE", dm.getTorrentFileName());
-							
-							if ( torrent != null ){
-								
-								writeTag( "HASH", TorrentUtils.nicePrintTorrentHash(torrent, true));
-							
-								writeRawCookedTag( "SIZE", torrent.getSize());
-								
-								writeTag( "PIECE_LENGTH", torrent.getPieceLength());
-								
-								writeTag( "PIECE_COUNT", torrent.getNumberOfPieces());
-								
-								writeTag( "FILE_COUNT", torrent.getFiles().length );
-								
-								writeTag( "COMMENT", dm.getTorrentComment());
-								
-								writeTag( "CREATED_BY", dm.getTorrentCreatedBy());
-								
-								writeTag( "CREATION_DATE", torrent.getCreationDate());
-							}
-							
-						}finally{
-							
-							exdent();
-						}
-						
-						writeLineRaw( "</TORRENT>");
-						
-						writeTag( "DOWNLOAD_STATUS", DisplayFormatters.formatDownloadStatusDefaultLocale( dm));
-						
-						writeTag( "DOWNLOAD_DIR", dm.getSaveLocation().toString());
-						
-						if ( torrent != null ){
-								
-							if ( torrent.isSimpleTorrent()){
-							
-								writeTag( "TARGET_FILE", dm.getSaveLocation().toString());
-								
-							}else{
-								
-								writeTag( "TARGET_DIR", dm.getSaveLocation().toString());
-							}
-						}
-						
-						writeTag( "TRACKER_STATUS", dm.getTrackerStatus());
-					
-						writeTag( "COMPLETED", 				dm_stats.getCompleted());
-						writeTag( "NON_DND_COMPLETED", 		dm.isDownloadComplete(false));
-						
-						writeRawCookedTag( "DOWNLOADED", 		dm_stats.getTotalDataBytesReceived());
-						writeRawCookedTag( "UPLOADED", 			dm_stats.getTotalDataBytesSent());
-						writeRawCookedTag( "DISCARDED", 		dm_stats.getDiscarded());
-						
-						writeRawCookedAverageTag( "DOWNLOAD_SPEED", 	dm_stats.getDataReceiveRate());
-						writeRawCookedAverageTag( "UPLOAD_SPEED", 		dm_stats.getDataSendRate());
-						writeRawCookedAverageTag( "TOTAL_SPEED", 		dm_stats.getTotalAverage());
-							
-						writeRawCookedAverageTag( "DOWNLOAD_SPEED_SMOOTH", 	dm_stats.getSmoothedDataReceiveRate());
-						writeRawCookedAverageTag( "UPLOAD_SPEED_SMOOTH", 		dm_stats.getSmoothedDataSendRate());
+                for (DownloadManager dm : dms) {
 
-						writeTag( "ELAPSED", 		dm_stats.getElapsedTime());
-						writeTag( "ETA", 			DisplayFormatters.formatETA(dm_stats.getSmoothedETA()));
-						writeTag( "HASH_FAILS", 	dm_stats.getHashFailCount());
-						writeTag( "SHARE_RATIO", 	dm_stats.getShareRatio());
-			
-						writeTag( "TOTAL_SEEDS", dm.getNbSeeds());
-						writeTag( "TOTAL_LEECHERS", dm.getNbPeers());
-						
-						if ( export_file_stats ){
-							
-							try{
-								writeLineRaw( "<FILES>");
-								
-								indent();
-								
-								DiskManagerFileInfo[] files = dm.getDiskManagerFileInfo();
-								
-								for (int j=0;j<files.length;j++){
-									
-									DiskManagerFileInfo file = files[j];
-									
-									try{
-										writeLineRaw( "<FILE>");
-										
-										indent();
-										
-										writeTag( "NAME", file.getTorrentFile().getRelativePath());
-										
-										writeTag( "DND", file.isSkipped());
-										
-										writeRawCookedTag( "SIZE", file.getLength());
-										
-										writeRawCookedTag( "DOWNLOADED", file.getDownloaded());
-																		
-									}finally{
+                    DownloadManagerStats dm_stats = dm.getStats();
 
-										exdent();
+                    writeLineRaw("<DOWNLOAD>");
 
-										writeLineRaw( "</FILE>");
-									}
-								}
-								
-							}finally{
+                    try {
+                        indent();
 
-								exdent();
+                        writeLineRaw("<TORRENT>");
 
-								writeLineRaw( "</FILES>");
-							}
-						}
-						if ( export_peer_stats ){
-							
-							try{
-								writeLineRaw( "<PEERS>");
-								
-								indent();
-							
-								PEPeerManager pm = dm.getPeerManager();
-								
-								if ( pm != null ){
-									
-									List	peers = pm.getPeers();
-									
-									for (int j=0;j<peers.size();j++){
-										
-										PEPeer	peer = (PEPeer)peers.get(j);
-										
-										PEPeerStats	peer_stats = peer.getStats();
-										
-										byte[]	id	= peer.getId();
-										
-										if ( id == null ){
-											
-											continue;
-										}
-										
-										try{
-											String	peer_id = PeerClassifier.getPrintablePeerID( id );
-											
-											peer_id = escapeXML(peer_id);
-											
-											String	type = escapeXML( peer.getClient());
-											
-											writeLineRaw( "<PEER hex_id=\"" + ByteFormatter.encodeString( id ) + "\" printable_id=\""+ peer_id + "\" type=\"" + type + "\">");
-										
-											indent();
-										
-											writeTag( "IP", peer.getIp());
-											
-											writeTag( "IS_SEED", peer.isSeed());
-											
-											writeRawCookedTag( "DOWNLOADED", peer_stats.getTotalDataBytesReceived());
-											writeRawCookedTag( "UPLOADED", peer_stats.getTotalDataBytesSent());
-											
-											writeRawCookedAverageTag( "DOWNLOAD_SPEED", peer_stats.getDataReceiveRate());
-											writeRawCookedAverageTag( "UPLOAD_SPEED", peer_stats.getDataSendRate());
-											
-										}catch( Throwable e ){
-											
-											Debug.printStackTrace( e );
-											
-										}finally{
-										
-											exdent();
-											
-											writeLineRaw( "</PEER>");
-										}
-									}
-								}
-							}finally{
-								
-								exdent();
-								
-								writeLineRaw( "</PEERS>");
-							}
-						}
-					}finally{
-						
-						exdent();
-					}
-					
-					writeLineRaw( "</DOWNLOAD>");
-				}
+                        // torrent can be null if broken torrent!
+
+                        TOTorrent torrent = dm.getTorrent();
+
+                        try {
+                            indent();
+
+                            writeTag("NAME", dm.getDisplayName());
+
+                            writeTag("TORRENT_FILE", dm.getTorrentFileName());
+
+                            if (torrent != null) {
+
+                                writeTag("HASH", TorrentUtils.nicePrintTorrentHash(torrent, true));
+
+                                writeRawCookedTag("SIZE", torrent.getSize());
+
+                                writeTag("PIECE_LENGTH", torrent.getPieceLength());
+
+                                writeTag("PIECE_COUNT", torrent.getNumberOfPieces());
+
+                                writeTag("FILE_COUNT", torrent.getFiles().length);
+
+                                writeTag("COMMENT", dm.getTorrentComment());
+
+                                writeTag("CREATED_BY", dm.getTorrentCreatedBy());
+
+                                writeTag("CREATION_DATE", torrent.getCreationDate());
+                            }
+
+                        } finally {
+
+                            exdent();
+                        }
+
+                        writeLineRaw("</TORRENT>");
+
+                        writeTag("DOWNLOAD_STATUS", DisplayFormatters.formatDownloadStatusDefaultLocale(dm));
+
+                        writeTag("DOWNLOAD_DIR", dm.getSaveLocation().toString());
+
+                        if (torrent != null) {
+
+                            if (torrent.isSimpleTorrent()) {
+
+                                writeTag("TARGET_FILE", dm.getSaveLocation().toString());
+
+                            } else {
+
+                                writeTag("TARGET_DIR", dm.getSaveLocation().toString());
+                            }
+                        }
+
+                        writeTag("TRACKER_STATUS", dm.getTrackerStatus());
+
+                        writeTag("COMPLETED", dm_stats.getCompleted());
+                        writeTag("NON_DND_COMPLETED", dm.isDownloadComplete(false));
+
+                        writeRawCookedTag("DOWNLOADED", dm_stats.getTotalDataBytesReceived());
+                        writeRawCookedTag("UPLOADED", dm_stats.getTotalDataBytesSent());
+                        writeRawCookedTag("DISCARDED", dm_stats.getDiscarded());
+
+                        writeRawCookedAverageTag("DOWNLOAD_SPEED", dm_stats.getDataReceiveRate());
+                        writeRawCookedAverageTag("UPLOAD_SPEED", dm_stats.getDataSendRate());
+                        writeRawCookedAverageTag("TOTAL_SPEED", dm_stats.getTotalAverage());
+
+                        writeRawCookedAverageTag("DOWNLOAD_SPEED_SMOOTH", dm_stats.getSmoothedDataReceiveRate());
+                        writeRawCookedAverageTag("UPLOAD_SPEED_SMOOTH", dm_stats.getSmoothedDataSendRate());
+
+                        writeTag("ELAPSED", dm_stats.getElapsedTime());
+                        writeTag("ETA", DisplayFormatters.formatETA(dm_stats.getSmoothedETA()));
+                        writeTag("HASH_FAILS", dm_stats.getHashFailCount());
+                        writeTag("SHARE_RATIO", dm_stats.getShareRatio());
+
+                        writeTag("TOTAL_SEEDS", dm.getNbSeeds());
+                        writeTag("TOTAL_LEECHERS", dm.getNbPeers());
+
+                        if (export_file_stats) {
+
+                            try {
+                                writeLineRaw("<FILES>");
+
+                                indent();
+
+                                DiskManagerFileInfo[] files = dm.getDiskManagerFileInfo();
+
+                                for (DiskManagerFileInfo file : files) {
+
+                                    try {
+                                        writeLineRaw("<FILE>");
+
+                                        indent();
+
+                                        writeTag("NAME", file.getTorrentFile().getRelativePath());
+
+                                        writeTag("DND", file.isSkipped());
+
+                                        writeRawCookedTag("SIZE", file.getLength());
+
+                                        writeRawCookedTag("DOWNLOADED", file.getDownloaded());
+
+                                    } finally {
+
+                                        exdent();
+
+                                        writeLineRaw("</FILE>");
+                                    }
+                                }
+
+                            } finally {
+
+                                exdent();
+
+                                writeLineRaw("</FILES>");
+                            }
+                        }
+                        if (export_peer_stats) {
+
+                            try {
+                                writeLineRaw("<PEERS>");
+
+                                indent();
+
+                                PEPeerManager pm = dm.getPeerManager();
+
+                                if (pm != null) {
+
+                                    List peers = pm.getPeers();
+
+                                    for (Object peer1 : peers) {
+
+                                        PEPeer peer = (PEPeer) peer1;
+
+                                        PEPeerStats peer_stats = peer.getStats();
+
+                                        byte[] id = peer.getId();
+
+                                        if (id == null) {
+
+                                            continue;
+                                        }
+
+                                        try {
+                                            String peer_id = PeerClassifier.getPrintablePeerID(id);
+
+                                            peer_id = escapeXML(peer_id);
+
+                                            String type = escapeXML(peer.getClient());
+
+                                            writeLineRaw("<PEER hex_id=\"" + ByteFormatter.encodeString(id) + "\" printable_id=\"" + peer_id + "\" type=\"" + type + "\">");
+
+                                            indent();
+
+                                            writeTag("IP", peer.getIp());
+
+                                            writeTag("IS_SEED", peer.isSeed());
+
+                                            writeRawCookedTag("DOWNLOADED", peer_stats.getTotalDataBytesReceived());
+                                            writeRawCookedTag("UPLOADED", peer_stats.getTotalDataBytesSent());
+
+                                            writeRawCookedAverageTag("DOWNLOAD_SPEED", peer_stats.getDataReceiveRate());
+                                            writeRawCookedAverageTag("UPLOAD_SPEED", peer_stats.getDataSendRate());
+
+                                        } catch (Throwable e) {
+
+                                            Debug.printStackTrace(e);
+
+                                        } finally {
+
+                                            exdent();
+
+                                            writeLineRaw("</PEER>");
+                                        }
+                                    }
+                                }
+                            } finally {
+
+                                exdent();
+
+                                writeLineRaw("</PEERS>");
+                            }
+                        }
+                    } finally {
+
+                        exdent();
+                    }
+
+                    writeLineRaw("</DOWNLOAD>");
+                }
 				
 			}finally{
 				

@@ -629,7 +629,7 @@ PeerImpl
 			
 			if ( peer_listeners == null ){
 				
-				peer_listeners = new HashMap<Object,PEPeerListener>();
+				peer_listeners = new HashMap<>();
 			}
 			
 			peer_listeners.put( l, core_listener );
@@ -669,7 +669,7 @@ PeerImpl
 					final PEPeer peer,	// seems don't need this here
 					int new_state ) 
 				{
-					fireEvent( PeerEvent.ET_STATE_CHANGED, new Integer( new_state ));
+					fireEvent( PeerEvent.ET_STATE_CHANGED, new_state);
 				}
       
 				public void 
@@ -678,7 +678,7 @@ PeerImpl
 					int piece_num, 
 					int total_bad_chunks )
 				{
-					fireEvent( PeerEvent.ET_BAD_CHUNK, new Integer[]{ new Integer(piece_num), new Integer(total_bad_chunks)});
+					fireEvent( PeerEvent.ET_BAD_CHUNK, new Integer[]{piece_num, total_bad_chunks});
 				}
 				
 				public void addAvailability(final PEPeer peer, BitFlags peerHavePieces)
@@ -715,7 +715,7 @@ PeerImpl
 			
 			if ( peer_listeners == null ){
 				
-				peer_listeners = new HashMap<Object,PEPeerListener>();
+				peer_listeners = new HashMap<>();
 			}
 			
 			peer_listeners.put( l, core_listener );

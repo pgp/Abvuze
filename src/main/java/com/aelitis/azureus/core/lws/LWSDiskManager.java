@@ -231,14 +231,14 @@ LWSDiskManager
 		}finally{
 			
 			if ( !ok ){
-				
-				for (int i=0;i<local_files.length;i++){
-					
-					if ( local_files[i] != null ){
-						
-						local_files[i].close();
-					}
-				}
+
+                for (DiskManagerFileInfoImpl local_file : local_files) {
+
+                    if (local_file != null) {
+
+                        local_file.close();
+                    }
+                }
 			}
 		}
 	}
@@ -264,17 +264,17 @@ LWSDiskManager
 		}
 		
 		if ( files != null ){
-			
-			for (int i=0;i<files.length;i++){
-				
-				try{
-					files[i].getCacheFile().close();
-					
-				}catch( Throwable e ){
-					
-					e.printStackTrace();
-				}
-			}
+
+            for (DiskManagerFileInfoImpl file : files) {
+
+                try {
+                    file.getCacheFile().close();
+
+                } catch (Throwable e) {
+
+                    e.printStackTrace();
+                }
+            }
 		}
 
 		return( false );

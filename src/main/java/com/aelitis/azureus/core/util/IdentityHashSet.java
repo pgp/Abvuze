@@ -33,13 +33,13 @@ IdentityHashSet<E>
 	public 
 	IdentityHashSet() 
 	{
-		identity_map = new IdentityHashMap<E,Object>();
+		identity_map = new IdentityHashMap<>();
 	}
 	
 	public IdentityHashSet(
 		Collection<? extends E> 	set ) 
 	{
-		identity_map = new IdentityHashMap<E,Object>( Math.max((int)(set.size()/.75f) + 1, 16 ));
+		identity_map = new IdentityHashMap<>(Math.max((int) (set.size() / .75f) + 1, 16));
 		
 		addAll(set);
 	}

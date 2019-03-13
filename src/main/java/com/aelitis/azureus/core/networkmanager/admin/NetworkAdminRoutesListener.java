@@ -23,16 +23,16 @@ package com.aelitis.azureus.core.networkmanager.admin;
 public interface 
 NetworkAdminRoutesListener 
 {
-	public boolean
+	boolean
 	foundNode(
-		NetworkAdminNetworkInterfaceAddress		intf,
-		NetworkAdminNode[]						route_so_far,
-		int										distance,
-		int										rtt );
+            NetworkAdminNetworkInterfaceAddress intf,
+            NetworkAdminNode[] route_so_far,
+            int distance,
+            int rtt);
 	
-	public boolean
+	boolean
 	timeout(
-		NetworkAdminNetworkInterfaceAddress		intf,
-		NetworkAdminNode[]						route_so_far,
-		int										distance );
+            NetworkAdminNetworkInterfaceAddress intf,
+            NetworkAdminNode[] route_so_far,
+            int distance);
 }

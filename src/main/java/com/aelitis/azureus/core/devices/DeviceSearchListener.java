@@ -23,10 +23,10 @@ package com.aelitis.azureus.core.devices;
 public interface 
 DeviceSearchListener 
 {
-	public void
+	void
 	deviceFound(
-		Device 	device );
+            Device device);
 	
-	public void
+	void
 	complete();
 }

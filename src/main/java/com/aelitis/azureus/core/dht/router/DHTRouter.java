@@ -29,29 +29,29 @@ import java.util.*;
 public interface 
 DHTRouter 
 {
-	public int
+	int
 	getK();
 	
-	public byte[]
+	byte[]
 	getID();
 	
-	public boolean
+	boolean
 	isID(
-		byte[]	node_id );
+            byte[] node_id);
 	
-	public DHTRouterContact
+	DHTRouterContact
 	getLocalContact();
 	
-	public void
+	void
 	setAdapter(
-		DHTRouterAdapter	_adapter );
+            DHTRouterAdapter _adapter);
 	
 		/**
 		 * Tells the router to perform its "start of day" functions required to integrate
 		 * it into the DHT (search for itself, refresh buckets)
 		 */
-	
-	public void
+
+        void
 	seed();
 	
 		/**
@@ -62,12 +62,12 @@ DHTRouter
 		 * @param attachment
 		 * @return
 		 */
-	
-	public void
+
+        void
 	contactKnown(
-		byte[]						node_id,
-		DHTRouterContactAttachment	attachment,
-		boolean						force );
+                byte[] node_id,
+                DHTRouterContactAttachment attachment,
+                boolean force);
 	
 		/**
 		 * Adds a contact to the router and marks it as "known to be alive"
@@ -75,11 +75,11 @@ DHTRouter
 		 * @param attachment
 		 * @return
 		 */
-	
-	public void
+
+        void
 	contactAlive(
-		byte[]						node_id,
-		DHTRouterContactAttachment	attachment );
+                byte[] node_id,
+                DHTRouterContactAttachment attachment);
 
 		/**
 		 * Informs the router that an attempt to interact with the contact failed 
@@ -87,39 +87,39 @@ DHTRouter
 		 * @param attachment
 		 * @return
 		 */
-	
-	public DHTRouterContact
+
+        DHTRouterContact
 	contactDead(
-		byte[]						node_id,
-		boolean						force );
+                byte[] node_id,
+                boolean force);
 	
-	public DHTRouterContact
+	DHTRouterContact
 	findContact(
-		byte[]	node_id );	
+            byte[] node_id);
 
 		/**
 		 * Returns num_to_return or a few more closest contacts, unordered
 		 */
-	
-	public List<DHTRouterContact>
+
+        List<DHTRouterContact>
 	findClosestContacts(
-		byte[]		node_id,
-		int			num_to_return,
-		boolean		live_only );
+                byte[] node_id,
+                int num_to_return,
+                boolean live_only);
 		
-	public void
+	void
 	recordLookup(
-		byte[]	node_id );
+            byte[] node_id);
 	
-	public boolean
+	boolean
 	requestPing(
-		byte[]	node_id );
+            byte[] node_id);
 	
-	public void
+	void
 	refreshIdleLeaves(
-		long	idle_max );
+            long idle_max);
 	
-	public byte[]
+	byte[]
 	refreshRandom();
 	
 		/**
@@ -127,34 +127,34 @@ DHTRouter
 		 * @param max
 		 * @return
 		 */
-	
-	public List<DHTRouterContact>
+
+        List<DHTRouterContact>
 	findBestContacts(
-		int		max );
+                int max);
 	
 		/**
 		 * Returns a list of DHTRouterContact objects
 		 * @return
 		 */
-	
-	public List<DHTRouterContact>
+
+        List<DHTRouterContact>
 	getAllContacts();
 	
-	public DHTRouterStats
+	DHTRouterStats
 	getStats();
 	
-	public void
+	void
 	setSleeping(
-		boolean	sleeping );
+            boolean sleeping);
 	
-	public void
+	void
 	setSuspended(
-		boolean			susp );
+            boolean susp);
 	
-	public void
+	void
 	destroy();
 	
-	public void
+	void
 	print();
 	
 	/**
@@ -164,7 +164,7 @@ DHTRouter
 	 * the observer to add
 	 * @return <code>true</code> if now observing, <code>false</code> otherwise
 	 */
-	public boolean addObserver(DHTRouterObserver rto);
+    boolean addObserver(DHTRouterObserver rto);
 	
 	/**
 	 * Returns whether the given observer is already observing.
@@ -173,7 +173,7 @@ DHTRouter
 	 * the observer to query as observing
 	 * @return <code>true</code> if observing, <code>false</code> otherwise
 	 */
-	public boolean containsObserver(DHTRouterObserver rto);
+    boolean containsObserver(DHTRouterObserver rto);
 	
 	/**
 	 * Removes the observer if it is already observing.
@@ -182,5 +182,5 @@ DHTRouter
 	 * the observer to remove
 	 * @return <code>true</code> if no longer observing, <code>false</code> otherwise
 	 */
-	public boolean removeObserver(DHTRouterObserver rto);
+    boolean removeObserver(DHTRouterObserver rto);
 }

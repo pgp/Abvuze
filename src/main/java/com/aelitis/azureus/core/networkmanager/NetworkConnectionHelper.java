@@ -108,14 +108,14 @@ NetworkConnectionHelper
 			synchronized( this ){
 				
 				if ( upload ){
-					
-					for (int i=0;i<upload_limiters.length;i++){
-						
-						if ( upload_limiters[i] == limiter ){
-							
-							return;
-						}
-					}
+
+                    for (LimitedRateGroup upload_limiter1 : upload_limiters) {
+
+                        if (upload_limiter1 == limiter) {
+
+                            return;
+                        }
+                    }
 					
 					LimitedRateGroup[] new_upload_limiters = new LimitedRateGroup[upload_limiters.length+1];
 					
@@ -125,14 +125,14 @@ NetworkConnectionHelper
 					
 					upload_limiters = new_upload_limiters;
 				}else{
-				
-					for (int i=0;i<download_limiters.length;i++){
 
-						if ( download_limiters[i] == limiter ){
+                    for (LimitedRateGroup download_limiter1 : download_limiters) {
 
-							return;
-						}
-					}
+                        if (download_limiter1 == limiter) {
+
+                            return;
+                        }
+                    }
 					LimitedRateGroup[] new_download_limiters = new LimitedRateGroup[download_limiters.length+1];
 					
 					System.arraycopy(download_limiters, 0, new_download_limiters, 0, download_limiters.length );
@@ -163,19 +163,19 @@ NetworkConnectionHelper
 					int	pos = 0;
 									
 					LimitedRateGroup[] new_upload_limiters = new LimitedRateGroup[upload_limiters.length-1];
-									
-					for (int i=0;i<upload_limiters.length;i++){
-						
-						if ( upload_limiters[i] != limiter ){
-							
-							if ( pos == new_upload_limiters.length ){
-								
-								return;
-							}
-							
-							new_upload_limiters[pos++] = upload_limiters[i];
-						}
-					}
+
+                    for (LimitedRateGroup upload_limiter1 : upload_limiters) {
+
+                        if (upload_limiter1 != limiter) {
+
+                            if (pos == new_upload_limiters.length) {
+
+                                return;
+                            }
+
+                            new_upload_limiters[pos++] = upload_limiter1;
+                        }
+                    }
 					
 					upload_limiters = new_upload_limiters;
 					
@@ -189,19 +189,19 @@ NetworkConnectionHelper
 					int	pos = 0;
 									
 					LimitedRateGroup[] new_download_limiters = new LimitedRateGroup[download_limiters.length-1];
-									
-					for (int i=0;i<download_limiters.length;i++){
-						
-						if ( download_limiters[i] != limiter ){
-							
-							if ( pos == new_download_limiters.length ){
-								
-								return;
-							}
-							
-							new_download_limiters[pos++] = download_limiters[i];
-						}
-					}
+
+                    for (LimitedRateGroup download_limiter1 : download_limiters) {
+
+                        if (download_limiter1 != limiter) {
+
+                            if (pos == new_download_limiters.length) {
+
+                                return;
+                            }
+
+                            new_download_limiters[pos++] = download_limiter1;
+                        }
+                    }
 					
 					download_limiters = new_download_limiters;
 				}

@@ -24,17 +24,17 @@ package com.aelitis.azureus.core.devices;
 public interface 
 TranscodeManager 
 {
-	public TranscodeProvider[]
+	TranscodeProvider[]
 	getProviders();
 	
-	public TranscodeQueue
+	TranscodeQueue
 	getQueue();
 	
-	public void
+	void
 	addListener(
-		TranscodeManagerListener		listener );
+            TranscodeManagerListener listener);
 	
-	public void
+	void
 	removeListener(
-		TranscodeManagerListener		listener );
+            TranscodeManagerListener listener);
 }

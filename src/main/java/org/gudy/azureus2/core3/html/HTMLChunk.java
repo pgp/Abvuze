@@ -26,6 +26,6 @@ package org.gudy.azureus2.core3.html;
 public interface 
 HTMLChunk 
 {
-	public String
+	String
 	getContent();
 }

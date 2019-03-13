@@ -780,39 +780,43 @@ CryptoHandlerECC
 		byte[]		recovered_private_key 	= null;
 				
 		String[]	bits = str.split( "\n" );
-		
-		for (int i=0;i<bits.length;i++){
-			
-			String	bit = bits[i].trim();
-			
-			if ( bit.length() == 0 ){
-				
+
+		for (String bit1 : bits) {
+
+			String bit = bit1.trim();
+
+			if (bit.length() == 0) {
+
 				continue;
 			}
-			
+
 			String[] x = bit.split(":");
-			
-			if ( x.length != 2 ){
-				
+
+			if (x.length != 2) {
+
 				continue;
 			}
-			
-			String	lhs = x[0].trim();
-			String	rhs = x[1].trim();
-			
-			byte[]	rhs_val = Base32.decode( rhs );
-			
-			if ( lhs.equals( "id" )){
-				
-				recovered_id = rhs_val;
-				
-			}else if ( lhs.equals( "public" )){
-				
-				recovered_public_key = rhs_val;
-				
-			}else if ( lhs.equals( "private" )){
-				
-				recovered_private_key = rhs_val;
+
+			String lhs = x[0].trim();
+			String rhs = x[1].trim();
+
+			byte[] rhs_val = Base32.decode(rhs);
+
+			switch (lhs) {
+				case "id":
+
+					recovered_id = rhs_val;
+
+					break;
+				case "public":
+
+					recovered_public_key = rhs_val;
+
+					break;
+				case "private":
+
+					recovered_private_key = rhs_val;
+					break;
 			}
 		}
 		
@@ -864,7 +868,7 @@ CryptoHandlerECC
 	protected int
 	getCurrentPasswordType()
 	{
-		return((int)COConfigurationManager.getIntParameter( CONFIG_PREFIX + "pwtype", CryptoManagerPasswordHandler.HANDLER_TYPE_USER ));
+		return COConfigurationManager.getIntParameter( CONFIG_PREFIX + "pwtype", CryptoManagerPasswordHandler.HANDLER_TYPE_USER );
 	}
 	
 	static class InternalECIES

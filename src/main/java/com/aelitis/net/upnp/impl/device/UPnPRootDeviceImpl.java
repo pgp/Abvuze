@@ -25,6 +25,7 @@ package com.aelitis.net.upnp.impl.device;
  *
  */
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.net.*;
 
@@ -39,21 +40,21 @@ public class
 UPnPRootDeviceImpl 
 	implements  UPnPRootDevice
 {
-	public static final String	ROUTERS[]				= 
-		{ 	"3Com ADSL 11g",
-			//"WRT54G",
-		};
-	
-	public static final String	BAD_ROUTER_VERSIONS[]	= 
-		{ 	"2.05",
-			//"any",
-		};
-	
-	public static final boolean BAD_ROUTER_REPORT_FAIL[]	=
-		{
-			true,		// report on fail
-			//true,		// report always	removed, apparently it works OK now according to manufacturer
-		};
+    public static final String[] ROUTERS =
+            {"3Com ADSL 11g",
+                    //"WRT54G",
+            };
+
+    public static final String[] BAD_ROUTER_VERSIONS =
+            {"2.05",
+                    //"any",
+            };
+
+    public static final boolean[] BAD_ROUTER_REPORT_FAIL =
+            {
+                    true,        // report on fail
+                    //true,		// report always	removed, apparently it works OK now according to manufacturer
+            };
 	
 	final private UPnPImpl			upnp;
 	
@@ -63,7 +64,7 @@ UPnPRootDeviceImpl
 	final private String		usn;
 	final private URL			location;
 	
-	final private List<URL>		alt_locations = new ArrayList<URL>();
+	final private List<URL>		alt_locations = new ArrayList<>();
 	
 	private URL			url_base_for_relative_urls;
 	private URL			saved_url_base_for_relative_urls;
@@ -147,10 +148,10 @@ UPnPRootDeviceImpl
 		try{
 			Map	cache = new HashMap();
 
-			cache.put( "ni", network_interface.getName().getBytes( "UTF-8" ));
-			cache.put( "la", local_address.getHostAddress().getBytes( "UTF-8" ));
-			cache.put( "usn", usn.getBytes( "UTF-8" ));
-			cache.put( "loc", location.toExternalForm().getBytes( "UTF-8" ));
+			cache.put( "ni", network_interface.getName().getBytes(StandardCharsets.UTF_8));
+			cache.put( "la", local_address.getHostAddress().getBytes(StandardCharsets.UTF_8));
+			cache.put( "usn", usn.getBytes(StandardCharsets.UTF_8));
+			cache.put( "loc", location.toExternalForm().getBytes(StandardCharsets.UTF_8));
 			
 			return( cache );
 		
@@ -363,7 +364,7 @@ UPnPRootDeviceImpl
 	{
 		synchronized( alt_locations ){
 			
-			return( new ArrayList<URL>( alt_locations ));
+			return(new ArrayList<>(alt_locations));
 		}
 	}
 	
@@ -378,11 +379,11 @@ UPnPRootDeviceImpl
 		boolean		replaced )
 	{
 		destroyed	= true;
-		
-		for (int i=0;i<listeners.size();i++){
-			
-			((UPnPRootDeviceListener)listeners.get(i)).lost( this, replaced);
-		}
+
+        for (Object listener : listeners) {
+
+            ((UPnPRootDeviceListener) listener).lost(this, replaced);
+        }
 	}
 	
 	public boolean
@@ -433,7 +434,7 @@ UPnPRootDeviceImpl
 			
 			if ( !Character.isLetterOrDigit( c )){
 				
-				delimiters.add( new Character( c ));
+				delimiters.add(c);
 				
 				current_delim = c;
 			}
@@ -445,7 +446,7 @@ UPnPRootDeviceImpl
 			
 			if ( !Character.isLetterOrDigit( c )){
 				
-				delimiters.add( new Character( c ));
+				delimiters.add(c);
 				
 				bad_delim = c;
 			}

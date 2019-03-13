@@ -65,7 +65,7 @@ TranscodeManagerImpl
 	
 	private volatile TranscodeProviderVuze	vuzexcode_provider;
 	
-	private CopyOnWriteList<TranscodeManagerListener>	listeners = new CopyOnWriteList<TranscodeManagerListener>();
+	private CopyOnWriteList<TranscodeManagerListener>	listeners = new CopyOnWriteList<>();
 	
 	private TranscodeQueueImpl		queue = new TranscodeQueueImpl( this );
 	
@@ -73,14 +73,14 @@ TranscodeManagerImpl
 
 	private boolean hooked_categories;
 	
-	private Map<Category,Object[]> 	category_map = new HashMap<Category, Object[]>();
+	private Map<Category,Object[]> 	category_map = new HashMap<>();
 	private CategoryListener		category_listener;
 	private GlobalManagerListener	category_dl_listener;
 	private TorrentAttribute		category_ta;
 	
 	private boolean 				hooked_tags;
 
-	private Map<Tag,Object[]> 		tag_map = new HashMap<Tag, Object[]>();
+	private Map<Tag,Object[]> 		tag_map = new HashMap<>();
 	private TagListener				tag_listener;
 
 	private TorrentAttribute		tag_ta;
@@ -344,7 +344,7 @@ TranscodeManagerImpl
 	{
 		Category[] cats = CategoryManager.getCategories();
 		
-		Map<Category,Object[]> active_map = new HashMap<Category, Object[]>();
+		Map<Category,Object[]> active_map = new HashMap<>();
 		
 		for ( Category cat: cats ){
 			
@@ -404,7 +404,7 @@ TranscodeManagerImpl
 			}
 		}
 		
-		Map<Category,Object[]> to_process = new HashMap<Category, Object[]>();
+		Map<Category,Object[]> to_process = new HashMap<>();
 		
 		synchronized( category_map ){
 			
@@ -623,7 +623,7 @@ TranscodeManagerImpl
 	{
 		TagManager tm = TagManagerFactory.getTagManager();
 		
-		Map<Tag,Object[]> active_map = new HashMap<Tag, Object[]>();
+		Map<Tag,Object[]> active_map = new HashMap<>();
 		
 		for ( TagType tt: tm.getTagTypes()){
 			
@@ -701,7 +701,7 @@ TranscodeManagerImpl
 			}
 		}
 		
-		Map<Tag,Object[]> to_process = new HashMap<Tag, Object[]>();
+		Map<Tag,Object[]> to_process = new HashMap<>();
 		
 		synchronized( tag_map ){
 			

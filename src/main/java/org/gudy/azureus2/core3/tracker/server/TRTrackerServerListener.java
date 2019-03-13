@@ -36,27 +36,27 @@ import org.gudy.azureus2.core3.util.AsyncController;
 public interface 
 TRTrackerServerListener 
 {
-	public boolean
+	boolean
 	handleExternalRequest(
-		InetSocketAddress	client_address,
-		String				user,
-		String				url,
-		URL					absolute_url,
-		String				header,
-		InputStream			is,
-		OutputStream		os,
-		AsyncController		async )
+            InetSocketAddress client_address,
+            String user,
+            String url,
+            URL absolute_url,
+            String header,
+            InputStream is,
+            OutputStream os,
+            AsyncController async)
 		
 		throws IOException;
 		
-	public boolean
+	boolean
 	permitted(
-		String		originator,
-		byte[]		hash,
-		boolean		explicit );
+            String originator,
+            byte[] hash,
+            boolean explicit);
 		
-	public boolean
+	boolean
 	denied(
-		byte[]		hash,
-		boolean		explicit );
+            byte[] hash,
+            boolean explicit);
 }

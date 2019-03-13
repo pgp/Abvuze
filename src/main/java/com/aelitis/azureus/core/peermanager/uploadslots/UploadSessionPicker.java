@@ -174,15 +174,15 @@ public class UploadSessionPicker {
 
 	private ArrayList<PEPeer> globalGetAllDownloadPeers() {
 		try {  next_optimistics_mon.enter();
-			ArrayList<PEPeer> all = new ArrayList<PEPeer>();
-			
-			for( Iterator<PEPeer> it = helpers.iterator(); it.hasNext(); ) {
-				UploadHelper helper = (UploadHelper)it.next();
-				
-				if( !helper.isSeeding() )  {  //filter out seeding
-					all.addAll( helper.getAllPeers() );
-				}
-			}
+			ArrayList<PEPeer> all = new ArrayList<>();
+
+            for (PEPeer helper1 : (Iterable<PEPeer>) helpers) {
+                UploadHelper helper = (UploadHelper) helper1;
+
+                if (!helper.isSeeding()) {  //filter out seeding
+                    all.addAll(helper.getAllPeers());
+                }
+            }
 			
 			return all;
 		}
@@ -206,17 +206,16 @@ public class UploadSessionPicker {
 		}
 		
 		if( best.isEmpty() ) {
-			return new LinkedList<UploadSession>();
+			return new LinkedList<>();
 		}
 		
 		
-		LinkedList<UploadSession> best_sessions = new LinkedList<UploadSession>();
-		
-		for( Iterator<PEPeer> it = best.iterator(); it.hasNext(); ) {
-			PEPeer peer = it.next();
-			UploadSession session = new UploadSession( peer, UploadSession.TYPE_DOWNLOAD );
-			best_sessions.add( session );
-		}
+		LinkedList<UploadSession> best_sessions = new LinkedList<>();
+
+        for (PEPeer peer : best) {
+            UploadSession session = new UploadSession(peer, UploadSession.TYPE_DOWNLOAD);
+            best_sessions.add(session);
+        }
 		
 		return best_sessions;
 	}

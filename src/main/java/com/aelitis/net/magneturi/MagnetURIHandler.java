@@ -71,13 +71,13 @@ MagnetURIHandler
 	public interface
 	ResourceProvider
 	{
-		public String
+		String
 		getUID();
 		
-		public String
+		String
 		getFileType();
 				
-		public byte[]
+		byte[]
 		getData();
 	}
 }

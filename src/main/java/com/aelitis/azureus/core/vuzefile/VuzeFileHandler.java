@@ -27,6 +27,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.gudy.azureus2.core3.util.BDecoder;
@@ -49,7 +50,7 @@ VuzeFileHandler
 		return( singleton );
 	}
 	
-	private final CopyOnWriteList<VuzeFileProcessor>	processors = new CopyOnWriteList<VuzeFileProcessor>();
+	private final CopyOnWriteList<VuzeFileProcessor>	processors = new CopyOnWriteList<>();
 	
 	
 	protected
@@ -105,28 +106,16 @@ VuzeFileHandler
 	loadVuzeFile(
 		File 	file )
 	{
-		InputStream is = null;
-		
-		try{
-			is = new FileInputStream( file );
-			
-			return( getVuzeFile( is ));
-			
-		}catch( Throwable e ){
-			
-			return( null );
-			
-		}finally{
-	
-			if ( is != null ){
-				
-				try{
-					is.close();
-					
-				}catch( Throwable e ){	
-				}
-			}
-		}
+
+        try (InputStream is = new FileInputStream(file)) {
+
+            return (getVuzeFile(is));
+
+        } catch (Throwable e) {
+
+            return (null);
+
+        }
 	}
 	
 	protected VuzeFile
@@ -168,7 +157,7 @@ VuzeFileHandler
 					
 					byte[] bytes = FileUtil.readInputStreamAsByteArray( bis, 2*1024*1024 );
 										
-					map = BDecoder.decodeFromJSON( new String( bytes, "UTF-8" ));
+					map = BDecoder.decodeFromJSON( new String( bytes, StandardCharsets.UTF_8));
 					
 				}else{
 
@@ -221,37 +210,30 @@ VuzeFileHandler
 		VuzeFile[]		files,
 		int				expected_types )
 	{
-		Iterator<VuzeFileProcessor> it = processors.iterator();
-		
-		while( it.hasNext()){
-			
-			VuzeFileProcessor	proc = it.next();
-			
-			try{
-				proc.process( files, expected_types );
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace(e);
-			}
-		}
-		
-		for (int i=0;i<files.length;i++){
-			
-			VuzeFile vf = files[i];
-			
-			VuzeFileComponent[] comps = vf.getComponents();
-			
-			for (int j=0;j<comps.length;j++){
-				
-				VuzeFileComponent comp = comps[j];
-				
-				if ( !comp.isProcessed()){
-				
-					Debug.out( "Failed to handle Vuze file component " + comp.getContent());
-				}
-			}
-		}
+
+        for (VuzeFileProcessor proc : processors) {
+
+            try {
+                proc.process(files, expected_types);
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
+
+        for (VuzeFile vf : files) {
+
+            VuzeFileComponent[] comps = vf.getComponents();
+
+            for (VuzeFileComponent comp : comps) {
+
+                if (!comp.isProcessed()) {
+
+                    Debug.out("Failed to handle Vuze file component " + comp.getContent());
+                }
+            }
+        }
 	}
 	
 	public VuzeFile

@@ -1110,26 +1110,26 @@ CacheFileWithCache
 			
 			throw( new CacheFileManagerException( this,"flush fails", e ));
 			
-		}finally{			
-			
-			for (int i=0;i<multi_block_entries.size();i++){
-				
-				CacheEntry	entry = (CacheEntry)multi_block_entries.get(i);
-				
-				if ( release_entries ){
+		}finally{
 
-					manager.releaseCacheSpace( entry );
-					
-				}else{
-					
-					entry.resetBufferPosition();
-			
-					if ( write_ok ){
-						
-						entry.setClean();
-					}
-				}
-			}
+            for (Object multi_block_entry : multi_block_entries) {
+
+                CacheEntry entry = (CacheEntry) multi_block_entry;
+
+                if (release_entries) {
+
+                    manager.releaseCacheSpace(entry);
+
+                } else {
+
+                    entry.resetBufferPosition();
+
+                    if (write_ok) {
+
+                        entry.setClean();
+                    }
+                }
+            }
 		}
 	}
 	
@@ -1223,49 +1223,43 @@ CacheFileWithCache
 		}
 
 		try{
-			Iterator it = cache.subSet(new CacheEntry(first-1-baseOffset), new CacheEntry(last-baseOffset)).iterator();
-			//Iterator it = cache.iterator();
+            //Iterator it = cache.iterator();
 
-			while(it.hasNext())
-			{
-				CacheEntry	entry = (CacheEntry)it.next();
-				long startPos = entry.getFilePosition()+baseOffset;
-				long endPos = startPos+entry.getLength();
-				// the following check ensures that we are within the interesting region
-				if(startPos < first)
-					continue; // skip forward until we reach a chunk
-				
-				// perform skipping from the previous round
-				if(doSkipping)
-					while(i < absoluteOffsets.length && absoluteOffsets[i] < startPos)
-					{
-						toModify[i] = false;
-						i++;
-					}
+            for (Object o : cache.subSet(new CacheEntry(first - 1 - baseOffset), new CacheEntry(last - baseOffset))) {
+                CacheEntry entry = (CacheEntry) o;
+                long startPos = entry.getFilePosition() + baseOffset;
+                long endPos = startPos + entry.getLength();
+                // the following check ensures that we are within the interesting region
+                if (startPos < first)
+                    continue; // skip forward until we reach a chunk
 
-				if(i >= absoluteOffsets.length)
-					break;
+                // perform skipping from the previous round
+                if (doSkipping)
+                    while (i < absoluteOffsets.length && absoluteOffsets[i] < startPos) {
+                        toModify[i] = false;
+                        i++;
+                    }
 
-				doSkipping = false;
+                if (i >= absoluteOffsets.length)
+                    break;
 
-				if(startPos >= absoluteOffsets[i] && endPos >= absoluteOffsets[i]+lengths[i])
-				{ // chunk completely falls into cache entry -> don't invalidate
-					i++;
-					doSkipping = true;
-				} else if(startPos >= lastEnd)
-				{ // chunk spans multiple cache entries AND we skipped -> invalidate
-					doSkipping = true;
-				} else if(startPos >= absoluteOffsets[i]+lengths[i]) 
-				{  // end of a spanning chunk -> don't invalidate
-					i++;
-					doSkipping = true;
-				}
+                doSkipping = false;
 
-				if(endPos > last)
-					break;
+                if (startPos >= absoluteOffsets[i] && endPos >= absoluteOffsets[i] + lengths[i]) { // chunk completely falls into cache entry -> don't invalidate
+                    i++;
+                    doSkipping = true;
+                } else if (startPos >= lastEnd) { // chunk spans multiple cache entries AND we skipped -> invalidate
+                    doSkipping = true;
+                } else if (startPos >= absoluteOffsets[i] + lengths[i]) {  // end of a spanning chunk -> don't invalidate
+                    i++;
+                    doSkipping = true;
+                }
 
-				lastEnd = endPos;
-			}
+                if (endPos > last)
+                    break;
+
+                lastEnd = endPos;
+            }
 
 		} finally {
 			this_mon.exit();

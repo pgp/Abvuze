@@ -23,22 +23,22 @@ package com.aelitis.azureus.core.speedmanager;
 public interface 
 SpeedManagerPingMapper 
 {
-	public String
+	String
 	getName();
 	
-	public int[][]
+	int[][]
 	getHistory();
 	         	
-	public SpeedManagerPingZone[]
+	SpeedManagerPingZone[]
 	getZones();
 	
-	public SpeedManagerLimitEstimate
+	SpeedManagerLimitEstimate
 	getEstimatedUploadLimit(
-		boolean		persistent );
+            boolean persistent);
 	
-	public SpeedManagerLimitEstimate
+	SpeedManagerLimitEstimate
 	getEstimatedDownloadLimit(
-		boolean		persistent );
+            boolean persistent);
 	
 		/**
 		 * +1 : good
@@ -46,25 +46,25 @@ SpeedManagerPingMapper
 		 * >-1 <+1 : relative goodness/badness
 		 * @return
 		 */
-	
-	public double
+
+        double
 	getCurrentMetricRating();
 	
-	public SpeedManagerLimitEstimate
+	SpeedManagerLimitEstimate
 	getLastBadUploadLimit();
 	
-	public SpeedManagerLimitEstimate
+	SpeedManagerLimitEstimate
 	getLastBadDownloadLimit();
 
-	public SpeedManagerLimitEstimate[]
+	SpeedManagerLimitEstimate[]
 	getBadUploadHistory();
 	
-	public SpeedManagerLimitEstimate[]
+	SpeedManagerLimitEstimate[]
 	getBadDownloadHistory();
 	
-	public boolean
+	boolean
 	isActive();
 	
-	public void
+	void
 	destroy();
 }

@@ -167,19 +167,18 @@ ExternalSeedPlugin
 						UTTimerEvent		event )
 					{
 						try{
-							Iterator	it = download_map.values().iterator();
-							
-							while( it.hasNext()){
-								
-								List	peers = randomiseList((List)it.next());
-								
-								for (int i=0;i<peers.size();i++){
-									
-										// bail out early if the state changed for this peer
-										// so one peer at a time gets a chance to activate
-									
-									if (((ExternalSeedPeer)peers.get(i)).checkConnection()){
-										
+
+							for (Object o : download_map.values()) {
+
+								List peers = randomiseList((List) o);
+
+								for (Object peer : peers) {
+
+									// bail out early if the state changed for this peer
+									// so one peer at a time gets a chance to activate
+
+									if (((ExternalSeedPeer) peer).checkConnection()) {
+
 										break;
 									}
 								}
@@ -210,32 +209,30 @@ ExternalSeedPlugin
 		}
 		
 		List	peers = new ArrayList();
-		
-		for (int i=0;i<factories.length;i++){
+
+		for (ExternalSeedReaderFactory factory : factories) {
 
 
-			String attributeID = "no-ext-seeds-" + factories[i].getClass().getSimpleName();
-			TorrentAttribute attribute = plugin_interface.getTorrentManager().getPluginAttribute( attributeID );
+			String attributeID = "no-ext-seeds-" + factory.getClass().getSimpleName();
+			TorrentAttribute attribute = plugin_interface.getTorrentManager().getPluginAttribute(attributeID);
 
 			boolean noExternalSeeds = download.getBooleanAttribute(attribute);
 			if (noExternalSeeds) {
-				continue;  	
+				continue;
 			}
-			
-			ExternalSeedReader[]	x = factories[i].getSeedReaders( this, download );
-			
+
+			ExternalSeedReader[] x = factory.getSeedReaders(this, download);
+
 			if (x.length == 0) {
 				download.setBooleanAttribute(attribute, true);
 			} else {
 
-  			for (int j=0;j<x.length;j++){
-  				
-  				ExternalSeedReader	reader = x[j];
-  				
-  				ExternalSeedPeer	peer = new ExternalSeedPeer( this, download, reader );
-  				
-  				peers.add( peer );
-  			}
+				for (ExternalSeedReader reader : x) {
+
+					ExternalSeedPeer peer = new ExternalSeedPeer(this, download, reader);
+
+					peers.add(peer);
+				}
 			}
 		}
 		
@@ -258,26 +255,24 @@ ExternalSeedPlugin
 	{
 		Torrent	torrent = download.getTorrent();
 		
-		List<ExternalSeedPeer>	peers = new ArrayList<ExternalSeedPeer>();
+		List<ExternalSeedPeer>	peers = new ArrayList<>();
 		 
 		if ( torrent != null ){
-						
-			for (int i=0;i<factories.length;i++){
-				
-				String attributeID = "no-ext-seeds-" + factories[i].getClass().getSimpleName();
-				TorrentAttribute attribute = plugin_interface.getTorrentManager().getPluginAttribute( attributeID );
 
-				ExternalSeedReader[]	x = factories[i].getSeedReaders( this, download, config );
-				
+			for (ExternalSeedReaderFactory factory : factories) {
+
+				String attributeID = "no-ext-seeds-" + factory.getClass().getSimpleName();
+				TorrentAttribute attribute = plugin_interface.getTorrentManager().getPluginAttribute(attributeID);
+
+				ExternalSeedReader[] x = factory.getSeedReaders(this, download, config);
+
 				download.setBooleanAttribute(attribute, x.length == 0);
-				
-				for (int j=0;j<x.length;j++){
-					
-					ExternalSeedReader	reader = x[j];
-					
-					ExternalSeedPeer	peer = new ExternalSeedPeer( this, download, reader );
-					
-					peers.add( peer );
+
+				for (ExternalSeedReader reader : x) {
+
+					ExternalSeedPeer peer = new ExternalSeedPeer(this, download, reader);
+
+					peers.add(peer);
 				}
 			}
 			
@@ -292,9 +287,8 @@ ExternalSeedPlugin
 		final Download	download,
 		List			_peers )
 	{
-		final List peers = new ArrayList();
-		
-		peers.addAll( _peers );
+
+		final List peers = new ArrayList(_peers);
 	
 		if ( peers.size() > 0 ){
 			
@@ -321,15 +315,15 @@ ExternalSeedPlugin
 					ExternalSeedPeer	peer = (ExternalSeedPeer)it.next();
 					
 					boolean	skip = false;
-					
-					for (int j=0;j<existing_peers.size();j++){
-						
-						ExternalSeedPeer	existing_peer = (ExternalSeedPeer)existing_peers.get(j);
-						
-						if ( existing_peer.sameAs( peer )){
-							
-							skip	= true;
-							
+
+					for (Object existing_peer1 : existing_peers) {
+
+						ExternalSeedPeer existing_peer = (ExternalSeedPeer) existing_peer1;
+
+						if (existing_peer.sameAs(peer)) {
+
+							skip = true;
+
 							break;
 						}
 					}
@@ -371,12 +365,12 @@ ExternalSeedPlugin
 								
 								return;
 							}
-							
-							for (int i=0;i<existing_peers.size();i++){
-								
-								ExternalSeedPeer	peer = (ExternalSeedPeer)existing_peers.get(i);
-								
-								peer.setManager( peer_manager );
+
+							for (Object existing_peer : existing_peers) {
+
+								ExternalSeedPeer peer = (ExternalSeedPeer) existing_peer;
+
+								peer.setManager(peer_manager);
 							}
 						}
 						
@@ -391,12 +385,12 @@ ExternalSeedPlugin
 								
 								return;
 							}
-							
-							for (int i=0;i<existing_peers.size();i++){
-								
-								ExternalSeedPeer	peer = (ExternalSeedPeer)existing_peers.get(i);
-								
-								peer.setManager( null );
+
+							for (Object existing_peer : existing_peers) {
+
+								ExternalSeedPeer peer = (ExternalSeedPeer) existing_peer;
+
+								peer.setManager(null);
 							}
 						}
 						
@@ -431,14 +425,14 @@ ExternalSeedPlugin
 				PeerManager	existing_pm = download.getPeerManager();
 				
 				if ( existing_pm != null ){
-					
-					for (int i=0;i<peers.size();i++){
-						
-						ExternalSeedPeer	peer = (ExternalSeedPeer)peers.get(i);
 
-						if ( peer.getManager() == null ){
-							
-							peer.setManager( existing_pm );
+					for (Object peer1 : peers) {
+
+						ExternalSeedPeer peer = (ExternalSeedPeer) peer1;
+
+						if (peer.getManager() == null) {
+
+							peer.setManager(existing_pm);
 						}
 					}
 				}
@@ -520,16 +514,16 @@ ExternalSeedPlugin
 	getManualWebSeeds(
 		Torrent	torrent )
 	{
-		List<ExternalSeedReader>		result = new ArrayList<ExternalSeedReader>();
-		
-		for (int i=0;i<factories.length;i++){
+		List<ExternalSeedReader>		result = new ArrayList<>();
 
-			ExternalSeedReader[] peers = factories[i].getSeedReaders( this, torrent );
-			
-			result.addAll( Arrays.asList( peers ));
+		for (ExternalSeedReaderFactory factory : factories) {
+
+			ExternalSeedReader[] peers = factory.getSeedReaders(this, torrent);
+
+			result.addAll(Arrays.asList(peers));
 		}
 		
-		return( result.toArray( new  ExternalSeedReader[result.size()]));
+		return( result.toArray(new ExternalSeedReader[0]));
 	}
 	
 	public TrackerPeerSource
@@ -738,10 +732,10 @@ ExternalSeedPlugin
 		}
 		
 		List	new_list = new ArrayList();
-		
-		for (int i=0;i<l.size();i++){
-			
-			new_list.add( random.nextInt(new_list.size()+1), l.get(i));
+
+		for (Object o : l) {
+
+			new_list.add(random.nextInt(new_list.size() + 1), o);
 		}
 		
 		return( new_list );

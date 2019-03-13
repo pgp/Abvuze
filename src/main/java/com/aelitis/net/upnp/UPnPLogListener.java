@@ -27,17 +27,17 @@ package com.aelitis.net.upnp;
 public interface 
 UPnPLogListener 
 {
-	public static final int	TYPE_ALWAYS					= 1;
-	public static final int	TYPE_ONCE_PER_SESSION		= 2;
-	public static final int	TYPE_ONCE_EVER				= 3;
+	int	TYPE_ALWAYS					= 1;
+	int	TYPE_ONCE_PER_SESSION		= 2;
+	int	TYPE_ONCE_EVER				= 3;
 	
-	public void
+	void
 	log(
-		String		str );
+            String str);
 	
-	public void
+	void
 	logAlert(
-		String		str,
-		boolean		error,
-		int			type );	
+            String str,
+            boolean error,
+            int type);
 }

@@ -149,8 +149,8 @@ VirtualAcceptSelector
 	     * The given connection has just been accepted.
 	     * @param channel new connection
 	     */
-		public void 
-		newConnectionAccepted( 
-			SocketChannel 	channel );
+        void
+		newConnectionAccepted(
+                SocketChannel channel);
 	}
 }

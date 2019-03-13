@@ -52,7 +52,7 @@ UncloseableInputStream
 
 	public int 
 	read(
-		byte b[] )
+            byte[] b)
 
 		throws IOException 
 	{
@@ -65,7 +65,7 @@ UncloseableInputStream
 
 	public int 
 	read(
-		byte b[], 
+            byte[] b,
 		int off, 
 		int len) 
 

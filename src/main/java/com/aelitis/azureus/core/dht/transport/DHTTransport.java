@@ -30,61 +30,61 @@ import java.util.Map;
 public interface 
 DHTTransport 
 {	
-	public static final byte GF_NONE				= 0x00;
-	public static final byte GF_DHT_SLEEPING		= 0x01;
+	byte GF_NONE				= 0x00;
+	byte GF_DHT_SLEEPING		= 0x01;
 
-	public byte
+	byte
 	getProtocolVersion();
 	
-	public byte
+	byte
 	getMinimumProtocolVersion();
 	
-	public int
+	int
 	getNetwork();
 
-	public boolean
+	boolean
 	isIPV6();
 	
-	public byte
+	byte
 	getGenericFlags();
 	
-	public void
+	void
 	setGenericFlag(
-		byte		flag,
-		boolean		value );
+            byte flag,
+            boolean value);
 	
-	public void
+	void
 	setSuspended(
-		boolean			susp );
+            boolean susp);
 	
 		/**
 		 * Gives access to the node ID for this transport 
 		 * @return
 		 */
-	
-	public DHTTransportContact
+
+        DHTTransportContact
 	getLocalContact();
 	
-	public int
+	int
 	getPort();
 	
-	public void
+	void
 	setPort(
-		int	port )
+            int port)
 	
 		throws DHTTransportException;
 	
-	public long
+	long
 	getTimeout();
 	
-	public void
+	void
 	setTimeout(
-		long		millis );
+            long millis);
 	
-	public DHTTransportContact
+	DHTTransportContact
 	importContact(
-		DataInputStream		is,
-		boolean				is_bootstrap )
+            DataInputStream is,
+            boolean is_bootstrap)
 	
 		throws IOException, DHTTransportException;
 	
@@ -92,80 +92,80 @@ DHTTransport
 		 * Set the handler for incoming requests
 		 * @param receiver
 		 */
-	
-	public void
+
+        void
 	setRequestHandler(
-		DHTTransportRequestHandler	receiver );
+                DHTTransportRequestHandler receiver);
 	
-	public DHTTransportStats
+	DHTTransportStats
 	getStats();
 	
 		// direct contact-contact communication
 	
-	public void
+	void
 	registerTransferHandler(
-		byte[]							handler_key,
-		DHTTransportTransferHandler		handler );
+            byte[] handler_key,
+            DHTTransportTransferHandler handler);
 	
-	public void
+	void
 	registerTransferHandler(
-		byte[]							handler_key,
-		DHTTransportTransferHandler		handler,
-		Map<String,Object>				options );
+            byte[] handler_key,
+            DHTTransportTransferHandler handler,
+            Map<String, Object> options);
 	
-	public void
+	void
 	unregisterTransferHandler(
-		byte[]						handler_key,
-		DHTTransportTransferHandler	handler );
+            byte[] handler_key,
+            DHTTransportTransferHandler handler);
 	
-	public byte[]
+	byte[]
 	readTransfer(
-		DHTTransportProgressListener	listener,
-		DHTTransportContact				target,
-		byte[]							handler_key,
-		byte[]							key,
-		long							timeout )
+            DHTTransportProgressListener listener,
+            DHTTransportContact target,
+            byte[] handler_key,
+            byte[] key,
+            long timeout)
 	
 		throws DHTTransportException;
 	
-	public void
+	void
 	writeTransfer(
-		DHTTransportProgressListener	listener,
-		DHTTransportContact				target,
-		byte[]							handler_key,
-		byte[]							key,
-		byte[]							data,
-		long							timeout )
+            DHTTransportProgressListener listener,
+            DHTTransportContact target,
+            byte[] handler_key,
+            byte[] key,
+            byte[] data,
+            long timeout)
 	
 		throws DHTTransportException;
 	
-	public byte[]
+	byte[]
 	writeReadTransfer(
-		DHTTransportProgressListener	listener,
-		DHTTransportContact				target,
-		byte[]							handler_key,
-		byte[]							data,
-		long							timeout )	
+            DHTTransportProgressListener listener,
+            DHTTransportContact target,
+            byte[] handler_key,
+            byte[] data,
+            long timeout)
 	
 		throws DHTTransportException;
 
-	public boolean
+	boolean
 	supportsStorage();
 	
-	public boolean
+	boolean
 	isReachable();
 	
-	public DHTTransportContact[]
+	DHTTransportContact[]
 	getReachableContacts();
 	
-	public DHTTransportContact[]
+	DHTTransportContact[]
 	getRecentContacts();
 	
-	public void
+	void
 	addListener(
-		DHTTransportListener	l );
+            DHTTransportListener l);
 	
-	public void
+	void
 	removeListener(
-		DHTTransportListener	l );
+            DHTTransportListener l);
 }

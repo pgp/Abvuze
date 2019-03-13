@@ -26,15 +26,15 @@ import java.net.URL;
 public interface 
 ResourceUploaderFactory 
 {
-	public ResourceUploader
+	ResourceUploader
 	create(
-		URL			url,
-		InputStream	data );
+            URL url,
+            InputStream data);
 		
-	public ResourceUploader
+	ResourceUploader
 	create(
-		URL				url,
-		InputStream		data,
-		String			user_name,
-		String			password );
+            URL url,
+            InputStream data,
+            String user_name,
+            String password);
 }

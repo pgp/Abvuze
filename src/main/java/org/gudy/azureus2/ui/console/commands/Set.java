@@ -181,10 +181,10 @@ public class Set extends IConsoleCommand {
 		sp.setIgnoreCase(true);
 		Iterator I = non_defaults?COConfigurationManager.getDefinedParameters().iterator():COConfigurationManager.getAllowedParameters().iterator();
 		Map backmap = new HashMap();
-		for (Iterator iter = ExternalUIConst.parameterlegacy.entrySet().iterator(); iter.hasNext();) {
-			Map.Entry entry = (Map.Entry) iter.next();
-			backmap.put( entry.getValue(), entry.getKey() );
-		}
+        for (Object o : ExternalUIConst.parameterlegacy.entrySet()) {
+            Map.Entry entry = (Map.Entry) o;
+            backmap.put(entry.getValue(), entry.getKey());
+        }
 		TreeSet srt = new TreeSet();
 		while (I.hasNext()) {
 			String internal_name = (String) I.next();
@@ -249,7 +249,7 @@ public class Set extends IConsoleCommand {
 					if( nextchar == 'i' )
 					{
 						int value = COConfigurationManager.getIntParameter(internal_name, Integer.MIN_VALUE);
-						return new Parameter(internal_name, external_name, value == Integer.MIN_VALUE ? (Integer)null : new Integer(value) );
+						return new Parameter(internal_name, external_name, value == Integer.MIN_VALUE ? null : new Integer(value) );
 					}
 					else if( nextchar == 'b' )
 					{
@@ -257,7 +257,7 @@ public class Set extends IConsoleCommand {
 						if( COConfigurationManager.getIntParameter(internal_name, Integer.MIN_VALUE) != Integer.MIN_VALUE )
 						{
 							boolean b = COConfigurationManager.getBooleanParameter(internal_name);
-							return new Parameter(internal_name, external_name, Boolean.valueOf(b));
+							return new Parameter(internal_name, external_name, b);
 						}
 						else
 						{
@@ -281,13 +281,13 @@ public class Set extends IConsoleCommand {
 					
 					int value = COConfigurationManager.getIntParameter(internal_name, Integer.MIN_VALUE);
 				
-					return new Parameter(internal_name, external_name, value == Integer.MIN_VALUE ? (Integer)null : new Integer(value) );
+					return new Parameter(internal_name, external_name, value == Integer.MIN_VALUE ? null : new Integer(value) );
 				
 				}else if ( v instanceof Boolean ){
 					
 					boolean value = COConfigurationManager.getBooleanParameter( internal_name );
 					
-					return new Parameter( internal_name, external_name, Boolean.valueOf( value ));
+					return new Parameter( internal_name, external_name, value);
 
 				}else if ( v instanceof String || v instanceof byte[] ){
 				

@@ -27,16 +27,16 @@ package org.gudy.azureus2.plugins.sharing;
 public interface 
 ShareResourceEvent 
 {
-	public static final int	ET_ATTRIBUTE_CHANGED	= 1;
+	int	ET_ATTRIBUTE_CHANGED	= 1;
 	
-	public int
+	int
 	getType();
 	
 		/**
 		 * For attribute change the value is an instance of TorrentAttribute
 		 * @return
 		 */
-	
-	public Object
+
+        Object
 	getData();
 }

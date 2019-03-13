@@ -27,19 +27,19 @@ import org.gudy.azureus2.plugins.torrent.Torrent;
 public interface 
 ExternalSeedReaderFactory 
 {
-	public ExternalSeedReader[]
+	ExternalSeedReader[]
 	getSeedReaders(
-		ExternalSeedPlugin	plugin,
-		Torrent				torrent );
+            ExternalSeedPlugin plugin,
+            Torrent torrent);
 	
-	public ExternalSeedReader[]
+	ExternalSeedReader[]
 	getSeedReaders(
-		ExternalSeedPlugin	plugin,
-		Download			download );
+            ExternalSeedPlugin plugin,
+            Download download);
 	
-	public ExternalSeedReader[]
+	ExternalSeedReader[]
 	getSeedReaders(
-		ExternalSeedPlugin		plugin,
-		Download				download,
-		Map						config );
+            ExternalSeedPlugin plugin,
+            Download download,
+            Map config);
 }

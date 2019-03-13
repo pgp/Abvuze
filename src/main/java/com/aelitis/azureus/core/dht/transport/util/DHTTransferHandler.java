@@ -67,17 +67,17 @@ DHTTransferHandler
 
 	private static final boolean	XFER_TRACE	= false;
 
-	private final Map<HashWrapper,transferHandlerInterceptor> transfer_handlers 	= new HashMap<HashWrapper,transferHandlerInterceptor>();
+	private final Map<HashWrapper,transferHandlerInterceptor> transfer_handlers 	= new HashMap<>();
 	
-	private final Map<Long,transferQueue>	read_transfers		= new HashMap<Long,transferQueue>();
-	private final Map<Long,transferQueue> write_transfers		= new HashMap<Long,transferQueue>();
+	private final Map<Long,transferQueue>	read_transfers		= new HashMap<>();
+	private final Map<Long,transferQueue> write_transfers		= new HashMap<>();
 	
 	private long	last_xferq_log;
 	
 	private int 	active_write_queue_processor_count;
 	private long	total_bytes_on_transfer_queues;
 	
-	final Map<HashWrapper,Object>	call_transfers		= new HashMap<HashWrapper,Object>();
+	final Map<HashWrapper,Object>	call_transfers		= new HashMap<>();
 
 	private final Adapter			adapter;
 	private final int				max_data;
@@ -666,18 +666,16 @@ DHTTransferHandler
 	
 		throws DHTTransportException
 	{		
-		SortedSet<Packet>	packets = 
-			new TreeSet<Packet>(
-				new Comparator<Packet>()
-				{
-					public int
-					compare(
-						Packet	p1,
-						Packet	p2 )
-					{
-						return( p1.getStartPosition() - p2.getStartPosition());
-					}
-				});
+		SortedSet<Packet>	packets =
+                new TreeSet<>(
+                        new Comparator<Packet>() {
+                            public int
+                            compare(
+                                    Packet p1,
+                                    Packet p2) {
+                                return (p1.getStartPosition() - p2.getStartPosition());
+                            }
+                        });
 		
 		int	entire_request_count = 0;
 		
@@ -742,11 +740,10 @@ DHTTransferHandler
 						
 						if ( listener != null ) {
   						listener.reportActivity( 
-  								getMessageText( "received_bit", 
-  								new String[]{ 
-  										String.valueOf( reply.getStartPosition()),
-  										String.valueOf(reply.getStartPosition() + reply.getLength()),
-  										target_name }));
+  								getMessageText( "received_bit",
+                                        String.valueOf( reply.getStartPosition()),
+                                        String.valueOf(reply.getStartPosition() + reply.getLength()),
+                                        target_name));
 						}
 
 						transferred += reply.getLength();
@@ -766,7 +763,7 @@ DHTTransferHandler
 						
 						while( it.hasNext()){
 							
-							Packet	p = (Packet)it.next();
+							Packet	p = it.next();
 						
 							if ( actual_end == -1 ){
 								
@@ -798,7 +795,7 @@ DHTTransferHandler
 								
 								while( it.hasNext()){
 									
-									p = (Packet)it.next();
+									p = it.next();
 
 									System.arraycopy( p.getData(), 0, result, pos, p.getLength());
 									
@@ -853,10 +850,9 @@ DHTTransferHandler
 								if ( listener != null ) {
   								listener.reportActivity( 
   										getMessageText( "rerequest_bit",
-  												new String[]{
-  													String.valueOf( pos ),
-  													String.valueOf( p.getStartPosition()),
-  													target_name }));
+                                                String.valueOf( pos ),
+                                                String.valueOf( p.getStartPosition()),
+                                                target_name));
 								}
 								
 								sendReadRequest( 
@@ -877,10 +873,9 @@ DHTTransferHandler
 							if ( listener != null ) {
   							listener.reportActivity( 
   									getMessageText( "rerequest_bit",
-  											new String[]{
-  												String.valueOf( pos ),
-  												String.valueOf( actual_end ),
-  												target_name }));
+                                            String.valueOf( pos ),
+                                            String.valueOf( actual_end ),
+                                            target_name));
 							}
 			
 							sendReadRequest( 
@@ -904,8 +899,8 @@ DHTTransferHandler
   				
   				listener.reportActivity( 
   						getMessageText( 
-  							"timeout_some", 
-  							new String[]{ String.valueOf( packets.size()), target_name }));
+  							"timeout_some",
+                                String.valueOf( packets.size()), target_name));
   							
   			}
 			}
@@ -1199,7 +1194,7 @@ DHTTransferHandler
 		try{
 			this_mon.enter();
 
-			return(transfers.get(new Long(id)));
+			return(transfers.get(id));
 			
 		}finally{
 			
@@ -1265,7 +1260,7 @@ DHTTransferHandler
 		private final long		connection_id;
 		private boolean		destroyed;
 		
-		private final List<Packet>		packets	= new ArrayList<Packet>();
+		private final List<Packet>		packets	= new ArrayList<>();
 		
 		private final AESemaphore	packets_sem	= new AESemaphore("DHTUDPTransport:transferQueue");
 		
@@ -1289,9 +1284,9 @@ DHTTransferHandler
 					throw( new DHTTransportException( "Transfer queue limit exceeded" ));
 				}
 				
-				Long l_id = new Long( connection_id );
+				Long l_id = connection_id;
 				
-				transferQueue	existing = (transferQueue)transfers.get( l_id );
+				transferQueue	existing = transfers.get( l_id );
 				
 				if ( existing != null ){
 					
@@ -1365,7 +1360,7 @@ DHTTransferHandler
 						return( null );
 					}
 					
-					Packet packet = (Packet)packets.remove(0);
+					Packet packet = packets.remove(0);
 					
 					int	length = packet.getLength();
 					
@@ -1395,20 +1390,18 @@ DHTTransferHandler
 					
 				destroyed = true;
 				
-				transfers.remove( new Long( connection_id ));
-				
-				for (int i=0;i<packets.size();i++){
-					
-					Packet	packet = (Packet)packets.get(i);
-					
-					int	length = packet.getLength();
-					
-					total_bytes_on_transfer_queues -= length;
-					
-					if ( XFER_TRACE ){
-						System.out.println( "total_bytes_on_transfer_queues=" + total_bytes_on_transfer_queues );
-					}
-				}
+				transfers.remove(connection_id);
+
+                for (Packet packet : packets) {
+
+                    int length = packet.getLength();
+
+                    total_bytes_on_transfer_queues -= length;
+
+                    if (XFER_TRACE) {
+                        System.out.println("total_bytes_on_transfer_queues=" + total_bytes_on_transfer_queues);
+                    }
+                }
 				
 				packets.clear();
 				
@@ -1776,13 +1769,13 @@ DHTTransferHandler
 	public interface
 	Adapter
 	{
-		public long
+		long
 		getConnectionID();
 		
-		public void
+		void
 		sendRequest(
-			DHTTransportContact			contact,
-			Packet						packet );
+                DHTTransportContact contact,
+                Packet packet);
 	
 	}
 }

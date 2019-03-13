@@ -32,39 +32,39 @@ public interface Connection {
    * connectSuccess() will be called immediately.
    * @param listener notified on connect success or failure
    */
-  public void connect( ConnectionListener listener );
+  void connect(ConnectionListener listener);
   
   
   /**
    * Close and shutdown this connection.
    */
-  public void close();
+  void close();
   
   
   /**
    * Get the connection's outgoing message queue.
    * @return outbound message queue
    */
-  public OutgoingMessageQueue getOutgoingMessageQueue();
+  OutgoingMessageQueue getOutgoingMessageQueue();
   
   
   /**
    * Get the connection's incoming message queue.
    * @return inbound message queue
    */
-  public IncomingMessageQueue getIncomingMessageQueue();
+  IncomingMessageQueue getIncomingMessageQueue();
   
   
   /**
    * Begin processing incoming and outgoing message queues.
    */
-  public void startMessageProcessing();
+  void startMessageProcessing();
   
   /**
    * Returns the transport object for this connection.
    * @since 3.0.5.3
    */
-  public Transport getTransport();
+  Transport getTransport();
   
   /**
    * Returns <tt>true</tt> if the connection represents an incoming
@@ -72,12 +72,12 @@ public interface Connection {
    * 
    * @since 3.0.5.3
    */
-  public boolean isIncoming();
+  boolean isIncoming();
   
   /**
    * descriptive text for the connection
    * @return
    */
-  public String
+  String
   getString();
 }

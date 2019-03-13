@@ -30,7 +30,7 @@ package org.gudy.azureus2.plugins;
 public interface 
 PluginEventListener 
 {
-	public void
+	void
 	handleEvent(
-		PluginEvent	ev );
+            PluginEvent ev);
 }

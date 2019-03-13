@@ -27,17 +27,13 @@ public class JSONArray extends ArrayList<Object> {
 
 	public String toString(){
 		ItemList list=new ItemList();
-		
-		Iterator<Object> iter=iterator();
-		
-		while(iter.hasNext()){
-			Object value=iter.next();				
-			if(value instanceof String){
-				list.add("\""+JSONObject.escape((String)value)+"\"");
-			}
-			else
-				list.add(String.valueOf(value));
-		}
+
+        for (Object value : this) {
+            if (value instanceof String) {
+                list.add("\"" + JSONObject.escape((String) value) + "\"");
+            } else
+                list.add(String.valueOf(value));
+        }
 		return "["+list.toString()+"]";
 	}
 	
@@ -63,7 +59,7 @@ public class JSONArray extends ArrayList<Object> {
 			}else if ( value instanceof JSONArray ){
 				((JSONArray)value).toString( sb ); 
 			}else{
-				sb.append(String.valueOf(value));
+				sb.append(value);
 			}
 		}
 		

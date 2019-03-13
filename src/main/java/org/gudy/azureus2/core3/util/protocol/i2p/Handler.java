@@ -48,18 +48,13 @@ Handler
 		try{
 			return( new URL(str).openConnection());
 			
-		}catch( MalformedURLException e ){
-			
+		} catch( IOException e ){
+
 			Debug.printStackTrace(e);
-			
+
 			return( null );
-			
-		}catch( IOException  e ){
-			
-			Debug.printStackTrace(e);
-			
-			return( null );
+
 		}
-	}
+    }
 
 }

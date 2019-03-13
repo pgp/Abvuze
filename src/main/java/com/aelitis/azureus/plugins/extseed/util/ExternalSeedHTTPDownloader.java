@@ -25,37 +25,37 @@ import com.aelitis.azureus.plugins.extseed.ExternalSeedException;
 public interface 
 ExternalSeedHTTPDownloader 
 {
-	public void
+	void
 	download(
-		int									length,
-		ExternalSeedHTTPDownloaderListener	listener,
-		boolean								con_fail_is_perm_fail )
+            int length,
+            ExternalSeedHTTPDownloaderListener listener,
+            boolean con_fail_is_perm_fail)
 	
 		throws ExternalSeedException;
 	
-	public void
+	void
 	downloadRange(
-		long								offset,
-		int									length,
-		ExternalSeedHTTPDownloaderListener	listener,
-		boolean								con_fail_is_perm_fail )
+            long offset,
+            int length,
+            ExternalSeedHTTPDownloaderListener listener,
+            boolean con_fail_is_perm_fail)
 	
 		throws ExternalSeedException;
 	
-	public void
+	void
 	downloadSocket(
-		int									length,
-		ExternalSeedHTTPDownloaderListener	listener,
-		boolean								con_fail_is_perm_fail )
+            int length,
+            ExternalSeedHTTPDownloaderListener listener,
+            boolean con_fail_is_perm_fail)
 		        	
 	    throws ExternalSeedException;
 	
-	public int
+	int
 	getLastResponse();
 	
-	public int
+	int
 	getLast503RetrySecs();
 	
-	public void
+	void
 	deactivate();
 }

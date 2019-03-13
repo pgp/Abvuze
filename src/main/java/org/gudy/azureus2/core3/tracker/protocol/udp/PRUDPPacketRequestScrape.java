@@ -60,8 +60,7 @@ PRUDPPacketRequestScrape
 	{
 		super( PRUDPPacketTracker.ACT_REQUEST_SCRAPE, con_id );
 		hashes = new ArrayList();
-		for(Iterator it = hashwrappers.iterator();it.hasNext();)
-			hashes.add(((HashWrapper)it.next()).getBytes());
+        for (Object hashwrapper : hashwrappers) hashes.add(((HashWrapper) hashwrapper).getBytes());
 	}
 	
 	protected
@@ -92,9 +91,8 @@ PRUDPPacketRequestScrape
 	throws IOException
 	{
 		super.serialise(os);
-		
-		for(Iterator it = hashes.iterator();it.hasNext();)
-			os.write((byte[])it.next());
+
+        for (Object hash : hashes) os.write((byte[]) hash);
 	}
 	
 	public String

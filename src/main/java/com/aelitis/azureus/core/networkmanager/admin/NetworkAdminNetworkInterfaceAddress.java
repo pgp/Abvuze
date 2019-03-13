@@ -25,34 +25,34 @@ import java.net.InetAddress;
 public interface
 NetworkAdminNetworkInterfaceAddress 
 {
-	public NetworkAdminNetworkInterface
+	NetworkAdminNetworkInterface
 	getInterface();
 	
-	public InetAddress
+	InetAddress
 	getAddress();
 	
-	public boolean
+	boolean
 	isLoopback();
 		
-	public NetworkAdminNode[]
+	NetworkAdminNode[]
 	getRoute(
-		InetAddress					target,
-		int							max_millis,
-		NetworkAdminRouteListener	listener )
+            InetAddress target,
+            int max_millis,
+            NetworkAdminRouteListener listener)
 	
 		throws NetworkAdminException;
 	
-	public NetworkAdminNode
+	NetworkAdminNode
 	pingTarget(
-		InetAddress					target,
-		int							max_millis,
-		NetworkAdminRouteListener	listener )
+            InetAddress target,
+            int max_millis,
+            NetworkAdminRouteListener listener)
 	
 		throws NetworkAdminException;
 	
-	public abstract InetAddress
+	InetAddress
 	testProtocol(
-		NetworkAdminProtocol	protocol )
+            NetworkAdminProtocol protocol)
 	
 		throws NetworkAdminException;
 }

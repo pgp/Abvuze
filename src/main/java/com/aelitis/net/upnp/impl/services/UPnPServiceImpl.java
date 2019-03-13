@@ -88,35 +88,25 @@ UPnPServiceImpl
 			List<URL> urls = getControlURLs();
 			
 			for ( URL url: urls ){
-				
-				Socket socket = new Socket();
-				
-				try{
-					int	port = url.getPort();
-					
-					if ( port <= 0 ){
-						
-						port = url.getDefaultPort();
-					}
-					
-					socket.connect( new InetSocketAddress( url.getHost(), port ), 5000 );
-					
-					if ( getPreferredControlURL() == null ){
-					
-						setPreferredControlURL( url );
-					}
-					
-					return( true );
-					
-				}finally{
-					
-					try{
-						socket.close();
-						
-					}catch( Throwable e ){
-						
-					}
-				}
+
+                try (Socket socket = new Socket()) {
+                    int port = url.getPort();
+
+                    if (port <= 0) {
+
+                        port = url.getDefaultPort();
+                    }
+
+                    socket.connect(new InetSocketAddress(url.getHost(), port), 5000);
+
+                    if (getPreferredControlURL() == null) {
+
+                        setPreferredControlURL(url);
+                    }
+
+                    return (true);
+
+                }
 			}
 		}catch( Throwable e ){
 		}
@@ -148,14 +138,14 @@ UPnPServiceImpl
 		throws UPnPException
 	{
 		UPnPAction[]	my_actions = getActions();
-		
-		for (int i=0;i<my_actions.length;i++){
-			
-			if ( my_actions[i].getName().equalsIgnoreCase( name )){
-				
-				return( my_actions[i] );
-			}
-		}
+
+        for (UPnPAction my_action : my_actions) {
+
+            if (my_action.getName().equalsIgnoreCase(name)) {
+
+                return (my_action);
+            }
+        }
 		
 		return( null );
 	}
@@ -184,14 +174,14 @@ UPnPServiceImpl
 		throws UPnPException
 	{
 		UPnPStateVariable[]	vars = getStateVariables();
-		
-		for (int i=0;i<vars.length;i++){
-			
-			if ( vars[i].getName().equalsIgnoreCase( name )){
-				
-				return( vars[i] );
-			}
-		}
+
+        for (UPnPStateVariable var : vars) {
+
+            if (var.getName().equalsIgnoreCase(name)) {
+
+                return (var);
+            }
+        }
 		
 		return( null );
 	}
@@ -209,7 +199,7 @@ UPnPServiceImpl
 	
 		throws UPnPException
 	{
-		List<URL>	result = new ArrayList<URL>();
+		List<URL>	result = new ArrayList<>();
 
 		String control_url = device.getAbsoluteURL( local_control_url );
 		
@@ -315,11 +305,11 @@ UPnPServiceImpl
 		actions	= new ArrayList();
 		
 		SimpleXMLParserDocumentNode[]	kids = action_list.getChildren();
-		
-		for (int i=0;i<kids.length;i++){
-			
-			actions.add( new UPnPActionImpl( this, kids[i] ));
-		}
+
+        for (SimpleXMLParserDocumentNode kid : kids) {
+
+            actions.add(new UPnPActionImpl(this, kid));
+        }
 	}
 	
 	protected void
@@ -329,11 +319,11 @@ UPnPServiceImpl
 		state_vars	= new ArrayList();
 		
 		SimpleXMLParserDocumentNode[]	kids = action_list.getChildren();
-		
-		for (int i=0;i<kids.length;i++){
-			
-			state_vars.add( new UPnPStateVariableImpl( this, kids[i] ));
-		}
+
+        for (SimpleXMLParserDocumentNode kid : kids) {
+
+            state_vars.add(new UPnPStateVariableImpl(this, kid));
+        }
 	}
 
 	public UPnPSpecificService

@@ -35,29 +35,29 @@ TOTorrentCreator
 		 * <target> is the absolute path of the physical file or dir
 		 * @param b
 		 */
-	
-	public void
+
+        void
 	setFileIsLayoutDescriptor(
-		boolean		b );
+                boolean b);
 	
-	public TOTorrent
+	TOTorrent
 	create()
 	
 		throws TOTorrentException;
 	
-	public long
+	long
 	getTorrentDataSizeFromFileOrDir()
 	
 		throws TOTorrentException;
 		
-	public void
+	void
 	cancel();
 	
-	public void
+	void
 	addListener(
-		TOTorrentProgressListener	listener );
+            TOTorrentProgressListener listener);
 	
-	public void
+	void
 	removeListener(
-		TOTorrentProgressListener	listener );
+            TOTorrentProgressListener listener);
 }

@@ -27,5 +27,5 @@ package com.aelitis.azureus.ui.mdi;
  */
 public interface MdiEntryVitalityImageListener
 {
-	public void mdiEntryVitalityImage_clicked(int x, int y);
+	void mdiEntryVitalityImage_clicked(int x, int y);
 }

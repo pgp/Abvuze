@@ -59,7 +59,7 @@ AEProxyImpl
 	final VirtualChannelSelector	connect_selector;
 	final VirtualChannelSelector	write_selector;
 	
-	private final List<AEProxyConnectionImpl>				processors = new ArrayList<AEProxyConnectionImpl>();
+	private final List<AEProxyConnectionImpl>				processors = new ArrayList<>();
 	
 	private final HashMap 		write_select_regs = new HashMap();
 	
@@ -324,17 +324,13 @@ AEProxyImpl
 			
 			try{
 				this_mon.enter();
-				
-				Iterator	it = processors.iterator();
-				
-				while( it.hasNext()){
-					
-					AEProxyConnectionImpl	processor = (AEProxyConnectionImpl)it.next();
-					
-					if (Logger.isEnabled())
-						Logger.log(new LogEvent(LOGID, "AEProxy: active processor: "
-								+ processor.getStateString()));
-				}
+
+                for (AEProxyConnectionImpl processor : processors) {
+
+                    if (Logger.isEnabled())
+                        Logger.log(new LogEvent(LOGID, "AEProxy: active processor: "
+                                + processor.getStateString()));
+                }
 			}finally{
 				
 				this_mon.exit();
@@ -350,37 +346,33 @@ AEProxyImpl
 		
 		try{
 			this_mon.enter();
-			
-			Iterator	it = processors.iterator();
-			
-			while( it.hasNext()){
-				
-				AEProxyConnectionImpl	processor = (AEProxyConnectionImpl)it.next();
-				
-				long diff = now - processor.getTimeStamp();
-				
-				if ( 	connect_timeout > 0 &&
-						diff >= connect_timeout && 
-						!processor.isConnected()){
-					
-					closes.add( processor );
-				
-				}else if (	read_timeout > 0 &&
-							diff >= read_timeout &&
-							processor.isConnected()){
-					
-					closes.add( processor );
-				}
-			}
+
+            for (AEProxyConnectionImpl processor : processors) {
+
+                long diff = now - processor.getTimeStamp();
+
+                if (connect_timeout > 0 &&
+                        diff >= connect_timeout &&
+                        !processor.isConnected()) {
+
+                    closes.add(processor);
+
+                } else if (read_timeout > 0 &&
+                        diff >= read_timeout &&
+                        processor.isConnected()) {
+
+                    closes.add(processor);
+                }
+            }
 		}finally{
 			
 			this_mon.exit();
 		}
-		
-		for (int i=0;i<closes.size();i++){
-			
-			((AEProxyConnectionImpl)closes.get(i)).failed( new SocketTimeoutException( "timeout" ));
-		}
+
+        for (Object close : closes) {
+
+            ((AEProxyConnectionImpl) close).failed(new SocketTimeoutException("timeout"));
+        }
 	}
 	
 	protected void
@@ -486,7 +478,7 @@ AEProxyImpl
 	
 			destroyed = true;
 			
-			to_close = new ArrayList<AEProxyConnectionImpl>( processors );
+			to_close = new ArrayList<>(processors);
 			
 		}finally{
 			

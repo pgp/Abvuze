@@ -29,6 +29,7 @@ import java.lang.reflect.Field;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -242,7 +243,7 @@ NetworkAdminSpeedTestScheduledTestImpl
 
             //Send "schedule test" request.
             Map request = new HashMap();
-            request.put("request_type", new Long(REQUEST_TEST) );
+            request.put("request_type", REQUEST_TEST);
 
             String id = COConfigurationManager.getStringParameter("ID","unknown");
             
@@ -364,8 +365,8 @@ NetworkAdminSpeedTestScheduledTestImpl
                     throw new IllegalArgumentException("Returned time or limit parameter is null");
                 }
                 
-                delay_millis 	= time.longValue();
-                max_speed		= limit.longValue();
+                delay_millis 	= time;
+                max_speed		= limit;
                                 
                 	// this is test-specific data
                 
@@ -469,7 +470,7 @@ NetworkAdminSpeedTestScheduledTestImpl
 
             //Build the URL.
             Map request = new HashMap();
-            request.put("request_type", new Long(CHALLENGE_REPLY) );
+            request.put("request_type", CHALLENGE_REPLY);
             request.put("challenge_id", challenge_id );
             request.put("data",jarBytes);
  
@@ -498,26 +499,26 @@ NetworkAdminSpeedTestScheduledTestImpl
     			
 	    		Map request = new HashMap();
 	    		
-	    		request.put("request_type", new Long(TEST_RESULT) );
+	    		request.put("request_type", TEST_RESULT);
 	    		
 	    		request.put("challenge_id", challenge_id );
 	
-    			request.put( "type", new Long( tester.getTestType()));
-    			request.put( "mode", new Long( tester.getMode()));
-    			request.put( "crypto", new Long( tester.getUseCrypto()?1:0));
+    			request.put( "type", (long) tester.getTestType());
+    			request.put( "mode", (long) tester.getMode());
+    			request.put( "crypto", (long) (tester.getUseCrypto() ? 1 : 0));
 
 	    		if ( result.hadError()){
 	    			
-	    			request.put( "result", new Long(0));
+	    			request.put( "result", 0L);
 	    			
 	    			request.put( "error", result.getLastError());
 	    			
 	    		}else{
 	    			
-	    			request.put( "result", new Long(1));
+	    			request.put( "result", 1L);
 
-	    			request.put( "maxup", new Long(result.getUploadSpeed()));
-	    			request.put( "maxdown", new Long(result.getDownloadSpeed()));
+	    			request.put( "maxup", (long) result.getUploadSpeed());
+	    			request.put( "maxdown", (long) result.getDownloadSpeed());
 	    		}
 	    		
 	    		sendRequest( request );
@@ -534,13 +535,13 @@ NetworkAdminSpeedTestScheduledTestImpl
     
     	throws IOException
     {
-        request.put( "ver", new Long(1) );//request version
+        request.put( "ver", 1L);//request version
         request.put( "locale",  MessageText.getCurrentLocale().toString());
         
         String speedTestServiceName = System.getProperty( "speedtest.service.ip.address", Constants.SPEED_TEST_SERVER );
 
         URL urlRequestTest = new URL("http://"+speedTestServiceName+":60000/scheduletest?request="
-                + URLEncoder.encode( new String(BEncoder.encode(request),"ISO-8859-1"),"ISO-8859-1"));
+                + URLEncoder.encode( new String(BEncoder.encode(request), StandardCharsets.ISO_8859_1),"ISO-8859-1"));
         
         return( getBEncodedMapFromRequest( urlRequestTest ));
 
@@ -711,16 +712,16 @@ NetworkAdminSpeedTestScheduledTestImpl
             Download[] d = plugin.getDownloadManager().getDownloads();
             if(d!=null){
                 int len = d.length;
-                for(int i=0;i<len;i++){
+                for (Download download : d) {
 
                     plugin.getDownloadManager().getStats();
-                    int downloadLimit = d[i].getDownloadRateLimitBytesPerSecond();
-                    int uploadLimit = d[i].getUploadRateLimitBytesPerSecond();
-                    
-                    setDownloadDetails(d[i],uploadLimit,downloadLimit);
+                    int downloadLimit = download.getDownloadRateLimitBytesPerSecond();
+                    int uploadLimit = download.getUploadRateLimitBytesPerSecond();
 
-                    d[i].setUploadRateLimitBytesPerSecond(ZERO_DOWNLOAD_SETTING);
-                    d[i].setDownloadRateLimitBytesPerSecond( ZERO_DOWNLOAD_SETTING );
+                    setDownloadDetails(download, uploadLimit, downloadLimit);
+
+                    download.setUploadRateLimitBytesPerSecond(ZERO_DOWNLOAD_SETTING);
+                    download.setDownloadRateLimitBytesPerSecond(ZERO_DOWNLOAD_SETTING);
                 }
             }
 
@@ -738,20 +739,20 @@ NetworkAdminSpeedTestScheduledTestImpl
             COConfigurationManager.setParameter( TransferSpeedValidator.DOWNLOAD_CONFIGKEY, max_speed);
             
             String[]	params = TransferSpeedValidator.CONFIG_PARAMS;
-        	
-        	for (int i=0;i<params.length;i++){
-        		COConfigurationManager.addParameterListener( params[i], this );
-        	}
+
+            for (String param : params) {
+                COConfigurationManager.addParameterListener(param, this);
+            }
         }
 
         public void
         restoreLimits()
         {  		
         	String[]	params = TransferSpeedValidator.CONFIG_PARAMS;
-        	
-        	for (int i=0;i<params.length;i++){
-        		COConfigurationManager.removeParameterListener( params[i], this );
-        	}
+
+            for (String param : params) {
+                COConfigurationManager.removeParameterListener(param, this);
+            }
         	
            	plugin.getDownloadManager().removeListener( this );
 
@@ -801,12 +802,12 @@ NetworkAdminSpeedTestScheduledTestImpl
             if(downloads!=null){
                 int nDownloads = downloads.length;
 
-                for(int i=0;i<nDownloads;i++){
-                    int uploadLimit = getDownloadDetails(downloads[i], TORRENT_UPLOAD_LIMIT);
-                    int downLimit = getDownloadDetails(downloads[i], TORRENT_DOWNLOAD_LIMIT);
+                for (Download download : downloads) {
+                    int uploadLimit = getDownloadDetails(download, TORRENT_UPLOAD_LIMIT);
+                    int downLimit = getDownloadDetails(download, TORRENT_DOWNLOAD_LIMIT);
 
-                    downloads[i].setDownloadRateLimitBytesPerSecond(downLimit);
-                    downloads[i].setUploadRateLimitBytesPerSecond(uploadLimit);
+                    download.setDownloadRateLimitBytesPerSecond(downLimit);
+                    download.setUploadRateLimitBytesPerSecond(uploadLimit);
                 }
             }
         }
@@ -822,8 +823,8 @@ NetworkAdminSpeedTestScheduledTestImpl
 
             Map props = new HashMap();//Map<String,Integer>
 
-            props.put(TORRENT_UPLOAD_LIMIT, new Integer(uploadLimit) );
-            props.put(TORRENT_DOWNLOAD_LIMIT, new Integer(downloadLimit) );
+            props.put(TORRENT_UPLOAD_LIMIT, uploadLimit);
+            props.put(TORRENT_DOWNLOAD_LIMIT, downloadLimit);
 
             torrentLimits.put(d,props);
         }
@@ -844,7 +845,7 @@ NetworkAdminSpeedTestScheduledTestImpl
             Map out = (Map) torrentLimits.get(d);
             Integer limit = (Integer) out.get(param);
 
-            return limit.intValue();
+            return limit;
         }
 
         /**
@@ -862,18 +863,17 @@ NetworkAdminSpeedTestScheduledTestImpl
 	reportStage(
 		String	str )
 	{
-		Iterator	it = listeners.iterator();
-		
-		while( it.hasNext()){
-			
-			try{
-				((NetworkAdminSpeedTestScheduledTestListener)it.next()).stage( this, str );
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace( e );
-			}
-		}
+
+        for (Object listener : listeners) {
+
+            try {
+                ((NetworkAdminSpeedTestScheduledTestListener) listener).stage(this, str);
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 	
 	protected void
@@ -881,18 +881,16 @@ NetworkAdminSpeedTestScheduledTestImpl
 	{		
 		resetSpeedLimits();
 
-		Iterator	it = listeners.iterator();
-		
-		while( it.hasNext()){
-			
-			try{
-				((NetworkAdminSpeedTestScheduledTestListener)it.next()).complete( this );
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace( e );
-			}
-		}
+        for (Object listener : listeners) {
+
+            try {
+                ((NetworkAdminSpeedTestScheduledTestListener) listener).complete(this);
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 	
 	public void

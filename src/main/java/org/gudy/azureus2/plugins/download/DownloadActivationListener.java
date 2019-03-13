@@ -29,8 +29,8 @@ DownloadActivationListener
 		 * @param event
 		 * @return return true if the download will be activated, false otherwise
 		 */
-	
-	public boolean
+
+        boolean
 	activationRequested(
-		DownloadActivationEvent	event );
+                DownloadActivationEvent event);
 }

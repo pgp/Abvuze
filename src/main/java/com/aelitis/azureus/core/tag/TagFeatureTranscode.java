@@ -23,14 +23,14 @@ package com.aelitis.azureus.core.tag;
 public interface 
 TagFeatureTranscode 
 {
-	public boolean
+	boolean
 	supportsTagTranscode();
 	
-	public String[]
+	String[]
 	getTagTranscodeTarget();
 	
-	public void
+	void
 	setTagTranscodeTarget(
-		String		uid,
-		String		display_name );
+            String uid,
+            String display_name);
 }

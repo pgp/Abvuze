@@ -198,17 +198,17 @@ public class UI
 			case UIManagerEvent.ET_SHOW_TEXT_MESSAGE:					// data is String[] - title, message, text
 			{
 				String[]	bits = (String[])data;
-				
-				for (int i=0;i<bits.length;i++){
-				
-					console.out.println( bits[i] );
-				}
+
+                for (String bit : bits) {
+
+                    console.out.println(bit);
+                }
 				
 				break;
 			}
 			case UIManagerEvent.ET_OPEN_TORRENT_VIA_FILE:				// data is File
 			{
-				openTorrent(((File)data).toString());
+				openTorrent(data.toString());
 				
 				break;
 			}

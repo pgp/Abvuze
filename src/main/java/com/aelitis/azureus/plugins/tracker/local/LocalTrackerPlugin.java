@@ -73,9 +73,9 @@ LocalTrackerPlugin
 	private TorrentAttribute 	ta_networks;
 	private TorrentAttribute 	ta_peer_sources;
 
-	private Map<Download,long[]>	downloads 	= new HashMap<Download, long[]>();
+	private Map<Download,long[]>	downloads 	= new HashMap<>();
 	
-	private Map<String,Map<String,Long>>	track_times	= new HashMap<String, Map<String,Long>>();
+	private Map<String,Map<String,Long>>	track_times	= new HashMap<>();
 	
 	private String				last_autoadd	= "";
 	private String				last_subnets	= "";
@@ -227,7 +227,7 @@ LocalTrackerPlugin
 		try{
 			mon.enter();
 			
-			track_times.put( instance.getID(), new HashMap<String, Long>());
+			track_times.put( instance.getID(), new HashMap<>());
 			
 		}finally{
 			
@@ -340,35 +340,31 @@ LocalTrackerPlugin
 
 						try{
 							
-							List<Download>	todo = new ArrayList<Download>();
+							List<Download>	todo = new ArrayList<>();
 							
 							try{
 								mon.enter();
-								
-								Iterator<Map.Entry<Download,long[]>>	it = downloads.entrySet().iterator();
-								
-								while( it.hasNext()){
-									
-									Map.Entry<Download,long[]>	entry = it.next();
-									
-									Download	dl 		= entry.getKey();
-									long		when	= entry.getValue()[0];
-									
-									if ( when > current_time || current_time - when > ANNOUNCE_PERIOD ){
-										
-										todo.add( dl );
-									}
-								}
+
+                                for (Map.Entry<Download, long[]> entry : downloads.entrySet()) {
+
+                                    Download dl = entry.getKey();
+                                    long when = entry.getValue()[0];
+
+                                    if (when > current_time || current_time - when > ANNOUNCE_PERIOD) {
+
+                                        todo.add(dl);
+                                    }
+                                }
 
 							}finally{
 								
 								mon.exit();
 							}
-							
-							for (int i=0;i<todo.size();i++){
-							
-								track(todo.get(i));
-							}
+
+                            for (Download download : todo) {
+
+                                track(download);
+                            }
 							
 						}catch( Throwable e ){
 							
@@ -442,16 +438,16 @@ LocalTrackerPlugin
 		boolean	ok = false;
 		
 		if ( sources != null ){
-			
-			for (int i=0;i<sources.length;i++){
-				
-				if ( sources[i].equalsIgnoreCase( "Plugin")){
-					
-					ok	= true;
-					
-					break;
-				}
-			}
+
+            for (String source : sources) {
+
+                if (source.equalsIgnoreCase("Plugin")) {
+
+                    ok = true;
+
+                    break;
+                }
+            }
 		}
 		
 		if ( !ok ){
@@ -488,23 +484,23 @@ LocalTrackerPlugin
 		int	total_seeds 	= 0;
 		int	total_leechers	= 0;
 		int	total_peers		= 0;
-		
-		for (int i=0;i<peers.length;i++){
-			
-			int res = handleTrackResult( peers[i] );
-			
-			if ( res == 1 ){
-				total_seeds++;
-			}else if ( res == 2 ){
-				total_leechers++;
-			}else if ( res == 3 ){
-				total_seeds++;
-				total_peers++;
-			}else if ( res == 4 ){
-				total_leechers++;
-				total_peers++;
-			}
-		}
+
+        for (AZInstanceTracked peer : peers) {
+
+            int res = handleTrackResult(peer);
+
+            if (res == 1) {
+                total_seeds++;
+            } else if (res == 2) {
+                total_leechers++;
+            } else if (res == 3) {
+                total_seeds++;
+                total_peers++;
+            } else if (res == 4) {
+                total_leechers++;
+                total_peers++;
+            }
+        }
 		
 		try{
 			mon.enter();
@@ -545,12 +541,10 @@ LocalTrackerPlugin
 			
 			String	dl_key = plugin_interface.getUtilities().getFormatters().encodeBytesToString(download.getTorrent().getHash());
 
-			Iterator<Map<String,Long>>	it = track_times.values().iterator();
-			
-			while( it.hasNext()){
-				
-				it.next().remove( dl_key );
-			}
+            for (Map<String, Long> stringLongMap : track_times.values()) {
+
+                stringLongMap.remove(dl_key);
+            }
 		}finally{
 			
 			mon.exit();
@@ -590,7 +584,7 @@ LocalTrackerPlugin
 			
 			if ( map == null ){
 				
-				map	= new HashMap<String, Long>();
+				map	= new HashMap<>();
 				
 				track_times.put( inst.getID(), map );
 			}
@@ -601,7 +595,7 @@ LocalTrackerPlugin
 			
 			if ( last_track != null ){
 				
-				long	lt = last_track.longValue();
+				long	lt = last_track;
 				
 				if ( now - lt < 30*1000 ){
 					
@@ -609,7 +603,7 @@ LocalTrackerPlugin
 				}
 			}
 			
-			map.put( dl_key, new Long(now));
+			map.put( dl_key, now);
 			
 		}finally{
 			
@@ -670,16 +664,16 @@ LocalTrackerPlugin
 			boolean	public_net = false;
 			
 			if ( networks != null ){
-				
-				for (int i=0;i<networks.length;i++){
-					
-					if ( networks[i].equalsIgnoreCase( "Public" )){
-							
-						public_net	= true;
-						
-						break;
-					}
-				}
+
+                for (String network : networks) {
+
+                    if (network.equalsIgnoreCase("Public")) {
+
+                        public_net = true;
+
+                        break;
+                    }
+                }
 			}
 			
 			if ( !public_net ){

@@ -36,14 +36,14 @@ NetworkConnection
    * connectSuccess() will be called immediately.
    * @param listener notified on connect success or failure
    */
-  public void connect( int priority, ConnectionListener listener );
+  void connect(int priority, ConnectionListener listener);
 
-  public void connect( ByteBuffer initial_outbound_data, int priority, ConnectionListener listener );
+  void connect(ByteBuffer initial_outbound_data, int priority, ConnectionListener listener);
 
   /**
    * Close and shutdown this connection.
    */
-  public void close( String reason );
+  void close(String reason);
   
   
   /**
@@ -51,75 +51,75 @@ NetworkConnection
    * @param upload_group upload rate limit group to use
    * @param download_group download rate limit group to use
    */
-  public void startMessageProcessing();
+  void startMessageProcessing();
   
   
   /**
    * Upgrade the connection to high-speed transfer processing.
    * @param enable true for high-speed processing, false for normal processing
    */
-  public void enableEnhancedMessageProcessing( boolean enable, int partition_id );
+  void enableEnhancedMessageProcessing(boolean enable, int partition_id);
   
   /**
    * Decouples the transport from this network connection so it can be reused
    * @return null if detach failed
    */
-  
-  public Transport detachTransport();
+
+  Transport detachTransport();
   
   /**
    * Get the connection's data transport interface.
    * @return the transport - MAY BE NULL if not yet fully connected
    */
-  public Transport getTransport();
+  Transport getTransport();
   
 
-  public boolean isConnected();
+  boolean isConnected();
     
-  public Object
+  Object
   setUserData(
-  	Object		key,
-  	Object		value );
+          Object key,
+          Object value);
   
-  public Object
+  Object
   getUserData(
-  	Object		key );
+          Object key);
   
   /**
    * Listener for notification of connection events.
    */
-  public interface ConnectionListener {
+  interface ConnectionListener {
     /**
      * The connection establishment process has started,
      * i.e. the connection is actively being attempted.
      * @return modified connect timeout
      */
-    public int connectStarted( int default_connect_timeout );    
+    int connectStarted(int default_connect_timeout);
     
     /**
      * The connection attempt succeeded.
      * The connection is now established.
      * NOTE: Called only during initial connect attempt.
      */
-    public void connectSuccess( ByteBuffer remaining_initial_data );
+    void connectSuccess(ByteBuffer remaining_initial_data);
     
     /**
      * The connection attempt failed.
      * NOTE: Called only during initial connect attempt.
      * @param failure_msg failure reason
      */
-    public void connectFailure( Throwable failure_msg );
+    void connectFailure(Throwable failure_msg);
     
     /**
      * Handle exception thrown by this connection.
      * NOTE: Can be called at any time during connection lifetime.
      * @param error exception
      */
-    public void exceptionThrown( Throwable error );
+    void exceptionThrown(Throwable error);
     
-    public Object getConnectionProperty( String property_name);
+    Object getConnectionProperty(String property_name);
     
-    public String
+    String
     getDescription();
   }
 }

@@ -30,13 +30,13 @@ import java.net.InetSocketAddress;
 public interface 
 PRUDPPacketReplyDecoder 
 {
-	public PRUDPPacketReply
+	PRUDPPacketReply
 	decode(
-		PRUDPPacketHandler	handler,
-		InetSocketAddress	originator,
-		DataInputStream		is,
-		int					action,
-		int					transaction_id )
+            PRUDPPacketHandler handler,
+            InetSocketAddress originator,
+            DataInputStream is,
+            int action,
+            int transaction_id)
 
 		throws IOException;
 }

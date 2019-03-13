@@ -32,18 +32,18 @@ import org.gudy.azureus2.core3.download.*;
 public interface 
 GlobalManagerListener 
 {
-	public void
+	void
 	downloadManagerAdded(
-		DownloadManager	dm );
+            DownloadManager dm);
 		
-	public void
+	void
 	downloadManagerRemoved(
-		DownloadManager	dm );
+            DownloadManager dm);
 		
-	public void
+	void
 	destroyInitiated();
 		
-	public void
+	void
 	destroyed();
     
     
@@ -52,9 +52,9 @@ GlobalManagerListener
      * @param seeding_only_mode true if only seeding torrents (no downloads), false otherwise
      * @param potentially_seeding_only_mode - as above but true if queued seeds
      */
-	
-    public void 
-    seedingStatusChanged( 
-    	boolean seeding_only_mode,
-    	boolean	potentially_seeding_only_mode );
+
+    void
+    seedingStatusChanged(
+            boolean seeding_only_mode,
+            boolean potentially_seeding_only_mode);
 }

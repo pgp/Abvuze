@@ -66,7 +66,7 @@ DHTUDPPacketReplyQueryStorage
 		
 		short size = is.readShort();
 		
-		response = new ArrayList<byte[]>( size );
+		response = new ArrayList<>(size);
 		
 		if ( size > 0 ){
 

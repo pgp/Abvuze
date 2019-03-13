@@ -38,7 +38,7 @@ import org.gudy.azureus2.plugins.utils.resourcedownloader.ResourceDownloaderAdap
  */
 public class ImageBytesDownloader
 {
-	static final Map<String, List<ImageDownloaderListener>> map = new HashMap<String, List<ImageDownloaderListener>>();
+	static final Map<String, List<ImageDownloaderListener>> map = new HashMap<>();
 
 	static final AEMonitor mon_map = new AEMonitor("ImageDownloaderMap");
 
@@ -52,7 +52,7 @@ public class ImageBytesDownloader
 				return;
 			}
 
-			list = new ArrayList<ImageDownloaderListener>(1);
+			list = new ArrayList<>(1);
 			list.add(l);
 			map.put(url, list);
 		} finally {
@@ -113,8 +113,8 @@ public class ImageBytesDownloader
 		}
 	}
 
-	public static interface ImageDownloaderListener
+	public interface ImageDownloaderListener
 	{
-		public void imageDownloaded(byte[] image);
+		void imageDownloaded(byte[] image);
 	}
 }

@@ -207,7 +207,7 @@ ResourceDownloaderTimeoutImpl
 		
 		if ( result instanceof Long ){
 			
-			return(((Long)result).longValue());
+			return((Long) result);
 		}
 		
 		throw((ResourceDownloaderException)result);
@@ -231,7 +231,7 @@ ResourceDownloaderTimeoutImpl
 							try{
 								long	res = current_downloader.getSize();
 								
-								result	= new Long(res);
+								result	= res;
 								
 								setProperties( current_downloader );
 								

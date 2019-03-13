@@ -22,6 +22,7 @@
  
 package org.gudy.azureus2.core3.config;
 
+import java.nio.charset.StandardCharsets;
 import java.security.AccessControlException;
 import java.security.Security;
 import java.util.List;
@@ -112,41 +113,30 @@ COConfigurationManager
 						boolean	write_file = true;
 						
 						if ( root_file.exists()){
-							
-							LineNumberReader lnr = new LineNumberReader( new InputStreamReader( new FileInputStream( root_file ), "UTF-8" ));
-							
-							try{
-								String	 line = lnr.readLine();
-								
-								if ( line != null ){
-									
+
+							try (LineNumberReader lnr = new LineNumberReader(new InputStreamReader(new FileInputStream(root_file), StandardCharsets.UTF_8))) {
+								String line = lnr.readLine();
+
+								if (line != null) {
+
 									line = line.trim();
-									
-									if ( line.equalsIgnoreCase( root_relative )){
-										
+
+									if (line.equalsIgnoreCase(root_relative)) {
+
 										write_file = false;
-										
-									}else{
-										
-										throw( new Exception( "root changed - old='" + line + "', new='" + root_relative ));
+
+									} else {
+
+										throw (new Exception("root changed - old='" + line + "', new='" + root_relative));
 									}
 								}
-							}finally{
-								
-								lnr.close();
 							}
 						}
 						
 						if ( write_file ){
-							
-							PrintWriter pw = new PrintWriter( new OutputStreamWriter( new FileOutputStream( root_file ), "UTF-8" ));
-							
-							try{
-								pw.println( root_relative );
-								
-							}finally{
-								
-								pw.close();
+
+							try (PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(root_file), StandardCharsets.UTF_8))) {
+								pw.println(root_relative);
 							}
 						}
 						
@@ -560,9 +550,9 @@ COConfigurationManager
 	public static void addParameterListener(String[] ids,
 			ParameterListener listener) {
 		ConfigurationManager instance = ConfigurationManager.getInstance();
-		for (int i = 0; i < ids.length; i++) {
-		  instance.addParameterListener(ids[i], listener);
-		}
+        for (String id : ids) {
+            instance.addParameterListener(id, listener);
+        }
 	}
 
 	public static void
@@ -576,9 +566,9 @@ COConfigurationManager
 	public static void
 	addAndFireParameterListeners(String[] parameters, ParameterListener listener)
 	{
-		for (int i=0;i<parameters.length;i++){
-			ConfigurationManager.getInstance().addParameterListener(parameters[i], listener);
-		}
+        for (String parameter : parameters) {
+            ConfigurationManager.getInstance().addParameterListener(parameter, listener);
+        }
 	  
 		listener.parameterChanged( null );
 	}
@@ -741,16 +731,16 @@ COConfigurationManager
   public interface
   ParameterVerifier
   {
-	  public boolean
+	  boolean
 	  verify(
-		String	parameter,
-		Object	value );
+              String parameter,
+              Object value);
   }
   
   public interface
   ResetToDefaultsListener
   {
-	public void
+	void
 	reset();
   }
 }

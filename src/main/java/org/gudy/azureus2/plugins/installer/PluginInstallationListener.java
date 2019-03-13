@@ -25,13 +25,13 @@ import org.gudy.azureus2.plugins.PluginException;
 public interface 
 PluginInstallationListener 
 {
-	public void
+	void
 	completed();
 	
-	public void
+	void
 	cancelled();
 	
-	public void
+	void
 	failed(
-		PluginException	e );
+            PluginException e);
 }

@@ -18,6 +18,7 @@
 package com.aelitis.azureus.util;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.gudy.azureus2.core3.util.Debug;
@@ -120,27 +121,24 @@ public class JSONUtils
 			Object[] array = (Object[]) value;
 			value = encodeToJSONArray(Arrays.asList(array));
 		} else if (value instanceof byte[]) {
-			try {
-				value = new String((byte[]) value, "utf-8");
-			} catch (UnsupportedEncodingException e) {
-			}
-		} else if (value instanceof boolean[]) {
+            value = new String((byte[]) value, StandardCharsets.UTF_8);
+        } else if (value instanceof boolean[]) {
 			boolean[] array = (boolean[]) value;
-			ArrayList<Object> list = new ArrayList<Object>();
+			ArrayList<Object> list = new ArrayList<>();
 			for (boolean b : array) {
 				list.add(b);
 			}
 			value = encodeToJSONArray(list);
 		} else if (value instanceof long[]) {
 			long[] array = (long[]) value;
-			ArrayList<Object> list = new ArrayList<Object>();
+			ArrayList<Object> list = new ArrayList<>();
 			for (long b : array) {
 				list.add(b);
 			}
 			value = encodeToJSONArray(list);
 		} else if (value instanceof int[]) {
 			int[] array = (int[]) value;
-			ArrayList<Object> list = new ArrayList<Object>();
+			ArrayList<Object> list = new ArrayList<>();
 			for (int b : array) {
 				list.add(b);
 			}
@@ -180,10 +178,9 @@ public class JSONUtils
 		Map mapAfter = JSONUtils.decodeJSON(jsonByteArray);
 		b = MapUtils.getMapByteArray(mapAfter, "Hi", null);
 		System.out.println(b.length);
-		for (int i = 0; i < b.length; i++) {
-			byte c = b[i];
-			System.out.println("--" + c);
-		}
+        for (byte c : b) {
+            System.out.println("--" + c);
+        }
 
 		Map map = new HashMap();
 		map.put("Test", "TestValue");
@@ -192,7 +189,7 @@ public class JSONUtils
 		map.put("TestMap", map2);
 
 		List list = new ArrayList();
-		list.add(new Long(5));
+		list.add(5L);
 		list.add("five");
 		map2.put("ListTest", list);
 

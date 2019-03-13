@@ -23,15 +23,15 @@ package com.aelitis.azureus.core.devices;
 public interface 
 TranscodeQueueListener 
 {
-	public void
+	void
 	jobAdded(
-		TranscodeJob		job );
+            TranscodeJob job);
 	
-	public void
+	void
 	jobChanged(
-		TranscodeJob		job );
+            TranscodeJob job);
 	
-	public void
+	void
 	jobRemoved(
-		TranscodeJob		job );
+            TranscodeJob job);
 }

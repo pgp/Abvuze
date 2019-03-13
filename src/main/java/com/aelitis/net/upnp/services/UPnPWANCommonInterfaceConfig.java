@@ -27,7 +27,7 @@ UPnPWANCommonInterfaceConfig
 {
 		// returns link down/up speed in bits/sec
 	
-	public long[]
+	long[]
 	getCommonLinkProperties()
 	
 		throws UPnPException;

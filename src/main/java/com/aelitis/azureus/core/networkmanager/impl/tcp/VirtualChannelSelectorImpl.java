@@ -267,10 +267,10 @@ public class VirtualChannelSelectorImpl {
     private int	consec_select_fails;
     private long consec_select_fails_start;
     
-    private final LinkedList<Object> 	register_cancel_list 		= new LinkedList<Object>();
+    private final LinkedList<Object> 	register_cancel_list 		= new LinkedList<>();
     private final AEMonitor 			register_cancel_list_mon	= new AEMonitor( "VirtualChannelSelector:RCL");
 
-    private final HashMap<AbstractSelectableChannel, Boolean> paused_states = new HashMap<AbstractSelectableChannel, Boolean>();
+    private final HashMap<AbstractSelectableChannel, Boolean> paused_states = new HashMap<>();
     
     private final int 		INTEREST_OP;
     private final boolean	pause_after_select;
@@ -514,7 +514,7 @@ public class VirtualChannelSelectorImpl {
     			}
     		}
     		   	
-			pauseSelects((AbstractSelectableChannel)channel );
+			pauseSelects(channel);
 			
   			register_cancel_list.add( channel );
     		
@@ -850,7 +850,7 @@ public class VirtualChannelSelectorImpl {
     		  
     		  last_write_select_debug = now;
     		  
-    		  non_selected_keys = new HashSet<SelectionKey>( selector.keys());
+    		  non_selected_keys = new HashSet<>(selector.keys());
     	  }
       }
       
@@ -860,7 +860,7 @@ public class VirtualChannelSelectorImpl {
     		   	
     	  Set<SelectionKey> all_keys = selector.keys();
     	  
-    	  ready_keys = new ArrayList<SelectionKey>();
+    	  ready_keys = new ArrayList<>();
     	  
     	  for ( SelectionKey key: all_keys ){
     		  
@@ -879,7 +879,7 @@ public class VirtualChannelSelectorImpl {
     		  
     	  }else{
     	  
-    		  ready_keys = new ArrayList<SelectionKey>( selected );
+    		  ready_keys = new ArrayList<>(selected);
     	  }
       }
             
@@ -892,8 +892,8 @@ public class VirtualChannelSelectorImpl {
       
       Set<SelectionKey>	selected_keys = selector.selectedKeys();
       
-      final int ready_key_size	= ready_keys.size();;
-      final int	start_pos 		= next_select_loop_pos++;
+      final int ready_key_size	= ready_keys.size();
+        final int	start_pos 		= next_select_loop_pos++;
       final int	end_pos			= start_pos + ready_key_size;
       
       for ( int i=start_pos; i<end_pos; i++ ){
@@ -1047,60 +1047,58 @@ public class VirtualChannelSelectorImpl {
       }
       
       if ( non_selected_keys != null ){
-    	  
-    	  for( Iterator<SelectionKey> i = non_selected_keys.iterator(); i.hasNext(); ) {
-    	    	     	    	
-    		  SelectionKey key = i.next();
-    	    
-    	      RegistrationData data = (RegistrationData)key.attachment();
- 
-    	      try{
-	        	  if (( key.interestOps() & INTEREST_OP) == 0 ) { 
-	
-	        		  continue;
-	        	  }
-    	      }catch( CancelledKeyException e ){
-    	    	  
-    	    	  		// get quite a few of these exceptions, ignore the key
-    	    	  
-    	    	  continue;
-    	      }
-        	  
-    	      long	stall_time = now - data.last_select_success_time;
-    	      
-    	      if ( stall_time < 0 ){
-    	    	  
-    	    	  data.last_select_success_time	= now;
-    	    	  
-    	      }else{
-    	    	  
-	    	      if ( stall_time > WRITE_SELECTOR_DEBUG_MAX_TIME ){
-	    	    	
-	    	    	  Logger.log(
-	    	    		new LogEvent(LOGID,LogEvent.LT_WARNING,"Write select for " + key.channel() + " stalled for " + stall_time ));	    	  
-	    	    	  
-	    	    	  	// hack - trigger a dummy write select to see if things are still OK
-	    	    	  
-	    	          if( key.isValid() ) {
-    	        	  
-    	        		  if( pause_after_select ) { 
 
-    	        			  key.interestOps( key.interestOps() & ~INTEREST_OP );
-    	        		  }
-    	        		  
-    	        		  if ( parent.selectSuccess( data.listener, data.channel, data.attachment )){
+          for (SelectionKey key : non_selected_keys) {
 
-    	        			  data.non_progress_count = 0;
-    	        		  }
-	    	          }else{
+              RegistrationData data = (RegistrationData) key.attachment();
 
-	    	        	  key.cancel();
+              try {
+                  if ((key.interestOps() & INTEREST_OP) == 0) {
 
-	    	        	  parent.selectFailure( data.listener, data.channel, data.attachment, new Throwable( "key is invalid" ) );
-	    	          }
-	    	      }
-	    	  }
-    	  }
+                      continue;
+                  }
+              } catch (CancelledKeyException e) {
+
+                  // get quite a few of these exceptions, ignore the key
+
+                  continue;
+              }
+
+              long stall_time = now - data.last_select_success_time;
+
+              if (stall_time < 0) {
+
+                  data.last_select_success_time = now;
+
+              } else {
+
+                  if (stall_time > WRITE_SELECTOR_DEBUG_MAX_TIME) {
+
+                      Logger.log(
+                              new LogEvent(LOGID, LogEvent.LT_WARNING, "Write select for " + key.channel() + " stalled for " + stall_time));
+
+                      // hack - trigger a dummy write select to see if things are still OK
+
+                      if (key.isValid()) {
+
+                          if (pause_after_select) {
+
+                              key.interestOps(key.interestOps() & ~INTEREST_OP);
+                          }
+
+                          if (parent.selectSuccess(data.listener, data.channel, data.attachment)) {
+
+                              data.non_progress_count = 0;
+                          }
+                      } else {
+
+                          key.cancel();
+
+                          parent.selectFailure(data.listener, data.channel, data.attachment, new Throwable("key is invalid"));
+                      }
+                  }
+              }
+          }
       }
     	  
         
@@ -1173,11 +1171,10 @@ public class VirtualChannelSelectorImpl {
     }
     
     protected void closeExistingSelector() {
-      for( Iterator<SelectionKey> i = selector.keys().iterator(); i.hasNext(); ) {
-        SelectionKey key = i.next();
-        RegistrationData data = (RegistrationData)key.attachment();
-        parent.selectFailure(data.listener, data.channel, data.attachment, new Throwable( "selector destroyed" ) );
-      }
+        for (SelectionKey key : selector.keys()) {
+            RegistrationData data = (RegistrationData) key.attachment();
+            parent.selectFailure(data.listener, data.channel, data.attachment, new Throwable("selector destroyed"));
+        }
       
       try{
         selector.close();

@@ -35,10 +35,10 @@ ShortCuts
 		 * @return
 		 * @throws DownloadException
 		 */
-	
-	public Download
+
+        Download
 	getDownload(
-		byte[]		hash )
+                byte[] hash)
 	
 		throws DownloadException;
 	
@@ -48,10 +48,10 @@ ShortCuts
 		 * @return
 		 * @throws DownloadException
 		 */
-		
-	public DownloadStats
+
+        DownloadStats
 	getDownloadStats(
-		byte[]		hash )
+                byte[] hash)
 	
 		throws DownloadException;
 	
@@ -60,10 +60,10 @@ ShortCuts
 		 * @param hash
 		 * @throws DownloadException
 		 */
-	
-	public void
+
+        void
 	restartDownload(
-		byte[]		hash )
+                byte[] hash)
 	
 		throws DownloadException;
 	
@@ -72,10 +72,10 @@ ShortCuts
 		 * @param hash
 		 * @throws DownloadException
 		 */
-	
-	public void
+
+        void
 	stopDownload(
-		byte[]		hash )
+                byte[] hash)
 	
 		throws DownloadException;
 	
@@ -85,10 +85,10 @@ ShortCuts
 		 * @throws DownloadException
 		 * @throws DownloadRemovalVetoException
 		 */
-	
-	public void
+
+        void
 	removeDownload(
-		byte[]		hash )
+                byte[] hash)
 	
 		throws DownloadException, DownloadRemovalVetoException;
 }

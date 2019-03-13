@@ -27,10 +27,10 @@ public interface
 DeviceContentDirectory
 	extends Device
 {
-	public List<URL>
+	List<URL>
 	getControlURLs();
 	
-	public void
+	void
 	setPreferredControlURL(
-		URL		url );
+            URL url);
 }

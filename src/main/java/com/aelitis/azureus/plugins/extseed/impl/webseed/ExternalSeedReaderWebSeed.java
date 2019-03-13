@@ -22,6 +22,7 @@ package com.aelitis.azureus.plugins.extseed.impl.webseed;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import org.gudy.azureus2.core3.util.Debug;
@@ -66,7 +67,7 @@ ExternalSeedReaderWebSeed
 		}
 		
 		try{
-			String hash_str = URLEncoder.encode(new String(_torrent.getHash(), "ISO-8859-1"), "ISO-8859-1").replaceAll("\\+", "%20");
+			String hash_str = URLEncoder.encode(new String(_torrent.getHash(), StandardCharsets.ISO_8859_1), "ISO-8859-1").replaceAll("\\+", "%20");
 
 			url_prefix = url.toString()+"?info_hash=" + hash_str;
 			

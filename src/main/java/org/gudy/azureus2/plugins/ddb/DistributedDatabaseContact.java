@@ -30,71 +30,71 @@ import java.util.Map;
 public interface 
 DistributedDatabaseContact 
 {
-	public byte[]
+	byte[]
 	getID();
 	
-	public String
+	String
 	getName();
 	
-	public int
+	int
 	getVersion();
 	
-	public InetSocketAddress
+	InetSocketAddress
 	getAddress();
 	
-	public int
+	int
 	getDHT();
 	
-	public boolean
+	boolean
 	isAlive(
-		long		timeout );
+            long timeout);
 	
 		// async version - event types: complete -> alive, timeout -> dead
 	
-	public void
+	void
 	isAlive(
-		long							timeout,
-		DistributedDatabaseListener		listener );
+            long timeout,
+            DistributedDatabaseListener listener);
 	
-	public boolean
+	boolean
 	isOrHasBeenLocal();
 	
-	public Map<String,Object>
+	Map<String,Object>
 	exportToMap();
 	
 		/**
 		 * Tries to open a NAT tunnel to the contact. Should only be used if direct contact fails
 		 * @return
 		 */
-	
-	public boolean
+
+        boolean
 	openTunnel();
 	
-	public DistributedDatabaseValue
+	DistributedDatabaseValue
 	call(
-		DistributedDatabaseProgressListener		listener,
-		DistributedDatabaseTransferType			type,
-		DistributedDatabaseValue				data,
-		long									timeout )
+            DistributedDatabaseProgressListener listener,
+            DistributedDatabaseTransferType type,
+            DistributedDatabaseValue data,
+            long timeout)
 	
 		throws DistributedDatabaseException;
 	
-	public void
+	void
 	write(
-		DistributedDatabaseProgressListener		listener,
-		DistributedDatabaseTransferType			type,
-		DistributedDatabaseKey					key,
-		DistributedDatabaseValue				data,
-		long									timeout )
+            DistributedDatabaseProgressListener listener,
+            DistributedDatabaseTransferType type,
+            DistributedDatabaseKey key,
+            DistributedDatabaseValue data,
+            long timeout)
 	
 		throws DistributedDatabaseException;
 	
-	public DistributedDatabaseValue
+	DistributedDatabaseValue
 	read(
-		DistributedDatabaseProgressListener	listener,
-		DistributedDatabaseTransferType		type,
-		DistributedDatabaseKey				key,
-		long								timeout )
+            DistributedDatabaseProgressListener listener,
+            DistributedDatabaseTransferType type,
+            DistributedDatabaseKey key,
+            long timeout)
 	
 		throws DistributedDatabaseException;
 }

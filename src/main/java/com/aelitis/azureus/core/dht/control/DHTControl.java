@@ -37,211 +37,211 @@ import com.aelitis.azureus.core.dht.transport.*;
 public interface 
 DHTControl 
 {
-	public static final int		K_DEFAULT								= 20;
-	public static final int		B_DEFAULT								= 4;
-	public static final int		MAX_REP_PER_NODE_DEFAULT				= 5;
-	public static final int		SEARCH_CONCURRENCY_DEFAULT				= 5;
-	public static final int		LOOKUP_CONCURRENCY_DEFAULT				= 10;
-	public static final int		CACHE_AT_CLOSEST_N_DEFAULT				= 1;
-	public static final int		ORIGINAL_REPUBLISH_INTERVAL_DEFAULT		= 8*60*60*1000;
-	public static final int		CACHE_REPUBLISH_INTERVAL_DEFAULT		=   30*60*1000; 
-	public static final int		ENCODE_KEYS_DEFAULT						= 1;
-	public static final int		ENABLE_RANDOM_DEFAULT					= 1;
+	int		K_DEFAULT								= 20;
+	int		B_DEFAULT								= 4;
+	int		MAX_REP_PER_NODE_DEFAULT				= 5;
+	int		SEARCH_CONCURRENCY_DEFAULT				= 5;
+	int		LOOKUP_CONCURRENCY_DEFAULT				= 10;
+	int		CACHE_AT_CLOSEST_N_DEFAULT				= 1;
+	int		ORIGINAL_REPUBLISH_INTERVAL_DEFAULT		= 8*60*60*1000;
+	int		CACHE_REPUBLISH_INTERVAL_DEFAULT		=   30*60*1000;
+	int		ENCODE_KEYS_DEFAULT						= 1;
+	int		ENABLE_RANDOM_DEFAULT					= 1;
 	
-	public void
+	void
 	seed(
-		boolean		full_wait );
+            boolean full_wait);
 		
-	public boolean
+	boolean
 	isSeeded();
 	
 	/**
 	 * Manually mark things as seeded
 	 */
-	
-	public void
+
+    void
 	setSeeded();
 	
-	public void
+	void
 	setSuspended(
-		boolean		susp );
+            boolean susp);
 	
-	public void
+	void
 	put(
-		byte[]					key,
-		String					description,
-		byte[]					value,
-		short					flags,
-		byte					life_hours,
-		byte					replication_control,
-		boolean					high_priority,
-		DHTOperationListener	listener );
+            byte[] key,
+            String description,
+            byte[] value,
+            short flags,
+            byte life_hours,
+            byte replication_control,
+            boolean high_priority,
+            DHTOperationListener listener);
 	
-	public boolean
+	boolean
 	isDiversified(
-		byte[]		key );
+            byte[] key);
 	
-	public DHTTransportValue
+	DHTTransportValue
 	getLocalValue(
-		byte[]		key );
+            byte[] key);
 		
-	public List<DHTTransportValue>
+	List<DHTTransportValue>
 	getStoredValues(
-		byte[]		key );
+            byte[] key);
 	
-	public void
+	void
 	get(
-		byte[]					key,
-		String					description,
-		short					flags,
-		int						max_values,
-		long					timeout,
-		boolean					exhaustive,
-		boolean					high_priority,
-		DHTOperationListener	listener );
+            byte[] key,
+            String description,
+            short flags,
+            int max_values,
+            long timeout,
+            boolean exhaustive,
+            boolean high_priority,
+            DHTOperationListener listener);
 		
-	public byte[]
+	byte[]
 	remove(
-		byte[]					key,
-		String					description,
-		DHTOperationListener	listener );
+            byte[] key,
+            String description,
+            DHTOperationListener listener);
 	
-	public byte[]
+	byte[]
 	remove(
-		DHTTransportContact[]	contacts,
-		byte[]					key,
-		String					description,
-		DHTOperationListener	listener );
+            DHTTransportContact[] contacts,
+            byte[] key,
+            String description,
+            DHTOperationListener listener);
 	
-	public DHTControlStats
+	DHTControlStats
 	getStats();
 	
-	public void
+	void
 	setSleeping(
-		boolean	asleep );
+            boolean asleep);
 	
-	public DHTTransport
+	DHTTransport
 	getTransport();
 	
-	public DHTRouter
+	DHTRouter
 	getRouter();
 	
-	public DHTDB
+	DHTDB
 	getDataBase();
 	
-	public DHTControlActivity[]
+	DHTControlActivity[]
 	getActivities();
 	
-	public void
+	void
 	exportState(
-		DataOutputStream	os,
-		int				max )
+            DataOutputStream os,
+            int max)
 		
 		throws IOException;
 		
-	public void
+	void
 	importState(
-		DataInputStream		is )
+            DataInputStream is)
 		
 		throws IOException;
 	
 		// support methods for DB
 	
-	public List<DHTTransportContact>
+	List<DHTTransportContact>
 	getClosestKContactsList(
-		byte[]		id,
-		boolean		live_only );
+            byte[] id,
+            boolean live_only);
 	
-	public List<DHTTransportContact>
+	List<DHTTransportContact>
 	getClosestContactsList(
-		byte[]		id,
-		int			num_to_return,
-		boolean		live_only );
+            byte[] id,
+            int num_to_return,
+            boolean live_only);
 	
-	public void
+	void
 	putEncodedKey(
-		byte[]				key,
-		String				description,
-		DHTTransportValue	value,
-		long				timeout,
-		boolean				original_mappings );
+            byte[] key,
+            String description,
+            DHTTransportValue value,
+            long timeout,
+            boolean original_mappings);
 	
-	public void
+	void
 	putDirectEncodedKeys(
-		byte[][]					keys,
-		String						description,
-		DHTTransportValue[][]		value_sets,
-		List<DHTTransportContact>	contacts );
+            byte[][] keys,
+            String description,
+            DHTTransportValue[][] value_sets,
+            List<DHTTransportContact> contacts);
 	
-	public void
+	void
 	putDirectEncodedKeys(
-		byte[][]					keys,
-		String						description,
-		DHTTransportValue[][]		value_sets,
-		DHTTransportContact			contact,
-		DHTOperationListener		listener );
+            byte[][] keys,
+            String description,
+            DHTTransportValue[][] value_sets,
+            DHTTransportContact contact,
+            DHTOperationListener listener);
 	
-	public int
+	int
 	computeAndCompareDistances(
-		byte[]		n1,
-		byte[]		n2,
-		byte[]		pivot );
+            byte[] n1,
+            byte[] n2,
+            byte[] pivot);
 	
-	public byte[]
+	byte[]
 	computeDistance(
-		byte[]		n1,
-		byte[]		n2 );
+            byte[] n1,
+            byte[] n2);
 	
-	public int
+	int
 	compareDistances(
-		byte[]		n1,
-		byte[]		n2 );
+            byte[] n1,
+            byte[] n2);
 	
-	public boolean
+	boolean
 	verifyContact(
-		DHTTransportContact c,
-		boolean				direct );
+            DHTTransportContact c,
+            boolean direct);
 	
-	public boolean
+	boolean
 	lookup(
-		byte[]					id,
-		String					description,
-		long					timeout,
-		DHTOperationListener	listener );
+            byte[] id,
+            String description,
+            long timeout,
+            DHTOperationListener listener);
 	
-	public boolean
+	boolean
 	lookupEncoded(
-		byte[]					id,
-		String					description,
-		long					timeout,
-		boolean					high_priority,
-		DHTOperationListener	listener );
+            byte[] id,
+            String description,
+            long timeout,
+            boolean high_priority,
+            DHTOperationListener listener);
 	
-	public byte[]
+	byte[]
 	getObfuscatedKey(
-		byte[]		plain_key );
+            byte[] plain_key);
 	
 	
-	public List<DHTControlContact>
+	List<DHTControlContact>
 	getContacts();
 	
 		// debug method only
 	
-	public void
+	void
 	pingAll();
 	
-	public void
+	void
 	addListener(
-		DHTControlListener	l );
+            DHTControlListener l);
 	
-	public void
+	void
 	removeListener(
-		DHTControlListener	l );
+            DHTControlListener l);
 	
-	public void
+	void
 	destroy();
 	
-	public void
+	void
 	print(
-		boolean	full );
+            boolean full);
 }

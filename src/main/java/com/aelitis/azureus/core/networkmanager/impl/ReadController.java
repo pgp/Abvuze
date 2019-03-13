@@ -61,8 +61,8 @@ public class ReadController implements AzureusCoreStatsProvider{
 			});
 	}
 	
-  private volatile ArrayList<RateControlledEntity> normal_priority_entities = new ArrayList<RateControlledEntity>();  //copied-on-write
-  private volatile ArrayList<RateControlledEntity> high_priority_entities 	= new ArrayList<RateControlledEntity>();  //copied-on-write
+  private volatile ArrayList<RateControlledEntity> normal_priority_entities = new ArrayList<>();  //copied-on-write
+  private volatile ArrayList<RateControlledEntity> high_priority_entities 	= new ArrayList<>();  //copied-on-write
   private final AEMonitor entities_mon = new AEMonitor( "ReadController:EM" );
   private int next_normal_position = 0;
   private int next_high_position = 0;
@@ -120,24 +120,20 @@ public class ReadController implements AzureusCoreStatsProvider{
 					ArrayList<RateControlledEntity> ref = normal_priority_entities;
 
 					writer.println( "normal - " + ref.size());
-					    
-					for (int i=0;i<ref.size();i++){
-						
-						RateControlledEntity entity = ref.get( i );
 
-						writer.println( entity.getString());
-					}
+                    for (RateControlledEntity entity : ref) {
+
+                        writer.println(entity.getString());
+                    }
 
 					ref = high_priority_entities;
 
 					writer.println( "priority - " + ref.size());
-					    
-					for (int i=0;i<ref.size();i++){
-						
-						RateControlledEntity entity = ref.get( i );
 
-						writer.println( entity.getString());
-					}
+                    for (RateControlledEntity entity : ref) {
+
+                        writer.println(entity.getString());
+                    }
 				}finally{
 					
 					writer.exdent();
@@ -153,27 +149,27 @@ public class ReadController implements AzureusCoreStatsProvider{
   {
 	  if ( types.contains( AzureusCoreStats.ST_NET_READ_CONTROL_LOOP_COUNT )){
 
-		  values.put( AzureusCoreStats.ST_NET_READ_CONTROL_LOOP_COUNT, new Long( loop_count  ));
+		  values.put( AzureusCoreStats.ST_NET_READ_CONTROL_LOOP_COUNT, loop_count);
 	  }
 	  
 	  if ( types.contains( AzureusCoreStats.ST_NET_READ_CONTROL_NP_COUNT )){
 
-		  values.put( AzureusCoreStats.ST_NET_READ_CONTROL_NP_COUNT, new Long( non_progress_count  ));
+		  values.put( AzureusCoreStats.ST_NET_READ_CONTROL_NP_COUNT, non_progress_count);
 	  }
 	  
 	  if ( types.contains( AzureusCoreStats.ST_NET_READ_CONTROL_P_COUNT )){
 
-		  values.put( AzureusCoreStats.ST_NET_READ_CONTROL_P_COUNT, new Long( progress_count  ));
+		  values.put( AzureusCoreStats.ST_NET_READ_CONTROL_P_COUNT, progress_count);
 	  }
 	  
 	  if ( types.contains( AzureusCoreStats.ST_NET_READ_CONTROL_WAIT_COUNT )){
 
-		  values.put( AzureusCoreStats.ST_NET_READ_CONTROL_WAIT_COUNT, new Long( wait_count  ));
+		  values.put( AzureusCoreStats.ST_NET_READ_CONTROL_WAIT_COUNT, wait_count);
 	  }
 	  
 	  if ( types.contains( AzureusCoreStats.ST_NET_READ_CONTROL_ENTITY_COUNT )){
 
-		  values.put( AzureusCoreStats.ST_NET_READ_CONTROL_ENTITY_COUNT, new Long( high_priority_entities.size() + normal_priority_entities.size()));
+		  values.put( AzureusCoreStats.ST_NET_READ_CONTROL_ENTITY_COUNT, (long) (high_priority_entities.size() + normal_priority_entities.size()));
 	  }
 	 
 	  if ( 	types.contains( AzureusCoreStats.ST_NET_READ_CONTROL_CON_COUNT ) ||
@@ -183,23 +179,21 @@ public class ReadController implements AzureusCoreStatsProvider{
 		  int	connections			= 0;
 		  
 		  ArrayList[] refs = { normal_priority_entities, high_priority_entities };
-		    
-		  for (int i=0;i<refs.length;i++){
-			  
-			  ArrayList	ref = refs[i];
-			 
-			  for (int j=0;j<ref.size();j++){
+
+          for (ArrayList ref : refs) {
+
+              for (Object o : ref) {
+
+                  RateControlledEntity entity = (RateControlledEntity) o;
+
+                  connections += entity.getConnectionCount(read_waiter);
+
+                  ready_connections += entity.getReadyConnectionCount(read_waiter);
+              }
+          }
 		  
-			      RateControlledEntity entity = (RateControlledEntity)ref.get( j );
-			      
-			      connections 		+= entity.getConnectionCount( read_waiter );
-			      
-			      ready_connections += entity.getReadyConnectionCount( read_waiter );
-			  }
-		  }
-		  
-		  values.put( AzureusCoreStats.ST_NET_READ_CONTROL_CON_COUNT, new Long( connections ));
-		  values.put( AzureusCoreStats.ST_NET_READ_CONTROL_READY_CON_COUNT, new Long( ready_connections ));
+		  values.put( AzureusCoreStats.ST_NET_READ_CONTROL_CON_COUNT, (long) connections);
+		  values.put( AzureusCoreStats.ST_NET_READ_CONTROL_READY_CON_COUNT, (long) ready_connections);
 	  }
   }
 
@@ -378,14 +372,14 @@ public class ReadController implements AzureusCoreStatsProvider{
     try {  entities_mon.enter();
       if( entity.getPriority() == RateControlledEntity.PRIORITY_HIGH ) {
         //copy-on-write
-        ArrayList<RateControlledEntity> high_new = new ArrayList<RateControlledEntity>( high_priority_entities.size() + 1 );
+        ArrayList<RateControlledEntity> high_new = new ArrayList<>(high_priority_entities.size() + 1);
         high_new.addAll( high_priority_entities );
         high_new.add( entity );
         high_priority_entities = high_new;
       }
       else {
         //copy-on-write
-        ArrayList<RateControlledEntity> norm_new = new ArrayList<RateControlledEntity>( normal_priority_entities.size() + 1 );
+        ArrayList<RateControlledEntity> norm_new = new ArrayList<>(normal_priority_entities.size() + 1);
         norm_new.addAll( normal_priority_entities );
         norm_new.add( entity );
         normal_priority_entities = norm_new;
@@ -407,13 +401,13 @@ public class ReadController implements AzureusCoreStatsProvider{
     try {  entities_mon.enter();
       if( entity.getPriority() == RateControlledEntity.PRIORITY_HIGH ) {
         //copy-on-write
-        ArrayList<RateControlledEntity> high_new = new ArrayList<RateControlledEntity>( high_priority_entities );
+        ArrayList<RateControlledEntity> high_new = new ArrayList<>(high_priority_entities);
         high_new.remove( entity );
         high_priority_entities = high_new;
       }
       else {
         //copy-on-write
-        ArrayList<RateControlledEntity> norm_new = new ArrayList<RateControlledEntity>( normal_priority_entities );
+        ArrayList<RateControlledEntity> norm_new = new ArrayList<>(normal_priority_entities);
         norm_new.remove( entity );
         normal_priority_entities = norm_new;
       }

@@ -30,6 +30,6 @@ public interface UIInstanceBase extends UIInstance
 	/**
 	 * PluginInterface is unloading.. destroy anything related to it
 	 */
-	public void unload(PluginInterface pi);
+    void unload(PluginInterface pi);
 
 }

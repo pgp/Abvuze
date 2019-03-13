@@ -29,49 +29,49 @@ import org.gudy.azureus2.core3.peer.PEPeerSource;
 public interface 
 DownloadAnnounceResultPeer 
 {
-	public static final short	PROTOCOL_NORMAL		= 1;
-	public static final short	PROTOCOL_CRYPT		= 2;
+	short	PROTOCOL_NORMAL		= 1;
+	short	PROTOCOL_CRYPT		= 2;
 	
 
 	/**
 	 * Peer source for all peers discovered through a tracker announce
 	 */
-	public static final String	PEERSOURCE_BT_TRACKER		= PEPeerSource.PS_BT_TRACKER;
+    String	PEERSOURCE_BT_TRACKER		= PEPeerSource.PS_BT_TRACKER;
 	/**
 	 * Peer source for all peers discovered through other peers from a globally accessible gossiping protocl (usually a DHT)
 	 */
-	public static final String	PEERSOURCE_DHT				= PEPeerSource.PS_DHT;
+    String	PEERSOURCE_DHT				= PEPeerSource.PS_DHT;
 	/**
 	 * Peer source for all peers discovered through other peers in the same swarm via gossiping protocols
 	 */
-	public static final String	PEERSOURCE_PEX		= PEPeerSource.PS_OTHER_PEER;
+    String	PEERSOURCE_PEX		= PEPeerSource.PS_OTHER_PEER;
 	
 	
 	/**
 	 * Peer source for all peers discovered by plugins that do not fall into the other categories
 	 */
-	public static final String	PEERSOURCE_PLUGIN			= PEPeerSource.PS_PLUGIN;
+    String	PEERSOURCE_PLUGIN			= PEPeerSource.PS_PLUGIN;
 	
 	/**
 	 * Peer source for all peers which already connected to us but we know nothing about since the connection is incoming  
 	 */
-	public static final String	PEERSOURCE_INCOMING			= PEPeerSource.PS_INCOMING;
+    String	PEERSOURCE_INCOMING			= PEPeerSource.PS_INCOMING;
 	
-	public String
+	String
 	getSource();
 	
-	public int
+	int
 	getPort();
 	
-	public int
+	int
 	getUDPPort();
 	
-	public String
+	String
 	getAddress();
 	
-	public byte[]
+	byte[]
 	getPeerID();
 	
-	public short
+	short
 	getProtocol();
 }

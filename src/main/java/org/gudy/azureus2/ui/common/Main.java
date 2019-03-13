@@ -27,11 +27,9 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.StringTokenizer;
 
 import org.apache.commons.cli.CommandLine;
@@ -49,7 +47,6 @@ import org.apache.log4j.varia.DenyAllFilter;
 
 import com.aelitis.azureus.core.*;
 import com.aelitis.azureus.core.impl.AzureusCoreSingleInstanceClient;
-import com.aelitis.azureus.launcher.Launcher;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
 import org.gudy.azureus2.core3.util.Constants;
@@ -250,7 +247,7 @@ public class Main {
 
             Class	main_class = Class.forName( uiclass );
 
-            Method main_method = main_class.getMethod( "main", new Class[]{ String[].class });
+            Method main_method = main_class.getMethod( "main", String[].class);
 
             main_method.invoke( null, new Object[]{ commands.getArgs()});
 
@@ -327,7 +324,7 @@ public class Main {
 
                 // change this and you'll need to change the parameters below....
 
-                Class params[] = {String.class, AzureusCore.class, Reader.class, PrintStream.class, Boolean.class};
+                Class[] params = {String.class, AzureusCore.class, Reader.class, PrintStream.class, Boolean.class};
 
                 conConsoleInput=clConsoleInput.getConstructor(params);
             } catch (Exception e) {
@@ -336,7 +333,7 @@ public class Main {
             if (commands.hasOption('e')) {
                 if (conConsoleInput != null) {
                     try {
-                        Object params[] = {commands.getOptionValue('e'), new_core, new FileReader(commands.getOptionValue('e')), System.out, Boolean.FALSE};
+                        Object[] params = {commands.getOptionValue('e'), new_core, new FileReader(commands.getOptionValue('e')), System.out, Boolean.FALSE};
                         conConsoleInput.newInstance(params);
                     } catch (java.io.FileNotFoundException e) {
                         Logger.getLogger("azureus2").error("Script file not found: "+e.toString());
@@ -351,7 +348,7 @@ public class Main {
                 if (conConsoleInput != null) {
                     String comm = commands.getOptionValue('c');
                     comm+="\nlogout\n";
-                    Object params[] = {commands.getOptionValue('c'), UIConst.getAzureusCore(), new StringReader(comm), System.out, Boolean.FALSE};
+                    Object[] params = {commands.getOptionValue('c'), UIConst.getAzureusCore(), new StringReader(comm), System.out, Boolean.FALSE};
                     try {
                         conConsoleInput.newInstance(params);
                     } catch (Exception e) {
@@ -369,14 +366,14 @@ public class Main {
 
     public static void openTorrents(String[] torrents) {
         if ((UIConst.UIS!=null) && (!UIConst.UIS.isEmpty()) && (torrents.length>0)) {
-            for(int l=0; l<torrents.length; l++) {
-                ((IUserInterface) UIConst.UIS.values().toArray()[0]).openTorrent(torrents[l]);
+            for (String torrent : torrents) {
+                ((IUserInterface) UIConst.UIS.values().toArray()[0]).openTorrent(torrent);
             }
         }
     }
 
     public static class StartSocket {
-        public StartSocket(String args[]) {
+        public StartSocket(String[] args) {
             Socket sck = null;
             PrintWriter pw = null;
             try {
@@ -387,8 +384,8 @@ public class Main {
                 sck = new Socket("127.0.0.1", Constants.INSTANCE_PORT );
                 pw = new PrintWriter(new OutputStreamWriter(sck.getOutputStream()));
                 StringBuilder buffer = new StringBuilder(AzureusCoreSingleInstanceClient.ACCESS_STRING+";args;");
-                for(int i = 0 ; i < args.length ; i++) {
-                    String arg = args[i].replaceAll("&","&&").replaceAll(";","&;");
+                for (String arg1 : args) {
+                    String arg = arg1.replaceAll("&", "&&").replaceAll(";", "&;");
                     buffer.append(arg);
                     buffer.append(';');
                 }

@@ -541,11 +541,10 @@ public class StringUtil
     
     if ( appendStrings == null )
       return newStrings ;
-    
-    for ( int i = 0 ; i < appendStrings.length ; i++ )
-    {
-      newStrings = this.appendIfNotThere( newStrings, appendStrings[i] ) ;
-    }
+
+      for (String appendString : appendStrings) {
+          newStrings = this.appendIfNotThere(newStrings, appendString);
+      }
     return newStrings ;
   } // appendIfNotThere()
   
@@ -621,7 +620,7 @@ public class StringUtil
     buffer = new StringBuffer( strings.length * 20 ) ;
     if ( strings.length > 0 )
     {
-      buffer.append( strings[0].toString() ) ;
+      buffer.append(strings[0]) ;
       for ( int i = 1 ; i < strings.length ; i++ )
       {
         buffer.append( separator ) ;
@@ -1123,14 +1122,13 @@ public class StringUtil
 		kvSep = ( keyValueSeparator == null ) ? "=" : keyValueSeparator ;
 		
 		assignments = this.parts( str, elemSep ) ;
-		for ( int i = 0 ; i < assignments.length ; i++ )
-		{
-			nameValue = this.splitNameValue( assignments[i], kvSep ) ;
-			nameValue[0] = nameValue[0].trim() ;
-			nameValue[1] = nameValue[1].trim() ;
-			if ( nameValue[0].length() > 0 )
-				result.put( nameValue[0], nameValue[1] ) ;
-		}
+        for (String assignment : assignments) {
+            nameValue = this.splitNameValue(assignment, kvSep);
+            nameValue[0] = nameValue[0].trim();
+            nameValue[1] = nameValue[1].trim();
+            if (nameValue[0].length() > 0)
+                result.put(nameValue[0], nameValue[1]);
+        }
 		
 		return result ;
 	} // asMap()
@@ -1356,7 +1354,7 @@ public class StringUtil
     while( tokenizer.hasMoreTokens() )
     {
     	token = tokenizer.nextToken() ;
-    	if ( delimiter.indexOf( token ) >= 0 )
+    	if (delimiter.contains(token))
     	{
     		if ( lastWasDelimiter )
     			list.add( "" ) ;
@@ -1559,22 +1557,17 @@ public class StringUtil
 		boolean remains ;
 		
 		list = new ArrayList( strings.length ) ;
-		for (int i = 0; i < strings.length; i++)
-		{
-			if ( removeStrings == null )
-			{
-				remains = strings[i] != null ;
-			}
-			else
-			{
-				remains = ! this.contains( removeStrings, strings[i] ) ;
-			}
-			if ( remains )
-			{
-				list.add( strings[i] ) ;
-			}			
-		}	
-		return (String[])list.toArray( new String[list.size()] ) ;
+        for (String string : strings) {
+            if (removeStrings == null) {
+                remains = string != null;
+            } else {
+                remains = !this.contains(removeStrings, string);
+            }
+            if (remains) {
+                list.add(string);
+            }
+        }
+		return (String[])list.toArray(new String[0]) ;
 	} // removeFromStringArray()
 
 	// -------------------------------------------------------------------------

@@ -49,7 +49,7 @@ public interface GlobalManager extends AzureusCoreComponent, TaggableResolver {
 	 *          May return an existing DownloadManager if torrent was already
 	 *          in GlobalManager. 
 	 */
-	public DownloadManager addDownloadManager(String file_name, String save_path);
+    DownloadManager addDownloadManager(String file_name, String save_path);
 
 	/**
 	 * Create and add a Download Manager to the global list
@@ -63,8 +63,8 @@ public interface GlobalManager extends AzureusCoreComponent, TaggableResolver {
 	 *          May return an existing DownloadManager if torrent was already
 	 *          in GlobalManager. 
 	 */
-	public DownloadManager addDownloadManager(String fileName, byte[]	optionalHash,
-			String savePath, int initialState, boolean persistent);
+    DownloadManager addDownloadManager(String fileName, byte[] optionalHash,
+                                       String savePath, int initialState, boolean persistent);
 
 	
 	/**
@@ -82,10 +82,10 @@ public interface GlobalManager extends AzureusCoreComponent, TaggableResolver {
 	 *          May return an existing DownloadManager if torrent was already
 	 *          in GlobalManager. 
 	 */
-	public DownloadManager addDownloadManager(String fileName,
-			byte[] optionalHash, String savePath, String saveFile,
-			int initialState, boolean persistent, boolean for_seeding, 
-			DownloadManagerInitialisationAdapter adapter );
+    DownloadManager addDownloadManager(String fileName,
+                                       byte[] optionalHash, String savePath, String saveFile,
+                                       int initialState, boolean persistent, boolean for_seeding,
+                                       DownloadManagerInitialisationAdapter adapter);
 	
 	
 	/**
@@ -102,10 +102,10 @@ public interface GlobalManager extends AzureusCoreComponent, TaggableResolver {
 	 *          May return an existing DownloadManager if torrent was already
 	 *          in GlobalManager. 
 	 */
-	public DownloadManager addDownloadManager(String fileName,
-			byte[] optionalHash, String savePath,
-			int initialState, boolean persistent, boolean for_seeding, 
-			DownloadManagerInitialisationAdapter adapter );
+    DownloadManager addDownloadManager(String fileName,
+                                       byte[] optionalHash, String savePath,
+                                       int initialState, boolean persistent, boolean for_seeding,
+                                       DownloadManagerInitialisationAdapter adapter);
 
 	/**
 	 * Removes a DownloadManager from the global list, providing it can be
@@ -118,7 +118,7 @@ public interface GlobalManager extends AzureusCoreComponent, TaggableResolver {
 	 * 
 	 * @throws GlobalManagerDownloadRemovalVetoException
 	 */
-	public void removeDownloadManager(DownloadManager dm)
+    void removeDownloadManager(DownloadManager dm)
 			throws GlobalManagerDownloadRemovalVetoException;
 
 	/**
@@ -127,15 +127,15 @@ public interface GlobalManager extends AzureusCoreComponent, TaggableResolver {
 	 * @param dm DownloadManager to check
 	 * @throws GlobalManagerDownloadRemovalVetoException
 	 */
-	public void canDownloadManagerBeRemoved(DownloadManager dm,
-			boolean remove_torrent, boolean remove_data)
+    void canDownloadManagerBeRemoved(DownloadManager dm,
+                                     boolean remove_torrent, boolean remove_data)
 			throws GlobalManagerDownloadRemovalVetoException;
 
 	/**
 	 * Retrieve a list of {@link DownloadManager}s that GlobalManager is handling
 	 * @return a list of {@link DownloadManager}s
 	 */
-	public List<DownloadManager> getDownloadManagers();
+    List<DownloadManager> getDownloadManagers();
 
 	/**
 	 * Retrieve the DownloadManager associated with a TOTorrent object
@@ -144,7 +144,7 @@ public interface GlobalManager extends AzureusCoreComponent, TaggableResolver {
 	 * @return The DownloadManager associted with the TOTOrrent, or null if
 	 *          none found
 	 */
-	public DownloadManager getDownloadManager(TOTorrent torrent);
+    DownloadManager getDownloadManager(TOTorrent torrent);
 
 	/**
 	 * Retrieve the DownloadManager associated with a hash
@@ -153,82 +153,82 @@ public interface GlobalManager extends AzureusCoreComponent, TaggableResolver {
 	 * @return The DownloadManager associted with the hash, or null if
 	 *          none found
 	 */
-	public DownloadManager getDownloadManager(HashWrapper hash);
+    DownloadManager getDownloadManager(HashWrapper hash);
 
 	/**
 	 * Retrieve the Tracker Scraper management class
 	 * 
 	 * @return Tracker Scraper management class
 	 */
-	public TRTrackerScraper getTrackerScraper();
+    TRTrackerScraper getTrackerScraper();
 
 	/**
 	 * Retrieve the Global Manager Statistics class
 	 * 
 	 * @return the Global Manager Statistics class
 	 */
-	public GlobalManagerStats getStats();
+    GlobalManagerStats getStats();
 
 	/**
 	 * Puts GlobalManager in a stopped state.<br>
 	 * Used when closing down Azureus.
 	 */
-	public void stopGlobalManager();
+    void stopGlobalManager();
 
 	/**
 	 * Stops all downloads without removing them
 	 *
 	 * @author Rene Leonhardt
 	 */
-	public void stopAllDownloads();
+    void stopAllDownloads();
 
 	/**
 	 * Starts all downloads
 	 */
-	public void startAllDownloads();
+    void startAllDownloads();
 
 	/**
 	 * Pauses (stops) all running downloads/seedings.
 	 */
-	public void pauseDownloads();
+    void pauseDownloads();
 
 	/**
 	 * pause any non-paused downloads and auto-resume all downloads after n seconds
 	 * @param seconds
 	 */
-	public void pauseDownloadsForPeriod( int seconds );
+    void pauseDownloadsForPeriod(int seconds);
 	
 	/**
 	 * seconds remaining, 0 if not active
 	 * @return
 	 */
-	
-	public int getPauseDownloadPeriodRemaining();
+
+    int getPauseDownloadPeriodRemaining();
 	
 	/**
 	 * Indicates whether or not there are any downloads that can be paused.
 	 * @return true if there is at least one download to pause, false if none
 	 */
-	public boolean canPauseDownloads();
+    boolean canPauseDownloads();
 
 	/**
 	 * Resumes (starts) all downloads paused by the previous pauseDownloads call.
 	 */
-	public void resumeDownloads();
+    void resumeDownloads();
 
 	/**
 	 * Attempt to automatically resume downloads - request may be denied if manual override in effect
 	 * @param is_auto_resume
 	 * @return whether operation was accepted
 	 */
-	
-	public boolean resumeDownloads( boolean is_auto_resume );
+
+    boolean resumeDownloads(boolean is_auto_resume);
 
 	/**
 	 * Indicates whether or not there are any paused downloads to resume.
 	 * @return true if there is at least one download to resume, false if none.
 	 */
-	public boolean canResumeDownloads();
+    boolean canResumeDownloads();
 
 	/**
 	 * This reports that a download is being resumed in order to remove it from the paused set
@@ -236,24 +236,24 @@ public interface GlobalManager extends AzureusCoreComponent, TaggableResolver {
 	 * @param dm
 	 * @return
 	 */
-	public boolean resumingDownload(DownloadManager dm);
+    boolean resumingDownload(DownloadManager dm);
 
 	/**
 	 * Pause one DownloadManager
 	 * @param dm DownloadManager to pause
 	 * @return False if DownloadManager was invalid, stopped, or pause failed
 	 */
-	public boolean pauseDownload(DownloadManager dm);
+    boolean pauseDownload(DownloadManager dm);
 
 	/**
 	 * Resume a previously paused DownloadManager
 	 * @param dm DownloadManager to resume
 	 */
-	public void resumeDownload(DownloadManager dm);
+    void resumeDownload(DownloadManager dm);
 
-	public void 
+	void
 	clearNonPersistentDownloadState(
-		byte[] hash );
+            byte[] hash);
 	
 	/**
 	 * Retrieve whether a DownloadManager is in a paused state
@@ -261,9 +261,9 @@ public interface GlobalManager extends AzureusCoreComponent, TaggableResolver {
 	 * @param dm DownloadManager to query
 	 * @return the pause state
 	 */
-	public boolean isPaused(DownloadManager dm);
+    boolean isPaused(DownloadManager dm);
 
-	public String isSwarmMerging(DownloadManager dm);
+	String isSwarmMerging(DownloadManager dm);
 	
 	/**
 	 * Determines whether we are only seeding, and not currently downloading
@@ -271,15 +271,15 @@ public interface GlobalManager extends AzureusCoreComponent, TaggableResolver {
 	 * 
 	 * @return  Seeding Only State
 	 */
-	
-	public boolean isSeedingOnly();
+
+    boolean isSeedingOnly();
 
 	/**
 	 * As for isSeedingOnly but includes queued seeds
 	 * @return
 	 */
-	
-	public boolean isPotentiallySeedingOnly();
+
+    boolean isPotentiallySeedingOnly();
 
 	/**
 	 * Retrieve the index of a DownloadManager within the GlobalManager
@@ -293,7 +293,7 @@ public interface GlobalManager extends AzureusCoreComponent, TaggableResolver {
 	 * @deprecated Should not be used, as indexes may be different than
 	 *               when getDownloadManagers() was called.
 	 */
-	public int getIndexOf(DownloadManager dm);
+    int getIndexOf(DownloadManager dm);
 	
 	/**
 	 * Retrieve the number of download managers the global manager is managing.
@@ -302,47 +302,47 @@ public interface GlobalManager extends AzureusCoreComponent, TaggableResolver {
 	 *                    False: Return count of incomplete downloads
 	 * @return count
 	 */
-	public int downloadManagerCount(boolean bCompleted);
+    int downloadManagerCount(boolean bCompleted);
 
 	/**
 	 * Retrieve whether a DownloadManager can move down in the GlobalManager list
 	 * @param dm DownloadManager to check
 	 * @return True - Can move down
 	 */
-	public boolean isMoveableDown(DownloadManager dm);
+    boolean isMoveableDown(DownloadManager dm);
 
 	/**
 	 * Retrieve whether a DownloadManager can move up in the GlobalManager list
 	 * @param dm DownloadManager to check
 	 * @return True - Can move up
 	 */
-	public boolean isMoveableUp(DownloadManager dm);
+    boolean isMoveableUp(DownloadManager dm);
 
 	/**
 	 * Move a list of DownloadManagers to the top of the GlobalManager list
 	 *  
 	 * @param dm array list of DownloadManager objects to move
 	 */
-	public void moveTop(DownloadManager[] dm);
+    void moveTop(DownloadManager[] dm);
 
 	/**
 	 * Move one DownloadManager up in the GlobalManager's list
 	 * @param dm DownloadManager to move up
 	 */
-	public void moveUp(DownloadManager dm);
+    void moveUp(DownloadManager dm);
 
 	/**
 	 * Move one DownloadManager down in the GlobalManager's list
 	 * @param dm DownloadManager to move down
 	 */
-	public void moveDown(DownloadManager dm);
+    void moveDown(DownloadManager dm);
 
 	/**
 	 * Move a list of DownloadManagers to the end of the GlobalManager list
 	 *  
 	 * @param dm array list of DownloadManager objects to move
 	 */
-	public void moveEnd(DownloadManager[] dm);
+    void moveEnd(DownloadManager[] dm);
 
 	/**
 	 * Move a Downloadmanager to a new position.
@@ -350,7 +350,7 @@ public interface GlobalManager extends AzureusCoreComponent, TaggableResolver {
 	 * @param manager DownloadManager to move
 	 * @param newPosition position to place
 	 */
-	public void moveTo(DownloadManager manager, int newPosition);
+    void moveTo(DownloadManager manager, int newPosition);
 
 	/** 
 	 * Verifies the positions of the DownloadManagers, 
@@ -359,71 +359,71 @@ public interface GlobalManager extends AzureusCoreComponent, TaggableResolver {
 	 * This does not need to be called after MoveXXX, addDownloadManager, or
 	 * removeDownloadManager functions.
 	 */
-	public void fixUpDownloadManagerPositions();
+    void fixUpDownloadManagerPositions();
 
 	/**
 	 * Add a Global Manager listener
 	 * @param l Listener to add
 	 */
-	public void addListener(GlobalManagerListener l);
+    void addListener(GlobalManagerListener l);
 
 	/**
 	 * Removes a Global Manager listener
 	 * @param l Listener to remove
 	 */
-	public void removeListener(GlobalManagerListener l);
+    void removeListener(GlobalManagerListener l);
 
 	/**
 	 * Add a listener triggered when Download is about to be removed
 	 * @param l Listener to add
 	 */
-	public void addDownloadWillBeRemovedListener(
-			GlobalManagerDownloadWillBeRemovedListener l);
+    void addDownloadWillBeRemovedListener(
+            GlobalManagerDownloadWillBeRemovedListener l);
 
 	/**
 	 * Remove a listener triggered when Download is about to be removed
 	 * @param l Listener to remove
 	 */
-	public void removeDownloadWillBeRemovedListener(
-			GlobalManagerDownloadWillBeRemovedListener l);
+    void removeDownloadWillBeRemovedListener(
+            GlobalManagerDownloadWillBeRemovedListener l);
 
 	/**
 	 * See plugin ConnectionManager.NAT_ constants for return values
 	 * @return ConnectionManager.NAT_*
 	 */
-	public int getNATStatus();
+    int getNATStatus();
 	
 		/**
 		 * Any adapters added will get a chance to see/set the initial state of downloads as they are
 		 * added
 		 * @param adapter
 		 */
-	
-	public void
+
+        void
 	addDownloadManagerInitialisationAdapter(
-		DownloadManagerInitialisationAdapter	adapter );
+                DownloadManagerInitialisationAdapter adapter);
 	
-	public void
+	void
 	removeDownloadManagerInitialisationAdapter(
-		DownloadManagerInitialisationAdapter	adapter );
+            DownloadManagerInitialisationAdapter adapter);
 
-	public void
+	void
 	addEventListener(
-		GlobalManagerEventListener 		listener );
+            GlobalManagerEventListener listener);
 	
-	public void
+	void
 	removeEventListener(
-		GlobalManagerEventListener 		listener );
+            GlobalManagerEventListener listener);
 
-	public void 
+	void
 	fireGlobalManagerEvent(
-		int					type, 
-		DownloadManager 	param );
+            int type,
+            DownloadManager param);
 	
 	/**
 	 * @param listener
 	 */
-	public void loadExistingTorrentsNow(boolean async);
+    void loadExistingTorrentsNow(boolean async);
 
 	/**
 	 * @param listener
@@ -457,10 +457,10 @@ public interface GlobalManager extends AzureusCoreComponent, TaggableResolver {
 	 */
 	MainlineDHTProvider getMainlineDHTProvider();
 
-	public void 
+	void
 	statsRequest(
-		Map 		request,
-		Map			reply );
+            Map request,
+            Map reply);
 
 	/**
 	 * @param manager
@@ -470,17 +470,17 @@ public interface GlobalManager extends AzureusCoreComponent, TaggableResolver {
 	 */
 	boolean contains(DownloadManager manager);
 	
-	public void
+	void
 	saveState();
 	
-	public Map
+	Map
 	exportDownloadStateToMap(
-		DownloadManager		dm );
+            DownloadManager dm);
 	
-	public DownloadManager
+	DownloadManager
 	importDownloadStateFromMap(
-		Map		map );
+            Map map);
 	
-	public Object		// DownloadHistoryManager
+	Object		// DownloadHistoryManager
 	getDownloadHistoryManager();
 }

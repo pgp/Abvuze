@@ -27,5 +27,5 @@ package org.gudy.azureus2.plugins.ui.tables;
  */
 public interface TableRowRefreshListener
 {
-  public void rowRefresh(TableRow row);
+  void rowRefresh(TableRow row);
 }

@@ -31,27 +31,27 @@ import java.nio.channels.*;
 
 public interface VirtualServerChannelSelector {
 
-  public void start();
+  void start();
  
-  public void stop();
+  void stop();
   
-  public boolean isRunning();
+  boolean isRunning();
  
-  public InetAddress getBoundToAddress();
+  InetAddress getBoundToAddress();
  
-  public int getPort();
+  int getPort();
   
-  public long getTimeOfLastAccept();
+  long getTimeOfLastAccept();
   
   /**
    * Listener notified when a new incoming connection is accepted.
    */
-  public interface SelectListener {
+  interface SelectListener {
     /**
      * The given connection has just been accepted.
      * @param channel new connection
      */
-    public void newConnectionAccepted( ServerSocketChannel	server, SocketChannel channel );
+    void newConnectionAccepted(ServerSocketChannel server, SocketChannel channel);
   }
 
   

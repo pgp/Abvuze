@@ -29,6 +29,6 @@ package org.gudy.azureus2.core3.ipchecker.extipchecker;
 public interface 
 ExternalIPChecker 
 {
-	public ExternalIPCheckerService[]
+	ExternalIPCheckerService[]
 	getServices();
 }

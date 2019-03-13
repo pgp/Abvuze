@@ -26,22 +26,22 @@ import java.util.Map;
 public interface 
 PooledByteBuffer 
 {
-	public byte[]
+	byte[]
 	toByteArray();
 	
-	public ByteBuffer
+	ByteBuffer
 	toByteBuffer();
 	
 		/**
 		 * Data must be b-encoded...
 		 * @return
 		 */
-	
-	public Map
+
+        Map
 	toMap()
 	
 		throws IOException;
 	
-	public void
+	void
 	returnToPool();
 }

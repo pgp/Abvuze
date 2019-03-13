@@ -231,16 +231,16 @@ public class TrackerChecker implements AEDiagnosticsEvidenceGenerator, SystemTim
       removeHash(torrent.getAnnounceURL().toString(), torrent.getHashWrapper());
       
       TOTorrentAnnounceURLSet[] sets = torrent.getAnnounceURLGroup().getAnnounceURLSets();
-      
-      for (int i=0;i<sets.length;i++){
-      	
-      	URL[]	urls = sets[i].getAnnounceURLs();
-      	
-      	for (int j=0;j<urls.length;j++){
-      		
-      		removeHash(urls[j].toString(), torrent.getHashWrapper());
-      	}
-      }
+
+        for (TOTorrentAnnounceURLSet set : sets) {
+
+            URL[] urls = set.getAnnounceURLs();
+
+            for (URL url : urls) {
+
+                removeHash(url.toString(), torrent.getHashWrapper());
+            }
+        }
       
       
     } catch (TOTorrentException e) {
@@ -278,33 +278,31 @@ public class TrackerChecker implements AEDiagnosticsEvidenceGenerator, SystemTim
       
       try{
       	trackers_mon.enter();
-      	
-        Iterator iter = trackers.values().iterator();
-        
-        while (iter.hasNext()){
-        	
-          TrackerStatus ts = (TrackerStatus) iter.next();
 
-          if ( 	target_url == null ||
-          		target_url.toString().equals( ts.getTrackerURL().toString())){
-          	
-	          Map hashmap = ts.getHashes();
-	
-		      try{
-		    	  ts.getHashesMonitor().enter();
+          for (Object o : trackers.values()) {
 
-		          if ( hashmap.get( hash ) != null ){
-		          	
-		        	matched_ts	= ts;
-		        	  
-		        	break;
-		          }
-		      }finally{
-		    	  
-		    	  ts.getHashesMonitor().exit();
-		      }
+              TrackerStatus ts = (TrackerStatus) o;
+
+              if (target_url == null ||
+                      target_url.toString().equals(ts.getTrackerURL().toString())) {
+
+                  Map hashmap = ts.getHashes();
+
+                  try {
+                      ts.getHashesMonitor().enter();
+
+                      if (hashmap.get(hash) != null) {
+
+                          matched_ts = ts;
+
+                          break;
+                      }
+                  } finally {
+
+                      ts.getHashesMonitor().exit();
+                  }
+              }
           }
-        }
       }finally{
       	
       	trackers_mon.exit();
@@ -420,50 +418,46 @@ public class TrackerChecker implements AEDiagnosticsEvidenceGenerator, SystemTim
 		try {
 			trackers_mon.enter();
 
-			Iterator iter = trackers.values().iterator();
+            for (Object o1 : trackers.values()) {
 
-			while (iter.hasNext()) {
+                TrackerStatus ts = (TrackerStatus) o1;
 
-				TrackerStatus ts = (TrackerStatus) iter.next();
+                if (!ts.isTrackerScrapeUrlValid()) {
+                    continue;
+                }
 
-				if (!ts.isTrackerScrapeUrlValid()) {
-					continue;
-				}
+                boolean hasActiveScrapes = ts.getNumActiveScrapes() > 0;
 
-				boolean hasActiveScrapes = ts.getNumActiveScrapes() > 0;
+                Map hashmap = ts.getHashes();
 
-				Map hashmap = ts.getHashes();
+                try {
+                    ts.getHashesMonitor().enter();
 
-				try {
-					ts.getHashesMonitor().enter();
+                    for (Object o : hashmap.values()) {
 
-					Iterator iterHashes = hashmap.values().iterator();
+                        TRTrackerBTScraperResponseImpl response = (TRTrackerBTScraperResponseImpl) o;
 
-					while (iterHashes.hasNext()) {
+                        if (response.getStatus() != TRTrackerScraperResponse.ST_SCRAPING) {
+                            long nextScrapeStartTime = response.getNextScrapeStartTime();
 
-						TRTrackerBTScraperResponseImpl response = (TRTrackerBTScraperResponseImpl) iterHashes.next();
+                            if (hasActiveScrapes) {
+                                if (nextScrapeStartTime < earliestBlocked) {
+                                    earliestBlocked = nextScrapeStartTime;
+                                    earliestBlockedResponse = response;
+                                }
+                            } else {
+                                if (nextScrapeStartTime < earliestNonBlocked) {
+                                    earliestNonBlocked = nextScrapeStartTime;
+                                    earliestNonBlockedResponse = response;
+                                }
+                            }
+                        }
+                    }
+                } finally {
 
-						if (response.getStatus() != TRTrackerScraperResponse.ST_SCRAPING) {
-							long nextScrapeStartTime = response.getNextScrapeStartTime();
-
-							if (hasActiveScrapes) {
-								if (nextScrapeStartTime < earliestBlocked) {
-									earliestBlocked = nextScrapeStartTime;
-									earliestBlockedResponse = response;
-								}
-							} else {
-								if (nextScrapeStartTime < earliestNonBlocked) {
-									earliestNonBlocked = nextScrapeStartTime;
-									earliestNonBlockedResponse = response;
-								}
-							}
-						}
-					}
-				} finally {
-
-					ts.getHashesMonitor().exit();
-				}
-			}
+                    ts.getHashesMonitor().exit();
+                }
+            }
 		} finally {
 
 			trackers_mon.exit();
@@ -494,36 +488,32 @@ public class TrackerChecker implements AEDiagnosticsEvidenceGenerator, SystemTim
   		
 	    try{
 	    	trackers_mon.enter();
-	    	
-	    	Iterator iter = trackers.values().iterator();
-	      
-	    	while (iter.hasNext()) {
-	    		
-	    		TrackerStatus ts = (TrackerStatus) iter.next();
-	    			    		
-	    		Map hashmap = ts.getHashes();
-	    		  
-	    		try{
-	    			ts.getHashesMonitor().enter();
-	        	
-	    			Iterator iterHashes = hashmap.values().iterator();
-	    			
-	    			while( iterHashes.hasNext() ) {
-	            
-	    				TRTrackerBTScraperResponseImpl response = (TRTrackerBTScraperResponseImpl)iterHashes.next();    				
-	            
-	    				long	time = response.getNextScrapeStartTime();
-	
-	    				if ( time > 0 ){
-	    						    					
-	    					response.setNextScrapeStartTime( time + offset );
-	    				}
-	    			}
-	    		}finally{
-	        	
-	    			ts.getHashesMonitor().exit();
-	    		}
-	    	} 
+
+            for (Object o1 : trackers.values()) {
+
+                TrackerStatus ts = (TrackerStatus) o1;
+
+                Map hashmap = ts.getHashes();
+
+                try {
+                    ts.getHashesMonitor().enter();
+
+                    for (Object o : hashmap.values()) {
+
+                        TRTrackerBTScraperResponseImpl response = (TRTrackerBTScraperResponseImpl) o;
+
+                        long time = response.getNextScrapeStartTime();
+
+                        if (time > 0) {
+
+                            response.setNextScrapeStartTime(time + offset);
+                        }
+                    }
+                } finally {
+
+                    ts.getHashesMonitor().exit();
+                }
+            }
 	    }finally{
 	    	
 	    	trackers_mon.exit();
@@ -549,41 +539,37 @@ public class TrackerChecker implements AEDiagnosticsEvidenceGenerator, SystemTim
 
 		    try{
 		    	trackers_mon.enter();
-			    	
-			    Iterator iter = trackers.entrySet().iterator();
-			    
-			    while (iter.hasNext()){
-			    	
-			    	Map.Entry	entry = (Map.Entry)iter.next();
-			    	
-			        TrackerStatus 	ts = (TrackerStatus)entry.getValue();
-			    	
-			    	writer.println( "Tracker: " + ts.getString());   	
-			        
-			        try{
-			        	writer.indent();
-			        	
-			        	ts.getHashesMonitor().enter();
-			        	
-				        Map hashmap = 	ts.getHashes();
-				        
-				        Iterator iter_hashes = hashmap.entrySet().iterator();
-	
-				        while (iter_hashes.hasNext()){
-				        	
-					    	Map.Entry	hash_entry = (Map.Entry)iter_hashes.next();
-					    	
-					    	TRTrackerBTScraperResponseImpl	response = (TRTrackerBTScraperResponseImpl)hash_entry.getValue();
-					    	
-					    	writer.println( response.getString());
-				        }
-			        }finally{
-			        	
-			        	ts.getHashesMonitor().exit();
-			        	
-			        	writer.exdent();
-			        }
-			    }
+
+                for (Object o1 : trackers.entrySet()) {
+
+                    Map.Entry entry = (Map.Entry) o1;
+
+                    TrackerStatus ts = (TrackerStatus) entry.getValue();
+
+                    writer.println("Tracker: " + ts.getString());
+
+                    try {
+                        writer.indent();
+
+                        ts.getHashesMonitor().enter();
+
+                        Map hashmap = ts.getHashes();
+
+                        for (Object o : hashmap.entrySet()) {
+
+                            Map.Entry hash_entry = (Map.Entry) o;
+
+                            TRTrackerBTScraperResponseImpl response = (TRTrackerBTScraperResponseImpl) hash_entry.getValue();
+
+                            writer.println(response.getString());
+                        }
+                    } finally {
+
+                        ts.getHashesMonitor().exit();
+
+                        writer.exdent();
+                    }
+                }
 		    }finally{
 		    	
 		    	trackers_mon.exit();

@@ -40,66 +40,47 @@ AEJarReader
 	AEJarReader(
 		String		name )
 	{
-		InputStream 	is 	= null;
-		JarInputStream 	jis = null;
-		
-		try{
-			is = getClass().getClassLoader().getResourceAsStream(name);
-			
-			jis = new JarInputStream(is );
-			
-			while( true ){
-				
+
+		try (InputStream is = getClass().getClassLoader().getResourceAsStream(name);
+			 JarInputStream jis = new JarInputStream(is)) {
+
+			while (true) {
+
 				JarEntry ent = jis.getNextJarEntry();
-				
-				if ( ent == null ){
-					
+
+				if (ent == null) {
+
 					break;
 				}
-				
-				if ( ent.isDirectory()){
-					
+
+				if (ent.isDirectory()) {
+
 					continue;
 				}
-				
-				ByteArrayOutputStream	baos = new ByteArrayOutputStream();
-					
-				byte[]	buffer = new byte[8192];
-					
-				while( true ){
-						
-					int	l = jis.read( buffer );
-						
-					if ( l <= 0 ){
-							
+
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+				byte[] buffer = new byte[8192];
+
+				while (true) {
+
+					int l = jis.read(buffer);
+
+					if (l <= 0) {
+
 						break;
 					}
-						
-					baos.write( buffer, 0, l );
+
+					baos.write(buffer, 0, l);
 				}
-					
-				entries.put( ent.getName(), new ByteArrayInputStream( baos.toByteArray()));
+
+				entries.put(ent.getName(), new ByteArrayInputStream(baos.toByteArray()));
 			}
-		
-		}catch( Throwable e ){
-			
+
+		} catch (Throwable e) {
+
 			e.printStackTrace();
-						
-		}finally{
-			
-			try{
-				if ( jis != null ){
-					
-					jis.close();
-				}
-				
-				if (is != null){
-					
-					is.close();
-				}
-			}catch( Throwable e ){
-				
-			}
+
 		}
 	}
 	

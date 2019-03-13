@@ -27,5 +27,5 @@ package com.aelitis.azureus.ui.mdi;
  */
 public interface MdiEntryLoadedListener
 {
-	public void mdiEntryLoaded(MdiEntry entry);
+	void mdiEntryLoaded(MdiEntry entry);
 }

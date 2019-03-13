@@ -91,21 +91,19 @@ LocaleUtilDecoderFallback
 		}
 		
 		StringBuffer	res = new StringBuffer( data.length*2 );
-		
-		for (int i=0;i<data.length;i++){
-			
-			byte	c = data[i];
-			
-			if ( VALID_CHARS.indexOf( Character.toLowerCase((char)c)) != -1 ){
-				
-				res.append((char)c);
-				
-			}else{
-				
-				res.append( "_" );
-				res.append( ByteFormatter.nicePrint(c));
-			}
-		}
+
+        for (byte c : data) {
+
+            if (VALID_CHARS.indexOf(Character.toLowerCase((char) c)) != -1) {
+
+                res.append((char) c);
+
+            } else {
+
+                res.append("_");
+                res.append(ByteFormatter.nicePrint(c));
+            }
+        }
 		
 			// more often that not these decoded values are used for filenames. Windows has a limit
 			// of 250 (ish) chars, so we do something sensible with longer values

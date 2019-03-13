@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.net.NoRouteToHostException;
 import java.net.Proxy;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -132,7 +133,7 @@ MagnetPlugin
 	private IntParameter	 md_lookup_delay;
 	private IntParameter	 timeout_param;
 	
-	private Map<String,BooleanParameter> net_params = new HashMap<String, BooleanParameter>();
+	private Map<String,BooleanParameter> net_params = new HashMap<>();
 	
 	
 	public static void
@@ -392,7 +393,7 @@ MagnetPlugin
 								
 								byte[] torrent_data = torrent.writeToBEncodedData();
 								
-								torrent_data = addTrackersAndWebSeedsEtc( torrent_data, args, new HashSet<String>());
+								torrent_data = addTrackersAndWebSeedsEtc( torrent_data, args, new HashSet<>());
 								
 								return( torrent_data);
 							}
@@ -475,14 +476,14 @@ MagnetPlugin
 					Map		values )
 				{
 					List	l = listeners.getList();
-					
-					for (int i=0;i<l.size();i++){
-						
-						if (((MagnetPluginListener)l.get(i)).set( name, values )){
-							
-							return( true );
-						}
-					}
+
+                    for (Object o : l) {
+
+                        if (((MagnetPluginListener) o).set(name, values)) {
+
+                            return (true);
+                        }
+                    }
 					
 					return( false );
 				}
@@ -493,16 +494,16 @@ MagnetPlugin
 					Map			values )
 				{
 					List	l = listeners.getList();
-					
-					for (int i=0;i<l.size();i++){
-						
-						int res = ((MagnetPluginListener)l.get(i)).get( name, values );
-						
-						if ( res != Integer.MIN_VALUE ){
-							
-							return( res );
-						}
-					}
+
+                    for (Object o : l) {
+
+                        int res = ((MagnetPluginListener) o).get(name, values);
+
+                        if (res != Integer.MIN_VALUE) {
+
+                            return (res);
+                        }
+                    }
 					
 					return( Integer.MIN_VALUE );
 				}
@@ -549,7 +550,7 @@ MagnetPlugin
 							try{
 								Class.forName( "com.aelitis.azureus.plugins.magnet.swt.MagnetPluginUISWT" ).getConstructor(
 									new Class[]{ UIInstance.class, TableContextMenuItem[].class }).newInstance(
-										new Object[]{ instance, new TableContextMenuItem[]{ menu1, menu2, menu3 }} );
+                                        instance, new TableContextMenuItem[]{ menu1, menu2, menu3 });
 								
 							}catch( Throwable e ){
 								
@@ -566,7 +567,7 @@ MagnetPlugin
 					}
 				});
 		
-		final List<Download>	to_delete = new ArrayList<Download>();
+		final List<Download>	to_delete = new ArrayList<>();
 		
 		Download[] downloads = plugin_interface.getDownloadManager().getDownloads();
 		
@@ -689,10 +690,10 @@ MagnetPlugin
 		String			args,
 		Set<String>		networks )
 	{
-		List<String>	new_web_seeds 	= new ArrayList<String>();
-		List<String>	new_trackers 	= new ArrayList<String>();
+		List<String>	new_web_seeds 	= new ArrayList<>();
+		List<String>	new_trackers 	= new ArrayList<>();
 
-		Set<String>	tags			= new HashSet<String>();
+		Set<String>	tags			= new HashSet<>();
 		
 		if ( args != null ){
 			
@@ -706,25 +707,29 @@ MagnetPlugin
 				if ( x.length == 2 ){
 					
 					String	lhs = x[0].toLowerCase();
-					
-					if ( lhs.equals( "ws" )){
-						
-						try{
-							new_web_seeds.add( new URL( UrlUtils.decode( x[1] )).toExternalForm());
-							
-						}catch( Throwable e ){							
-						}
-					}else if ( lhs.equals( "tr" )){
-						
-						try{
-							new_trackers.add( new URL( UrlUtils.decode( x[1] )).toExternalForm());
-							
-						}catch( Throwable e ){							
-						}
-					}else if ( lhs.equals( "tag" )){
-						
-						tags.add(UrlUtils.decode( x[1] ));
-					}
+
+                    switch (lhs) {
+                        case "ws":
+
+                            try {
+                                new_web_seeds.add(new URL(UrlUtils.decode(x[1])).toExternalForm());
+
+                            } catch (Throwable e) {
+                            }
+                            break;
+                        case "tr":
+
+                            try {
+                                new_trackers.add(new URL(UrlUtils.decode(x[1])).toExternalForm());
+
+                            } catch (Throwable e) {
+                            }
+                            break;
+                        case "tag":
+
+                            tags.add(UrlUtils.decode(x[1]));
+                            break;
+                    }
 				}
 			}
 		}
@@ -740,12 +745,12 @@ MagnetPlugin
 					
 					Object obj = torrent.getAdditionalProperty( "url-list" );
 					
-					List<String> existing = new ArrayList<String>();
+					List<String> existing = new ArrayList<>();
 					
 					if ( obj instanceof byte[] ){
 		                
 						try{
-							new_web_seeds.remove( new URL( new String((byte[])obj, "UTF-8" )).toExternalForm());
+							new_web_seeds.remove( new URL( new String((byte[])obj, StandardCharsets.UTF_8)).toExternalForm());
 							
 						}catch( Throwable e ){							
 						}
@@ -756,7 +761,7 @@ MagnetPlugin
 						for ( byte[] b: l ){
 							
 							try{
-								existing.add( new URL( new String((byte[])b, "UTF-8" )).toExternalForm());
+								existing.add( new URL( new String(b, StandardCharsets.UTF_8)).toExternalForm());
 								
 							}catch( Throwable e ){							
 							}
@@ -777,11 +782,11 @@ MagnetPlugin
 					
 					if ( update_ws ){
 					
-						List<byte[]>	l = new ArrayList<byte[]>();
+						List<byte[]>	l = new ArrayList<>();
 						
 						for ( String s: existing ){
 							
-							l.add( s.getBytes( "UTF-8" ));
+							l.add( s.getBytes(StandardCharsets.UTF_8));
 						}
 						
 						torrent.setAdditionalProperty( "url-list", l );
@@ -831,14 +836,14 @@ MagnetPlugin
 				
 				if ( networks.size() > 0 ){
 						
-					TorrentUtils.setNetworkCache( torrent, new ArrayList<String>( networks ));
+					TorrentUtils.setNetworkCache( torrent, new ArrayList<>(networks));
 
 					update_torrent = true;
 				}
 				
 				if ( tags.size() > 0 ){
 					
-					TorrentUtils.setTagCache( torrent, new ArrayList<String>( tags ));
+					TorrentUtils.setTagCache( torrent, new ArrayList<>(tags));
 
 					update_torrent = true;
 				}
@@ -854,7 +859,7 @@ MagnetPlugin
 		return( torrent_data );
 	}
 	
-	private static ByteArrayHashMap<DownloadActivity>	download_activities = new ByteArrayHashMap<DownloadActivity>();
+	private static ByteArrayHashMap<DownloadActivity>	download_activities = new ByteArrayHashMap<>();
 	
 	private static class
 	DownloadActivity
@@ -1014,16 +1019,16 @@ MagnetPlugin
 		
 		final Set<String>	networks_enabled;
 		
-		final Set<String>	additional_networks = new HashSet<String>();
+		final Set<String>	additional_networks = new HashSet<>();
 
 		if ( args != null ){
 			
 			String[] bits = args.split( "&" );
 			
-			List<URL>	fl_args 	= new ArrayList<URL>();
+			List<URL>	fl_args 	= new ArrayList<>();
 			
-			Set<String>	tr_networks 		= new HashSet<String>();
-			Set<String>	explicit_networks 	= new HashSet<String>();
+			Set<String>	tr_networks 		= new HashSet<>();
+			Set<String>	explicit_networks 	= new HashSet<>();
 
 			for ( String bit: bits ){
 				
@@ -1045,34 +1050,40 @@ MagnetPlugin
 				if ( x.length == 2 ){
 					
 					String	lhs = x[0].toLowerCase();
-					
-					if ( lhs.equals( "fl" ) || lhs.equals( "xs" ) || lhs.equals( "as" )){
-						
-						try{
-							URL url = new URL( UrlUtils.decode( x[1] ));
-							
-							fl_args.add(url );
-							
-							tr_networks.add( AENetworkClassifier.categoriseAddress( url.getHost()));
 
-						}catch( Throwable e ){							
-						}
-					}else if ( lhs.equals( "tr" )){
-						
-						try{
-							tr_networks.add( AENetworkClassifier.categoriseAddress( new URL( UrlUtils.decode( x[1] )).getHost()));
-							
-						}catch( Throwable e ){							
-						}
-					}else if ( lhs.equals( "net" )){
-						
-						String network = AENetworkClassifier.internalise( x[1] );
-						
-						if ( network != null ){
-							
-							explicit_networks.add( network );
-						}
-					}
+                    switch (lhs) {
+                        case "fl":
+                        case "xs":
+                        case "as":
+
+                            try {
+                                URL url = new URL(UrlUtils.decode(x[1]));
+
+                                fl_args.add(url);
+
+                                tr_networks.add(AENetworkClassifier.categoriseAddress(url.getHost()));
+
+                            } catch (Throwable e) {
+                            }
+                            break;
+                        case "tr":
+
+                            try {
+                                tr_networks.add(AENetworkClassifier.categoriseAddress(new URL(UrlUtils.decode(x[1])).getHost()));
+
+                            } catch (Throwable e) {
+                            }
+                            break;
+                        case "net":
+
+                            String network = AENetworkClassifier.internalise(x[1]);
+
+                            if (network != null) {
+
+                                explicit_networks.add(network);
+                            }
+                            break;
+                    }
 				}
 			}
 			
@@ -1170,7 +1181,7 @@ MagnetPlugin
 			}
 		}else{
 				
-			networks_enabled = new HashSet<String>();
+			networks_enabled = new HashSet<>();
 			
 			if ( net_pub_default ){
 									
@@ -1225,7 +1236,7 @@ MagnetPlugin
 										int		total_size )
 									{
 										if ( listener != null ){
-  										listener.reportActivity( getMessageText( "report.md.progress", String.valueOf( downloaded + "/" + total_size ) ));
+  										listener.reportActivity( getMessageText( "report.md.progress", downloaded + "/" + total_size));
   										
   										listener.reportCompleteness( 100*downloaded/total_size );
 										}
@@ -1374,17 +1385,17 @@ MagnetPlugin
 								
 								protected void
 								addExplicitSources()
-								{	
-									for (int i=0;i<sources.length;i++){
-										
-										try{
-											contactFound( db.importContact(sources[i]));
-											
-										}catch( Throwable e ){
-											
-											Debug.printStackTrace(e);
-										}
-									}
+								{
+                                    for (InetSocketAddress source : sources) {
+
+                                        try {
+                                            contactFound(db.importContact(source));
+
+                                        } catch (Throwable e) {
+
+                                            Debug.printStackTrace(e);
+                                        }
+                                    }
 								}
 								
 								public void
@@ -1438,7 +1449,7 @@ MagnetPlugin
 													try{
 														potential_contacts_mon.enter();
 														
-														Object[]	entry = new Object[]{Boolean.valueOf(alive), contact};
+														Object[]	entry = new Object[]{alive, contact};
 														
 														boolean	added = false;
 														
@@ -1448,7 +1459,7 @@ MagnetPlugin
 													
 															for (int i=0;i<potential_contacts.size();i++){
 																
-																if (!((Boolean)((Object[])potential_contacts.get(i))[0]).booleanValue()){
+																if (!(Boolean) ((Object[]) potential_contacts.get(i))[0]){
 																	
 																	potential_contacts.add(i, entry );
 																	
@@ -1630,7 +1641,7 @@ MagnetPlugin
 								
 									Object[]	entry = (Object[])potential_contacts.remove(0);
 									
-									live_contact 	= ((Boolean)entry[0]).booleanValue(); 
+									live_contact 	= (Boolean) entry[0];
 									contact 		= (DistributedDatabaseContact)entry[1];
 								}
 								
@@ -2099,7 +2110,7 @@ MagnetPlugin
 		{
 			data		= torrent_data;
 			
-			networks = new HashSet<String>();
+			networks = new HashSet<>();
 			
 			networks.addAll( networks_enabled );
 			networks.addAll( additional_networks );

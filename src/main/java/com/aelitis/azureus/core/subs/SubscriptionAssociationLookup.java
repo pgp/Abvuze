@@ -23,10 +23,10 @@ package com.aelitis.azureus.core.subs;
 public interface
 SubscriptionAssociationLookup 
 {
-	public void
+	void
 	cancel();
 	
-	public void
+	void
 	setTimeout(
-		long	millis );
+            long millis);
 }

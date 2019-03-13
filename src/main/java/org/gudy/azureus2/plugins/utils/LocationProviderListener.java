@@ -23,12 +23,12 @@ package org.gudy.azureus2.plugins.utils;
 public interface 
 LocationProviderListener 
 {
-	public void
+	void
 	locationProviderAdded(
-		LocationProvider	lp );
+            LocationProvider lp);
 	
-	public void
+	void
 	locationProviderRemoved(
-		LocationProvider	lp );
+            LocationProvider lp);
 
 }

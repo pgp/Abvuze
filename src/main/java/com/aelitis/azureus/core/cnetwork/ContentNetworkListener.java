@@ -23,20 +23,20 @@ package com.aelitis.azureus.core.cnetwork;
 public interface 
 ContentNetworkListener 
 {
-	public void
+	void
 	networkAdded(
-		ContentNetwork	network );
+            ContentNetwork network);
 
-	public void
+	void
 	networkAddFailed(
-		long network_id,
-		Throwable error );
+            long network_id,
+            Throwable error);
 
-	public void
+	void
 	networkChanged(
-		ContentNetwork	network );
+            ContentNetwork network);
 
-	public void
+	void
 	networkRemoved(
-		ContentNetwork	network );
+            ContentNetwork network);
 }

@@ -22,9 +22,9 @@ package org.gudy.azureus2.plugins.utils.security;
 public interface 
 SEPublicKey 
 {
-	public static final int KEY_TYPE_ECC_192		= 1;
+	int KEY_TYPE_ECC_192		= 1;
 	
-	public int
+	int
 	getType();
 	
 		/**
@@ -34,16 +34,16 @@ SEPublicKey
 		 * 
 		 * @return
 		 */
-	
-	public byte[]
+
+        byte[]
 	encodePublicKey();
 
 		/**
 		 * Raw encoding of the specific key type
 		 * @return
 		 */
-	
-	public byte[]
+
+        byte[]
 	encodeRawPublicKey();
 	
 		/**
@@ -51,11 +51,11 @@ SEPublicKey
 		 * @param other
 		 * @return
 		 */
-	
-	public boolean
+
+        boolean
 	equals(
-		Object	other );
+                Object other);
 	
-	public int
+	int
 	hashCode();
 }

@@ -33,21 +33,21 @@ import java.util.Map;
 public interface 
 ShareManager 
 {
-	public static final String	PR_PERSONAL		= "personal";		// "true"/"false"
-	public static final String	PR_NETWORKS		= "networks";		// String of nets, comma separated
-	public static final String	PR_TAGS			= "tags";			// String of long tag IDs, comma separated
-	public static final String	PR_USER_DATA	= "user_data";		// something distinct the 'creator' can recognise
-	public static final String	PR_PERSISTENT	= "persistent";		// "true"/"false"
+	String	PR_PERSONAL		= "personal";		// "true"/"false"
+	String	PR_NETWORKS		= "networks";		// String of nets, comma separated
+	String	PR_TAGS			= "tags";			// String of long tag IDs, comma separated
+	String	PR_USER_DATA	= "user_data";		// something distinct the 'creator' can recognise
+	String	PR_PERSISTENT	= "persistent";		// "true"/"false"
 
-	public void
+	void
 	initialise()
 	
 		throws ShareException;
 	
-	public boolean
+	boolean
 	isInitialising();
 	
-	public ShareResource[]
+	ShareResource[]
 	getShares();
 	
 		/**
@@ -55,49 +55,49 @@ ShareManager
 		 * @param file_or_dir
 		 * @return
 		 */
-	
-	public ShareResource
+
+        ShareResource
 	getShare(
-		File	file_or_dir );
+                File file_or_dir);
 	
-	public ShareResourceFile
+	ShareResourceFile
 	addFile(
-		File	file )
+            File file)
 	
 		throws ShareException, ShareResourceDeletionVetoException;
 	
-	public ShareResourceFile
+	ShareResourceFile
 	addFile(
-		File				file,
-		Map<String,String>	properties )
+            File file,
+            Map<String, String> properties)
 	
 		throws ShareException, ShareResourceDeletionVetoException;
 
-	public ShareResourceDir
+	ShareResourceDir
 	addDir(
-		File	dir )
+            File dir)
 	
 		throws ShareException, ShareResourceDeletionVetoException;
 	
-	public ShareResourceDir
+	ShareResourceDir
 	addDir(
-		File				dir,
-		Map<String,String>	properties )
+            File dir,
+            Map<String, String> properties)
 	
 		throws ShareException, ShareResourceDeletionVetoException;
 	
-	public ShareResourceDirContents
+	ShareResourceDirContents
 	addDirContents(
-		File	dir,
-		boolean	recursive )
+            File dir,
+            boolean recursive)
 	
 		throws ShareException, ShareResourceDeletionVetoException;
 	
-	public ShareResourceDirContents
+	ShareResourceDirContents
 	addDirContents(
-		File				dir,
-		boolean				recursive,
-		Map<String,String>	properties )
+            File dir,
+            boolean recursive,
+            Map<String, String> properties)
 	
 		throws ShareException, ShareResourceDeletionVetoException;
 	
@@ -106,15 +106,15 @@ ShareManager
 	 * activity can be interrupted by calling this function, in which case the original 
 	 * activity will fail with a ShareException
 	 */
-	
-	public void
+
+    void
 	cancelOperation();
 	
-	public void
+	void
 	addListener(
-		ShareManagerListener	listener );
+            ShareManagerListener listener);
 	
-	public void
+	void
 	removeListener(
-		ShareManagerListener	listener );
+            ShareManagerListener listener);
 }

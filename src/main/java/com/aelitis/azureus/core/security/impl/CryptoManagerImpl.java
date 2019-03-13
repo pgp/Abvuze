@@ -19,6 +19,7 @@
 
 package com.aelitis.azureus.core.security.impl;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
@@ -358,7 +359,7 @@ CryptoManagerImpl
 			String persist_pw_key_type	= CryptoManager.CRYPTO_CONFIG_PREFIX + "pw." + handler + ".persist_type";
 	
 			byte[]	salt		= getPasswordSalt();
-			byte[]	pw_bytes	= new String( pw_chars ).getBytes( "UTF8" );
+			byte[]	pw_bytes	= new String( pw_chars ).getBytes(StandardCharsets.UTF_8);
 			
 			SHA1 sha1 = new SHA1();
 			
@@ -425,129 +426,127 @@ CryptoManagerImpl
 				}
 			}
 		}
-				
-		Iterator	it = password_handlers.iterator();
-		
-		while( it.hasNext()){
-			
-			int	retry_count	= 0;
-			
-			char[]	last_pw_chars = null;
-			
-			CryptoManagerPasswordHandler provider = (CryptoManagerPasswordHandler)it.next();
-			
-			if ( 	pw_type != CryptoManagerPasswordHandler.HANDLER_TYPE_UNKNOWN &&
-					pw_type != provider.getHandlerType()){
-				
-				continue;
-			}
-			
-			while( retry_count < 64 ){
-				
-				try{
-					CryptoManagerPasswordHandler.passwordDetails details = provider.getPassword( handler, action, retry_count > 0, reason );
-					
-					if ( details == null ){
-						
-							// try next password provider
-						
-						break;
-					}
-					
-					char[]	pw_chars = details.getPassword();
-					
-					if ( last_pw_chars != null && Arrays.equals( last_pw_chars, pw_chars )){
-						
-							// no point in going through verification if same as last
-						
-						retry_count++;
-						
-						continue;
-					}
-					
-					last_pw_chars = pw_chars;
-					
-						// transform password so we can persist if needed 
-					
-					byte[]	salt		= getPasswordSalt();
-					byte[]	pw_bytes	= new String( pw_chars ).getBytes( "UTF8" );
-					
-					SHA1 sha1 = new SHA1();
-					
-					sha1.update( ByteBuffer.wrap( salt ));
-					sha1.update( ByteBuffer.wrap( pw_bytes ));
-					
-					String	encoded_pw = ByteFormatter.encodeString( sha1.digest());
-					
-					if ( tester != null && !tester.testPassword( encoded_pw.toCharArray())){
-					
-							// retry
-						
-						retry_count++;
-						
-						continue;
-					}
-					
-					int	persist_secs = details.getPersistForSeconds();
-					
-					long	timeout;
-					
-					if ( persist_secs == 0 ){
-						
-						timeout	= 0;
-						
-					}else if ( persist_secs == Integer.MAX_VALUE ){
-						
-						timeout = Long.MAX_VALUE;
-						
-					}else if ( persist_secs < 0 ){
-						
-							// session only
-						
-						timeout = -1;
-						
-					}else{
-						
-						timeout = SystemTime.getCurrentTime() + persist_secs * 1000L;
-					}
-					
-					passwordDetails	result = new passwordDetails( encoded_pw.toCharArray(), provider.getHandlerType());
-					
-					synchronized( this ){
-						
-						COConfigurationManager.setParameter( persist_timeout_key, timeout );
-						COConfigurationManager.setParameter( persist_pw_key_type, provider.getHandlerType());
-						
-						session_passwords.remove( persist_pw_key );
-						
-						COConfigurationManager.removeParameter( persist_pw_key );
-													
-						if ( timeout < 0 ){
-								
-							session_passwords.put( persist_pw_key, result );
-								
-						}else if ( timeout > 0 ){
-							
-							COConfigurationManager.setParameter( persist_pw_key, encoded_pw );
-	
-							addPasswordTimer( persist_timeout_key, persist_pw_key, timeout );
-						}
-					}
-					
-					provider.passwordOK( handler, details );
-					
-					return( result );
 
-				}catch( Throwable e ){
-					
-					Debug.printStackTrace(e);
-					
-						// next provider
-					
-					break;
-				}
-			}
-		}
+        for (Object password_handler : password_handlers) {
+
+            int retry_count = 0;
+
+            char[] last_pw_chars = null;
+
+            CryptoManagerPasswordHandler provider = (CryptoManagerPasswordHandler) password_handler;
+
+            if (pw_type != CryptoManagerPasswordHandler.HANDLER_TYPE_UNKNOWN &&
+                    pw_type != provider.getHandlerType()) {
+
+                continue;
+            }
+
+            while (retry_count < 64) {
+
+                try {
+                    CryptoManagerPasswordHandler.passwordDetails details = provider.getPassword(handler, action, retry_count > 0, reason);
+
+                    if (details == null) {
+
+                        // try next password provider
+
+                        break;
+                    }
+
+                    char[] pw_chars = details.getPassword();
+
+                    if (last_pw_chars != null && Arrays.equals(last_pw_chars, pw_chars)) {
+
+                        // no point in going through verification if same as last
+
+                        retry_count++;
+
+                        continue;
+                    }
+
+                    last_pw_chars = pw_chars;
+
+                    // transform password so we can persist if needed
+
+                    byte[] salt = getPasswordSalt();
+                    byte[] pw_bytes = new String(pw_chars).getBytes(StandardCharsets.UTF_8);
+
+                    SHA1 sha1 = new SHA1();
+
+                    sha1.update(ByteBuffer.wrap(salt));
+                    sha1.update(ByteBuffer.wrap(pw_bytes));
+
+                    String encoded_pw = ByteFormatter.encodeString(sha1.digest());
+
+                    if (tester != null && !tester.testPassword(encoded_pw.toCharArray())) {
+
+                        // retry
+
+                        retry_count++;
+
+                        continue;
+                    }
+
+                    int persist_secs = details.getPersistForSeconds();
+
+                    long timeout;
+
+                    if (persist_secs == 0) {
+
+                        timeout = 0;
+
+                    } else if (persist_secs == Integer.MAX_VALUE) {
+
+                        timeout = Long.MAX_VALUE;
+
+                    } else if (persist_secs < 0) {
+
+                        // session only
+
+                        timeout = -1;
+
+                    } else {
+
+                        timeout = SystemTime.getCurrentTime() + persist_secs * 1000L;
+                    }
+
+                    passwordDetails result = new passwordDetails(encoded_pw.toCharArray(), provider.getHandlerType());
+
+                    synchronized (this) {
+
+                        COConfigurationManager.setParameter(persist_timeout_key, timeout);
+                        COConfigurationManager.setParameter(persist_pw_key_type, provider.getHandlerType());
+
+                        session_passwords.remove(persist_pw_key);
+
+                        COConfigurationManager.removeParameter(persist_pw_key);
+
+                        if (timeout < 0) {
+
+                            session_passwords.put(persist_pw_key, result);
+
+                        } else if (timeout > 0) {
+
+                            COConfigurationManager.setParameter(persist_pw_key, encoded_pw);
+
+                            addPasswordTimer(persist_timeout_key, persist_pw_key, timeout);
+                        }
+                    }
+
+                    provider.passwordOK(handler, details);
+
+                    return (result);
+
+                } catch (Throwable e) {
+
+                    Debug.printStackTrace(e);
+
+                    // next provider
+
+                    break;
+                }
+            }
+        }
 		
 		throw( new CryptoManagerPasswordException( false, "No password handlers returned a password" ));
 	}
@@ -575,36 +574,34 @@ CryptoManagerImpl
 	keyChanged(
 		CryptoHandler	handler )
 	{
-		Iterator it = keychange_listeners.iterator();
-		
-		while( it.hasNext()){
-			
-			try{		
-				((CryptoManagerKeyListener)it.next()).keyChanged( handler );
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace( e );
-			}
-		}
+
+        for (Object keychange_listener : keychange_listeners) {
+
+            try {
+                ((CryptoManagerKeyListener) keychange_listener).keyChanged(handler);
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 	
 	protected void
 	lockChanged(
 		CryptoHandler	handler )
 	{
-		Iterator it = keychange_listeners.iterator();
-		
-		while( it.hasNext()){
-			
-			try{		
-				((CryptoManagerKeyListener)it.next()).keyLockStatusChanged( handler );
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace( e );
-			}
-		}
+
+        for (Object keychange_listener : keychange_listeners) {
+
+            try {
+                ((CryptoManagerKeyListener) keychange_listener).keyLockStatusChanged(handler);
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 	
 	public void
@@ -638,9 +635,9 @@ CryptoManagerImpl
 	public interface
 	passwordTester
 	{
-		public boolean
+		boolean
 		testPassword(
-			char[]		pw );
+                char[] pw);
 	}
 	
 	public void

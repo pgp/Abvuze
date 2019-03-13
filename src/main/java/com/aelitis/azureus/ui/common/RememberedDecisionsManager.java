@@ -97,7 +97,7 @@ public class RememberedDecisionsManager
 		if (value == -1) {
 			remembered_decisions.remove(id);
 		} else {
-			remembered_decisions.put(id, new Long(value));
+			remembered_decisions.put(id, (long) value);
 		}
 
 		// System.out.println("setR " + id + " -> " + value);

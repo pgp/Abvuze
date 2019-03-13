@@ -24,20 +24,20 @@ import com.aelitis.azureus.core.dht.transport.DHTTransportContact;
 public interface 
 DHTStorageBlock 
 {
-	public byte[]
+	byte[]
 	getKey();
 	
-	public byte[]
+	byte[]
 	getRequest();
 	
-	public byte[]
+	byte[]
 	getCertificate();
 	
-	public boolean
+	boolean
 	hasBeenSentTo(
-		DHTTransportContact	contact );
+            DHTTransportContact contact);
 	
-	public void
+	void
 	sentTo(
-		DHTTransportContact	contact );
+            DHTTransportContact contact);
 }

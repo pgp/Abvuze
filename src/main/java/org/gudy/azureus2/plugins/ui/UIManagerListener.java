@@ -33,9 +33,9 @@ UIManagerListener
 	 * @param instance Check with <code>instanceof</code> to see what UI is being
 	 *                  attached
 	 */
-	public void
+    void
 	UIAttached(
-		UIInstance		instance );
+            UIInstance instance);
 	
 	/**
 	 * Triggered when an UI is detached
@@ -43,7 +43,7 @@ UIManagerListener
 	 * @param instance Check with <code>instanceof</code> to see what UI is being
 	 *                  dettached
 	 */
-	public void
+    void
 	UIDetached(
-		UIInstance		instance );		
+            UIInstance instance);
 }

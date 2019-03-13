@@ -51,9 +51,9 @@ public class BTKeepAlive implements BTMessage, RawMessage {
   
   public int getType() {  return Message.TYPE_PROTOCOL_PAYLOAD;  }
     
-  public byte getVersion() { return version; };
+  public byte getVersion() { return version; }
 
-  public String getDescription() {  return BTMessage.ID_BT_KEEP_ALIVE;  }
+    public String getDescription() {  return BTMessage.ID_BT_KEEP_ALIVE;  }
   
   public DirectByteBuffer[] getData() {  return new DirectByteBuffer[]{};  }
 

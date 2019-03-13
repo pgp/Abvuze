@@ -39,5 +39,5 @@ public interface TableCellMouseListener {
 	 * 
 	 * @since 2.3.0.7
 	 */
-	public void cellMouseTrigger(TableCellMouseEvent event);
+    void cellMouseTrigger(TableCellMouseEvent event);
 }

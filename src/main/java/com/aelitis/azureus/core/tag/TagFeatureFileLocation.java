@@ -25,66 +25,66 @@ import java.io.File;
 public interface 
 TagFeatureFileLocation 
 {
-	public static final long	FL_NONE			= 0x00;
-	public static final long	FL_DATA			= 0x01;
-	public static final long	FL_TORRENT		= 0x02;
-	public static final long	FL_BOTH			= FL_DATA | FL_TORRENT;
-	public static final long	FL_DEFAULT		= FL_DATA;
+	long	FL_NONE			= 0x00;
+	long	FL_DATA			= 0x01;
+	long	FL_TORRENT		= 0x02;
+	long	FL_BOTH			= FL_DATA | FL_TORRENT;
+	long	FL_DEFAULT		= FL_DATA;
 	
 		// initial location
 	
-	public boolean
+	boolean
 	supportsTagInitialSaveFolder();
 	
-	public File
+	File
 	getTagInitialSaveFolder();
 	
-	public void
+	void
 	setTagInitialSaveFolder(
-		File		folder );
+            File folder);
 	
-	public long
+	long
 	getTagInitialSaveOptions();
 	
-	public void
+	void
 	setTagInitialSaveOptions(
-		long		opions );
+            long opions);
 	
 		// move 
 	
-	public boolean
+	boolean
 	supportsTagMoveOnComplete();
 	
-	public File
+	File
 	getTagMoveOnCompleteFolder();
 	
-	public void
+	void
 	setTagMoveOnCompleteFolder(
-		File		folder );
+            File folder);
 	
-	public long
+	long
 	getTagMoveOnCompleteOptions();
 	
-	public void
+	void
 	setTagMoveOnCompleteOptions(
-		long		opions );
+            long opions);
 	
 		// copy 
 	
-	public boolean
+	boolean
 	supportsTagCopyOnComplete();
 	
-	public File
+	File
 	getTagCopyOnCompleteFolder();
 	
-	public void
+	void
 	setTagCopyOnCompleteFolder(
-		File		folder );
+            File folder);
 	
-	public long
+	long
 	getTagCopyOnCompleteOptions();
 	
-	public void
+	void
 	setTagCopyOnCompleteOptions(
-		long		opions );
+            long opions);
 }

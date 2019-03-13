@@ -224,17 +224,21 @@ implements PiecePicker
 		{
 			public final void parameterChanged(final String parameterName)
 			{
-				if (parameterName.equals("Prioritize Most Completed Files"))
-				{
-					completionPriority =COConfigurationManager.getBooleanParameter(parameterName);
-					paramPriorityChange++;	// this is a user's priority change event
-				} else if (parameterName.equals("Prioritize First Piece"))
-				{
-					firstPiecePriority =COConfigurationManager.getBooleanParameter(parameterName);
-					paramPriorityChange++;	// this is a user's priority change event
-			    }else if ( parameterName.equals( "Piece Picker Request Hint Enabled" )){
-			    	enable_request_hints = COConfigurationManager.getBooleanParameter(parameterName);
-				}
+                switch (parameterName) {
+                    case "Prioritize Most Completed Files":
+                        completionPriority = COConfigurationManager.getBooleanParameter(parameterName);
+                        paramPriorityChange++;    // this is a user's priority change event
+
+                        break;
+                    case "Prioritize First Piece":
+                        firstPiecePriority = COConfigurationManager.getBooleanParameter(parameterName);
+                        paramPriorityChange++;    // this is a user's priority change event
+
+                        break;
+                    case "Piece Picker Request Hint Enabled":
+                        enable_request_hints = COConfigurationManager.getBooleanParameter(parameterName);
+                        break;
+                }
 				
 				includeLanPeersInReqLimiting = ! COConfigurationManager.getBooleanParameter("LAN Speed Enabled");
 			}
@@ -330,7 +334,7 @@ implements PiecePicker
 		try
 		{	availabilityMon.enter();
 		if ( availabilityAsynch == null ){
-			availabilityAsynch = (int[])availability.clone();
+			availabilityAsynch = availability.clone();
 		}
 		++availabilityAsynch[pieceNumber];
 		availabilityChange++;
@@ -666,27 +670,25 @@ implements PiecePicker
 		final int peersSize =peers.size();
 
 		//final long[] upRates =new long[peersSize];
-		final ArrayList<PEPeerTransport> bestUploaders =new ArrayList<PEPeerTransport>( peersSize );
+		final ArrayList<PEPeerTransport> bestUploaders = new ArrayList<>(peersSize);
 
-		for (int i =0; i <peersSize; i++){
+        for (Object peer1 : peers) {
 
-			final PEPeerTransport peer =(PEPeerTransport) peers.get(i);
+            final PEPeerTransport peer = (PEPeerTransport) peer1;
 
-			if (peer.isDownloadPossible())
-			{
+            if (peer.isDownloadPossible()) {
 
-				int	no_req_count 	= peer.getConsecutiveNoRequestCount();
+                int no_req_count = peer.getConsecutiveNoRequestCount();
 
-				if ( 	no_req_count == 0 || 
-						allocate_request_loop_count % ( no_req_count + 1 ) == 0 )
-				{
-					bestUploaders.add(peer);
-					
-					//final long upRate =peer.getStats().getSmoothDataReceiveRate();
-					//UnchokerUtil.updateLargestValueFirstSort(upRate, upRates, peer, bestUploaders, 0);
-				}
-			}
-		}
+                if (no_req_count == 0 ||
+                        allocate_request_loop_count % (no_req_count + 1) == 0) {
+                    bestUploaders.add(peer);
+
+                    //final long upRate =peer.getStats().getSmoothDataReceiveRate();
+                    //UnchokerUtil.updateLargestValueFirstSort(upRate, upRates, peer, bestUploaders, 0);
+                }
+            }
+        }
 
 		/* sort all peers we're currently downloading from
 		 * with the most favorable for the next request one as 1st entry
@@ -809,7 +811,7 @@ implements PiecePicker
 								
 								if ( m1 == null ){
 									
-									m1 = new Integer( getNextBlockETAFromNow( pt1 ));
+									m1 = getNextBlockETAFromNow(pt1);
 									
 									block_time_order_peers_metrics.put( pt1, m1 );
 								}
@@ -818,12 +820,12 @@ implements PiecePicker
 								
 								if ( m2 == null ){
 									
-									m2 = new Integer( getNextBlockETAFromNow( pt2 ));
+									m2 = getNextBlockETAFromNow(pt2);
 									
 									block_time_order_peers_metrics.put( pt2, m2 );
 								}
 								
-								int	result = m1.intValue() - m2.intValue();
+								int	result = m1 - m2;
 								
 								if ( result == 0 ){
 									
@@ -838,7 +840,7 @@ implements PiecePicker
 									
 									if ( r_1 == null ){
 									
-										r_1 = new Integer(random.nextInt());
+										r_1 = random.nextInt();
 										
 										pr.put( pt1, r_1 );
 									}
@@ -847,12 +849,12 @@ implements PiecePicker
 									
 									if ( r_2 == null ){
 									
-										r_2 = new Integer(random.nextInt());
+										r_2 = random.nextInt();
 										
 										pr.put( pt2, r_2 );
 									}
 
-									result = r_1.intValue() - r_2.intValue();
+									result = r_1 - r_2;
 									
 									if ( result == 0 ){
 										
@@ -873,7 +875,7 @@ implements PiecePicker
 
 			block_time_order_peers.addAll( bestUploaders );
 			
-			PEPeerTransport	best_uploader = (PEPeerTransport)bestUploaders.get(0);
+			PEPeerTransport	best_uploader = bestUploaders.get(0);
 
 			long best_block_eta = SystemTime.getCurrentTime() + getNextBlockETAFromNow( best_uploader );
 			
@@ -953,11 +955,10 @@ implements PiecePicker
 					}
 				}
 			}finally{
-				Iterator	it = allocations_started.iterator();
-				
-				while( it.hasNext()){
-					((PEPeerTransport)it.next()).requestAllocationComplete();
-				}
+
+                for (Object o : allocations_started) {
+                    ((PEPeerTransport) o).requestAllocationComplete();
+                }
 			}
 		}else{
 			
@@ -974,120 +975,118 @@ implements PiecePicker
 		checkEndGameMode();
 		
 		//dispenser.refill();
-		
-		for (int i =0; i <uploadersSize; i++){
-			
-			final PEPeerTransport pt =(PEPeerTransport) bestUploaders.get(i);
-			
-			// only request when there are still free tokens in the bucket or when it's a lan peer (which get sorted to the front of the queue) 
-			if(dispenser.peek(DiskManager.BLOCK_SIZE) < 1 && (!pt.isLANLocal() || includeLanPeersInReqLimiting))
-				break;
-			
-			//System.out.println("#"+i+" "+pt.getStats().getSmoothDataReceiveRate());
-			
-			// can we transfer something?
-			if (pt.isDownloadPossible()){
-				int	peer_request_num = pt.getMaxNbRequests();
 
-				// If request queue is too low, enqueue another request
-				int maxRequests;
-				if ( peer_request_num != -1 ){
-					maxRequests = peer_request_num;
-				}else{
-					if (!pt.isSnubbed()){
-						if (!endGameMode){
-							
-							int	peer_requests_min;
-							
-							if ( pt.getUnchokedForMillis() < 10*1000 ){
-								
-								peer_requests_min = REQUESTS_MIN;
-								
-							}else{
-								
-								peer_requests_min = REQUESTS_MIN_MIN;
-							}
-							
-							maxRequests =peer_requests_min +(int) (pt.getStats().getDataReceiveRate() /SLOPE_REQUESTS);
-							if (maxRequests >REQUESTS_MAX ||maxRequests <0)
-								maxRequests =REQUESTS_MAX;
-						}else{
-							maxRequests =2;
-						}
-					}else{
-						
-						maxRequests = pt.getNetwork()==AENetworkClassifier.AT_PUBLIC?1:2;
-					}
-				}
+        for (final PEPeerTransport pt : bestUploaders) {
 
-				// Only loop when 3/5 of the queue is empty, in order to make more consecutive requests,
-				// and improve cache efficiency
+            // only request when there are still free tokens in the bucket or when it's a lan peer (which get sorted to the front of the queue)
+            if (dispenser.peek(DiskManager.BLOCK_SIZE) < 1 && (!pt.isLANLocal() || includeLanPeersInReqLimiting))
+                break;
 
-				if ( pt.getNbRequests() <=(maxRequests *3) /5){
-				//if ( pt.getNbRequests() <= maxRequests){
-				//	System.out.println("\treqesting from peer; speed:"+pt.getStats().getDataReceiveRate()+" outstanding requests:"+pt.getNbRequests()+" max:"+maxRequests);
+            //System.out.println("#"+i+" "+pt.getStats().getSmoothDataReceiveRate());
 
-					if ( !done_priorities ){
+            // can we transfer something?
+            if (pt.isDownloadPossible()) {
+                int peer_request_num = pt.getMaxNbRequests();
 
-						done_priorities	= true;
+                // If request queue is too low, enqueue another request
+                int maxRequests;
+                if (peer_request_num != -1) {
+                    maxRequests = peer_request_num;
+                } else {
+                    if (!pt.isSnubbed()) {
+                        if (!endGameMode) {
 
-						computeBasePriorities();
-					}
+                            int peer_requests_min;
 
-					int	total_allocated = 0;
+                            if (pt.getUnchokedForMillis() < 10 * 1000) {
 
-					try{
-						boolean	peer_managing_requests = pt.requestAllocationStarts( startPriorities );
+                                peer_requests_min = REQUESTS_MIN;
 
-						while ( pt.isDownloadPossible() && pt.getNbRequests() < maxRequests ){
+                            } else {
 
-							// is there anything else to download?
+                                peer_requests_min = REQUESTS_MIN_MIN;
+                            }
 
-							int	allocated;
+                            maxRequests = peer_requests_min + (int) (pt.getStats().getDataReceiveRate() / SLOPE_REQUESTS);
+                            if (maxRequests > REQUESTS_MAX || maxRequests < 0)
+                                maxRequests = REQUESTS_MAX;
+                        } else {
+                            maxRequests = 2;
+                        }
+                    } else {
 
-							if ( peer_managing_requests || !endGameMode ){
+                        maxRequests = pt.getNetwork() == AENetworkClassifier.AT_PUBLIC ? 1 : 2;
+                    }
+                }
 
-								allocated = findPieceToDownload(pt, maxRequests );
+                // Only loop when 3/5 of the queue is empty, in order to make more consecutive requests,
+                // and improve cache efficiency
 
-							}else{
+                if (pt.getNbRequests() <= (maxRequests * 3) / 5) {
+                    //if ( pt.getNbRequests() <= maxRequests){
+                    //	System.out.println("\treqesting from peer; speed:"+pt.getStats().getDataReceiveRate()+" outstanding requests:"+pt.getNbRequests()+" max:"+maxRequests);
 
-								allocated = findPieceInEndGameMode(pt, maxRequests);
-							}
+                    if (!done_priorities) {
 
-							if ( allocated == 0 )	                		
-								break;
-							else
-								total_allocated += allocated;
+                        done_priorities = true;
 
-						}
-					}finally{
+                        computeBasePriorities();
+                    }
 
-						pt.requestAllocationComplete();
-					}
+                    int total_allocated = 0;
 
-					if ( total_allocated == 0 ){
+                    try {
+                        boolean peer_managing_requests = pt.requestAllocationStarts(startPriorities);
 
-						// there are various reasons that we might not allocate any requests to a peer
-						// such as them not having any pieces we're interested in. Keep track of the 
-						// number of consecutive "no requests" outcomes so we can reduce the scheduling
-						// frequency of such peers
+                        while (pt.isDownloadPossible() && pt.getNbRequests() < maxRequests) {
 
-						int	no_req_count = pt.getConsecutiveNoRequestCount();
+                            // is there anything else to download?
 
-						if ( no_req_count < NO_REQUEST_BACKOFF_MAX_LOOPS ){
+                            int allocated;
 
-							pt.setConsecutiveNoRequestCount( no_req_count + 1 );
-						}
+                            if (peer_managing_requests || !endGameMode) {
 
-						// System.out.println( pt.getIp() + ": nb=" + pt.getNbRequests() + ",max=" + maxRequests + ",nrc=" + no_req_count +",loop=" + allocate_request_loop_count); 
+                                allocated = findPieceToDownload(pt, maxRequests);
 
-					}else{
+                            } else {
 
-						pt.setConsecutiveNoRequestCount( 0 );
-					}
-				}
-			}
-		}
+                                allocated = findPieceInEndGameMode(pt, maxRequests);
+                            }
+
+                            if (allocated == 0)
+                                break;
+                            else
+                                total_allocated += allocated;
+
+                        }
+                    } finally {
+
+                        pt.requestAllocationComplete();
+                    }
+
+                    if (total_allocated == 0) {
+
+                        // there are various reasons that we might not allocate any requests to a peer
+                        // such as them not having any pieces we're interested in. Keep track of the
+                        // number of consecutive "no requests" outcomes so we can reduce the scheduling
+                        // frequency of such peers
+
+                        int no_req_count = pt.getConsecutiveNoRequestCount();
+
+                        if (no_req_count < NO_REQUEST_BACKOFF_MAX_LOOPS) {
+
+                            pt.setConsecutiveNoRequestCount(no_req_count + 1);
+                        }
+
+                        // System.out.println( pt.getIp() + ": nb=" + pt.getNbRequests() + ",max=" + maxRequests + ",nrc=" + no_req_count +",loop=" + allocate_request_loop_count);
+
+                    } else {
+
+                        pt.setConsecutiveNoRequestCount(0);
+                    }
+                }
+            }
+        }
 	}
 
 
@@ -1131,7 +1130,7 @@ implements PiecePicker
 		PEPiece rarestStarted;
 		for (int i=0;i<rarestStartedPieces.size();i++)
 		{
-			rarestStarted = (PEPiece)rarestStartedPieces.get(i);
+			rarestStarted = rarestStartedPieces.get(i);
 			if (pePieces[rarestStarted.getPieceNumber()] == null) {rarestStartedPieces.remove(i);i--;continue;}
 			if (
 				(
@@ -1363,8 +1362,8 @@ implements PiecePicker
 						
 					}else if ( forced != null && forced.contains( i )){
 						
-						startPriority 	= PRIORITY_FORCED;;
-					}
+						startPriority 	= PRIORITY_FORCED;
+                    }
 				}else{
 
 					dmPiece.clearNeeded();
@@ -2410,7 +2409,7 @@ implements PiecePicker
 					peerControl.addPiece(pePiece,i, null);
 				}
 
-				final boolean written[] =dmPiece.getWritten();
+                final boolean[] written = dmPiece.getWritten();
 				
 				if (written ==null){
 					
@@ -2665,27 +2664,27 @@ implements PiecePicker
 
 			provider_piece_priorities = new long[nbPieces];
 
-			for (int i=0;i<p_ps.size();i++){
+            for (Object p_p : p_ps) {
 
-				PiecePriorityProvider	shaper = (PiecePriorityProvider)p_ps.get(i);
+                PiecePriorityProvider shaper = (PiecePriorityProvider) p_p;
 
-				final long[] priorities = shaper.updatePriorities( this );
+                final long[] priorities = shaper.updatePriorities(this);
 
-				if ( priorities == null ){
+                if (priorities == null) {
 
-					continue;
-				}
+                    continue;
+                }
 
-				for (int j=0;j<priorities.length;j++){
+                for (int j = 0; j < priorities.length; j++) {
 
-					long priority = priorities[j];
+                    long priority = priorities[j];
 
-					if ( priority != 0 ){
+                    if (priority != 0) {
 
-						provider_piece_priorities[j] += priority;
-					}
-				}
-			}
+                        provider_piece_priorities[j] += priority;
+                    }
+                }
+            }
 		}
 
 		List	rta_ps = rta_providers.getList();
@@ -2696,15 +2695,13 @@ implements PiecePicker
 
 				// coming out of real-time mode - clear down 
 
-				for (int i=0;i<pePieces.length;i++){
+                for (PEPiece piece : pePieces) {
 
-					PEPiece	piece = pePieces[i];
+                    if (piece != null) {
 
-					if ( piece != null ){
-
-						piece.setRealTimeData(null);
-					}
-				}
+                        piece.setRealTimeData(null);
+                    }
+                }
 
 				provider_piece_rtas = null;
 			}
@@ -2719,36 +2716,36 @@ implements PiecePicker
 
 			provider_piece_rtas = new long[nbPieces];
 
-			for (int i=0;i<rta_ps.size();i++){
+            for (Object rta_p : rta_ps) {
 
-				PieceRTAProvider	shaper = (PieceRTAProvider)rta_ps.get(i);
+                PieceRTAProvider shaper = (PieceRTAProvider) rta_p;
 
-				final long[]	offsets = shaper.updateRTAs( this );
+                final long[] offsets = shaper.updateRTAs(this);
 
-				if ( offsets == null ){
+                if (offsets == null) {
 
-					continue;
-				}
+                    continue;
+                }
 
-				for (int j=0;j<offsets.length;j++){
+                for (int j = 0; j < offsets.length; j++) {
 
-					long rta = offsets[j];
+                    long rta = offsets[j];
 
-					if ( rta > 0 ){
+                    if (rta > 0) {
 
-						if ( provider_piece_rtas[j] == 0 ){
+                        if (provider_piece_rtas[j] == 0) {
 
-							provider_piece_rtas[j] = rta;
+                            provider_piece_rtas[j] = rta;
 
-						}else{
+                        } else {
 
-							provider_piece_rtas[j] = Math.min( provider_piece_rtas[j], rta );
-						}
+                            provider_piece_rtas[j] = Math.min(provider_piece_rtas[j], rta);
+                        }
 
-						has_rta	= true;
-					}
-				}
-			}
+                        has_rta = true;
+                    }
+                }
+            }
 
 			return( has_rta );
 		}
@@ -2760,18 +2757,16 @@ implements PiecePicker
 	{
 		rta_providers.add( provider );
 
-		Iterator	it = listeners.iterator();
+        for (Object listener : listeners) {
 
-		while( it.hasNext()){
+            try {
+                ((PiecePickerListener) listener).providerAdded(provider);
 
-			try{
-				((PiecePickerListener)it.next()).providerAdded( provider );
+            } catch (Throwable e) {
 
-			}catch( Throwable e ){
-
-				Debug.printStackTrace(e);
-			}
-		}
+                Debug.printStackTrace(e);
+            }
+        }
 		
 			// we don't want end-game mode kicking in and screwing with the RTA logic
 			// at the end of the download. simplest way is to abandon it for this
@@ -2787,18 +2782,16 @@ implements PiecePicker
 	{
 		rta_providers.remove( provider );
 
-		Iterator	it = listeners.iterator();
+        for (Object listener : listeners) {
 
-		while( it.hasNext()){
+            try {
+                ((PiecePickerListener) listener).providerRemoved(provider);
 
-			try{
-				((PiecePickerListener)it.next()).providerRemoved( provider );
+            } catch (Throwable e) {
 
-			}catch( Throwable e ){
-
-				Debug.printStackTrace(e);
-			}
-		}
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 
 	public List
@@ -2813,18 +2806,16 @@ implements PiecePicker
 	{
 		priority_providers.add( provider );
 
-		Iterator	it = listeners.iterator();
+        for (Object listener : listeners) {
 
-		while( it.hasNext()){
+            try {
+                ((PiecePickerListener) listener).providerAdded(provider);
 
-			try{
-				((PiecePickerListener)it.next()).providerAdded( provider );
+            } catch (Throwable e) {
 
-			}catch( Throwable e ){
-
-				Debug.printStackTrace(e);
-			}
-		}
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 
 	public void
@@ -2833,18 +2824,16 @@ implements PiecePicker
 	{
 		priority_providers.remove( provider );
 
-		Iterator	it = listeners.iterator();
+        for (Object listener : listeners) {
 
-		while( it.hasNext()){
+            try {
+                ((PiecePickerListener) listener).providerRemoved(provider);
 
-			try{
-				((PiecePickerListener)it.next()).providerRemoved( provider );
+            } catch (Throwable e) {
 
-			}catch( Throwable e ){
-
-				Debug.printStackTrace(e);
-			}
-		}
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 
 	public List
@@ -2859,12 +2848,10 @@ implements PiecePicker
 	{
 		listeners.add( listener );
 
-		Iterator	it = rta_providers.iterator();
+        for (Object rta_provider : rta_providers) {
 
-		while( it.hasNext()){
-
-			listener.providerAdded((PieceRTAProvider)it.next());
-		}
+            listener.providerAdded((PieceRTAProvider) rta_provider);
+        }
 	}
 
 	public void 
@@ -2943,7 +2930,7 @@ implements PiecePicker
 			try
 			{	availabilityMon.enter();
 			if ( availabilityAsynch == null ){
-				availabilityAsynch = (int[])availability.clone();
+				availabilityAsynch = availability.clone();
 			}
 			for (int i =peerHavePieces.start; i <=peerHavePieces.end; i++)
 			{
@@ -2968,7 +2955,7 @@ implements PiecePicker
 			{	availabilityMon.enter();
 			if (availabilityAsynch ==null)
 			{
-				availabilityAsynch = (int[])availability.clone();
+				availabilityAsynch = availability.clone();
 			}
 			for (int i =peerHavePieces.start; i <=peerHavePieces.end; i++)
 			{
@@ -3047,7 +3034,7 @@ implements PiecePicker
 				try
 				{   availabilityMon.enter();
 				if ( availabilityAsynch == null ){
-					availabilityAsynch = (int[])availability.clone();
+					availabilityAsynch = availability.clone();
 				}
 				if (availabilityAsynch[pieceNumber] >0)
 					--availabilityAsynch[pieceNumber];
@@ -3094,7 +3081,7 @@ implements PiecePicker
 					return;
 				}
 				
-				set = new CopyOnWriteSet<Integer>( false );
+				set = new CopyOnWriteSet<>(false);
 				
 				forced_pieces = set;
 			}

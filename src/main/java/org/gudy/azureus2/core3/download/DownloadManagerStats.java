@@ -38,7 +38,7 @@ DownloadManagerStats
    *         returns the % done of that task
    *         Any other state MAY return getDownloadCompleted()
    */
-	public int
+  int
 	getCompleted();
 
   /** Retrieve the level of download completion, *including* DND files.
@@ -66,10 +66,10 @@ DownloadManagerStats
    *
    * @return 0 - 1000
    */
-	public int
+  int
 	getDownloadCompleted(boolean bLive);
 	
-	public void 
+	void
 	setDownloadCompletedBytes(long completedBytes);
 	
 	/**
@@ -77,118 +77,118 @@ DownloadManagerStats
 	 * <P>
 	 * Includes bytes downloaded for files marked as DND/Skipped
 	 */
-	public long
+    long
 	getDownloadCompletedBytes();
 
-	public void
+	void
 	recalcDownloadCompleteBytes();
 
   /**
    * Get the total number of bytes ever downloaded.
    * @return total bytes downloaded
    */
-	public long	getTotalDataBytesReceived();
+  long	getTotalDataBytesReceived();
 	
 	/**
 	 * data bytes received minus discards and hashfails
 	 * @return
 	 */
+
+    long	getTotalGoodDataBytesReceived();
 	
-	public long	getTotalGoodDataBytesReceived();
+	long getTotalProtocolBytesReceived();
 	
-	public long getTotalProtocolBytesReceived();
-	
-	public long	getSessionDataBytesReceived();
+	long	getSessionDataBytesReceived();
 
   
   /**
    * Get the total number of bytes ever uploaded.
    * @return total bytes uploaded
    */
-	public long	getTotalDataBytesSent();
+  long	getTotalDataBytesSent();
   	
-	public long getTotalProtocolBytesSent();
+	long getTotalProtocolBytesSent();
 	
-	public long	getSessionDataBytesSent();
+	long	getSessionDataBytesSent();
 
 	/**
 	 * Resets the total bytes sent/received - will stop and start the download if it is running
 	 */
-	public void resetTotalBytesSentReceived( long sent, long received );
+    void resetTotalBytesSentReceived(long sent, long received);
 
 	/**
 	 * Returns the bytes remaining.  *Includes* DND files
 	 */
-	public long getRemaining();
+    long getRemaining();
 	
-	public long
+	long
 	getDiscarded();
   	
-	public long
+	long
 	getHashFailBytes();
 	
-	public long
+	long
 	getHashFailCount();
 
 	/**
 	 * Gives the share ratio of the torrent in 1000ths (i.e. 1000 = share ratio of 1)
 	 */
-	public int
+    int
 	getShareRatio();
 	
-	public void
+	void
 	setShareRatio(
-		int		ratio );
+            int ratio);
 	
-	public long getDataReceiveRate();
+	long getDataReceiveRate();
   
-	public long getProtocolReceiveRate();
+	long getProtocolReceiveRate();
   
 		
-	public long getDataSendRate();
+	long getDataSendRate();
 
-	public long getProtocolSendRate();
+	long getProtocolSendRate();
   
 	/**
 	 * Swarm speed
 	 * @return
 	 */
-	public long
+    long
 	getTotalAverage();
 	
 		/**
 		 * Average for a peer in the swarm
 		 * @return
 		 */
-	public long
+        long
 	getTotalAveragePerPeer();
 	
 		/**
 		 * In general history isn't available, however if this method is called it will start retention for a certain period of time
 		 * @return
 		 */
-	
-	public void
+
+        void
 	setRecentHistoryRetention(
-		boolean		required );
+                boolean required);
 	
 		/**
 		 * Get any recent history. Returned values are send rate, receive rate and peer-swarm average
 		 * @return
 		 */
-	
-	public int[][]
+
+        int[][]
 	getRecentHistory();
 	
-	public String
+	String
 	getElapsedTime();
 	
 	// in ms
-	public long
+    long
 	getTimeStarted();
 
-  /* -1 if not seeding */		
-	public long
+  /* -1 if not seeding */
+  long
 	getTimeStartedSeeding();
 
 	/**
@@ -203,87 +203,87 @@ DownloadManagerStats
 	 * *deprecated - use getSmoothedETA as the unstability of getETA is pretty bad
 	 * @return
 	 */
-	public long
+    long
 	getETA();
 	
-	public long
+	long
 	getSmoothedETA();
 	
-	public long
+	long
 	getPeakDataReceiveRate();
 	
-	public long
+	long
 	getPeakDataSendRate();
 	
-	public long
+	long
 	getSmoothedDataReceiveRate();
 	
-	public long
+	long
 	getSmoothedDataSendRate();
 	
-	public float
+	float
 	getAvailability();
 		
 
-	public long 
+	long
 	getSecondsDownloading();
 
-	public long 
+	long
 	getSecondsOnlySeeding();
 	
-	public void
+	void
 	setCompleted(
-		int		c );	 
+            int c);
   
   /**
    * Get the max upload rate allowed for this download.
    * @return upload rate in bytes per second, 0 for unlimited, -1 for upload disabled
    */
-  public int getUploadRateLimitBytesPerSecond();
+  int getUploadRateLimitBytesPerSecond();
   
   /**
    * Set the max upload rate allowed for this download.
    * @param max_rate_bps limit in bytes per second, 0 for unlimited, -1 for upload disabled
    */
-  public void setUploadRateLimitBytesPerSecond( int max_rate_bps );
+  void setUploadRateLimitBytesPerSecond(int max_rate_bps);
   
   
   /**
    * Get the max download rate allowed for this download.
    * @return download rate in bytes per second, 0 for unlimited, -1 for download disabled
    */
-  public int getDownloadRateLimitBytesPerSecond();
+  int getDownloadRateLimitBytesPerSecond();
   
   /**
    * Set the max download rate allowed for this download.
    * @param max_rate_bps limit in bytes per second, 0 for unlimited, -1 for download disabled
    */
-  public void setDownloadRateLimitBytesPerSecond( int max_rate_bps );
+  void setDownloadRateLimitBytesPerSecond(int max_rate_bps);
   
-	public int getTimeSinceLastDataReceivedInSeconds();
-	public int getTimeSinceLastDataSentInSeconds();
+	int getTimeSinceLastDataReceivedInSeconds();
+	int getTimeSinceLastDataSentInSeconds();
 	
-	public long getAvailWentBadTime();
-	public long getBytesUnavailable();
+	long getAvailWentBadTime();
+	long getBytesUnavailable();
 	
 	/*
 	public long getEstimatedDownloaded();
 	public long getEstimatedUploaded();
 	*/
 	
-	public void
+	void
 	restoreSessionTotals(
-		long		_saved_data_bytes_downloaded,
-		long		_saved_data_bytes_uploaded,
-		long		_saved_discarded,
-		long		_saved_hashfails,
-		long		_saved_SecondsDownloading,
-		long		_saved_SecondsOnlySeeding );
+            long _saved_data_bytes_downloaded,
+            long _saved_data_bytes_uploaded,
+            long _saved_discarded,
+            long _saved_hashfails,
+            long _saved_SecondsDownloading,
+            long _saved_SecondsOnlySeeding);
 
-	public long getRemainingExcludingDND();
+	long getRemainingExcludingDND();
 
-	public long getSizeExcludingDND();
+	long getSizeExcludingDND();
 
-	public int getPercentDoneExcludingDND();
+	int getPercentDoneExcludingDND();
 
 }

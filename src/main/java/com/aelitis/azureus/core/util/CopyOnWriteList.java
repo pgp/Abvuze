@@ -58,14 +58,14 @@ implements Iterable<T>
 					try {
 						long count = 0;
 						long size = 0;
-						for (Iterator iter = stats.iterator(); iter.hasNext();) {
-							WeakReference wf = (WeakReference) iter.next();
-							CopyOnWriteList cowList = (CopyOnWriteList) wf.get();
-							if (cowList != null) {
-								count++;
-								size += cowList.size();
-							}
-						}
+                        for (Object stat : stats) {
+                            WeakReference wf = (WeakReference) stat;
+                            CopyOnWriteList cowList = (CopyOnWriteList) wf.get();
+                            if (cowList != null) {
+                                count++;
+                                size += cowList.size();
+                            }
+                        }
 						writer.println(count + " lists with " + size + " total entries");
 						if ( count > 0 ){
 							writer.println((size/count) + " avg size");
@@ -131,7 +131,7 @@ implements Iterable<T>
 			
 			if ( visible ){
 				
-				List<T>	new_list = use_linked_list?new LinkedList<T>( list ):new ArrayList<T>( list );
+				List<T>	new_list = use_linked_list? new LinkedList<>(list): new ArrayList<>(list);
 				
 				//mutated();
 				
@@ -143,7 +143,7 @@ implements Iterable<T>
 				
 			}else{
 				if (list == Collections.EMPTY_LIST) {
-					list = use_linked_list?new LinkedList<T>():new ArrayList<T>(initialCapacity);
+					list = use_linked_list? new LinkedList<>(): new ArrayList<>(initialCapacity);
 				}
 				
 				list.add( obj );
@@ -207,7 +207,7 @@ implements Iterable<T>
 			
 			if ( visible ){
 				
-				List<T>	new_list = use_linked_list?new LinkedList<T>(list):new ArrayList<T>( list );
+				List<T>	new_list = use_linked_list? new LinkedList<>(list): new ArrayList<>(list);
 				
 				//mutated();
 				
@@ -219,7 +219,7 @@ implements Iterable<T>
 				
 			}else{
 				if (list == Collections.EMPTY_LIST) {
-					list = use_linked_list?new LinkedList<T>():new ArrayList<T>(initialCapacity);
+					list = use_linked_list? new LinkedList<>(): new ArrayList<>(initialCapacity);
 				}
 				
 				list.add( index, obj );
@@ -237,7 +237,7 @@ implements Iterable<T>
 			
 			if ( visible ){
 				
-				List<T>	new_list = use_linked_list?new LinkedList<T>( list ):new ArrayList<T>( list );
+				List<T>	new_list = use_linked_list? new LinkedList<>(list): new ArrayList<>(list);
 				
 				//mutated();
 				
@@ -249,7 +249,7 @@ implements Iterable<T>
 				
 			}else{
 				if (list == Collections.EMPTY_LIST) {
-					list = use_linked_list?new LinkedList<T>():new ArrayList<T>(initialCapacity);
+					list = use_linked_list? new LinkedList<>(): new ArrayList<>(initialCapacity);
 				}
 				
 				list.addAll( c );
@@ -281,7 +281,7 @@ implements Iterable<T>
 			
 			if ( visible ){
 
-				List<T>	new_list = use_linked_list?new LinkedList<T>(list):new ArrayList<T>( list );
+				List<T>	new_list = use_linked_list? new LinkedList<>(list): new ArrayList<>(list);
 				
 				//mutated();
 				

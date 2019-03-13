@@ -23,9 +23,9 @@ package com.aelitis.azureus.core.diskmanager.access;
 public interface 
 DiskAccessControllerStats 
 {
-	public long
+	long
 	getTotalReadRequests();
 	
-	public long
+	long
 	getTotalReadBytes();
 }

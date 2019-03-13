@@ -23,7 +23,7 @@ package com.aelitis.azureus.core.peermanager.utils;
 public interface 
 OutgoingBTPieceMessageHandlerAdapter 
 {
-	public void
+	void
 	diskRequestCompleted(
-		long		bytes );
+            long bytes);
 }

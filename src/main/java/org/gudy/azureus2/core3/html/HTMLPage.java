@@ -30,10 +30,10 @@ public interface
 HTMLPage
 	extends HTMLChunk
 {
-	public URL
+	URL
 	getMetaRefreshURL();
 	
-	public URL
+	URL
 	getMetaRefreshURL(
-		URL		base_url );
+            URL base_url);
 }

@@ -79,7 +79,7 @@ GeneralUtils
 				
 				if ( p1 > pos ){
 					
-					res.append( str.substring( pos, p1 ));
+					res.append(str, pos, p1);
 				}
 				
 				res.append( replacement );
@@ -146,7 +146,7 @@ GeneralUtils
 				
 				if ( min_match_pos > pos ){
 					
-					res.append( str.substring( pos, min_match_pos ));
+					res.append(str, pos, min_match_pos);
 				}
 				
 				res.append( to_strs[match_index] );
@@ -172,7 +172,7 @@ GeneralUtils
 	splitQuotedTokens(
 		String		str )
 	{
-		List<String>	bits = new ArrayList<String>();
+		List<String>	bits = new ArrayList<>();
 		
 		char	quote 				= ' ';
 		boolean	escape 				= false;
@@ -257,7 +257,7 @@ GeneralUtils
 			bits.add( bit );
 		}
 		
-		return( bits.toArray( new String[bits.size()]));
+		return( bits.toArray(new String[0]));
 	}
 	
 	public static ProcessBuilder 
@@ -270,8 +270,7 @@ GeneralUtils
 	{
 		ProcessBuilder pb;
 
-		Map<String, String> newEnv = new HashMap<String, String>();
-		newEnv.putAll(System.getenv());
+		Map<String, String> newEnv = new HashMap<>(System.getenv());
 		newEnv.put("LANG", "C.UTF-8");
 		if (extra_env != null && extra_env.length > 1) {
 			for (int i = 1; i < extra_env.length; i += 2) {

@@ -23,15 +23,15 @@ package com.aelitis.azureus.core.networkmanager.admin;
 public interface 
 NetworkAdminNetworkInterface 
 {
-	public String
+	String
 	getDisplayName();
 	
-	public String
+	String
 	getName();
 	
-	public NetworkAdminNetworkInterfaceAddress[]
+	NetworkAdminNetworkInterfaceAddress[]
 	getAddresses();
 	
-	public String
+	String
 	getString();
 }

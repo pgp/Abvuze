@@ -52,7 +52,7 @@ public class PlatformConfigMessenger
 
 	protected static List platformLoginCompleteListeners = Collections.EMPTY_LIST;
 
-	private static CopyOnWriteList<String> externalLinks = new CopyOnWriteList<String>();
+	private static CopyOnWriteList<String> externalLinks = new CopyOnWriteList<>();
 	
 	public static void login(long maxDelayMS) {
 		PlatformManager pm = PlatformManagerFactory.getPlatformManager();
@@ -84,10 +84,10 @@ public class PlatformConfigMessenger
 					List listURLs = (List) MapUtils.getMapObject(reply, "url-whitelist",
 							null, List.class);
 					if (listURLs != null) {
-						for (int i = 0; i < listURLs.size(); i++) {
-							String string = (String) listURLs.get(i);
-							UrlFilter.getInstance().addUrlWhitelist(string);
-						}
+                        for (Object listURL : listURLs) {
+                            String string = (String) listURL;
+                            UrlFilter.getInstance().addUrlWhitelist(string);
+                        }
 					}
 				} catch (Exception e) {
 					Debug.out(e);
@@ -97,10 +97,10 @@ public class PlatformConfigMessenger
 					List listURLs = (List) MapUtils.getMapObject(reply, "url-blacklist",
 							null, List.class);
 					if (listURLs != null) {
-						for (int i = 0; i < listURLs.size(); i++) {
-							String string = (String) listURLs.get(i);
-							UrlFilter.getInstance().addUrlBlacklist(string);
-						}
+                        for (Object listURL : listURLs) {
+                            String string = (String) listURL;
+                            UrlFilter.getInstance().addUrlBlacklist(string);
+                        }
 					}
 				} catch (Exception e) {
 					Debug.out(e);
@@ -125,14 +125,14 @@ public class PlatformConfigMessenger
 				platformLoginComplete = true;
 				Object[] listeners = platformLoginCompleteListeners.toArray();
 				platformLoginCompleteListeners = Collections.EMPTY_LIST;
-				for (int i = 0; i < listeners.length; i++) {
-					try {
-						PlatformLoginCompleteListener l = (PlatformLoginCompleteListener) listeners[i];
-						l.platformLoginComplete();
-					} catch (Exception e) {
-						Debug.out(e);
-					}
-				}
+                for (Object listener1 : listeners) {
+                    try {
+                        PlatformLoginCompleteListener l = (PlatformLoginCompleteListener) listener1;
+                        l.platformLoginComplete();
+                    } catch (Exception e) {
+                        Debug.out(e);
+                    }
+                }
 			}
 
 			public void messageSent(PlatformMessage message) {
@@ -176,9 +176,9 @@ public class PlatformConfigMessenger
 						"version",
 						version,
 						"timestamp",
-						new Long(timestamp),
+                    timestamp,
 						"ago-ms",
-						new Long(SystemTime.getCurrentTime() - timestamp),
+                    SystemTime.getCurrentTime() - timestamp,
 					}, 5000);
 
 			PlatformMessenger.queueMessage(message, l);
@@ -203,11 +203,11 @@ public class PlatformConfigMessenger
 		}
 	}
 
-	public static interface GetBrowseSectionsReplyListener
+	public interface GetBrowseSectionsReplyListener
 	{
-		public void messageSent();
+		void messageSent();
 
-		public void replyReceived(Map[] browseSections);
+		void replyReceived(Map[] browseSections);
 	}
 
 	
@@ -239,8 +239,8 @@ public class PlatformConfigMessenger
 		}
 	}
 	
-	public static interface PlatformLoginCompleteListener {
-		public void platformLoginComplete();
+	public interface PlatformLoginCompleteListener {
+		void platformLoginComplete();
 	}
 
 	public static boolean areLinksExternal(String url) {

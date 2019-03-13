@@ -137,7 +137,7 @@ public class AZMessageDecoder implements MessageStreamDecoder {
   public Message[] removeDecodedMessages() {
     if( messages_last_read.isEmpty() )  return null;
     
-    Message[] msgs = (Message[])messages_last_read.toArray( new Message[messages_last_read.size()] );
+    Message[] msgs = (Message[])messages_last_read.toArray(new Message[0]);
     messages_last_read.clear();
     
     return msgs;
@@ -151,9 +151,9 @@ public class AZMessageDecoder implements MessageStreamDecoder {
   
   public int getDataBytesDecoded() {  return data_bytes_last_read;  }
 
-  public boolean getLastReadMadeProgress(){ return last_read_made_progress; };
+  public boolean getLastReadMadeProgress(){ return last_read_made_progress; }
 
-  public ByteBuffer destroy() {
+    public ByteBuffer destroy() {
     is_paused = true;
     destroyed = true;
 
@@ -192,10 +192,10 @@ public class AZMessageDecoder implements MessageStreamDecoder {
     }
  
     try{
-	    for( int i=0; i < messages_last_read.size(); i++ ) {
-	      Message msg = (Message)messages_last_read.get( i );
-	      msg.destroy();
-	    }
+        for (Object o : messages_last_read) {
+            Message msg = (Message) o;
+            msg.destroy();
+        }
     }catch( IndexOutOfBoundsException e ){
     	// as access to messages_last_read isn't synchronized we can get this error if we destroy the
     	// decoder in parallel with messages being removed. We don't really want to synchronize access

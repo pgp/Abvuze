@@ -26,6 +26,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
@@ -111,7 +112,7 @@ SubscriptionRSSFeed
 			
 			OutputStream os = response.getOutputStream();
 	
-			PrintWriter pw = new PrintWriter(new OutputStreamWriter( os, "UTF-8" ));
+			PrintWriter pw = new PrintWriter(new OutputStreamWriter( os, StandardCharsets.UTF_8));
 	
 			if ( path.length() <= 1 ){
 				

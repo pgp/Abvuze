@@ -39,25 +39,25 @@ ResourceDownloaderFactory
 		 * from a local file as the installer required ResourceDownloader instances to operate
 		 * @param file
 		 * @return
-		 */ 
-	
-	public ResourceDownloader
+		 */
+
+        ResourceDownloader
 	create(
-		File		file );
+                File file);
 	
 		/**
 		 * creates a basic downloader. current url must be http or https
 		 * @param url
 		 * @return
 		 */
-	
-	public ResourceDownloader
+
+        ResourceDownloader
 	create(
-		URL		url );
+                URL url);
 	
-	public ResourceDownloader
+	ResourceDownloader
 	createWithAutoPluginProxy(
-		URL			url );
+            URL url);
 	
 	/**
 	 * Creates a basic downloader, where you can force any configured proxy
@@ -65,18 +65,18 @@ ResourceDownloaderFactory
 	 *
 	 * @since 3.1.0.1
 	 */
-	public ResourceDownloader create(URL url, boolean force_no_proxy);
+    ResourceDownloader create(URL url, boolean force_no_proxy);
 	
 	/**
 	 * @since 5.2.0.1
 	 */
-	public ResourceDownloader create(URL url, Proxy force_proxy );
+    ResourceDownloader create(URL url, Proxy force_proxy);
 		
-	public ResourceDownloader
+	ResourceDownloader
 	create(
-		URL		url,
-		String	user_name,
-		String	password );
+            URL url,
+            String user_name,
+            String password);
 		
 		/**
 		 * creates a downloader that will be asked to create a ResourceDownloader
@@ -86,10 +86,10 @@ ResourceDownloaderFactory
 		 * @param factory
 		 * @return
 		 */
-	
-	public ResourceDownloader
+
+        ResourceDownloader
 	create(
-		ResourceDownloaderDelayedFactory	factory );
+                ResourceDownloaderDelayedFactory factory);
 
 		/**
 		 * gets a downloader that will retry a number of times before failing
@@ -97,11 +97,11 @@ ResourceDownloaderFactory
 		 * @param retry_count
 		 * @return
 		 */
-	
-	public ResourceDownloader
+
+        ResourceDownloader
 	getRetryDownloader(
-		ResourceDownloader		downloader,
-		int						retry_count );
+                ResourceDownloader downloader,
+                int retry_count);
 
 	
 		/**
@@ -110,46 +110,46 @@ ResourceDownloaderFactory
 		 * @param timeout_millis
 		 * @return
 		 */
-	
-	public ResourceDownloader
+
+        ResourceDownloader
 	getTimeoutDownloader(
-		ResourceDownloader		downloader,
-		int						timeout_millis );
+                ResourceDownloader downloader,
+                int timeout_millis);
 
 	
 	/**
 	 * Gets a downloader that will cycle through a list of downloaders until
 	 * a download succeeds. The resource downloaders will be tried in order.
 	 */
-	public ResourceDownloader
+    ResourceDownloader
 	getAlternateDownloader(
-		ResourceDownloader[]		downloaders );
+            ResourceDownloader[] downloaders);
 
 	/**
 	 * Gets a downloader that will cycle through a list of downloaders until
 	 * a download succeeds. The resource downloaders will be tried in order.
 	 */
-	public ResourceDownloader
+    ResourceDownloader
 	getAlternateDownloader(
-		ResourceDownloader[]		downloaders,
-		int							max_to_try );
+            ResourceDownloader[] downloaders,
+            int max_to_try);
 	
 	/**
 	 * Gets a downloader that will cycle through a list of downloaders until
 	 * a download succeeds. The resource downloaders will be tried randomly.
 	 */
-	public ResourceDownloader
+    ResourceDownloader
 	getRandomDownloader(
-		ResourceDownloader[]		downloaders );
+            ResourceDownloader[] downloaders);
 
 	/**
 	 * Gets a downloader that will cycle through a list of downloaders until
 	 * a download succeeds. The resource downloaders will be tried randomly.
 	 */
-	public ResourceDownloader
+    ResourceDownloader
 	getRandomDownloader(
-		ResourceDownloader[]		downloaders,
-		int							max_to_try );
+            ResourceDownloader[] downloaders,
+            int max_to_try);
 	
 		/**
 		 * gets a downloader that will automatically follow META refresh tags
@@ -157,10 +157,10 @@ ResourceDownloaderFactory
 		 * @param downloader
 		 * @return
 		 */
-	
-	public ResourceDownloader
+
+        ResourceDownloader
 	getMetaRefreshDownloader(
-		ResourceDownloader			downloader );
+                ResourceDownloader downloader);
 
 		/**
 		 * Given a downloader that will download a torrent, this will download
@@ -171,11 +171,11 @@ ResourceDownloaderFactory
 		 * @param persistent whether or not the d/l will be retained over az stop/start
 		 * @return
 		 */
-	
-	public ResourceDownloader
+
+        ResourceDownloader
 	getTorrentDownloader(
-		ResourceDownloader			downloader,
-		boolean						persistent );
+                ResourceDownloader downloader,
+                boolean persistent);
 	
 		/**
 		 * Download a torrent's data to the given download location 
@@ -184,12 +184,12 @@ ResourceDownloaderFactory
 		 * @param download_directory
 		 * @return
 		 */
-	
-	public ResourceDownloader
+
+        ResourceDownloader
 	getTorrentDownloader(
-		ResourceDownloader			downloader,
-		boolean						persistent,
-		File						download_directory );
+                ResourceDownloader downloader,
+                boolean persistent,
+                File download_directory);
 	
 		/**
 		 * Returns a downloader that does something sensible based on the url suffix.
@@ -199,10 +199,10 @@ ResourceDownloaderFactory
 		 * @param url
 		 * @return
 		 */
-	
-	public ResourceDownloader
+
+        ResourceDownloader
 	getSuffixBasedDownloader(
-		ResourceDownloader			downloader );
+                ResourceDownloader downloader);
 
 		/**
 		 * @param url
@@ -233,7 +233,7 @@ ResourceDownloaderFactory
 	 * 
 	 * @since 3.0.5.3
 	 */
-	public ResourceDownloader[] getSourceforgeDownloaders(String project_name, String file_name);
+    ResourceDownloader[] getSourceforgeDownloaders(String project_name, String file_name);
 
 	/**
 	 * Creates a resource downloader which can be used to download
@@ -241,6 +241,6 @@ ResourceDownloaderFactory
 	 * 
 	 * @since 3.0.5.3
 	 */
-	public ResourceDownloader getSourceforgeDownloader(String project_name, String file_name);
+    ResourceDownloader getSourceforgeDownloader(String project_name, String file_name);
 	
 }

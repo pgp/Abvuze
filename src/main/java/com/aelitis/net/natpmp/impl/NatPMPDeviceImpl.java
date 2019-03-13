@@ -220,9 +220,9 @@ public class NatPMPDeviceImpl implements NatPMPDevice
     	
     	try{
 	        // Send NAT request to find out if it is PMP happy
-	        byte reqBuf[] = {NATMAP_VER, NATOp_AddrRequest};
-	        DatagramPacket dstPkt = new DatagramPacket(reqBuf, reqBuf.length);     
-	        byte recBuf[] = new byte[NATAddrReplyLen];
+            byte[] reqBuf = {NATMAP_VER, NATOp_AddrRequest};
+	        DatagramPacket dstPkt = new DatagramPacket(reqBuf, reqBuf.length);
+            byte[] recBuf = new byte[NATAddrReplyLen];
 	        /* DatagramPacket recPkt = */ sendNATMsg(natPriInet, dstPkt, recBuf);
 	        
 	        //int recVer = unsigned8ByteArrayToInt( recBuf, 0 ); 
@@ -310,12 +310,12 @@ public class NatPMPDeviceImpl implements NatPMPDevice
 
         byte NATOp = (tcp?NATOp_MapTCP:NATOp_MapUDP);
         // Should check for errors - only using lower 2 bytes
-        byte pubPort[] = intToByteArray(publicPort);
-        byte priPort[] = intToByteArray(privatePort);
-        byte portLifeTime[] = intToByteArray(lifetime);
+        byte[] pubPort = intToByteArray(publicPort);
+        byte[] priPort = intToByteArray(privatePort);
+        byte[] portLifeTime = intToByteArray(lifetime);
         
         // Generate Port Map request packet
-        byte dstBuf[] = new byte[NATPortMapRequestLen];
+        byte[] dstBuf = new byte[NATPortMapRequestLen];
         dstBuf[0] = NATMAP_VER;  // Ver
         dstBuf[1] = NATOp;       // OP
         dstBuf[2] = 0;           // Reserved - 2 bytes
@@ -326,8 +326,8 @@ public class NatPMPDeviceImpl implements NatPMPDevice
         dstBuf[7] = pubPort[3];
 	    System.arraycopy(portLifeTime, 0, dstBuf, 8, 4);
         
-        DatagramPacket dstPkt = new DatagramPacket(dstBuf, dstBuf.length);       
-        byte recBuf[] = new byte[NATPortMapReplyLen];
+        DatagramPacket dstPkt = new DatagramPacket(dstBuf, dstBuf.length);
+        byte[] recBuf = new byte[NATPortMapReplyLen];
         /* DatagramPacket recPkt = */ sendNATMsg(natPriInet, dstPkt, recBuf);
 
         // Unpack this and check codes
@@ -454,7 +454,7 @@ public class NatPMPDeviceImpl implements NatPMPDevice
      * @return unsigned byte array
      **/    
     public byte[] shortToByteArray(short v) {
-        byte b[] = new byte[2];
+        byte[] b = new byte[2];
         b[0] = (byte) ( 0xFF & (v >> 8) );
         b[1] = (byte) ( 0xFF & (v >> 0) );
         
@@ -467,7 +467,7 @@ public class NatPMPDeviceImpl implements NatPMPDevice
      * @return unsigned byte array
      **/
     public byte[] intToByteArray(int v) {
-        byte b[] = new byte[4];
+        byte[] b = new byte[4];
         int i, shift;
           
         for(i = 0, shift = 24; i < 4; i++, shift -= 8)
@@ -478,16 +478,16 @@ public class NatPMPDeviceImpl implements NatPMPDevice
     
     public String intArrayString(int[] buf) {
         StringBuilder sb = new StringBuilder();
-        for(int i = 0; i < buf.length; i++) {
-            sb.append(buf[i]).append(" ");
+        for (int i1 : buf) {
+            sb.append(i1).append(" ");
         }
         return sb.toString();   
     }
     
     public String byteArrayString(byte[] buf) {
         StringBuilder sb = new StringBuilder();
-        for(int i = 0; i < buf.length; i++) {
-            sb.append(buf[i]).append(" ");
+        for (byte b : buf) {
+            sb.append(b).append(" ");
         }
         return sb.toString();   
     }
@@ -498,8 +498,8 @@ public class NatPMPDeviceImpl implements NatPMPDevice
      * @return String the address as (xxx.xxx.xxx.1)
      **/
     private String convertHost2RouterAddress(InetAddress inet) {
-    
-        byte rawIP[] = inet.getAddress();
+
+        byte[] rawIP = inet.getAddress();
         
         // assume router is at xxx.xxx.xxx.1
         rawIP[3] = 1;

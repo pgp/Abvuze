@@ -335,12 +335,12 @@ public class UserCommand extends IConsoleCommand {
 		{
 			ci.out.println("> -----");
 			ci.out.println("> Username\tProfile\t\tSave Directory");
-			for (Iterator iter = getUserManager().getUsers().iterator(); iter.hasNext();) {
-				UserProfile profile = (UserProfile) iter.next();
-				String saveDir = profile.getDefaultSaveDirectory();
-				if( saveDir == null ) saveDir = "(default)";
-				ci.out.println("> " + profile.getUsername() + "\t\t" + profile.getUserType() + "\t\t" + saveDir);
-			}
+            for (Object o : getUserManager().getUsers()) {
+                UserProfile profile = (UserProfile) o;
+                String saveDir = profile.getDefaultSaveDirectory();
+                if (saveDir == null) saveDir = "(default)";
+                ci.out.println("> " + profile.getUsername() + "\t\t" + profile.getUserType() + "\t\t" + saveDir);
+            }
 			ci.out.println("> -----");
 		}
 

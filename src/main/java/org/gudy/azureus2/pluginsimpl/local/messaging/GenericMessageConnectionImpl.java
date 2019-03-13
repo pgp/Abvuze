@@ -264,21 +264,21 @@ GenericMessageConnectionImpl
 			delegate 	= _delegate;
 			
 	    	if ( inbound_rls != null ){
-	    		
-	    		for (int i=0;i<inbound_rls.size();i++){
-	    			
-	    			delegate.addInboundRateLimiter((RateLimiter)inbound_rls.get(i));
-	    		}
+
+                for (Object inbound_rl : inbound_rls) {
+
+                    delegate.addInboundRateLimiter((RateLimiter) inbound_rl);
+                }
 	    		
 	    		inbound_rls = null;
 	    	}
 	    	
 	    	if ( outbound_rls != null ){
-	    		
-	    		for (int i=0;i<outbound_rls.size();i++){
-	    			
-	    			delegate.addOutboundRateLimiter((RateLimiter)outbound_rls.get(i));
-	    		}
+
+                for (Object outbound_rl : outbound_rls) {
+
+                    delegate.addOutboundRateLimiter((RateLimiter) outbound_rl);
+                }
 	    		
 	    			// copy/paste error detected by Coverity static analysis
 	    		
@@ -658,26 +658,26 @@ GenericMessageConnectionImpl
 		GenericMessage	message )
 	{
 		boolean	handled = false;
-		
-		for (int i=0;i<listeners.size();i++){
-			
-			PooledByteBuffer	buffer = new PooledByteBufferImpl(message.getPayload());
-			
-			try{
-				((GenericMessageConnectionListener)listeners.get(i)).receive( this, buffer );
-				
-				handled = true;
-				
-			}catch( Throwable f ){
-				
-				buffer.returnToPool();
-				
-				if ( !( f instanceof MessageException )){
-				
-					Debug.printStackTrace(f);
-				}
-			}
-		}
+
+        for (Object listener : listeners) {
+
+            PooledByteBuffer buffer = new PooledByteBufferImpl(message.getPayload());
+
+            try {
+                ((GenericMessageConnectionListener) listener).receive(this, buffer);
+
+                handled = true;
+
+            } catch (Throwable f) {
+
+                buffer.returnToPool();
+
+                if (!(f instanceof MessageException)) {
+
+                    Debug.printStackTrace(f);
+                }
+            }
+        }
 		
 		if ( !handled && !( closed || closing )){
 			
@@ -707,32 +707,32 @@ GenericMessageConnectionImpl
 	protected void
 	reportConnected()
 	{
-		for (int i=0;i<listeners.size();i++){
-			
-			try{
-				((GenericMessageConnectionListener)listeners.get(i)).connected( this );
-				
-			}catch( Throwable f ){
-				
-				Debug.printStackTrace(f);
-			}
-		}
+        for (Object listener : listeners) {
+
+            try {
+                ((GenericMessageConnectionListener) listener).connected(this);
+
+            } catch (Throwable f) {
+
+                Debug.printStackTrace(f);
+            }
+        }
 	}
 	
 	protected void
 	reportFailed(
 		Throwable	e )
 	{
-		for (int i=0;i<listeners.size();i++){
-			
-			try{
-				((GenericMessageConnectionListener)listeners.get(i)).failed( this, e );
-				
-			}catch( Throwable f ){
-				
-				Debug.printStackTrace(f);
-			}
-		}
+        for (Object listener : listeners) {
+
+            try {
+                ((GenericMessageConnectionListener) listener).failed(this, e);
+
+            } catch (Throwable f) {
+
+                Debug.printStackTrace(f);
+            }
+        }
 	}
 	
 	public void

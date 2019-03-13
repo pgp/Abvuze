@@ -28,10 +28,10 @@ public interface
 IntParameter
 	extends Parameter
 {
-	public int
+	int
 	getValue();
 	
-	public void
+	void
 	setValue(
-		int	v );
+            int v);
 }

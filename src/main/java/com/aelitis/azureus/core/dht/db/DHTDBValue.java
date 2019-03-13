@@ -30,11 +30,11 @@ public interface
 DHTDBValue 
 	extends DHTTransportValue
 {
-	public void
+	void
 	setFlags(
-		byte	flags );
+            byte flags);
 	
-	public DHTDBValue
+	DHTDBValue
 	getValueForRelay(
-		DHTTransportContact	new_originator );
+            DHTTransportContact new_originator);
 }

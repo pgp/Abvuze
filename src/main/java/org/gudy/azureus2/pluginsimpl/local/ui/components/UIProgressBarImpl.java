@@ -41,12 +41,12 @@ UIProgressBarImpl
 	setPercentageComplete(
 		int		percentage )
 	{
-		setProperty( PT_VALUE, new Integer(percentage));
+		setProperty( PT_VALUE, percentage);
 	}
 		
 	public int
 	getPercentageComplete()
 	{
-		return(((Integer)getProperty( PT_VALUE )).intValue());
+		return((Integer) getProperty(PT_VALUE));
 	}
 }

@@ -26,8 +26,8 @@ import org.gudy.azureus2.plugins.torrent.TorrentAttribute;
  * @author Allan Crooks
  */
 public interface DownloadAttributeListener {
-	public int WRITTEN = DownloadPropertyEvent.PT_TORRENT_ATTRIBUTE_WRITTEN;
-	public int WILL_BE_READ = DownloadPropertyEvent.PT_TORRENT_ATTRIBUTE_WILL_BE_READ;
+	int WRITTEN = DownloadPropertyEvent.PT_TORRENT_ATTRIBUTE_WRITTEN;
+	int WILL_BE_READ = DownloadPropertyEvent.PT_TORRENT_ATTRIBUTE_WILL_BE_READ;
 	
 	/**
 	 * This method will be called when an attribute event occurs.
@@ -36,5 +36,5 @@ public interface DownloadAttributeListener {
 	 * @param attribute The attribute involved.
 	 * @param event_type Either <tt>WRITTEN</tt> or <tt>WILL_BE_READ</tt>.
 	 */
-	public void attributeEventOccurred(Download download, TorrentAttribute attribute, int event_type);
+    void attributeEventOccurred(Download download, TorrentAttribute attribute, int event_type);
 }

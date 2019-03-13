@@ -67,7 +67,7 @@ TRTrackerServerImpl
 	
 	public static String	redirect_on_not_found		= "";
 	
-	public static final List<String>	banned_clients = new ArrayList<String>();
+	public static final List<String>	banned_clients = new ArrayList<>();
 	
 		// torrent map is static across all protocol servers
 	
@@ -256,12 +256,12 @@ TRTrackerServerImpl
 	private boolean	keep_alive_enabled	= false;
 	
 	
-	protected final CopyOnWriteList<TRTrackerServerListener>	listeners 	= new CopyOnWriteList<TRTrackerServerListener>();
-	protected final CopyOnWriteList<TRTrackerServerListener2>	listeners2 	= new CopyOnWriteList<TRTrackerServerListener2>();
+	protected final CopyOnWriteList<TRTrackerServerListener>	listeners 	= new CopyOnWriteList<>();
+	protected final CopyOnWriteList<TRTrackerServerListener2>	listeners2 	= new CopyOnWriteList<>();
 	
-	private final List<TRTrackerServerAuthenticationListener>		auth_listeners		= new ArrayList<TRTrackerServerAuthenticationListener>();
+	private final List<TRTrackerServerAuthenticationListener>		auth_listeners		= new ArrayList<>();
 	
-	private final Vector<TRTrackerServerRequestListener>	request_listeners 	= new Vector<TRTrackerServerRequestListener>();
+	private final Vector<TRTrackerServerRequestListener>	request_listeners 	= new Vector<>();
 	
 	protected AEMonitor this_mon 	= new AEMonitor( "TRTrackerServer" );
 
@@ -424,13 +424,11 @@ TRTrackerServerImpl
 		}
 		
 		String	str = "";
-		
-		Iterator	it = peers.iterator();
-		
-		while( it.hasNext()){
-			
-			str += " " + it.next();
-		}
+
+        for (Object peer : peers) {
+
+            str += " " + peer;
+        }
 		
 		System.out.println( "biased peers: " + str );
 		
@@ -438,15 +436,13 @@ TRTrackerServerImpl
 			class_mon.enter();
 		
 			biased_peers = new HashSet( peers );
-			
-			Iterator	tit = torrent_map.values().iterator();
-			
-			while(tit.hasNext()){
-							
-				TRTrackerServerTorrentImpl	this_torrent = (TRTrackerServerTorrentImpl)tit.next();
-				
-				this_torrent.updateBiasedPeers( biased_peers );
-			}
+
+            for (Object o : torrent_map.values()) {
+
+                TRTrackerServerTorrentImpl this_torrent = (TRTrackerServerTorrentImpl) o;
+
+                this_torrent.updateBiasedPeers(biased_peers);
+            }
 			
 		}finally{
 			
@@ -499,20 +495,20 @@ TRTrackerServerImpl
 		String				password )
 	{
 		headers = headers.trim() + "\r\nX-Real-IP: " + remote_ip.getAddress().getHostAddress() + "\r\n\r\n";
-		
-		for (int i=0;i<auth_listeners.size();i++){
-			
-			try{
-				
-				if ( ((TRTrackerServerAuthenticationListener)auth_listeners.get(i)).authenticate( headers, resource, user, password )){
-					
-					return( true );
-				}
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace( e );
-			}
-		}
+
+        for (TRTrackerServerAuthenticationListener auth_listener : auth_listeners) {
+
+            try {
+
+                if (auth_listener.authenticate(headers, resource, user, password)) {
+
+                    return (true);
+                }
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 		
 		return( false );
 	}
@@ -522,21 +518,21 @@ TRTrackerServerImpl
 		URL			resource,
 		String		user )
 	{
-		for (int i=0;i<auth_listeners.size();i++){
-			
-			try{
-				
-				byte[] sha_pw =  ((TRTrackerServerAuthenticationListener)auth_listeners.get(i)).authenticate( resource, user );
-					
-				if ( sha_pw != null ){
-					
-					return( sha_pw );
-				}
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace( e );
-			}
-		}
+        for (TRTrackerServerAuthenticationListener auth_listener : auth_listeners) {
+
+            try {
+
+                byte[] sha_pw = auth_listener.authenticate(resource, user);
+
+                if (sha_pw != null) {
+
+                    return (sha_pw);
+                }
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 		
 		return( null );
 	}
@@ -743,15 +739,13 @@ TRTrackerServerImpl
 				
 				try{
 					class_mon.enter();
-					
-					Iterator	it = torrent_map.values().iterator();
-					
-					while(it.hasNext()){
-												
-						TRTrackerServerTorrentImpl	t = (TRTrackerServerTorrentImpl)it.next();
-						
-						clients += t.getPeerCount();
-					}
+
+                    for (Object o : torrent_map.values()) {
+
+                        TRTrackerServerTorrentImpl t = (TRTrackerServerTorrentImpl) o;
+
+                        clients += t.getPeerCount();
+                    }
 				}finally{
 					
 					class_mon.exit();
@@ -786,15 +780,13 @@ TRTrackerServerImpl
 					
 					try{
 						class_mon.enter();
-						
-						Iterator	it = torrent_map.values().iterator();
-						
-						while(it.hasNext()){
-														
-							TRTrackerServerTorrentImpl	t = (TRTrackerServerTorrentImpl)it.next();
-							
-							t.checkTimeouts();
-						}
+
+                        for (Object o : torrent_map.values()) {
+
+                            TRTrackerServerTorrentImpl t = (TRTrackerServerTorrentImpl) o;
+
+                            t.checkTimeouts();
+                        }
 					}finally{
 						
 						class_mon.exit();
@@ -848,16 +840,14 @@ TRTrackerServerImpl
 		}
 		
 		if ( entry == null ){
-			
-			Iterator<TRTrackerServerListener>	it = listeners.iterator();
-			
-			while( it.hasNext()){
-						
-				if ( !it.next().permitted( _originator, _hash, _explicit )){
-					
-					throw( new TRTrackerServerException( "operation denied"));			
-				}
-			}
+
+            for (TRTrackerServerListener listener : listeners) {
+
+                if (!listener.permitted(_originator, _hash, _explicit)) {
+
+                    throw (new TRTrackerServerException("operation denied"));
+                }
+            }
 		
 			try{
 				class_mon.enter();
@@ -891,16 +881,14 @@ TRTrackerServerImpl
 		// System.out.println( "TRTrackerServerImpl::deny( " + _explicit + ")");
 		
 		HashWrapper	hash = new HashWrapper( _hash );
-		
-		Iterator<TRTrackerServerListener>	it = listeners.iterator();
-			
-		while( it.hasNext()){
-			
-			if ( !it.next().denied( _hash, _explicit )){				
-				
-				throw( new TRTrackerServerException( "operation denied"));			
-			}
-		}
+
+        for (TRTrackerServerListener listener : listeners) {
+
+            if (!listener.denied(_hash, _explicit)) {
+
+                throw (new TRTrackerServerException("operation denied"));
+            }
+        }
 
 		try{
 			class_mon.enter();
@@ -1120,7 +1108,7 @@ TRTrackerServerImpl
 			for (int i=0;i<request_listeners.size();i++){
 				
 				try{
-					((TRTrackerServerRequestListener)request_listeners.elementAt(i)).preProcess( req );
+					request_listeners.elementAt(i).preProcess( req );
 					
 				}catch( TRTrackerServerException e ){
 				
@@ -1151,7 +1139,7 @@ TRTrackerServerImpl
 			for (int i=0;i<request_listeners.size();i++){
 				
 				try{
-					((TRTrackerServerRequestListener)request_listeners.elementAt(i)).postProcess( req );
+					request_listeners.elementAt(i).postProcess( req );
 				
 				}catch( TRTrackerServerException e ){
 					

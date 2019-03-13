@@ -24,39 +24,39 @@ public interface
 DeviceOfflineDownloader
 	extends Device
 {
-	public boolean
+	boolean
 	isEnabled();
 	
-	public void
+	void
 	setEnabled(
-		boolean		b );
+            boolean b);
 	
-	public boolean
+	boolean
 	hasShownFTUX();
 	
-	public void
+	void
 	setShownFTUX();
 	
-	public String
+	String
 	getManufacturer();
 	
-	public long
+	long
 	getSpaceAvailable(
-		boolean		force )
+            boolean force)
 	
 		throws DeviceManagerException;
 	
-	public int
+	int
 	getTransferingCount();
 
-	public DeviceOfflineDownload[]
+	DeviceOfflineDownload[]
 	getDownloads();
 		
-	public void
+	void
 	addListener(
-		DeviceOfflineDownloaderListener		listener );
+            DeviceOfflineDownloaderListener listener);
 	
-	public void
+	void
 	removeListener(
-		DeviceOfflineDownloaderListener		listener );
+            DeviceOfflineDownloaderListener listener);
 }

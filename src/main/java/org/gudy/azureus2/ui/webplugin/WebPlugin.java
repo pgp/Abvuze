@@ -28,6 +28,7 @@ package org.gudy.azureus2.ui.webplugin;
  */
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.zip.GZIPOutputStream;
 import java.net.*;
@@ -209,7 +210,7 @@ WebPlugin
 	private static final int	LOGOUT_GRACE_MILLIS	= 5*1000;
 	private static final String	GRACE_PERIOD_MARKER	= "<grace_period>";
 	
-	private Map<String,Long>	logout_timer 		= new HashMap<String, Long>();
+	private Map<String,Long>	logout_timer 		= new HashMap<>();
 	
 	private boolean	unloaded;
 	
@@ -252,14 +253,14 @@ WebPlugin
 		
 		if ( pr_enable != null ){
 		
-			CONFIG_ENABLE_DEFAULT	= pr_enable.booleanValue();
+			CONFIG_ENABLE_DEFAULT	= pr_enable;
 		}
 		
 		Integer	pr_port = (Integer)properties.get(PR_PORT);
 		
 		if ( pr_port != null ){
 		
-			CONFIG_PORT_DEFAULT	= pr_port.intValue();
+			CONFIG_PORT_DEFAULT	= pr_port;
 		}
 		
 		String	pr_bind_ip = (String)properties.get(PR_BIND_IP);
@@ -301,7 +302,7 @@ WebPlugin
 		
 		if ( pr_enable_upnp != null ){
 		
-			CONFIG_UPNP_ENABLE_DEFAULT	= pr_enable_upnp.booleanValue();
+			CONFIG_UPNP_ENABLE_DEFAULT	= pr_enable_upnp;
 		}
 		
 		Boolean	pr_hide_resource_config = (Boolean)properties.get( PR_HIDE_RESOURCE_CONFIG );
@@ -675,7 +676,7 @@ WebPlugin
 		param_rootdir 	= config_model.addStringParameter2(	CONFIG_ROOT_DIR, "webui.rootdir", CONFIG_ROOT_DIR_DEFAULT );
 		param_rootres	= config_model.addStringParameter2(	CONFIG_ROOT_RESOURCE, "webui.rootres", CONFIG_ROOT_RESOURCE_DEFAULT );
 		
-		if ( pr_hide_resource_config != null && pr_hide_resource_config.booleanValue()){
+		if ( pr_hide_resource_config != null && pr_hide_resource_config){
 			
 			param_home.setVisible( false );
 			param_rootdir.setVisible( false );
@@ -895,7 +896,7 @@ WebPlugin
 		
 		if ( param_enable != null ){
 						
-			final List<Parameter> changed_params = new ArrayList<Parameter>();
+			final List<Parameter> changed_params = new ArrayList<>();
 			
 			if ( !plugin_enabled){
 				
@@ -1177,7 +1178,7 @@ WebPlugin
 			
 			String[] ranges = access_str.replace( ';', ',' ).split( "," );
 			
-			ip_ranges = new ArrayList<IPRange>();
+			ip_ranges = new ArrayList<>();
 			
 			for ( String range: ranges ){
 				
@@ -1345,7 +1346,7 @@ WebPlugin
 
 			int	protocol = protocol_str.equalsIgnoreCase( "HTTP")?Tracker.PR_HTTP:Tracker.PR_HTTPS;
 
-			Map<String,Object>		tc_properties = new HashMap<String, Object>();
+			Map<String,Object>		tc_properties = new HashMap<>();
 
 			Boolean prop_non_blocking = (Boolean)properties.get( PR_NON_BLOCKING );
 
@@ -1376,7 +1377,7 @@ WebPlugin
 						public void
 						runSupport()
 						{
-							Map<String,Object>	options = new HashMap<String, Object>();
+							Map<String,Object>	options = new HashMap<>();
 							
 							options.put( AEProxyFactory.SP_PORT, port );
 							
@@ -1417,7 +1418,7 @@ WebPlugin
 						public void
 						runSupport()
 						{
-							Map<String,Object>	options = new HashMap<String, Object>();
+							Map<String,Object>	options = new HashMap<>();
 							
 							options.put( AEProxyFactory.SP_PORT, port );
 							
@@ -1466,7 +1467,7 @@ WebPlugin
 					
 					private final int DELAY = 10*1000;
 					
-					private Map<String,Object[]>	fail_map = new HashMap<String, Object[]>();
+					private Map<String,Object[]>	fail_map = new HashMap<>();
 					
 					public boolean
 					authenticate(
@@ -1515,7 +1516,7 @@ WebPlugin
 								
 									if ( x == null ){
 										
-										x = new Object[]{ new AESemaphore( "af:waiter" ), new Long(-1), new Long(-1), now };
+										x = new Object[]{ new AESemaphore( "af:waiter" ), (long) -1, (long) -1, now };
 										
 										fail_map.put( client_address, x );
 										
@@ -2211,7 +2212,7 @@ WebPlugin
 		}else{
 			int	request_header_len = ((request_bytes[0]<<8)&0x0000ff00) | (request_bytes[1]&0x000000ff);
 			
-			String	reply_json_str = new String( request_bytes, 2, request_header_len, "UTF-8" );	
+			String	reply_json_str = new String( request_bytes, 2, request_header_len, StandardCharsets.UTF_8);
 			
 			request_headers.putAll( JSONUtils.decodeJSON( reply_json_str ));
 			
@@ -2459,7 +2460,7 @@ WebPlugin
 				
 				String header_json = JSONUtils.encodeToJSON( reply_headers );
 	
-				byte[] header_bytes = header_json.getBytes( "UTF-8" );
+				byte[] header_bytes = header_json.getBytes(StandardCharsets.UTF_8);
 				
 				int	header_len = header_bytes.length;
 				
@@ -2608,14 +2609,14 @@ WebPlugin
 		
 		String url = request.getURL();
 		
-		if ( url.toString().endsWith(".class")){
+		if ( url.endsWith(".class")){
 			
 			System.out.println( "WebPlugin::generate:" + url );
 		}
 	
 		String	cookie_to_set = tls.get();
 		
-		if ( cookie_to_set == GRACE_PERIOD_MARKER ){
+		if ( GRACE_PERIOD_MARKER.equals(cookie_to_set) ){
 			
 			return( returnTextPlain( response, "Logout in progress, please try again later." ));
 		}
@@ -2632,103 +2633,107 @@ WebPlugin
 		URL full_url = request.getAbsoluteURL();
 		
 		String	full_url_path = full_url.getPath();
-		
-		if ( full_url_path.equals( "/isPairedServiceAvailable" )){
-			
-			String redirect = getArgumentFromURL( full_url, "redirect_to" );
-			
-			if ( redirect != null ){
-				
-				try{
-					URL target = new URL( redirect );
-					
-					String	host = target.getHost();
-					
-					if ( !Constants.isAzureusDomain( host )){
-					
-						if ( !InetAddress.getByName(host).isLoopbackAddress()){
-							
-							log( "Invalid redirect host: " + host );
-							
-							redirect = null;
+
+		switch (full_url_path) {
+			case "/isPairedServiceAvailable": {
+
+				String redirect = getArgumentFromURL(full_url, "redirect_to");
+
+				if (redirect != null) {
+
+					try {
+						URL target = new URL(redirect);
+
+						String host = target.getHost();
+
+						if (!Constants.isAzureusDomain(host)) {
+
+							if (!InetAddress.getByName(host).isLoopbackAddress()) {
+
+								log("Invalid redirect host: " + host);
+
+								redirect = null;
+							}
 						}
+					} catch (Throwable e) {
+
+						Debug.out(e);
+
+						redirect = null;
 					}
-				}catch( Throwable e ){
-					
-					Debug.out( e );
-					
-					redirect = null;
 				}
+
+				if (redirect != null) {
+
+					response.setReplyStatus(302);
+
+					response.setHeader("Location", redirect);
+
+					return (true);
+				}
+
+				String callback = getArgumentFromURL(full_url, "jsoncallback");
+
+				if (callback != null) {
+
+					return (returnTextPlain(response, callback + "( {'pairedserviceavailable':true} )"));
+				}
+				break;
 			}
-			
-			if ( redirect != null ){
-								
-				response.setReplyStatus( 302 );
-				
-				response.setHeader( "Location", redirect );
-				
-				return( true );
-			}
-			
-			String callback = getArgumentFromURL( full_url, "jsoncallback" );
-				
-			if ( callback != null ){
-					
-				return( returnTextPlain( response,  callback + "( {'pairedserviceavailable':true} )"));
-			}
-		}else if ( full_url_path.equals( "/isServicePaired" )){
-			
-			boolean paired = cookie_to_set != null || hasOurCookie((String)request.getHeaders().get( "cookie" ));
-			
+			case "/isServicePaired":
+
+				boolean paired = cookie_to_set != null || hasOurCookie((String) request.getHeaders().get("cookie"));
+
 				// DON'T use returnJSON here as it DOESN'T work in the web ui for some reason!
-			
-			return( returnTextPlain( response, "{ 'servicepaired': " + ( paired?"true":"false" ) + " }" ));
-			
-		}else if ( full_url_path.equals( "/pairedServiceLogout")){
-			
-			synchronized( logout_timer ){
-				
-				logout_timer.put( client, SystemTime.getMonotonousTime());
-			}
-			
-			response.setHeader( "Set-Cookie", "vuze_pairing_sc=<deleted>, expires=" + TimeFormatter.getCookieDate(0));
-			
-			String redirect = getArgumentFromURL( full_url, "redirect_to" );
-			
-			if ( redirect != null ){
-				
-				try{
-					URL target = new URL( redirect );
-					
-					String	host = target.getHost();
-					
-					if ( !Constants.isAzureusDomain( host )){
-					
-						if ( !InetAddress.getByName(host).isLoopbackAddress()){
-							
-							log( "Invalid redirect host: " + host );
-							
-							redirect = null;
-						}
-					}
-				}catch( Throwable e ){
-					
-					Debug.out( e );
-					
-					redirect = null;
+
+				return (returnTextPlain(response, "{ 'servicepaired': " + (paired ? "true" : "false") + " }"));
+
+			case "/pairedServiceLogout": {
+
+				synchronized (logout_timer) {
+
+					logout_timer.put(client, SystemTime.getMonotonousTime());
 				}
-			}
-			if ( redirect == null ){
-					
-				return( returnTextPlain( response, "" ));
-				
-			}else{
-				
-				response.setReplyStatus( 302 );
-				
-				response.setHeader( "Location", redirect );
-				
-				return( true );
+
+				response.setHeader("Set-Cookie", "vuze_pairing_sc=<deleted>, expires=" + TimeFormatter.getCookieDate(0));
+
+				String redirect = getArgumentFromURL(full_url, "redirect_to");
+
+				if (redirect != null) {
+
+					try {
+						URL target = new URL(redirect);
+
+						String host = target.getHost();
+
+						if (!Constants.isAzureusDomain(host)) {
+
+							if (!InetAddress.getByName(host).isLoopbackAddress()) {
+
+								log("Invalid redirect host: " + host);
+
+								redirect = null;
+							}
+						}
+					} catch (Throwable e) {
+
+						Debug.out(e);
+
+						redirect = null;
+					}
+				}
+				if (redirect == null) {
+
+					return (returnTextPlain(response, ""));
+
+				} else {
+
+					response.setReplyStatus(302);
+
+					response.setHeader("Location", redirect);
+
+					return (true);
+				}
 			}
 		}
 	
@@ -2892,7 +2897,7 @@ WebPlugin
 		
 		OutputStream os = response.getOutputStream();
 	
-		os.write( str.getBytes( "UTF-8" ));
+		os.write( str.getBytes(StandardCharsets.UTF_8));
 		
 		return( true );
 	}

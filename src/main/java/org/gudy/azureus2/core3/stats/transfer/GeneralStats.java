@@ -30,53 +30,53 @@ public interface GeneralStats {
   /**
    * @return the number of downloaded bytes
    */
-  public long getDownloadedBytes();
+  long getDownloadedBytes();
   
   /**
    * @return the number of uploaded bytes
    */
-  public long getUploadedBytes();
+  long getUploadedBytes();
   
   /**
    * @return the total lifetime 'up time' in seconds
    */
-  public long getTotalUpTime();
+  long getTotalUpTime();
   
   /**
    * Method variants that can return values relative to the last mark
    * @param since_mark
    * @return
    */
-  public long getDownloadedBytes( boolean since_mark );
-  public long getUploadedBytes( boolean since_mark );
-  public long getTotalUpTime( boolean since_mark );
-  public int getAverageDownloadSpeed( boolean since_mark );
-  public int getAverageUploadSpeed( boolean since_mark );
+  long getDownloadedBytes(boolean since_mark);
+  long getUploadedBytes(boolean since_mark);
+  long getTotalUpTime(boolean since_mark);
+  int getAverageDownloadSpeed(boolean since_mark);
+  int getAverageUploadSpeed(boolean since_mark);
   
-  public long getMarkTime();
+  long getMarkTime();
   /**
    * Sets a mark against the overall up/down/uptime so that the methods that report relative to
    * the mark return values relative to it
    */
-  
-  public void
+
+  void
   setMark();
   
-  public void
+  void
   clearMark();
   
   /**
    * @return this session uptime in seconds
    */
-  public long getSessionUpTime();
+  long getSessionUpTime();
   
   /**
    * @return the average download speed in bytes per second
    */
-  public int getAverageDownloadSpeed();
+  int getAverageDownloadSpeed();
   
   /**
    * @return the average upload speed in bytes per second
    */
-  public int getAverageUploadSpeed();
+  int getAverageUploadSpeed();
 }

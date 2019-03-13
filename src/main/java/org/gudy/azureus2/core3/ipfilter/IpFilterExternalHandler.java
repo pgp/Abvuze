@@ -22,13 +22,13 @@ import java.net.InetAddress;
 public interface 
 IpFilterExternalHandler 
 {
-	public boolean
+	boolean
 	isBlocked(
-		byte[]			torrent_hash,
-		String			ip );
+            byte[] torrent_hash,
+            String ip);
 	
-	public boolean
+	boolean
 	isBlocked(
-		byte[]			torrent_hash,
-		InetAddress		ip );
+            byte[] torrent_hash,
+            InetAddress ip);
 }

@@ -25,38 +25,38 @@ import java.nio.ByteBuffer;
 public interface 
 TransportHelperFilter 
 {
-	public long 
-	write( 
-		ByteBuffer[] 	buffers, 
-		int 			array_offset, 
-		int 			length ) 
+	long
+	write(
+            ByteBuffer[] buffers,
+            int array_offset,
+            int length)
 	
 		throws IOException;
 
-	public long 
-	read( 
-		ByteBuffer[] 	buffers, 
-		int 			array_offset, 
-		int 			length ) 
+	long
+	read(
+            ByteBuffer[] buffers,
+            int array_offset,
+            int length)
 	
 		throws IOException;
 	
-	public boolean
+	boolean
 	hasBufferedWrite();
 	
-	public boolean
+	boolean
 	hasBufferedRead();
 	
-	public TransportHelper
+	TransportHelper
 	getHelper();
 	
-	public String
+	String
 	getName(boolean verbose);
 	
-	public boolean 
+	boolean
 	isEncrypted();
 	
-	public void
+	void
 	setTrace(
-		boolean	on );
+            boolean on);
 }

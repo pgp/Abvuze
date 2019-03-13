@@ -54,9 +54,9 @@ public interface TableRow {
    */
   String getTableID();
 
-  public TableView<?> getView();
+  TableView<?> getView();
   
-  public int
+  int
   getIndex();
   
   /**
@@ -67,7 +67,7 @@ public interface TableRow {
   * @param blue blue value (0 - 255)
   * @since 3.0.3.5
   */
-  public void setForeground(int red, int green, int blue);
+  void setForeground(int red, int green, int blue);
   
   /**
    * Change the row's foreground color
@@ -77,14 +77,14 @@ public interface TableRow {
    *
    * @since 3.0.4.3
    */
-  public void setForeground(int[] rgb);
+  void setForeground(int[] rgb);
 
   /**
    * Change the row's foreground color to the user's defined "error" color.
    * 
   * @since 3.0.3.5
   */
-  public void setForegroundToErrorColor();
+  void setForegroundToErrorColor();
 
 
   /** Validility of the row's cells.
@@ -117,14 +117,14 @@ public interface TableRow {
 	 * 
 	 * @since 3.0.1.7
 	 */
-	public void addMouseListener(TableRowMouseListener listener);
+  void addMouseListener(TableRowMouseListener listener);
 
 	/** Remove a previously added TableRowMouseListener
 	 *
 	 * @param listener Previously added listener
 	 * @since 3.0.1.7
 	 */
-	public void removeMouseListener(TableRowMouseListener listener);
+    void removeMouseListener(TableRowMouseListener listener);
 
 	/**
 	 * Get a previously stored value

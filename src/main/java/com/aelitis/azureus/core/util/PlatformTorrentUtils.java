@@ -143,7 +143,7 @@ public class PlatformTorrentUtils
 
 		try {
 			if (obj instanceof Long) {
-				return ((Long) obj).longValue();
+				return (Long) obj;
 			} else if (obj instanceof Integer) {
 				return ((Integer) obj).longValue();
 			} else if (obj instanceof String) {
@@ -179,7 +179,7 @@ public class PlatformTorrentUtils
 		}
 
 		Map mapContent = getContentMap(torrent);
-		mapContent.put(key, new Long(value));
+		mapContent.put(key, value);
 		incVersion(mapContent);
 	}
 

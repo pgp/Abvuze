@@ -31,22 +31,22 @@ import org.gudy.azureus2.plugins.utils.resourcedownloader.*;
 public interface 
 Update 
 {
-	public static final int	RESTART_REQUIRED_NO			= 1;
-	public static final int	RESTART_REQUIRED_YES		= 2;
-	public static final int	RESTART_REQUIRED_MAYBE		= 3;
+	int	RESTART_REQUIRED_NO			= 1;
+	int	RESTART_REQUIRED_YES		= 2;
+	int	RESTART_REQUIRED_MAYBE		= 3;
 	
-	public String
+	String
 	getName();
 
-	public String[]
+	String[]
 	getDescription();
 	
-	public String
+	String
 	getRelativeURLBase();
 	
-	public void
+	void
 	setRelativeURLBase(
-		String	base );
+            String base);
 
 	/**
 	 * 
@@ -54,90 +54,90 @@ Update
 	 *
 	 * @since 3.0.1.7
 	 */
-	public void
+    void
 	setDescriptionURL(
-		String url);
+            String url);
 	
 	/**
 	 * @return null if no description url
 	 *
 	 * @since 3.0.1.7
 	 */
-	public String 
+    String
 	getDesciptionURL();
 
-	public String
+	String
 	getOldVersion();
 	
-	public String
+	String
 	getNewVersion();
 	
-	public ResourceDownloader[]
+	ResourceDownloader[]
 	getDownloaders();
 	
-	public boolean
+	boolean
 	isMandatory();
 	
-	public void
+	void
 	setRestartRequired(
-		int	restart_required );
+            int restart_required);
 	
-	public int
+	int
 	getRestartRequired();
 	
-	public void
+	void
 	setUserObject(
-		Object		obj );
+            Object obj);
 	
-	public Object
+	Object
 	getUserObject();
 	
 		/**
 		 * mark the update as complete and inform any listeners
 		 */
-	
-	public void
+
+        void
 	complete(
-		boolean	success );
+                boolean success);
 	
 		/**
 		 * cancel this update
 		 */
-	
-	public void
+
+        void
 	cancel();
 	
-	public boolean
+	boolean
 	isCancelled();
 	
-	public boolean
+	boolean
 	isComplete();
 	
-	public boolean
+	boolean
 	wasSuccessful();
 	
-	public UpdateCheckInstance
+	UpdateCheckInstance
 	getCheckInstance();
 	
-	public Object
+	Object
 	getDecision(
-		int			decision_type,	// see UpdateManagerDecisionListener
-		String		decision_name,
-		String		decision_description,
-		Object		decision_data );
+            int decision_type,    // see UpdateManagerDecisionListener
+            String decision_name,
+            String decision_description,
+            Object decision_data);
 	
-	public InputStream
+	InputStream
 	verifyData(
-		InputStream		is,
-		boolean			force )
+            InputStream is,
+            boolean force)
 	
 		throws UpdateException;
 	
-	public void
+	void
 	addListener(
-		UpdateListener	l );
+            UpdateListener l);
 	
-	public void
+	void
 	removeListener(
-		UpdateListener	l );
+            UpdateListener l);
 }

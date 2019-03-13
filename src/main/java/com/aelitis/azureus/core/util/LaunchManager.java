@@ -35,7 +35,7 @@ LaunchManager
 		return( singleton );
 	}
 	
-	final CopyOnWriteList<LaunchController>	controllers	= new CopyOnWriteList<LaunchController>();
+	final CopyOnWriteList<LaunchController>	controllers	= new CopyOnWriteList<>();
 	
 	public void
 	launchRequest(
@@ -130,9 +130,9 @@ LaunchManager
 	public interface
 	LaunchController
 	{
-		public void
+		void
 		handleRequest(
-			LaunchTarget		target )
+                LaunchTarget target)
 		
 			throws Throwable;
 	}
@@ -140,12 +140,12 @@ LaunchManager
 	public interface
 	LaunchAction
 	{
-		public void
+		void
 		actionAllowed();
 		
-		public void
+		void
 		actionDenied(
-			Throwable			reason );
+                Throwable reason);
 			
 	}
 }

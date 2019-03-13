@@ -69,7 +69,7 @@ FMFileManagerImpl
 	protected final LinkedHashMap		map;
 	protected final AEMonitor			map_mon	= new AEMonitor( "FMFileManager:Map");
 
-	protected final HashMap<Object,LinkFileMap>			links		= new HashMap<Object,LinkFileMap>();
+	protected final HashMap<Object,LinkFileMap>			links		= new HashMap<>();
 	protected final AEMonitor			links_mon	= new AEMonitor( "FMFileManager:Links");
 
 	protected final boolean			limited;
@@ -439,16 +439,16 @@ FMFileManagerImpl
 					files_mon.enter();
 					
 					int	open = 0;
-					
-					for (int i=0;i<files.size();i++){
 
-						FMFileLimited	f = (FMFileLimited)files.get(i);
-						
-						if ( f.isOpen()){
-							
-							open++;
-						}
-					}
+                    for (Object file1 : files) {
+
+                        FMFileLimited f = (FMFileLimited) file1;
+
+                        if (f.isOpen()) {
+
+                            open++;
+                        }
+                    }
 					
 					System.out.println( "INFO: files = " + files.size() + ", open = " + open );
 					
@@ -471,15 +471,13 @@ FMFileManagerImpl
 			
 			try{
 				map_mon.enter();
-							
-				Iterator it = map.keySet().iterator();
-					
-				while( it.hasNext()){
-					
-					FMFileLimited	file = (FMFileLimited)it.next();
-					
-					writer.println( file.getString());
-				}
+
+                for (Object o : map.keySet()) {
+
+                    FMFileLimited file = (FMFileLimited) o;
+
+                    writer.println(file.getString());
+                }
 							
 			}finally{
 				

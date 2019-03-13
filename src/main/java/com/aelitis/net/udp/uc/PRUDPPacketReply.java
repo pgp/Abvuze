@@ -52,18 +52,16 @@ PRUDPPacketReply
 			class_mon.enter();
 		
 			Map	new_decoders = new HashMap( packet_decoders );
-			
-			Iterator	it = _decoders.keySet().iterator();
-			
-			while( it.hasNext()){
-				
-				Integer action = (Integer)it.next();
-				
-				if ( packet_decoders.containsKey( action )){
-					
-					Debug.out( "Duplicate codec! " + action );
-				}
-			}
+
+            for (Object o : _decoders.keySet()) {
+
+                Integer action = (Integer) o;
+
+                if (packet_decoders.containsKey(action)) {
+
+                    Debug.out("Duplicate codec! " + action);
+                }
+            }
 			
 			new_decoders.putAll( _decoders );
 			
@@ -107,7 +105,7 @@ PRUDPPacketReply
 	{
 		int		action			= is.readInt();
 		
-		PRUDPPacketReplyDecoder	decoder = (PRUDPPacketReplyDecoder)packet_decoders.get( new Integer( action ));
+		PRUDPPacketReplyDecoder	decoder = (PRUDPPacketReplyDecoder)packet_decoders.get(action);
 		
 		if ( decoder == null ){
 			

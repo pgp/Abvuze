@@ -30,46 +30,46 @@ import org.gudy.azureus2.plugins.utils.resourcedownloader.*;
 public interface 
 UpdateChecker 
 {
-	public UpdatableComponent
+	UpdatableComponent
 	getComponent();
 	
-	public UpdateCheckInstance
+	UpdateCheckInstance
 	getCheckInstance();
 	
 		/**
 		 * Add an update with a single downloader
 		 * @param mandatory indicates that in a group of updates this one must succeed
 		 */
-	
-	public Update
+
+        Update
 	addUpdate(
-		String				name,
-		String[]			description,
-		String				old_version,
-		String				new_version,
-		ResourceDownloader	downloader,
-		int					restart_required );
+                String name,
+                String[] description,
+                String old_version,
+                String new_version,
+                ResourceDownloader downloader,
+                int restart_required);
 	
 		/**
 		 * Add an update with a number of downloaders
 		 */
-	
-	public Update
+
+        Update
 	addUpdate(
-		String					name,
-		String[]				description,
-		String					old_version,
-		String					new_version,
-		ResourceDownloader[]	downloaders,
-		int						restart_required );
+                String name,
+                String[] description,
+                String old_version,
+                String new_version,
+                ResourceDownloader[] downloaders,
+                int restart_required);
 	
 		/**
 		 * For updates that require a stop, update-action and then start you create an installer.
 		 * This allows the specification of actions such as the replacement of a DLL 
 		 * @return
 		 */
-	
-	public UpdateInstaller
+
+        UpdateInstaller
 	createInstaller()
 		
 		throws UpdateException;
@@ -78,8 +78,8 @@ UpdateChecker
 		 * Indicate that update checking is complete and that any updates required have
 		 * been added by the addUpdate methods
 		 */
-	
-	public void
+
+        void
 	completed();
 	
 		/**
@@ -87,32 +87,32 @@ UpdateChecker
 		 * components (e.g. AZ core) as failure of a mandatory one causes all other
 		 * updates to be aborted 
 		 */
-	
-	public void
+
+        void
 	failed();
 	
 		/**
 		 * report a progress string to registered listeners
 		 * @param str
 		 */
-	
-	public void
+
+        void
 	reportProgress(
-		String	str );
+                String str);
 	
-	public void
+	void
 	addListener(
-		UpdateCheckerListener	l );
+            UpdateCheckerListener l);
 	
-	public void
+	void
 	removeListener(
-		UpdateCheckerListener	l );
+            UpdateCheckerListener l);
 	
-	public void
+	void
 	addProgressListener(
-		UpdateProgressListener	l );
+            UpdateProgressListener l);
 	
-	public void
+	void
 	removeProgressListener(
-		UpdateProgressListener	l );
+            UpdateProgressListener l);
 }

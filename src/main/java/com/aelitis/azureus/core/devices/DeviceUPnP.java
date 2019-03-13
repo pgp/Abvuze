@@ -28,6 +28,6 @@ public interface
 DeviceUPnP
 	extends Device
 {
-	public UPnPDevice
+	UPnPDevice
 	getUPnPDevice();
 }

@@ -26,14 +26,14 @@ public interface ClientMessageHandler {
 	 * Get the message type id that this handler handles.
 	 * @return
 	 */
-	public String getMessageTypeID();
+    String getMessageTypeID();
 	
 	
 	/**
 	 * Process the given message received from a client.
 	 * @param message from client to process
 	 */
-	public void processMessage( ClientMessage message );
+    void processMessage(ClientMessage message);
 	
 	
 	/**
@@ -42,8 +42,8 @@ public interface ClientMessageHandler {
 	 * @param message sent
 	 * @param success true if reply send was successful, false if reply send failed
 	 */
-	public void sendAttemptCompleted( ClientMessage message );
+    void sendAttemptCompleted(ClientMessage message);
 	
-	public void sendAttemptFailed( ClientMessage message, Throwable error );
+	void sendAttemptFailed(ClientMessage message, Throwable error);
 	
 }

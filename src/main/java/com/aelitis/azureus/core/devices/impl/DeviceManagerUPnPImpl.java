@@ -24,6 +24,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.NetworkInterface;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
@@ -73,9 +74,9 @@ DeviceManagerUPnPImpl
 	
 	private volatile IPCInterface			upnpav_ipc;
 	
-	private Map<InetAddress,String>		unassociated_devices = new HashMap<InetAddress, String>();
+	private Map<InetAddress,String>		unassociated_devices = new HashMap<>();
 	
-	private Set<String>					access_logs	= new HashSet<String>();
+	private Set<String>					access_logs	= new HashSet<>();
 	
 	protected
 	DeviceManagerUPnPImpl(
@@ -230,7 +231,7 @@ DeviceManagerUPnPImpl
 			upnp.getSSDP().addListener(
 				new UPnPSSDPListener()
 				{
-					private Map<InetAddress,Boolean>	liveness_map = new HashMap<InetAddress, Boolean>();
+					private Map<InetAddress,Boolean>	liveness_map = new HashMap<>();
 					
 					public void
 					receivedResult(
@@ -475,7 +476,7 @@ DeviceManagerUPnPImpl
 							
 							DeviceImpl[] devices = manager.getDevices();
 							
-							final List<DeviceMediaRendererImpl>	browse_devices = new ArrayList<DeviceMediaRendererImpl>();
+							final List<DeviceMediaRendererImpl>	browse_devices = new ArrayList<>();
 							
 							boolean	restrict_access = false;
 							
@@ -576,7 +577,7 @@ DeviceManagerUPnPImpl
 								}
 							}
 							
-							Map<String,Object> result = new HashMap<String, Object>();
+							Map<String,Object> result = new HashMap<>();
 							
 							if ( browse_devices.size() > 0 ){
 								
@@ -694,13 +695,13 @@ DeviceManagerUPnPImpl
 	public UnassociatedDevice[]
 	getUnassociatedDevices()
 	{
-		List<UnassociatedDevice> result = new ArrayList<UnassociatedDevice>();
+		List<UnassociatedDevice> result = new ArrayList<>();
 		
 		Map<InetAddress,String> ud;
 		
 		synchronized( unassociated_devices ){
 
-			ud = new HashMap<InetAddress,String>( unassociated_devices );
+			ud = new HashMap<>(unassociated_devices);
 		}
 		
 		DeviceImpl[] devices = manager.getDevices();
@@ -748,7 +749,7 @@ DeviceManagerUPnPImpl
 			}
 		}
 		
-		return( result.toArray( new UnassociatedDevice[result.size()]));
+		return( result.toArray(new UnassociatedDevice[0]));
 	}
 	
 	public PluginInterface
@@ -905,7 +906,7 @@ DeviceManagerUPnPImpl
 			String un_key;
 			
 			try{
-				un_key = Base32.encode( unique_name.getBytes( "UTF-8" ));
+				un_key = Base32.encode( unique_name.getBytes(StandardCharsets.UTF_8));
 				
 			}catch( Throwable e ){
 				
@@ -981,9 +982,9 @@ DeviceManagerUPnPImpl
 	{
 		UPnPService[] 	services = device.getServices();
 		
-		List<DeviceUPnPImpl>	new_devices = new ArrayList<DeviceUPnPImpl>();
+		List<DeviceUPnPImpl>	new_devices = new ArrayList<>();
 		
-		List<UPnPWANConnection>	igd_services = new ArrayList<UPnPWANConnection>();
+		List<UPnPWANConnection>	igd_services = new ArrayList<>();
 		
 		for ( UPnPService service: services ){
 				

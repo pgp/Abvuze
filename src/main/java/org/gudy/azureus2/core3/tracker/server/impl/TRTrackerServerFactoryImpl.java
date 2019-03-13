@@ -85,44 +85,42 @@ TRTrackerServerFactoryImpl
 					long	announce_time	= 0;
 					long	scrape_count	= 0;
 					long	scrape_time		= 0;
-					
-					Iterator it = servers.iterator();
 
-					while( it.hasNext()){
-						
-						TRTrackerServerStats stats = ((TRTrackerServer)it.next()).getStats();
-						
-						read_bytes		+= stats.getBytesIn();
-						write_bytes		+= stats.getBytesOut();
-						announce_count 	+= stats.getAnnounceCount();
-						announce_time	+= stats.getAnnounceTime();
-						scrape_count 	+= stats.getScrapeCount();
-						scrape_time		+= stats.getScrapeTime();
-					}
+                    for (Object server : servers) {
+
+                        TRTrackerServerStats stats = ((TRTrackerServer) server).getStats();
+
+                        read_bytes += stats.getBytesIn();
+                        write_bytes += stats.getBytesOut();
+                        announce_count += stats.getAnnounceCount();
+                        announce_time += stats.getAnnounceTime();
+                        scrape_count += stats.getScrapeCount();
+                        scrape_time += stats.getScrapeTime();
+                    }
 					
 					if ( types.contains( AzureusCoreStats.ST_TRACKER_READ_BYTES )){
 						
-						values.put( AzureusCoreStats.ST_TRACKER_READ_BYTES, new Long( read_bytes ));
+						values.put( AzureusCoreStats.ST_TRACKER_READ_BYTES, read_bytes);
 					}
 					if ( types.contains( AzureusCoreStats.ST_TRACKER_WRITE_BYTES )){
 						
-						values.put( AzureusCoreStats.ST_TRACKER_WRITE_BYTES, new Long( write_bytes ));
+						values.put( AzureusCoreStats.ST_TRACKER_WRITE_BYTES, write_bytes);
 					}
 					if ( types.contains( AzureusCoreStats.ST_TRACKER_ANNOUNCE_COUNT )){
 						
-						values.put( AzureusCoreStats.ST_TRACKER_ANNOUNCE_COUNT, new Long( announce_count ));
+						values.put( AzureusCoreStats.ST_TRACKER_ANNOUNCE_COUNT, announce_count);
 					}
 					if ( types.contains( AzureusCoreStats.ST_TRACKER_ANNOUNCE_TIME )){
 						
-						values.put( AzureusCoreStats.ST_TRACKER_ANNOUNCE_TIME, new Long( announce_time ));
+						values.put( AzureusCoreStats.ST_TRACKER_ANNOUNCE_TIME, announce_time);
 					}
 					if ( types.contains( AzureusCoreStats.ST_TRACKER_SCRAPE_COUNT )){
 						
-						values.put( AzureusCoreStats.ST_TRACKER_SCRAPE_COUNT, new Long( scrape_count ));
+						values.put( AzureusCoreStats.ST_TRACKER_SCRAPE_COUNT, scrape_count);
 					}
 					if ( types.contains( AzureusCoreStats.ST_TRACKER_SCRAPE_TIME )){
 						
-						values.put( AzureusCoreStats.ST_TRACKER_SCRAPE_TIME, new Long( scrape_time ));
+						values.put( AzureusCoreStats.ST_TRACKER_SCRAPE_TIME, scrape_time);
 					}
 				}
 			});
@@ -144,7 +142,7 @@ TRTrackerServerFactoryImpl
 	{
 		if ( properties == null ){
 			
-			properties = new HashMap<String, Object>();
+			properties = new HashMap<>();
 		}
 		
 		Boolean	pr_non_blocking = (Boolean)properties.get(Tracker.PR_NON_BLOCKING );
@@ -209,11 +207,11 @@ TRTrackerServerFactoryImpl
 			}
 			
 			servers.add( server );
-			
-			for (int i=0;i<listeners.size();i++){
-				
-				((TRTrackerServerFactoryListener)listeners.get(i)).serverCreated( server );
-			}
+
+            for (Object listener : listeners) {
+
+                ((TRTrackerServerFactoryListener) listener).serverCreated(server);
+            }
 			
 			return( server );
 			
@@ -233,11 +231,11 @@ TRTrackerServerFactoryImpl
 			server.closeSupport();
 			
 			if ( servers.remove( server )){
-			
-				for (int i=0;i<listeners.size();i++){
-					
-					((TRTrackerServerFactoryListener)listeners.get(i)).serverDestroyed( server );
-				}	
+
+                for (Object listener : listeners) {
+
+                    ((TRTrackerServerFactoryListener) listener).serverDestroyed(server);
+                }
 			}
 		}finally{
 			
@@ -253,13 +251,11 @@ TRTrackerServerFactoryImpl
 			class_mon.enter();
 		
 			listeners.add( l );
-			
-			Iterator it = servers.iterator();
-			
-			while( it.hasNext()){
-				
-				l.serverCreated((TRTrackerServer)it.next());
-			}
+
+            for (Object server : servers) {
+
+                l.serverCreated((TRTrackerServer) server);
+            }
 		}finally{
 			
 			class_mon.exit();

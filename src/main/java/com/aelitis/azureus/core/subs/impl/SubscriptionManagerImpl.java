@@ -23,6 +23,7 @@ package com.aelitis.azureus.core.subs.impl;
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -163,39 +164,35 @@ SubscriptionManagerImpl
 					VuzeFile[]		files,
 					int				expected_types )
 				{
-					for (int i=0;i<files.length;i++){
-						
-						VuzeFile	vf = files[i];
-						
-						VuzeFileComponent[] comps = vf.getComponents();
-						
-						for (int j=0;j<comps.length;j++){
-							
-							VuzeFileComponent comp = comps[j];
-							
-							int	type = comp.getType();
-							
-							if ( 	type == VuzeFileComponent.COMP_TYPE_SUBSCRIPTION ||
-									type == VuzeFileComponent.COMP_TYPE_SUBSCRIPTION_SINGLETON ){
-								
-								try{
-									Subscription subs = ((SubscriptionManagerImpl)getSingleton( false )).importSubscription(
-											type,
-											comp.getContent(),
-											( expected_types & 
-												( VuzeFileComponent.COMP_TYPE_SUBSCRIPTION | VuzeFileComponent.COMP_TYPE_SUBSCRIPTION_SINGLETON )) == 0 );
-									
-									comp.setProcessed();
-									
-									comp.setData( Subscription.VUZE_FILE_COMPONENT_SUBSCRIPTION_KEY, subs );
-									
-								}catch( Throwable e ){
-									
-									Debug.printStackTrace(e);
-								}
-							}
-						}
-					}
+                    for (VuzeFile vf : files) {
+
+                        VuzeFileComponent[] comps = vf.getComponents();
+
+                        for (VuzeFileComponent comp : comps) {
+
+                            int type = comp.getType();
+
+                            if (type == VuzeFileComponent.COMP_TYPE_SUBSCRIPTION ||
+                                    type == VuzeFileComponent.COMP_TYPE_SUBSCRIPTION_SINGLETON) {
+
+                                try {
+                                    Subscription subs = ((SubscriptionManagerImpl) getSingleton(false)).importSubscription(
+                                            type,
+                                            comp.getContent(),
+                                            (expected_types &
+                                                    (VuzeFileComponent.COMP_TYPE_SUBSCRIPTION | VuzeFileComponent.COMP_TYPE_SUBSCRIPTION_SINGLETON)) == 0);
+
+                                    comp.setProcessed();
+
+                                    comp.setData(Subscription.VUZE_FILE_COMPONENT_SUBSCRIPTION_KEY, subs);
+
+                                } catch (Throwable e) {
+
+                                    Debug.printStackTrace(e);
+                                }
+                            }
+                        }
+                    }
 				}
 			});		
 	}
@@ -258,7 +255,7 @@ SubscriptionManagerImpl
 	
 	private volatile DHTPluginInterface	dht_plugin_public;
 	
-	private List<SubscriptionImpl>		subscriptions	= new ArrayList<SubscriptionImpl>();
+	private List<SubscriptionImpl>		subscriptions	= new ArrayList<>();
 	
 	private boolean	config_dirty;
 		
@@ -276,13 +273,13 @@ SubscriptionManagerImpl
 	private boolean					periodic_lookup_in_progress;
 	private int						priority_lookup_pending;
 	
-	private CopyOnWriteList<SubscriptionManagerListener>			listeners = new CopyOnWriteList<SubscriptionManagerListener>();
+	private CopyOnWriteList<SubscriptionManagerListener>			listeners = new CopyOnWriteList<>();
 	
 	private SubscriptionSchedulerImpl	scheduler;
 	
-	private List<Object[]>					potential_associations	= new ArrayList<Object[]>();
-	private Map<HashWrapper,Object[]>		potential_associations2	= new HashMap<HashWrapper,Object[]>();
-	private Map<HashWrapper,Object[]>		potential_associations3	= new HashMap<HashWrapper,Object[]>();
+	private List<Object[]>					potential_associations	= new ArrayList<>();
+	private Map<HashWrapper,Object[]>		potential_associations2	= new HashMap<>();
+	private Map<HashWrapper,Object[]>		potential_associations3	= new HashMap<>();
 	
 	private boolean					meta_search_listener_added;
 	
@@ -292,7 +289,7 @@ SubscriptionManagerImpl
 	
 	private AEDiagnosticsLogger		logger;
 	
-	private Map<SubscriptionImpl,Object[]>		result_cache = new HashMap<SubscriptionImpl, Object[]>();
+	private Map<SubscriptionImpl,Object[]>		result_cache = new HashMap<>();
 		
 	
 	protected
@@ -323,51 +320,43 @@ SubscriptionManagerImpl
 					
 					try{
 						InputStream[] streams = cust.getResources( Customization.RT_SUBSCRIPTIONS );
-						
-						for (int i=0;i<streams.length;i++){
-							
-							InputStream is = streams[i];
-							
-							try{
-								VuzeFile vf = VuzeFileHandler.getSingleton().loadVuzeFile(is);
-								
-								if ( vf != null ){
-									
-									VuzeFileComponent[] comps = vf.getComponents();
-									
-									for (int j=0;j<comps.length;j++){
-										
-										VuzeFileComponent comp = comps[j];
-										
-										int type = comp.getType();
-										
-										if ( 	type == VuzeFileComponent.COMP_TYPE_SUBSCRIPTION ||
-												type == VuzeFileComponent.COMP_TYPE_SUBSCRIPTION_SINGLETON	){
-											
-											try{
-												importSubscription(
-														type,
-														comp.getContent(),
-														false );
-												
-												comp.setProcessed();
-												
-											}catch( Throwable e ){
-												
-												Debug.printStackTrace(e);
-											}
-										}
-									}
-								}
-							}finally{
-								
-								try{
-									is.close();
-									
-								}catch( Throwable e ){
-								}
-							}
-						}
+
+                        for (InputStream is : streams) {
+
+                            try {
+                                VuzeFile vf = VuzeFileHandler.getSingleton().loadVuzeFile(is);
+
+                                if (vf != null) {
+
+                                    VuzeFileComponent[] comps = vf.getComponents();
+
+                                    for (VuzeFileComponent comp : comps) {
+
+                                        int type = comp.getType();
+
+                                        if (type == VuzeFileComponent.COMP_TYPE_SUBSCRIPTION ||
+                                                type == VuzeFileComponent.COMP_TYPE_SUBSCRIPTION_SINGLETON) {
+
+                                            try {
+                                                importSubscription(
+                                                        type,
+                                                        comp.getContent(),
+                                                        false);
+
+                                                comp.setProcessed();
+
+                                            } catch (Throwable e) {
+
+                                                Debug.printStackTrace(e);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            finally {
+                                try{ is.close();} catch (IOException e) {}
+                            }
+                        }
 					}finally{
 						
 						COConfigurationManager.setParameter( "subscriptions.custom.name", cust.getName());
@@ -509,7 +498,7 @@ SubscriptionManagerImpl
 							
 							synchronized( potential_associations2 ){
 								
-								entry = (Object[])potential_associations2.remove( new HashWrapper( hash ));
+								entry = potential_associations2.remove( new HashWrapper( hash ));
 							}
 							
 							if ( entry != null ){
@@ -526,7 +515,7 @@ SubscriptionManagerImpl
 								recordAssociationsSupport(
 									hash,
 									subs,
-									((Boolean)entry[1]).booleanValue());
+                                        (Boolean) entry[1]);
 							}
 						}
 					}
@@ -558,7 +547,7 @@ SubscriptionManagerImpl
 							
 							synchronized( potential_associations2 ){
 								
-								entry = (Object[])potential_associations2.get( hw );
+								entry = potential_associations2.get( hw );
 							}
 							
 							if ( entry != null ){
@@ -630,32 +619,30 @@ SubscriptionManagerImpl
 						asyncInit()
 						{
 							Download[] downloads = default_pi.getDownloadManager().getDownloads();
-									
-							for (int i=0;i<downloads.length;i++){
-								
-								Download download = downloads[i];
-								
-								if ( download.getBooleanAttribute( ta_subs_download )){
-									
-									Map	rd = download.getMapAttribute( ta_subs_download_rd );
-									
-									boolean	delete_it;
-									
-									if ( rd == null ){
-										
-										delete_it = true;
-										
-									}else{
-										
-										delete_it = !recoverSubscriptionUpdate( download, rd );
-									}
-									
-									if ( delete_it ){
-										
-										removeDownload( download, true );
-									}
-								}
-							}
+
+                            for (Download download : downloads) {
+
+                                if (download.getBooleanAttribute(ta_subs_download)) {
+
+                                    Map rd = download.getMapAttribute(ta_subs_download_rd);
+
+                                    boolean delete_it;
+
+                                    if (rd == null) {
+
+                                        delete_it = true;
+
+                                    } else {
+
+                                        delete_it = !recoverSubscriptionUpdate(download, rd);
+                                    }
+
+                                    if (delete_it) {
+
+                                        removeDownload(download, true);
+                                    }
+                                }
+                            }
 								
 							default_pi.getDownloadManager().addListener(
 								new DownloadManagerListener()
@@ -756,7 +743,7 @@ SubscriptionManagerImpl
 				default_pi.getUtilities().registerSearchProvider(
 					new SearchProvider()
 					{
-						private Map<Integer,Object>	properties = new HashMap<Integer, Object>();
+						private Map<Integer,Object>	properties = new HashMap<>();
 						
 						{
 							properties.put( PR_NAME, MessageText.getString( "ConfigView.section.Subscriptions" ));
@@ -868,7 +855,7 @@ SubscriptionManagerImpl
 		default_pi.getUtilities().registerJSONRPCServer(
 			new Utilities.JSONServer()
 			{
-				private List<String>	methods = new ArrayList<String>();
+				private List<String>	methods = new ArrayList<>();
 				
 				{
 					methods.add( "vuze-subs-list" );
@@ -981,7 +968,7 @@ SubscriptionManagerImpl
 				public void
 				run()
 				{
-					final Set<String>	hashes = new HashSet<String>();
+					final Set<String>	hashes = new HashSet<>();
 					
 					searchMatcher	matcher = new searchMatcher( term );
 
@@ -1026,7 +1013,7 @@ SubscriptionManagerImpl
 							}
 						}
 												
-						Map<String,Object[]> template_matches = new HashMap<String, Object[]>();
+						Map<String,Object[]> template_matches = new HashMap<>();
 								
 						Engine[] engines = MetaSearchManagerFactory.getSingleton().getMetaSearch().getEngines( false, false );
 						
@@ -1105,7 +1092,7 @@ SubscriptionManagerImpl
 							
 							if ( sub_dl_name_map == null ){
 								
-								sub_dl_name_map = new HashMap<Subscription, List<String>>();
+								sub_dl_name_map = new HashMap<>();
 								
 								SubscriptionDownloadDetails[] sdds = SubscriptionUtils.getAllCachedDownloadDetails( azureus_core );
 								
@@ -1123,7 +1110,7 @@ SubscriptionManagerImpl
 											
 											if ( g == null ){
 												
-												g = new ArrayList<String>();
+												g = new ArrayList<>();
 												
 												sub_dl_name_map.put( s, g );
 											}
@@ -1161,7 +1148,7 @@ SubscriptionManagerImpl
 							}
 						}
 						
-						List<SubscriptionImpl>	interesting = new ArrayList<SubscriptionImpl>();
+						List<SubscriptionImpl>	interesting = new ArrayList<>();
 						
 						for ( Object[] entry: template_matches.values()){
 						
@@ -1255,7 +1242,7 @@ SubscriptionManagerImpl
 												}else if ( 	property_name == SearchResult.PR_SEED_COUNT ||
 															property_name == SearchResult.PR_VOTES ){
 																							
-													return((long)sub.getCachedPopularity());
+													return sub.getCachedPopularity();
 													
 												}else if ( property_name == SearchResult.PR_RANK ){
 												
@@ -1300,7 +1287,7 @@ SubscriptionManagerImpl
 	matchSubscriptionResults(
 		searchMatcher	matcher  )
 	{
-		List<SubscriptionResult> result = new ArrayList<SubscriptionResult>();
+		List<SubscriptionResult> result = new ArrayList<>();
 				
 		for ( Subscription sub: getSubscriptions( true )){
 			
@@ -1332,11 +1319,11 @@ SubscriptionManagerImpl
 		int		max )
 	{
 		Subscription[] subs = getSubscriptions();
-		
-		for (int i=0;i<subs.length;i++){
-			
-			((SubscriptionHistoryImpl)subs[i].getHistory()).checkMaxResults( max );
-		}
+
+        for (Subscription sub : subs) {
+
+            ((SubscriptionHistoryImpl) sub.getHistory()).checkMaxResults(max);
+        }
 	}
 	
 	public SubscriptionScheduler
@@ -1489,18 +1476,22 @@ SubscriptionManagerImpl
 			
 			String lhs 	= temp[0].toLowerCase( Locale.US );
 			String	rhs	= temp[1];
-			
-			if ( lhs.equals( "id" )){
-				
-				sid = Base32.decode( rhs );
-				
-			}else if ( lhs.equals( "v" )){
-				
-				version = Integer.parseInt( rhs );
-				
-			}else if ( lhs.equals( "a" )){
-				
-				is_anon = rhs.equals( "1" );
+
+			switch (lhs) {
+				case "id":
+
+					sid = Base32.decode(rhs);
+
+					break;
+				case "v":
+
+					version = Integer.parseInt(rhs);
+
+					break;
+				case "a":
+
+					is_anon = rhs.equals("1");
+					break;
 			}
 		}
 		
@@ -1641,7 +1632,7 @@ SubscriptionManagerImpl
 			
 		}catch( SubscriptionException e ){
 			
-			throw((SubscriptionException)e);
+			throw e;
 			
 		}catch( Throwable e ){
 			
@@ -1686,7 +1677,7 @@ SubscriptionManagerImpl
 				singleton_details.put( "key", url.toExternalForm().getBytes( Constants.BYTE_ENCODING ));
 
 			}else{
-				singleton_details.put( "key", url.toExternalForm().getBytes( "UTF-8" ));
+				singleton_details.put( "key", url.toExternalForm().getBytes(StandardCharsets.UTF_8));
 			}
 						
 			String	name2 = name.length() > 64?name.substring(0,64):name;
@@ -1695,12 +1686,12 @@ SubscriptionManagerImpl
 			
 			if ( check_interval_mins != SubscriptionHistoryImpl.DEFAULT_CHECK_INTERVAL_MINS ){
 				
-				singleton_details.put( "ci", new Long( check_interval_mins ));
+				singleton_details.put( "ci", (long) check_interval_mins);
 			}
 			
 			if ( is_anon ){
 				
-				singleton_details.put( "a", new Long(1));
+				singleton_details.put( "a", 1L);
 			}
 			
 			return( singleton_details );
@@ -1873,15 +1864,13 @@ SubscriptionManagerImpl
 			SubscriptionImpl subs = new SubscriptionImpl( this, engine.getName(), engine.isPublic(), is_anonymous, null, json, SubscriptionImpl.ADD_TYPE_CREATE );
 			
 			if ( user_data != null ){
-				
-				Iterator it = user_data.entrySet().iterator();
-				
-				while( it.hasNext()){
-					
-					Map.Entry entry = (Map.Entry)it.next();
-					
-					subs.setUserData( entry.getKey(), entry.getValue());
-				}
+
+                for (Object o : user_data.entrySet()) {
+
+                    Map.Entry entry = (Map.Entry) o;
+
+                    subs.setUserData(entry.getKey(), entry.getValue());
+                }
 			}
 			
 			log( "Created new subscription: " + subs.getString());
@@ -1939,7 +1928,7 @@ SubscriptionManagerImpl
 			
 				saveConfig();
 			} else {
-				existing = (SubscriptionImpl) subscriptions.get(index);
+				existing = subscriptions.get(index);
 			}
 		}
 		
@@ -1981,19 +1970,17 @@ SubscriptionManagerImpl
 				log( "", e );
 			}
 		}
-		
-		Iterator it = listeners.iterator();
-		
-		while( it.hasNext()){
-			
-			try{
-				((SubscriptionManagerListener)it.next()).subscriptionAdded( subs );
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace(e);
-			}
-		}
+
+        for (SubscriptionManagerListener listener : listeners) {
+
+            try {
+                (listener).subscriptionAdded(subs);
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 		
 		if ( subs.isSubscribed() && subs.isPublic()){
 			
@@ -2042,16 +2029,14 @@ SubscriptionManagerImpl
 					Engine		engine )
 				{
 					synchronized( SubscriptionManagerImpl.this ){
-						
-						for (int i=0;i<subscriptions.size();i++){
-							
-							SubscriptionImpl	subs = (SubscriptionImpl)subscriptions.get(i);
-							
-							if ( subs.isMine()){
-								
-								subs.engineUpdated( engine );
-							}
-						}
+
+                        for (SubscriptionImpl subs : subscriptions) {
+
+                            if (subs.isMine()) {
+
+                                subs.engineUpdated(engine);
+                            }
+                        }
 					}
 				}
 				
@@ -2074,19 +2059,17 @@ SubscriptionManagerImpl
 		SubscriptionImpl		subs )
 	{
 		if ( !subs.isRemoved()){
-			
-			Iterator it = listeners.iterator();
-			
-			while( it.hasNext()){
-				
-				try{
-					((SubscriptionManagerListener)it.next()).subscriptionChanged( subs );
-					
-				}catch( Throwable e ){
-					
-					Debug.printStackTrace(e);
-				}
-			}
+
+            for (SubscriptionManagerListener listener : listeners) {
+
+                try {
+                    (listener).subscriptionChanged(subs);
+
+                } catch (Throwable e) {
+
+                    Debug.printStackTrace(e);
+                }
+            }
 		}
 	}
 	
@@ -2096,18 +2079,16 @@ SubscriptionManagerImpl
 	{
 		if ( !subs.isRemoved()){
 
-			Iterator it = listeners.iterator();
-			
-			while( it.hasNext()){
-				
-				try{
-					((SubscriptionManagerListener)it.next()).subscriptionSelected( subs );
-					
-				}catch( Throwable e ){
-					
-					Debug.printStackTrace(e);
-				}
-			}
+            for (SubscriptionManagerListener listener : listeners) {
+
+                try {
+                    (listener).subscriptionSelected(subs);
+
+                } catch (Throwable e) {
+
+                    Debug.printStackTrace(e);
+                }
+            }
 		}
 	}
 	
@@ -2141,19 +2122,17 @@ SubscriptionManagerImpl
 			
 			log( "Failed to check for engine deletion", e );
 		}
-		
-		Iterator<SubscriptionManagerListener> it = listeners.iterator();
-		
-		while( it.hasNext()){
-			
-			try{
-				it.next().subscriptionRemoved( subs );
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace(e);
-			}
-		}
+
+        for (SubscriptionManagerListener listener : listeners) {
+
+            try {
+                listener.subscriptionRemoved(subs);
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 		
 		try{
 			FileUtil.deleteResilientFile( getResultsFile( subs ));
@@ -2208,7 +2187,7 @@ SubscriptionManagerImpl
 								
 								long	delay = SERVER_PUB_CHECK_PERIOD;
 								
-								for (int i=0;i<l_consec_fail.longValue();i++){
+								for (int i = 0; i< l_consec_fail; i++){
 									
 									delay <<= 1;
 									
@@ -2218,7 +2197,7 @@ SubscriptionManagerImpl
 									}
 								}
 								
-								if ( l_last_pub.longValue() + delay > SystemTime.getMonotonousTime()){
+								if (l_last_pub + delay > SystemTime.getMonotonousTime()){
 									
 									return;
 								}
@@ -2252,9 +2231,9 @@ SubscriptionManagerImpl
 								
 								log( "    Failed to update public subscription " + subs.getString(), e );
 								
-								subs.setUserData( SP_LAST_ATTEMPTED, new Long( SystemTime.getMonotonousTime()));
+								subs.setUserData( SP_LAST_ATTEMPTED, SystemTime.getMonotonousTime());
 								
-								subs.setUserData( SP_CONSEC_FAIL, new Long( l_consec_fail==null?1:(l_consec_fail.longValue()+1)));
+								subs.setUserData( SP_CONSEC_FAIL, l_consec_fail == null ? 1 : (l_consec_fail.longValue() + 1));
 				
 								subs.setServerPublicationOutstanding();
 							}
@@ -2318,15 +2297,15 @@ SubscriptionManagerImpl
 	checkServerPublications(
 		List		subs )
 	{
-		for (int i=0;i<subs.size();i++){
-			
-			SubscriptionImpl	sub = (SubscriptionImpl)subs.get(i);
-			
-			if ( sub.getServerPublicationOutstanding()){
-				
-				updatePublicSubscription( sub );
-			}
-		}
+        for (Object sub1 : subs) {
+
+            SubscriptionImpl sub = (SubscriptionImpl) sub1;
+
+            if (sub.getServerPublicationOutstanding()) {
+
+                updatePublicSubscription(sub);
+            }
+        }
 	}
 	
 	private static final Object	SUBS_CHAT_KEY	= new Object();
@@ -2341,34 +2320,32 @@ SubscriptionManagerImpl
 		
 		synchronized( this ){
 			
-			subs = new ArrayList<SubscriptionImpl>( subscriptions );
+			subs = new ArrayList<>(subscriptions);
 		}
 		
 		SubscriptionImpl	expired_subs = null;
-		
-		for (int i=0;i<subs.size();i++){
-			
-			SubscriptionImpl sub = subs.get( i );
-			
-			if ( !( sub.isMine() || sub.isSubscribed())){
-				
-				long	age = now - sub.getAddTime();
-				
-				if ( age > DELETE_UNUSED_AFTER_MILLIS ){
-					
-					if ( 	expired_subs == null || 
-							( sub.getAddTime() < expired_subs.getAddTime())){
-						
-						expired_subs = sub;
-					}
-					
-					continue;
-				}
-			}
-			
-			
-			sub.checkPublish();
-		}
+
+        for (SubscriptionImpl sub : subs) {
+
+            if (!(sub.isMine() || sub.isSubscribed())) {
+
+                long age = now - sub.getAddTime();
+
+                if (age > DELETE_UNUSED_AFTER_MILLIS) {
+
+                    if (expired_subs == null ||
+                            (sub.getAddTime() < expired_subs.getAddTime())) {
+
+                        expired_subs = sub;
+                    }
+
+                    continue;
+                }
+            }
+
+
+            sub.checkPublish();
+        }
 		
 		if ( expired_subs != null ){
 			
@@ -2379,7 +2356,7 @@ SubscriptionManagerImpl
 		
 		if ( ticks % CHAT_CHECK_TICKS == 0 ){
 			
-			List<SubscriptionImpl> subs_copy = new ArrayList<SubscriptionImpl>( subs );
+			List<SubscriptionImpl> subs_copy = new ArrayList<>(subs);
 			
 			Collections.shuffle( subs_copy );
 			
@@ -2490,9 +2467,9 @@ SubscriptionManagerImpl
 			try{
 				if ( type == VuzeFileComponent.COMP_TYPE_SUBSCRIPTION_SINGLETON ){
 					
-					String	name = new String((byte[])map.get( "name" ), "UTF-8" );
+					String	name = new String((byte[])map.get( "name" ), StandardCharsets.UTF_8);
 					
-					URL	url = new URL( new String((byte[])map.get( "url" ), "UTF-8" ));
+					URL	url = new URL( new String((byte[])map.get( "url" ), StandardCharsets.UTF_8));
 					
 					Long	l_interval = (Long)map.get( "check_interval_mins" );
 					
@@ -2500,11 +2477,11 @@ SubscriptionManagerImpl
 					
 					Long	l_public = (Long)map.get( "public" );
 					
-					boolean is_public = l_public==null?true:l_public.longValue()==1;
+					boolean is_public = l_public==null?true: l_public ==1;
 					
 					Long	l_anon = (Long)map.get( "anon" );
 					
-					boolean is_anon = l_anon==null?false:l_anon.longValue()==1;
+					boolean is_anon = l_anon==null?false: l_anon ==1;
 					
 					SubscriptionImpl existing = lookupSingletonRSS(name, url, is_public, check_interval_mins, is_anon );
 					
@@ -2718,7 +2695,7 @@ SubscriptionManagerImpl
 	{
 		synchronized( this ){
 			
-			return((SubscriptionImpl[])subscriptions.toArray( new SubscriptionImpl[subscriptions.size()]));
+			return subscriptions.toArray( new SubscriptionImpl[subscriptions.size()]);
 		}
 	}
 	
@@ -2734,19 +2711,17 @@ SubscriptionManagerImpl
 		List	result = new ArrayList();
 				
 		synchronized( this ){
-			
-			for (int i=0;i<subscriptions.size();i++){
-				
-				SubscriptionImpl subs = (SubscriptionImpl)subscriptions.get(i);
-				
-				if ( subs.isSubscribed()){
-					
-					result.add( subs );
-				}
-			}
+
+            for (SubscriptionImpl subs : subscriptions) {
+
+                if (subs.isSubscribed()) {
+
+                    result.add(subs);
+                }
+            }
 		}
 		
-		return((SubscriptionImpl[])result.toArray( new SubscriptionImpl[result.size()]));
+		return((SubscriptionImpl[])result.toArray(new SubscriptionImpl[0]));
 	}
 	
 	public int
@@ -2784,16 +2759,14 @@ SubscriptionManagerImpl
 		String		name )
 	{
 		synchronized( this ){
-			
-			for (int i=0;i<subscriptions.size();i++){
-				
-				SubscriptionImpl s = (SubscriptionImpl)subscriptions.get(i);
-				
-				if ( s.getName().equalsIgnoreCase( name )){
-					
-					return( s );
-				}
-			}
+
+            for (SubscriptionImpl s : subscriptions) {
+
+                if (s.getName().equalsIgnoreCase(name)) {
+
+                    return (s);
+                }
+            }
 		}
 		
 		return( null );
@@ -2877,7 +2850,7 @@ SubscriptionManagerImpl
 
 		Download[] downloads = pi.getDownloadManager().getDownloads();
 
-		ByteArrayHashMap<String> results = new ByteArrayHashMap<String>(Math.max( 16, downloads.length * 2 ));
+		ByteArrayHashMap<String> results = new ByteArrayHashMap<>(Math.max(16, downloads.length * 2));
 		
 		try{			
 			for ( Download download: downloads ){
@@ -2889,13 +2862,13 @@ SubscriptionManagerImpl
 					List s = (List)m.get("s");
 					
 					if ( s != null && s.size() > 0 ){
-												
-						for (int i=0;i<s.size();i++){
-							
-							byte[]	sid = (byte[])s.get(i);
-							
-							results.put( sid, "" );
-						}
+
+                        for (Object o : s) {
+
+                            byte[] sid = (byte[]) o;
+
+                            results.put(sid, "");
+                        }
 					}
 				}
 			}
@@ -2929,28 +2902,28 @@ SubscriptionManagerImpl
 						List	result = new ArrayList( s.size());
 						
 						boolean hide_search = hideSearchTemplates();
+
+                        for (Object o : s) {
+
+                            byte[] sid = (byte[]) o;
+
+                            SubscriptionImpl subs = getSubscriptionFromSID(sid);
+
+                            if (subs != null) {
+
+                                if (isVisible(subs)) {
+
+                                    if (hide_search && subs.isSearchTemplate()) {
+
+                                    } else {
+
+                                        result.add(subs);
+                                    }
+                                }
+                            }
+                        }
 						
-						for (int i=0;i<s.size();i++){
-							
-							byte[]	sid = (byte[])s.get(i);
-							
-							SubscriptionImpl subs = getSubscriptionFromSID(sid);
-							
-							if ( subs != null ){
-								
-								if ( isVisible( subs )){
-								
-									if ( hide_search && subs.isSearchTemplate()){
-									
-									}else{
-										
-										result.add( subs );
-									}
-								}
-							}
-						}
-						
-						return((Subscription[])result.toArray( new Subscription[result.size()]));
+						return((Subscription[])result.toArray(new Subscription[0]));
 					}
 				}
 			}
@@ -2976,16 +2949,16 @@ SubscriptionManagerImpl
 			List s = (List)m.get("s");
 			
 			if ( s != null && s.size() > 0 ){
-								
-				for (int i=0;i<s.size();i++){
-					
-					byte[]	x = (byte[])s.get(i);
-					
-					if ( Arrays.equals( x, sid )){
-						
-						return( true );
-					}
-				}
+
+                for (Object o : s) {
+
+                    byte[] x = (byte[]) o;
+
+                    if (Arrays.equals(x, sid)) {
+
+                        return (true);
+                    }
+                }
 			}
 		}
 		
@@ -3061,23 +3034,23 @@ SubscriptionManagerImpl
 					if ( s != null && s.size() > 0 ){
 						
 						List	result = new ArrayList( s.size());
+
+                        for (Object o : s) {
+
+                            byte[] sid = (byte[]) o;
+
+                            SubscriptionImpl subs = getSubscriptionFromSID(sid);
+
+                            if (subs != null) {
+
+                                if (subs.hasAssociation(hash)) {
+
+                                    result.add(subs);
+                                }
+                            }
+                        }
 						
-						for (int i=0;i<s.size();i++){
-							
-							byte[]	sid = (byte[])s.get(i);
-							
-							SubscriptionImpl subs = getSubscriptionFromSID(sid);
-							
-							if ( subs != null ){
-								
-								if ( subs.hasAssociation( hash )){
-								
-									result.add( subs );
-								}
-							}
-						}
-						
-						return((Subscription[])result.toArray( new Subscription[result.size()]));
+						return((Subscription[])result.toArray(new Subscription[0]));
 					}
 				}
 			}
@@ -3117,63 +3090,61 @@ SubscriptionManagerImpl
 			
 			long		newest_time		= 0;
 			Download	newest_download	= null;
-			
-			
-			for( int i=0;i<downloads.length;i++){
-				
-				Download	download = downloads[i];
-				
-				if ( downloadIsIgnored( download )){
-					
-					continue;
-				}
-				
-				Map	map = download.getMapAttribute( ta_subscription_info );
-				
-				if ( map == null ){
-					
-					map = new LightHashMap();
-					
-				}else{
-					
-					map = new LightHashMap( map );
-				}	
-				
-				Long	l_last_check = (Long)map.get( "lc" );
-				
-				long	last_check = l_last_check==null?0:l_last_check.longValue();
-				
-				if ( last_check > now ){
-					
-					last_check = now;
-					
-					map.put( "lc", new Long( last_check ));
-					
-					download.setMapAttribute( ta_subscription_info, map );
-				}
-				
-				List	subs = (List)map.get( "s" );
-				
-				int	sub_count = subs==null?0:subs.size();
-				
-				if ( sub_count > 8 ){
-					
-					continue;
-				}
-				
-				long	create_time = download.getCreationTime();
-				
-				int	time_between_checks = (sub_count + 1) * 24*60*60*1000 + (int)(create_time%4*60*60*1000);
-				
-				if ( now - last_check >= time_between_checks ){
-					
-					if ( create_time > newest_time ){
-						
-						newest_time		= create_time;
-						newest_download	= download;
-					}
-				}
-			}
+
+
+            for (Download download : downloads) {
+
+                if (downloadIsIgnored(download)) {
+
+                    continue;
+                }
+
+                Map map = download.getMapAttribute(ta_subscription_info);
+
+                if (map == null) {
+
+                    map = new LightHashMap();
+
+                } else {
+
+                    map = new LightHashMap(map);
+                }
+
+                Long l_last_check = (Long) map.get("lc");
+
+                long last_check = l_last_check == null ? 0 : l_last_check;
+
+                if (last_check > now) {
+
+                    last_check = now;
+
+                    map.put("lc", last_check);
+
+                    download.setMapAttribute(ta_subscription_info, map);
+                }
+
+                List subs = (List) map.get("s");
+
+                int sub_count = subs == null ? 0 : subs.size();
+
+                if (sub_count > 8) {
+
+                    continue;
+                }
+
+                long create_time = download.getCreationTime();
+
+                int time_between_checks = (sub_count + 1) * 24 * 60 * 60 * 1000 + (int) (create_time % 4 * 60 * 60 * 1000);
+
+                if (now - last_check >= time_between_checks) {
+
+                    if (create_time > newest_time) {
+
+                        newest_time = create_time;
+                        newest_download = download;
+                    }
+                }
+            }
 			
 			if ( newest_download != null ){
 			
@@ -3266,35 +3237,35 @@ SubscriptionManagerImpl
 	setSelected(
 		List		subs )
 	{
-		List<byte[]>			sids 		= new ArrayList<byte[]>();
-		List<SubscriptionImpl>	used_subs	= new ArrayList<SubscriptionImpl>();
+		List<byte[]>			sids 		= new ArrayList<>();
+		List<SubscriptionImpl>	used_subs	= new ArrayList<>();
 		
-		final List<SubscriptionImpl> dht_pops = new ArrayList<SubscriptionImpl>();
+		final List<SubscriptionImpl> dht_pops = new ArrayList<>();
 
-		for (int i=0;i<subs.size();i++){
-			
-			SubscriptionImpl	sub = (SubscriptionImpl)subs.get(i);
-			
-			if ( sub.isSubscribed()){
-				
-				if ( sub.isPublic()){
-				
-					if ( !sub.isAnonymous()){
-					
-						used_subs.add( sub );
-				
-						sids.add( sub.getShortID());
-						
-					}else{
-						
-						dht_pops.add( sub );
-					}
-				}else{
-					
-					checkInitialDownload( sub );
-				}
-			}
-		}
+        for (Object sub1 : subs) {
+
+            SubscriptionImpl sub = (SubscriptionImpl) sub1;
+
+            if (sub.isSubscribed()) {
+
+                if (sub.isPublic()) {
+
+                    if (!sub.isAnonymous()) {
+
+                        used_subs.add(sub);
+
+                        sids.add(sub.getShortID());
+
+                    } else {
+
+                        dht_pops.add(sub);
+                    }
+                } else {
+
+                    checkInitialDownload(sub);
+                }
+            }
+        }
 		
 		if ( sids.size() > 0 ){
 			
@@ -3308,7 +3279,7 @@ SubscriptionManagerImpl
 								
 				for (int i=0;i<sids.size();i++){
 					
-					SubscriptionImpl sub = (SubscriptionImpl)used_subs.get(i);
+					SubscriptionImpl sub = used_subs.get(i);
 					
 					int	latest_version = versions.get(i).intValue();
 					
@@ -3324,7 +3295,7 @@ SubscriptionManagerImpl
 					if ( latest_version > 0 ){
 						
 						try{
-							long	pop = popularities.get(i).longValue();
+							long	pop = popularities.get(i);
 							
 							if ( pop >= 0 && pop != sub.getCachedPopularity()){
 								
@@ -3350,11 +3321,11 @@ SubscriptionManagerImpl
 		}
 		
 		if ( dht_pops.size() <= 3 ){
-			
-			for (int i=0;i<dht_pops.size();i++){
-					
-				updatePopularityFromDHT(dht_pops.get(i), false );
-			}
+
+            for (SubscriptionImpl dht_pop : dht_pops) {
+
+                updatePopularityFromDHT(dht_pop, false);
+            }
 		}else{
 			
 			new AEThread2( "SM:asyncPop", true )
@@ -3362,10 +3333,10 @@ SubscriptionManagerImpl
 				public void
 				run()
 				{
-					for (int i=0;i<dht_pops.size();i++){
-						
-						updatePopularityFromDHT(dht_pops.get(i), true );
-					}
+                    for (SubscriptionImpl dht_pop : dht_pops) {
+
+                        updatePopularityFromDHT(dht_pop, true);
+                    }
 				}
 			}.start();
 		}
@@ -3421,7 +3392,7 @@ SubscriptionManagerImpl
 									if ( latest_version > 0 ){
 										
 										try{
-											long	pop = ((Long)result[1].get(0)).longValue();
+											long	pop = (Long) result[1].get(0);
 											
 											if ( pop >= 0 && pop != sub.getCachedPopularity()){
 												
@@ -3639,7 +3610,7 @@ SubscriptionManagerImpl
 			{
 				private boolean	done = false;
 				
-				private List<Subscription>	subs = new ArrayList<Subscription>();
+				private List<Subscription>	subs = new ArrayList<>();
 						
 				public void
 				found(
@@ -3686,7 +3657,7 @@ SubscriptionManagerImpl
 						
 						done = true;
 						
-						subscriptions = subs.toArray(new Subscription[ subs.size()]);
+						subscriptions = subs.toArray(new Subscription[0]);
 					}
 					
 					if ( error == timeout_exception ){
@@ -3710,9 +3681,9 @@ SubscriptionManagerImpl
 			true,
 			new DHTPluginOperationListener()
 			{
-				private Map<HashWrapper,Integer>	hits 					= new HashMap<HashWrapper, Integer>();
+				private Map<HashWrapper,Integer>	hits 					= new HashMap<>();
 				private AESemaphore					hits_sem				= new AESemaphore( "Subs:lookup" );
-				private List<Subscription>			found_subscriptions 	= new ArrayList<Subscription>();
+				private List<Subscription>			found_subscriptions 	= new ArrayList<>();
 				
 				private boolean	complete;
 				
@@ -3763,19 +3734,19 @@ SubscriptionManagerImpl
 								return;
 							}
 							
-							Integer v = (Integer)hits.get(hw);
+							Integer v = hits.get(hw);
 							
 							if ( v != null ){
 								
-								if ( ver > v.intValue()){
+								if ( ver > v){
 									
-									hits.put( hw, new Integer( ver ));								
+									hits.put( hw, ver);
 								}
 							}else{
 								
 								new_sid = true;
 																
-								hits.put( hw, new Integer( ver ));
+								hits.put( hw, ver);
 							}
 						}
 						
@@ -3952,7 +3923,7 @@ SubscriptionManagerImpl
 							
 							synchronized( hits ){
 								
-								s = (SubscriptionImpl[])found_subscriptions.toArray( new SubscriptionImpl[ found_subscriptions.size() ]);
+								s = found_subscriptions.toArray(new SubscriptionImpl[0]);
 							}
 							
 							log( "    Association lookup complete - " + s.length + " found" );
@@ -4012,7 +3983,7 @@ SubscriptionManagerImpl
 	subsLookupListener
 		extends SubscriptionLookupListener
 	{
-		public boolean
+		boolean
 		isCancelled();
 	}
 	
@@ -4567,30 +4538,28 @@ SubscriptionManagerImpl
 		throws SubscriptionException
 	{
 		VuzeFileComponent[] comps = vf.getComponents();
-		
-		for (int j=0;j<comps.length;j++){
-			
-			VuzeFileComponent comp = comps[j];
-			
-			if ( comp.getType() == VuzeFileComponent.COMP_TYPE_SUBSCRIPTION ){
-				
-				Map map = comp.getContent();
-				
-				try{
-					SubscriptionBodyImpl body = new SubscriptionBodyImpl( SubscriptionManagerImpl.this, map );
-												
-					SubscriptionImpl new_subs = new SubscriptionImpl( SubscriptionManagerImpl.this, body, add_type, false );
-							
-					if ( Arrays.equals( new_subs.getShortID(), sid )){
-													
-						return( new_subs );
-					}
-				}catch( Throwable e ){
-					
-					log( "Subscription decode failed", e );
-				}
-			}
-		}
+
+        for (VuzeFileComponent comp : comps) {
+
+            if (comp.getType() == VuzeFileComponent.COMP_TYPE_SUBSCRIPTION) {
+
+                Map map = comp.getContent();
+
+                try {
+                    SubscriptionBodyImpl body = new SubscriptionBodyImpl(SubscriptionManagerImpl.this, map);
+
+                    SubscriptionImpl new_subs = new SubscriptionImpl(SubscriptionManagerImpl.this, body, add_type, false);
+
+                    if (Arrays.equals(new_subs.getShortID(), sid)) {
+
+                        return (new_subs);
+                    }
+                } catch (Throwable e) {
+
+                    log("Subscription decode failed", e);
+                }
+            }
+        }
 		
 		throw( new SubscriptionException( "Subscription not found" ));
 	}
@@ -4728,16 +4697,14 @@ SubscriptionManagerImpl
 		Download[] downloads = pi.getDownloadManager().getDownloads();
 		
 		int	res = 0;
-		
-		for( int i=0;i<downloads.length;i++){
-			
-			Download	download = downloads[i];
-			
-			if ( download.getBooleanAttribute( ta_subs_download )){
-				
-				res++;
-			}
-		}
+
+        for (Download download : downloads) {
+
+            if (download.getBooleanAttribute(ta_subs_download)) {
+
+                res++;
+            }
+        }
 		
 		return( res );
 	}
@@ -4774,7 +4741,7 @@ SubscriptionManagerImpl
 		
 		synchronized( potential_associations ){
 			
-			potential_associations.add( new Object[]{ subs, result_id, key, new Long( System.currentTimeMillis())} );
+			potential_associations.add( new Object[]{ subs, result_id, key, System.currentTimeMillis()} );
 			
 			if ( potential_associations.size() > 512 ){
 				
@@ -4922,11 +4889,11 @@ SubscriptionManagerImpl
 				
 				Object[]	entry = (Object[])it.next();
 				
-				long	created = ((Long)entry[3]).longValue();
+				long	created = (Long) entry[3];
 				
 				if ( created > now ){
 					
-					entry[3] = new Long( now );
+					entry[3] = now;
 					
 				}else if ( now - created > 60*60*1000 ){
 					
@@ -4954,11 +4921,11 @@ SubscriptionManagerImpl
 				
 				Object[]	entry = (Object[])map_entry.getValue();
 				
-				long	created = ((Long)entry[2]).longValue();
+				long	created = (Long) entry[2];
 				
 				if ( created > now ){
 					
-					entry[2] = new Long( now );
+					entry[2] = now;
 					
 				}else if ( now - created > 60*60*1000 ){
 					
@@ -4988,7 +4955,7 @@ SubscriptionManagerImpl
 		
 		synchronized( potential_associations2 ){
 			
-			potential_associations2.put( hw, new Object[]{ subscriptions, Boolean.valueOf(full_lookup), new Long( SystemTime.getCurrentTime())});
+			potential_associations2.put( hw, new Object[]{ subscriptions, full_lookup, SystemTime.getCurrentTime()});
 		}
 			
 		if ( recordAssociationsSupport( association_hash, subscriptions, full_lookup )){
@@ -5136,71 +5103,67 @@ SubscriptionManagerImpl
 				
 				if ( map == null ){
 					
-					map = new LightHashMap<String,Object>();
+					map = new LightHashMap<>();
 					
 				}else{
 					
-					map = new LightHashMap<String,Object>( map );
+					map = new LightHashMap<>(map);
 				}
 				
 				List<byte[]>	s = (List<byte[]>)map.get( "s" );
-				
-				for (int i=0;i<subscriptions.length;i++){
-				
-					SubscriptionImpl subscription = subscriptions[i];
-					
-					byte[]	sid = subscription.getShortID();
-					
-					if ( s == null ){
-						
-						s = new ArrayList<byte[]>();
-						
-						s.add( sid );
-						
-						changed	= true;
-						
-						map.put( "s", s );
-						
-					}else{
-						
-						boolean found = false;
-						
-						for (int j=0;j<s.size();j++){
-							
-							byte[]	existing = s.get(j);
-							
-							if ( Arrays.equals( sid, existing )){
-								
-								found = true;
-								
-								break;
-							}
-						}
-						
-						if ( !found ){
-						
-							s.add( sid );
-								
-							if ( 	subscription.isSubscribed() && 
-									subscription.isPublic() && 
-									!subscription.isSearchTemplate()){
-								
-									// pick up alternative subscriptions for same download
-								
-								if ( subscription.addAssociationSupport( association_hash, true )){
-									
-									assoc_added = true;
-								}
-							}
-							
-							changed	= true;
-						}
-					}
-				}
+
+                for (SubscriptionImpl subscription : subscriptions) {
+
+                    byte[] sid = subscription.getShortID();
+
+                    if (s == null) {
+
+                        s = new ArrayList<>();
+
+                        s.add(sid);
+
+                        changed = true;
+
+                        map.put("s", s);
+
+                    } else {
+
+                        boolean found = false;
+
+                        for (byte[] existing : s) {
+
+                            if (Arrays.equals(sid, existing)) {
+
+                                found = true;
+
+                                break;
+                            }
+                        }
+
+                        if (!found) {
+
+                            s.add(sid);
+
+                            if (subscription.isSubscribed() &&
+                                    subscription.isPublic() &&
+                                    !subscription.isSearchTemplate()) {
+
+                                // pick up alternative subscriptions for same download
+
+                                if (subscription.addAssociationSupport(association_hash, true)) {
+
+                                    assoc_added = true;
+                                }
+                            }
+
+                            changed = true;
+                        }
+                    }
+                }
 				
 				if ( full_lookup ){
 				
-					map.put( "lc", new Long( SystemTime.getCurrentTime()));
+					map.put( "lc", SystemTime.getCurrentTime());
 					
 					changed	= true;
 				}
@@ -5221,19 +5184,17 @@ SubscriptionManagerImpl
 		}
 		
 		if ( changed ){
-			
-			Iterator it = listeners.iterator();
-			
-			while( it.hasNext()){
-				
-				try{
-					((SubscriptionManagerListener)it.next()).associationsChanged( association_hash );
-					
-				}catch( Throwable e ){
-					
-					Debug.printStackTrace(e);
-				}
-			}
+
+            for (SubscriptionManagerListener listener : listeners) {
+
+                try {
+                    (listener).associationsChanged(association_hash);
+
+                } catch (Throwable e) {
+
+                    Debug.printStackTrace(e);
+                }
+            }
 		}
 		
 		if ( assoc_added ){
@@ -5245,8 +5206,8 @@ SubscriptionManagerImpl
 	}
 	
 	private AsyncDispatcher				chat_write_dispatcher 	= new AsyncDispatcher( "Subscriptions:cwd" );
-	private Set<String>					chat_st_done = new HashSet<String>();
-	private LinkedList<ChatInstance>	chat_assoc_done	= new LinkedList<ChatInstance>();
+	private Set<String>					chat_st_done = new HashSet<>();
+	private LinkedList<ChatInstance>	chat_assoc_done	= new LinkedList<>();
 	
 	private void
 	searchTemplateOK(
@@ -5313,11 +5274,11 @@ SubscriptionManagerImpl
 									public void
 									run()
 									{		
-										Map<String,Object>	flags 	= new HashMap<String, Object>();
+										Map<String,Object>	flags 	= new HashMap<>();
 										
 										flags.put( BuddyPluginBeta.FLAGS_MSG_ORIGIN_KEY, BuddyPluginBeta.FLAGS_MSG_ORIGIN_SUBS );
 										
-										Map<String,Object>	options = new HashMap<String, Object>();
+										Map<String,Object>	options = new HashMap<>();
 										
 										chat.sendMessage( f_msg, flags, options );
 									}
@@ -5341,8 +5302,8 @@ SubscriptionManagerImpl
 										}
 										
 										do_write.run();
-									};
-								});
+									}
+                                });
 						}
 					}
 				});
@@ -5437,16 +5398,16 @@ SubscriptionManagerImpl
 														}
 													}
 													
-													Map<String,Object>	flags 	= new HashMap<String, Object>();
+													Map<String,Object>	flags 	= new HashMap<>();
 													
 													flags.put( BuddyPluginBeta.FLAGS_MSG_ORIGIN_KEY, BuddyPluginBeta.FLAGS_MSG_ORIGIN_SUBS );
 													
-													Map<String,Object>	options = new HashMap<String, Object>();
+													Map<String,Object>	options = new HashMap<>();
 													
 													chat.sendMessage( f_msg, flags, options );
 	
-												};
-											});
+												}
+                                            });
 									}else{
 										
 										chat.destroy();
@@ -5554,26 +5515,24 @@ SubscriptionManagerImpl
 			
 			log( "Publishing Associations Starts (conc=" + publish_associations_active + ")" );
 			
-			List<SubscriptionImpl> shuffled_subs = new ArrayList<SubscriptionImpl>( subscriptions );
+			List<SubscriptionImpl> shuffled_subs = new ArrayList<>(subscriptions);
 
 			Collections.shuffle( shuffled_subs );
-							
-			for (int i=0;i<shuffled_subs.size();i++){
-					
-				SubscriptionImpl sub = shuffled_subs.get( i );
-					
-				if ( sub.isSubscribed() && sub.isPublic()){
-					
-					assoc_to_publish 	= sub.getAssociationForPublish();
-						
-					if ( assoc_to_publish != null ){
-							
-						subs_to_publish		= sub;
 
-						break;
-					}
-				}
-			}
+            for (SubscriptionImpl sub : shuffled_subs) {
+
+                if (sub.isSubscribed() && sub.isPublic()) {
+
+                    assoc_to_publish = sub.getAssociationForPublish();
+
+                    if (assoc_to_publish != null) {
+
+                        subs_to_publish = sub;
+
+                        break;
+                    }
+                }
+            }
 		}
 		
 		if ( assoc_to_publish != null ){
@@ -5888,22 +5847,22 @@ SubscriptionManagerImpl
 		
 		try{
 			Collections.shuffle( shuffled_subs );
-						
-			for (int i=0;i<shuffled_subs.size();i++){
-				
-				SubscriptionImpl sub = (SubscriptionImpl)shuffled_subs.get( i );
-				
-				if ( sub.isSubscribed() && sub.isPublic() && !sub.getPublished()){
-									
-					sub.setPublished( true );
-					
-					publishSubscription( sub );
-					
-					publish_initiated = true;
-					
-					break;
-				}
-			}
+
+            for (Object shuffled_sub : shuffled_subs) {
+
+                SubscriptionImpl sub = (SubscriptionImpl) shuffled_sub;
+
+                if (sub.isSubscribed() && sub.isPublic() && !sub.getPublished()) {
+
+                    sub.setPublished(true);
+
+                    publishSubscription(sub);
+
+                    publish_initiated = true;
+
+                    break;
+                }
+            }
 		}finally{
 			
 			if ( !publish_initiated ){
@@ -6230,7 +6189,7 @@ SubscriptionManagerImpl
 			// inject a random element so we can count occurrences properly (as the DHT logic
 			// removes duplicates)
 		
-		details.put( "!", new Long( random_seed ));
+		details.put( "!", (long) random_seed);
 		
 		byte[] encoded = BEncoder.encode( details );
 				
@@ -6673,23 +6632,23 @@ SubscriptionManagerImpl
 	protected interface
 	downloadListener
 	{
-		public void
+		void
 		complete(
-			File		data_file );
+                File data_file);
 		
-		public void
+		void
 		complete(
-			Download	download,	
-			File		torrent_file );
+                Download download,
+                File torrent_file);
 			
-		public void
+		void
 		failed(
-			Throwable	error );
+                Throwable error);
 		
-		public Map
+		Map
 		getRecoveryData();
 		
-		public boolean
+		boolean
 		isCancelled();
 	}
 	
@@ -6743,7 +6702,7 @@ SubscriptionManagerImpl
 					Map	rd = new HashMap();
 					
 					rd.put( "sid", subs.getShortID());
-					rd.put( "ver", new Long( new_version ));
+					rd.put( "ver", (long) new_version);
 					
 					return( rd );
 				}
@@ -6935,7 +6894,7 @@ SubscriptionManagerImpl
 	
 		throws SubscriptionException
 	{
-		long id = ((Long)json_map.get( "engine_id" )).longValue();
+		long id = (Long) json_map.get("engine_id");
 		
 		Engine engine = MetaSearchManagerFactory.getSingleton().getMetaSearch().getEngine( id );
 		
@@ -7006,21 +6965,21 @@ SubscriptionManagerImpl
 				if ( list != null ){
 				
 					SubscriptionHistoryImpl	history = (SubscriptionHistoryImpl)subs.getHistory();
-					
-					for (int i=0;i<list.size();i++){
-						
-						Map	result_map =(Map)list.get(i);
-						
-						try{
-							SubscriptionResultImpl result = new SubscriptionResultImpl( history, result_map );
-							
-							results.put( result.getID(), result );
-							
-						}catch( Throwable e ){
-							
-							log( "Failed to decode result '" + result_map + "'", e );
-						}
-					}
+
+                    for (Object o : list) {
+
+                        Map result_map = (Map) o;
+
+                        try {
+                            SubscriptionResultImpl result = new SubscriptionResultImpl(history, result_map);
+
+                            results.put(result.getID(), result);
+
+                        } catch (Throwable e) {
+
+                            log("Failed to decode result '" + result_map + "'", e);
+                        }
+                    }
 				}
 				
 			}catch( Throwable e ){
@@ -7208,11 +7167,11 @@ SubscriptionManagerImpl
 				List	list = new ArrayList( results.length );
 				
 				map.put( "results", list );
-				
-				for (int i=0;i<results.length;i++){
-					
-					list.add( results[i].toBEncodedMap());
-				}
+
+                for (SubscriptionResultImpl result : results) {
+
+                    list.add(result.toBEncodedMap());
+                }
 				
 				FileUtil.writeResilientFile( f, map );
 				
@@ -7242,37 +7201,37 @@ SubscriptionManagerImpl
 			List	l_subs = (List)map.get( "subs" );
 			
 			if ( l_subs != null ){
-				
-				for (int i=0;i<l_subs.size();i++){
-					
-					Map	m = (Map)l_subs.get(i);
-					
-					try{
-						SubscriptionImpl sub = new SubscriptionImpl( this, m );
 
-						int index = Collections.binarySearch(subscriptions, sub, new Comparator<Subscription>() {
-							public int compare(Subscription arg0, Subscription arg1) {
-								return arg0.getID().compareTo(arg1.getID());
-							}
-						});
-						if (index < 0) {
-							index = -1 * index - 1; // best guess
+                for (Object l_sub : l_subs) {
 
-							subscriptions.add( index, sub );
-						}
+                    Map m = (Map) l_sub;
 
-						if ( sub.isMine()){
-							
-							some_are_mine = true;
-						}
-						
-						log( "    loaded " + sub.getString());
-						
-					}catch( Throwable e ){
-						
-						log( "Failed to import subscription from " + m, e );
-					}
-				}
+                    try {
+                        SubscriptionImpl sub = new SubscriptionImpl(this, m);
+
+                        int index = Collections.binarySearch(subscriptions, sub, new Comparator<Subscription>() {
+                            public int compare(Subscription arg0, Subscription arg1) {
+                                return arg0.getID().compareTo(arg1.getID());
+                            }
+                        });
+                        if (index < 0) {
+                            index = -1 * index - 1; // best guess
+
+                            subscriptions.add(index, sub);
+                        }
+
+                        if (sub.isMine()) {
+
+                            some_are_mine = true;
+                        }
+
+                        log("    loaded " + sub.getString());
+
+                    } catch (Throwable e) {
+
+                        log("Failed to import subscription from " + m, e);
+                    }
+                }
 			}
 		}
 		
@@ -7344,21 +7303,17 @@ SubscriptionManagerImpl
 				List	l_subs = new ArrayList();
 				
 				map.put( "subs", l_subs );
-				
-				Iterator	it = subscriptions.iterator();
-				
-				while( it.hasNext()){
-					
-					SubscriptionImpl sub = (SubscriptionImpl)it.next();
-						
-					try{
-						l_subs.add( sub.toMap());
-						
-					}catch( Throwable e ){
-						
-						log( "Failed to save subscription " + sub.getString(), e );
-					}
-				}
+
+                for (SubscriptionImpl sub : subscriptions) {
+
+                    try {
+                        l_subs.add(sub.toMap());
+
+                    } catch (Throwable e) {
+
+                        log("Failed to save subscription " + sub.getString(), e);
+                    }
+                }
 				
 				FileUtil.writeResilientConfigFile( CONFIG_FILE, map );
 			}
@@ -7369,16 +7324,9 @@ SubscriptionManagerImpl
 	getKeyBytes( 
 		String		key )
 	{
-		try{
-			return( key.getBytes( "UTF-8" ));
-			
-		}catch( UnsupportedEncodingException e ){
-			
-			Debug.out( e );
-			
-			return( key.getBytes());
-		}
-	}
+        return( key.getBytes(StandardCharsets.UTF_8));
+
+    }
 	private AEDiagnosticsLogger
 	getLogger()
 	{
@@ -7436,13 +7384,13 @@ SubscriptionManagerImpl
 			writer.indent();
 
 			Subscription[] subs = getSubscriptions();
-			
-			for (int i=0;i<subs.length;i++){
-				
-				SubscriptionImpl sub = (SubscriptionImpl)subs[i];
-				
-				sub.generate( writer );
-			}
+
+            for (Subscription sub1 : subs) {
+
+                SubscriptionImpl sub = (SubscriptionImpl) sub1;
+
+                sub.generate(writer);
+            }
 			
 		}finally{
 			
@@ -7658,8 +7606,8 @@ SubscriptionManagerImpl
 			
 			map.put( "name", NAME );
 			map.put( "url", URL_STR );
-			map.put( "public", new Long( 0 ));
-			map.put( "check_interval_mins", new Long( 345 ));
+			map.put( "public", 0L);
+			map.put( "check_interval_mins", 345L);
 			
 			vf.addComponent( VuzeFileComponent.COMP_TYPE_SUBSCRIPTION_SINGLETON, map );
 			

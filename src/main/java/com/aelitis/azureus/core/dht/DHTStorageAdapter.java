@@ -35,7 +35,7 @@ import com.aelitis.azureus.core.dht.transport.DHTTransportValue;
 public interface 
 DHTStorageAdapter 
 {
-	public int
+	int
 	getNetwork();
 	
 		// local value operations
@@ -44,102 +44,102 @@ DHTStorageAdapter
 		 * Create a new storage key for a given key
 		 * @return null if the key shouldn't be allocated (e.g.out of space)
 		 */
-	
-	public DHTStorageKey
+
+        DHTStorageKey
 	keyCreated(
-		HashWrapper		key,
-		boolean			local );
+                HashWrapper key,
+                boolean local);
 	
-	public void
+	void
 	keyDeleted(
-		DHTStorageKey	adapter_key );
+            DHTStorageKey adapter_key);
 	
-	public void
+	void
 	keyRead(
-		DHTStorageKey			adapter_key,
-		DHTTransportContact		contact );
+            DHTStorageKey adapter_key,
+            DHTTransportContact contact);
 	
-	public DHTStorageKeyStats
+	DHTStorageKeyStats
 	deserialiseStats(
-		DataInputStream			is )
+            DataInputStream is)
 	
 		throws IOException;
 	
-	public void
+	void
 	valueAdded(
-		DHTStorageKey		key,
-		DHTTransportValue	value );
+            DHTStorageKey key,
+            DHTTransportValue value);
 	
-	public void
+	void
 	valueUpdated(
-		DHTStorageKey		key,
-		DHTTransportValue	old_value,
-		DHTTransportValue	new_value );
+            DHTStorageKey key,
+            DHTTransportValue old_value,
+            DHTTransportValue new_value);
 	
-	public void
+	void
 	valueDeleted(
-		DHTStorageKey		key,
-		DHTTransportValue	value );
+            DHTStorageKey key,
+            DHTTransportValue value);
 	
 		// local lookup/put operations
 	
-	public boolean
+	boolean
 	isDiversified(
-		byte[]		key );
+            byte[] key);
 	
-	public byte[][]
+	byte[][]
 	getExistingDiversification(
-		byte[]			key,
-		boolean			put_operation,
-		boolean			exhaustive_get,
-		int				max_depth );
+            byte[] key,
+            boolean put_operation,
+            boolean exhaustive_get,
+            int max_depth);
 	
-	public byte[][]
+	byte[][]
 	createNewDiversification(
-		String				description,
-		DHTTransportContact	cause,
-		byte[]				key,
-		boolean				put_operation,
-		byte				diversification_type,
-		boolean				exhaustive_get,
-		int					max_depth );
+            String description,
+            DHTTransportContact cause,
+            byte[] key,
+            boolean put_operation,
+            byte diversification_type,
+            boolean exhaustive_get,
+            int max_depth);
 	
-	public int
+	int
 	getNextValueVersions(
-		int		num );
+            int num);
 	
-	public DHTStorageBlock
+	DHTStorageBlock
 	keyBlockRequest(
-		DHTTransportContact		direct_sender,
-		byte[]					request,
-		byte[]					signature );
+            DHTTransportContact direct_sender,
+            byte[] request,
+            byte[] signature);
 	
-	public DHTStorageBlock
+	DHTStorageBlock
 	getKeyBlockDetails(
-		byte[]		key );
+            byte[] key);
 	
-	public DHTStorageBlock[]
+	DHTStorageBlock[]
 	getDirectKeyBlocks();
 
-	public byte[]
+	byte[]
 	getKeyForKeyBlock(
-		byte[]	request );
+            byte[] request);
 	
-	public void
+	void
 	setStorageForKey(
-		String	key,
-		byte[]	data );
+            String key,
+            byte[] data);
 	
-	public byte[]
+	byte[]
 	getStorageForKey(
-		String	key );
+            String key);
 	
-	public int
+	int
 	getRemoteFreqDivCount();
 	
-	public int
+	int
 	getRemoteSizeDivCount();
 	
-	public int
+	int
 	getKeyCount();
 }

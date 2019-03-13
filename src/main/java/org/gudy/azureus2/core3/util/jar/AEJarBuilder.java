@@ -30,6 +30,7 @@ package org.gudy.azureus2.core3.util.jar;
 import java.io.*;
 import java.net.URL;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.jar.*;
 import java.util.*;
 
@@ -52,23 +53,23 @@ AEJarBuilder
 			throws IOException
 	{
 		List	resource_names = new ArrayList();
-		
-		for (int i=0;i<package_names.length;i++){
-			
-			List	entries = (List)package_map.get(package_names[i]);
-			
-			if ( entries == null ){
-				
-				Debug.out( "package '" + package_names[i] + "' missing" );
-				
-			}else{
-			
-				for (int j=0;j<entries.size();j++){
-				
-					resource_names.add( package_names[i] + "/" + entries.get(j));
-				}
-			}
-		}
+
+        for (String package_name : package_names) {
+
+            List entries = (List) package_map.get(package_name);
+
+            if (entries == null) {
+
+                Debug.out("package '" + package_name + "' missing");
+
+            } else {
+
+                for (Object entry : entries) {
+
+                    resource_names.add(package_name + "/" + entry);
+                }
+            }
+        }
 		
 		String[]	res = new String[resource_names.size()];
 		
@@ -166,75 +167,67 @@ AEJarBuilder
 	{		
 		long	latest_time	= 0;
 		long	now			= SystemTime.getCurrentTime();
-		
-		for (int i=0;i<resource_names.length;i++){
-	
-			String	resource_name = resource_names[i];
-	
-			if ( resource_prefix != null ){
-				
-				resource_name = resource_prefix + "/" + resource_name;
-			}
-			
-			InputStream	is = null;
-			
-			try{
-				is	= class_loader.getResourceAsStream(resource_name);
-			
-				if ( is == null ){
-				
-					Debug.out( "WUJarBuilder: failed to find resource '" + resource_name + "'");
-	
-				}else{
-				
-					URL	url = class_loader.getResource( resource_name );
-					
-					try{
-						File	file = null;
-						
-						if ( url != null ){
-							
-							String	url_str = url.toString();
-							
-							if ( url_str.startsWith("jar:file:" )){
-								
-								file	= FileUtil.getJarFileFromURL( url_str );
-								
-							}else if ( url_str.startsWith( "file:")){
-								
-								file	= new File( URI.create( url_str ));
+
+        for (String resource_name1 : resource_names) {
+
+            String resource_name = resource_name1;
+
+            if (resource_prefix != null) {
+
+                resource_name = resource_prefix + "/" + resource_name;
+            }
+
+			try (InputStream is = class_loader.getResourceAsStream(resource_name)) {
+
+				if (is == null) {
+
+					Debug.out("WUJarBuilder: failed to find resource '" + resource_name + "'");
+
+				} else {
+
+					URL url = class_loader.getResource(resource_name);
+
+					try {
+						File file = null;
+
+						if (url != null) {
+
+							String url_str = url.toString();
+
+							if (url_str.startsWith("jar:file:")) {
+
+								file = FileUtil.getJarFileFromURL(url_str);
+
+							} else if (url_str.startsWith("file:")) {
+
+								file = new File(URI.create(url_str));
 							}
 						}
-						
-						if ( file == null ){
-							
-							latest_time	= now;
-							
-						}else{
-						
-							long	time = file.lastModified();
-							
-							if ( time > latest_time ){
-								
-								latest_time	= time;
+
+						if (file == null) {
+
+							latest_time = now;
+
+						} else {
+
+							long time = file.lastModified();
+
+							if (time > latest_time) {
+
+								latest_time = time;
 							}
 						}
-					}catch( Throwable e ){
-						
-						Debug.printStackTrace( e );
+					} catch (Throwable e) {
+
+						Debug.printStackTrace(e);
 					}
-					
+
 					JarEntry entry = new JarEntry(resource_name);
-			
-					writeEntry( jos, entry, is );
-				}
-			}finally{
-				if ( is != null ){
-					
-					is.close();
+
+					writeEntry(jos, entry, is);
 				}
 			}
-		}
+        }
 		
 		JarEntry entry = new JarEntry("META-INF/MANIFEST.MF");
 		
@@ -243,7 +236,7 @@ AEJarBuilder
 				"Permissions: all-permissions\r\n" + 
 				"\r\n";
 		
-		ByteArrayInputStream bais = new ByteArrayInputStream( manifest_lines.getBytes( "ISO-8859-1" ));
+		ByteArrayInputStream bais = new ByteArrayInputStream( manifest_lines.getBytes(StandardCharsets.ISO_8859_1));
 		
 		writeEntry( jos, entry, bais );
 		

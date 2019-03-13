@@ -35,20 +35,20 @@ DiskManagerReadRequestListener
 	 * @param data
 	 */
 
-	public void 
-	readCompleted( 
-			DiskManagerReadRequest 	request, 
-			DirectByteBuffer 		data );
+    void
+	readCompleted(
+            DiskManagerReadRequest request,
+            DirectByteBuffer data);
 
-	public void 
-	readFailed( 
-			DiskManagerReadRequest 	request, 
-			Throwable		 		cause );
+	void
+	readFailed(
+            DiskManagerReadRequest request,
+            Throwable cause);
 
-	public int
+	int
 	getPriority();
 	
-	public void 
+	void
 	requestExecuted(
-		long 	bytes );
+            long bytes);
 }

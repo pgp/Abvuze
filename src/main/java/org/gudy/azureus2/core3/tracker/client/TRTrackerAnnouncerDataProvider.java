@@ -30,46 +30,46 @@ package org.gudy.azureus2.core3.tracker.client;
 public interface 
 TRTrackerAnnouncerDataProvider 
 {
-	public String
+	String
 	getName();
 	
-	public long
+	long
 	getTotalSent();
 	
-	public long
+	long
 	getTotalReceived();
 	
-	public long
+	long
 	getRemaining();
 	
-	public long
+	long
 	getFailedHashCheck();
 
-	public String
+	String
 	getExtensions();
 	
-	public int
+	int
 	getMaxNewConnectionsAllowed(
-		String	network );
+            String network);
 	
-	public int
+	int
 	getPendingConnectionCount();
 	
-	public int
+	int
 	getConnectedConnectionCount();
 	
-	public int
+	int
 	getUploadSpeedKBSec(
-		boolean	estimate );
+            boolean estimate);
 	
-	public int
+	int
 	getCryptoLevel();
 	
-	public boolean
+	boolean
 	isPeerSourceEnabled(
-		String		peer_source );
+            String peer_source);
 	
-	public void
+	void
 	setPeerSources(
-		String[]	allowed_sources ); 
+            String[] allowed_sources);
 }

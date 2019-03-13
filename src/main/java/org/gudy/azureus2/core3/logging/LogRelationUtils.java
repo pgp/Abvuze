@@ -30,24 +30,22 @@ public class LogRelationUtils
 		}
 		
 		// Pass 1: Quick check if class is in objects
-		for (int i = 0; i < objects.length; i++) {
-			Object object = objects[i];
-			if (cla.isInstance(object)) {
-				return object;
-			}
-		}
+        for (Object object : objects) {
+            if (cla.isInstance(object)) {
+                return object;
+            }
+        }
 
 		// Pass 2: check LogRelations
-		for (int i = 0; i < objects.length; i++) {
-			Object object = objects[i];
-			if (object instanceof LogRelation) {
-				LogRelation logRelation = (LogRelation)object;
-				Object answer = logRelation.queryForClass(cla);
-				if (answer != null) {
-					return answer;
-				}
-			}
-		}
+        for (Object object : objects) {
+            if (object instanceof LogRelation) {
+                LogRelation logRelation = (LogRelation) object;
+                Object answer = logRelation.queryForClass(cla);
+                if (answer != null) {
+                    return answer;
+                }
+            }
+        }
 
 		return null;
 	}

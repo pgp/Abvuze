@@ -108,7 +108,7 @@ public class Logger {
 	}
 
     // dead
-	public static void logTextResource(LogEvent event, String params[]) {
+	public static void logTextResource(LogEvent event, String[] params) {
 		loggerImpl.logTextResource(event, params);
 	}
 
@@ -117,7 +117,7 @@ public class Logger {
 		loggerImpl.logTextResource(alert);
 	}
 
-	public static void logTextResource(LogAlert alert, String params[]) {
+	public static void logTextResource(LogAlert alert, String[] params) {
 		loggerImpl.logTextResource(alert, params);
 	}
 

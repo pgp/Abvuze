@@ -28,48 +28,48 @@ package org.gudy.azureus2.core3.tracker.server;
 public interface 
 TRTrackerServerTorrentStats 
 {
-	public int
+	int
 	getSeedCount();
 	
-	public int
+	int
 	getLeecherCount();
 	
-	public int
+	int
 	getQueuedCount();
 
-	public long
+	long
 	getScrapeCount();
 		
-	public long
+	long
 	getAnnounceCount();
 	
-	public long
+	long
 	getCompletedCount();
 	
-	public long
+	long
 	getUploaded();
 	
-	public long
+	long
 	getDownloaded();
 	
-	public long
+	long
 	getBiasedUploaded();
 	
-	public long
+	long
 	getBiasedDownloaded();
 
-	public long
+	long
 	getAmountLeft();
 	
-	public long
+	long
 	getBytesIn();
 	
-	public long
+	long
 	getBytesOut();
 	
-	public int
+	int
 	getBadNATPeerCount();
 	
-	public String
+	String
 	getString();
 }

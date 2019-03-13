@@ -216,12 +216,12 @@ JSONEngine
 		
 		
 		String searchQuery = null;
-		
-		for(int i = 0 ; i < searchParameters.length ; i++) {
-			if(searchParameters[i].getMatchPattern().equals("s")) {
-				searchQuery = searchParameters[i].getValue();
-			}
-		}
+
+        for (SearchParameter searchParameter : searchParameters) {
+            if (searchParameter.getMatchPattern().equals("s")) {
+                searchQuery = searchParameter.getValue();
+            }
+        }
 		
 		FieldMapping[] mappings = getMappings();
 
@@ -318,227 +318,231 @@ JSONEngine
 				List results = new ArrayList();
 				
 				Throwable	decode_failure 		= null;
-				
-				for(int i = 0 ; i < resultArray.size() ; i++) {
-					
-					Object obj = resultArray.get(i);
-					
-					if(obj instanceof JSONObject) {
-						JSONObject jsonEntry = (JSONObject) obj;
-						
-						if ( absolute_max_matches >= 0 ){
-							if ( --absolute_max_matches < 0 ){
-								break;
-							}
-						}
-						
-						if ( listener != null ){
-							
-								// sort for consistent order
-							
-							Iterator it = new TreeMap( jsonEntry ).entrySet().iterator();
-							
-							String[]	groups = new String[ jsonEntry.size()];
-							
-							int	pos = 0;
-							
-							while( it.hasNext()){
-								
-								Map.Entry entry = (Map.Entry)it.next();
-								
-								Object key 		= entry.getKey();
-								Object value 	= entry.getValue();
-								
-								if ( key != null && value != null ){
-								
-									groups[pos++] = key.toString() + "=" + UrlUtils.encode( value.toString());
-									
-								}else{
-									
-									groups[pos++] = "";
-								}
-							}
-							
-							listener.matchFound( this, groups );
-						}
-						
-						WebResult result = new WebResult(this,getRootPage(),getBasePage(),getDateParser(),searchQuery);
-							
-						try{
-							for(int j = 0 ; j < mappings.length ; j++) {
-								String fieldFrom = mappings[j].getName();
-								if(fieldFrom == null) {
-									continue;
-								}
 
-								int fieldTo = mappings[j].getField();
-								
-								String fieldContent = null;
-								Matcher matcher = patternVariable.matcher(fieldFrom);
-								if (matcher.find()) {
-									fieldContent = fieldFrom;
-									do {
-										String key = matcher.group();
-										key = key.substring(2, key.length() - 1);
+                for (Object obj : resultArray) {
 
-										String[] keys = key.split(",", -1);
-										try {
-											Object replaceWithObject = jsonEntry.get(keys[0]);
-											String replaceWith = replaceWithObject == null ? ""
-													: replaceWithObject.toString();
-											
-											if (keys.length > 1) {
-												String[] commands = keys[1].split("\\+");
-												int keyPos = 2;
-												for (String command : commands) {
-													try {
-														if (DEBUG_MAPPINGS) {
-															System.out.println("command " + command);
-														}
-														if (command.equals("replace")) {
-															if (keyPos + 2 > keys.length) {
-	  														if (DEBUG_MAPPINGS) {
-	  															System.out.println("not enough keys. have " + keys.length + "; need " + (keyPos + 3));
-	  														}
-																break;
-															}
-															String simpleReplace = keys[keyPos];
-															keyPos++;
-															String simpleReplacement = keys[keyPos];
-															keyPos++;
-															
-															replaceWith = replaceWith.replaceAll(simpleReplace, simpleReplacement); 
-														} else if (command.equals("ucase")) {
-															replaceWith = replaceWith.toUpperCase();
-														} else if (command.equals("lcase")) {
-															replaceWith = replaceWith.toLowerCase();
-														} else if (command.equals("urldecode")) {
-															replaceWith = UrlUtils.decode(replaceWith);
-														}
-														if (DEBUG_MAPPINGS) {
-															System.out.println("replaceWith now " + replaceWith);
-														}
-													} catch (Exception e) {
-														if (DEBUG_MAPPINGS) {
-															System.out.println(e.toString());
-														}
-													}
-												}
-											}
-											
-											fieldContent = fieldContent.replaceFirst(variablePattern,
-													replaceWith);
-											
-										} catch (Exception e) {
-											
-										}
-									} while (matcher.find());
-								} else {
-									Object fieldContentObj = jsonEntry.get(fieldFrom);
-									fieldContent = fieldContentObj == null ? ""
-											: fieldContentObj.toString();
-								}
+                    if (obj instanceof JSONObject) {
+                        JSONObject jsonEntry = (JSONObject) obj;
 
-								if(fieldContent == null) {
-									continue;
-								}
-									
-								switch(fieldTo) {
-									case FIELD_NAME :
-										result.setNameFromHTML(fieldContent);
-										break;
-									case FIELD_SIZE :
-										result.setSizeFromHTML(fieldContent);
-										break;
-									case FIELD_PEERS :
-										result.setNbPeersFromHTML(fieldContent);
-										break;
-									case FIELD_SEEDS :
-										result.setNbSeedsFromHTML(fieldContent);
-										break;
-									case FIELD_CATEGORY :
-										result.setCategoryFromHTML(fieldContent);
-										break;
-									case FIELD_DATE :
-										result.setPublishedDateFromHTML(fieldContent);
-										break;
-									case FIELD_COMMENTS :
-										result.setCommentsFromHTML(fieldContent);
-										break;
-									case FIELD_CDPLINK :
-										result.setCDPLink(fieldContent);
-										break;
-									case FIELD_TORRENTLINK :
-										result.setTorrentLink(fieldContent);
-										break;
-									case FIELD_PLAYLINK :
-										result.setPlayLink(fieldContent);
-										break;
-									case FIELD_DOWNLOADBTNLINK :
-										result.setDownloadButtonLink(fieldContent);
-										break;
-									case FIELD_VOTES :
-										result.setVotesFromHTML(fieldContent);
-										break;
-									case FIELD_SUPERSEEDS :
-										result.setNbSuperSeedsFromHTML(fieldContent);
-										break;
-									case FIELD_PRIVATE :
-										result.setPrivateFromHTML(fieldContent);
-										break;
-									case FIELD_DRMKEY :
-										result.setDrmKey(fieldContent);
-										break;
-									case FIELD_VOTES_DOWN :
-										result.setVotesDownFromHTML(fieldContent);
-										break;
-									case FIELD_HASH :
-											// seen a magnet being returned as hash!
-										if ( fieldContent.startsWith( "magnet:")){
-											byte[] hash = UrlUtils.getHashFromMagnetURI(fieldContent);
-											if ( hash != null ){
-												fieldContent = ByteFormatter.encodeString( hash );
-											}else{
-												fieldContent = null;
-											}
-										}
-										if ( fieldContent != null ){
-											result.setHash(fieldContent);
-										}
-										break;
-									case FIELD_RANK : {
-										result.setRankFromHTML(fieldContent, rankDivisor);
-										break;
-									}
-									default:
-										break;
-								}
-							}
+                        if (absolute_max_matches >= 0) {
+                            if (--absolute_max_matches < 0) {
+                                break;
+                            }
+                        }
 
-							if (result.getHash() == null) {
-								String downloadLink = result.getDownloadLink();
-								String possibleMagnet = UrlUtils.parseTextForMagnets(downloadLink);
-								byte[] hash = UrlUtils.getHashFromMagnetURI(possibleMagnet);
-								if (hash != null) {
-									result.setHash(ByteFormatter.nicePrint(hash, true));
-								}
-							}
+                        if (listener != null) {
 
-							results.add(result);
-							
-						}catch( Throwable e ){
-							
-							decode_failure = e;
-						}
-					}
-				}
+                            // sort for consistent order
+
+                            Iterator it = new TreeMap(jsonEntry).entrySet().iterator();
+
+                            String[] groups = new String[jsonEntry.size()];
+
+                            int pos = 0;
+
+                            while (it.hasNext()) {
+
+                                Map.Entry entry = (Map.Entry) it.next();
+
+                                Object key = entry.getKey();
+                                Object value = entry.getValue();
+
+                                if (key != null && value != null) {
+
+                                    groups[pos++] = key.toString() + "=" + UrlUtils.encode(value.toString());
+
+                                } else {
+
+                                    groups[pos++] = "";
+                                }
+                            }
+
+                            listener.matchFound(this, groups);
+                        }
+
+                        WebResult result = new WebResult(this, getRootPage(), getBasePage(), getDateParser(), searchQuery);
+
+                        try {
+                            for (FieldMapping mapping : mappings) {
+                                String fieldFrom = mapping.getName();
+                                if (fieldFrom == null) {
+                                    continue;
+                                }
+
+                                int fieldTo = mapping.getField();
+
+                                String fieldContent = null;
+                                Matcher matcher = patternVariable.matcher(fieldFrom);
+                                if (matcher.find()) {
+                                    fieldContent = fieldFrom;
+                                    do {
+                                        String key = matcher.group();
+                                        key = key.substring(2, key.length() - 1);
+
+                                        String[] keys = key.split(",", -1);
+                                        try {
+                                            Object replaceWithObject = jsonEntry.get(keys[0]);
+                                            String replaceWith = replaceWithObject == null ? ""
+                                                    : replaceWithObject.toString();
+
+                                            if (keys.length > 1) {
+                                                String[] commands = keys[1].split("\\+");
+                                                int keyPos = 2;
+                                                label:
+                                                for (String command : commands) {
+                                                    try {
+                                                        if (DEBUG_MAPPINGS) {
+                                                            System.out.println("command " + command);
+                                                        }
+                                                        switch (command) {
+                                                            case "replace":
+                                                                if (keyPos + 2 > keys.length) {
+                                                                    if (DEBUG_MAPPINGS) {
+                                                                        System.out.println("not enough keys. have " + keys.length + "; need " + (keyPos + 3));
+                                                                    }
+                                                                    break label;
+                                                                }
+                                                                String simpleReplace = keys[keyPos];
+                                                                keyPos++;
+                                                                String simpleReplacement = keys[keyPos];
+                                                                keyPos++;
+
+                                                                replaceWith = replaceWith.replaceAll(simpleReplace, simpleReplacement);
+                                                                break;
+                                                            case "ucase":
+                                                                replaceWith = replaceWith.toUpperCase();
+                                                                break;
+                                                            case "lcase":
+                                                                replaceWith = replaceWith.toLowerCase();
+                                                                break;
+                                                            case "urldecode":
+                                                                replaceWith = UrlUtils.decode(replaceWith);
+                                                                break;
+                                                        }
+                                                        if (DEBUG_MAPPINGS) {
+                                                            System.out.println("replaceWith now " + replaceWith);
+                                                        }
+                                                    } catch (Exception e) {
+                                                        if (DEBUG_MAPPINGS) {
+                                                            System.out.println(e.toString());
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+                                            fieldContent = fieldContent.replaceFirst(variablePattern,
+                                                    replaceWith);
+
+                                        } catch (Exception e) {
+
+                                        }
+                                    } while (matcher.find());
+                                } else {
+                                    Object fieldContentObj = jsonEntry.get(fieldFrom);
+                                    fieldContent = fieldContentObj == null ? ""
+                                            : fieldContentObj.toString();
+                                }
+
+                                if (fieldContent == null) {
+                                    continue;
+                                }
+
+                                switch (fieldTo) {
+                                    case FIELD_NAME:
+                                        result.setNameFromHTML(fieldContent);
+                                        break;
+                                    case FIELD_SIZE:
+                                        result.setSizeFromHTML(fieldContent);
+                                        break;
+                                    case FIELD_PEERS:
+                                        result.setNbPeersFromHTML(fieldContent);
+                                        break;
+                                    case FIELD_SEEDS:
+                                        result.setNbSeedsFromHTML(fieldContent);
+                                        break;
+                                    case FIELD_CATEGORY:
+                                        result.setCategoryFromHTML(fieldContent);
+                                        break;
+                                    case FIELD_DATE:
+                                        result.setPublishedDateFromHTML(fieldContent);
+                                        break;
+                                    case FIELD_COMMENTS:
+                                        result.setCommentsFromHTML(fieldContent);
+                                        break;
+                                    case FIELD_CDPLINK:
+                                        result.setCDPLink(fieldContent);
+                                        break;
+                                    case FIELD_TORRENTLINK:
+                                        result.setTorrentLink(fieldContent);
+                                        break;
+                                    case FIELD_PLAYLINK:
+                                        result.setPlayLink(fieldContent);
+                                        break;
+                                    case FIELD_DOWNLOADBTNLINK:
+                                        result.setDownloadButtonLink(fieldContent);
+                                        break;
+                                    case FIELD_VOTES:
+                                        result.setVotesFromHTML(fieldContent);
+                                        break;
+                                    case FIELD_SUPERSEEDS:
+                                        result.setNbSuperSeedsFromHTML(fieldContent);
+                                        break;
+                                    case FIELD_PRIVATE:
+                                        result.setPrivateFromHTML(fieldContent);
+                                        break;
+                                    case FIELD_DRMKEY:
+                                        result.setDrmKey(fieldContent);
+                                        break;
+                                    case FIELD_VOTES_DOWN:
+                                        result.setVotesDownFromHTML(fieldContent);
+                                        break;
+                                    case FIELD_HASH:
+                                        // seen a magnet being returned as hash!
+                                        if (fieldContent.startsWith("magnet:")) {
+                                            byte[] hash = UrlUtils.getHashFromMagnetURI(fieldContent);
+                                            if (hash != null) {
+                                                fieldContent = ByteFormatter.encodeString(hash);
+                                            } else {
+                                                fieldContent = null;
+                                            }
+                                        }
+                                        if (fieldContent != null) {
+                                            result.setHash(fieldContent);
+                                        }
+                                        break;
+                                    case FIELD_RANK: {
+                                        result.setRankFromHTML(fieldContent, rankDivisor);
+                                        break;
+                                    }
+                                    default:
+                                        break;
+                                }
+                            }
+
+                            if (result.getHash() == null) {
+                                String downloadLink = result.getDownloadLink();
+                                String possibleMagnet = UrlUtils.parseTextForMagnets(downloadLink);
+                                byte[] hash = UrlUtils.getHashFromMagnetURI(possibleMagnet);
+                                if (hash != null) {
+                                    result.setHash(ByteFormatter.nicePrint(hash, true));
+                                }
+                            }
+
+                            results.add(result);
+
+                        } catch (Throwable e) {
+
+                            decode_failure = e;
+                        }
+                    }
+                }
 				
 				if ( results.size() == 0 && decode_failure != null ){
 					
 					throw( decode_failure );
 				}
 				
-				Result[] res = (Result[]) results.toArray(new Result[results.size()]);
+				Result[] res = (Result[]) results.toArray(new Result[0]);
 
 				debugLog( "success: found " + res.length + " results" );
 				

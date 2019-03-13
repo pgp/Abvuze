@@ -25,15 +25,15 @@ import java.util.List;
 public interface 
 TaggableLifecycleHandler 
 {
-	public void
+	void
 	initialized(
-		List<Taggable>	initial_taggables );
+            List<Taggable> initial_taggables);
 	
-	public void
+	void
 	taggableCreated(
-		Taggable	taggable );
+            Taggable taggable);
 	
-	public void
+	void
 	taggableDestroyed(
-		Taggable	taggable );
+            Taggable taggable);
 }

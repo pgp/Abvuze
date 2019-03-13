@@ -23,15 +23,15 @@ package com.aelitis.azureus.core.devices;
 public interface 
 TranscodeManagerListener 
 {
-	public void
+	void
 	providerAdded(
-		TranscodeProvider	provider );
+            TranscodeProvider provider);
 	
-	public void
+	void
 	providerUpdated(
-		TranscodeProvider	provider );
+            TranscodeProvider provider);
 	
-	public void
+	void
 	providerRemoved(
-		TranscodeProvider	provider );
+            TranscodeProvider provider);
 }

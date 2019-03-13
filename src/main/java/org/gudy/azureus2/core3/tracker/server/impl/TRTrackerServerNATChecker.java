@@ -68,21 +68,19 @@ TRTrackerServerNATChecker
 		final String	timeout_param	= "Tracker NAT Check Timeout";
 		
 		final String[]	params = { enable_param, timeout_param };
-		
-		for (int i=0;i<params.length;i++){
-			
-			COConfigurationManager.addParameterListener(
-				params[i],
-				new ParameterListener()
-				{
-					public void 
-					parameterChanged(
-						String parameter_name)
-					{
-						checkConfig( enable_param, timeout_param );
-					}
-				});
-		}
+
+        for (String param : params) {
+
+            COConfigurationManager.addParameterListener(
+                    param,
+                    new ParameterListener() {
+                        public void
+                        parameterChanged(
+                                String parameter_name) {
+                            checkConfig(enable_param, timeout_param);
+                        }
+                    });
+        }
 		
 		checkConfig( enable_param, timeout_param );
 	}

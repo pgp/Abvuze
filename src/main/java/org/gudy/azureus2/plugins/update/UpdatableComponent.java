@@ -30,19 +30,19 @@ UpdatableComponent
 		 * Name of the updatable component
 		 * @return
 		 */
-	
-	public String
+
+        String
 	getName();
 	
 		/**
 		 * estimated maximum time to check whether an update is required or not in SECONDS
 		 * @return
 		 */
-	
-	public int
+
+        int
 	getMaximumCheckTime();
 	
-	public void
+	void
 	checkForUpdate(
-		UpdateChecker	checker );
+            UpdateChecker checker);
 }

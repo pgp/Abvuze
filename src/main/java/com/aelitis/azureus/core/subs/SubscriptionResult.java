@@ -28,39 +28,39 @@ public interface
 SubscriptionResult 
 	extends UtilitiesImpl.PluginSubscriptionResult
 {
-	public String
+	String
 	getID();
 	
-	public Map
+	Map
 	toJSONMap();
 	
 		/**
 		 * See SearchResult properties for list
 		 * @return
 		 */
-	
-	public Map<Integer,Object>
+
+        Map<Integer,Object>
 	toPropertyMap();
 	
-	public String
+	String
 	getDownloadLink();
 	
-	public String
+	String
 	getPlayLink();
 	
-	public long
+	long
 	getTimeFound();
 	
-	public void
+	void
 	setRead(
-		boolean		read );
+            boolean read);
 	
-	public boolean
+	boolean
 	getRead();
 	
-	public void
+	void
 	delete();
 	
-	public boolean
+	boolean
 	isDeleted();
 }

@@ -148,8 +148,8 @@ public class PeerManager implements AzureusCoreStatsProvider{
 
 
 
-	private final Map<HashWrapper,List<PeerManagerRegistrationImpl>> registered_legacy_managers 	= new HashMap<HashWrapper,List<PeerManagerRegistrationImpl>>();
-	private final Map<String,PeerManagerRegistrationImpl>			 registered_links				= new HashMap<String,PeerManagerRegistrationImpl>();
+	private final Map<HashWrapper,List<PeerManagerRegistrationImpl>> registered_legacy_managers 	= new HashMap<>();
+	private final Map<String,PeerManagerRegistrationImpl>			 registered_links				= new HashMap<>();
 
 	private final ByteBuffer legacy_handshake_header;
 
@@ -162,7 +162,7 @@ public class PeerManager implements AzureusCoreStatsProvider{
 		legacy_handshake_header.put( BTHandshake.PROTOCOL.getBytes() );
 		legacy_handshake_header.flip();
 
-		Set<String>	types = new HashSet<String>();
+		Set<String>	types = new HashSet<>();
 
 		types.add( AzureusCoreStats.ST_PEER_MANAGER_COUNT );
 		types.add( AzureusCoreStats.ST_PEER_MANAGER_PEER_COUNT );
@@ -181,7 +181,7 @@ public class PeerManager implements AzureusCoreStatsProvider{
 	{
 		if ( types.contains( AzureusCoreStats.ST_PEER_MANAGER_COUNT )){
 
-			values.put( AzureusCoreStats.ST_PEER_MANAGER_COUNT, new Long( registered_legacy_managers.size()));
+			values.put( AzureusCoreStats.ST_PEER_MANAGER_COUNT, (long) registered_legacy_managers.size());
 		}
 
 		if ( 	types.contains( AzureusCoreStats.ST_PEER_MANAGER_PEER_COUNT ) ||
@@ -196,43 +196,35 @@ public class PeerManager implements AzureusCoreStatsProvider{
 
 				managers_mon.enter();
 
-				Iterator<List<PeerManagerRegistrationImpl>>	it = registered_legacy_managers.values().iterator();
+                for (List<PeerManagerRegistrationImpl> registrations : registered_legacy_managers.values()) {
 
-				while( it.hasNext()){
+                    for (PeerManagerRegistrationImpl reg : registrations) {
 
-					List<PeerManagerRegistrationImpl>	registrations = it.next();
+                        PEPeerControl control = reg.getActiveControl();
 
-					Iterator<PeerManagerRegistrationImpl>	it2 = registrations.iterator();
+                        if (control != null) {
 
-					while( it2.hasNext()){
-
-						PeerManagerRegistrationImpl reg = it2.next();
-
-						PEPeerControl control = reg.getActiveControl();
-
-						if ( control != null ){
-
-							total_peers 				+= control.getNbPeers();
-							total_snubbed_peers			+= control.getNbPeersSnubbed();
-							total_stalled_pending_load	+= control.getNbPeersStalledPendingLoad();
-						}
-					}
-				}
+                            total_peers += control.getNbPeers();
+                            total_snubbed_peers += control.getNbPeersSnubbed();
+                            total_stalled_pending_load += control.getNbPeersStalledPendingLoad();
+                        }
+                    }
+                }
 			}finally{
 
 				managers_mon.exit();
 			}
 			if ( types.contains( AzureusCoreStats.ST_PEER_MANAGER_PEER_COUNT )){
 
-				values.put( AzureusCoreStats.ST_PEER_MANAGER_PEER_COUNT, new Long( total_peers ));
+				values.put( AzureusCoreStats.ST_PEER_MANAGER_PEER_COUNT, total_peers);
 			}
 			if ( types.contains( AzureusCoreStats.ST_PEER_MANAGER_PEER_SNUBBED_COUNT )){
 
-				values.put( AzureusCoreStats.ST_PEER_MANAGER_PEER_SNUBBED_COUNT, new Long( total_snubbed_peers ));
+				values.put( AzureusCoreStats.ST_PEER_MANAGER_PEER_SNUBBED_COUNT, total_snubbed_peers);
 			}
 			if ( types.contains( AzureusCoreStats.ST_PEER_MANAGER_PEER_STALLED_DISK_COUNT )){
 
-				values.put( AzureusCoreStats.ST_PEER_MANAGER_PEER_STALLED_DISK_COUNT, new Long( total_stalled_pending_load ));
+				values.put( AzureusCoreStats.ST_PEER_MANAGER_PEER_STALLED_DISK_COUNT, total_stalled_pending_load);
 			}
 		}
 	}
@@ -499,7 +491,7 @@ public class PeerManager implements AzureusCoreStatsProvider{
 
 			if ( registrations == null ){
 
-				registrations = new ArrayList<PeerManagerRegistrationImpl>(1);
+				registrations = new ArrayList<>(1);
 
 				registered_legacy_managers.put( hash, registrations );
 
@@ -601,7 +593,7 @@ public class PeerManager implements AzureusCoreStatsProvider{
 
 				if ( links == null ){
 
-					links = new HashMap<String,TOTorrentFile>();
+					links = new HashMap<>();
 				}
 
 				links.put( link, target );
@@ -666,16 +658,14 @@ public class PeerManager implements AzureusCoreStatsProvider{
 
 			if ( connections != null ){
 
-				for (int i=0;i<connections.size();i++){
+                for (Object[] entry : connections) {
 
-					Object[]	entry = connections.get(i);
+                    NetworkConnection nc = (NetworkConnection) entry[0];
 
-					NetworkConnection	nc = (NetworkConnection)entry[0];
+                    PeerManagerRoutingListener listener = (PeerManagerRoutingListener) entry[2];
 
-					PeerManagerRoutingListener	listener = (PeerManagerRoutingListener)entry[2];
-
-					route( _active_control, nc, true, listener );
-				}
+                    route(_active_control, nc, true, listener);
+                }
 			}
 		}
 
@@ -698,19 +688,17 @@ public class PeerManager implements AzureusCoreStatsProvider{
 
 				if ( pending_connections != null ){
 
-					for (int i=0;i<pending_connections.size();i++){
+                    for (Object[] entry : pending_connections) {
 
-						Object[]	entry = pending_connections.get(i);
+                        NetworkConnection connection = (NetworkConnection) entry[0];
 
-						NetworkConnection	connection = (NetworkConnection)entry[0];
+                        if (Logger.isEnabled())
+                            Logger.log(new LogEvent(LOGID, LogEvent.LT_WARNING,
+                                    "Incoming connection from [" + connection
+                                            + "] closed due to deactivation"));
 
-						if (Logger.isEnabled())
-							Logger.log(new LogEvent(LOGID, LogEvent.LT_WARNING,
-									"Incoming connection from [" + connection
-									                           + "] closed due to deactivation" ));
-
-						connection.close( "deactivated" );
-					}
+                        connection.close("deactivated");
+                    }
 
 					pending_connections = null;
 				}
@@ -759,13 +747,11 @@ public class PeerManager implements AzureusCoreStatsProvider{
 				synchronized( this ){
 					
 					if ( links != null ){
-	
-						Iterator<String>	it = links.keySet().iterator();
-	
-						while( it.hasNext()){
-	
-							registered_links.remove( it.next());
-						}
+
+                        for (String s : links.keySet()) {
+
+                            registered_links.remove(s);
+                        }
 					}
 				}
 			}finally{
@@ -873,10 +859,10 @@ public class PeerManager implements AzureusCoreStatsProvider{
 
 						if ( pending_connections == null ){
 
-							pending_connections = new ArrayList<Object[]>();
+							pending_connections = new ArrayList<>();
 						}
 
-						pending_connections.add( new Object[]{ connection, new Long( SystemTime.getCurrentTime()), listener });
+						pending_connections.add( new Object[]{ connection, SystemTime.getCurrentTime(), listener });
 
 						if ( pending_connections.size() == 1 ){
 
@@ -922,11 +908,11 @@ public class PeerManager implements AzureusCoreStatsProvider{
 
 					Object[]	entry = it.next();
 
-					long	start_time = ((Long)entry[1]).longValue();
+					long	start_time = (Long) entry[1];
 
 					if ( now < start_time ){
 
-						entry[1] = new Long( now );
+						entry[1] = now;
 
 					}else if ( now - start_time > PENDING_TIMEOUT ){
 

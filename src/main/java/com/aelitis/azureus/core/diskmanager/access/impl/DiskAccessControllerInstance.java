@@ -443,22 +443,22 @@ DiskAccessControllerInstance
 					if ( priority >= 0 ){
 						
 						int	pos = 0;
-						
-						for (Iterator it = requests.iterator();it.hasNext();){
-							
-							DiskAccessRequestImpl	r = (DiskAccessRequestImpl)it.next();
-						
-							if ( r.getPriority() < priority ){
-								
-								requests.add( pos, request );
-								
-								added = true;
-								
-								break;
-							}
-							
-							pos++;
-						}
+
+                        for (Object request1 : requests) {
+
+                            DiskAccessRequestImpl r = (DiskAccessRequestImpl) request1;
+
+                            if (r.getPriority() < priority) {
+
+                                requests.add(pos, request);
+
+                                added = true;
+
+                                break;
+                            }
+
+                            pos++;
+                        }
 					}
 					
 					if ( !added ){
@@ -477,7 +477,7 @@ DiskAccessControllerInstance
 							request_map.put( request.getFile(), m ); 
 						}
 						
-						m.put( new Long( request.getOffset()), request );
+						m.put(request.getOffset(), request );
 						
 						long now = SystemTime.getCurrentTime();
 						
@@ -589,7 +589,7 @@ DiskAccessControllerInstance
 															file_map = new HashMap();
 														}
 														
-														file_map.remove( new Long( request.getOffset()));
+														file_map.remove(request.getOffset());
 																							
 														if ( request.getPriority() < 0 && !request.isCancelled()){
 																
@@ -606,7 +606,7 @@ DiskAccessControllerInstance
 																					
 																		// doesn't matter if we remove from this and don't end up using it
 																	
-																	DiskAccessRequestImpl next = (DiskAccessRequestImpl)file_map.remove( new Long( end ));
+																	DiskAccessRequestImpl next = (DiskAccessRequestImpl)file_map.remove(end);
 																	
 																	if ( 	next == null || next.isCancelled() ||
 																			!next.canBeAggregatedWith( request )){
@@ -681,7 +681,7 @@ DiskAccessControllerInstance
 											
 											if ( aggregated != null ){
 												
-												DiskAccessRequestImpl[]	requests = (DiskAccessRequestImpl[])aggregated.toArray( new DiskAccessRequestImpl[ aggregated.size()]);
+												DiskAccessRequestImpl[]	requests = (DiskAccessRequestImpl[])aggregated.toArray(new DiskAccessRequestImpl[0]);
 												
 												try{
 													
@@ -694,15 +694,13 @@ DiskAccessControllerInstance
 													io_time += ( io_end - io_start );
 													
 													io_count++;
-													
-													for (int i=0;i<requests.length;i++){
-														
-														DiskAccessRequestImpl	r = requests[i];
-														
-														total_aggregated_bytes += r.getSize();
-														
-														releaseSpaceAllowance( r );
-													}
+
+                                                    for (DiskAccessRequestImpl r : requests) {
+
+                                                        total_aggregated_bytes += r.getSize();
+
+                                                        releaseSpaceAllowance(r);
+                                                    }
 												}
 											}else if ( request != null ){
 												

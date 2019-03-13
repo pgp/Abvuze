@@ -23,20 +23,20 @@ package com.aelitis.azureus.core.pairing;
 public interface 
 PairingTest 
 {
-	public static final int	OT_PENDING				= 0;	// waiting to start
-	public static final int	OT_SUCCESS				= 1;	// yay
-	public static final int	OT_FAILED				= 2;	// server did its stuff, couldn't connect
-	public static final int	OT_SERVER_UNAVAILABLE	= 3;	// server not running
-	public static final int	OT_SERVER_OVERLOADED	= 4;	// server too busy
-	public static final int	OT_SERVER_FAILED		= 5;	// server failed (e.g. db down)
-	public static final int	OT_CANCELLED			= 6;	// you cancelled the test
+	int	OT_PENDING				= 0;	// waiting to start
+	int	OT_SUCCESS				= 1;	// yay
+	int	OT_FAILED				= 2;	// server did its stuff, couldn't connect
+	int	OT_SERVER_UNAVAILABLE	= 3;	// server not running
+	int	OT_SERVER_OVERLOADED	= 4;	// server too busy
+	int	OT_SERVER_FAILED		= 5;	// server failed (e.g. db down)
+	int	OT_CANCELLED			= 6;	// you cancelled the test
 	
-	public int
+	int
 	getOutcome();
 	
-	public String
+	String
 	getErrorMessage();
 	
-	public void
+	void
 	cancel();
 }

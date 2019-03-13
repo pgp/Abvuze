@@ -23,13 +23,13 @@ package com.aelitis.azureus.plugins.net.buddy.tracker;
 public interface 
 BuddyPluginTrackerListener 
 {
-	public void
+	void
 	enabledStateChanged(
-		BuddyPluginTracker	tracker,
-		boolean				enabled );
+            BuddyPluginTracker tracker,
+            boolean enabled);
 	
-	public void
+	void
 	networkStatusChanged(
-		BuddyPluginTracker	tracker,
-		int					new_status );
+            BuddyPluginTracker tracker,
+            int new_status);
 }

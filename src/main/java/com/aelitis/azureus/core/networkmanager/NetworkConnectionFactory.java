@@ -32,7 +32,7 @@ import com.aelitis.azureus.core.util.CopyOnWriteList;
 public class 
 NetworkConnectionFactory 
 {
-	private static final CopyOnWriteList<NetworkConnectionFactoryListener>	listeners = new CopyOnWriteList<NetworkConnectionFactory.NetworkConnectionFactoryListener>();
+	private static final CopyOnWriteList<NetworkConnectionFactoryListener>	listeners = new CopyOnWriteList<>();
 	
 	/**
 	 * Create an OUTGOING connection.
@@ -102,8 +102,8 @@ NetworkConnectionFactory
 	public interface
 	NetworkConnectionFactoryListener
 	{
-		public void
+		void
 		connectionCreated(
-			NetworkConnection		connection );
+                NetworkConnection connection);
 	}
 }

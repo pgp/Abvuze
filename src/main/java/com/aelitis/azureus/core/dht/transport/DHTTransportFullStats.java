@@ -29,95 +29,95 @@ DHTTransportFullStats
 {
 		// DB
 	
-	public long
+	long
 	getDBValueCount();
 	
-	public long
+	long
 	getDBKeyCount();
 
-	public long
+	long
 	getDBValuesStored();
 	
-	public long
+	long
 	getDBKeysBlocked();
 	
-	public long
+	long
 	getDBKeyDivSizeCount();
 	
-	public long
+	long
 	getDBKeyDivFreqCount();
 
-	public long
+	long
 	getDBStoreSize();
 
 		// Router
 	
-	public long
+	long
 	getRouterNodes();
 	
-	public long
+	long
 	getRouterLeaves();
 	
-	public long
+	long
 	getRouterContacts();
 	
-	public long
+	long
 	getRouterUptime();
 	
-	public int
+	int
 	getRouterCount();
 	
 		// Transport
 	
 		// totals
 	
-	public long
+	long
 	getTotalBytesReceived();
 	
-	public long
+	long
 	getTotalBytesSent();
 	
-	public long
+	long
 	getTotalPacketsReceived();
 	
-	public long
+	long
 	getTotalPacketsSent();
 	
-	public long
+	long
 	getTotalPingsReceived();
 	
-	public long
+	long
 	getTotalFindNodesReceived();
 	
-	public long
+	long
 	getTotalFindValuesReceived();
 	
-	public long
+	long
 	getTotalStoresReceived();
 	
-	public long
+	long
 	getTotalKeyBlocksReceived();
 	
-	public long
+	long
 	getIncomingRequests();
 	
 		// averages
 	
-	public long
+	long
 	getAverageBytesReceived();
 	
-	public long
+	long
 	getAverageBytesSent();
 	
-	public long
+	long
 	getAveragePacketsReceived();
 	
-	public long
+	long
 	getAveragePacketsSent();
 	
-	public String
+	String
 	getVersion();
 	
-	public String
+	String
 	getString();
 }

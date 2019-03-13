@@ -23,24 +23,24 @@ package org.gudy.azureus2.core3.ipfilter;
 public interface 
 IPFilterListener 
 {
-	public void
+	void
 	IPFilterEnabledChanged(
-		boolean			is_enabled );
+            boolean is_enabled);
 	
-	public boolean
+	boolean
 	canIPBeBanned(
-		String			ip );
+            String ip);
 	
-	public void
+	void
 	IPBanned(
-		BannedIp		ip );
+            BannedIp ip);
 	
-	public void
+	void
 	IPBlockedListChanged(
-		IpFilter 		filter );
+            IpFilter filter);
 	
-	public boolean
+	boolean
 	canIPBeBlocked(
-		String			ip,
-		byte[]			torrent_hash );
+            String ip,
+            byte[] torrent_hash);
 }

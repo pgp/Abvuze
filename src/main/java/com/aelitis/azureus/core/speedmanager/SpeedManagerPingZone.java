@@ -23,18 +23,18 @@ package com.aelitis.azureus.core.speedmanager;
 public interface 
 SpeedManagerPingZone 
 {
-	public int
+	int
 	getUploadStartBytesPerSec();
 	
-	public int
+	int
 	getUploadEndBytesPerSec();
 	
-	public int
+	int
 	getDownloadStartBytesPerSec();
 	
-	public int
+	int
 	getDownloadEndBytesPerSec();
 	
-	public int
+	int
 	getMetric();
 }

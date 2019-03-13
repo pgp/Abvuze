@@ -27,11 +27,11 @@ package org.gudy.azureus2.plugins.update;
 public interface 
 UpdateListener 
 {
-	public void
+	void
 	complete(
-		Update	update );
+            Update update);
 	
-	public void
+	void
 	cancelled(
-		Update	update );
+            Update update);
 }

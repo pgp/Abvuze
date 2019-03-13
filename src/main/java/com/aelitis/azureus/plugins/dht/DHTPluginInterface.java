@@ -31,149 +31,149 @@ import com.aelitis.azureus.core.dht.DHT;
 public interface 
 DHTPluginInterface 
 {
-	public static final byte		FLAG_SINGLE_VALUE	= DHT.FLAG_SINGLE_VALUE;
-	public static final byte		FLAG_DOWNLOADING	= DHT.FLAG_DOWNLOADING;
-	public static final byte		FLAG_SEEDING		= DHT.FLAG_SEEDING;
-	public static final byte		FLAG_MULTI_VALUE	= DHT.FLAG_MULTI_VALUE;
-	public static final byte		FLAG_STATS			= DHT.FLAG_STATS;
-	public static final byte		FLAG_ANON			= DHT.FLAG_ANON;
-	public static final byte		FLAG_PRECIOUS		= DHT.FLAG_PRECIOUS;
-	public static final byte		FLAG_BRIDGED		= DHT.FLAG_BRIDGED;
+	byte		FLAG_SINGLE_VALUE	= DHT.FLAG_SINGLE_VALUE;
+	byte		FLAG_DOWNLOADING	= DHT.FLAG_DOWNLOADING;
+	byte		FLAG_SEEDING		= DHT.FLAG_SEEDING;
+	byte		FLAG_MULTI_VALUE	= DHT.FLAG_MULTI_VALUE;
+	byte		FLAG_STATS			= DHT.FLAG_STATS;
+	byte		FLAG_ANON			= DHT.FLAG_ANON;
+	byte		FLAG_PRECIOUS		= DHT.FLAG_PRECIOUS;
+	byte		FLAG_BRIDGED		= DHT.FLAG_BRIDGED;
 
-	public static final int			MAX_VALUE_SIZE		= DHT.MAX_VALUE_SIZE;
+	int			MAX_VALUE_SIZE		= DHT.MAX_VALUE_SIZE;
 
 
 	
-	public boolean
+	boolean
 	isEnabled();
 	
-	public boolean
+	boolean
 	isExtendedUseAllowed();
 	
-	public boolean
+	boolean
 	isInitialising();
 	
-	public boolean
+	boolean
 	isSleeping();
 	
-	public DHTPluginContact
+	DHTPluginContact
 	getLocalAddress();
 	
-	public String
+	String
 	getNetwork();
 	
-	public DHTPluginKeyStats
+	DHTPluginKeyStats
 	decodeStats(
-		DHTPluginValue		value );
+            DHTPluginValue value);
 	
-	public void
+	void
 	registerHandler(
-		byte[]							handler_key,
-		DHTPluginTransferHandler		handler,
-		Map<String,Object>				options );
+            byte[] handler_key,
+            DHTPluginTransferHandler handler,
+            Map<String, Object> options);
 	
-	public void
+	void
 	unregisterHandler(
-		byte[]							handler_key,
-		DHTPluginTransferHandler		handler );
+            byte[] handler_key,
+            DHTPluginTransferHandler handler);
 
-	public DHTPluginContact
+	DHTPluginContact
 	importContact(
-		InetSocketAddress				address );
+            InetSocketAddress address);
 	
-	public DHTPluginContact
+	DHTPluginContact
 	importContact(
-		InetSocketAddress				address,
-		byte							version );
+            InetSocketAddress address,
+            byte version);
 	
-	public DHTPluginContact
+	DHTPluginContact
 	importContact(
-		InetSocketAddress				address,
-		byte							version,
-		boolean							is_cvs );
+            InetSocketAddress address,
+            byte version,
+            boolean is_cvs);
 	
-	public DHTPluginContact
+	DHTPluginContact
 	importContact(
-		Map<String,Object>				map );		
+            Map<String, Object> map);
 	
-	public void
+	void
 	get(
-		byte[]								original_key,
-		String								description,
-		byte								flags,
-		int									max_values,
-		long								timeout,
-		boolean								exhaustive,
-		boolean								high_priority,
-		DHTPluginOperationListener			original_listener );
+            byte[] original_key,
+            String description,
+            byte flags,
+            int max_values,
+            long timeout,
+            boolean exhaustive,
+            boolean high_priority,
+            DHTPluginOperationListener original_listener);
 	
-	public void
+	void
 	put(
-		byte[]						key,
-		String						description,
-		byte[]						value,
-		byte						flags,
-		DHTPluginOperationListener	listener);
+            byte[] key,
+            String description,
+            byte[] value,
+            byte flags,
+            DHTPluginOperationListener listener);
 	
-	public DHTInterface[]
+	DHTInterface[]
 	getDHTInterfaces();
 	
-	public List<DHTPluginValue>
+	List<DHTPluginValue>
 	getValues();
 
-	public List<DHTPluginValue>
+	List<DHTPluginValue>
 	getValues(
-		byte[]		key );
+            byte[] key);
 
-	public void
+	void
 	remove(
-		byte[]						key,
-		String						description,
-		DHTPluginOperationListener	listener );
+            byte[] key,
+            String description,
+            DHTPluginOperationListener listener);
 	
-	public void
+	void
 	remove(
-		DHTPluginContact[]			targets,
-		byte[]						key,
-		String						description,
-		DHTPluginOperationListener	listener );
+            DHTPluginContact[] targets,
+            byte[] key,
+            String description,
+            DHTPluginOperationListener listener);
 	
-	public void
+	void
 	addListener(
-		DHTPluginListener	l );
+            DHTPluginListener l);
 
 	
-	public void
+	void
 	removeListener(
-		DHTPluginListener	l );
+            DHTPluginListener l);
 
 	
-	public void
+	void
 	log(
-		String	str );
+            String str);
 
-	public interface
+	interface
 	DHTInterface
 	{
-		public byte[]
+		byte[]
 		getID();
 		
-		public boolean
+		boolean
 		isIPV6();
 		
-		public int
+		int
 		getNetwork();
 				
-		public DHTPluginContact[]
+		DHTPluginContact[]
 		getReachableContacts();
 		
-		public DHTPluginContact[]
+		DHTPluginContact[]
 		getRecentContacts();
 		
-		public List<DHTPluginContact>
+		List<DHTPluginContact>
 		getClosestContacts(
-			byte[]		to_id,
-			boolean		live_only );
+                byte[] to_id,
+                boolean live_only);
 	}
 	
 }

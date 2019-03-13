@@ -24,7 +24,7 @@ import java.net.DatagramPacket;
 public interface 
 PRUDPPrimordialHandler 
 {
-	public boolean
+	boolean
 	packetReceived(
-		DatagramPacket	packet );
+            DatagramPacket packet);
 }

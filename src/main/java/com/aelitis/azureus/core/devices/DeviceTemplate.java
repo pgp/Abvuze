@@ -23,22 +23,22 @@ package com.aelitis.azureus.core.devices;
 public interface 
 DeviceTemplate 
 {
-	public int
+	int
 	getType();
 	
-	public String
+	String
 	getName();
 	
-	public String
+	String
 	getManufacturer();
 	
-	public String
+	String
 	getClassification();
 	
-	public String
+	String
 	getShortDescription();
 	
-	public boolean
+	boolean
 	isAuto();
 	
 		/**
@@ -47,18 +47,18 @@ DeviceTemplate
 		 * @return
 		 * @throws DeviceManagerException
 		 */
-	
-	public Device
+
+        Device
 	createInstance(
-		String		name )
+                String name)
 	
 		throws DeviceManagerException;
 	
-	public Device
+	Device
 	createInstance(
-		String		name,
-		String		uid,
-		boolean		manual )
+            String name,
+            String uid,
+            boolean manual)
 	
 		throws DeviceManagerException;
 }

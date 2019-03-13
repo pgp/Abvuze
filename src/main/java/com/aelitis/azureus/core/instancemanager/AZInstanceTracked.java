@@ -23,22 +23,22 @@ package com.aelitis.azureus.core.instancemanager;
 public interface 
 AZInstanceTracked 
 {
-	public AZInstance
+	AZInstance
 	getInstance();
 	
-	public TrackTarget
+	TrackTarget
 	getTarget();
 	
-	public boolean
+	boolean
 	isSeed();
 	
 	interface
 	TrackTarget
 	{
-		public Object
+		Object
 		getTarget();
 		
-		public boolean
+		boolean
 		isSeed();
 	}
 }

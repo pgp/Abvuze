@@ -229,7 +229,7 @@ DHTPluginImpl
 				
 				//System.out.println( "CVS DHT cache republish interval modified" );
 
-				props.put( DHT.PR_CACHE_REPUBLISH_INTERVAL, new Integer( 1*60*60*1000 ));
+				props.put( DHT.PR_CACHE_REPUBLISH_INTERVAL, 1 * 60 * 60 * 1000);
 			}
 			
 			dht = DHTFactory.create( 
@@ -419,7 +419,7 @@ DHTPluginImpl
 					",net=" + transport.getNetwork() +
 					",prot=V" + transport.getProtocolVersion()+
 					",reach=" + transport.isReachable()+
-					",flags=" + Integer.toString((int)(transport.getGenericFlags()&0xff), 16 ));
+					",flags=" + Integer.toString((transport.getGenericFlags()&0xff), 16 ));
 
 		log.log( 	"Router" +
 					":nodes=" + rs[DHTRouterStats.ST_NODES] +
@@ -533,50 +533,46 @@ DHTPluginImpl
 					Download[]	downloads = plugin_interface.getDownloadManager().getDownloads();
 									
 outer:
-	
-					for (int i=0;i<downloads.length;i++){
-						
-						Download	download = downloads[i];
-						
-						PeerManager pm = download.getPeerManager();
-						
-						if ( pm == null ){
-							
-							continue;
-						}
-						
-						Peer[] 	peers = pm.getPeers();
-						
-						for (int j=0;j<peers.length;j++){
-							
-							Peer	p = peers[j];
-							
-							int	peer_udp_port = p.getUDPNonDataListenPort();
-							
-							if ( peer_udp_port != 0 ){
-											
-								boolean is_v6 = p.getIp().contains( ":" );
-								
-								if ( is_v6 == v6 ){
-									
-									String ip =  p.getIp();
-									
-									if ( AENetworkClassifier.categoriseAddress( ip ) == AENetworkClassifier.AT_PUBLIC ){
-										
-										if ( importSeed( ip, peer_udp_port ) != null ){
-											
-											peers_imported++;
-																		
-											if ( peers_imported > seed_limit ){
-												
-												break outer;
-											}
-										}
-									}
-								}
-							}	
-						}
-					}
+
+for (Download download : downloads) {
+
+    PeerManager pm = download.getPeerManager();
+
+    if (pm == null) {
+
+        continue;
+    }
+
+    Peer[] peers = pm.getPeers();
+
+    for (Peer p : peers) {
+
+        int peer_udp_port = p.getUDPNonDataListenPort();
+
+        if (peer_udp_port != 0) {
+
+            boolean is_v6 = p.getIp().contains(":");
+
+            if (is_v6 == v6) {
+
+                String ip = p.getIp();
+
+                if (AENetworkClassifier.categoriseAddress(ip) == AENetworkClassifier.AT_PUBLIC) {
+
+                    if (importSeed(ip, peer_udp_port) != null) {
+
+                        peers_imported++;
+
+                        if (peers_imported > seed_limit) {
+
+                            break outer;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 					
 					if ( peers_imported < 16 ){
 						
@@ -858,7 +854,7 @@ outer:
 		
 		Iterator<HashWrapper>	keys = db.getKeys();
 		
-		List<DHTPluginValue>	vals = new ArrayList<DHTPluginValue>();
+		List<DHTPluginValue>	vals = new ArrayList<>();
 		
 		while( keys.hasNext()){
 			
@@ -876,7 +872,7 @@ outer:
 	public List<DHTPluginValue> 
 	getValues(byte[] key)
 	{
-		List<DHTPluginValue>	vals = new ArrayList<DHTPluginValue>();
+		List<DHTPluginValue>	vals = new ArrayList<>();
 
 		if ( dht != null ){
 							
@@ -1218,7 +1214,7 @@ outer:
 	
 		// direct read/write support
 	
-	private Map<DHTPluginTransferHandler,DHTTransportTransferHandler>	handler_map = new HashMap<DHTPluginTransferHandler, DHTTransportTransferHandler>();
+	private Map<DHTPluginTransferHandler,DHTTransportTransferHandler>	handler_map = new HashMap<>();
 
 	public void
 	registerHandler(
@@ -1579,7 +1575,7 @@ outer:
 	{
 		List<DHTTransportContact> contacts = dht.getControl().getClosestKContactsList(to_id, live_only);
 		
-		List<DHTPluginContact> result = new ArrayList<DHTPluginContact>( contacts.size());
+		List<DHTPluginContact> result = new ArrayList<>(contacts.size());
 		
 		for ( DHTTransportContact contact: contacts ){
 			

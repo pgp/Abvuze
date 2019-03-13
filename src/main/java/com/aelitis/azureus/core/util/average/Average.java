@@ -26,17 +26,17 @@ public interface Average {
    /**
     * Update average and return average-so-far.
     */
-   public double update(final double newValue);
+   double update(final double newValue);
    
    /**
     * Return average-so-far.
     */
-   public double getAverage();
+   double getAverage();
    
    /**
     * sets back to start-of-day
     *
     */
-   public void
+   void
    reset();
 }

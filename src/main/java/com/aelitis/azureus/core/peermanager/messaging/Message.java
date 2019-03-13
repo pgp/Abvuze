@@ -32,51 +32,51 @@ public interface Message {
   /**
    * Is a protocol-bearing message, i.e. messaging/overhead data.
    */
-  public static final int TYPE_PROTOCOL_PAYLOAD = 0;
+  int TYPE_PROTOCOL_PAYLOAD = 0;
   
   /**
    * Is a data-bearing message, i.e. file data.
    */
-  public static final int TYPE_DATA_PAYLOAD     = 1;
+  int TYPE_DATA_PAYLOAD     = 1;
   
   /**
    * Get message id.
    * @return id
    */
-  public String getID();
+  String getID();
   
-  public byte[] getIDBytes();
+  byte[] getIDBytes();
   /**
    * Get the main feature set name this message belongs to.
    * @return feature id
    */
-  public String getFeatureID();
+  String getFeatureID();
   
   /**
    * Get the static message sub-id for the feature.
    * @return sub id
    */
-  public int getFeatureSubID();
+  int getFeatureSubID();
   
-  public byte getVersion();
+  byte getVersion();
   
   /**
    * Get message type.
    * @return type
    */
-  public int getType();
+  int getType();
     
   /**
    * Get textual description of this particular message.
    * @return description
    */
-  public String getDescription();
+  String getDescription();
   
   /**
    * Get message payload data.
    * @return message data buffers
    */
-  public DirectByteBuffer[] getData();
+  DirectByteBuffer[] getData();
   
   
   /**
@@ -86,12 +86,12 @@ public interface Message {
    * @throws MessageException if the decoding process fails
    * NOTE: Does not auto-return given direct buffer on thrown exception.
    */
-  public Message deserialize( DirectByteBuffer data, byte version ) throws MessageException;
+  Message deserialize(DirectByteBuffer data, byte version) throws MessageException;
     
   
   /**
    * Destroy the message; i.e. perform cleanup actions.
    */
-  public void destroy();
+  void destroy();
   
 }

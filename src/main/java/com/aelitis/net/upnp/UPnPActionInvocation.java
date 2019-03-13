@@ -28,23 +28,23 @@ import java.util.Map;
 public interface 
 UPnPActionInvocation 
 {
-	public void
+	void
 	addArgument(
-		String	name,
-		String	value );
+            String name,
+            String value);
 	
 		/**
 		 * returns the out/parameters and response
 		 * @return
 		 * @throws UPnPException
 		 */
-	
-	public UPnPActionArgument[]
+
+        UPnPActionArgument[]
 	invoke()
 	
 		throws UPnPException;
 	
-	public Map
+	Map
 	invoke2()
   	
   		throws UPnPException;

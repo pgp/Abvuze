@@ -308,14 +308,14 @@ TransportHelperFilterStream
 			return( total_read );
 			
 		}finally{
-			
-			for (int i=0;i<copy_db.length;i++){
-				
-				if ( copy_db[i] != null ){
-					
-					copy_db[i].returnToPool();
-				}
-			}
+
+            for (DirectByteBuffer directByteBuffer : copy_db) {
+
+                if (directByteBuffer != null) {
+
+                    directByteBuffer.returnToPool();
+                }
+            }
 		}
 	}
 	

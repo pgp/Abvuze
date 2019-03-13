@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.gudy.azureus2.core3.util.AESemaphore;
@@ -46,7 +47,7 @@ MagnetConnection2
 {
 	private static final String	NL			= "\r\n";
 	
-	static final LinkedList<MagnetOutputStream>		active_os = new LinkedList<MagnetOutputStream>();
+	static final LinkedList<MagnetOutputStream>		active_os = new LinkedList<>();
 	private static TimerEventPeriodic					active_os_event;
 	
 	private static void
@@ -73,7 +74,7 @@ MagnetConnection2
 								
 								synchronized( active_os ){
 								
-									active = new ArrayList<MagnetOutputStream>( active_os );
+									active = new ArrayList<>(active_os);
 								}
 								
 								for ( MagnetOutputStream os: active ){
@@ -107,7 +108,7 @@ MagnetConnection2
 	private OutputStream 	output_stream;
 	private InputStream 	input_stream;
 	
-	private final LinkedList<String>	status_list = new LinkedList<String>();
+	private final LinkedList<String>	status_list = new LinkedList<>();
 	
 	public
 	MagnetConnection2(
@@ -169,7 +170,7 @@ MagnetConnection2
 				
 				if ( line.startsWith( "X-Report:")){
 					
-					line = new String( line_bytes, 0, line_bytes_pos, "UTF-8" );
+					line = new String( line_bytes, 0, line_bytes_pos, StandardCharsets.UTF_8);
 					
 					line = line.substring( 9 );
 										
@@ -232,7 +233,7 @@ MagnetConnection2
 
 			if ( error_only ){
 			
-				List<String>	response = new ArrayList<String>();
+				List<String>	response = new ArrayList<>();
 				
 				for ( String s: status_list ){
 					
@@ -246,7 +247,7 @@ MagnetConnection2
 				
 			}else{
 			
-				return( new ArrayList<String>( status_list ));
+				return(new ArrayList<>(status_list));
 			}
 		}
 	}
@@ -281,7 +282,7 @@ MagnetConnection2
 	MagnetOutputStream
 		extends OutputStream
 	{
-		private final LinkedList<byte[]>	buffers 	= new LinkedList<byte[]>();
+		private final LinkedList<byte[]>	buffers 	= new LinkedList<>();
 		private int					available;
 		private final AESemaphore			buffer_sem 	= new AESemaphore( "mos:buffers" );
 		private boolean				closed;
@@ -341,7 +342,7 @@ MagnetConnection2
 		
 		public void 
 		write(
-			byte b[], 
+                byte[] b,
 			int off, 
 			int len) 
 					
@@ -421,7 +422,7 @@ MagnetConnection2
 		
 		private int 
 		read(
-			byte 	buffer[], 
+                byte[] buffer,
 			int 	off, 
 			int 	len )  
 					
@@ -568,7 +569,7 @@ MagnetConnection2
 		
 		public int 
 		read(
-			byte b[], 
+                byte[] b,
 			int off, 
 			int len)  
 					
@@ -605,10 +606,10 @@ MagnetConnection2
 	public interface
 	MagnetHandler
 	{
-		public void
+		void
 		process(
-			URL					magnet,
-			OutputStream		os )
+                URL magnet,
+                OutputStream os)
 			
 			throws IOException;	
 	}

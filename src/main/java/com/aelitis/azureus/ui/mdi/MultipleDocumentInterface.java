@@ -25,79 +25,79 @@ import com.aelitis.azureus.ui.common.viewtitleinfo.ViewTitleInfo;
 
 public interface MultipleDocumentInterface
 {
-	public static final String SIDEBAR_POS_FIRST = "";
+	String SIDEBAR_POS_FIRST = "";
 
-	public static final String SIDEBAR_HEADER_VUZE = "header.vuze";
+	String SIDEBAR_HEADER_VUZE = "header.vuze";
 
-	public static final String SIDEBAR_HEADER_TRANSFERS = "header.transfers";
+	String SIDEBAR_HEADER_TRANSFERS = "header.transfers";
 
-	public static final String SIDEBAR_HEADER_DISCOVERY = "header.discovery";
+	String SIDEBAR_HEADER_DISCOVERY = "header.discovery";
 
-	public static final String SIDEBAR_HEADER_DEVICES = "header.devices";
+	String SIDEBAR_HEADER_DEVICES = "header.devices";
 
-	public static final String SIDEBAR_HEADER_DVD = "header.dvd";
+	String SIDEBAR_HEADER_DVD = "header.dvd";
 
-	public static final String SIDEBAR_HEADER_PLUGINS = "header.plugins";
+	String SIDEBAR_HEADER_PLUGINS = "header.plugins";
 
-	public static final String SIDEBAR_SECTION_PLUGINS = "Plugins";
+	String SIDEBAR_SECTION_PLUGINS = "Plugins";
 
-	public static final String SIDEBAR_SECTION_ABOUTPLUGINS = "About.Plugins";
+	String SIDEBAR_SECTION_ABOUTPLUGINS = "About.Plugins";
 
-	public static final String SIDEBAR_SECTION_LIBRARY = "Library";
+	String SIDEBAR_SECTION_LIBRARY = "Library";
 
-	public static final String SIDEBAR_SECTION_GAMES = "Games";
+	String SIDEBAR_SECTION_GAMES = "Games";
 
-	public static final String SIDEBAR_SECTION_BETAPROGRAM = "BetaProgramme";
+	String SIDEBAR_SECTION_BETAPROGRAM = "BetaProgramme";
 
-	public static final String SIDEBAR_SECTION_LIBRARY_DL = "LibraryDL";
+	String SIDEBAR_SECTION_LIBRARY_DL = "LibraryDL";
 
-	public static final String SIDEBAR_SECTION_LIBRARY_CD = "LibraryCD";
+	String SIDEBAR_SECTION_LIBRARY_CD = "LibraryCD";
 
-	public static final String SIDEBAR_SECTION_TAGS = "TagsOverview";
+	String SIDEBAR_SECTION_TAGS = "TagsOverview";
 
-	public static final String SIDEBAR_SECTION_TAG_DISCOVERY = "TagDiscovery";
+	String SIDEBAR_SECTION_TAG_DISCOVERY = "TagDiscovery";
 
-	public static final String SIDEBAR_SECTION_CHAT = "ChatOverview";
+	String SIDEBAR_SECTION_CHAT = "ChatOverview";
 
-	public static final String SIDEBAR_SECTION_LIBRARY_UNOPENED = "LibraryUnopened";
+	String SIDEBAR_SECTION_LIBRARY_UNOPENED = "LibraryUnopened";
 	
-	public static final String SIDEBAR_SECTION_TORRENT_DETAILS = "DMDetails";
+	String SIDEBAR_SECTION_TORRENT_DETAILS = "DMDetails";
 
-	public static final String SIDEBAR_SECTION_WELCOME = "Welcome";
+	String SIDEBAR_SECTION_WELCOME = "Welcome";
 
-	public static final String SIDEBAR_SECTION_PLUS = "Plus";
+	String SIDEBAR_SECTION_PLUS = "Plus";
 
-	public static final String SIDEBAR_SECTION_SUBSCRIPTIONS = "Subscriptions";
+	String SIDEBAR_SECTION_SUBSCRIPTIONS = "Subscriptions";
 
-	public static final String SIDEBAR_SECTION_DEVICES = "Devices";
+	String SIDEBAR_SECTION_DEVICES = "Devices";
 
-	public static final String SIDEBAR_SECTION_BURN_INFO = "BurnInfo";
+	String SIDEBAR_SECTION_BURN_INFO = "BurnInfo";
 
-	public static final String SIDEBAR_SECTION_ACTIVITIES = "Activity";
+	String SIDEBAR_SECTION_ACTIVITIES = "Activity";
 
-	public static final String SIDEBAR_SECTION_SEARCH = "Search";
+	String SIDEBAR_SECTION_SEARCH = "Search";
 	
-	public static final String SIDEBAR_SECTION_ALLPEERS = "AllPeersView";
+	String SIDEBAR_SECTION_ALLPEERS = "AllPeersView";
 	
-	public static final String SIDEBAR_SECTION_TORRENT_OPTIONS = "TorrentOptionsView";
+	String SIDEBAR_SECTION_TORRENT_OPTIONS = "TorrentOptionsView";
 
-	public static final String SIDEBAR_SECTION_MY_SHARES = "MySharesView";
+	String SIDEBAR_SECTION_MY_SHARES = "MySharesView";
 
-	public static final String SIDEBAR_SECTION_MY_TRACKER = "MyTrackerView";
+	String SIDEBAR_SECTION_MY_TRACKER = "MyTrackerView";
 	
-	public static final String SIDEBAR_SECTION_CLIENT_STATS = "ClientStatsView";
+	String SIDEBAR_SECTION_CLIENT_STATS = "ClientStatsView";
 
-	public static final String SIDEBAR_SECTION_LOGGER = "LoggerView";
+	String SIDEBAR_SECTION_LOGGER = "LoggerView";
 
-	public static final String SIDEBAR_SECTION_CONFIG = "ConfigView";
+	String SIDEBAR_SECTION_CONFIG = "ConfigView";
 
-	public static final String SIDEBAR_SECTION_ARCHIVED_DOWNLOADS = "ArchivedDownloads";
+	String SIDEBAR_SECTION_ARCHIVED_DOWNLOADS = "ArchivedDownloads";
 	
-	public static final String SIDEBAR_SECTION_DOWNLOAD_HISTORY = "DownloadHistory";
+	String SIDEBAR_SECTION_DOWNLOAD_HISTORY = "DownloadHistory";
 
-	public boolean showEntryByID(String id);
+	boolean showEntryByID(String id);
 
-	public boolean showEntryByID(String id, Object datasource);
+	boolean showEntryByID(String id, Object datasource);
 
 		/**
 		 * If you prefix the 'preferedAfterID' string with '~' then the operation will actually
@@ -112,73 +112,73 @@ public interface MultipleDocumentInterface
 		 * @param preferedAfterID
 		 * @return
 		 */
-	public MdiEntry createEntryFromSkinRef(String parentID, String id,
-			String configID, String title, ViewTitleInfo titleInfo, Object params,
-			boolean closeable, String preferedAfterID);
+        MdiEntry createEntryFromSkinRef(String parentID, String id,
+                                        String configID, String title, ViewTitleInfo titleInfo, Object params,
+                                        boolean closeable, String preferedAfterID);
 
-	public MdiEntry getCurrentEntry();
+	MdiEntry getCurrentEntry();
 
-	public MdiEntry getEntry(String id);
+	MdiEntry getEntry(String id);
 
-	public void addListener(MdiListener l);
+	void addListener(MdiListener l);
 
-	public void removeListener(MdiListener l);
+	void removeListener(MdiListener l);
 
-	public void addListener(MdiEntryLoadedListener l);
+	void addListener(MdiEntryLoadedListener l);
 
-	public void removeListener(MdiEntryLoadedListener l);
+	void removeListener(MdiEntryLoadedListener l);
 
-	public boolean isVisible();
+	boolean isVisible();
 
-	public void closeEntry(String id);
+	void closeEntry(String id);
 
-	public MdiEntry[] getEntries();
+	MdiEntry[] getEntries();
 
-	public void registerEntry(String id, MdiEntryCreationListener l);
+	void registerEntry(String id, MdiEntryCreationListener l);
 	
-	public void registerEntry(String id,
-			MdiEntryCreationListener2 mdiEntryCreationListener2);
+	void registerEntry(String id,
+                       MdiEntryCreationListener2 mdiEntryCreationListener2);
 
-	public void deregisterEntry(String id, MdiEntryCreationListener l);
+	void deregisterEntry(String id, MdiEntryCreationListener l);
 	
-	public void deregisterEntry(String id,
-			MdiEntryCreationListener2 mdiEntryCreationListener2);
+	void deregisterEntry(String id,
+                         MdiEntryCreationListener2 mdiEntryCreationListener2);
 
-	public boolean entryExists(String id);
+	boolean entryExists(String id);
 
-	public void removeItem(MdiEntry entry);
+	void removeItem(MdiEntry entry);
 
 	/**
 	 * When an entry can not be opened (ie. creation listener isn't registered yet),
 	 * call this to store your open request
 	 */
-	public void setEntryAutoOpen(String id, Object datasource);
+    void setEntryAutoOpen(String id, Object datasource);
 	
-	public void removeEntryAutoOpen(String id);
+	void removeEntryAutoOpen(String id);
 
-	public void showEntry(MdiEntry newEntry);
+	void showEntry(MdiEntry newEntry);
 
-	public void informAutoOpenSet(MdiEntry entry, Map<String, Object> autoOpenInfo);
+	void informAutoOpenSet(MdiEntry entry, Map<String, Object> autoOpenInfo);
 
-	public boolean loadEntryByID(String id, boolean activate);
+	boolean loadEntryByID(String id, boolean activate);
 
-	public void setPreferredOrder(String[] preferredOrder);
+	void setPreferredOrder(String[] preferredOrder);
 
-	public String[] getPreferredOrder();
+	String[] getPreferredOrder();
 
-	public MdiEntry createHeader(String id, String title, String preferredAfterID);
+	MdiEntry createHeader(String id, String title, String preferredAfterID);
 
-	public List<MdiEntry> getChildrenOf(String id);
+	List<MdiEntry> getChildrenOf(String id);
 
-	public boolean loadEntryByID(String id, boolean activate,
-			boolean onlyLoadOnce, Object datasource);
+	boolean loadEntryByID(String id, boolean activate,
+                          boolean onlyLoadOnce, Object datasource);
 
 	/**
 	 * @return
 	 * @since 5.6.0.1
 	 */
-	public int getEntriesCount();
+    int getEntriesCount();
 	
-	public boolean isDisposed();
+	boolean isDisposed();
 
 }

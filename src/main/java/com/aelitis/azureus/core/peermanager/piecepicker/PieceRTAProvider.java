@@ -22,37 +22,37 @@ package com.aelitis.azureus.core.peermanager.piecepicker;
 public interface 
 PieceRTAProvider 
 {
-	public long[]
+	long[]
 	updateRTAs(
-		PiecePicker		picker );
+            PiecePicker picker);
 	
-	public long
+	long
 	getStartTime();
 	
-	public long
+	long
 	getStartPosition();
 	
-	public long
+	long
 	getCurrentPosition();
 	
-	public long
+	long
 	getBlockingPosition();
 	
 		/**
 		 * Sets an external view of how much buffer is being maintained by an external source. This
 		 * reduces piece urgency and therefore reduces discard. 
 		 */
-	
-	public void
+
+        void
 	setBufferMillis(
-		long	millis,
-		long	delay_millis );
+                long millis,
+                long delay_millis);
 	
 		/**
 		 * Returns the user-agent associated with this RTA activity, if known
 		 * @return
 		 */
-	
-	public String
+
+        String
 	getUserAgent();
 }

@@ -23,7 +23,7 @@ import com.aelitis.azureus.core.speedmanager.SpeedManagerLimitEstimate;
 public interface PSMonitorListener
 {
 
-    public void notifyUpload(SpeedManagerLimitEstimate estimate);
-    public void notifyDownload(SpeedManagerLimitEstimate estimate);
+    void notifyUpload(SpeedManagerLimitEstimate estimate);
+    void notifyDownload(SpeedManagerLimitEstimate estimate);
     
 }

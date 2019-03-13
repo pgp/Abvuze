@@ -27,8 +27,8 @@ UIManagerEventListener
 		 * @param event
 		 * @return
 		 */
-	
-	public boolean
+
+        boolean
 	eventOccurred(
-		UIManagerEvent	event );
+                UIManagerEvent event);
 }

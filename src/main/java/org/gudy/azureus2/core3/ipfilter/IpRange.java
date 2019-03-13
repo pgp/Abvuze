@@ -29,52 +29,52 @@ package org.gudy.azureus2.core3.ipfilter;
 public interface 
 IpRange
 {
-	public String
+	String
 	getDescription();
 	
-	public void
+	void
 	setDescription(
-		String	str );
+            String str);
 		
-	public boolean
+	boolean
 	isValid();
   
-  public boolean
+  boolean
   isSessionOnly();
 	
-	public String
+	String
 	getStartIp();
 	
-	public void
+	void
 	setStartIp(
-		String	str );
+            String str);
 		
-	public String
+	String
 	getEndIp();
 	
-	public void
+	void
 	setEndIp(
-		String	str );
+            String str);
   
-  public void
+  void
   setSessionOnly(
-    boolean sessionOnly );
+          boolean sessionOnly);
 		
-	public boolean isInRange(String ipAddress);
+	boolean isInRange(String ipAddress);
 	
-	public void checkValid();
+	void checkValid();
 	
-	public int
+	int
 	compareStartIpTo(
-		IpRange	other );
+            IpRange other);
 	
-	public int 
+	int
 	compareEndIpTo(
-	    IpRange other );
+            IpRange other);
 	
-	public int 
+	int
 	compareDescription(
-		IpRange other );
+            IpRange other);
 
 	/**
 	 * @return
@@ -89,42 +89,42 @@ IpRange
 	/**
 	 * @return
 	 */
-	public long getMergedEndLong();
+    long getMergedEndLong();
 
 	/**
 	 * @return
 	 */
-	public IpRange[] getMergedEntries();
+    IpRange[] getMergedEntries();
 
 	/**
 	 * 
 	 */
-	public void resetMergeInfo();
+    void resetMergeInfo();
 
 	/**
 	 * @return
 	 */
-	public boolean getMerged();
+    boolean getMerged();
 
 	/**
 	 * 
 	 */
-	public void setMerged();
+    void setMerged();
 
 	/**
 	 * @param endIpLong
 	 */
-	public void setMergedEnd(long endIpLong);
+    void setMergedEnd(long endIpLong);
 
 	/**
 	 * @param e2
 	 */
-	public void addMergedEntry(IpRange e2);
+    void addMergedEntry(IpRange e2);
 
 	/**
 	 * @return
 	 *
 	 * @since 3.0.1.5
 	 */
-	public boolean getAddedToRangeList();
+    boolean getAddedToRangeList();
 }

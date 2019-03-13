@@ -31,23 +31,23 @@ public interface ConfigSection {
   /**
    * Configuration panel will be added to main configuration view area
    */
-  public static final String SECTION_ROOT = "root";
+  String SECTION_ROOT = "root";
   /**
    * Configuration panel will be added to the plugins view area.
    */
-  public static final String SECTION_PLUGINS = "plugins";
-  public static final String SECTION_TRACKER = "tracker";
-  public static final String SECTION_FILES = "files";
-  public static final String SECTION_INTERFACE = "style";
-  public static final String SECTION_CONNECTION = "server";
-  public static final String SECTION_TRANSFER = "transfer";
+  String SECTION_PLUGINS = "plugins";
+  String SECTION_TRACKER = "tracker";
+  String SECTION_FILES = "files";
+  String SECTION_INTERFACE = "style";
+  String SECTION_CONNECTION = "server";
+  String SECTION_TRANSFER = "transfer";
 
   /**
    * Returns section you want your configuration panel to be under.
    * See SECTION_* constants.  To add a subsection to your own ConfigSection,
    * return the configSectionGetName result of your parent.<br>
    */
-  public String configSectionGetParentSection();
+  String configSectionGetParentSection();
 
   /**
    * In order for the plugin to display its section correctly, a key in the
@@ -56,7 +56,7 @@ public interface ConfigSection {
    *
    * @return The name of the configuration section
    */
-  public String configSectionGetName();
+  String configSectionGetName();
 
   /**
    * User selected Save.
@@ -64,10 +64,10 @@ public interface ConfigSection {
    * saving of plugins that implement org.gudy.azureus2.plugins.ui.config
    * parameters.
    */
-  public void configSectionSave();
+  void configSectionSave();
 
   /**
    * Config view is closing
    */
-  public void configSectionDelete();
+  void configSectionDelete();
 }

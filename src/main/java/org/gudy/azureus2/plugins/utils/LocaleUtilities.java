@@ -39,10 +39,10 @@ LocaleUtilities
 	 * If you message base file is, say, a.b.c.Messages.properties, pass a.b.c.Messages
 	 * @param resource_bundle_prefix
 	 */
-	
-	public void
+
+    void
 	integrateLocalisedMessageBundle(
-		String		resource_bundle_prefix );
+            String resource_bundle_prefix);
 	
 	/**
 	 * Allows plugins to dynamically pass in a resource bundle to be used
@@ -50,7 +50,7 @@ LocaleUtilities
 	 * 
 	 * @since 3.0.2.3
 	 */
-	public void integrateLocalisedMessageBundle(ResourceBundle rb);
+    void integrateLocalisedMessageBundle(ResourceBundle rb);
 
 	/**
 	 * Allows plugins to dynamically pass in a properties object to be used
@@ -58,16 +58,16 @@ LocaleUtilities
 	 * 
 	 * @since 3.0.2.3
 	 */
-	public void integrateLocalisedMessageBundle(Properties p);
+    void integrateLocalisedMessageBundle(Properties p);
 	
-	public String
+	String
 	getLocalisedMessageText(
-		String		key );
+            String key);
 	
-	public String
+	String
 	getLocalisedMessageText(
-		String		key,
-		String[]	params );
+            String key,
+            String[] params);
 	
 	/**
 	 * Returns <tt>true</tt> if there exists a message string
@@ -75,7 +75,7 @@ LocaleUtilities
 	 * 
 	 * @since 3.0.5.3
 	 */
-	public boolean hasLocalisedMessageText(String key);
+    boolean hasLocalisedMessageText(String key);
 	
 	/**
 	 * An alias for {@link #getLocalisedMessageText(String)} which returns
@@ -84,23 +84,23 @@ LocaleUtilities
 	 * 
 	 * @since 3.0.5.3
 	 */
-	public String localise(String key);
+    String localise(String key);
 	
-	public LocaleDecoder[]
+	LocaleDecoder[]
 	getDecoders();
 	
-	public void
+	void
 	addListener(
-		LocaleListener		l );
+            LocaleListener l);
 	
-	public void
+	void
 	removeListener(
-		LocaleListener		l );
+            LocaleListener l);
 
 	/**
 	 * Returns the current locale being used.
 	 * 
 	 * @since 3.0.0.9
 	 */
-	public Locale getCurrentLocale();
+    Locale getCurrentLocale();
 }

@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.gudy.azureus2.core3.internat.MessageText;
@@ -66,12 +67,12 @@ MetaSearchImpl
 		
 	private MetaSearchManagerImpl	manager;
 	
-	private CopyOnWriteList<EngineImpl> engines 	= new CopyOnWriteList<EngineImpl>();
-	private Map<String,Long>			plugin_map	= new HashMap<String,Long>();
+	private CopyOnWriteList<EngineImpl> engines 	= new CopyOnWriteList<>();
+	private Map<String,Long>			plugin_map	= new HashMap<>();
 	
 	private boolean config_dirty;
 	
-	private CopyOnWriteList<MetaSearchListener> 	listeners 	= new CopyOnWriteList<MetaSearchListener>();
+	private CopyOnWriteList<MetaSearchListener> 	listeners 	= new CopyOnWriteList<>();
 	
 	private TimerEventPeriodic	update_check_timer;
 	
@@ -132,22 +133,20 @@ MetaSearchImpl
 				// unfortunately pid can be internationalised and thus musn't be used as a key to
 				// a bencoded-map as it can lead of nastyness. Delete any existing entries that have
 				// got out of control
+
+            for (String s : plugin_map.keySet()) {
+
+                if (s.length() > 1024) {
+
+                    Debug.out("plugin_map corrupted, resetting");
+
+                    plugin_map.clear();
+
+                    break;
+                }
+            }
 			
-			Iterator<String>	it = plugin_map.keySet().iterator();
-			
-			while( it.hasNext()){
-				
-				if ( it.next().length() > 1024 ){
-					
-					Debug.out( "plugin_map corrupted, resetting" );
-							
-					plugin_map.clear();
-					
-					break;
-				}
-			}
-			
-			String pid = Base32.encode( _pid.getBytes( "UTF-8" ));
+			String pid = Base32.encode( _pid.getBytes(StandardCharsets.UTF_8));
 			
 			Long	l_id = plugin_map.get( pid );
 			
@@ -157,13 +156,13 @@ MetaSearchImpl
 				
 				id = manager.getLocalTemplateID();
 						
-				plugin_map.put( pid, new Long( id ));
+				plugin_map.put( pid, id);
 						
 				configDirty();
 
 			}else{
 				
-				id = l_id.longValue();
+				id = l_id;
 			}
 			
 			EngineImpl engine = (EngineImpl)getEngine( id );
@@ -295,75 +294,72 @@ MetaSearchImpl
 	private void
 	checkUpdatesSupport()
 	{
-		Iterator<EngineImpl> it = engines.iterator();
-		
-		while( it.hasNext()){
-				
-			EngineImpl	engine = (EngineImpl)it.next();
-				
-			String	update_url = engine.getUpdateURL();
-			
-			if ( update_url != null ){
-				
-				long	now				= SystemTime.getCurrentTime();
-				
-				long	last_check 		= engine.getLastUpdateCheck();
-				
-				if ( last_check > now ){
-					
-					last_check = now;
-					
-					engine.setLastUpdateCheck( now );
-				}
-				
-				long	check_secs	= engine.getUpdateCheckSecs();
-				
-				if ( check_secs < MIN_UPDATE_CHECK_SECS ){
-					
-					log( "Engine '" + engine.getName() + "': Update check period too small (" + check_secs + " secs) adjusting to " + MIN_UPDATE_CHECK_SECS + ": " + engine.getName());
-					
-					check_secs = MIN_UPDATE_CHECK_SECS;
-				}
-				
-				long	check_millis	= check_secs*1000;
-				
-				long	next_check		= last_check + check_millis;
-				
-				Object	consec_fails_o = engine.getUserData( MS_UPDATE_CONSEC_FAIL_KEY );
-				
-				int	consec_fails = consec_fails_o==null?0:((Integer)consec_fails_o).intValue();
-				
-				if ( consec_fails > 0 ){
-					
-					next_check += ( UPDATE_CHECK_PERIOD << consec_fails );
-				}
-				
-				if ( next_check < now ){
-				
-					if ( updateEngine( engine )){
-						
-						consec_fails	= 0;
-						
-						engine.setLastUpdateCheck( now );
-						
-					}else{
-						
-						consec_fails++;
-						
-						if ( consec_fails > 3 ){
-							
-							consec_fails	= 0;
-							
-								// skip to next scheduled update time
-							
-							engine.setLastUpdateCheck( now );
-						}
-					}
-					
-					engine.setUserData( MS_UPDATE_CONSEC_FAIL_KEY, consec_fails==0?null:new Integer( consec_fails ));
-				}
-			}
-		}
+
+        for (EngineImpl engine : engines) {
+
+            String update_url = engine.getUpdateURL();
+
+            if (update_url != null) {
+
+                long now = SystemTime.getCurrentTime();
+
+                long last_check = engine.getLastUpdateCheck();
+
+                if (last_check > now) {
+
+                    last_check = now;
+
+                    engine.setLastUpdateCheck(now);
+                }
+
+                long check_secs = engine.getUpdateCheckSecs();
+
+                if (check_secs < MIN_UPDATE_CHECK_SECS) {
+
+                    log("Engine '" + engine.getName() + "': Update check period too small (" + check_secs + " secs) adjusting to " + MIN_UPDATE_CHECK_SECS + ": " + engine.getName());
+
+                    check_secs = MIN_UPDATE_CHECK_SECS;
+                }
+
+                long check_millis = check_secs * 1000;
+
+                long next_check = last_check + check_millis;
+
+                Object consec_fails_o = engine.getUserData(MS_UPDATE_CONSEC_FAIL_KEY);
+
+                int consec_fails = consec_fails_o == null ? 0 : (Integer) consec_fails_o;
+
+                if (consec_fails > 0) {
+
+                    next_check += (UPDATE_CHECK_PERIOD << consec_fails);
+                }
+
+                if (next_check < now) {
+
+                    if (updateEngine(engine)) {
+
+                        consec_fails = 0;
+
+                        engine.setLastUpdateCheck(now);
+
+                    } else {
+
+                        consec_fails++;
+
+                        if (consec_fails > 3) {
+
+                            consec_fails = 0;
+
+                            // skip to next scheduled update time
+
+                            engine.setLastUpdateCheck(now);
+                        }
+                    }
+
+                    engine.setUserData(MS_UPDATE_CONSEC_FAIL_KEY, consec_fails == 0 ? null : consec_fails);
+                }
+            }
+        }
 	}
 	
 	protected boolean
@@ -397,97 +393,92 @@ MetaSearchImpl
 			ResourceDownloader url_rd = rdf.create( new URL( update_url ));
 			
 			ResourceDownloader rd = rdf.getMetaRefreshDownloader( url_rd );
-			
-			InputStream is = rd.download();
-			
-			try{
-				Map<String,Object> map = BDecoder.decode( new BufferedInputStream( is ));
-				
-				log( "    update check reply: " + map );
-				
-					// reply is either "response" meaning "no update" and giving possibly changed update secs
-					// or Vuze file with updated template
-				
-				Map<String,Object> response = (Map<String,Object>)map.get( "response" );
-				
-				if ( response != null ){
-					
-					Long	update_secs = (Long)response.get( "update_url_check_secs" );
-					
-					if ( update_secs == null ){
-						
-						engine.setLocalUpdateCheckSecs( 0 );
-						
-					}else{
-						
-						int	check_secs = update_secs.intValue();
-						
-						if ( check_secs < MIN_UPDATE_CHECK_SECS ){
-							
-							log( "    update check secs for to small, min is " + MIN_UPDATE_CHECK_SECS);
-							
-							check_secs = MIN_UPDATE_CHECK_SECS;
-						}
-							
-						engine.setLocalUpdateCheckSecs( check_secs );
-					}
-					
-					return( true );
-					
-				}else{
-					
-					VuzeFile vf = VuzeFileHandler.getSingleton().loadVuzeFile( map );
-					
-					if ( vf == null ){
-						
-						log( "    failed to decode vuze file" );
-						
-						return( false );
-					}
-										
-					Engine[] updated_engines = manager.loadFromVuzeFile( vf );
-					
-					if ( updated_engines.length > 0 ){
-						
-						String	existing_uid = engine.getUID();
-						
-						boolean	found = false;
-						
-						String	engine_str = "";
-						
-						for (int i=0;i<updated_engines.length;i++){
-							
-							Engine updated_engine = updated_engines[i];
-							
-							engine_str += (i==0?"":",") + updated_engine.getName() + ": uid=" + updated_engine.getUID() + ",version=" + updated_engine.getVersion();
-							
-							if ( updated_engine.getUID().equals( existing_uid )){
-								
-								found	= true;
-							}
-						}
-						
-						if ( !found ){
-							
-							log( "    existing engine not found in updated set, deleting" );
-							
-							engine.delete();
-							
-						}
-							
-						log( "    update complete: new engines=" + engine_str );
-						
-					}else{
-						
-						log( "    no engines found in vuze file" );
-					}
-					
-					return( true );
-				}
-			}finally{
-				
-				is.close();
-			}
+
+            try (InputStream is = rd.download()) {
+                Map<String, Object> map = BDecoder.decode(new BufferedInputStream(is));
+
+                log("    update check reply: " + map);
+
+                // reply is either "response" meaning "no update" and giving possibly changed update secs
+                // or Vuze file with updated template
+
+                Map<String, Object> response = (Map<String, Object>) map.get("response");
+
+                if (response != null) {
+
+                    Long update_secs = (Long) response.get("update_url_check_secs");
+
+                    if (update_secs == null) {
+
+                        engine.setLocalUpdateCheckSecs(0);
+
+                    } else {
+
+                        int check_secs = update_secs.intValue();
+
+                        if (check_secs < MIN_UPDATE_CHECK_SECS) {
+
+                            log("    update check secs for to small, min is " + MIN_UPDATE_CHECK_SECS);
+
+                            check_secs = MIN_UPDATE_CHECK_SECS;
+                        }
+
+                        engine.setLocalUpdateCheckSecs(check_secs);
+                    }
+
+                    return (true);
+
+                } else {
+
+                    VuzeFile vf = VuzeFileHandler.getSingleton().loadVuzeFile(map);
+
+                    if (vf == null) {
+
+                        log("    failed to decode vuze file");
+
+                        return (false);
+                    }
+
+                    Engine[] updated_engines = manager.loadFromVuzeFile(vf);
+
+                    if (updated_engines.length > 0) {
+
+                        String existing_uid = engine.getUID();
+
+                        boolean found = false;
+
+                        String engine_str = "";
+
+                        for (int i = 0; i < updated_engines.length; i++) {
+
+                            Engine updated_engine = updated_engines[i];
+
+                            engine_str += (i == 0 ? "" : ",") + updated_engine.getName() + ": uid=" + updated_engine.getUID() + ",version=" + updated_engine.getVersion();
+
+                            if (updated_engine.getUID().equals(existing_uid)) {
+
+                                found = true;
+                            }
+                        }
+
+                        if (!found) {
+
+                            log("    existing engine not found in updated set, deleting");
+
+                            engine.delete();
+
+                        }
+
+                        log("    update complete: new engines=" + engine_str);
+
+                    } else {
+
+                        log("    no engines found in vuze file");
+                    }
+
+                    return (true);
+                }
+            }
 		}catch( Throwable e ){
 			
 			log( "    update check failed", e );
@@ -605,27 +596,23 @@ MetaSearchImpl
 			log( "Engine '" + new_engine.getName() + "' added" );
 			
 			saveConfig();
-		
-			Iterator<MetaSearchListener> it = listeners.iterator();
-			
-			while( it.hasNext()){
-				
-				MetaSearchListener listener = it.next();
-				
-				try{
-					if ( add_op ){
-						
-						listener.engineAdded( new_engine );
-						
-					}else{
-						
-						listener.engineUpdated( new_engine );
-					}
-				}catch( Throwable e ){
-					
-					Debug.printStackTrace(e);
-				}
-			}
+
+            for (MetaSearchListener listener : listeners) {
+
+                try {
+                    if (add_op) {
+
+                        listener.engineAdded(new_engine);
+
+                    } else {
+
+                        listener.engineUpdated(new_engine);
+                    }
+                } catch (Throwable e) {
+
+                    Debug.printStackTrace(e);
+                }
+            }
 		}
 	}
 	
@@ -638,20 +625,18 @@ MetaSearchImpl
 			log( "Engine '" + engine.getName() + "' removed" );
 			
 			saveConfig();
-			
-			Iterator<MetaSearchListener> it = listeners.iterator();
-			
-			while( it.hasNext()){
-				
-				try{
-	
-					it.next().engineRemoved( engine );
-	
-				}catch( Throwable e ){
-					
-					Debug.printStackTrace(e);
-				}
-			}
+
+            for (MetaSearchListener listener : listeners) {
+
+                try {
+
+                    listener.engineRemoved(engine);
+
+                } catch (Throwable e) {
+
+                    Debug.printStackTrace(e);
+                }
+            }
 		}
 	}
 	
@@ -659,20 +644,17 @@ MetaSearchImpl
 	stateChanged(
 		Engine		engine )
 	{
-		Iterator<MetaSearchListener> it = listeners.iterator();
-		
-		while( it.hasNext()){
-			
-			MetaSearchListener listener = it.next();
-			
-			try{					
-				listener.engineStateChanged( engine );	
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace(e);
-			}
-		}
+
+        for (MetaSearchListener listener : listeners) {
+
+            try {
+                listener.engineStateChanged(engine);
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 	
 	public String
@@ -680,7 +662,7 @@ MetaSearchImpl
 	{
 		List<EngineImpl> l = engines.getList();
 		
-		List<Long>	ids = new ArrayList<Long>();
+		List<Long>	ids = new ArrayList<>();
 		
 		for ( EngineImpl engine: l ){
 			
@@ -726,23 +708,21 @@ MetaSearchImpl
 		
 		if ( active_only ){
 			
-			result = new ArrayList<EngineImpl>();
-			
-			for (int i=0;i<l.size();i++){
-				
-				EngineImpl	e = l.get(i);
-				
-				if ( e.isActive()){
-					
-					result.add( e );
-				}
-			}
+			result = new ArrayList<>();
+
+            for (EngineImpl e : l) {
+
+                if (e.isActive()) {
+
+                    result.add(e);
+                }
+            }
 		}else{
 			
 			result = l;
 		}
 		
-		return( (Engine[])result.toArray( new Engine[ result.size() ]));
+		return result.toArray( new Engine[ result.size() ]);
 	}
 	
 	public Engine
@@ -750,16 +730,14 @@ MetaSearchImpl
 		long		id )
 	{
 		List<EngineImpl> l = engines.getList();
-		
-		for( int i=0;i<l.size();i++){
-			
-			Engine e = l.get(i);
-			
-			if ( e.getId() == id ){
-				
-				return( e );
-			}
-		}
+
+        for (Engine e : l) {
+
+            if (e.getId() == id) {
+
+                return (e);
+            }
+        }
 
 		return( null );
 	}
@@ -769,16 +747,14 @@ MetaSearchImpl
 		String	uid )
 	{
 		List<EngineImpl> l = engines.getList();
-		
-		for( int i=0;i<l.size();i++){
-			
-			Engine e = l.get(i);
-			
-			if ( e.getUID().equals( uid )){
-				
-				return( e );
-			}
-		}
+
+        for (Engine e : l) {
+
+            if (e.getUID().equals(uid)) {
+
+                return (e);
+            }
+        }
 
 		return( null );
 	}
@@ -796,7 +772,7 @@ MetaSearchImpl
 		String					headers,
 		int						max_results_per_engine )
 	{
-		return( search( original_listener, searchParameters, headers, new HashMap<String,String>(), max_results_per_engine ));
+		return( search( original_listener, searchParameters, headers, new HashMap<>(), max_results_per_engine ));
 	}
 	
 	public Engine[] 
@@ -818,7 +794,7 @@ MetaSearchImpl
 		String					headers,
 		final int				max_results_per_engine )
 	{
-		return( search( engines, listener, search_parameters, headers, new HashMap<String,String>(), max_results_per_engine ));
+		return( search( engines, listener, search_parameters, headers, new HashMap<>(), max_results_per_engine ));
 	}
 	
 	public void
@@ -882,9 +858,9 @@ MetaSearchImpl
 			
 				private AsyncDispatcher dispatcher = new AsyncDispatcher( 5000 );
 
-				final private Map<Engine,List<Result[]>>	pending_results = new HashMap<Engine,List<Result[]>>();
+				final private Map<Engine,List<Result[]>>	pending_results = new HashMap<>();
 				
-				final private Map<Engine,Set<String>>	result_hashes = new HashMap<Engine, Set<String>>();
+				final private Map<Engine,Set<String>>	result_hashes = new HashMap<>();
 				
 				public void
 				contentReceived(
@@ -939,7 +915,7 @@ MetaSearchImpl
 																			
 										results_to_return = results;
 										
-										pending_results.put( engine, new ArrayList<Result[]>());
+										pending_results.put( engine, new ArrayList<>());
 										
 										new DelayedEvent(
 											"SearchBatcher",
@@ -1007,14 +983,14 @@ MetaSearchImpl
 					
 					if ( list != null ){
 						
-						List<Result> x = new ArrayList<Result>();
+						List<Result> x = new ArrayList<>();
 						
 						for ( Result[] y: list ){
 							
 							x.addAll( Arrays.asList( y ));
 						}
 						
-						Result[] results = x.toArray( new Result[ x.size()]);
+						Result[] results = x.toArray(new Result[0]);
 					
 						results = truncateResults( engine, results, max_results_per_engine );
 					
@@ -1032,12 +1008,12 @@ MetaSearchImpl
 					
 					if ( hash_set == null ){
 						
-						hash_set = new HashSet<String>();
+						hash_set = new HashSet<>();
 						
 						result_hashes.put( engine, hash_set );
 					}
 						
-					List<Result>	results = new ArrayList<Result>( a_results.length );
+					List<Result>	results = new ArrayList<>(a_results.length);
 					
 					for ( Result r: a_results ){
 							
@@ -1080,24 +1056,24 @@ MetaSearchImpl
              				results,
              				new Comparator<Result>()
              				{
-             					Map<Result,Float>	ranks = new HashMap<Result, Float>();
+             					Map<Result,Float>	ranks = new HashMap<>();
              					
              					public int 
              					compare(
              						Result r1, 
              						Result r2) 
              					{						
-             						Float	rank1 = (Float)ranks.get(r1);
+             						Float	rank1 = ranks.get(r1);
              						
              						if ( rank1 == null ){	
-             							rank1 = new Float(r1.getRank());
+             							rank1 = r1.getRank();
              							ranks.put( r1, rank1 );
              						}
              						
-             						Float	rank2 = (Float)ranks.get(r2);
+             						Float	rank2 = ranks.get(r2);
              						
              						if ( rank2 == null ){	
-             							rank2 = new Float(r2.getRank());
+             							rank2 = r2.getRank();
              							ranks.put( r2, rank2 );
              						}
              						
@@ -1120,7 +1096,7 @@ MetaSearchImpl
              			
              		}else{
              			
-             			return( results.toArray( new Result[ results.size()] ));
+             			return( results.toArray(new Result[0]));
              		}
              	}
 				
@@ -1172,11 +1148,11 @@ MetaSearchImpl
 		}
 		
 		log( "Search: engines=" + engines_str );
-		
-		for (int i=0;i<engines.length;i++){
-			
-			se.search( engines[i], searchParameters, headers, max_results_per_engine );
-		}
+
+        for (Engine engine : engines) {
+
+            se.search(engine, searchParameters, headers, max_results_per_engine);
+        }
 		
 		return( engines );
 	}
@@ -1240,23 +1216,21 @@ MetaSearchImpl
 			List<Map<String,Object>>	l_engines = (List<Map<String,Object>>)map.get( "engines" );
 			
 			if( l_engines != null ){
-				
-				for (int i=0;i<l_engines.size();i++){
-					
-					Map<String,Object>	m = (Map<String,Object>)l_engines.get(i);
-					
-					try{
-						Engine e = importFromBEncodedMap( m );
-						
-						addEngine( (EngineImpl)e, true );
-						
-						log( "    loaded " + e.getString());
-						
-					}catch( Throwable e ){
-						
-						log( "Failed to import engine from " + m, e );
-					}
-				}
+
+                for (Map<String, Object> m : l_engines) {
+
+                    try {
+                        Engine e = importFromBEncodedMap(m);
+
+                        addEngine((EngineImpl) e, true);
+
+                        log("    loaded " + e.getString());
+
+                    } catch (Throwable e) {
+
+                        log("Failed to import engine from " + m, e);
+                    }
+                }
 			}
 			
 			Map<String,Long>	p_map = (Map<String,Long>)map.get( "plugin_map" );
@@ -1315,27 +1289,23 @@ MetaSearchImpl
 			
 			config_dirty = false;
 			
-			Map<String,Object> map = new HashMap<String, Object>();
+			Map<String,Object> map = new HashMap<>();
 			
-			List<Map<String,Object>>	l_engines = new ArrayList<Map<String,Object>>();
+			List<Map<String,Object>>	l_engines = new ArrayList<>();
 			
 			map.put( "engines", l_engines );
-			
-			Iterator<EngineImpl>	it = engines.iterator();
-			
-			while( it.hasNext()){
-				
-				Engine e = it.next();
-			
-				try{
-					
-					l_engines.add( e.exportToBencodedMap());
-					
-				}catch( Throwable f ){
-					
-					log( "Failed to export engine " + e.getName(), f );
-				}
-			}
+
+            for (Engine e : engines) {
+
+                try {
+
+                    l_engines.add(e.exportToBencodedMap());
+
+                } catch (Throwable f) {
+
+                    log("Failed to export engine " + e.getName(), f);
+                }
+            }
 			
 			if ( plugin_map != null ){
 				
@@ -1365,13 +1335,10 @@ MetaSearchImpl
 	generate(
 		IndentWriter		writer )
 	{
-		Iterator<EngineImpl> it = engines.iterator();
-		
-		while( it.hasNext()){
-				
-			EngineImpl	e = it.next();
-			
-			writer.println( e.getString( true ));
-		}	
+
+        for (EngineImpl e : engines) {
+
+            writer.println(e.getString(true));
+        }
 	}
 }

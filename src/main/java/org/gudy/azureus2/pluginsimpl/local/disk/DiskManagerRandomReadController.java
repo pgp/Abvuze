@@ -56,7 +56,7 @@ import com.aelitis.azureus.core.peermanager.piecepicker.PiecePicker;
 public class 
 DiskManagerRandomReadController 
 {
-	private static Map<DownloadImpl, DiskManagerRandomReadController>	controller_map = new HashMap<DownloadImpl, DiskManagerRandomReadController>();
+	private static Map<DownloadImpl, DiskManagerRandomReadController>	controller_map = new HashMap<>();
 	
 	public static DiskManagerRandomReadRequest
 	createRequest(
@@ -98,7 +98,7 @@ DiskManagerRandomReadController
 	
 	private DownloadImpl		download;
 	
-	private List<DiskManagerRandomReadRequestImpl>	requests = new ArrayList<DiskManagerRandomReadRequestImpl>();
+	private List<DiskManagerRandomReadRequestImpl>	requests = new ArrayList<>();
 	
 	private AsyncDispatcher	dispatcher = new AsyncDispatcher( "dm_rand_reads");
 	

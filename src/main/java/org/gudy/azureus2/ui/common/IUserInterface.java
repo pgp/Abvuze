@@ -32,22 +32,22 @@ public interface IUserInterface {
    * @param first This UI Instance is the first on the command line and should take control of singular stuff (LocaleUtil and torrents added via Command Line).
    * @param others Indicates wether other UIs run along.
    */
-  public void init(boolean first, boolean others);
+  void init(boolean first, boolean others);
   /** Process UI specific command line arguments.
    * @return Unprocessed Args
    */
-  public String[] processArgs(String[] args);
+  String[] processArgs(String[] args);
   /** Start the UI.
    * Now the GlobalManager is initialized.
    */
-  public void startUI();
+  void startUI();
   /** Determine if the UI is already started
    * You usually don't need to override this from UITemplate
    */
-  public boolean isStarted();
+  boolean isStarted();
   /** Open a torrent file.
    * This is for torrents passed in the command line. Only called for the first UI.
    */
-  public void openTorrent(final String fileName);
+  void openTorrent(final String fileName);
   
 }

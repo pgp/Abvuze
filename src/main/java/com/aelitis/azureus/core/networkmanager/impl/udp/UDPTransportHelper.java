@@ -227,11 +227,11 @@ UDPTransportHelper
 			}else{
 				
 				int	queued = 0;
-				
-				for ( int i=0;i<pending_partial_writes.length;i++){
-					
-					queued += pending_partial_writes[i].remaining();
-				}
+
+                for (ByteBuffer pending_partial_write : pending_partial_writes) {
+
+                    queued += pending_partial_write.remaining();
+                }
 				
 				if ( queued + buffer_rem <= UDPConnectionSet.MAX_BUFFERED_PAYLOAD ){
 					

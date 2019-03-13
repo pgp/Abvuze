@@ -197,7 +197,7 @@ public class DownloadManagerDefaultPaths extends DownloadManagerMoveHandlerUtils
     		return( def_mi );
     	}
     	
-    	List<Tag>	applicable_tags = new ArrayList<Tag>();
+    	List<Tag>	applicable_tags = new ArrayList<>();
     	
     	for ( Tag tag: dm_tags ){
     		
@@ -320,8 +320,8 @@ public class DownloadManagerDefaultPaths extends DownloadManagerMoveHandlerUtils
 		return( def_mi );
     }
     
-    private static interface ContextDescriptor {
-    	public String getContext(); 
+    private interface ContextDescriptor {
+    	String getContext();
     }
     
     private static String normaliseRelativePathPart(String name) {
@@ -372,14 +372,14 @@ public class DownloadManagerDefaultPaths extends DownloadManagerMoveHandlerUtils
 		List results = new ArrayList();
 		File location = null;
 		TargetSpecification ts = null;
-		for (int i=0; i<DEFAULT_DIRS.length; i++) {
-			ts = DEFAULT_DIRS[i];
-			File[] targets = ts.getTargets(null, ts);
-			if (targets[0] != null) {
-				results.add(targets[0]);
-			}
-		}
-		return (File[])results.toArray(new File[results.size()]);
+        for (TargetSpecification defaultDir : DEFAULT_DIRS) {
+            ts = defaultDir;
+            File[] targets = ts.getTargets(null, ts);
+            if (targets[0] != null) {
+                results.add(targets[0]);
+            }
+        }
+		return (File[])results.toArray(new File[0]);
 	}
 
 
@@ -438,12 +438,12 @@ public class DownloadManagerDefaultPaths extends DownloadManagerMoveHandlerUtils
 		protected boolean getBoolean(String key, boolean def) {
 			Object result = this.settings.get(key);
 			if (result == null) {return( def );}
-			if (result instanceof Boolean) {return ((Boolean)result).booleanValue();}
+			if (result instanceof Boolean) {return (Boolean) result;}
             return COConfigurationManager.getBooleanParameter((String)result);
         }
 
         protected void setBoolean(String key, boolean value) {
-        	settings.put(key, Boolean.valueOf(value));
+        	settings.put(key, value);
         }
 
         protected void setBoolean(String key, String param) {
@@ -516,14 +516,17 @@ public class DownloadManagerDefaultPaths extends DownloadManagerMoveHandlerUtils
 		public boolean checkDefaultDir(File location, File[] default_dirs) {
 			location = FileUtil.canonise(location);
 			boolean subdir = this.getBoolean("default subdir", false);
-			for (int i=0; i<default_dirs.length; i++) {
-				if (subdir) {
-					if (FileUtil.isAncestorOf(default_dirs[i], location)) {return true;}
-				}
-				else {
-					if (default_dirs[i].equals(location)) {return true;}
-				}
-			}
+            for (File default_dir : default_dirs) {
+                if (subdir) {
+                    if (FileUtil.isAncestorOf(default_dir, location)) {
+                        return true;
+                    }
+                } else {
+                    if (default_dir.equals(location)) {
+                        return true;
+                    }
+                }
+            }
 			return false;
 		}
 		

@@ -24,18 +24,18 @@ import com.aelitis.net.upnp.UPnPListener;
 public interface 
 NatPMPUPnP 
 {
-	public void
+	void
 	setEnabled(
-		boolean	enabled );
+            boolean enabled);
 	
-	public boolean
+	boolean
 	isEnabled();
 
-	public void
+	void
 	addListener(
-		UPnPListener	listener );
+            UPnPListener listener);
 	
-	public void
+	void
 	removeListener(
-		UPnPListener	listener );
+            UPnPListener listener);
 }

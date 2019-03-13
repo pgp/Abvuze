@@ -22,6 +22,7 @@ package org.gudy.azureus2.core3.util;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 public class 
 RARTOCDecoder 
@@ -197,7 +198,7 @@ RARTOCDecoder
 					
 					if ( zero_pos == -1 ){
 						
-						decoded_name =  new String( name, "UTF-8" );
+						decoded_name =  new String( name, StandardCharsets.UTF_8);
 						
 					}else{
 					
@@ -205,12 +206,12 @@ RARTOCDecoder
 						
 						if ( decoded_name == null ){
 						
-							decoded_name =  new String( name, 0, zero_pos , "UTF-8" );
+							decoded_name =  new String( name, 0, zero_pos , StandardCharsets.UTF_8);
 						}
 					}
 				}else{
 					
-					decoded_name =  new String( name, "UTF-8" );
+					decoded_name =  new String( name, StandardCharsets.UTF_8);
 				}
 				
 				if ( ( entry_flags & 0xe0 ) == 0xe0 ){
@@ -322,7 +323,7 @@ RARTOCDecoder
 				temp[i*2+1] = (byte)(( NameW[i] ) & 0xff);
 			}
 	
-			return( new String( temp, "UTF-16BE" ));
+			return( new String( temp, StandardCharsets.UTF_16BE));
 			
 		}catch( Throwable e ){
 			
@@ -346,34 +347,34 @@ RARTOCDecoder
 	public interface
 	TOCResultHandler
 	{
-		public void
+		void
 		entryRead(
-			String		name,
-			long		size,
-			boolean		password )
+                String name,
+                long size,
+                boolean password)
 		
 			throws IOException;
 		
-		public void
+		void
 		complete();
 		
-		public void
+		void
 		failed(
-			IOException error );
+                IOException error);
 	}
 	
 	public interface
 	DataProvider
 	{
-		public int
+		int
 		read(
-			byte[]		buffer )
+                byte[] buffer)
 		
 			throws IOException;
 		
-		public void
+		void
 		skip(
-			long		bytes )
+                long bytes)
 		
 			throws IOException;
 	}

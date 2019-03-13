@@ -99,9 +99,9 @@ public class ExternalUIConst {
         parameterlegacy.put("Tracker_Password","Tracker Password");
 
         int[] logComponents = { 0, 1, 2, 4 };
-        for (int i = 0; i < logComponents.length; i++)
+        for (int logComponent : logComponents)
             for (int j = 0; j <= 3; j++)
-                parameterlegacy.put("Logger_bLog" + logComponents[i] + "-" + j,"bLog" + logComponents[i] + "-" + j);
+                parameterlegacy.put("Logger_bLog" + logComponent + "-" + j, "bLog" + logComponent + "-" + j);
     }
 
     public static void registerDefaults() {
@@ -114,43 +114,43 @@ public class ExternalUIConst {
             // IP to bind to
             def.put("Server_sBindIP", "");
             // Port the server runs on
-            def.put("Server_iPort", new Long(8088));
+            def.put("Server_iPort", 8088L);
             // Connection Timeout in seconds.
-            def.put("Server_iTimeout", new Long(10));
+            def.put("Server_iTimeout", 10L);
             // Path to the html templates.
             def.put("Server_sTemplate_Directory", SystemProperties.getUserPath()+"template");
             // Maximal simultaneous connections
-            def.put("Server_iMaxHTTPConnections", new Long(5));
+            def.put("Server_iMaxHTTPConnections", 5L);
             // Auto-refresh torrents every (seconds, 0 = off);
-            def.put("Server_iRefresh", new Long(20));
+            def.put("Server_iRefresh", 20L);
             // Allowed static ips (space separated list)
             def.put("Server_sAllowStatic", "127.0.0.1");
             // Allowed dynamic hosts (space separated list)
             def.put("Server_sAllowDynamic", "");
             // Recheck dynamic hosts every (minutes)
-            def.put("Server_iRecheckDynamic", new Long(30));
+            def.put("Server_iRecheckDynamic", 30L);
             // Be not JavaScript-dependant
-            def.put("Server_bNoJavaScript", new Long(0));
+            def.put("Server_bNoJavaScript", 0L);
 
             // Relevant for the proxy part
             // Fake hostname to access the webinterface when used in proxy mode
             def.put("Server_sAccessHost", "torrent");
             // Enable Cookies
-            def.put("Server_bProxyEnableCookies", new Long(1));
+            def.put("Server_bProxyEnableCookies", 1L);
             // Block certain URLs
-            def.put("Server_bProxyBlockURLs", new Long(0));
+            def.put("Server_bProxyBlockURLs", 0L);
             // Filter HTTP Headers (Referer and User Agent)
-            def.put("Server_bProxyFilterHTTP", new Long(0));
+            def.put("Server_bProxyFilterHTTP", 0L);
             // User agent for outgoing connections
             def.put("Server_sProxyUserAgent", "Mozilla/4.0 (compatible; MSIE 4.0; WindowsNT 5.0)");
             // Use a downstream proxy
-            def.put("Server_bUseDownstreamProxy", new Long(0));
+            def.put("Server_bUseDownstreamProxy", 0L);
             // Server Host Name
             def.put("Server_sDownstreamProxyHost", "127.0.0.1");
             // Port of a downstream proxy
-            def.put("Server_iDownstreamProxyPort", new Long(0));
+            def.put("Server_iDownstreamProxyPort", 0L);
             // Grab Torrents in Proxy mode
-            def.put("Server_bProxyGrabTorrents", new Long(1));
+            def.put("Server_bProxyGrabTorrents", 1L);
             // Page to redirect to if torrent download was successful
             def.put("Server_sProxySuccessRedirect", "torrents");
 
@@ -167,15 +167,15 @@ public class ExternalUIConst {
             //   10001 Thread (SLevel)
             //   10000 Debug
             // Log to file
-            def.put("Server_bLogFile", new Long(0));
+            def.put("Server_bLogFile", 0L);
             // Logfile
             def.put("Server_sLogFile", SystemProperties.getUserPath()+"webinterface.log");
             // Log Level for web interface
-            def.put("Server_iLogLevelWebinterface", new Long(20000));
+            def.put("Server_iLogLevelWebinterface", 20000L);
             // Log Level for core
-            def.put("Server_iLogLevelCore", new Long(20000));
+            def.put("Server_iLogLevelCore", 20000L);
             // Number of remembered log entries
-            def.put("Server_iLogCount", new Long(200));
+            def.put("Server_iLogCount", 200L);
             COConfigurationManager.registerExternalDefaults(def);
         }
     }

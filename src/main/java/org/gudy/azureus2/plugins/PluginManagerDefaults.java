@@ -29,29 +29,29 @@ PluginManagerDefaults
 {
 			// if default plugins get removed then set their id to -1!
 	
-	public static final String	PID_START_STOP_RULES		= "Start/Stop Rules";
-	public static final String	PID_REMOVE_RULES			= "Torrent Removal Rules";
-	public static final String	PID_SHARE_HOSTER			= "Share Hoster";
-	public static final String	PID_DEFAULT_TRACKER_WEB		= "Default Tracker Web";
+	String	PID_START_STOP_RULES		= "Start/Stop Rules";
+	String	PID_REMOVE_RULES			= "Torrent Removal Rules";
+	String	PID_SHARE_HOSTER			= "Share Hoster";
+	String	PID_DEFAULT_TRACKER_WEB		= "Default Tracker Web";
 	//public static final String	PID_UPDATE_LANGUAGE			= "Update Language";
-	public static final String	PID_PLUGIN_UPDATE_CHECKER	= "Plugin Update Checker";
-	public static final String	PID_CORE_UPDATE_CHECKER		= "Core Update Checker";
-	public static final String	PID_CORE_PATCH_CHECKER		= "Core Patch Checker";
-	public static final String	PID_PLATFORM_CHECKER		= "Platform Checker";
-	public static final String	PID_UPNP					= "UPnP";
+    String	PID_PLUGIN_UPDATE_CHECKER	= "Plugin Update Checker";
+	String	PID_CORE_UPDATE_CHECKER		= "Core Update Checker";
+	String	PID_CORE_PATCH_CHECKER		= "Core Patch Checker";
+	String	PID_PLATFORM_CHECKER		= "Platform Checker";
+	String	PID_UPNP					= "UPnP";
 	//public static final String	PID_CLIENT_ID				= "Client ID";
-	public static final String	PID_DHT						= "DHT";
-	public static final String	PID_DHT_TRACKER				= "DHT Tracker";
-	public static final String	PID_MAGNET					= "Magnet URI Handler";
+    String	PID_DHT						= "DHT";
+	String	PID_DHT_TRACKER				= "DHT Tracker";
+	String	PID_MAGNET					= "Magnet URI Handler";
 	//public static final String	PID_JPC						= "JPC";
-	public static final String	PID_EXTERNAL_SEED			= "External Seed";
-	public static final String	PID_LOCAL_TRACKER			= "Local Tracker";
-	public static final String	PID_TRACKER_PEER_AUTH		= "Tracker Peer Auth";
-	public static final String	PID_NET_STATUS				= "Network Status";
-	public static final String	PID_BUDDY					= "Buddy";
-	public static final String	PID_RSS						= "RSS";
+    String	PID_EXTERNAL_SEED			= "External Seed";
+	String	PID_LOCAL_TRACKER			= "Local Tracker";
+	String	PID_TRACKER_PEER_AUTH		= "Tracker Peer Auth";
+	String	PID_NET_STATUS				= "Network Status";
+	String	PID_BUDDY					= "Buddy";
+	String	PID_RSS						= "RSS";
 	
-	public static final String[] PLUGIN_IDS = {
+	String[] PLUGIN_IDS = {
 			
 			PID_START_STOP_RULES,
 			PID_REMOVE_RULES,
@@ -75,58 +75,58 @@ PluginManagerDefaults
 			PID_RSS,
 		};
 	
-	public String[]
+	String[]
 	getDefaultPlugins();
 	
 		/**
 		 * by default all default plugins are enabled. This methods allows them to be disabled
 		 * @param plugin_id
 		 */
-	
-	public void
+
+        void
 	setDefaultPluginEnabled(
-		String		plugin_id,
-		boolean		enabled );
+                String plugin_id,
+                boolean enabled);
 		
-	public boolean
+	boolean
 	isDefaultPluginEnabled(
-		String		plugin_id );
+            String plugin_id);
 	
 		/**
 		 * Set the name of the application, default is "Azureus", and an identifier for it, default is "az"
 		 * default for entry point is the SWT UI
 		 * @param name
 		 */
-	
-	public void
+
+        void
 	setApplicationName(
-		String		name );
+                String name);
 	
-	public String
+	String
 	getApplicationName();
 	
-	public void
+	void
 	setApplicationIdentifier(
-		String		identifier );
+            String identifier);
 	
-	public String
+	String
 	getApplicationIdentifier();
 	
-	public void
+	void
 	setApplicationEntryPoint(
-		String		entry_point );
+            String entry_point);
 	
-	public String
+	String
 	getApplicationEntryPoint();
 	
-	public void
+	void
 	setSingleInstanceHandler(
-		int									single_instance_port,
-		PluginManagerArgumentHandler		handler );
+            int single_instance_port,
+            PluginManagerArgumentHandler handler);
 	
-	public boolean
+	boolean
 	setSingleInstanceHandlerAndProcess(
-		int									single_instance_port,
-		PluginManagerArgumentHandler		handler,
-		String[]							args );
+            int single_instance_port,
+            PluginManagerArgumentHandler handler,
+            String[] args);
 }

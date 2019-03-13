@@ -24,6 +24,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.Signature;
 import java.security.interfaces.RSAPublicKey;
@@ -61,82 +62,74 @@ AEVerifier
 	
 		throws AEVerifierException, Exception
 	{
-		ZipInputStream	zis = null;
-		
-		try{
-			zis = new ZipInputStream( 
-					new BufferedInputStream( new FileInputStream( file ) ));
-				
-			byte[]		signature	= null;
-			
-			Signature	sig = Signature.getInstance("MD5withRSA" );
 
-			sig.initVerify( key );
-			
-			while( true ){
-				
-				ZipEntry	entry = zis.getNextEntry();
-					
-				if ( entry == null ){
-					
+		try (ZipInputStream zis = new ZipInputStream(
+				new BufferedInputStream(new FileInputStream(file)))) {
+
+			byte[] signature = null;
+
+			Signature sig = Signature.getInstance("MD5withRSA");
+
+			sig.initVerify(key);
+
+			while (true) {
+
+				ZipEntry entry = zis.getNextEntry();
+
+				if (entry == null) {
+
 					break;
 				}
-			
-				if ( entry.isDirectory()){
-					
+
+				if (entry.isDirectory()) {
+
 					continue;
 				}
-				
-				String	name = entry.getName();
-			
-				ByteArrayOutputStream	output = null;
-				
-				if ( name.equalsIgnoreCase("azureus.sig")){
-					
-					output	= new ByteArrayOutputStream();
+
+				String name = entry.getName();
+
+				ByteArrayOutputStream output = null;
+
+				if (name.equalsIgnoreCase("azureus.sig")) {
+
+					output = new ByteArrayOutputStream();
 				}
-												
-				byte[]	buffer = new byte[65536];
-				
-				while( true ){
-				
-					int	len = zis.read( buffer );
-					
-					if ( len <= 0 ){
-						
+
+				byte[] buffer = new byte[65536];
+
+				while (true) {
+
+					int len = zis.read(buffer);
+
+					if (len <= 0) {
+
 						break;
 					}
-					
-					if ( output == null ){
-						
-						sig.update( buffer, 0, len );
-						
-					}else{
-						
-						output.write( buffer, 0, len );
+
+					if (output == null) {
+
+						sig.update(buffer, 0, len);
+
+					} else {
+
+						output.write(buffer, 0, len);
 					}
 				}
-				
-				if ( output != null ){
-					
+
+				if (output != null) {
+
 					signature = output.toByteArray();
 				}
 			}
-						
-			if ( signature == null ){
-								
-				throw( new AEVerifierException( AEVerifierException.FT_SIGNATURE_MISSING, "Signature missing from file" ));
+
+			if (signature == null) {
+
+				throw (new AEVerifierException(AEVerifierException.FT_SIGNATURE_MISSING, "Signature missing from file"));
 			}
-			
-			if ( !sig.verify( signature )){
-				
-				throw( new AEVerifierException( AEVerifierException.FT_SIGNATURE_BAD, "Signature doesn't match data" ));
-			}
-		}finally{
-			
-			if ( zis != null ){
-				
-				zis.close();
+
+			if (!sig.verify(signature)) {
+
+				throw (new AEVerifierException(AEVerifierException.FT_SIGNATURE_BAD, "Signature doesn't match data"));
 			}
 		}
 	}
@@ -159,7 +152,7 @@ AEVerifier
 
 		sig.initVerify( public_key );
 		
-		sig.update( data.getBytes( "UTF-8" ));
+		sig.update( data.getBytes(StandardCharsets.UTF_8));
 			
 		if ( !sig.verify( signature )){
 			

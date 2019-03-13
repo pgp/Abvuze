@@ -36,8 +36,8 @@ IPFilter
 		 * Gets the file name used for persistent ranges
 		 * @return
 		 */
-	
-	public File
+
+        File
 	getFile();
 
 		/**
@@ -46,19 +46,19 @@ IPFilter
 		 * @param this_session_only	// not persisted if "this_session_only" is true
 		 * @return
 		 */
-	
-	public IPRange
+
+        IPRange
 	createRange(
-		boolean this_session_only );
+                boolean this_session_only);
 	
 		/**
 		 * Adds a range. Only ranges created with "create" above can be added
 		 * @param range
 		 */
-	
-	public void
+
+        void
 	addRange(
-		IPRange		range );
+                IPRange range);
 	
 		/**
 		 * Creates, validates and adds a range
@@ -68,29 +68,29 @@ IPFilter
 		 * @param this_session_only	not persisted if true
 		 * @return new range or null if invalid
 		 */
-	
-	public IPRange
+
+        IPRange
 	createAndAddRange(
-		String		description,
-		String		start_ip,
-		String		end_ip,
-		boolean		this_session_only );
+                String description,
+                String start_ip,
+                String end_ip,
+                boolean this_session_only);
 	
 	/**
 	 * Remove a range
 	 * @param range
 	 */
 
-	public void
+    void
 	removeRange(
-		IPRange		range );
+            IPRange range);
 	
 		/**
 		 * Reloads the ip filter from the config file (obtainable using "getFile")
 		 * @throws IPFilterException
 		 */
-	
-	public void
+
+        void
 	reload()
 	
 		throws IPFilterException;
@@ -99,16 +99,16 @@ IPFilter
 		 * Gets the current set of defined IP ranges
 		 * @return
 		 */
-	
-	public IPRange[]
+
+        IPRange[]
 	getRanges();
 
 		/**
 		 * returns length of ranges list
 		 * @return
 		 */
-	
-	public int
+
+        int
 	getNumberOfRanges();
 	
 		/**
@@ -116,35 +116,35 @@ IPFilter
 		 * @param IPAddress
 		 * @return
 		 */
-	
-	public boolean 
+
+        boolean
 	isInRange(
-		String IPAddress );
+                String IPAddress);
 	
 		/**
 		 * Gets the current list of blocked addresses
 		 * @return
 		 */
-	
-	public IPBlocked[]
+
+        IPBlocked[]
 	getBlockedIPs();
 	
 		/**
 		 * returns length of blocked ip list
 		 * @return
 		 */
-	
-	public int
+
+        int
 	getNumberOfBlockedIPs();
 	
 		/**
 		 * Explicitly blocks an address
 		 * @param IPAddress
 		 */
-	
-	public void 
+
+        void
 	block(
-		String IPAddress);
+                String IPAddress);
 	
 	/**
 	 * Gets the current list of b addresses
@@ -152,7 +152,7 @@ IPFilter
 	 * @return
 	 */
 
-	public IPBanned[]
+    IPBanned[]
 	getBannedIPs();
 
 	/**
@@ -161,7 +161,7 @@ IPFilter
 	 * @return
 	 */
 
-	public int
+    int
     getNumberOfBannedIPs();	
 	
 	/**
@@ -170,10 +170,10 @@ IPFilter
 	 * @since 2.5.0.2
 	 */
 
-	public void 
+    void
     ban(
-	    String IPAddress,
-	    String text);
+            String IPAddress,
+            String text);
 	
 	/**
 	 * Removes a ban on an address
@@ -181,51 +181,51 @@ IPFilter
 	 * @since 2.5.0.2
 	 */
 
-	public void 
+    void
     unban(
-	    String IPAddress);
+            String IPAddress);
 	
 		/**
 		 * The filter either allows defined ranges to be allowed or denied access
 		 * @return
 		 */
-	
-	public boolean
+
+        boolean
 	getInRangeAddressesAreAllowed();
 
 		/**
 		 * Set the behaviour of the filter to either allow or deny access for defined ranges
 		 * @param b
 		 */
-	
-	public void
+
+        void
 	setInRangeAddressesAreAllowed(
-		boolean	b );
+                boolean b);
 
 	
 		/**
 		 * Test if ipfilter is enabled or not
 		 * @return
 		 */
-	
-	public boolean
+
+        boolean
 	isEnabled();
 	
 		/**
 		 * change the enabled status
 		 * @param enabled
 		 */
-	
-	public void
+
+        void
 	setEnabled(
-		boolean	enabled );
+                boolean enabled);
 	
 		/**
 		 * saves current setting to file given by getFile
 		 * @throws IPFilterException
 		 */
-	
-	public void
+
+        void
 	save()
 	
 		throws IPFilterException;
@@ -234,15 +234,15 @@ IPFilter
 		 * Marks the IPFilter set as being uptodate
 		 *
 		 */
-	
-	public void
+
+        void
 	markAsUpToDate();
 	
 		/**
 		 * Gets the last time the filter set was updated or marked as up to date
 		 * @return
 		 */
-	
-	public long
+
+        long
 	getLastUpdateTime();
 }

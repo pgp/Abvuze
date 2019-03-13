@@ -27,36 +27,36 @@ package com.aelitis.azureus.core.dht.transport;
 public interface 
 DHTTransportValue 
 {
-	public boolean
+	boolean
 	isLocal();
 	
-	public long
+	long
 	getCreationTime();
 	
-	public byte[]
+	byte[]
 	getValue();
 	
-	public int
+	int
 	getVersion();
 	
-	public DHTTransportContact
+	DHTTransportContact
 	getOriginator();
 	
-	public int
+	int
 	getFlags();
 	
-	public int
+	int
 	getLifeTimeHours();
 	
-	public byte
+	byte
 	getReplicationControl();
 	
-	public byte
+	byte
 	getReplicationFactor();
 
-	public byte
+	byte
 	getReplicationFrequencyHours();
 
-	public String
+	String
 	getString();
 }

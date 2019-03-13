@@ -57,12 +57,12 @@ AEProxyAddressMapperImpl
 	protected String	prefix;
 	protected long		next_value;
 	
-	protected final Map<String,String>		map			= new HashMap<String,String>();
-	protected final Map<String,String>		reverse_map	= new HashMap<String,String>();
+	protected final Map<String,String>		map			= new HashMap<>();
+	protected final Map<String,String>		reverse_map	= new HashMap<>();
 	
 	protected final AEMonitor	this_mon	= new AEMonitor( "AEProxyAddressMapper" );
 		
-	final Map<Integer,PortMappingImpl>	port_mappings = new HashMap<Integer,PortMappingImpl>();
+	final Map<Integer,PortMappingImpl>	port_mappings = new HashMap<>();
 	
 	protected
 	AEProxyAddressMapperImpl()

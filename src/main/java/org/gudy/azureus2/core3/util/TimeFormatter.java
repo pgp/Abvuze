@@ -22,8 +22,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import org.gudy.azureus2.core3.config.COConfigurationListener;
-import org.gudy.azureus2.core3.config.COConfigurationManager;
 import org.gudy.azureus2.core3.internat.MessageText;
 import org.gudy.azureus2.core3.internat.MessageText.MessageTextListener;
 
@@ -334,7 +332,7 @@ public class TimeFormatter {
     	
     	nanos = nanos - ((nanos/truncator) * truncator);
     	
-    	return( String.valueOf(((double)nanos)/1000000) + " ms" );
+    	return(((double) nanos) / 1000000 + " ms" );
     }
     
     public static String

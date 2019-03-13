@@ -41,36 +41,36 @@ public interface MenuManager {
 	 * 
 	 * @see org.gudy.azureus2.plugins.local.ui.tables.TableManager TableManager
 	 */
-	public static final String MENU_TABLE = "table";
+    String MENU_TABLE = "table";
 	
 	/**
 	 * The menu used for the system tray icon.
 	 */
-	public static final String MENU_SYSTRAY = "systray";
+    String MENU_SYSTRAY = "systray";
 	
 	/**
 	 * The menu used on download bars.
 	 */
-	public static final String MENU_DOWNLOAD_BAR = "downloadbar";
+    String MENU_DOWNLOAD_BAR = "downloadbar";
 	
 	/**
 	 * The "Plugins" menu on the menu bar.
 	 */
-	public static final String MENU_MENUBAR = "mainmenu";
+    String MENU_MENUBAR = "mainmenu";
 	
 	/**
 	 * The "transfers bar". 
 	 * 
 	 * @since 3.0.1.3
 	 */
-	public static final String MENU_TRANSFERSBAR = "transfersbar";
+    String MENU_TRANSFERSBAR = "transfersbar";
 	
 	/**
 	 * The "Torrents" menu.
 	 * 
 	 * @since 3.0.2
 	 */
-	public static final String MENU_TORRENT_MENU = "torrentmenu";
+    String MENU_TORRENT_MENU = "torrentmenu";
 	
 	/**
 	 * All menus which are {@link Download} specific, such as download bars, the
@@ -81,7 +81,7 @@ public interface MenuManager {
 	 * 
 	 * @since 3.0.2
 	 */
-	public static final String MENU_DOWNLOAD_CONTEXT = "download_context";
+    String MENU_DOWNLOAD_CONTEXT = "download_context";
 
 	/**
 	 * All menus which are {@link DiskManagerFileInfo} specific, such as the
@@ -92,13 +92,13 @@ public interface MenuManager {
 	 * 
 	 * @since 5.6
 	 */
-	public static final String MENU_FILE_CONTEXT = "file_context";
+    String MENU_FILE_CONTEXT = "file_context";
 
 
 	/**
 	 * @since 5.6
 	 */
-	public static final String MENU_TAG_CONTEXT = "tag_content";
+    String MENU_TAG_CONTEXT = "tag_content";
 
 	/**
 	 * Creates a menu item for the appropriate menu.
@@ -110,7 +110,7 @@ public interface MenuManager {
 	 *                     textual name from the plugin language file.
 	 * @return The newly created menu item.
 	 */
-    public MenuItem addMenuItem(String menuID, String resource_key);
+    MenuItem addMenuItem(String menuID, String resource_key);
     
     /**
      * Creates a menu item in a particular context. {@link MenuContext}
@@ -130,7 +130,7 @@ public interface MenuManager {
 	 * @return The newly created menu item.
 	 * @since 3.0.5.3
      */
-    public MenuItem addMenuItem(MenuContext context, String resource_key);
+    MenuItem addMenuItem(MenuContext context, String resource_key);
     
     /**
      * Creates a menu item as a sub-item of the given menu item.
@@ -143,5 +143,5 @@ public interface MenuManager {
 	 *                     textual name from the plugin language file.
 	 * @return The newly created menu item.
      */
-    public MenuItem addMenuItem(MenuItem parent, String resource_key);
+    MenuItem addMenuItem(MenuItem parent, String resource_key);
 }

@@ -65,7 +65,7 @@ public class PluginConfigSourceImpl implements COConfigurationListener, Paramete
 		ConfigurationManager config = ConfigurationManager.getInstance(); 
 		while (itr.hasNext()) {
 			entry = (Map.Entry)itr.next();
-			key = this.key_prefix + (String)entry.getKey();
+			key = this.key_prefix + entry.getKey();
 			this.params_monitored.add(key);
 			config.registerTransientParameter(key);
 			config.setParameterRawNoNotify(key, entry.getValue());

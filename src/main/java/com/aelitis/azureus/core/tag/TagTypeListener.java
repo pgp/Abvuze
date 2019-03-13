@@ -26,27 +26,27 @@ TagTypeListener
 		/**
 		 * General change not specific to one tag
 		 */
-	
-	public void
+
+        void
 	tagTypeChanged(
-		TagType		tag_type );
+                TagType tag_type);
 	
-	public void
+	void
 	tagEventOccurred(
-		TagEvent			event );
+            TagEvent event);
 		
-	public interface
+	interface
 	TagEvent
 	{
-		public int ET_TAG_ADDED						= 0;
-		public int ET_TAG_CHANGED					= 1;
-		public int ET_TAG_REMOVED					= 2;
-		public int ET_TAG_ATTENTION_REQUESTED		= 3;
+		int ET_TAG_ADDED						= 0;
+		int ET_TAG_CHANGED					= 1;
+		int ET_TAG_REMOVED					= 2;
+		int ET_TAG_ATTENTION_REQUESTED		= 3;
 		
-		public Tag
+		Tag
 		getTag();
 		
-		public int
+		int
 		getEventType();
 	}
 }

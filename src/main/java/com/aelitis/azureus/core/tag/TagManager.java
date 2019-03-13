@@ -25,69 +25,69 @@ import java.util.List;
 public interface 
 TagManager 
 {
-	public boolean
+	boolean
 	isEnabled();
 	
-	public void
+	void
 	setProcessingEnabled(
-		boolean	enabled );
+            boolean enabled);
 		
-	public TagType
+	TagType
 	getTagType(
-		int			tag_type );
+            int tag_type);
 	
-	public List<TagType>
+	List<TagType>
 	getTagTypes();
 	
-	public List<Tag>
+	List<Tag>
 	getTagsForTaggable(
-		Taggable	taggable );
+            Taggable taggable);
 	
-	public List<Tag>
+	List<Tag>
 	getTagsForTaggable(
-		int			tag_types,
-		Taggable	taggable );
+            int tag_types,
+            Taggable taggable);
 	
-	public void
+	void
 	setTagPublicDefault(
-		boolean	pub );
+            boolean pub);
 	
-	public boolean
+	boolean
 	getTagPublicDefault();
 	
-	public Tag
+	Tag
 	lookupTagByUID(
-		long	tag_uid );
+            long tag_uid);
 	
-	public TaggableLifecycleHandler
+	TaggableLifecycleHandler
 	registerTaggableResolver(
-		TaggableResolver	resolver );
+            TaggableResolver resolver);
 	
-	public void
+	void
 	addTagManagerListener(
-		TagManagerListener		listener,
-		boolean					fire_for_existing );
+            TagManagerListener listener,
+            boolean fire_for_existing);
 	
-	public void
+	void
 	removeTagManagerListener(
-		TagManagerListener		listener );
+            TagManagerListener listener);
 	
-	public void
+	void
 	addTagFeatureListener(
-		int						features,
-		TagFeatureListener		listener );
+            int features,
+            TagFeatureListener listener);
 	
-	public void
+	void
 	removeTagFeatureListener(
-		TagFeatureListener		listener );
+            TagFeatureListener listener);
 	
-	public void
+	void
 	addTaggableLifecycleListener(
-		long						taggable_type,
-		TaggableLifecycleListener	listener );
+            long taggable_type,
+            TaggableLifecycleListener listener);
 	
-	public void
+	void
 	removeTaggableLifecycleListener(
-		long						taggable_type,
-		TaggableLifecycleListener	listener );
+            long taggable_type,
+            TaggableLifecycleListener listener);
 }

@@ -36,7 +36,7 @@ UIComponentImpl
 {
 	protected Properties	properties 	= new Properties();
 	
-	protected CopyOnWriteList<UIPropertyChangeListener>			listeners	= new CopyOnWriteList<UIPropertyChangeListener>();
+	protected CopyOnWriteList<UIPropertyChangeListener>			listeners	= new CopyOnWriteList<>();
 	
 	
 	protected
@@ -50,26 +50,26 @@ UIComponentImpl
 	setEnabled(
 		boolean		enabled )
 	{
-		setProperty( PT_ENABLED, Boolean.valueOf(enabled));
+		setProperty( PT_ENABLED, enabled);
 	}
 	
 	public boolean
 	getEnabled()
 	{
-		return(((Boolean)getProperty( PT_ENABLED )).booleanValue());
+		return((Boolean) getProperty(PT_ENABLED));
 	}
 	
 	public void
 	setVisible(
 		boolean		visible )
 	{
-		setProperty( PT_VISIBLE, Boolean.valueOf(visible));
+		setProperty( PT_VISIBLE, visible);
 	}
 	
 	public boolean
 	getVisible()
 	{
-		return(((Boolean)getProperty( PT_VISIBLE )).booleanValue());
+		return((Boolean) getProperty(PT_VISIBLE));
 	}
 	
 	public void

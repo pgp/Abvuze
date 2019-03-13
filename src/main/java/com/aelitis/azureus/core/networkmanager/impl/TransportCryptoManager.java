@@ -96,18 +96,18 @@ public class TransportCryptoManager {
 	
 	
 	public interface HandshakeListener {
-		public static final int MATCH_NONE						= ProtocolDecoderAdapter.MATCH_NONE;
-		public static final int MATCH_CRYPTO_NO_AUTO_FALLBACK	= ProtocolDecoderAdapter.MATCH_CRYPTO_NO_AUTO_FALLBACK;
-		public static final int MATCH_CRYPTO_AUTO_FALLBACK		= ProtocolDecoderAdapter.MATCH_CRYPTO_AUTO_FALLBACK;
+		int MATCH_NONE						= ProtocolDecoderAdapter.MATCH_NONE;
+		int MATCH_CRYPTO_NO_AUTO_FALLBACK	= ProtocolDecoderAdapter.MATCH_CRYPTO_NO_AUTO_FALLBACK;
+		int MATCH_CRYPTO_AUTO_FALLBACK		= ProtocolDecoderAdapter.MATCH_CRYPTO_AUTO_FALLBACK;
 		
-		public void handshakeSuccess( ProtocolDecoder decoder, ByteBuffer remaining_initial_data );
+		void handshakeSuccess(ProtocolDecoder decoder, ByteBuffer remaining_initial_data);
 
-		public void handshakeFailure( Throwable failure_msg );
+		void handshakeFailure(Throwable failure_msg);
 		
-		public void gotSecret( byte[] session_secret );
+		void gotSecret(byte[] session_secret);
 		
-		public int getMaximumPlainHeaderLength();
+		int getMaximumPlainHeaderLength();
 		
-		public int matchPlainHeader( ByteBuffer buffer );
+		int matchPlainHeader(ByteBuffer buffer);
   }
 }

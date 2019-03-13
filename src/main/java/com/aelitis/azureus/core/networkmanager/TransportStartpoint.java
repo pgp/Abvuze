@@ -23,6 +23,6 @@ package com.aelitis.azureus.core.networkmanager;
 public interface 
 TransportStartpoint 
 {
-	public ProtocolStartpoint
+	ProtocolStartpoint
 	getProtocolStartpoint();
 }

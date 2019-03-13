@@ -23,9 +23,9 @@ package org.gudy.azureus2.core3.util;
 public interface
 AsyncController 
 {
-	public void
+	void
 	setAsyncStart();
 	
-	public void
+	void
 	setAsyncComplete();
 }

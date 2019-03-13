@@ -194,18 +194,18 @@ public abstract class AverageFactory {
    public interface
    LazyMovingImmediateAverageAdapter<T>
    {
-	   public LazyMovingImmediateAverageState
+	   LazyMovingImmediateAverageState
 	   getCurrent(
-			  T	instance );
+               T instance);
 	   
-	   public void
+	   void
 	   setCurrent(
-			  T									instance,
-			  LazyMovingImmediateAverageState	average );
+               T instance,
+               LazyMovingImmediateAverageState average);
 	   
-	   public long
+	   long
 	   getValue(
-			  T		instance );
+               T instance);
    }
    
    public static class

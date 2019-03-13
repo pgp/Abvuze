@@ -52,90 +52,77 @@ outer:
 					
 					return( null );
 				}
-				
-				Socket	sock = null;
-				
-				try{
-					sock = new Socket();
-										
-					sock.connect( new InetSocketAddress( "127.0.0.1", i ), 500 );
-					
-					sock.setSoTimeout( 5000 );
-					
-					PrintWriter	pw = new PrintWriter( sock.getOutputStream());
-					
-					pw.println( "GET " + url + " HTTP/1.1" + NL + NL );
-					
-					pw.flush();
-					
-					InputStream	is = sock.getInputStream();
-					
-					String	header = "";
-					
-					byte[]	buffer = new byte[1];
-	
-					while( true ){
-						
-						int	len = is.read( buffer );
-						
-						if ( len <= 0 ){
-							
-							break outer;
-						}
-						
-						header += new String( buffer, 0, len );
-						
-						if ( header.endsWith( NL + NL )){
-							
-							break;
-						}
-					}
-					
-					int	pos = header.indexOf( NL );
-					
-					String	first_line = header.substring( 0, pos );
-					
-					if (!first_line.contains("200")){
-						
-						continue;
-					}
-					
-					ByteArrayOutputStream baos = new ByteArrayOutputStream(1024);
-					
-					buffer = new byte[2048];
-					
-					while( true ){
-						
-						int	len = is.read( buffer );
-						
-						if ( len <= 0 ){
-							
-							break;
-						}
-	
-						baos.write( buffer, 0, len );
-						
-						if ( baos.size() > 512*1024 ){
-							
-							break outer;
-						}
-					}
-					
-					return( baos.toByteArray());
-					
-				}catch( Throwable e ){
-					
-				}finally{
-					
-					if ( sock != null ){
 
-						try{
-							sock.close();
-							
-						}catch( Throwable e ){
-						}
-					}
-				}
+                try (Socket sock = new Socket()) {
+
+                    sock.connect(new InetSocketAddress("127.0.0.1", i), 500);
+
+                    sock.setSoTimeout(5000);
+
+                    PrintWriter pw = new PrintWriter(sock.getOutputStream());
+
+                    pw.println("GET " + url + " HTTP/1.1" + NL + NL);
+
+                    pw.flush();
+
+                    InputStream is = sock.getInputStream();
+
+                    String header = "";
+
+                    byte[] buffer = new byte[1];
+
+                    while (true) {
+
+                        int len = is.read(buffer);
+
+                        if (len <= 0) {
+
+                            break outer;
+                        }
+
+                        header += new String(buffer, 0, len);
+
+                        if (header.endsWith(NL + NL)) {
+
+                            break;
+                        }
+                    }
+
+                    int pos = header.indexOf(NL);
+
+                    String first_line = header.substring(0, pos);
+
+                    if (!first_line.contains("200")) {
+
+                        continue;
+                    }
+
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream(1024);
+
+                    buffer = new byte[2048];
+
+                    while (true) {
+
+                        int len = is.read(buffer);
+
+                        if (len <= 0) {
+
+                            break;
+                        }
+
+                        baos.write(buffer, 0, len);
+
+                        if (baos.size() > 512 * 1024) {
+
+                            break outer;
+                        }
+                    }
+
+                    return (baos.toByteArray());
+
+                } catch (Throwable e) {
+
+                }
 			}
 		}
 	}

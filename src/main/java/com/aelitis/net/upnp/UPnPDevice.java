@@ -27,42 +27,42 @@ package com.aelitis.net.upnp;
 public interface 
 UPnPDevice 
 {
-	public String
+	String
 	getDeviceType();
 	
-	public String
+	String
 	getFriendlyName();
 	
-	public String
+	String
 	getManufacturer();
 	
-	public String
+	String
 	getManufacturerURL();
 	
-	public String
+	String
 	getModelDescription();
 	
-	public String
+	String
 	getModelName();
 	
-	public String
+	String
 	getModelNumber();
 	
-	public String
+	String
 	getModelURL();
 	
-	public String
+	String
 	getPresentation();
 	
-	public UPnPDevice[]
+	UPnPDevice[]
 	getSubDevices();
 	
-	public UPnPService[]
+	UPnPService[]
 	getServices();
 	
-	public UPnPRootDevice
+	UPnPRootDevice
 	getRootDevice();
 
-	public UPnPDeviceImage[]
+	UPnPDeviceImage[]
 	getImages();
 }

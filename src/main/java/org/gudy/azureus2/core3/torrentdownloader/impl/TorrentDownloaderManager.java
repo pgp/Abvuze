@@ -100,8 +100,7 @@ public class TorrentDownloaderManager implements TorrentDownloaderCallBackInterf
     public void TorrentDownloaderEvent(int state, org.gudy.azureus2.core3.torrentdownloader.TorrentDownloader inf) {
         switch(state) {
             case TorrentDownloader.STATE_START:
-                if (this.queued.contains(inf))
-                    this.queued.remove(inf);
+                this.queued.remove(inf);
                 if (!this.running.contains(inf))
                     this.running.add(inf);
                 break;
@@ -122,10 +121,8 @@ public class TorrentDownloaderManager implements TorrentDownloaderCallBackInterf
 	 * @param inf
 	 */
 	public void remove(TorrentDownloader inf) {
-		if (this.running.contains(inf))
-		    this.running.remove(inf);
-		if (this.queued.contains(inf))
-		    this.queued.remove(inf);
+        this.running.remove(inf);
+        this.queued.remove(inf);
 	}
     
 }

@@ -180,11 +180,11 @@ UPnPActionInvocationImpl
 		UPnPActionArgument[]	res = invoke();
 		
 		Map	map = new HashMap();
-		
-		for (int i=0;i<res.length;i++){
-			
-			map.put( res[i].getName(), res[i].getValue());
-		}
+
+        for (UPnPActionArgument re : res) {
+
+            map.put(re.getName(), re.getValue());
+        }
 		
 		return( map );
 	}

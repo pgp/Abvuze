@@ -24,6 +24,7 @@ package org.gudy.azureus2.core3.torrent.impl;
 
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.gudy.azureus2.core3.internat.*;
@@ -274,13 +275,8 @@ TOTorrentFileImpl
 
 				try {
 					String comp;
-					try {
-						comp =  new String(pathComponentsUTF8[j], "utf8");
-					} catch (UnsupportedEncodingException e) {
-						System.out.println("file - unsupported encoding!!!!");
-						comp = "UnsupportedEncoding";
-					}
-	
+					comp =  new String(pathComponentsUTF8[j], StandardCharsets.UTF_8);
+
 					comp = FileUtil.convertOSSpecificChars(comp, j != pathComponentsUTF8.length-1 );
 	
 					if ( j == 0 ){
@@ -363,7 +359,7 @@ TOTorrentFileImpl
 	public Map serializeToMap() {
 		Map	file_map = new HashMap();
 
-		file_map.put( TOTorrentImpl.TK_LENGTH, new Long( getLength()));
+		file_map.put( TOTorrentImpl.TK_LENGTH, getLength());
 		
 		List path = new ArrayList();
 		
@@ -372,10 +368,7 @@ TOTorrentFileImpl
 		byte[][]	path_comps = getPathComponentsBasic();
 		
 		if (path_comps != null) {
-  		for (int j=0;j<path_comps.length;j++){
-  			
-  			path.add( path_comps[j]);
-  		}
+			path.addAll(Arrays.asList(path_comps));
 		}
 		
 		if (path_comps != null && isUTF8()){
@@ -383,11 +376,8 @@ TOTorrentFileImpl
 			List utf8_path = new ArrayList();
 			
 			file_map.put( TOTorrentImpl.TK_PATH_UTF8, utf8_path );
-								
-			for (int j=0;j<path_comps.length;j++){
-				
-				utf8_path.add( path_comps[j]);
-			}
+
+			utf8_path.addAll(Arrays.asList(path_comps));
 		} else {
 			
 			byte[][]	utf8_path_comps = getPathComponentsUTF8();
@@ -396,25 +386,20 @@ TOTorrentFileImpl
   			List utf8_path = new ArrayList();
   			
   			file_map.put( TOTorrentImpl.TK_PATH_UTF8, utf8_path );
-  								
-  			for (int j=0;j<utf8_path_comps.length;j++){
-  				
-  				utf8_path.add( utf8_path_comps[j]);
-  			}
+
+			utf8_path.addAll(Arrays.asList(utf8_path_comps));
 			}
 		}
 		
 		Map file_additional_properties = getAdditionalProperties();
 		
 		if ( file_additional_properties != null ){
-			
-			Iterator prop_it = file_additional_properties.keySet().iterator();
-			
-			while( prop_it.hasNext()){
-				
-				String	key = (String)prop_it.next();
-				
-				file_map.put( key, file_additional_properties.get( key ));
+
+			for (Object o : file_additional_properties.keySet()) {
+
+				String key = (String) o;
+
+				file_map.put(key, file_additional_properties.get(key));
 			}
 		}
 		

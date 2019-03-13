@@ -63,7 +63,7 @@ Test
 			UPNPMSBrowser browser = 
 				new UPNPMSBrowserImpl( 
 						"Vuze", 
-						Arrays.asList( new URL[]{ new URL( "http://192.168.1.5:2869/upnphost/udhisapi.dll?control=uuid:82aaab53-afaf-4d8f-bdd8-c1e438e7a348+urn:upnp-org:serviceId:ContentDirectory" )}),
+						Arrays.asList(new URL( "http://192.168.1.5:2869/upnphost/udhisapi.dll?control=uuid:82aaab53-afaf-4d8f-bdd8-c1e438e7a348+urn:upnp-org:serviceId:ContentDirectory" )),
 						new UPNPMSBrowserListener()
 						{
 							public void 

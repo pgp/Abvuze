@@ -27,8 +27,8 @@ import org.gudy.azureus2.core3.tracker.server.impl.tcp.TRTrackerServerTCP;
 public interface 
 TRNonBlockingServerProcessorFactory 
 {
-	public TRNonBlockingServerProcessor
-	create(	
-		TRTrackerServerTCP		_server,
-		SocketChannel			_socket );
+	TRNonBlockingServerProcessor
+	create(
+            TRTrackerServerTCP _server,
+            SocketChannel _socket);
 }

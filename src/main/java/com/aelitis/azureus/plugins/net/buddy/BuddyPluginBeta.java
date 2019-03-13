@@ -31,6 +31,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.lang.ref.WeakReference;
 import java.net.InetSocketAddress;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -122,8 +123,8 @@ BuddyPluginBeta
 	
 	private AsyncDispatcher		dispatcher = new AsyncDispatcher( "BuddyPluginBeta" );
 	
-	private Map<String,ChatInstance>		chat_instances_map 	= new HashMap<String, BuddyPluginBeta.ChatInstance>();
-	private CopyOnWriteList<ChatInstance>	chat_instances_list	= new CopyOnWriteList<BuddyPluginBeta.ChatInstance>();
+	private Map<String,ChatInstance>		chat_instances_map 	= new HashMap<>();
+	private CopyOnWriteList<ChatInstance>	chat_instances_list	= new CopyOnWriteList<>();
 	
 	private PluginInterface azmsgsync_pi;
 
@@ -145,11 +146,11 @@ BuddyPluginBeta
 		
 	private Map<String,Map<String,Object>>		opts_map;
 	
-	private CopyOnWriteList<FTUXStateChangeListener>		ftux_listeners = new CopyOnWriteList<FTUXStateChangeListener>();
+	private CopyOnWriteList<FTUXStateChangeListener>		ftux_listeners = new CopyOnWriteList<>();
 	
 	private boolean	ftux_accepted = false;
 	
-	private CopyOnWriteList<ChatManagerListener>		listeners = new CopyOnWriteList<ChatManagerListener>();
+	private CopyOnWriteList<ChatManagerListener>		listeners = new CopyOnWriteList<>();
 	
 	private AtomicInteger		private_chat_id = new AtomicInteger();
 	
@@ -402,7 +403,7 @@ BuddyPluginBeta
 	{
 		synchronized( opts_map ){
 
-			List<String[]>	result = new ArrayList<String[]>();
+			List<String[]>	result = new ArrayList<>();
 
 			for ( Map.Entry<String,Map<String,Object>> entry: opts_map.entrySet()){
 						
@@ -439,7 +440,7 @@ BuddyPluginBeta
 					try{
 						List<String[]>	faves = getFavourites();
 						
-						Set<String>	set = new HashSet<String>();
+						Set<String>	set = new HashSet<>();
 						
 						for ( String[] fave: faves ){
 							
@@ -775,7 +776,7 @@ BuddyPluginBeta
 		String		value )
 	{
 		try{
-			setByteArrayOption( net, key, name, value.getBytes( "UTF-8" ));
+			setByteArrayOption( net, key, name, value.getBytes(StandardCharsets.UTF_8));
 			
 		}catch( Throwable e ){
 			
@@ -794,7 +795,7 @@ BuddyPluginBeta
 		if ( bytes != null ){
 			
 			try{
-				return( new String( bytes, "UTF-8" ));
+				return( new String( bytes, StandardCharsets.UTF_8));
 			
 			}catch( Throwable e ){
 			
@@ -835,7 +836,7 @@ BuddyPluginBeta
 		String	key )
 	{
 		try{
-			return( Base32.encode( key.getBytes( "UTF-8" )));
+			return( Base32.encode( key.getBytes(StandardCharsets.UTF_8)));
 			
 		}catch( Throwable e ){
 			
@@ -850,7 +851,7 @@ BuddyPluginBeta
 		String		key )
 	{
 		try{
-			return( new String( Base32.decode( key ),"UTF-8" ));
+			return( new String( Base32.decode( key ), StandardCharsets.UTF_8));
 			
 		}catch( Throwable e ){
 			
@@ -870,7 +871,7 @@ BuddyPluginBeta
 		
 		synchronized( opts_map ){
 			
-			Map<String,Object>	opts = (Map<String,Object>)opts_map.get( net_key );
+			Map<String,Object>	opts = opts_map.get( net_key );
 			
 			if ( opts == null ){
 					
@@ -893,11 +894,11 @@ BuddyPluginBeta
 		synchronized( opts_map ){
 						
 			try{
-				Map<String,Object>	opts = (Map<String,Object>)opts_map.get( net_key );
+				Map<String,Object>	opts = opts_map.get( net_key );
 				
 				if ( opts == null ){
 				
-					opts = new HashMap<String, Object>();
+					opts = new HashMap<>();
 				
 					opts_map.put( net_key, opts );
 				}
@@ -923,7 +924,7 @@ BuddyPluginBeta
 		synchronized( opts_map ){
 						
 			try{
-				Map<String,Object>	opts = (Map<String,Object>)opts_map.remove( net_key );
+				Map<String,Object>	opts = opts_map.remove( net_key );
 				
 				if ( opts == null ){
 				
@@ -1479,7 +1480,7 @@ BuddyPluginBeta
 			
 			ByteArrayOutputStream baos = new ByteArrayOutputStream( 10*1024 );
 			
-			PrintWriter pw = new PrintWriter( new OutputStreamWriter( baos, "UTF-8" ));
+			PrintWriter pw = new PrintWriter( new OutputStreamWriter( baos, StandardCharsets.UTF_8));
 			
 			pw.println( "<?xml version=\"1.0\" encoding=\"utf-8\"?>" );
 			
@@ -1645,7 +1646,7 @@ BuddyPluginBeta
 	extractLinks(
 		String		str )
 	{
-		List<Map<String,Object>> result = new ArrayList<Map<String,Object>>();
+		List<Map<String,Object>> result = new ArrayList<>();
 		
 		int	len = str.length();
 		
@@ -1715,7 +1716,7 @@ BuddyPluginBeta
 				
 				if ( x != -1 ){
 				
-					Map<String,Object> map = new HashMap<String,Object>();
+					Map<String,Object> map = new HashMap<>();
 					
 						// remove any trailing ui name hack
 					
@@ -1728,7 +1729,7 @@ BuddyPluginBeta
 					
 					map.put( "magnet", magnet );
 					
-					List<String>	trackers = new ArrayList<String>();
+					List<String>	trackers = new ArrayList<>();
 					
 					map.put( "trackers", trackers );
 					
@@ -1744,57 +1745,67 @@ BuddyPluginBeta
 	
 								String	lhs = temp[0].toLowerCase( Locale.US );
 								String	rhs = UrlUtils.decode( temp[1] );
-								
-								if ( lhs.equals( "xt" )){
-									
-									String lc_rhs = rhs.toLowerCase( Locale.US );
-									
-									int p = lc_rhs.indexOf( "btih:" );
-									
-									if ( p >= 0 ){
-										
-										map.put( "hash", lc_rhs.substring( p+5 ).toUpperCase( Locale.US ));
-									}
-									
-								}else if ( lhs.equals( "dn" )){
-									
-									map.put( "title", rhs );
-									
-								}else if ( lhs.equals( "tr" )){
-									
-									trackers.add( rhs );
-									
-								}else if ( lhs.equals( "fl" )){
-									
-									map.put( "link", rhs );
-									
-								}else if ( lhs.equals( "xl" )){
-									
-									long size = Long.parseLong( rhs );
-									
-									map.put( "size", size );
-									
-								}else if ( lhs.equals( "_d" )){
-									
-									long date = Long.parseLong( rhs );
-									
-									map.put( "date", date );
-	
-								}else if ( lhs.equals( "_s" )){
-									
-									long seeds = Long.parseLong( rhs );
-									
-									map.put( "seeds", seeds );
-									
-								}else if ( lhs.equals( "_l" )){
-									
-									long leechers = Long.parseLong( rhs );
-									
-									map.put( "leechers", leechers );
-									
-								}else if ( lhs.equals( "_c" )){
-								
-									map.put( "cdp", rhs );
+
+								switch (lhs) {
+									case "xt":
+
+										String lc_rhs = rhs.toLowerCase(Locale.US);
+
+										int p = lc_rhs.indexOf("btih:");
+
+										if (p >= 0) {
+
+											map.put("hash", lc_rhs.substring(p + 5).toUpperCase(Locale.US));
+										}
+
+										break;
+									case "dn":
+
+										map.put("title", rhs);
+
+										break;
+									case "tr":
+
+										trackers.add(rhs);
+
+										break;
+									case "fl":
+
+										map.put("link", rhs);
+
+										break;
+									case "xl":
+
+										long size = Long.parseLong(rhs);
+
+										map.put("size", size);
+
+										break;
+									case "_d":
+
+										long date = Long.parseLong(rhs);
+
+										map.put("date", date);
+
+										break;
+									case "_s":
+
+										long seeds = Long.parseLong(rhs);
+
+										map.put("seeds", seeds);
+
+										break;
+									case "_l":
+
+										long leechers = Long.parseLong(rhs);
+
+										map.put("leechers", leechers);
+
+										break;
+									case "_c":
+
+										map.put("cdp", rhs);
+										break;
 								}
 							}catch( Throwable e ){
 								
@@ -1809,7 +1820,7 @@ BuddyPluginBeta
 				}
 			}else{
 								
-				Map<String,Object> map = new HashMap<String,Object>();
+				Map<String,Object> map = new HashMap<>();
 				
 					// remove any trailing ui name hack
 				
@@ -1893,30 +1904,18 @@ BuddyPluginBeta
 		}
 		
 		File log_file = new File( log_dir, FileUtil.convertOSSpecificChars( chat.getName(), false ) + ".log" );
-		
-		PrintWriter	pw = null;
-		
-		try{
-			
-			pw = new PrintWriter( new OutputStreamWriter( new FileOutputStream( log_file, true ), "UTF-8" ));
-						
-			SimpleDateFormat time_format 	= new SimpleDateFormat( "yyyy/MM/dd HH:mm" );
 
-			String msg = "[" + time_format.format( new Date( message.getTimeStamp())) + "]";
-							
-			msg += " <" + message.getParticipant().getName( true ) + "> " + message.getMessage();
+		try (PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(log_file, true), StandardCharsets.UTF_8))) {
 
-			pw.println( msg );
-			
-		}catch( Throwable e ){
-			
-		}finally{
-			
-			if ( pw != null ){
-				
-				pw.close();
-			}
-		}
+			SimpleDateFormat time_format = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+
+			String msg = "[" + time_format.format(new Date(message.getTimeStamp())) + "]";
+
+			msg += " <" + message.getParticipant().getName(true) + "> " + message.getMessage();
+
+			pw.println(msg);
+
+		} catch (Throwable e) {}
 	}
 	
 	public ChatInstance
@@ -1983,13 +1982,13 @@ BuddyPluginBeta
 			throw( new Exception( "Plugin unavailable " ));
 		}
 		
-		Map<String,Object>		options = new HashMap<String, Object>();
+		Map<String,Object>		options = new HashMap<>();
 				
-		options.put( "import_data", import_data.getBytes( "UTF-8" ));
+		options.put( "import_data", import_data.getBytes(StandardCharsets.UTF_8));
 	
 		Map<String,Object> reply = (Map<String,Object>)azmsgsync_pi.getIPC().invoke( "importMessageHandler", new Object[]{ options } );
 
-		String	key			= new String((byte[])reply.get( "key" ), "UTF-8" );
+		String	key			= new String((byte[])reply.get( "key" ), StandardCharsets.UTF_8);
 		String	network	 	= (String)reply.get( "network" );
 		Object	handler 	= reply.get( "handler" );
 		
@@ -2304,7 +2303,7 @@ BuddyPluginBeta
 						return( null );
 					}
 						
-					map = new HashMap<String, Object>();
+					map = new HashMap<>();
 					
 					download.setUserData( DOWNLOAD_PEEK_CACHE_KEY, map );
 					
@@ -2392,7 +2391,7 @@ BuddyPluginBeta
 		String				network,
 		String				key )
 	{
-		Map<String,Object>		reply = new HashMap<String, Object>();
+		Map<String,Object>		reply = new HashMap<>();
 		
 		try{
 			PluginInterface pi;
@@ -2404,10 +2403,10 @@ BuddyPluginBeta
 			
 			if ( pi != null ){
 				
-				Map<String,Object>		options = new HashMap<String, Object>();
+				Map<String,Object>		options = new HashMap<>();
 				
 				options.put( "network", network );
-				options.put( "key", key.getBytes( "UTF-8" ));
+				options.put( "key", key.getBytes(StandardCharsets.UTF_8));
 
 				options.put( "timeout", 60*1000 );
 				
@@ -2473,7 +2472,7 @@ BuddyPluginBeta
 				
 				str = chan_name + ": " + str;
 				
-				Map<String,String>	cb_data = new HashMap<String, String>();
+				Map<String,String>	cb_data = new HashMap<>();
 				
 				cb_data.put( "allowReAdd", "true" );
 				cb_data.put( "net", inst.getNetwork());
@@ -2569,17 +2568,17 @@ BuddyPluginBeta
 		
 		private AtomicInteger						message_uid_next = new AtomicInteger();
 		
-		private List<ChatMessage>					messages	= new ArrayList<ChatMessage>();
-		private ByteArrayHashMap<String>			message_ids = new ByteArrayHashMap<String>();
+		private List<ChatMessage>					messages	= new ArrayList<>();
+		private ByteArrayHashMap<String>			message_ids = new ByteArrayHashMap<>();
 		private int									messages_not_mine_count;
 		
-		private ByteArrayHashMap<ChatParticipant>	participants = new ByteArrayHashMap<ChatParticipant>();
+		private ByteArrayHashMap<ChatParticipant>	participants = new ByteArrayHashMap<>();
 		
-		private Map<String,List<ChatParticipant>>	nick_clash_map = new HashMap<String, List<ChatParticipant>>();
+		private Map<String,List<ChatParticipant>>	nick_clash_map = new HashMap<>();
 		
-		private CopyOnWriteList<ChatListener>		listeners = new CopyOnWriteList<ChatListener>();
+		private CopyOnWriteList<ChatListener>		listeners = new CopyOnWriteList<>();
 		
-		private Map<Object,Object>					user_data = new HashMap<Object, Object>();
+		private Map<Object,Object>					user_data = new HashMap<>();
 		
 		private LinkedHashMap<String,String>							auto_dup_set = 
 			new LinkedHashMap<String,String>(500,0.75f,true)
@@ -2836,7 +2835,7 @@ BuddyPluginBeta
 					
 					BuddyPluginBeta.this.setSaveMessages( network, key, b );
 					
-					Map<String,Object>	options = new HashMap<String, Object>();
+					Map<String,Object>	options = new HashMap<>();
 					
 					options.put( "save_messages", b );
 					
@@ -2939,7 +2938,7 @@ BuddyPluginBeta
 			ChatParticipant		participant,
 			boolean				is_spammer )
 		{
-			Map<String,Object>	options = new HashMap<String, Object>();
+			Map<String,Object>	options = new HashMap<>();
 			
 			options.put( "pk", participant.getPublicKey());
 			options.put( "spammer", is_spammer );
@@ -3184,7 +3183,7 @@ BuddyPluginBeta
 						handler		= _handler;
 						
 						try{
-							Map<String,Object>		options = new HashMap<String, Object>();
+							Map<String,Object>		options = new HashMap<>();
 									
 							options.put( "handler", _handler );
 							
@@ -3211,10 +3210,10 @@ BuddyPluginBeta
 					}else{
 					
 						try{
-							Map<String,Object>		options = new HashMap<String, Object>();
+							Map<String,Object>		options = new HashMap<>();
 							
 							options.put( "network", network );
-							options.put( "key", key.getBytes( "UTF-8" ));
+							options.put( "key", key.getBytes(StandardCharsets.UTF_8));
 								
 							if ( private_target != null ){
 							
@@ -3331,7 +3330,7 @@ BuddyPluginBeta
 		{
 			synchronized( chat_lock ){
 				
-				return( messages.toArray( new ChatMessage[ messages.size() ]));
+				return( messages.toArray(new ChatMessage[0]));
 			}
 		}
 		
@@ -3344,7 +3343,7 @@ BuddyPluginBeta
 			if ( current_handler != null && current_pi != null ){
 							
 				try{
-					Map<String,Object>		options = new HashMap<String, Object>();
+					Map<String,Object>		options = new HashMap<>();
 					
 					options.put( "handler", current_handler );
 	
@@ -3618,10 +3617,10 @@ BuddyPluginBeta
 		{
 			int	num_messages = messages.size();
 			
-			ByteArrayHashMap<ChatMessage>	id_map 		= new ByteArrayHashMap<ChatMessage>( num_messages );
-			Map<ChatMessage,ChatMessage>	prev_map 	= new HashMap<ChatMessage,ChatMessage>( num_messages );
+			ByteArrayHashMap<ChatMessage>	id_map 		= new ByteArrayHashMap<>(num_messages);
+			Map<ChatMessage,ChatMessage>	prev_map 	= new HashMap<>(num_messages);
 			
-			Map<ChatMessage,Object>	next_map 			= new HashMap<ChatMessage,Object>( num_messages );
+			Map<ChatMessage,Object>	next_map 			= new HashMap<>(num_messages);
 			
 				// build id map so we can lookup prev messages
 			
@@ -3662,7 +3661,7 @@ BuddyPluginBeta
 							
 						}else if ( existing instanceof ChatMessage ){
 							
-							List<ChatMessage> list = new ArrayList<ChatMessage>();
+							List<ChatMessage> list = new ArrayList<>();
 							
 							list.add( (ChatMessage)existing );
 							list.add( msg );
@@ -3693,7 +3692,7 @@ BuddyPluginBeta
 					
 				// break any loops arbitrarily
 		
-			Set<ChatMessage>	linked_messages = new TreeSet<ChatMessage>(	message_comparator );
+			Set<ChatMessage>	linked_messages = new TreeSet<>(message_comparator);
 			
 			linked_messages.addAll( prev_map.keySet());
 			
@@ -3749,7 +3748,7 @@ BuddyPluginBeta
 			}
 				// find the heads of the various trees
 			
-			Set<ChatMessage>		tree_heads = new TreeSet<ChatMessage>( message_comparator );
+			Set<ChatMessage>		tree_heads = new TreeSet<>(message_comparator);
 			
 			for ( ChatMessage msg: messages ){
 				
@@ -3788,7 +3787,7 @@ BuddyPluginBeta
 			
 			// System.out.println( "Got trees: " + tree_heads.size());
 			
-			Set<ChatMessage>	remainder_set = new HashSet<BuddyPluginBeta.ChatMessage>( messages );
+			Set<ChatMessage>	remainder_set = new HashSet<>(messages);
 			
 			List<ChatMessage> result = null;
 			
@@ -3812,7 +3811,7 @@ BuddyPluginBeta
 				
 					// these are messages not part of any chain so sort based on time
 				
-				List<ChatMessage>	remainder = new ArrayList<ChatMessage>( remainder_set );
+				List<ChatMessage>	remainder = new ArrayList<>(remainder_set);
 				
 				Collections.sort(
 						remainder,
@@ -3859,7 +3858,7 @@ BuddyPluginBeta
 				changed = true;
 			}
 					
-			Set<ChatParticipant>	participants = new HashSet<ChatParticipant>();
+			Set<ChatParticipant>	participants = new HashSet<>();
 			
 			for ( int i=0;i<result.size();i++){
 				
@@ -3888,7 +3887,7 @@ BuddyPluginBeta
 					p.resetMessages();
 				}
 				
-				Set<ChatParticipant>	updated = new HashSet<ChatParticipant>();
+				Set<ChatParticipant>	updated = new HashSet<>();
 				
 				for ( ChatMessage msg: messages ){
 					
@@ -3919,10 +3918,10 @@ BuddyPluginBeta
 				
 					// fail safe in case for some reason we end up in a loop
 				
-				return(  new ArrayList<ChatMessage>());
+				return(new ArrayList<>());
 			}
 			
-			List<ChatMessage> chain = new ArrayList<ChatMessage>( num_messages );
+			List<ChatMessage> chain = new ArrayList<>(num_messages);
 
 			ChatMessage msg = head;
 							
@@ -3981,7 +3980,7 @@ BuddyPluginBeta
 			int	size1 = list1.size();
 			int size2 = list2.size();
 			
-			List<ChatMessage>	result = new ArrayList<ChatMessage>( size1 + size2 );
+			List<ChatMessage>	result = new ArrayList<>(size1 + size2);
 			
 			int	pos1 = 0;
 			int pos2 = 0;
@@ -4305,7 +4304,7 @@ BuddyPluginBeta
 				
 				ui.openChat( inst );
 				
-				Map<String,Object>	reply = new HashMap<String, Object>();
+				Map<String,Object>	reply = new HashMap<>();
 				
 				reply.put( "nickname", participant.getName());
 				
@@ -4388,7 +4387,7 @@ BuddyPluginBeta
 					public void 
 					runSupport() 
 					{
-						Map<String,Object>		options = new HashMap<String, Object>();
+						Map<String,Object>		options = new HashMap<>();
 						
 						String raw_message;
 						
@@ -4426,7 +4425,7 @@ BuddyPluginBeta
 					public void 
 					runSupport() 
 					{
-						Map<String,Object>		options = new HashMap<String, Object>();
+						Map<String,Object>		options = new HashMap<>();
 						
 						options.put( "is_control", true );
 						options.put( "cmd", cmd );
@@ -4451,49 +4450,50 @@ BuddyPluginBeta
 				if ( o_message instanceof String ){
 					
 					final String message = (String)o_message;
-					
-					if ( message.equals( "!dump!" )){
-						
-						synchronized( chat_lock ){
-							
-							for ( ChatMessage msg: messages ){
-								
-								System.out.println( msg.getTimeStamp() + ": " + pkToString( msg.getID()) + ", " + pkToString( msg.getPreviousID()) + ", " + msg.getSequence() + " - " + msg.getMessage());
+
+					switch (message) {
+						case "!dump!":
+
+							synchronized (chat_lock) {
+
+								for (ChatMessage msg : messages) {
+
+									System.out.println(msg.getTimeStamp() + ": " + pkToString(msg.getID()) + ", " + pkToString(msg.getPreviousID()) + ", " + msg.getSequence() + " - " + msg.getMessage());
+								}
 							}
-						}
-						return;
-						
-					}else if ( message.equals( "!sort!" )){
-						
-						sortMessages( false );
-						
-						return;
-						
-					}else if ( message.equals( "!flood!" )){
-						
-						if ( DEBUG_ENABLED ){
-						
-							SimpleTimer.addPeriodicEvent(
-								"flooder",
-								1500,
-								new TimerEventPerformer() {
-									
-									public void perform(TimerEvent event) {
-									
-										sendMessage( "flood - " + SystemTime.getCurrentTime(), null );
-										
-									}
-								});
-						}
-						
-						return;
-						
-		
-					}else if ( message.equals( "!ftux!" )){
-						
-						plugin.getBeta().setFTUXAccepted( false );
-						
-						return;
+							return;
+
+						case "!sort!":
+
+							sortMessages(false);
+
+							return;
+
+						case "!flood!":
+
+							if (DEBUG_ENABLED) {
+
+								SimpleTimer.addPeriodicEvent(
+										"flooder",
+										1500,
+										new TimerEventPerformer() {
+
+											public void perform(TimerEvent event) {
+
+												sendMessage("flood - " + SystemTime.getCurrentTime(), null);
+
+											}
+										});
+							}
+
+							return;
+
+
+						case "!ftux!":
+
+							plugin.getBeta().setFTUXAccepted(false);
+
+							return;
 					}
 					
 					boolean	is_me_msg = false;
@@ -4508,221 +4508,234 @@ BuddyPluginBeta
 						boolean	missing_params 	= false;
 						
 						try{
-							if ( command.equals( "/help" )){
-								
-								String link = MessageText.getString( "azbuddy.dchat.link.url" );
-								
-								sendLocalMessage( "label.see.x.for.help", new String[]{ link }, ChatMessage.MT_INFO );
-	
-								ok = true;
-								
-							}else if ( command.equals( "/join" )){
-								
-								if ( bits.length > 1 ){
-									
-									bits = message.split( "[\\s]+", 2 );
-									
-									String key = bits[1];
-									
-									if ( key.startsWith( "\"" ) && key.endsWith( "\"" )){
-										key = key.substring(1,key.length()-1);
-									}
-									
-									getAndShowChat( getNetwork(), key );
-									
-									ok = true;
-									
-								}else{
-									
-									missing_params = true;
-								}
-							}else if ( command.equals( "/nick" )){
-								
-								if ( bits.length > 1 ){
+							switch (command) {
+								case "/help":
 
-									bits = message.split( "[\\s]+", 2 );
-									
-									setSharedNickname( false );
-									
-									setInstanceNickname( bits[1]);
-									
-									ok = true;
-									
-								}else{
-									
-									missing_params = true;
-								}
+									String link = MessageText.getString("azbuddy.dchat.link.url");
 
-							}else if ( command.equals( "/pjoin" )){
-								
-								if ( bits.length > 1 ){
-									
-									bits = message.split( "[\\s]+", 2 );
-									
-									String key = bits[1];
-									
-									if ( key.startsWith( "\"" ) && key.endsWith( "\"" )){
-										key = key.substring(1,key.length()-1);
-									}
-									
-									getAndShowChat( AENetworkClassifier.AT_PUBLIC, key );
-									
+									sendLocalMessage("label.see.x.for.help", new String[]{link}, ChatMessage.MT_INFO);
+
 									ok = true;
 
-								}else{
-									
-									missing_params = true;
-								}
-							}else if ( command.equals( "/ajoin" )){
-								
-								if ( bits.length <= 1 ){
-									
-									missing_params = true;
-									
-								}else if ( !isI2PAvailable()){
-									
-									throw( new Exception( "I2P not available" ));
-									
-								}else{
-									
-									bits = message.split( "[\\s]+", 2 );
-									
-									String key = bits[1];
-									
-									if ( key.startsWith( "\"" ) && key.endsWith( "\"" )){
-										key = key.substring(1,key.length()-1);
-									}
-									
-									getAndShowChat( AENetworkClassifier.AT_I2P, key );
-									
-									ok = true;
-								}
-							}else if ( command.equals( "/msg" ) || command.equals( "/query" )){
-								
-								if ( bits.length > 1 ){
-									
-									String nick = bits[1];
-									
-									String	pm = bits.length ==2?"":bits[2].trim();
-									
-									ChatParticipant p = getParticipant( nick );
-									
-									if ( p == null ){
-										
-										throw( new Exception( "Nick not found: " + nick ));
-										
-									}else if ( p.isMe()){
-										
-										throw( new Exception( "Can't chat to yourself" ));
-									}
-									
-									ChatInstance ci = p.createPrivateChat();
-									
-									if ( pm.length() > 0 ){
-									
-										ci.sendMessage( pm, new HashMap<String, Object>());
-									}
-									
-									showChat( ci );
-									
-									ok = true;
+									break;
+								case "/join":
 
-								}else{
-									
-									missing_params = true;
-								}						
-							}else if ( command.equals( "/me" )){
-								
-								if ( bits.length > 1 ){
-									
-									is_me_msg	= true;
-									
-									o_message = message.substring( 3 ).trim(); 
-										
-									if ( flags == null ){
-										
-										flags = new HashMap<String, Object>();
-									}
-									
-									flags.put( FLAGS_MSG_TYPE_KEY, FLAGS_MSG_TYPE_ME );
-									
-									ok = true;
-									
-								}else{
-									
-									missing_params = true;
-								}
-							}else if ( command.equals( "/ignore" )){
-								
-								if ( bits.length > 1 ){
-									
-									String nick = bits[1];
-									
-									boolean	ignore = true;
-									
-									if ( nick.equals( "-r" ) && bits.length > 2 ){
-										
-										nick = bits[2];
-										
-										ignore = false;
-									}
-									
-									ChatParticipant p = getParticipant( nick );
-									
-									if ( p == null ){
-										
-										throw( new Exception( "Nick not found: " + nick ));
-									}
-									
-									p.setIgnored( ignore );
-									
-										// obviously the setter should do this but whatever for the mo
-									
-									updated( p );
-									
-									ok = true;
+									if (bits.length > 1) {
 
-								}else{
-									
-									missing_params = true;
-								}
-							}else if ( command.equals( "/control" )){
-								
-								if ( ipc_version >= 3 ){
-									
-									String[] bits2 = message.split( "[\\s]+", 2 );
-		
-									if ( bits2.length > 1 ){
-										
-										sendControlMessage( bits2[1] );
-										
+										bits = message.split("[\\s]+", 2);
+
+										String key = bits[1];
+
+										if (key.startsWith("\"") && key.endsWith("\"")) {
+											key = key.substring(1, key.length() - 1);
+										}
+
+										getAndShowChat(getNetwork(), key);
+
 										ok = true;
-										
-									}else{
-										
-										throw( new Exception( "Invalid command: " + message ));
-									}
-								}
-								
-							}else if ( command.equals( "/peek" )){
-								
-								if ( bits.length > 1 ){
-									
-									Map<String,Object> result = peekChat( getNetwork(), message.substring( 5 ).trim());
-									
-									sendLocalMessage( "!" + result + "!", null, ChatMessage.MT_INFO );
-									
-									ok = true;
 
-								}else{
-									
-									missing_params = true;
-								}
-							}else if ( command.equals( "/clone" )){
-								
-								getAndShowChat( getNetwork(), getKey());
-								
-								ok = true;
+									} else {
+
+										missing_params = true;
+									}
+									break;
+								case "/nick":
+
+									if (bits.length > 1) {
+
+										bits = message.split("[\\s]+", 2);
+
+										setSharedNickname(false);
+
+										setInstanceNickname(bits[1]);
+
+										ok = true;
+
+									} else {
+
+										missing_params = true;
+									}
+
+									break;
+								case "/pjoin":
+
+									if (bits.length > 1) {
+
+										bits = message.split("[\\s]+", 2);
+
+										String key = bits[1];
+
+										if (key.startsWith("\"") && key.endsWith("\"")) {
+											key = key.substring(1, key.length() - 1);
+										}
+
+										getAndShowChat(AENetworkClassifier.AT_PUBLIC, key);
+
+										ok = true;
+
+									} else {
+
+										missing_params = true;
+									}
+									break;
+								case "/ajoin":
+
+									if (bits.length <= 1) {
+
+										missing_params = true;
+
+									} else if (!isI2PAvailable()) {
+
+										throw (new Exception("I2P not available"));
+
+									} else {
+
+										bits = message.split("[\\s]+", 2);
+
+										String key = bits[1];
+
+										if (key.startsWith("\"") && key.endsWith("\"")) {
+											key = key.substring(1, key.length() - 1);
+										}
+
+										getAndShowChat(AENetworkClassifier.AT_I2P, key);
+
+										ok = true;
+									}
+									break;
+								case "/msg":
+								case "/query":
+
+									if (bits.length > 1) {
+
+										String nick = bits[1];
+
+										String pm = bits.length == 2 ? "" : bits[2].trim();
+
+										ChatParticipant p = getParticipant(nick);
+
+										if (p == null) {
+
+											throw (new Exception("Nick not found: " + nick));
+
+										} else if (p.isMe()) {
+
+											throw (new Exception("Can't chat to yourself"));
+										}
+
+										ChatInstance ci = p.createPrivateChat();
+
+										if (pm.length() > 0) {
+
+											ci.sendMessage(pm, new HashMap<>());
+										}
+
+										showChat(ci);
+
+										ok = true;
+
+									} else {
+
+										missing_params = true;
+									}
+									break;
+								case "/me":
+
+									if (bits.length > 1) {
+
+										is_me_msg = true;
+
+										o_message = message.substring(3).trim();
+
+										if (flags == null) {
+
+											flags = new HashMap<>();
+										}
+
+										flags.put(FLAGS_MSG_TYPE_KEY, FLAGS_MSG_TYPE_ME);
+
+										ok = true;
+
+									} else {
+
+										missing_params = true;
+									}
+									break;
+								case "/ignore":
+
+									if (bits.length > 1) {
+
+										String nick = bits[1];
+
+										boolean ignore = true;
+
+										if (nick.equals("-r") && bits.length > 2) {
+
+											nick = bits[2];
+
+											ignore = false;
+										}
+
+										ChatParticipant p = getParticipant(nick);
+
+										if (p == null) {
+
+											throw (new Exception("Nick not found: " + nick));
+										}
+
+										p.setIgnored(ignore);
+
+										// obviously the setter should do this but whatever for the mo
+
+										updated(p);
+
+										ok = true;
+
+									} else {
+
+										missing_params = true;
+									}
+									break;
+								case "/control":
+
+									if (ipc_version >= 3) {
+
+										String[] bits2 = message.split("[\\s]+", 2);
+
+										if (bits2.length > 1) {
+
+											sendControlMessage(bits2[1]);
+
+											ok = true;
+
+										} else {
+
+											throw (new Exception("Invalid command: " + message));
+										}
+									}
+
+									break;
+								case "/peek":
+
+									if (bits.length > 1) {
+
+										Map<String, Object> result = peekChat(getNetwork(), message.substring(5).trim());
+
+										sendLocalMessage("!" + result + "!", null, ChatMessage.MT_INFO);
+
+										ok = true;
+
+									} else {
+
+										missing_params = true;
+									}
+									break;
+								case "/clone":
+
+									getAndShowChat(getNetwork(), getKey());
+
+									ok = true;
+									break;
 							}
 							
 							if ( !ok ){
@@ -4788,29 +4801,29 @@ BuddyPluginBeta
 					
 					if ( options == null ){
 						
-						options = new HashMap<String, Object>();
+						options = new HashMap<>();
 						
 					}else{
 						
 							// clone as we are updating
 						
-						options = new HashMap<String, Object>( options );
+						options = new HashMap<>(options);
 					}
 					
 					options.put( "handler", handler );
 					
-					Map<String,Object>	payload = new HashMap<String, Object>();
+					Map<String,Object>	payload = new HashMap<>();
 					
 					if ( o_message instanceof String ){
 					
-						payload.put( "msg", ((String)o_message).getBytes( "UTF-8" ));
+						payload.put( "msg", ((String)o_message).getBytes(StandardCharsets.UTF_8));
 						
 					}else{
 						
-						payload.put( "msg", (byte[])o_message );
+						payload.put( "msg", o_message);
 					}
 					
-					payload.put( "nick", getNickname( false ).getBytes( "UTF-8" ));
+					payload.put( "nick", getNickname( false ).getBytes(StandardCharsets.UTF_8));
 					
 					if ( prev_message != null ){
 						
@@ -4847,7 +4860,7 @@ BuddyPluginBeta
 				return( "" );
 			}
 			try{
-				Map<String,Object>		options = new HashMap<String, Object>();
+				Map<String,Object>		options = new HashMap<>();
 				
 				options.put( "handler", handler );
 	
@@ -4868,7 +4881,7 @@ BuddyPluginBeta
 		{
 			synchronized( chat_lock ){
 
-				return( new ArrayList<ChatMessage>( messages ));
+				return(new ArrayList<>(messages));
 			}
 		}
 		
@@ -4893,13 +4906,13 @@ BuddyPluginBeta
 		{
 			synchronized( chat_lock ){
 				
-				LinkedList<ChatMessage> result = new LinkedList<ChatMessage>();
+				LinkedList<ChatMessage> result = new LinkedList<>();
 				
 				if ( messages.size() > 0 ){
 
 					for ( int loop=0;loop<2;loop++ ){
 						
-						List<ChatMessage>	need_fixup = new ArrayList<ChatMessage>();
+						List<ChatMessage>	need_fixup = new ArrayList<>();
 
 						for ( int i=messages.size()-1;i>=0;i--){
 							
@@ -5020,7 +5033,7 @@ BuddyPluginBeta
 	
 				if ( list == null ){
 					
-					list = new ArrayList<BuddyPluginBeta.ChatParticipant>();
+					list = new ArrayList<>();
 					
 					nick_clash_map.put( new_nick, list );
 				}
@@ -5246,7 +5259,7 @@ BuddyPluginBeta
 						
 						if ( message_ids.containsKey( old_id )){
 							
-							Map<ChatMessage,Integer>	msg_map = new HashMap<ChatMessage, Integer>();
+							Map<ChatMessage,Integer>	msg_map = new HashMap<>();
 							
 							int old_msg_index 	= -1;
 
@@ -5351,15 +5364,15 @@ BuddyPluginBeta
 							
 					if ( is_private_chat ){
 						
-						Map<String,Object>		flags = new HashMap<String, Object>();
+						Map<String,Object>		flags = new HashMap<>();
 						
 						flags.put( FLAGS_MSG_STATUS_KEY, FLAGS_MSG_STATUS_CHAT_QUIT );
 						
-						sendMessageSupport( "", flags, new HashMap<String, Object>());
+						sendMessageSupport( "", flags, new HashMap<>());
 					}
 					
 					try{
-						Map<String,Object>		options = new HashMap<String, Object>();
+						Map<String,Object>		options = new HashMap<>();
 						
 						options.put( "handler", handler );
 													
@@ -5406,7 +5419,7 @@ BuddyPluginBeta
 									
 								}catch( Throwable e ){
 									
-									Debug.out( e );;
+									Debug.out( e );
 								}
 							}
 						}
@@ -5428,7 +5441,7 @@ BuddyPluginBeta
 		private boolean				is_pinned;
 		private boolean				nick_clash;
 		
-		private List<ChatMessage>	participant_messages	= new ArrayList<ChatMessage>();
+		private List<ChatMessage>	participant_messages	= new ArrayList<>();
 		
 		private Boolean				is_me;
 		
@@ -5614,7 +5627,7 @@ BuddyPluginBeta
 		{
 			synchronized( chat.chat_lock ){
 				
-				return( new ArrayList<ChatMessage>( participant_messages ));
+				return(new ArrayList<>(participant_messages));
 			}
 		}
 		
@@ -5855,7 +5868,7 @@ BuddyPluginBeta
 					
 					int	nick_len = my_nick.length();				
 					
-					List<Integer> hits = new ArrayList<Integer>();
+					List<Integer> hits = new ArrayList<>();
 					
 					if ( my_nick.length() > 0 ){
 						
@@ -5955,10 +5968,10 @@ BuddyPluginBeta
 				
 				if ( payload == null ){
 					
-					payload = new HashMap<String, Object>();
+					payload = new HashMap<>();
 				}
 				
-				payload_ref = new WeakReference<Map<String,Object>>( payload );
+				payload_ref = new WeakReference<>(payload);
 				
 				return( payload );
 			}
@@ -6100,13 +6113,13 @@ BuddyPluginBeta
 					
 					if ( msg_bytes != null ){
 					
-						return( new String( msg_bytes, "UTF-8" ));
+						return( new String( msg_bytes, StandardCharsets.UTF_8));
 					}
 				}
 				
 				
 				
-				return( new String((byte[])map.get( "content" ), "UTF-8" ));
+				return( new String((byte[])map.get( "content" ), StandardCharsets.UTF_8));
 				
 			}catch( Throwable e ){
 				
@@ -6284,7 +6297,7 @@ BuddyPluginBeta
 				if ( nick != null ){
 					
 					try{
-						String str = new String( nick, "UTF-8" );
+						String str = new String( nick, StandardCharsets.UTF_8);
 						
 						if ( str.length() > 0 ){
 						
@@ -6322,43 +6335,43 @@ BuddyPluginBeta
 	public interface
 	ChatManagerListener
 	{
-		public void
+		void
 		chatAdded(
-			ChatInstance	inst );
+				ChatInstance inst);
 		
-		public void
+		void
 		chatRemoved(
-			ChatInstance	inst );
+				ChatInstance inst);
 	}
 	
 	public interface
 	ChatListener
 	{
-		public void
+		void
 		messageReceived(
-			ChatMessage				message,
-			boolean					sort_outstanding );
+				ChatMessage message,
+				boolean sort_outstanding);
 		
-		public void
+		void
 		messagesChanged();
 		
-		public void
+		void
 		participantAdded(
-			ChatParticipant			participant );
+				ChatParticipant participant);
 		
-		public void
+		void
 		participantChanged(
-			ChatParticipant			participant );
+				ChatParticipant participant);
 		
-		public void
+		void
 		participantRemoved(
-			ChatParticipant			participant );
+				ChatParticipant participant);
 		
-		public void
+		void
 		stateChanged(
-			boolean					avail );
+				boolean avail);
 		
-		public void
+		void
 		updated();
 	}
 	
@@ -6411,8 +6424,8 @@ BuddyPluginBeta
 	public interface
 	FTUXStateChangeListener
 	{
-		public void
+		void
 		stateChanged(
-			boolean	accepted );
+				boolean accepted);
 	}
 }

@@ -29,7 +29,7 @@ public interface
 UnloadablePlugin
 	extends Plugin
 {
-	public void
+	void
 	unload()
 	
 		throws PluginException;

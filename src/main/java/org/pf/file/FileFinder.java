@@ -186,7 +186,7 @@ public class FileFinder implements FileHandler
 			throw new IllegalArgumentException( "FileFinder.findFiles(): pattern is null" ) ;
 		
 		if ( digitWildcard > 0 )
-			digitChar = new Character(digitWildcard) ;
+			digitChar = digitWildcard;
 		
 		finder = new FileFinder() ;
 		return finder.collectFiles( dir, pattern, recursive, digitChar ) ;
@@ -298,11 +298,11 @@ public class FileFinder implements FileHandler
 		
 		fileWalker = new FileWalker( this ) ;
 		if ( digitWildcard != null )
-			fileWalker.setDigitWildcardChar( digitWildcard.charValue() ) ;
+			fileWalker.setDigitWildcardChar(digitWildcard) ;
 			
 		fileWalker.walkThrough( dir, pattern, recursive ) ;
 		list = this.getCollectedFiles() ;
-		return (File[])list.toArray( new File[list.size()]) ;
+		return (File[])list.toArray(new File[0]) ;
 	} // collectFiles()
 
 	// -------------------------------------------------------------------------

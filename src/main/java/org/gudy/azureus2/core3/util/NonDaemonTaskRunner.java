@@ -137,11 +137,11 @@ NonDaemonTaskRunner
 									if ( tasks.isEmpty()){
 	
 										current_thread = null;
-											
-										for (int i=0;i<wait_until_idle_list.size();i++){
-											
-											((AESemaphore)wait_until_idle_list.get(i)).release();
-										}
+
+                                        for (Object o : wait_until_idle_list) {
+
+                                            ((AESemaphore) o).release();
+                                        }
 										
 										wait_until_idle_list.clear();
 										
@@ -268,16 +268,16 @@ NonDaemonTaskRunner
 
 				try{
 					tasks_mon.enter();
-	
-					for (int i=0;i<wait_until_idle_list.size();i++){
-						
-						AESemaphore pending = (AESemaphore)wait_until_idle_list.get(i);
-						
-						if ( pending != sem ){
-						
-							Logger.log(new LogEvent(LogIDs.CORE, "Waiting for " + pending.getName() + " to complete" ));
-						}
-					}
+
+                    for (Object o : wait_until_idle_list) {
+
+                        AESemaphore pending = (AESemaphore) o;
+
+                        if (pending != sem) {
+
+                            Logger.log(new LogEvent(LogIDs.CORE, "Waiting for " + pending.getName() + " to complete"));
+                        }
+                    }
 				}finally{
 					
 					tasks_mon.exit();

@@ -33,116 +33,116 @@ import org.gudy.azureus2.core3.util.IndentWriter;
 
 public interface PiecePicker
 {
-	public static final int REQUEST_HINT_MAX_LIFE	= 120*1000;
+	int REQUEST_HINT_MAX_LIFE	= 120*1000;
 	
-    public boolean  hasDownloadablePiece();
+    boolean  hasDownloadablePiece();
     /** @return long value indicated serial number of current count of changes
      * to hasNeededUndonePiece.
      * A method interesting in tracking changes can compare this with a locally stored
      * value to determine if the hasNeededUndonePiece status has changed since the last check. 
      */
-    public long     getNeededUndonePieceChange();
+    long     getNeededUndonePieceChange();
     
 
-    public void     addHavePiece(PEPeer peer, int pieceNumber);
+    void     addHavePiece(PEPeer peer, int pieceNumber);
     
     /** This is called periodically by the peer control scheduler.
      * It should not normally be called by other methods.
      * It will update the global availability if neccesary
      * and then update the derived information 
      */
-    public void     updateAvailability();
-    public int[]    getAvailability();
-    public int      getAvailability(final int pieceNumber);
+    void     updateAvailability();
+    int[]    getAvailability();
+    int      getAvailability(final int pieceNumber);
     
-    public float    getMinAvailability();
-    public int		getMaxAvailability();
-    public float    getAvgAvail();
-	public long 	getAvailWentBadTime();
-	public float    getMinAvailability( int fileIndex );
+    float    getMinAvailability();
+    int		getMaxAvailability();
+    float    getAvgAvail();
+	long 	getAvailWentBadTime();
+	float    getMinAvailability(int fileIndex);
 	   
-	public long 	getBytesUnavailable();
+	long 	getBytesUnavailable();
 	
-	public void		allocateRequests();
+	void		allocateRequests();
 
-	public boolean	isInEndGameMode();
-	public boolean	hasEndGameModeBeenAbandoned();
-	public void		clearEndGameChunks();
+	boolean	isInEndGameMode();
+	boolean	hasEndGameModeBeenAbandoned();
+	void		clearEndGameChunks();
 	/** adds all blocks in the piece to endGameModeChunks
 	 * @param pePiece
 	 */
-	public void		addEndGameChunks(final PEPiece pePiece);
+    void		addEndGameChunks(final PEPiece pePiece);
 
-	public void		removeFromEndGameModeChunks(final int pieceNumber, final int offset);
+	void		removeFromEndGameModeChunks(final int pieceNumber, final int offset);
 	
-	public int	getNumberOfPieces();
+	int	getNumberOfPieces();
 	
 	
-	public int		getNbPiecesDone();
+	int		getNbPiecesDone();
 	
-	public void
+	void
 	setForcePiece(
-		int			pieceNumber,
-		boolean		forced );
+            int pieceNumber,
+            boolean forced);
 	
-	public boolean
+	boolean
 	isForcePiece(
-		int			pieceNumber );
+            int pieceNumber);
 	
-	public void
+	void
 	setGlobalRequestHint(
-		int	piece_number,
-		int	start_bytes,
-		int	byte_count );
+            int piece_number,
+            int start_bytes,
+            int byte_count);
 	
-	public int[]
+	int[]
 	getGlobalRequestHint();
 	
-	public void
+	void
 	setReverseBlockOrder(
-		boolean		is_reverse );
+            boolean is_reverse);
 	
-	public boolean
+	boolean
 	getReverseBlockOrder();
 	
-	public void
+	void
 	addRTAProvider(
-		PieceRTAProvider		shaper );
+            PieceRTAProvider shaper);
 	
-	public void
+	void
 	removeRTAProvider(
-		PieceRTAProvider		shaper );
+            PieceRTAProvider shaper);
 	
-	public List
+	List
 	getRTAProviders();
 	
-	public void 
+	void
 	addPriorityProvider(
-		PiecePriorityProvider		shaper );
+            PiecePriorityProvider shaper);
 	
-	public void
+	void
 	removePriorityProvider(
-		PiecePriorityProvider		shaper );
+            PiecePriorityProvider shaper);
 	
-	public List
+	List
 	getPriorityProviders();
 	
-	public void 
+	void
 	addListener(
-		PiecePickerListener		listener );
+            PiecePickerListener listener);
 	
-	public void 
+	void
 	removeListener(
-		PiecePickerListener		listener );
+            PiecePickerListener listener);
 
-	public void
+	void
 	destroy();
 	
-	public void
+	void
 	generateEvidence(
-		IndentWriter	writer );
+            IndentWriter writer);
 	
-	public String
+	String
 	getPieceString(
-		int	piece_number );
+            int piece_number);
 }

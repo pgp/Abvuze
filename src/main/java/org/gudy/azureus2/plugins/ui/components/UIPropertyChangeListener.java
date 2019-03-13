@@ -26,7 +26,7 @@ package org.gudy.azureus2.plugins.ui.components;
 public interface 
 UIPropertyChangeListener 
 {
-	public void
+	void
 	propertyChanged(
-		UIPropertyChangeEvent	ev );
+            UIPropertyChangeEvent ev);
 }

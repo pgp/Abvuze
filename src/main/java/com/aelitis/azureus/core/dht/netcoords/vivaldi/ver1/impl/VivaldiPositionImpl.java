@@ -226,10 +226,10 @@ public class VivaldiPositionImpl implements VivaldiPosition{
   	throws IOException
   {
 	float[]	data = toFloatArray();
-		
-	for (int i=0;i<data.length;i++){
-			
-	  os.writeFloat( data[i] );
-	}  
+
+      for (float datum : data) {
+
+          os.writeFloat(datum);
+      }
   }
 }

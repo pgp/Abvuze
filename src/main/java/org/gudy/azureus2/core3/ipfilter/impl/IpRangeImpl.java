@@ -272,7 +272,7 @@ public class IpRangeImpl implements IpRange
 	}
 
 	public int compareStartIpTo(IpRange other) {
-		long l = getStartIpLong() - ((IpRangeImpl) other).getStartIpLong();
+		long l = getStartIpLong() - other.getStartIpLong();
 
 		if (l < 0) {
 			return (-1);
@@ -284,7 +284,7 @@ public class IpRangeImpl implements IpRange
 	}
 
 	public int compareEndIpTo(IpRange other) {
-		long l = getEndIpLong() - ((IpRangeImpl) other).getEndIpLong();
+		long l = getEndIpLong() - other.getEndIpLong();
 
 		if (l < 0) {
 			return (-1);

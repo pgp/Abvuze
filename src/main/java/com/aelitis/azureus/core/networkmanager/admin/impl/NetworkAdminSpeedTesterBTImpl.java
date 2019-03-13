@@ -86,23 +86,22 @@ public class NetworkAdminSpeedTesterBTImpl
 
     	if(downloads!=null){
     		int num = downloads.length;
-    		for(int i=0; i<num; i++){
-    			Download	download = downloads[i];
-    			if( download.getBooleanAttribute(speedTestAttrib) ){
-    				try{
-    					if (download.getState() != Download.ST_STOPPED ){
-    						try{
-    							download.stop();
-    						}catch( Throwable e ){
-    							Debug.out(e);
-    						}
-    					}
-    					download.remove(true,true);
-     				}catch(Throwable e ){
-    					Debug.out("Had "+e.getMessage()+" while trying to remove "+downloads[i].getName());
-    				}
-    			}
-    		}
+            for (Download download : downloads) {
+                if (download.getBooleanAttribute(speedTestAttrib)) {
+                    try {
+                        if (download.getState() != Download.ST_STOPPED) {
+                            try {
+                                download.stop();
+                            } catch (Throwable e) {
+                                Debug.out(e);
+                            }
+                        }
+                        download.remove(true, true);
+                    } catch (Throwable e) {
+                        Debug.out("Had " + e.getMessage() + " while trying to remove " + download.getName());
+                    }
+                }
+            }
     	}
     }
 
@@ -458,27 +457,25 @@ public class NetworkAdminSpeedTesterBTImpl
 	                	if ( pm != null ){
 	                		
 	                		Peer[] peers = pm.getPeers();
-	                		
-	                		for ( int i=0;i<peers.length;i++){
-	                			
-	                			Peer peer = peers[i];
-	                			
-	                				// use the IP as the key so we don't count reconnects multiple times
-	                			
-	                			String	key = peer.getIp();
-	                			
-	                			connected_peers.add( key );
-	                			
-	                			if ( !peer.isChoked()){
-	                				
-	                				not_choked_peers.add( key );
-	                			}
-	                			
-	                			if ( !peer.isChoking()){
-	                				
-	                				not_choking_peers.add( key );
-	                			}
-	                		}
+
+                            for (Peer peer : peers) {
+
+                                // use the IP as the key so we don't count reconnects multiple times
+
+                                String key = peer.getIp();
+
+                                connected_peers.add(key);
+
+                                if (!peer.isChoked()) {
+
+                                    not_choked_peers.add(key);
+                                }
+
+                                if (!peer.isChoking()) {
+
+                                    not_choking_peers.add(key);
+                                }
+                            }
 	                	}
 	                	
 	                    long currTime = SystemTime.getCurrentTime();
@@ -604,21 +601,20 @@ public class NetworkAdminSpeedTesterBTImpl
                 reportedProgress=percentDownload;
 
             int progressBarVal = Math.round( reportedProgress*100.0f );
-            StringBuilder msg = new StringBuilder("progress: ");
-            msg.append(  progressBarVal );
             //include the upload and download values.
-            msg.append(" : download ave ");
-            msg.append( stats.getDownloadAverage( true ) );
-            msg.append(" : upload ave ");
-            msg.append( stats.getUploadAverage( true ) );
-            msg.append(" : ");
             int totalTimeLeft = (int)((MAX_TEST_TIME-totalDownloadTimeUsed)/1000);
-            msg.append(totalTimeLeft);
-            msg.append(" : ");
             int testTimeLeft = (int)((MAX_PEAK_TIME-totalTestTimeUsed)/1000);
-            msg.append(testTimeLeft);
 
-            sendStageUpdateToListeners( msg.toString() );
+            String msg = "progress: " + progressBarVal +
+                    " : download ave " +
+                    stats.getDownloadAverage(true) +
+                    " : upload ave " +
+                    stats.getUploadAverage(true) +
+                    " : " +
+                    totalTimeLeft +
+                    " : " +
+                    testTimeLeft;
+            sendStageUpdateToListeners(msg);
 
         }//updateTestProgress
 
@@ -872,12 +868,9 @@ public class NetworkAdminSpeedTesterBTImpl
 
 
         public String toString(){
-            StringBuilder sb = new StringBuilder("[com.aelitis.azureus.core.networkmanager.admin.impl.NetworkAdminSpeedTesterBTImpl");
 
-            sb.append(" ").append( getResultString() ).append(" ");
-            sb.append("]");
-
-            return sb.toString();
+            return "[com.aelitis.azureus.core.networkmanager.admin.impl.NetworkAdminSpeedTesterBTImpl" + " " + getResultString() + " " +
+                    "]";
         }
     }//class BitTorrentResult
 
@@ -887,14 +880,14 @@ public class NetworkAdminSpeedTesterBTImpl
     }
 
     private static long autoboxLong(Long l){
-        return l.longValue();
+        return l;
     }
 
     private static Long autoboxLong(long l){
-        return new Long(l);
+        return l;
     }
 
     private static Double autoboxDouble(double d){
-        return new Double(d);
+        return d;
     }
 }//class

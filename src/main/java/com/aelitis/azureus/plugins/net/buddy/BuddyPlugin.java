@@ -22,6 +22,7 @@ package com.aelitis.azureus.plugins.net.buddy;
 
 import java.io.*;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
@@ -194,14 +195,14 @@ BuddyPlugin
 	
 	private CryptoHandler ecc_handler = CryptoManagerFactory.getSingleton().getECCHandler();
 
-	private List<BuddyPluginBuddy>	buddies 	= new ArrayList<BuddyPluginBuddy>();
+	private List<BuddyPluginBuddy>	buddies 	= new ArrayList<>();
 	
 	private List<BuddyPluginBuddy>	connected_at_close;
 	
-	private Map<String,BuddyPluginBuddy>		buddies_map	= new HashMap<String,BuddyPluginBuddy>();
+	private Map<String,BuddyPluginBuddy>		buddies_map	= new HashMap<>();
 	
-	private CopyOnWriteList<BuddyPluginListener>				listeners 			= new CopyOnWriteList<BuddyPluginListener>();
-	private CopyOnWriteList<BuddyPluginBuddyRequestListener>	request_listeners	= new CopyOnWriteList<BuddyPluginBuddyRequestListener>(); 
+	private CopyOnWriteList<BuddyPluginListener>				listeners 			= new CopyOnWriteList<>();
+	private CopyOnWriteList<BuddyPluginBuddyRequestListener>	request_listeners	= new CopyOnWriteList<>();
 		
 	private SESecurityManager	sec_man;
 
@@ -217,7 +218,7 @@ BuddyPlugin
 	
 	private BuddyPluginAZ2		az2_handler;
 	
-	private List<DistributedDatabaseContact>	publish_write_contacts = new ArrayList<DistributedDatabaseContact>();
+	private List<DistributedDatabaseContact>	publish_write_contacts = new ArrayList<>();
 	
 	private int		status_seq;
 	
@@ -228,9 +229,9 @@ BuddyPlugin
 		}
 	}
 		
-	private Set<BuddyPluginBuddy>			pd_preinit		= new HashSet<BuddyPluginBuddy>();
+	private Set<BuddyPluginBuddy>			pd_preinit		= new HashSet<>();
 	
-	private List<BuddyPluginBuddy>			pd_queue 		= new ArrayList<BuddyPluginBuddy>();
+	private List<BuddyPluginBuddy>			pd_queue 		= new ArrayList<>();
 	private AESemaphore						pd_queue_sem	= new AESemaphore( "BuddyPlugin:persistDispatch");
 	private AEThread2						pd_thread;
 	
@@ -240,7 +241,7 @@ BuddyPlugin
 	
 	private TorrentAttribute	ta_category;
 
-	private Set<String>	public_tags_or_categories = new HashSet<String>();
+	private Set<String>	public_tags_or_categories = new HashSet<>();
 	
 	private boolean lan_local_peers;
 	
@@ -456,7 +457,7 @@ BuddyPlugin
 						return;
 					}
 					
-					final List<Torrent>	torrents = new ArrayList<Torrent>();
+					final List<Torrent>	torrents = new ArrayList<>();
 								
 					if ( _target instanceof TableRow ){
 						
@@ -483,32 +484,28 @@ BuddyPlugin
 						boolean	incomplete = ((TableContextMenuItem)menu).getTableID() == TableManager.TABLE_MYTORRENTS_INCOMPLETE;
 						
 						TableContextMenuItem parent = incomplete?menu_item_itorrents:menu_item_ctorrents;
-												
-						for (int i=0;i<buddies.size();i++){
-							
-							final BuddyPluginBuddy	buddy = (BuddyPluginBuddy)buddies.get(i);
-							
-							if ( buddy.isOnline( true )){
-								
+
+						for (final BuddyPluginBuddy buddy : buddies) {
+
+							if (buddy.isOnline(true)) {
+
 								TableContextMenuItem item =
-									plugin_interface.getUIManager().getTableManager().addContextMenuItem(
-										parent,
-										"!" + buddy.getName() + "!");
-								
+										plugin_interface.getUIManager().getTableManager().addContextMenuItem(
+												parent,
+												"!" + buddy.getName() + "!");
+
 								item.addMultiListener(
-									new MenuItemListener()
-									{
-										public void 
-										selected(
-											MenuItem 	menu,
-											Object 		target ) 
-										{
-											for ( Torrent torrent: torrents ){
-											
-												az2_handler.sendAZ2Torrent( torrent, buddy );
+										new MenuItemListener() {
+											public void
+											selected(
+													MenuItem menu,
+													Object target) {
+												for (Torrent torrent : torrents) {
+
+													az2_handler.sendAZ2Torrent(torrent, buddy);
+												}
 											}
-										}
-									});
+										});
 							}
 						}
 					
@@ -803,10 +800,10 @@ BuddyPlugin
 								run()
 								{
 									List buddies = getAllBuddies();
-									
-									for (int i=0;i<buddies.size();i++){
-										
-										((BuddyPluginBuddy)buddies.get(i)).disconnect();
+
+									for (Object buddy : buddies) {
+
+										((BuddyPluginBuddy) buddy).disconnect();
 									}
 								}
 							}.start();
@@ -1023,7 +1020,7 @@ BuddyPlugin
 		String	str,
 		boolean	persist )
 	{
-		Set<String>	new_pub_cats = new HashSet<String>();
+		Set<String>	new_pub_cats = new HashSet<>();
 		
 		String[]	bits = str.split(",");
 		
@@ -1047,7 +1044,7 @@ BuddyPlugin
 	{
 		if ( !public_tags_or_categories.equals( new_pub_tags_or_cats )){
 			
-			Set<String> removed = new HashSet<String>( public_tags_or_categories );
+			Set<String> removed = new HashSet<>(public_tags_or_categories);
 			
 			removed.removeAll( new_pub_tags_or_cats );
 			
@@ -1075,13 +1072,13 @@ BuddyPlugin
 					
 					if ( local == null ){
 						
-						local = new HashSet<String>();
+						local = new HashSet<>();
 						
 					}else{
 						
 							// gotta clone else we're messing with stuff that ain't ours
 						
-						local = new HashSet<String>( local );
+						local = new HashSet<>(local);
 					}
 					
 					local.addAll( new_pub_tags_or_cats );
@@ -1178,30 +1175,28 @@ BuddyPlugin
 														synchronized( BuddyPlugin.this ){
 																
 															int	unauth_count = 0;
-															
-															for (int i=0;i<buddies.size();i++){
-															
-																BuddyPluginBuddy	buddy = (BuddyPluginBuddy)buddies.get(i);
-	
-																if ( buddy.getPublicKey().equals( other_key_str )){
-																	
-																		// don't accept a second or subsequent connection for unauth buddies
-																		// as they have a single chance to be processed
-																	
-																	if ( !buddy.isAuthorised()){
-																		
-																		log( "Incoming connection from " + originator + " failed as for unauthorised buddy" );
-																		
-																		return( false );
+
+															for (BuddyPluginBuddy buddy : buddies) {
+
+																if (buddy.getPublicKey().equals(other_key_str)) {
+
+																	// don't accept a second or subsequent connection for unauth buddies
+																	// as they have a single chance to be processed
+
+																	if (!buddy.isAuthorised()) {
+
+																		log("Incoming connection from " + originator + " failed as for unauthorised buddy");
+
+																		return (false);
 																	}
-																	
-																	buddy.incomingConnection((GenericMessageConnection)context );	
-																	
-																	return( true );
+
+																	buddy.incomingConnection((GenericMessageConnection) context);
+
+																	return (true);
 																}
-																
-																if ( !buddy.isAuthorised()){
-																	
+
+																if (!buddy.isAuthorised()) {
+
 																	unauth_count++;
 																}
 															}
@@ -1340,10 +1335,10 @@ BuddyPlugin
 		
 			buddies_copy = new ArrayList( buddies );
 		}
-				
-		for (int i=0;i<buddies_copy.size();i++){
-			
-			BuddyPluginBuddy	buddy = (BuddyPluginBuddy)buddies_copy.get(i);
+
+		for (Object o : buddies_copy) {
+
+			BuddyPluginBuddy buddy = (BuddyPluginBuddy) o;
 
 			buddy.checkPersistentDispatch();
 		}
@@ -1352,11 +1347,10 @@ BuddyPlugin
 	protected void
 	persistentDispatchInit()
 	{
-		Iterator it = pd_preinit.iterator();
-		
-		while( it.hasNext()){
-		
-			persistentDispatchPending((BuddyPluginBuddy)it.next());
+
+		for (BuddyPluginBuddy buddyPluginBuddy : pd_preinit) {
+
+			persistentDispatchPending(buddyPluginBuddy);
 		}
 		
 		pd_preinit = null;
@@ -1408,7 +1402,7 @@ BuddyPlugin
 										
 										synchronized( pd_queue ){
 											
-											buddy = (BuddyPluginBuddy)pd_queue.remove(0);
+											buddy = pd_queue.remove(0);
 										}
 										
 										buddy.persistentDispatch();
@@ -1436,7 +1430,7 @@ BuddyPlugin
 		
 			Map	reply = new HashMap();
 		
-			reply.put( "type", new Long( RT_INTERNAL_REPLY_PING ));
+			reply.put( "type", (long) RT_INTERNAL_REPLY_PING);
 		
 			return( reply );
 			
@@ -1446,7 +1440,7 @@ BuddyPlugin
 			
 			Map	reply = new HashMap();
 		
-			reply.put( "type", new Long( RT_INTERNAL_REPLY_CLOSE ));
+			reply.put( "type", (long) RT_INTERNAL_REPLY_CLOSE);
 		
 			return( reply );
 			
@@ -1564,13 +1558,13 @@ BuddyPlugin
 		if ( changed ){
 			
 			List	buddies = getAllBuddies();
-						
-			for (int i=0;i<buddies.size();i++){
-				
-				BuddyPluginBuddy	buddy = (BuddyPluginBuddy)buddies.get(i);
-				
-				if ( buddy.isConnected()){
-				
+
+			for (Object buddy1 : buddies) {
+
+				BuddyPluginBuddy buddy = (BuddyPluginBuddy) buddy1;
+
+				if (buddy.isConnected()) {
+
 					buddy.sendKeepAlive();
 				}
 			}
@@ -1741,12 +1735,12 @@ BuddyPlugin
 			
 			if ( details.getTCPPort() > 0 ){
 			
-				payload.put( "t", new Long(  details.getTCPPort() ));
+				payload.put( "t", (long) details.getTCPPort());
 			}
 			
 			if (  details.getUDPPort() > 0 ){
 				
-				payload.put( "u", new Long( details.getUDPPort() ));
+				payload.put( "u", (long) details.getUDPPort());
 			}
 						
 			payload.put( "i", ip.getAddress());
@@ -1763,7 +1757,7 @@ BuddyPlugin
 				payload.put( "n", nick );
 			}
 			
-			payload.put( "o", new Long( details.getOnlineStatus()));
+			payload.put( "o", (long) details.getOnlineStatus());
 			
 			int	next_seq = ++status_seq;
 			
@@ -1774,9 +1768,9 @@ BuddyPlugin
 			
 			details.setSequence( next_seq );
 			
-			payload.put( "s", new Long( next_seq ));
+			payload.put( "s", (long) next_seq);
 			
-			payload.put( "v", new Long( VERSION_CURRENT ));
+			payload.put( "v", (long) VERSION_CURRENT);
 			
 			boolean	failed_to_get_key = true;
 			
@@ -1810,7 +1804,7 @@ BuddyPlugin
 				ddb.write(
 					new DistributedDatabaseListener()
 					{
-						private List<DistributedDatabaseContact>	write_contacts = new ArrayList<DistributedDatabaseContact>();
+						private List<DistributedDatabaseContact>	write_contacts = new ArrayList<>();
 						
 						public void
 						event(
@@ -1913,7 +1907,7 @@ BuddyPlugin
 		
 		synchronized( this ){
 			
-			connected_at_close = new ArrayList<BuddyPluginBuddy>();
+			connected_at_close = new ArrayList<>();
 			
 			for ( BuddyPluginBuddy buddy: buddies ){
 				
@@ -1926,24 +1920,24 @@ BuddyPlugin
 		
 		if ( ddb != null ){
 			
-			boolean	restarting = AzureusCoreFactory.isCoreAvailable() ? AzureusCoreFactory.getSingleton().isRestarting() : false;
+			boolean	restarting = AzureusCoreFactory.isCoreAvailable() && AzureusCoreFactory.getSingleton().isRestarting();
 			
 			logMessage( "   closing buddy connections" );
-			
-			for (int i=0;i<buddies.size();i++){
-				
-				((BuddyPluginBuddy)buddies.get(i)).sendCloseRequest( restarting );
+
+			for (BuddyPluginBuddy buddy : buddies) {
+
+				buddy.sendCloseRequest(restarting);
 			}
 			
 			if ( !restarting ){
 				
 				logMessage( "   updating online status" );
 				
-				List	contacts = new ArrayList();
+				List	contacts;
 				
 				synchronized( publish_write_contacts ){
 					
-					contacts.addAll( publish_write_contacts );
+					contacts = new ArrayList(publish_write_contacts);
 				}
 				
 				byte[] key_to_remove;
@@ -2052,80 +2046,78 @@ BuddyPlugin
 					deleteConfig();
 					
 				}else{
-					for (int i=0;i<buddies_config.size();i++){
-						
-						Object o = buddies_config.get(i);
-			
-						if ( o instanceof Map ){
-							
-							Map	details = (Map)o;
-							
-							Long	l_ct = (Long)details.get( "ct" );
-							
-							long	created_time = l_ct==null?now:l_ct.longValue();
-							
-							if ( created_time > now ){
-								
+					for (Object o : buddies_config) {
+
+						if (o instanceof Map) {
+
+							Map details = (Map) o;
+
+							Long l_ct = (Long) details.get("ct");
+
+							long created_time = l_ct == null ? now : l_ct;
+
+							if (created_time > now) {
+
 								created_time = now;
 							}
-							
-							String	key = new String((byte[])details.get( "pk" ));
-							
-							List	recent_ygm = (List)details.get( "ygm" );
-												
-							String	nick = decodeString((byte[])details.get( "n" ));
-							
-							Long	l_seq = (Long)details.get( "ls" );
-							
-							int	last_seq = l_seq==null?0:l_seq.intValue();
-							
-							Long	l_lo = (Long)details.get( "lo" );
-							
-							long	last_time_online = l_lo==null?0:l_lo.longValue();
-						
-							if ( last_time_online > now ){
-								
+
+							String key = new String((byte[]) details.get("pk"));
+
+							List recent_ygm = (List) details.get("ygm");
+
+							String nick = decodeString((byte[]) details.get("n"));
+
+							Long l_seq = (Long) details.get("ls");
+
+							int last_seq = l_seq == null ? 0 : l_seq.intValue();
+
+							Long l_lo = (Long) details.get("lo");
+
+							long last_time_online = l_lo == null ? 0 : l_lo;
+
+							if (last_time_online > now) {
+
 								last_time_online = now;
 							}
-							
-							Long l_subsystem = (Long)details.get( "ss" );
-							
-							int	subsystem = l_subsystem==null?SUBSYSTEM_AZ2:l_subsystem.intValue();
-							
+
+							Long l_subsystem = (Long) details.get("ss");
+
+							int subsystem = l_subsystem == null ? SUBSYSTEM_AZ2 : l_subsystem.intValue();
+
 							if (subsystem == SUBSYSTEM_AZ3) {
 								continue;
 							}
-							
-							Long l_ver = (Long)details.get("v");
-							
-							int	ver = l_ver==null?VERSION_INITIAL:l_ver.intValue();
-														
-							String	loc_cat = decodeString((byte[])details.get( "lc" ));
-							String	rem_cat = decodeString((byte[])details.get( "rc" ));
-							
-							BuddyPluginBuddy buddy = new BuddyPluginBuddy( this, created_time, subsystem, true, key, nick, ver, loc_cat, rem_cat, last_seq, last_time_online, recent_ygm );
-							
-							byte[]	ip_bytes = (byte[])details.get( "ip" );
-							
-							if ( ip_bytes != null ){
-								
-								try{
-									InetAddress ip = InetAddress.getByAddress( ip_bytes );
-									
-									int	tcp_port = ((Long)details.get( "tcp" )).intValue();
-									int	udp_port = ((Long)details.get( "udp" )).intValue();
-									
-									buddy.setCachedStatus( ip, tcp_port, udp_port );
-									
-								}catch( Throwable e ){
+
+							Long l_ver = (Long) details.get("v");
+
+							int ver = l_ver == null ? VERSION_INITIAL : l_ver.intValue();
+
+							String loc_cat = decodeString((byte[]) details.get("lc"));
+							String rem_cat = decodeString((byte[]) details.get("rc"));
+
+							BuddyPluginBuddy buddy = new BuddyPluginBuddy(this, created_time, subsystem, true, key, nick, ver, loc_cat, rem_cat, last_seq, last_time_online, recent_ygm);
+
+							byte[] ip_bytes = (byte[]) details.get("ip");
+
+							if (ip_bytes != null) {
+
+								try {
+									InetAddress ip = InetAddress.getByAddress(ip_bytes);
+
+									int tcp_port = ((Long) details.get("tcp")).intValue();
+									int udp_port = ((Long) details.get("udp")).intValue();
+
+									buddy.setCachedStatus(ip, tcp_port, udp_port);
+
+								} catch (Throwable e) {
 								}
 							}
-							
-							logMessage( "Loaded buddy " + buddy.getString());
-							
-							buddies.add( buddy );
-							
-							buddies_map.put( key, buddy );
+
+							logMessage("Loaded buddy " + buddy.getString());
+
+							buddies.add(buddy);
+
+							buddies_map.put(key, buddy);
 						}
 					}
 				}
@@ -2150,7 +2142,7 @@ BuddyPlugin
 		}
 		
 		try{
-			return( new String( bytes, "UTF8" ));
+			return( new String( bytes, StandardCharsets.UTF_8));
 			
 		}catch( Throwable e ){
 			
@@ -2173,71 +2165,69 @@ BuddyPlugin
 			if ( config_dirty || force ){
 				
 				List buddies_config = new ArrayList();
-		
-				for (int i=0;i<buddies.size();i++){
-					
-					BuddyPluginBuddy buddy = (BuddyPluginBuddy)buddies.get(i);
-		
-					if ( !buddy.isAuthorised()){
-						
+
+				for (BuddyPluginBuddy buddy : buddies) {
+
+					if (!buddy.isAuthorised()) {
+
 						continue;
 					}
-					
-					Map	map = new HashMap();
-				
-					map.put( "ct", new Long( buddy.getCreatedTime()));
-					
-					map.put( "pk", buddy.getPublicKey());
-				
-					List	ygm = buddy.getYGMMarkers();
-					
-					if ( ygm != null ){
-						
-						map.put( "ygm", ygm );
-					}
-					
-					String	nick = buddy.getNickName();
-					
-					if ( nick != null ){
-						
-						map.put( "n", nick );
-					}
-					
-					map.put( "ls", new Long( buddy.getLastStatusSeq()));
-					
-					map.put( "lo", new Long( buddy.getLastTimeOnline()));
-					
-					map.put( "ss", new Long( buddy.getSubsystem()));
-					
-					map.put( "v", new Long( buddy.getVersion()));
-					
-					if ( buddy.getLocalAuthorisedRSSTagsOrCategoriesAsString() != null ){
-						map.put( "lc", buddy.getLocalAuthorisedRSSTagsOrCategoriesAsString());
-					}
-					
-					if ( buddy.getRemoteAuthorisedRSSTagsOrCategoriesAsString() != null ){
-						map.put( "rc", buddy.getRemoteAuthorisedRSSTagsOrCategoriesAsString());
+
+					Map map = new HashMap();
+
+					map.put("ct", buddy.getCreatedTime());
+
+					map.put("pk", buddy.getPublicKey());
+
+					List ygm = buddy.getYGMMarkers();
+
+					if (ygm != null) {
+
+						map.put("ygm", ygm);
 					}
 
-					boolean connected = 
-						buddy.isConnected() ||
-						( connected_at_close != null && connected_at_close.contains( buddy ));
-					
-					if ( connected ){
-						
-						InetAddress	ip 			= buddy.getIP();
-						int			tcp_port	= buddy.getTCPPort();
-						int			udp_port	= buddy.getUDPPort();
-						
-						if ( ip != null ){
-							
-							map.put( "ip", ip.getAddress());
-							map.put( "tcp", new Long( tcp_port ));
-							map.put( "udp", new Long( udp_port ));
+					String nick = buddy.getNickName();
+
+					if (nick != null) {
+
+						map.put("n", nick);
+					}
+
+					map.put("ls", (long) buddy.getLastStatusSeq());
+
+					map.put("lo", buddy.getLastTimeOnline());
+
+					map.put("ss", (long) buddy.getSubsystem());
+
+					map.put("v", (long) buddy.getVersion());
+
+					if (buddy.getLocalAuthorisedRSSTagsOrCategoriesAsString() != null) {
+						map.put("lc", buddy.getLocalAuthorisedRSSTagsOrCategoriesAsString());
+					}
+
+					if (buddy.getRemoteAuthorisedRSSTagsOrCategoriesAsString() != null) {
+						map.put("rc", buddy.getRemoteAuthorisedRSSTagsOrCategoriesAsString());
+					}
+
+					boolean connected =
+							buddy.isConnected() ||
+									(connected_at_close != null && connected_at_close.contains(buddy));
+
+					if (connected) {
+
+						InetAddress ip = buddy.getIP();
+						int tcp_port = buddy.getTCPPort();
+						int udp_port = buddy.getUDPPort();
+
+						if (ip != null) {
+
+							map.put("ip", ip.getAddress());
+							map.put("tcp", (long) tcp_port);
+							map.put("udp", (long) udp_port);
 						}
 					}
-					
-					buddies_config.add( map );
+
+					buddies_config.add(map);
 				}
 				
 				Map	map = new HashMap();
@@ -2290,33 +2280,31 @@ BuddyPlugin
 			// unauthorised buddies)
 		
 		synchronized( this ){
-						
-			for (int i=0;i<buddies.size();i++){
-				
-				BuddyPluginBuddy buddy = (BuddyPluginBuddy)buddies.get(i);
-				
-				if ( buddy.getPublicKey().equals( key )){
-					
-					if ( buddy.getSubsystem() != subsystem ){
-						
-						log( "Buddy " + buddy.getString() + ": subsystem changed from " + buddy.getSubsystem() + " to " + subsystem );
-						
-						buddy.setSubsystem( subsystem );
-						
-						saveConfig( true );
+
+			for (BuddyPluginBuddy buddy : buddies) {
+
+				if (buddy.getPublicKey().equals(key)) {
+
+					if (buddy.getSubsystem() != subsystem) {
+
+						log("Buddy " + buddy.getString() + ": subsystem changed from " + buddy.getSubsystem() + " to " + subsystem);
+
+						buddy.setSubsystem(subsystem);
+
+						saveConfig(true);
 					}
-					
-					if ( authorised && !buddy.isAuthorised()){
-						
-						log( "Buddy " + buddy.getString() + ": no authorised" );
-						
-						buddy.setAuthorised( true );
-						
-						buddy_to_return	= buddy;
-						
-					}else{
-					
-						return( buddy );
+
+					if (authorised && !buddy.isAuthorised()) {
+
+						log("Buddy " + buddy.getString() + ": no authorised");
+
+						buddy.setAuthorised(true);
+
+						buddy_to_return = buddy;
+
+					} else {
+
+						return (buddy);
 					}
 				}
 			}
@@ -2569,14 +2557,14 @@ BuddyPlugin
 			// trim any non-authorised buddies that have gone idle
 
 		synchronized( this ){
-			
-			for (int i=0;i<buddies_copy.size();i++){
-			
-				BuddyPluginBuddy	buddy = (BuddyPluginBuddy)buddies_copy.get(i);
-				
-				if ( buddy.isIdle() && !buddy.isAuthorised()){
-					
-					removeBuddy( buddy );
+
+			for (Object o : buddies_copy) {
+
+				BuddyPluginBuddy buddy = (BuddyPluginBuddy) o;
+
+				if (buddy.isIdle() && !buddy.isAuthorised()) {
+
+					removeBuddy(buddy);
 				}
 			}
 		}
@@ -2959,7 +2947,7 @@ BuddyPlugin
 			
 			Map	payload = new HashMap();
 			
-			payload.put( "r", new Long( random.nextLong()));
+			payload.put( "r", random.nextLong());
 			
 			byte[] signed_payload = signAndInsert( payload, reason);
 			
@@ -3032,8 +3020,8 @@ BuddyPlugin
 				new DistributedDatabaseListener()
 				{	
 					private List		new_ygm_buddies = new ArrayList();
-					private boolean	 	unauth_permitted = false;;
-					
+					private boolean	 	unauth_permitted = false;
+
 					public void
 					event(
 						DistributedDatabaseEvent		event )
@@ -3095,7 +3083,7 @@ BuddyPlugin
 									
 									if ( payload != null ){
 										
-										long	rand = ((Long)payload.get("r")).longValue();
+										long	rand = (Long) payload.get("r");
 										
 										if ( buddy.addYGMMarker( rand )){
 											
@@ -3176,7 +3164,7 @@ BuddyPlugin
 	{
 		synchronized( this ){
 			
-			return((BuddyPluginBuddy)buddies_map.get( key ));
+			return buddies_map.get( key );
 		}
 	}
 	
@@ -3207,15 +3195,13 @@ BuddyPlugin
 	{
 		synchronized( this ){
 			
-			List<BuddyPluginBuddy>	result = new ArrayList<BuddyPluginBuddy>();
-			
-			for (int i=0;i<buddies.size();i++){
-				
-				BuddyPluginBuddy	buddy = (BuddyPluginBuddy)buddies.get(i);
-				
-				if ( buddy.isAuthorised()){
-					
-					result.add( buddy );
+			List<BuddyPluginBuddy>	result = new ArrayList<>();
+
+			for (BuddyPluginBuddy buddy : buddies) {
+
+				if (buddy.isAuthorised()) {
+
+					result.add(buddy);
 				}
 			}
 			
@@ -3228,7 +3214,7 @@ BuddyPlugin
 	{
 		synchronized( this ){
 			
-			return( new ArrayList<BuddyPluginBuddy>( buddies ));
+			return new ArrayList<>(buddies);
 		}
 	}
 	
@@ -3284,14 +3270,14 @@ BuddyPlugin
 		}
 		
 		List	 listeners_ref = listeners.getList();
-		
-		for (int i=0;i<listeners_ref.size();i++){
 
-			try{
-				((BuddyPluginListener)listeners_ref.get(i)).initialised( ok );
-				
-			}catch( Throwable e ){
-				
+		for (Object o : listeners_ref) {
+
+			try {
+				((BuddyPluginListener) o).initialised(ok);
+
+			} catch (Throwable e) {
+
 				Debug.printStackTrace(e);
 			}
 		}	
@@ -3329,25 +3315,25 @@ BuddyPlugin
 		throws BuddyPluginException
 	{
 		List	 listeners_ref = request_listeners.getList();
-		
-		for (int i=0;i<listeners_ref.size();i++){
-			
-			try{
-				Map reply = ((BuddyPluginBuddyRequestListener)listeners_ref.get(i)).requestReceived(from_buddy, subsystem, content);
-				
-				if ( reply != null ){
-					
-					return( reply );
+
+		for (Object o : listeners_ref) {
+
+			try {
+				Map reply = ((BuddyPluginBuddyRequestListener) o).requestReceived(from_buddy, subsystem, content);
+
+				if (reply != null) {
+
+					return (reply);
 				}
-			}catch( BuddyPluginException e ){
-				
-				throw( e );
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace( e );
-				
-				throw( new BuddyPluginException( "Request processing failed", e ));
+			} catch (BuddyPluginException e) {
+
+				throw (e);
+
+			} catch (Throwable e) {
+
+				Debug.printStackTrace(e);
+
+				throw (new BuddyPluginException("Request processing failed", e));
 			}
 		}
 		
@@ -3363,17 +3349,17 @@ BuddyPlugin
 			buddy.setLocalAuthorisedRSSTagsOrCategories( public_tags_or_categories );
 			
 	   		List	 listeners_ref = listeners.getList();
-	   		
-	   		for (int i=0;i<listeners_ref.size();i++){
-	   			
-	   			try{
-	   				((BuddyPluginListener)listeners_ref.get(i)).buddyAdded( buddy );
-	 
-	   			}catch( Throwable e ){
-	   				
-	   				Debug.printStackTrace( e );
-	   			}
-	   		}
+
+			for (Object o : listeners_ref) {
+
+				try {
+					((BuddyPluginListener) o).buddyAdded(buddy);
+
+				} catch (Throwable e) {
+
+					Debug.printStackTrace(e);
+				}
+			}
 		}
    	}
 	
@@ -3384,17 +3370,17 @@ BuddyPlugin
 		if ( buddy.isAuthorised()){
 			
 	   		List	 listeners_ref = listeners.getList();
-	   		
-	   		for (int i=0;i<listeners_ref.size();i++){
-	   			
-	   			try{
-	   				((BuddyPluginListener)listeners_ref.get(i)).buddyRemoved( buddy );
-	 
-	   			}catch( Throwable e ){
-	   				
-	   				Debug.printStackTrace( e );
-	   			}
-	   		}
+
+			for (Object o : listeners_ref) {
+
+				try {
+					((BuddyPluginListener) o).buddyRemoved(buddy);
+
+				} catch (Throwable e) {
+
+					Debug.printStackTrace(e);
+				}
+			}
 		}
    	}
 	
@@ -3405,17 +3391,17 @@ BuddyPlugin
 		if ( buddy.isAuthorised()){
 			
 	   		List	 listeners_ref = listeners.getList();
-	   		
-	   		for (int i=0;i<listeners_ref.size();i++){
-	   			
-	   			try{
-	   				((BuddyPluginListener)listeners_ref.get(i)).buddyChanged( buddy );
-	 
-	   			}catch( Throwable e ){
-	   				
-	   				Debug.printStackTrace( e );
-	   			}
-	   		}
+
+			for (Object o : listeners_ref) {
+
+				try {
+					((BuddyPluginListener) o).buddyChanged(buddy);
+
+				} catch (Throwable e) {
+
+					Debug.printStackTrace(e);
+				}
+			}
 		}
    	}
 	
@@ -3424,17 +3410,17 @@ BuddyPlugin
    		BuddyPluginBuddy[]		from_buddies )
    	{
    		List	 listeners_ref = request_listeners.getList();
-   		
-   		for (int i=0;i<listeners_ref.size();i++){
-   			
-   			try{
-   				((BuddyPluginBuddyRequestListener)listeners_ref.get(i)).pendingMessages( from_buddies );
- 
-   			}catch( Throwable e ){
-   				
-   				Debug.printStackTrace( e );
-   			}
-   		}
+
+		for (Object o : listeners_ref) {
+
+			try {
+				((BuddyPluginBuddyRequestListener) o).pendingMessages(from_buddies);
+
+			} catch (Throwable e) {
+
+				Debug.printStackTrace(e);
+			}
+		}
    	}
 
 	protected void
@@ -3443,17 +3429,17 @@ BuddyPlugin
 		final boolean enabled = !plugin_interface.getPluginState().isDisabled() && isClassicEnabled();
 
  		List	 listeners_ref = listeners.getList();
- 		
- 		for (int i=0;i<listeners_ref.size();i++){
- 			
- 			try{
- 				((BuddyPluginListener)listeners_ref.get(i)).enabledStateChanged( enabled );
 
- 			}catch( Throwable e ){
- 				
- 				Debug.printStackTrace( e );
- 			}
- 		}
+		for (Object o : listeners_ref) {
+
+			try {
+				((BuddyPluginListener) o).enabledStateChanged(enabled);
+
+			} catch (Throwable e) {
+
+				Debug.printStackTrace(e);
+			}
+		}
  	}
 	
 	protected void
@@ -3544,18 +3530,22 @@ BuddyPlugin
 				
 				String	lhs = bits[0];
 				String	rhs	= UrlUtils.decode( bits[1] );
-				
-				if ( lhs.equals( "pk" )){
-					
-					pk		= rhs;
-					
-				}else if ( lhs.equals( "cat" )){
-					
-					category_or_tag = rhs;
-					
-				}else if ( lhs.equals( "hash" )){
-					
-					hash	= Base32.decode(rhs);
+
+				switch (lhs) {
+					case "pk":
+
+						pk = rhs;
+
+						break;
+					case "cat":
+
+						category_or_tag = rhs;
+
+						break;
+					case "hash":
+
+						hash = Base32.decode(rhs);
+						break;
 				}
 			}
 			
@@ -3595,12 +3585,12 @@ BuddyPlugin
 			throw( new IPCException( "Buddy isn't online" ));
 		}
 		
-		Map<String,Object>	msg = new HashMap<String, Object>();
+		Map<String,Object>	msg = new HashMap<>();
 
 		final String if_mod 	= connection.getRequestProperty( "If-Modified-Since" );
 
 		try{
-			msg.put( "cat", tag_or_category.getBytes( "UTF-8" ));
+			msg.put( "cat", tag_or_category.getBytes(StandardCharsets.UTF_8));
 									
 			if ( if_mod != null ){
 				
@@ -3642,7 +3632,7 @@ BuddyPlugin
 						
 						if ( b_last_mod != null ){
 						
-							String	last_mod = new String( b_last_mod, "UTF-8" );
+							String	last_mod = new String( b_last_mod, StandardCharsets.UTF_8);
 							
 							connection.setHeaderField( "Last-Modified", last_mod );
 							
@@ -3711,10 +3701,10 @@ BuddyPlugin
 
 			try{
 				
-				Map<String,Object>	msg = new HashMap<String, Object>();
+				Map<String,Object>	msg = new HashMap<>();
 			
 				try{
-					msg.put( "cat", tag_or_category.getBytes( "UTF-8" ));
+					msg.put( "cat", tag_or_category.getBytes(StandardCharsets.UTF_8));
 									
 					msg.put( "hash", hash );
 							
@@ -3990,57 +3980,55 @@ BuddyPlugin
 		
 		Download[] downloads = plugin_interface.getDownloadManager().getDownloads();
 		
-		List<Download>	selected_dls = new ArrayList<Download>();
+		List<Download>	selected_dls = new ArrayList<>();
 		
 		long	fingerprint	= 0;
-		
-		for (int i=0;i<downloads.length;i++){
-			
-			Download download = downloads[i];
-			
+
+		for (Download download : downloads) {
+
 			Torrent torrent = download.getTorrent();
-			
-			if ( torrent == null ){
-				
+
+			if (torrent == null) {
+
 				continue;
 			}
-			
-			boolean	match = tag_or_category.equalsIgnoreCase( "all" );
-			
-			if ( !match ){
-			
-				String dl_cat = download.getAttribute( ta_category );
-		
-				match = dl_cat != null && dl_cat.equals( tag_or_category );
+
+			boolean match = tag_or_category.equalsIgnoreCase("all");
+
+			if (!match) {
+
+				String dl_cat = download.getAttribute(ta_category);
+
+				match = dl_cat != null && dl_cat.equals(tag_or_category);
 			}
-			
-			if ( !match ){
-				
-				try{
-					List<Tag> tags = TagManagerFactory.getTagManager().getTagsForTaggable( TagType.TT_DOWNLOAD_MANUAL, PluginCoreUtils.unwrap( download ));
-					
-					for ( Tag tag: tags ){
-						
-						if ( tag.getTagName( true ).equals( tag_or_category )){
-							
+
+			if (!match) {
+
+				try {
+					List<Tag> tags = TagManagerFactory.getTagManager().getTagsForTaggable(TagType.TT_DOWNLOAD_MANUAL, PluginCoreUtils.unwrap(download));
+
+					for (Tag tag : tags) {
+
+						if (tag.getTagName(true).equals(tag_or_category)) {
+
 							match = true;
-							
+
 							break;
 						}
 					}
-				}catch( Throwable e ){
+				} catch (Throwable e) {
 				}
 			}
-			
-			if ( match ){
-				
-				if ( !TorrentUtils.isReallyPrivate( PluginCoreUtils.unwrap( torrent ))){
-					
-					selected_dls.add( download );
-					
+
+			if (match) {
+
+				if (!TorrentUtils.isReallyPrivate(PluginCoreUtils.unwrap(torrent))) {
+
+					selected_dls.add(download);
+
 					byte[] hash = torrent.getHash();
-					
-					int	num = (hash[0]<<24)&0xff000000 | (hash[1] << 16)&0x00ff0000 | (hash[2] << 8)&0x0000ff00 | hash[3]&0x000000ff;
+
+					int num = (hash[0] << 24) & 0xff000000 | (hash[1] << 16) & 0x00ff0000 | (hash[2] << 8) & 0x0000ff00 | hash[3] & 0x000000ff;
 
 					fingerprint += num;
 				}
@@ -4100,7 +4088,7 @@ BuddyPlugin
 		ByteArrayOutputStream	os = new ByteArrayOutputStream();
 			
 		try{
-			PrintWriter pw = new PrintWriter(new OutputStreamWriter( os, "UTF-8" ));
+			PrintWriter pw = new PrintWriter(new OutputStreamWriter( os, StandardCharsets.UTF_8));
 			
 			pw.println( "<?xml version=\"1.0\" encoding=\"utf-8\"?>" );
 			
@@ -4128,47 +4116,45 @@ BuddyPlugin
 								
 							
 			pw.println(	"<pubDate>" + last_modified + "</pubDate>" );
-		
-			for (int i=0;i<selected_dls.size();i++){
-				
-				Download download = (Download)selected_dls.get( i );
-				
-				DownloadManager	core_download = PluginCoreUtils.unwrap( download );
-				
+
+			for (Download download : selected_dls) {
+
+				DownloadManager core_download = PluginCoreUtils.unwrap(download);
+
 				Torrent torrent = download.getTorrent();
-				
-				String	hash_str = Base32.encode( torrent.getHash());
-				
-				pw.println( "<item>" );
-				
-				pw.println( "<title>" + escape( download.getName()) + "</title>" );
-				
-				pw.println( "<guid>" + hash_str + "</guid>" );
-				
+
+				String hash_str = Base32.encode(torrent.getHash());
+
+				pw.println("<item>");
+
+				pw.println("<title>" + escape(download.getName()) + "</title>");
+
+				pw.println("<guid>" + hash_str + "</guid>");
+
 				long added = core_download.getDownloadState().getLongParameter(DownloadManagerState.PARAM_DOWNLOAD_ADDED_TIME);
-				
-				pw.println(	"<pubDate>" + TimeFormatter.getHTTPDate( added ) + "</pubDate>" );
-				
-				pw.println(	"<vuze:size>" + torrent.getSize()+ "</vuze:size>" );
-				pw.println(	"<vuze:assethash>" + hash_str + "</vuze:assethash>" );
-				
+
+				pw.println("<pubDate>" + TimeFormatter.getHTTPDate(added) + "</pubDate>");
+
+				pw.println("<vuze:size>" + torrent.getSize() + "</vuze:size>");
+				pw.println("<vuze:assethash>" + hash_str + "</vuze:assethash>");
+
 				String url = "azplug:?id=azbuddy&name=Friends&arg=";
-				
+
 				String arg = "pk=" + getPublicKey() + "&cat=" + tag_or_category + "&hash=" + Base32.encode(torrent.getHash());
 
-				url += URLEncoder.encode( arg, "UTF-8" );
-			
-				pw.println( "<vuze:downloadurl>" + escape( url ) + "</vuze:downloadurl>" );
-		
+				url += URLEncoder.encode(arg, "UTF-8");
+
+				pw.println("<vuze:downloadurl>" + escape(url) + "</vuze:downloadurl>");
+
 				DownloadScrapeResult scrape = download.getLastScrapeResult();
-				
-				if ( scrape != null && scrape.getResponseType() == DownloadScrapeResult.RT_SUCCESS ){
-					
-					pw.println(	"<vuze:seeds>" + scrape.getSeedCount() + "</vuze:seeds>" );
-					pw.println(	"<vuze:peers>" + scrape.getNonSeedCount() + "</vuze:peers>" );
+
+				if (scrape != null && scrape.getResponseType() == DownloadScrapeResult.RT_SUCCESS) {
+
+					pw.println("<vuze:seeds>" + scrape.getSeedCount() + "</vuze:seeds>");
+					pw.println("<vuze:peers>" + scrape.getNonSeedCount() + "</vuze:peers>");
 				}
-				
-				pw.println( "</item>" );
+
+				pw.println("</item>");
 			}
 			
 			pw.println( "</channel>" );
@@ -4280,17 +4266,15 @@ BuddyPlugin
 		boolean		is_error )
 	{
 		log( str );
-		
-		Iterator it = listeners.iterator();
-		
-		while( it.hasNext()){
-			
-			try{
-				((BuddyPluginListener)it.next()).messageLogged( str, is_error );
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace( e );
+
+		for (BuddyPluginListener listener : listeners) {
+
+			try {
+				(listener).messageLogged(str, is_error);
+
+			} catch (Throwable e) {
+
+				Debug.printStackTrace(e);
 			}
 		}
 	}
@@ -4469,17 +4453,17 @@ BuddyPlugin
 	protected interface
 	operationListener
 	{
-		public void
+		void
 		complete();
 	}
 	
 	public interface
 	cryptoResult
 	{
-		public byte[]
+		byte[]
 		getChallenge();
 		
-		public byte[]
+		byte[]
 		getPayload();
 	}
 	

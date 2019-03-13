@@ -30,21 +30,21 @@ import com.aelitis.azureus.core.dht.transport.DHTTransportContact;
 public interface 
 DHTControlAdapter 
 {
-	public DHTStorageAdapter
+	DHTStorageAdapter
 	getStorageAdapter();
 
-	public byte[][]
+	byte[][]
 	diversify(
-		String				description,
-		DHTTransportContact	cause,
-		boolean				put_operation,
-		boolean				existing,
-		byte[]				key,
-		byte				type,
-		boolean				exhaustive,
-		int					max_depth );
+            String description,
+            DHTTransportContact cause,
+            boolean put_operation,
+            boolean existing,
+            byte[] key,
+            byte type,
+            boolean exhaustive,
+            int max_depth);
 	
-	public boolean
+	boolean
 	isDiversified(
-		byte[]		key );
+            byte[] key);
 }

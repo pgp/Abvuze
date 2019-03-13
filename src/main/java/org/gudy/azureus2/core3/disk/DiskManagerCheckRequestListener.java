@@ -27,17 +27,17 @@ package org.gudy.azureus2.core3.disk;
 public interface 
 DiskManagerCheckRequestListener 
 {
-	public void 
-	checkCompleted( 
-		DiskManagerCheckRequest 	request,
-		boolean						passed );
+	void
+	checkCompleted(
+            DiskManagerCheckRequest request,
+            boolean passed);
 	 
-	public void
+	void
 	checkCancelled(
-		DiskManagerCheckRequest		request );
+            DiskManagerCheckRequest request);
 	
-	public void 
-	checkFailed( 
-		DiskManagerCheckRequest 	request, 
-		Throwable		 			cause );
+	void
+	checkFailed(
+            DiskManagerCheckRequest request,
+            Throwable cause);
 }

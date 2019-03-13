@@ -27,13 +27,13 @@ package org.gudy.azureus2.plugins.peers;
 public interface 
 PeerManagerListener 
 {
-	public void
+	void
 	peerAdded(
-		PeerManager	manager,
-		Peer		peer );
+            PeerManager manager,
+            Peer peer);
 	
-	public void
+	void
 	peerRemoved(
-		PeerManager	manager,
-		Peer		peer );
+            PeerManager manager,
+            Peer peer);
 }

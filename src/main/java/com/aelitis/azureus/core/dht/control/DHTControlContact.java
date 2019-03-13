@@ -25,9 +25,9 @@ import com.aelitis.azureus.core.dht.transport.DHTTransportContact;
 public interface 
 DHTControlContact 
 {
-	public DHTRouterContact
+	DHTRouterContact
 	getRouterContact();
 	
-	public DHTTransportContact
+	DHTTransportContact
 	getTransportContact();
 }

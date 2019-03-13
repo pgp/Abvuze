@@ -27,38 +27,38 @@ package com.aelitis.azureus.core;
 public interface 
 AzureusCoreLifecycleListener 
 {
-	public void
+	void
 	componentCreated(
-		AzureusCore				core,
-		AzureusCoreComponent	component );
+            AzureusCore core,
+            AzureusCoreComponent component);
 	
-	public void
+	void
 	started(
-		AzureusCore		core );
+            AzureusCore core);
 	
-	public void
+	void
 	stopping(
-		AzureusCore		core );
+            AzureusCore core);
 	
-	public void
+	void
 	stopped(
-		AzureusCore		core );
+            AzureusCore core);
 	
 		/**
 		 * return true if the request has been accepted (and hence the listener will arrange for a stop to occur
 		 * @param core
 		 * @return
 		 */
-	
-	public boolean
+
+        boolean
 	stopRequested(
-		AzureusCore		core )
+                AzureusCore core)
 	
 		throws AzureusCoreException;
 	
-	public boolean
+	boolean
 	restartRequested(
-		AzureusCore		core )
+            AzureusCore core)
 	
 		throws AzureusCoreException;
 
@@ -68,8 +68,8 @@ AzureusCoreLifecycleListener
 		 * initiated the closedown.
 		 * @return
 		 */
-	
-	public boolean
+
+        boolean
 	syncInvokeRequired();
 	
 		/**
@@ -79,7 +79,7 @@ AzureusCoreLifecycleListener
 		 * indicate that they're happy to be "started" before plugin init complete
 		 * @return
 		 */
-	
-	public boolean
+
+        boolean
 	requiresPluginInitCompleteBeforeStartedEvent();
 }

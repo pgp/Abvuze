@@ -22,28 +22,28 @@ package com.aelitis.net.upnp;
 public interface 
 UPnPSSDP 
 {
-	public static final String				SSDP_GROUP_ADDRESS 	= "239.255.255.250"; 
-	public static final int					SSDP_GROUP_PORT		= 1900;	
+	String				SSDP_GROUP_ADDRESS 	= "239.255.255.250";
+	int					SSDP_GROUP_PORT		= 1900;
 
-	public int
+	int
 	getControlPort();
 	
-	public void
+	void
 	search(
-		String[]		STs );
+            String[] STs);
 	
-	public void
+	void
 	notify(
-		String		NT,
-		String		NTS,
-		String		UUID,
-		String		url );
+            String NT,
+            String NTS,
+            String UUID,
+            String url);
 	
-	public void
+	void
 	addListener(
-		UPnPSSDPListener	l );
+            UPnPSSDPListener l);
 	
-	public void
+	void
 	removeListener(
-		UPnPSSDPListener	l );
+            UPnPSSDPListener l);
 }

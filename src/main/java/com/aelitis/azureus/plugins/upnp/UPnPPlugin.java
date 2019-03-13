@@ -99,11 +99,11 @@ UPnPPlugin
 	private BooleanParameter	ignore_bad_devices;
 	private LabelParameter		ignored_devices_list;
 	
-	private List<UPnPMapping>		mappings	= new ArrayList<UPnPMapping>();
-	private List<UPnPPluginService>	services	= new ArrayList<UPnPPluginService>();
+	private List<UPnPMapping>		mappings	= new ArrayList<>();
+	private List<UPnPPluginService>	services	= new ArrayList<>();
 	
-	private Map<URL,String> 	root_info_map		= new HashMap<URL, String>();
-	private Map<String,String> log_no_repeat_map	= new HashMap<String,String>();
+	private Map<URL,String> 	root_info_map		= new HashMap<>();
+	private Map<String,String> log_no_repeat_map	= new HashMap<>();
 	
 	protected AEMonitor	this_mon 	= new AEMonitor( "UPnPPlugin" );
 	   
@@ -259,13 +259,13 @@ UPnPPlugin
 					Parameter	param )
 				{
 					PluginConfig pc = plugin_interface.getPluginconfig();
-					
-					for (int i=0;i<STATS_KEYS.length;i++){
-						
-						String	key = "upnp.device.stats." + STATS_KEYS[i];
-						
-						pc.setPluginMapParameter( key, new HashMap());
-					}
+
+                    for (String statsKey : STATS_KEYS) {
+
+                        String key = "upnp.device.stats." + statsKey;
+
+                        pc.setPluginMapParameter(key, new HashMap());
+                    }
 					
 					pc.setPluginMapParameter( "upnp.device.ignorelist", new HashMap());
 					
@@ -398,17 +398,15 @@ UPnPPlugin
 				PluginConfig pc = plugin_interface.getPluginconfig();
 	
 				Map	ignored = pc.getPluginMapParameter( "upnp.device.ignorelist", new HashMap());
-				
-				Iterator	it = ignored.entrySet().iterator();
-				
-				while( it.hasNext()){
-					
-					Map.Entry	entry = (Map.Entry)it.next();
-								
-					Map	value = (Map)entry.getValue();
-					
-					param += "\n    " + entry.getKey() + ": " + new String((byte[])value.get( "Location" ));
-				}
+
+                for (Object o : ignored.entrySet()) {
+
+                    Map.Entry entry = (Map.Entry) o;
+
+                    Map value = (Map) entry.getValue();
+
+                    param += "\n    " + entry.getKey() + ": " + new String((byte[]) value.get("Location"));
+                }
 				
 				if ( ignored.size() > 0 ){
 					
@@ -663,11 +661,11 @@ UPnPPlugin
 				});
 			
 			UPnPMapping[]	upnp_mappings = mapping_manager.getMappings();
-			
-			for (int i=0;i<upnp_mappings.length;i++){
-				
-				addMapping( upnp_mappings[i] );
-			}
+
+            for (UPnPMapping upnp_mapping : upnp_mappings) {
+
+                addMapping(upnp_mapping);
+            }
 			
 			setNATPMPEnableState();
 
@@ -693,22 +691,18 @@ UPnPPlugin
 			run()
 			{
 				try{
-					for (int i=0;i<mappings.size();i++){
-						
-						UPnPMapping	mapping = (UPnPMapping)mappings.get(i);
-						
-						if ( !mapping.isEnabled()){
-							
-							continue;
-						}
-						
-						for (int j=0;j<services.size();j++){
-							
-							UPnPPluginService	service = (UPnPPluginService)services.get(j);
-							
-							service.removeMapping( log, mapping, end_of_day );
-						}
-					}
+                    for (UPnPMapping mapping : mappings) {
+
+                        if (!mapping.isEnabled()) {
+
+                            continue;
+                        }
+
+                        for (UPnPPluginService service : services) {
+
+                            service.removeMapping(log, mapping, end_of_day);
+                        }
+                    }
 				}finally{
 					
 					sem.release();
@@ -746,44 +740,44 @@ UPnPPlugin
 			boolean found	= false;
 			
 			boolean	all_exclude = true;
-			
-			for (int i=0;i<addresses.length;i++){
-				
-				String	this_address = addresses[i];
-				
-				boolean	include = true;
 
-				if ( this_address.startsWith( "+" )){
-					
-					this_address = this_address.substring(1);
-					
-					all_exclude = false;
-					
-				}else if ( this_address.startsWith( "-" )){
-					
-					this_address = this_address.substring(1);
-					
-					include = false;
-					
-				}else{
-					
-					all_exclude = false;
-				}
-				
-				if ( this_address.equals( address )){
-				
-					if ( !include ){
-						
-						logNoRepeat( USN, "Device '" + location + "' is being ignored as excluded in address list" );
-						
-						return( false );
-					}
-					
-					found = true;
-					
-					break;
-				}
-			}
+            for (String address1 : addresses) {
+
+                String this_address = address1;
+
+                boolean include = true;
+
+                if (this_address.startsWith("+")) {
+
+                    this_address = this_address.substring(1);
+
+                    all_exclude = false;
+
+                } else if (this_address.startsWith("-")) {
+
+                    this_address = this_address.substring(1);
+
+                    include = false;
+
+                } else {
+
+                    all_exclude = false;
+                }
+
+                if (this_address.equals(address)) {
+
+                    if (!include) {
+
+                        logNoRepeat(USN, "Device '" + location + "' is being ignored as excluded in address list");
+
+                        return (false);
+                    }
+
+                    found = true;
+
+                    break;
+                }
+            }
 			
 			if ( !found ){
 				
@@ -835,7 +829,7 @@ UPnPPlugin
 	{
 		synchronized( log_no_repeat_map ){
 			
-			String	last = (String)log_no_repeat_map.get( usn );
+			String	last = log_no_repeat_map.get( usn );
 			
 			if ( last != null && last.equals( msg )){
 				
@@ -874,7 +868,7 @@ UPnPPlugin
 					
 					while( it.hasNext()){
 						
-						String	info = (String)it.next();
+						String	info = it.next();
 						
 						if ( info != null && !reported_info.contains( info )){
 							
@@ -965,18 +959,18 @@ UPnPPlugin
 		
 		if ( count == null ){
 			
-			count = new Long(1);
+			count = 1L;
 			
 		}else{
 			
-			count = new Long( count.longValue() + 1 );
+			count = count.longValue() + 1;
 		}
 		
 		counts.put( USN, count );
 		
 		pc.getPluginMapParameter( key, counts );
 				
-		return( count.longValue());
+		return(count);
 	}
 	
 	protected long
@@ -997,7 +991,7 @@ UPnPPlugin
 			return( 0 );
 		}
 		
-		return( count.longValue());
+		return(count);
 	}
 		
 	protected void
@@ -1012,7 +1006,7 @@ UPnPPlugin
 
 		Map	counts = pc.getPluginMapParameter( key, new HashMap());
 		
-		counts.put( USN, new Long( value ));
+		counts.put( USN, value);
 		
 		pc.getPluginMapParameter( key, counts );
 	}
@@ -1058,7 +1052,7 @@ UPnPPlugin
 			}
 		}
 		
-		return( (String[])res.toArray( new String[res.size()]));
+		return( (String[])res.toArray(new String[0]));
 	}
 	
 	protected String[]
@@ -1080,7 +1074,7 @@ UPnPPlugin
 			}
 		}
 
-		return( (String[])res.toArray( new String[res.size()]));
+		return( (String[])res.toArray(new String[0]));
 	}
 	
 	protected int
@@ -1092,11 +1086,11 @@ UPnPPlugin
 		int	interesting = processServices( device, device.getServices());
 			
 		UPnPDevice[]	kids = device.getSubDevices();
-				
-		for (int i=0;i<kids.length;i++){
-			
-			interesting += processDevice( kids[i] );
-		}
+
+        for (UPnPDevice kid : kids) {
+
+            interesting += processDevice(kid);
+        }
 		
 		return( interesting );
 	}
@@ -1109,35 +1103,31 @@ UPnPPlugin
 		throws UPnPException
 	{
 		int	interesting = 0;
-		
-		for (int i=0;i<device_services.length;i++){
-			
-			UPnPService	s = device_services[i];
-			
-			String	service_type = s.getServiceType();
-			
-			if ( 	service_type.equalsIgnoreCase( "urn:schemas-upnp-org:service:WANIPConnection:1") || 
-					service_type.equalsIgnoreCase( "urn:schemas-upnp-org:service:WANPPPConnection:1")){
-				
-				final UPnPWANConnection	wan_service = (UPnPWANConnection)s.getSpecificService();
-								
-				device.getRootDevice().addListener(
-					new UPnPRootDeviceListener()
-					{
-						public void
-						lost(
-							UPnPRootDevice	root,
-							boolean			replaced )
-						{
-							removeService( wan_service, replaced );
-						}
-					});
-				
-				addService( wan_service );
-				
-				interesting++;
-				
-			}else if ( 	service_type.equalsIgnoreCase( "urn:schemas-upnp-org:service:WANCommonInterfaceConfig:1")){ 
+
+        for (UPnPService s : device_services) {
+
+            String service_type = s.getServiceType();
+
+            if (service_type.equalsIgnoreCase("urn:schemas-upnp-org:service:WANIPConnection:1") ||
+                    service_type.equalsIgnoreCase("urn:schemas-upnp-org:service:WANPPPConnection:1")) {
+
+                final UPnPWANConnection wan_service = (UPnPWANConnection) s.getSpecificService();
+
+                device.getRootDevice().addListener(
+                        new UPnPRootDeviceListener() {
+                            public void
+                            lost(
+                                    UPnPRootDevice root,
+                                    boolean replaced) {
+                                removeService(wan_service, replaced);
+                            }
+                        });
+
+                addService(wan_service);
+
+                interesting++;
+
+            } else if (service_type.equalsIgnoreCase("urn:schemas-upnp-org:service:WANCommonInterfaceConfig:1")) {
 				
 				/* useless stats
 				try{
@@ -1156,8 +1146,8 @@ UPnPPlugin
 					log.log(e);
 				}
 				*/
-			}
-		}
+            }
+        }
 		
 		return( interesting );
 	}
@@ -1213,7 +1203,7 @@ UPnPPlugin
 				
 				for (int i=0;i<services.size()-1;i++){
 					
-					UPnPPluginService	service = (UPnPPluginService)services.get(i);
+					UPnPPluginService	service = services.get(i);
 					
 					String existing_usn = service.getService().getGenericService().getDevice().getRootDevice().getUSN();
 					
@@ -1273,7 +1263,7 @@ UPnPPlugin
 					
 			for (int i=0;i<services.size();i++){
 				
-				UPnPPluginService	ps = (UPnPPluginService)services.get(i);
+				UPnPPluginService	ps = services.get(i);
 				
 				if ( ps.getService() == wan_service ){
 					
@@ -1328,12 +1318,10 @@ UPnPPlugin
 			
 			log.log( "Mapping request removed: " + mapping.getString());
 
-			for (int j=0;j<services.size();j++){
-				
-				UPnPPluginService	service = (UPnPPluginService)services.get(j);
-				
-				service.removeMapping( log, mapping, false );
-			}
+            for (UPnPPluginService service : services) {
+
+                service.removeMapping(log, mapping, false);
+            }
 		}finally{
 			
 			this_mon.exit();
@@ -1345,18 +1333,14 @@ UPnPPlugin
 	{		
 		try{
 			this_mon.enter();
-		
-			for (int i=0;i<mappings.size();i++){
-				
-				UPnPMapping	mapping = (UPnPMapping)mappings.get(i);
-	
-				for (int j=0;j<services.size();j++){
-					
-					UPnPPluginService	service = (UPnPPluginService)services.get(j);
-					
-					service.checkMapping( log, mapping );
-				}
-			}
+
+            for (UPnPMapping mapping : mappings) {
+
+                for (UPnPPluginService service : services) {
+
+                    service.checkMapping(log, mapping);
+                }
+            }
 		}finally{
 			
 			this_mon.exit();
@@ -1370,29 +1354,27 @@ UPnPPlugin
 		
 		try{
 			this_mon.enter();
-			
-			for (int j=0;j<services.size();j++){
-				
-				UPnPPluginService	service = (UPnPPluginService)services.get(j);
-				
-				try{
-					String	address = service.getService().getExternalIPAddress();
-				
-					if ( address != null ){
-						
-						res.add( address );
-					}
-				}catch( Throwable e ){
-					
-					Debug.printStackTrace(e);
-				}
-			}
+
+            for (UPnPPluginService service : services) {
+
+                try {
+                    String address = service.getService().getExternalIPAddress();
+
+                    if (address != null) {
+
+                        res.add(address);
+                    }
+                } catch (Throwable e) {
+
+                    Debug.printStackTrace(e);
+                }
+            }
 		}finally{
 			
 			this_mon.exit();
 		}
 		
-		return((String[])res.toArray( new String[res.size()]));
+		return((String[])res.toArray(new String[0]));
 	}
 	
 	public UPnPPluginService[]
@@ -1401,7 +1383,7 @@ UPnPPlugin
 		try{
 			this_mon.enter();
 						
-			return((UPnPPluginService[])services.toArray( new UPnPPluginService[services.size()] ));
+			return services.toArray( new UPnPPluginService[services.size()] );
 			
 		}finally{
 			
@@ -1415,7 +1397,7 @@ UPnPPlugin
 	{
 		String	target_usn = device.getRootDevice().getUSN();
 		
-		List<UPnPPluginService> res = new ArrayList<UPnPPluginService>();
+		List<UPnPPluginService> res = new ArrayList<>();
 		
 		try{
 			this_mon.enter();
@@ -1434,7 +1416,7 @@ UPnPPlugin
 			this_mon.exit();
 		}
 		
-		return( res.toArray( new UPnPPluginService[res.size()] ));
+		return( res.toArray(new UPnPPluginService[0]));
 	}
 	
 		// for external use, e.g. webui
@@ -1558,9 +1540,9 @@ UPnPPlugin
 		try{
 			this_mon.enter();
 
-			mappings_copy 	= new ArrayList<UPnPMapping>( mappings );
+			mappings_copy 	= new ArrayList<>(mappings);
 			
-			services_copy	= new ArrayList<UPnPPluginService>( services );
+			services_copy	= new ArrayList<>(services);
 			
 		}finally{
 			

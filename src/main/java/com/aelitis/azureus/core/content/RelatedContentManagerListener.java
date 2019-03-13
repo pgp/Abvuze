@@ -23,21 +23,21 @@ package com.aelitis.azureus.core.content;
 public interface 
 RelatedContentManagerListener 
 {
-	public void
+	void
 	contentFound(
-		RelatedContent[]	content );
+            RelatedContent[] content);
 
-	public void
+	void
 	contentChanged(
-		RelatedContent[]	content );
+            RelatedContent[] content);
 	
-	public void
+	void
 	contentRemoved(
-		RelatedContent[]	content );
+            RelatedContent[] content);
 	
-	public void
+	void
 	contentChanged();
 	
-	public void
+	void
 	contentReset();
 }

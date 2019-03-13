@@ -62,7 +62,7 @@ VersionCheckClientUDPReply
 		
 		is.read( bytes );
 		
-		payload = (Map<String,Object>)BDecoder.decode( bytes );
+		payload = BDecoder.decode( bytes );
 	}
 	
 	public void

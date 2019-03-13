@@ -301,7 +301,7 @@ public class DateParserClassic extends DateParser {
 	}
 	
 	
-	public static void main(String args[]) {
+	public static void main(String[] args) {
 		DEBUG = true;
 		DateParserClassic dateParser = new DateParserClassic();
 		

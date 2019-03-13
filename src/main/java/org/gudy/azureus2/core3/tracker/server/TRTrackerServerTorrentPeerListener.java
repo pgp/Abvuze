@@ -24,27 +24,27 @@ import java.util.Map;
 public interface
 TRTrackerServerTorrentPeerListener 
 {
-	public static final int	ET_STARTED			= 1;	
-	public static final int	ET_UPDATED			= 2;	
-	public static final int	ET_COMPLETE			= 3;
+	int	ET_STARTED			= 1;
+	int	ET_UPDATED			= 2;
+	int	ET_COMPLETE			= 3;
 	
 		// all the following result in the peer being removed from the tracker's tables
 	
-	public static final int	ET_STOPPED			= 4;		// peer removed due to stop
-	public static final int	ET_TIMEOUT			= 5;		// peer has timed out and been removed
-	public static final int	ET_REPLACED			= 5;		// peer's address has changed and someone else already has it - old one is removed
-	public static final int	ET_TOO_MANY_PEERS	= 6;		// peer removed due to too many peers
-	public static final int	ET_FAILED			= 7;		// eventOccurred method threw exception
+	int	ET_STOPPED			= 4;		// peer removed due to stop
+	int	ET_TIMEOUT			= 5;		// peer has timed out and been removed
+	int	ET_REPLACED			= 5;		// peer's address has changed and someone else already has it - old one is removed
+	int	ET_TOO_MANY_PEERS	= 6;		// peer removed due to too many peers
+	int	ET_FAILED			= 7;		// eventOccurred method threw exception
 	
-	public static final int	ET_ANNOUNCE			= 8;		// announce event - reply can contain List of explicit peers to return
+	int	ET_ANNOUNCE			= 8;		// announce event - reply can contain List of explicit peers to return
 
 	
-	public Map
+	Map
 	eventOccurred(
-		TRTrackerServerTorrent	torrent,
-		TRTrackerServerPeer		peer,
-		int						event,
-		String					url_parameters )
+            TRTrackerServerTorrent torrent,
+            TRTrackerServerPeer peer,
+            int event,
+            String url_parameters)
 	
 		throws TRTrackerServerException;
 }

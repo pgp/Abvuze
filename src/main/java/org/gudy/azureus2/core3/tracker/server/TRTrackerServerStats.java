@@ -30,24 +30,24 @@ package org.gudy.azureus2.core3.tracker.server;
 public interface 
 TRTrackerServerStats 
 {
-	public int
+	int
 	getTorrentCount();
 	
-	public long
+	long
 	getBytesIn();
 	
-	public long
+	long
 	getBytesOut();
 	
-	public long
+	long
 	getAnnounceCount();
 	
-	public long
+	long
 	getScrapeCount();
 	
-	public long
+	long
 	getAnnounceTime();
 	
-	public long
+	long
 	getScrapeTime();
 }

@@ -90,61 +90,62 @@ RPShortCuts
 	{
 		String		method 	= request.getMethod();
 		Object[]	params	= request.getParams();
-		
-		if ( method.equals( "getDownload[byte[]]")){
-			
-			try{
-				return( new RPReply( RPDownload.create( delegate.getDownload((byte[])params[0]))));
-				
-			}catch( DownloadException e ){
-				
-				return( new RPReply(e));
-			}
-		}else if ( method.equals( "getDownloadStats[byte[]]")){
-				
-				try{
-					return( new RPReply( RPDownloadStats.create( delegate.getDownloadStats((byte[])params[0]))));
-					
-				}catch( DownloadException e ){
-					
-					return( new RPReply(e));
-				}
-		}else if ( method.equals( "restartDownload[byte[]]")){
-			
-			try{
-				delegate.restartDownload((byte[])params[0]);
-				
-			}catch( DownloadException e ){
-				
-				return( new RPReply(e));
-			}
-			
-			return( null );
-			
-		}else if ( method.equals( "stopDownload[byte[]]")){
-			
-			try{
-				delegate.stopDownload((byte[])params[0]);
-				
-			}catch( DownloadException e ){
-				
-				return( new RPReply(e));
-			}
-			
-			return( null );
-			
-		}else if ( method.equals( "removeDownload[byte[]]")){
-			
-			try{
-				delegate.removeDownload((byte[])params[0]);
-				
-			}catch( Throwable e ){
-				
-				return( new RPReply(e));
-			}
-			
-			return( null );	
-		}
+
+        switch (method) {
+            case "getDownload[byte[]]":
+
+                try {
+                    return (new RPReply(RPDownload.create(delegate.getDownload((byte[]) params[0]))));
+
+                } catch (DownloadException e) {
+
+                    return (new RPReply(e));
+                }
+            case "getDownloadStats[byte[]]":
+
+                try {
+                    return (new RPReply(RPDownloadStats.create(delegate.getDownloadStats((byte[]) params[0]))));
+
+                } catch (DownloadException e) {
+
+                    return (new RPReply(e));
+                }
+            case "restartDownload[byte[]]":
+
+                try {
+                    delegate.restartDownload((byte[]) params[0]);
+
+                } catch (DownloadException e) {
+
+                    return (new RPReply(e));
+                }
+
+                return (null);
+
+            case "stopDownload[byte[]]":
+
+                try {
+                    delegate.stopDownload((byte[]) params[0]);
+
+                } catch (DownloadException e) {
+
+                    return (new RPReply(e));
+                }
+
+                return (null);
+
+            case "removeDownload[byte[]]":
+
+                try {
+                    delegate.removeDownload((byte[]) params[0]);
+
+                } catch (Throwable e) {
+
+                    return (new RPReply(e));
+                }
+
+                return (null);
+        }
 		
 		throw( new RPException( "Unknown method: " + method ));
 	}

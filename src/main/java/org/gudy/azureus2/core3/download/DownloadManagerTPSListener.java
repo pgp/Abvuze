@@ -23,6 +23,6 @@ package org.gudy.azureus2.core3.download;
 public interface 
 DownloadManagerTPSListener 
 {
-	public void
+	void
 	trackerPeerSourcesChanged();
 }

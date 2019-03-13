@@ -23,11 +23,11 @@ package com.aelitis.azureus.core.networkmanager.admin;
 public interface 
 NetworkAdminASNListener 
 {
-	public void
+	void
 	success(
-		NetworkAdminASN		asn );
+            NetworkAdminASN asn);
 	
-	public void
+	void
 	failed(
-		NetworkAdminException	error );
+            NetworkAdminException error);
 }

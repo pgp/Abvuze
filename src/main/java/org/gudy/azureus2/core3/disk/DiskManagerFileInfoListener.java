@@ -22,13 +22,13 @@ package org.gudy.azureus2.core3.disk;
 public interface 
 DiskManagerFileInfoListener 
 {
-	public void
+	void
 	dataWritten(
-		long	offset,
-		long	length );
+            long offset,
+            long length);
 	
-	public void
+	void
 	dataChecked(
-		long	offset,
-		long	length );
+            long offset,
+            long length);
 }

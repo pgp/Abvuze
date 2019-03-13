@@ -24,9 +24,9 @@ import org.gudy.azureus2.plugins.messaging.MessageException;
 public interface 
 GenericMessageHandler 
 {
-	public boolean
+	boolean
 	accept(
-		GenericMessageConnection	connection )
+            GenericMessageConnection connection)
 	
 		throws MessageException;
 }

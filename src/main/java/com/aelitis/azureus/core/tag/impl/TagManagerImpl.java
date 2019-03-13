@@ -26,6 +26,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.lang.ref.WeakReference;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
@@ -114,15 +115,15 @@ TagManagerImpl
 		return( singleton );
 	}
 	
-	final CopyOnWriteList<TagTypeBase>	tag_types = new CopyOnWriteList<TagTypeBase>();
+	final CopyOnWriteList<TagTypeBase>	tag_types = new CopyOnWriteList<>();
 	
-	private final Map<Integer,TagType>	tag_type_map = new HashMap<Integer, TagType>();
+	private final Map<Integer,TagType>	tag_type_map = new HashMap<>();
 	
 	private static final String RSS_PROVIDER	= "tags";
 	
-	final Set<TagBase>	rss_tags = new HashSet<TagBase>();
+	final Set<TagBase>	rss_tags = new HashSet<>();
 	
-	final Set<DownloadManager>	active_copy_on_complete = new IdentityHashSet<DownloadManager>();
+	final Set<DownloadManager>	active_copy_on_complete = new IdentityHashSet<>();
 	
 	private final RSSGeneratorPlugin.Provider rss_generator =
 		new RSSGeneratorPlugin.Provider()
@@ -248,7 +249,7 @@ TagManagerImpl
 				
 				path = path.substring( RSS_PROVIDER.length()+1);
 
-				XMLEscapeWriter pw = new XMLEscapeWriter( new PrintWriter(new OutputStreamWriter( response.getOutputStream(), "UTF-8" )));
+				XMLEscapeWriter pw = new XMLEscapeWriter( new PrintWriter(new OutputStreamWriter( response.getOutputStream(), StandardCharsets.UTF_8)));
 
 				pw.setEnabled( false );
 				
@@ -258,13 +259,13 @@ TagManagerImpl
 					
 					pw.println( "<HTML><HEAD><TITLE>Vuze Tag Feeds</TITLE></HEAD><BODY>" );
 					
-					Map<String,String>	lines = new TreeMap<String, String>();
+					Map<String,String>	lines = new TreeMap<>();
 					
 					List<TagBase>	tags;
 					
 					synchronized( rss_tags ){
 
-						tags = new ArrayList<TagBase>( rss_tags);
+						tags = new ArrayList<>(rss_tags);
 					}
 					
 					for ( TagBase t: tags ){
@@ -326,7 +327,7 @@ TagManagerImpl
 					
 					Set<DownloadManager> dms = tag.getTaggedDownloads();
 					
-					List<Download> downloads = new ArrayList<Download>( dms.size());
+					List<Download> downloads = new ArrayList<>(dms.size());
 					
 					long	dl_marker = 0;
 					
@@ -392,47 +393,45 @@ TagManagerImpl
 							pw.println( "UPnP Media Server plugin not found" );
 							
 						}else{
-							
-							for (int i=0;i<downloads.size();i++){
-								
-								Download download = downloads.get( i );
-																
-								DiskManagerFileInfo[] files = download.getDiskManagerFileInfo();
-								
-								for ( DiskManagerFileInfo file: files ){
-									
-									File target_file = file.getFile( true );
-									
-									if ( !target_file.exists()){
-										
-										continue;
-									}
-									
-									try{
-										URL stream_url = new URL((String)pi.getIPC().invoke("getContentURL", new Object[] { file }));
-						  									  				
-						  				if ( stream_url != null ){
-						  						
-						  					stream_url = UrlUtils.setHost( stream_url, host );
-						  					
-						  					String url_ext = stream_url.toExternalForm();
-						  					
-						  					pw.println( "<p>" );
-						  					
-						  					pw.println( "<a href=\"" + url_ext + "\">" + escape( target_file.getName()) + "</a>" );
-						  						
-						  					url_ext += url_ext.indexOf('?') == -1?"?":"&";
-						  					
-						  					url_ext += "action=download";
-						  					
-						  					pw.println( "&nbsp;&nbsp;-&nbsp;&nbsp;<font size=\"-1\"><a href=\"" + url_ext + "\">save</a></font>" );
-						  				}
-									}catch( Throwable e ){
-										
-										e.printStackTrace();
-									}
-								}
-							}
+
+                            for (Download download : downloads) {
+
+                                DiskManagerFileInfo[] files = download.getDiskManagerFileInfo();
+
+                                for (DiskManagerFileInfo file : files) {
+
+                                    File target_file = file.getFile(true);
+
+                                    if (!target_file.exists()) {
+
+                                        continue;
+                                    }
+
+                                    try {
+                                        URL stream_url = new URL((String) pi.getIPC().invoke("getContentURL", new Object[]{file}));
+
+                                        if (stream_url != null) {
+
+                                            stream_url = UrlUtils.setHost(stream_url, host);
+
+                                            String url_ext = stream_url.toExternalForm();
+
+                                            pw.println("<p>");
+
+                                            pw.println("<a href=\"" + url_ext + "\">" + escape(target_file.getName()) + "</a>");
+
+                                            url_ext += url_ext.indexOf('?') == -1 ? "?" : "&";
+
+                                            url_ext += "action=download";
+
+                                            pw.println("&nbsp;&nbsp;-&nbsp;&nbsp;<font size=\"-1\"><a href=\"" + url_ext + "\">save</a></font>");
+                                        }
+                                    } catch (Throwable e) {
+
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
 						}
 						
 						pw.println( "</BODY></HTML>" );
@@ -493,150 +492,148 @@ TagManagerImpl
 											
 													
 						pw.println(	"<pubDate>" + TimeFormatter.getHTTPDate( last_modified ) + "</pubDate>" );
-					
-						for (int i=0;i<downloads.size();i++){
-							
-							Download download = downloads.get( i );
 
-							DownloadManager	core_download = PluginCoreUtils.unwrap( download );
-							
-							Torrent 	torrent 	= download.getTorrent();
-							TOTorrent 	to_torrent 	= core_download.getTorrent();
-							
-							byte[] hash = torrent.getHash();
-							
-							String	hash_str = Base32.encode( hash );
-							
-							pw.println( "<item>" );
-							
-							pw.println( "<title>" + escape( download.getName()) + "</title>" );
-							
-							String desc  = PlatformTorrentUtils.getContentDescription( to_torrent );
+                        for (Download download : downloads) {
 
-							if ( desc != null && desc.length() > 0 ){
-								
-								desc = desc.replaceAll( "\r\n", "<br>" );
-								desc = desc.replaceAll( "\n", "<br>" );
-								desc = desc.replaceAll( "\t", "    " );
-								
-								pw.println( "<description>" + escape( desc) + "</description>" );
-							}
-							
-							pw.println( "<guid>" + hash_str + "</guid>" );
-							
-							String magnet_uri = UrlUtils.getMagnetURI( download );
-							
-							String obtained_from = TorrentUtils.getObtainedFrom( core_download.getTorrent());
-							
-							String[] dl_nets = core_download.getDownloadState().getNetworks();
-							
-							boolean	added_fl = false;
-							
-							if ( obtained_from != null ){
-								
-								try{
-									URL ou = new URL( obtained_from );
-									
-									if ( ou.getProtocol().toLowerCase( Locale.US ).startsWith( "http" )){
-										
-										String host = ou.getHost();
-										
-											// make sure the originator network is compatible with the ones enabled
-											// for the download
-										
-										String net = AENetworkClassifier.categoriseAddress( host );
-										
-										boolean	net_ok = false;
-										
-										if ( dl_nets == null || dl_nets.length == 0 ){
-										
-											net_ok = true;
-											
-										}else{
-											
-											for ( String dl_net: dl_nets ){
-											
-												if ( dl_net == net ){
-													
-													net_ok = true;
-													
-													break;
-												}
-											}
-										}
-										
-										if ( net_ok ){
-											
-											magnet_uri += "&fl=" + UrlUtils.encode( ou.toExternalForm());
-											
-											added_fl = true;
-										}
-									}
-								}catch( Throwable e ){
-									
-								}
-							}
-							
-								// in theory we could add multiple &fls but it keeps things less confusing
-								// and more efficient to just use one - if an external link is available and
-								// the torrent file is a reasonable size and the rss feed is popular then this
-								// can avoid quite a bit of load - plus it reduces the size of magnet URI
-							
-							if ( !added_fl ){
-							
-								String host = (String)request.getHeaders().get( "host" );
-								
-								if ( host != null ){
-									
-										// don't need to check network here as we are replying with the network
-										// used to contact us
-									
-									String local_fl = url.getProtocol() + "://" + host + "/" + RSS_PROVIDER + "/GetTorrent?hash=" + Base32.encode( torrent.getHash());
-																	
-									magnet_uri += "&fl=" + UrlUtils.encode( local_fl );
-								}
-							}
-																			
-							magnet_uri = escape( magnet_uri );
-	
-							pw.println( "<link>" + magnet_uri + "</link>" );
-							
-							long added = core_download.getDownloadState().getLongParameter(DownloadManagerState.PARAM_DOWNLOAD_ADDED_TIME);
-							
-							pw.println(	"<pubDate>" + TimeFormatter.getHTTPDate( added ) + "</pubDate>" );
-							
-							pw.println(	"<vuze:size>" + torrent.getSize()+ "</vuze:size>" );
-							pw.println(	"<vuze:assethash>" + hash_str + "</vuze:assethash>" );
-															
-							pw.println( "<vuze:downloadurl>" + magnet_uri + "</vuze:downloadurl>" );
-					
-							DownloadScrapeResult scrape = download.getLastScrapeResult();
-							
-							if ( scrape != null && scrape.getResponseType() == DownloadScrapeResult.RT_SUCCESS ){
-								
-								pw.println(	"<vuze:seeds>" + scrape.getSeedCount() + "</vuze:seeds>" );
-								pw.println(	"<vuze:peers>" + scrape.getNonSeedCount() + "</vuze:peers>" );
-							}
-							
-							byte[] thumb = PlatformTorrentUtils.getContentThumbnail( to_torrent );
-							
-							if ( thumb != null ){
-								
-								String host = (String)request.getHeaders().get( "host" );
-								
-								if ( host != null ){
-									
-										// don't need to check network here as we are replying with the network
-										// used to contact us
-									
-									String thumb_url = url.getProtocol() + "://" + host + "/" + RSS_PROVIDER + "/GetThumbnail?hash=" + Base32.encode( torrent.getHash());
-									
-									pw.println( "<media:thumbnail url=\"" + thumb_url + "\"/>" );
-								}
-							}
-							
-							pw.println( "</item>" );
-						}
+                            DownloadManager core_download = PluginCoreUtils.unwrap(download);
+
+                            Torrent torrent = download.getTorrent();
+                            TOTorrent to_torrent = core_download.getTorrent();
+
+                            byte[] hash = torrent.getHash();
+
+                            String hash_str = Base32.encode(hash);
+
+                            pw.println("<item>");
+
+                            pw.println("<title>" + escape(download.getName()) + "</title>");
+
+                            String desc = PlatformTorrentUtils.getContentDescription(to_torrent);
+
+                            if (desc != null && desc.length() > 0) {
+
+                                desc = desc.replaceAll("\r\n", "<br>");
+                                desc = desc.replaceAll("\n", "<br>");
+                                desc = desc.replaceAll("\t", "    ");
+
+                                pw.println("<description>" + escape(desc) + "</description>");
+                            }
+
+                            pw.println("<guid>" + hash_str + "</guid>");
+
+                            String magnet_uri = UrlUtils.getMagnetURI(download);
+
+                            String obtained_from = TorrentUtils.getObtainedFrom(core_download.getTorrent());
+
+                            String[] dl_nets = core_download.getDownloadState().getNetworks();
+
+                            boolean added_fl = false;
+
+                            if (obtained_from != null) {
+
+                                try {
+                                    URL ou = new URL(obtained_from);
+
+                                    if (ou.getProtocol().toLowerCase(Locale.US).startsWith("http")) {
+
+                                        String host = ou.getHost();
+
+                                        // make sure the originator network is compatible with the ones enabled
+                                        // for the download
+
+                                        String net = AENetworkClassifier.categoriseAddress(host);
+
+                                        boolean net_ok = false;
+
+                                        if (dl_nets == null || dl_nets.length == 0) {
+
+                                            net_ok = true;
+
+                                        } else {
+
+                                            for (String dl_net : dl_nets) {
+
+                                                if (dl_net == net) {
+
+                                                    net_ok = true;
+
+                                                    break;
+                                                }
+                                            }
+                                        }
+
+                                        if (net_ok) {
+
+                                            magnet_uri += "&fl=" + UrlUtils.encode(ou.toExternalForm());
+
+                                            added_fl = true;
+                                        }
+                                    }
+                                } catch (Throwable e) {
+
+                                }
+                            }
+
+                            // in theory we could add multiple &fls but it keeps things less confusing
+                            // and more efficient to just use one - if an external link is available and
+                            // the torrent file is a reasonable size and the rss feed is popular then this
+                            // can avoid quite a bit of load - plus it reduces the size of magnet URI
+
+                            if (!added_fl) {
+
+                                String host = (String) request.getHeaders().get("host");
+
+                                if (host != null) {
+
+                                    // don't need to check network here as we are replying with the network
+                                    // used to contact us
+
+                                    String local_fl = url.getProtocol() + "://" + host + "/" + RSS_PROVIDER + "/GetTorrent?hash=" + Base32.encode(torrent.getHash());
+
+                                    magnet_uri += "&fl=" + UrlUtils.encode(local_fl);
+                                }
+                            }
+
+                            magnet_uri = escape(magnet_uri);
+
+                            pw.println("<link>" + magnet_uri + "</link>");
+
+                            long added = core_download.getDownloadState().getLongParameter(DownloadManagerState.PARAM_DOWNLOAD_ADDED_TIME);
+
+                            pw.println("<pubDate>" + TimeFormatter.getHTTPDate(added) + "</pubDate>");
+
+                            pw.println("<vuze:size>" + torrent.getSize() + "</vuze:size>");
+                            pw.println("<vuze:assethash>" + hash_str + "</vuze:assethash>");
+
+                            pw.println("<vuze:downloadurl>" + magnet_uri + "</vuze:downloadurl>");
+
+                            DownloadScrapeResult scrape = download.getLastScrapeResult();
+
+                            if (scrape != null && scrape.getResponseType() == DownloadScrapeResult.RT_SUCCESS) {
+
+                                pw.println("<vuze:seeds>" + scrape.getSeedCount() + "</vuze:seeds>");
+                                pw.println("<vuze:peers>" + scrape.getNonSeedCount() + "</vuze:peers>");
+                            }
+
+                            byte[] thumb = PlatformTorrentUtils.getContentThumbnail(to_torrent);
+
+                            if (thumb != null) {
+
+                                String host = (String) request.getHeaders().get("host");
+
+                                if (host != null) {
+
+                                    // don't need to check network here as we are replying with the network
+                                    // used to contact us
+
+                                    String thumb_url = url.getProtocol() + "://" + host + "/" + RSS_PROVIDER + "/GetThumbnail?hash=" + Base32.encode(torrent.getHash());
+
+                                    pw.println("<media:thumbnail url=\"" + thumb_url + "\"/>");
+                                }
+                            }
+
+                            pw.println("</item>");
+                        }
 						
 						pw.println( "</channel>" );
 						
@@ -704,14 +701,14 @@ TagManagerImpl
 	
 	private boolean				config_dirty;
 	
-	private final List<Object[]>		config_change_queue = new ArrayList<Object[]>();
+	private final List<Object[]>		config_change_queue = new ArrayList<>();
 	
 	
-	private final CopyOnWriteList<TagManagerListener>		listeners = new CopyOnWriteList<TagManagerListener>();
+	private final CopyOnWriteList<TagManagerListener>		listeners = new CopyOnWriteList<>();
 	
-	private final CopyOnWriteList<Object[]>				feature_listeners = new CopyOnWriteList<Object[]>();
+	private final CopyOnWriteList<Object[]>				feature_listeners = new CopyOnWriteList<>();
 	
-	private final Map<Long,LifecycleHandlerImpl>			lifecycle_handlers = new HashMap<Long,LifecycleHandlerImpl>();
+	private final Map<Long,LifecycleHandlerImpl>			lifecycle_handlers = new HashMap<>();
 	
 	private TagPropertyUntaggedHandler	untagged_handler;
 	
@@ -846,7 +843,7 @@ TagManagerImpl
 									
 									List<Tag> auto_tags = auto_tracker.getTagsForDownload( manager );
 									
-									Set<Tag> tags = new HashSet<Tag>( getTagsForTaggable( TagType.TT_DOWNLOAD_MANUAL, manager ));
+									Set<Tag> tags = new HashSet<>(getTagsForTaggable(TagType.TT_DOWNLOAD_MANUAL, manager));
 									
 									tags.addAll( auto_tags );
 									
@@ -859,7 +856,7 @@ TagManagerImpl
 									
 									if ( tags.size() > 0 ){
 										
-										List<Tag>	sl_tags = new ArrayList<Tag>();
+										List<Tag>	sl_tags = new ArrayList<>();
 										
 										for ( Tag tag: tags ){
 											
@@ -977,7 +974,7 @@ TagManagerImpl
 	
 		List<Tag> tags = getTagsForTaggable( manager );
 		
-		List<Tag> cc_tags = new ArrayList<Tag>();
+		List<Tag> cc_tags = new ArrayList<>();
 		
 		for ( Tag tag: tags ){
 			
@@ -1219,7 +1216,7 @@ TagManagerImpl
 					return( null );	// deleted in the meantime
 				}
 				
-				Map<String,Object>	bindings = new HashMap<String, Object>();
+				Map<String,Object>	bindings = new HashMap<>();
 				
 				
 				String dm_name = dm.getDisplayName();
@@ -1270,7 +1267,7 @@ TagManagerImpl
 	{
 		TagTypeDownloadManual ttdm = new TagTypeDownloadManual( resolver );
 		
-		List<Tag> tags = new ArrayList<Tag>();
+		List<Tag> tags = new ArrayList<>();
 		
 		synchronized( this ){
 			
@@ -1527,14 +1524,14 @@ TagManagerImpl
 	getTagsForTaggable(
 		Taggable	taggable )
 	{
-		Set<Tag>	result = new HashSet<Tag>();
+		Set<Tag>	result = new HashSet<>();
 		
 		for ( TagType tt: tag_types ){
 			
 			result.addAll( tt.getTagsForTaggable( taggable ));
 		}
 		
-		return( new ArrayList<Tag>( result ));
+		return(new ArrayList<>(result));
 	}
 	
 	public List<Tag>
@@ -1542,7 +1539,7 @@ TagManagerImpl
 		int			tts,
 		Taggable	taggable )
 	{
-		Set<Tag>	result = new HashSet<Tag>();
+		Set<Tag>	result = new HashSet<>();
 		
 		for ( TagType tt: tag_types ){
 			
@@ -1552,7 +1549,7 @@ TagManagerImpl
 			}
 		}
 		
-		return( new ArrayList<Tag>( result ));
+		return(new ArrayList<>(result));
 	}
 	
 	public Tag
@@ -1833,7 +1830,7 @@ TagManagerImpl
 	applyConfigUpdates(
 		Map			config )
 	{
-		Map<TagWithState,Integer>	updates = new HashMap<TagWithState, Integer>();
+		Map<TagWithState,Integer>	updates = new HashMap<>();
 		
 		for ( Object[] update: config_change_queue ){
 			
@@ -1939,9 +1936,9 @@ TagManagerImpl
 	{
 		if ( !enabled ){
 			
-			Debug.out( "TagManager is disabled" );;
-			
-			return( new HashMap());
+			Debug.out( "TagManager is disabled" );
+
+            return( new HashMap());
 		}
 		
 		Map map;
@@ -1989,8 +1986,8 @@ TagManagerImpl
 	{
 		if ( !enabled ){
 			
-			Debug.out( "TagManager is disabled" );;
-		}
+			Debug.out( "TagManager is disabled" );
+        }
 		
 		synchronized( this ){
 			
@@ -2010,7 +2007,7 @@ TagManagerImpl
 							
 				FileUtil.writeResilientConfigFile( CONFIG_FILE, config );
 				
-				config_ref = new WeakReference<Map>( config );
+				config_ref = new WeakReference<>(config);
 				
 				config = null;
 			}
@@ -2268,7 +2265,7 @@ TagManagerImpl
 					return( def );
 				}
 				
-				return( vals.toArray( new String[ vals.size()]));
+				return( vals.toArray(new String[0]));
 			}
 		}catch( Throwable e ){
 			
@@ -2397,7 +2394,7 @@ TagManagerImpl
 		private TaggableResolver		resolver;
 		private boolean					initialised;
 		
-		private final CopyOnWriteList<TaggableLifecycleListener>	listeners = new CopyOnWriteList<TaggableLifecycleListener>();
+		private final CopyOnWriteList<TaggableLifecycleListener>	listeners = new CopyOnWriteList<>();
 		
 		private
 		LifecycleHandlerImpl()

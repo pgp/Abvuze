@@ -24,6 +24,7 @@ package org.gudy.azureus2.update;
  *
  */
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -330,7 +331,7 @@ CoreUpdateChecker
 			if ( info_b != null ){
 			
 				try{
-					info = new String( info_b, "UTF-8" );
+					info = new String( info_b, StandardCharsets.UTF_8);
 				
 				}catch( Throwable e ){
 					
@@ -480,220 +481,219 @@ CoreUpdateChecker
 	  //  pick up any user message in the reply
 
 	  try{
-		  Iterator it = reply.keySet().iterator();
-		  
-		  while( it.hasNext()){
-			  
-			  String	key = (String)it.next();
-		  
-			  	// support message + message_sig
-			  	//		message_1 + message_sig_1   etc
-			  
-			  if ( key.startsWith( "message_sig" ) || !key.startsWith( "message" )){
-				  
-				  continue;
-			  }
-			  
-			  byte[]  message_bytes = (byte[])reply.get( key );
-	
-			  if ( message_bytes != null && message_bytes.length > 0 ){
-	
-				  String  message;
-				  
-				  try{
-					  message = new String(message_bytes, "UTF-8" );
-					  
-				  }catch( Throwable e ){
-					  
-					  message = new String( message_bytes );
-				  }
-	
-				  String sig_key;
-				  
-				  int	pos = key.indexOf('_');
-				  
-				  if ( pos == -1 ){
-					  
-					  sig_key = "message_sig";
-					  
-				  }else{
-					  
-					  sig_key = "message_sig" + key.substring( pos );
-				  }
-				  
-				  String	last_message_key = "CoreUpdateChecker.last" + key;
-				  
-				  String  last = COConfigurationManager.getStringParameter( last_message_key, "" );
-	
-				  if ( !message.equals( last )){
-	
-					  boolean	repeatable = false;
-					  
-					  byte[]	signature = (byte[])reply.get( sig_key );
-	
-					  if ( signature == null ){
-	
-						  Logger.log( new LogEvent( LogIDs.LOGGER, "Signature missing from message" ));
-	
-						  return;
-					  }
-	
-					  try{
-						  AEVerifier.verifyData( message, signature );
-	
-					  }catch( Throwable e ){
-	
-						  Logger.log( new LogEvent( LogIDs.LOGGER, "Message signature check failed", e  ));
-	
-						  return;
-					  }
-	
-					  boolean	completed = false;
-					  
-					  if ( message.startsWith( "x:" ) || message.startsWith( "y:" )){
-						  
-						  	// emergency patch application
-						  
-						  repeatable = message.startsWith( "y:" );
-						  
-						  try{
-							  URL jar_url = new URL( message.substring(2));
-							  
-							  if ( !repeatable ){
-							  
-								  Logger.log( new LogEvent( LogIDs.LOGGER, "Patch application requsted: url=" + jar_url ));
-							  }
 
-							  File	temp_dir = AETemporaryFileHandler.createTempDir();
-							  
-							  File	jar_file = new File( temp_dir, "patch.jar" );
-							  
-							  InputStream is = rdf.create( jar_url ).download();
-							  
-							  try{
-								  FileUtil.copyFile( is, jar_file );
-								  
-								  is = null;
-								  
-								  AEVerifier.verifyData( jar_file );
-								  
-								  ClassLoader cl = CoreUpdateChecker.class.getClassLoader();
-								      		
-								  if ( cl instanceof URLClassLoader ){
+          for (Object o : reply.keySet()) {
 
-									  URL[]	old = ((URLClassLoader)cl).getURLs();
+              String key = (String) o;
 
-									  URL[]	new_urls = new URL[old.length+1];
+              // support message + message_sig
+              //		message_1 + message_sig_1   etc
 
-									  System.arraycopy( old, 0, new_urls, 1, old.length );
+              if (key.startsWith("message_sig") || !key.startsWith("message")) {
 
-									  new_urls[0]= jar_file.toURL();
+                  continue;
+              }
 
-									  cl = new URLClassLoader( new_urls, cl );
+              byte[] message_bytes = (byte[]) reply.get(key);
 
-								  }else{
+              if (message_bytes != null && message_bytes.length > 0) {
 
-									  cl = new URLClassLoader( new URL[]{jar_file.toURL()}, cl );
-								  }
-	
-								  Class cla = cl.loadClass( "org.gudy.azureus2.update.version.Patch" );
-								  
-								  cla.newInstance();
-								  
-								  completed = true;
-								  
-							  }finally{
-								  
-								  if ( is != null ){
-								  
-									  is.close();
-								  }
-								  
-								  jar_file.delete();
-								  
-								  temp_dir.delete();
-							  }
-						  }catch( Throwable e ){
-							  
-							  if ( !repeatable ){
-							  
-								  Logger.log( new LogEvent( LogIDs.LOGGER, "Patch application failed", e  ));
-							  }
-						  }
-					  } else if ( message.startsWith("u:") && message.length() > 4 ) {
-					  	try {
-  					  	String type = message.substring(2, 3);
-  					  	String url = message.substring(4);
-  					  	UIFunctions uif = UIFunctionsManager.getUIFunctions();
-  					  	if (uif != null) {
-  					  		uif.viewURL(url, null, 0.9, 0.9, true, type.equals("1"));
-  					  	}
-					  	} catch (Throwable t) {
-							  Logger.log( new LogEvent( LogIDs.LOGGER, "URL message failed", t  ));
-					  	}
-					  	// mark as complete even if errored
-						  completed = true;
-					  }else{
-						  
-						  int   alert_type    = LogAlert.AT_WARNING;
-						  
-						  String  alert_text    = message;
-		
-						  boolean	force = false;
-						  
-						  if ( alert_text.startsWith( "f:" )){
-							  
-							  force = true;
-						  
-							  alert_text = alert_text.substring( 2 );
-						  }
-						  
-						  if ( alert_text.startsWith("i:" )){
-		
-							  alert_type = LogAlert.AT_INFORMATION;
-		
-							  alert_text = alert_text.substring(2);
-						  }
-		
-						  plugin_interface.getPluginProperties().setProperty( MESSAGE_PROPERTY, alert_text );
-		
-						  if ( force ){
-							  
-							  UIFunctions uif = UIFunctionsManager.getUIFunctions();
-							  
-							  if ( uif != null ){
-								  
-								  try{
-									  uif.forceNotify( UIFunctions.STATUSICON_NONE, null, alert_text, null, null, 0 );
-								  
-									  completed = true;
-									  
-								  }catch( Throwable e ){
-									  
-								  }
-							  }
-						  }
-						  
-						  if ( !completed ){
-							  
-							  Logger.log(new LogAlert(LogAlert.UNREPEATABLE, alert_type, alert_text, 0 ));
-						  }
-						  
-						  completed = true;
-					  }
-					  
-					  if ( completed ){
-						  
-						  if ( !repeatable ){
-							  
-							  COConfigurationManager.setParameter( last_message_key, message );
-		
-							  COConfigurationManager.save();
-						  }
-					  }
-				  }
-			  }
-		  }
+                  String message;
+
+                  try {
+                      message = new String(message_bytes, StandardCharsets.UTF_8);
+
+                  } catch (Throwable e) {
+
+                      message = new String(message_bytes);
+                  }
+
+                  String sig_key;
+
+                  int pos = key.indexOf('_');
+
+                  if (pos == -1) {
+
+                      sig_key = "message_sig";
+
+                  } else {
+
+                      sig_key = "message_sig" + key.substring(pos);
+                  }
+
+                  String last_message_key = "CoreUpdateChecker.last" + key;
+
+                  String last = COConfigurationManager.getStringParameter(last_message_key, "");
+
+                  if (!message.equals(last)) {
+
+                      boolean repeatable = false;
+
+                      byte[] signature = (byte[]) reply.get(sig_key);
+
+                      if (signature == null) {
+
+                          Logger.log(new LogEvent(LogIDs.LOGGER, "Signature missing from message"));
+
+                          return;
+                      }
+
+                      try {
+                          AEVerifier.verifyData(message, signature);
+
+                      } catch (Throwable e) {
+
+                          Logger.log(new LogEvent(LogIDs.LOGGER, "Message signature check failed", e));
+
+                          return;
+                      }
+
+                      boolean completed = false;
+
+                      if (message.startsWith("x:") || message.startsWith("y:")) {
+
+                          // emergency patch application
+
+                          repeatable = message.startsWith("y:");
+
+                          try {
+                              URL jar_url = new URL(message.substring(2));
+
+                              if (!repeatable) {
+
+                                  Logger.log(new LogEvent(LogIDs.LOGGER, "Patch application requsted: url=" + jar_url));
+                              }
+
+                              File temp_dir = AETemporaryFileHandler.createTempDir();
+
+                              File jar_file = new File(temp_dir, "patch.jar");
+
+                              InputStream is = rdf.create(jar_url).download();
+
+                              try {
+                                  FileUtil.copyFile(is, jar_file);
+
+                                  is = null;
+
+                                  AEVerifier.verifyData(jar_file);
+
+                                  ClassLoader cl = CoreUpdateChecker.class.getClassLoader();
+
+                                  if (cl instanceof URLClassLoader) {
+
+                                      URL[] old = ((URLClassLoader) cl).getURLs();
+
+                                      URL[] new_urls = new URL[old.length + 1];
+
+                                      System.arraycopy(old, 0, new_urls, 1, old.length);
+
+                                      new_urls[0] = jar_file.toURL();
+
+                                      cl = new URLClassLoader(new_urls, cl);
+
+                                  } else {
+
+                                      cl = new URLClassLoader(new URL[]{jar_file.toURL()}, cl);
+                                  }
+
+                                  Class cla = cl.loadClass("org.gudy.azureus2.update.version.Patch");
+
+                                  cla.newInstance();
+
+                                  completed = true;
+
+                              } finally {
+
+                                  if (is != null) {
+
+                                      is.close();
+                                  }
+
+                                  jar_file.delete();
+
+                                  temp_dir.delete();
+                              }
+                          } catch (Throwable e) {
+
+                              if (!repeatable) {
+
+                                  Logger.log(new LogEvent(LogIDs.LOGGER, "Patch application failed", e));
+                              }
+                          }
+                      } else if (message.startsWith("u:") && message.length() > 4) {
+                          try {
+                              String type = message.substring(2, 3);
+                              String url = message.substring(4);
+                              UIFunctions uif = UIFunctionsManager.getUIFunctions();
+                              if (uif != null) {
+                                  uif.viewURL(url, null, 0.9, 0.9, true, type.equals("1"));
+                              }
+                          } catch (Throwable t) {
+                              Logger.log(new LogEvent(LogIDs.LOGGER, "URL message failed", t));
+                          }
+                          // mark as complete even if errored
+                          completed = true;
+                      } else {
+
+                          int alert_type = LogAlert.AT_WARNING;
+
+                          String alert_text = message;
+
+                          boolean force = false;
+
+                          if (alert_text.startsWith("f:")) {
+
+                              force = true;
+
+                              alert_text = alert_text.substring(2);
+                          }
+
+                          if (alert_text.startsWith("i:")) {
+
+                              alert_type = LogAlert.AT_INFORMATION;
+
+                              alert_text = alert_text.substring(2);
+                          }
+
+                          plugin_interface.getPluginProperties().setProperty(MESSAGE_PROPERTY, alert_text);
+
+                          if (force) {
+
+                              UIFunctions uif = UIFunctionsManager.getUIFunctions();
+
+                              if (uif != null) {
+
+                                  try {
+                                      uif.forceNotify(UIFunctions.STATUSICON_NONE, null, alert_text, null, null, 0);
+
+                                      completed = true;
+
+                                  } catch (Throwable e) {
+
+                                  }
+                              }
+                          }
+
+                          if (!completed) {
+
+                              Logger.log(new LogAlert(LogAlert.UNREPEATABLE, alert_type, alert_text, 0));
+                          }
+
+                          completed = true;
+                      }
+
+                      if (completed) {
+
+                          if (!repeatable) {
+
+                              COConfigurationManager.setParameter(last_message_key, message);
+
+                              COConfigurationManager.save();
+                          }
+                      }
+                  }
+              }
+          }
 	  }catch( Throwable e ){
 
 		  Debug.printStackTrace( e );
@@ -813,21 +813,21 @@ CoreUpdateChecker
 				data.close();
 				
 				List mirrors = (List)decoded.get("mirrors");
-		
-				for (int i=0;i<mirrors.size();i++){
-					
-					String mirror = new String( (byte[])mirrors.get(i));
-					
-					try{
-						
-						res.add( new URL( mirror + latest_file_name ));
-						// res.add( new URL( "http://torrent.vuze.com:88/torrents/Azureus2.4.0.2_signed.jar.torrent" ));
-						
-					}catch(Throwable e){
-						
-						log.log( "Invalid URL read:" + mirror, e );
-					}
-				}
+
+                for (Object mirror1 : mirrors) {
+
+                    String mirror = new String((byte[]) mirror1);
+
+                    try {
+
+                        res.add(new URL(mirror + latest_file_name));
+                        // res.add( new URL( "http://torrent.vuze.com:88/torrents/Azureus2.4.0.2_signed.jar.torrent" ));
+
+                    } catch (Throwable e) {
+
+                        log.log("Invalid URL read:" + mirror, e);
+                    }
+                }
 			}
 		}catch( Throwable e ){
 			
@@ -920,56 +920,40 @@ CoreUpdateChecker
 	
 		throws Exception
 	{
-		ZipInputStream zip = null;
-		
-		Properties	update_properties = new Properties();
-		
-		File		temp_dir = AETemporaryFileHandler.createTempDir();
-		
-		File		update_file = null;
-		
-		try{
-			zip = new ZipInputStream(data);
 
-			ZipEntry entry = null;
+        Properties	update_properties = new Properties();
+        File		temp_dir = AETemporaryFileHandler.createTempDir();
+        File		update_file = null;
+        try (ZipInputStream zip = new ZipInputStream(data)) {
 
-			while((entry = zip.getNextEntry()) != null) {
+            ZipEntry entry = null;
 
-				String name = entry.getName().trim();
+            while ((entry = zip.getNextEntry()) != null) {
 
-				if ( name.equals( "azureus.sig" ) || name.endsWith( "/" ) || name.length() == 0 ){
-					
-					continue;
-				}
+                String name = entry.getName().trim();
 
-				if ( name.equals( "update.properties" )){
-					
-					update_properties.load( zip );
-					
-				}else{
-					
-					if ( update_file != null ){
-						
-						throw( new Exception( "Multiple update files are not supported" ));
-					}
-					
-					update_file = new File( temp_dir, name );
-					
-					FileUtil.copyFile( zip, update_file, false );
-				}
-			}
-		}finally{
-			
-			if ( zip != null ){
-				
-				try{
-					zip.close();
-					
-				}catch( Throwable e ){
-					
-				}
-			}
-		}
+                if (name.equals("azureus.sig") || name.endsWith("/") || name.length() == 0) {
+
+                    continue;
+                }
+
+                if (name.equals("update.properties")) {
+
+                    update_properties.load(zip);
+
+                } else {
+
+                    if (update_file != null) {
+
+                        throw (new Exception("Multiple update files are not supported"));
+                    }
+
+                    update_file = new File(temp_dir, name);
+
+                    FileUtil.copyFile(zip, update_file, false);
+                }
+            }
+        }
 		
 		if ( update_properties == null ){
 			
@@ -1136,84 +1120,77 @@ CoreUpdateChecker
 					// osx, need to unzip .app and launch
 				
 				File	dir = file.getParentFile();
-				
-			   	ZipInputStream	zis = new ZipInputStream( new BufferedInputStream( new FileInputStream( file )));
-		    		
-			   	Throwable unzip_error = null;
-			   	
-			   	String chmod_command = findCommand( "chmod" );
-			   	
-		    	try{
-					while( true ){
-												
-						ZipEntry	entry = zis.getNextEntry();
-							
-						if ( entry == null ){
-							
-							break;
-						}
-						
-						if ( entry.isDirectory()){
-							
-							continue;
-						}
-						
-						String	name = entry.getName();
-						
-						FileOutputStream	entry_os 	= null;
-						File				entry_file 	= null;
-						
-						if ( !name.endsWith("/")){
-														
-							entry_file = new File( dir, name.replace('/', File.separatorChar ));
-														
-							entry_file.getParentFile().mkdirs();
-							
-							entry_os	= new FileOutputStream( entry_file );
-						}
-						
-						try{
-							byte[]	buffer = new byte[65536];
-							
-							while( true ){
-							
-								int	len = zis.read( buffer );
-								
-								if ( len <= 0 ){
-									
-									break;
-								}
-																									
-								if ( entry_os != null ){
-									
-									entry_os.write( buffer, 0, len );
-								}
-							}
-						}finally{
-							
-							if ( entry_os != null ){
-								
-								entry_os.close();
-																	
-								if ( name.endsWith( ".jnilib" ) || name.endsWith( "JavaApplicationStub" )){
-										
-									try{
-										String[] to_run = { chmod_command, "a+x", entry_file.getAbsolutePath() };
-									  	
-										runCommand( to_run, true );
-												
-									}catch( Throwable e ){
-										
-										unzip_error = e;
-									}
-								}
-							}
-						}
-					}
-		    	}finally{
-		    		
-		    		zis.close();
-		    	}
+
+				Throwable unzip_error = null;
+				try (ZipInputStream zis = new ZipInputStream(new BufferedInputStream(new FileInputStream(file)))) {
+                    String chmod_command = findCommand("chmod");
+                    while (true) {
+
+                        ZipEntry entry = zis.getNextEntry();
+
+                        if (entry == null) {
+
+                            break;
+                        }
+
+                        if (entry.isDirectory()) {
+
+                            continue;
+                        }
+
+                        String name = entry.getName();
+
+                        FileOutputStream entry_os = null;
+                        File entry_file = null;
+
+                        if (!name.endsWith("/")) {
+
+                            entry_file = new File(dir, name.replace('/', File.separatorChar));
+
+                            entry_file.getParentFile().mkdirs();
+
+                            entry_os = new FileOutputStream(entry_file);
+                        }
+
+                        try {
+                            byte[] buffer = new byte[65536];
+
+                            while (true) {
+
+                                int len = zis.read(buffer);
+
+                                if (len <= 0) {
+
+                                    break;
+                                }
+
+                                if (entry_os != null) {
+
+                                    entry_os.write(buffer, 0, len);
+                                }
+                            }
+                        } finally {
+
+                            if (entry_os != null) {
+
+                                entry_os.close();
+
+                                if (name.endsWith(".jnilib") || name.endsWith("JavaApplicationStub")) {
+
+                                    try {
+                                        String[] to_run = {chmod_command, "a+x", entry_file.getAbsolutePath()};
+
+                                        runCommand(to_run, true);
+
+                                    } catch (Throwable e) {
+
+                                        unzip_error = e;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
 				
 		    	if ( unzip_error != null ){
 		    		
@@ -1370,10 +1347,10 @@ CoreUpdateChecker
 
 		};
 
-		for (int i=0;i<tests.length;i++){
-			
-			System.out.println( shouldUpdate(tests[i][0],tests[i][1]) + " / " + tests[i][2] );
-		}
+        for (String[] test : tests) {
+
+            System.out.println(shouldUpdate(test[0], test[1]) + " / " + test[2]);
+        }
 		
 		/*
 		AEDiagnostics.startup();

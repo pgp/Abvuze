@@ -85,8 +85,8 @@ PeerManagerImpl
 	
 	private Map		foreign_map		= new HashMap();
 	
-	private Map<PeerManagerListener,PEPeerManagerListener>	listener_map1 	= new HashMap<PeerManagerListener,PEPeerManagerListener>();
-	private Map<PeerManagerListener2,CoreListener>	listener_map2 	= new HashMap<PeerManagerListener2,CoreListener>();
+	private Map<PeerManagerListener,PEPeerManagerListener>	listener_map1 	= new HashMap<>();
+	private Map<PeerManagerListener2,CoreListener>	listener_map2 	= new HashMap<>();
 	
 	protected AEMonitor	this_mon	= new AEMonitor( "PeerManager" );
 
@@ -128,18 +128,16 @@ PeerManagerImpl
 
 						 destroyed	= true;
 
-						 Iterator it = foreign_map.values().iterator();
+                         for (Object o : foreign_map.values()) {
 
-						 while( it.hasNext()){
+                             try {
+                                 ((PeerForeignDelegate) o).stop();
 
-							 try{
-								 ((PeerForeignDelegate)it.next()).stop();
+                             } catch (Throwable e) {
 
-							 }catch( Throwable e ){
-
-								 Debug.printStackTrace( e );
-							 }
-						 }
+                                 Debug.printStackTrace(e);
+                             }
+                         }
 					 }
 				 }
 			});
@@ -500,18 +498,18 @@ PeerManagerImpl
 		Peer[]	_foreigns )
 	{
 		List	res = new ArrayList();
-		
-		for (int i=0;i<_foreigns.length;i++){
-		
-			PEPeer	local = mapForeignPeer( _foreigns[i]);
-			
-				// could already be there if torrent contains two identical seeds (for whatever reason)
-			
-			if ( !res.contains( local )){
-				
-				res.add( local );
-			}
-		}
+
+        for (Peer foreign : _foreigns) {
+
+            PEPeer local = mapForeignPeer(foreign);
+
+            // could already be there if torrent contains two identical seeds (for whatever reason)
+
+            if (!res.contains(local)) {
+
+                res.add(local);
+            }
+        }
 		
 		return( res );
 	}
@@ -590,7 +588,7 @@ PeerManagerImpl
 		try{
 			this_mon.enter();
 		
-			PEPeerManagerListener core_listener	= (PEPeerManagerListener)listener_map1.remove( l );
+			PEPeerManagerListener core_listener	= listener_map1.remove( l );
 		
 			if ( core_listener != null ){
 				
@@ -761,7 +759,7 @@ PeerManagerImpl
 		implements PEPeerManagerListener, DiskManagerListener
 	{
 		private PeerManagerListener2		listener;
-		private Map<PEPeer, Peer>			peer_map = new HashMap<PEPeer, Peer>();
+		private Map<PEPeer, Peer>			peer_map = new HashMap<>();
 
 		private
 		CoreListener(
@@ -871,7 +869,7 @@ PeerManagerImpl
 				PeerManagerEvent.ET_PEER_SENT_BAD_DATA,
 				pi,
 				null,
-				new Integer( pieceNumber ));
+                    pieceNumber);
 			
 		}
 		

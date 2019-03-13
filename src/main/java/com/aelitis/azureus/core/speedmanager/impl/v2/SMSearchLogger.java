@@ -50,14 +50,10 @@ public class SMSearchLogger
         SpeedManagerLimitEstimate downloadSetting = conf.getDownloadLimit();
 
 
-        StringBuilder sb = new StringBuilder(str);
-        sb.append(", Download current =").append(adptCurrDownLimit);
-        sb.append(", max limit =").append(downloadSetting.getString());
-
-        sb.append(", Upload current = ").append(adptCurrUpLimit);
-        sb.append(", max limit = ").append(uploadSetting.getString());
-
-        String msg = sb.toString();
+        String msg = str + ", Download current =" + adptCurrDownLimit +
+                ", max limit =" + downloadSetting.getString() +
+                ", Upload current = " + adptCurrUpLimit +
+                ", max limit = " + uploadSetting.getString();
 
         LogEvent e = new LogEvent(ID,msg);
         Logger.log(e);

@@ -64,19 +64,17 @@ UPnPSSOfflineDownloaderImpl
 			inv.addArgument( "NewClientID", client_id );
 			
 			UPnPActionArgument[]	args = inv.invoke();
-						
-			for (int i=0;i<args.length;i++){
-				
-				UPnPActionArgument	arg = args[i];
-			
-				String	name = arg.getName();
-				
-				if ( name.equalsIgnoreCase("NewFreeSpace")){
-					
-					return( Long.parseLong( arg.getValue()));
-					
-				}
-			}
+
+            for (UPnPActionArgument arg : args) {
+
+                String name = arg.getName();
+
+                if (name.equalsIgnoreCase("NewFreeSpace")) {
+
+                    return (Long.parseLong(arg.getValue()));
+
+                }
+            }
 			
 			throw( new UPnPException( "result not found" ));
 		}
@@ -101,19 +99,17 @@ UPnPSSOfflineDownloaderImpl
 			inv.addArgument( "NewClientID", client_id );
 			
 			UPnPActionArgument[]	args = inv.invoke();
-						
-			for (int i=0;i<args.length;i++){
-				
-				UPnPActionArgument	arg = args[i];
-			
-				String	name = arg.getName();
-				
-				if ( name.equalsIgnoreCase("NewStatus")){
-					
-					return;
-					
-				}
-			}
+
+            for (UPnPActionArgument arg : args) {
+
+                String name = arg.getName();
+
+                if (name.equalsIgnoreCase("NewStatus")) {
+
+                    return;
+
+                }
+            }
 			
 			throw( new UPnPException( "status not found" ));
 		}
@@ -143,22 +139,20 @@ UPnPSSOfflineDownloaderImpl
 			
 			String	result	= null;
 			String	status 	= null;
-			
-			for (int i=0;i<args.length;i++){
-				
-				UPnPActionArgument	arg = args[i];
-			
-				String	name = arg.getName();
-				
-				if ( name.equalsIgnoreCase("NewSetDownloadsResultList")){
-					
-					result = arg.getValue();
-					
-				}else if ( name.equalsIgnoreCase("NewStatus")){
-					
-					status = arg.getValue();
-				}
-			}
+
+            for (UPnPActionArgument arg : args) {
+
+                String name = arg.getName();
+
+                if (name.equalsIgnoreCase("NewSetDownloadsResultList")) {
+
+                    result = arg.getValue();
+
+                } else if (name.equalsIgnoreCase("NewStatus")) {
+
+                    status = arg.getValue();
+                }
+            }
 			
 			if ( result != null && status != null ){
 				
@@ -192,18 +186,16 @@ UPnPSSOfflineDownloaderImpl
 			inv.addArgument( "NewTorrentData", torrent );
 			
 			UPnPActionArgument[]	args = inv.invoke();
-						
-			for (int i=0;i<args.length;i++){
-				
-				UPnPActionArgument	arg = args[i];
-			
-				String	name = arg.getName();
-				
-				if ( name.equalsIgnoreCase("NewStatus")){
-					
-					return( arg.getValue());
-				}
-			}
+
+            for (UPnPActionArgument arg : args) {
+
+                String name = arg.getName();
+
+                if (name.equalsIgnoreCase("NewStatus")) {
+
+                    return (arg.getValue());
+                }
+            }
 			
 			throw( new UPnPException( "result not found" ));
 		}
@@ -236,18 +228,16 @@ UPnPSSOfflineDownloaderImpl
 			inv.addArgument( "NewTotalLength", String.valueOf( total_size ));
 			
 			UPnPActionArgument[]	args = inv.invoke();
-						
-			for (int i=0;i<args.length;i++){
-				
-				UPnPActionArgument	arg = args[i];
-			
-				String	name = arg.getName();
-				
-				if ( name.equalsIgnoreCase("NewStatus")){
-					
-					return( arg.getValue());
-				}
-			}
+
+            for (UPnPActionArgument arg : args) {
+
+                String name = arg.getName();
+
+                if (name.equalsIgnoreCase("NewStatus")) {
+
+                    return (arg.getValue());
+                }
+            }
 			
 			throw( new UPnPException( "result not found" ));
 		}
@@ -279,22 +269,20 @@ UPnPSSOfflineDownloaderImpl
   			
   			String	have	= null;
   			String	status 	= null;
-  			
-  			for (int i=0;i<args.length;i++){
-  				
-  				UPnPActionArgument	arg = args[i];
-  			
-  				String	name = arg.getName();
-  				
-  				if ( name.equalsIgnoreCase("NewPieceHaveMap")){
-  					
-  					have = arg.getValue();
-  					
-  				}else if ( name.equalsIgnoreCase("NewStatus")){
-  					
-  					status = arg.getValue();
-  				}
-  			}
+
+            for (UPnPActionArgument arg : args) {
+
+                String name = arg.getName();
+
+                if (name.equalsIgnoreCase("NewPieceHaveMap")) {
+
+                    have = arg.getValue();
+
+                } else if (name.equalsIgnoreCase("NewStatus")) {
+
+                    status = arg.getValue();
+                }
+            }
   			
   			if ( have != null && status != null ){
   				
@@ -328,18 +316,16 @@ UPnPSSOfflineDownloaderImpl
 			UPnPActionArgument[]	args = inv.invoke();
 			
 			String	status 	= null;
-			
-			for (int i=0;i<args.length;i++){
-				
-				UPnPActionArgument	arg = args[i];
-			
-				String	name = arg.getName();
-				
-				if ( name.equalsIgnoreCase("NewStatus")){
-					
-					status = arg.getValue();
-				}
-			}
+
+            for (UPnPActionArgument arg : args) {
+
+                String name = arg.getName();
+
+                if (name.equalsIgnoreCase("NewStatus")) {
+
+                    status = arg.getValue();
+                }
+            }
 			
 			if ( status != null ){
 				
@@ -374,22 +360,20 @@ UPnPSSOfflineDownloaderImpl
 			
 			String	status 		= null;
 			String	data_port	= null;
-			
-			for (int i=0;i<args.length;i++){
-				
-				UPnPActionArgument	arg = args[i];
-			
-				String	name = arg.getName();
-				
-				if ( name.equalsIgnoreCase("NewStatus")){
-					
-					status = arg.getValue();
-					
-				}else if ( name.equalsIgnoreCase("NewDataPort")){
-					
-					data_port = arg.getValue();
-				}
-			}
+
+            for (UPnPActionArgument arg : args) {
+
+                String name = arg.getName();
+
+                if (name.equalsIgnoreCase("NewStatus")) {
+
+                    status = arg.getValue();
+
+                } else if (name.equalsIgnoreCase("NewDataPort")) {
+
+                    data_port = arg.getValue();
+                }
+            }
 			
 			if ( status != null && data_port != null ){
 				

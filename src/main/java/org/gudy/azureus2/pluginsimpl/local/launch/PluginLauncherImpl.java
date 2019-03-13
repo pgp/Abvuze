@@ -93,37 +93,28 @@ PluginLauncherImpl
 				{
 				    File	log_file	 = getApplicationFile("launch.log");
 
-				    PrintWriter	pw = null;
-				    
-				    try{
-						pw = new PrintWriter(new FileWriter( log_file, true ));
+                    try (PrintWriter pw = new PrintWriter(new FileWriter(log_file, true))) {
 
-						if ( str.endsWith( "\n" )){
-							
-							if ( stdout ){
-								System.err.print( "PluginLauncher: " + str );
-							}
-							
-							pw.print( str );
-							
-						}else{
-							
-							if ( stdout ){
-								System.err.println( "PluginLauncher: " + str );
-							}
-							
-							pw.println( str );
-						}
-						
-				    }catch( Throwable e ){
-				    	
-				    }finally{
-				    	
-				    	if ( pw != null ){
-				    		
-				    		pw.close();
-				    	}
-				    }
+                        if (str.endsWith("\n")) {
+
+                            if (stdout) {
+                                System.err.print("PluginLauncher: " + str);
+                            }
+
+                            pw.print(str);
+
+                        } else {
+
+                            if (stdout) {
+                                System.err.println("PluginLauncher: " + str);
+                            }
+
+                            pw.println(str);
+                        }
+
+                    } catch (Throwable e) {
+
+                    }
 				}
 			};
 			
@@ -245,103 +236,92 @@ PluginLauncherImpl
 	
 	    	return( new LaunchablePlugin[0] );
 	    }
-	    
-	    for ( int i=0;i<plugins.length;i++ ) {
-	        
-	    	File	plugin_dir = plugins[i];
-	    	
-	  	    if( !plugin_dir.isDirectory()){
-	  	    	
-	  	    	continue;
-	  	    }
-	  	    
-		    try{
-		    	    	    
-		      	ClassLoader classLoader = PluginLauncherImpl.class.getClassLoader();
-		    	    	
-		      	ClassLoader	root_cl = classLoader;
-		      	
-		    	File[] contents = plugin_dir.listFiles();
-		    	    
-	    	    if ( contents == null || contents.length == 0){
-	    	    	
-	    	    	continue;
-	    	    }
-		    	    		    	    		    	    	
-		    	    // take only the highest version numbers of jars that look versioned
-		    	    
-	    	    String[]	plugin_version 	= {null};
-	    	    String[]	plugin_id 		= {null};
-		    	    
-	    	    contents	= getHighestJarVersions( contents, plugin_version, plugin_id, true );
-		    	    
-	    	    for( int j = 0 ; j < contents.length ; j++){
-		    	    			    	    	
-		    	    classLoader = addFileToClassPath( root_cl, classLoader, contents[j]);
-	    	    }
-		    	        		    	    
-	    	    Properties props = new Properties();
-	    	    
-	    	    File	properties_file = new File( plugin_dir, "plugin.properties");
-		    	 
-	    	    	// if properties file exists on its own then override any properties file
-	    	    	// potentially held within a jar	    	      	
-		    	   
-	  	    	if ( properties_file.exists()){
-	    	      	
-	  	    		FileInputStream	fis = null;
-	    	      		
-	  	    		try{
-	  	    			fis = new FileInputStream( properties_file );
-	    	      		
-	  	    			props.load( fis );
-	    	      			
-	    	      	}finally{
-	    	      			
-	    	      		if ( fis != null ){
-	    	      				
-	    	      			fis.close();
-	    	      		}
-	    	      	}  		
-	  	    	}else{
-	    	      		
-	    	    	if ( classLoader instanceof URLClassLoader ){
-	    	      			
-	    	    		URLClassLoader	current = (URLClassLoader)classLoader;
-	    	      		    			
-	    	      		URL url = current.findResource("plugin.properties");
-	    	      		
-	    	      		if ( url != null ){
-	    	      				
-	    	      			props.load(url.openStream());
-	    	      		}
-	    	      	}
-	  	    	}
-	
-		    	String plugin_class = (String)props.get( "plugin.class");
-		    	      	    	      		    	      
-		    		// don't support multiple launchable plugins
-		    	
-			    if ( plugin_class == null || plugin_class.indexOf(';') != -1 ){
-			    		
-			    	continue;
-			    }
-		    	    	    		      
-		    	Class c = classLoader.loadClass(plugin_class);
-		    			      
-		    	Plugin	    plugin	= (Plugin) c.newInstance();
-		   
-		    	if ( plugin instanceof LaunchablePlugin ){
-		    		
-		    		preloaded_plugins.put( plugin_class, plugin );
-		    		
-		    		res.add( plugin );
-		    	}
-		    }catch( Throwable e ){
-		    	
-		    	listener.messageLogged( "Load of plugin in '" + plugin_dir + "' fails", e );
-		    }
-	    }
+
+        for (File plugin_dir : plugins) {
+
+            if (!plugin_dir.isDirectory()) {
+
+                continue;
+            }
+
+            try {
+
+                ClassLoader classLoader = PluginLauncherImpl.class.getClassLoader();
+
+                ClassLoader root_cl = classLoader;
+
+                File[] contents = plugin_dir.listFiles();
+
+                if (contents == null || contents.length == 0) {
+
+                    continue;
+                }
+
+                // take only the highest version numbers of jars that look versioned
+
+                String[] plugin_version = {null};
+                String[] plugin_id = {null};
+
+                contents = getHighestJarVersions(contents, plugin_version, plugin_id, true);
+
+                for (File content : contents) {
+
+                    classLoader = addFileToClassPath(root_cl, classLoader, content);
+                }
+
+                Properties props = new Properties();
+
+                File properties_file = new File(plugin_dir, "plugin.properties");
+
+                // if properties file exists on its own then override any properties file
+                // potentially held within a jar
+
+                if (properties_file.exists()) {
+
+                    try (FileInputStream fis = new FileInputStream(properties_file)) {
+
+                        props.load(fis);
+
+                    }
+                } else {
+
+                    if (classLoader instanceof URLClassLoader) {
+
+                        URLClassLoader current = (URLClassLoader) classLoader;
+
+                        URL url = current.findResource("plugin.properties");
+
+                        if (url != null) {
+
+                            props.load(url.openStream());
+                        }
+                    }
+                }
+
+                String plugin_class = (String) props.get("plugin.class");
+
+                // don't support multiple launchable plugins
+
+                if (plugin_class == null || plugin_class.indexOf(';') != -1) {
+
+                    continue;
+                }
+
+                Class c = classLoader.loadClass(plugin_class);
+
+                Plugin plugin = (Plugin) c.newInstance();
+
+                if (plugin instanceof LaunchablePlugin) {
+
+                    preloaded_plugins.put(plugin_class, plugin);
+
+                    res.add(plugin);
+                }
+            } catch (Throwable e) {
+
+                listener.messageLogged("Load of plugin in '" + plugin_dir + "' fails", e);
+            }
+        }
 	    
 	    LaunchablePlugin[]	x = new LaunchablePlugin[res.size()];
 	    
@@ -376,54 +356,52 @@ PluginLauncherImpl
   		
   		List	res 		= new ArrayList();
   		Map		version_map	= new HashMap();
-  		
-  		for (int i=0;i<files.length;i++){
-  			
-  			File	f = files[i];
-  			
-  			String	name = f.getName().toLowerCase();
-  			
-  			if ( name.endsWith(".jar")){
-  				
-  				int cvs_pos = name.lastIndexOf("_cvs");
-  				
-  				int sep_pos;
-  				
-  				if (cvs_pos <= 0)
-  					sep_pos = name.lastIndexOf("_");
-  				else
-  					sep_pos = name.lastIndexOf("_", cvs_pos - 1);
-   				
-  				if ( 	sep_pos == -1 || 
-  						sep_pos == name.length()-1 ||
-						!Character.isDigit(name.charAt(sep_pos+1))){
-  					
-  						// not a versioned jar
-  					
-  					res.add( f );
-  					
-  				}else{
-  					
-  					String	prefix = name.substring(0,sep_pos);
-					
-					String	version = name.substring(sep_pos+1, (cvs_pos <= 0) ? name.length()-4 : cvs_pos);
-					
-					String	prev_version = (String)version_map.get(prefix);
-					
-					if ( prev_version == null ){
-						
-						version_map.put( prefix, version );
-						
-					}else{
-					
-						if ( PluginUtils.comparePluginVersions( prev_version, version ) < 0 ){
-														
-							version_map.put( prefix, version );
-						}							
-					}
-  				}
-   			}
-  		}
+
+        for (File f : files) {
+
+            String name = f.getName().toLowerCase();
+
+            if (name.endsWith(".jar")) {
+
+                int cvs_pos = name.lastIndexOf("_cvs");
+
+                int sep_pos;
+
+                if (cvs_pos <= 0)
+                    sep_pos = name.lastIndexOf("_");
+                else
+                    sep_pos = name.lastIndexOf("_", cvs_pos - 1);
+
+                if (sep_pos == -1 ||
+                        sep_pos == name.length() - 1 ||
+                        !Character.isDigit(name.charAt(sep_pos + 1))) {
+
+                    // not a versioned jar
+
+                    res.add(f);
+
+                } else {
+
+                    String prefix = name.substring(0, sep_pos);
+
+                    String version = name.substring(sep_pos + 1, (cvs_pos <= 0) ? name.length() - 4 : cvs_pos);
+
+                    String prev_version = (String) version_map.get(prefix);
+
+                    if (prev_version == null) {
+
+                        version_map.put(prefix, version);
+
+                    } else {
+
+                        if (PluginUtils.comparePluginVersions(prev_version, version) < 0) {
+
+                            version_map.put(prefix, version);
+                        }
+                    }
+                }
+            }
+        }
   		
   			// If any of the jars are versioned then the assumption is that all of them are
   			// For migration purposes (i.e. on the first real introduction of the update versioning
@@ -442,34 +420,30 @@ PluginLauncherImpl
   			 			
   			version_map.remove( "rating" );
   		}
-  		
-  		Iterator it = version_map.keySet().iterator();
-  		
-  		while(it.hasNext()){
-  			
-  			String	prefix 	= (String)it.next();
-  			String	version	= (String)version_map.get(prefix);
-  			
-  			String	target = prefix + "_" + version;
-  			
-  			version_out[0] 	= version;
-  			id_out[0]		= prefix;
-  			
-  			for (int i=0;i<files.length;i++){
-  				
-  				File	f = files[i];
-  				
-  				String	lc_name = f.getName().toLowerCase();
-  				
-  				if ( lc_name.equals( target + ".jar" ) ||
-  					 lc_name.equals( target + "_cvs.jar" )){
-  					  					
-  					res.add( f );
-  					
-  					break;
-  				}
-  			}
-  		}
+
+        for (Object o : version_map.keySet()) {
+
+            String prefix = (String) o;
+            String version = (String) version_map.get(prefix);
+
+            String target = prefix + "_" + version;
+
+            version_out[0] = version;
+            id_out[0] = prefix;
+
+            for (File f : files) {
+
+                String lc_name = f.getName().toLowerCase();
+
+                if (lc_name.equals(target + ".jar") ||
+                        lc_name.equals(target + "_cvs.jar")) {
+
+                    res.add(f);
+
+                    break;
+                }
+            }
+        }
   		
   		
   		

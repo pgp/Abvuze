@@ -79,7 +79,7 @@ BloomFilterRotator
 	public Map<String, Object> 
 	serialiseToMap() 
 	{
-		Map<String, Object>  m = new HashMap<String, Object>();
+		Map<String, Object>  m = new HashMap<>();
 		
 		serialiseToMap( m );
 		
@@ -101,7 +101,7 @@ BloomFilterRotator
 			
 			x.put( "_impl", cla );
 			
-			List<Map<String,Object>>	list = new ArrayList<Map<String,Object>>();
+			List<Map<String,Object>>	list = new ArrayList<>();
 			
 			for ( BloomFilter filter: filters ){
 				
@@ -109,7 +109,7 @@ BloomFilterRotator
 			}
 			
 			x.put( "list", list );
-			x.put( "index", new Long( current_filter_index ));
+			x.put( "index", (long) current_filter_index);
 		}
 	}
 	
@@ -170,18 +170,16 @@ BloomFilterRotator
 		byte[]		value )
 	{
 		int	res = 0;
-		
-		for (int i=0;i<filters.length;i++){
-			
-			BloomFilter	filter = filters[i];
-			
-			int r = filter.remove( value );
-			
-			if ( filter == current_filter ){
-				
-				res = r;
-			}
-		}
+
+        for (BloomFilter filter : filters) {
+
+            int r = filter.remove(value);
+
+            if (filter == current_filter) {
+
+                res = r;
+            }
+        }
 		
 		return( res );
 	}

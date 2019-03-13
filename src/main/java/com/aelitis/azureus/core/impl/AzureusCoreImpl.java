@@ -138,7 +138,7 @@ AzureusCoreImpl
 	/** 
 	 * Listeners that will be fired after core has completed initialization
 	 */
-	static List<AzureusCoreRunningListener> coreRunningListeners = new ArrayList<AzureusCoreRunningListener>(1);
+	static List<AzureusCoreRunningListener> coreRunningListeners = new ArrayList<>(1);
 	
 	static final AEMonitor mon_coreRunningListeners = new AEMonitor("CoreCreationListeners");
 	
@@ -207,7 +207,7 @@ AzureusCoreImpl
 	final CopyOnWriteList		lifecycle_listeners		= new CopyOnWriteList();
 	private final List				operation_listeners		= new ArrayList();
 	
-	private final CopyOnWriteList<PowerManagementListener>	power_listeners = new CopyOnWriteList<PowerManagementListener>();
+	private final CopyOnWriteList<PowerManagementListener>	power_listeners = new CopyOnWriteList<>();
 	
 	final AESemaphore			stopping_sem	= new AESemaphore( "AzureusCore::stopping" );
 	
@@ -645,9 +645,9 @@ AzureusCoreImpl
 								return( 
 									new Object[]{
 										up_key,
-										new Integer( COConfigurationManager.getIntParameter( up_key )),
+                                            COConfigurationManager.getIntParameter(up_key),
 										down_key,
-										new Integer( COConfigurationManager.getIntParameter( down_key )),
+                                            COConfigurationManager.getIntParameter(down_key),
 									});
 							}
 							
@@ -673,12 +673,12 @@ AzureusCoreImpl
 									
 									if ( do_up ){
 										
-										COConfigurationManager.setParameter((String)bits[0], ((Integer)bits[1]).intValue());
+										COConfigurationManager.setParameter((String)bits[0], (Integer) bits[1]);
 									}
 									
 									if ( do_down ){
 										
-										COConfigurationManager.setParameter((String)bits[2], ((Integer)bits[3]).intValue());
+										COConfigurationManager.setParameter((String)bits[2], (Integer) bits[3]);
 									}
 									
 								}finally{
@@ -732,33 +732,33 @@ AzureusCoreImpl
 			
 			long now	= SystemTime.getCurrentTime();
 
-			for (int i=0;i<downloads.size();i++){
-				
-				DownloadManager	dm = (DownloadManager)downloads.get(i);
-				
-				Long	last_announce_l = (Long)dm.getUserData( DM_ANNOUNCE_KEY );
-				
-				long	last_announce	= last_announce_l==null?create_time:last_announce_l.longValue();
-				
-				TRTrackerAnnouncer an = dm.getTrackerClient();
-				
-				if ( an != null ){
-					
-					TRTrackerAnnouncerResponse last_announce_response = an.getLastResponse();
-					
-					if ( 	now - last_announce > 15*60*1000 ||
-							last_announce_response == null ||
-							last_announce_response.getStatus() == TRTrackerAnnouncerResponse.ST_OFFLINE ||
-							force ){
-	
-						dm.setUserData( DM_ANNOUNCE_KEY, new Long( now ));
-						
-						Logger.log(	new LogEvent(LOGID, "    updating tracker for " + dm.getDisplayName()));
-	
-						dm.requestTrackerAnnounce( true );
-					}
-				}
-			}
+            for (Object download : downloads) {
+
+                DownloadManager dm = (DownloadManager) download;
+
+                Long last_announce_l = (Long) dm.getUserData(DM_ANNOUNCE_KEY);
+
+                long last_announce = last_announce_l == null ? create_time : last_announce_l;
+
+                TRTrackerAnnouncer an = dm.getTrackerClient();
+
+                if (an != null) {
+
+                    TRTrackerAnnouncerResponse last_announce_response = an.getLastResponse();
+
+                    if (now - last_announce > 15 * 60 * 1000 ||
+                            last_announce_response == null ||
+                            last_announce_response.getStatus() == TRTrackerAnnouncerResponse.ST_OFFLINE ||
+                            force) {
+
+                        dm.setUserData(DM_ANNOUNCE_KEY, now);
+
+                        Logger.log(new LogEvent(LOGID, "    updating tracker for " + dm.getDisplayName()));
+
+                        dm.requestTrackerAnnounce(true);
+                    }
+                }
+            }
 		}
 		
 	    PluginInterface dht_tracker_pi = getPluginManager().getPluginInterfaceByClass( DHTTrackerPlugin.class );
@@ -947,90 +947,86 @@ AzureusCoreImpl
 						VuzeFile[]		files,
 						int				expected_types )
 					{
-						for (int i=0;i<files.length;i++){
-							
-							VuzeFile	vf = files[i];
-							
-							VuzeFileComponent[] comps = vf.getComponents();
-							
-							for (int j=0;j<comps.length;j++){
-								
-								VuzeFileComponent comp = comps[j];
-								
-								int	comp_type = comp.getType();
-								
-								if ( comp_type == VuzeFileComponent.COMP_TYPE_ADD_TORRENT ){
-									
-									PluginInterface default_pi = getPluginManager().getDefaultPluginInterface();
-									
-									Map map = comp.getContent();
-									
-									try{
-										Torrent torrent;
+                        for (VuzeFile vf : files) {
 
-										String url = MapUtils.getMapString(map, "torrent_url", null );
-																				
-										if ( url != null ){
-											
-											TorrentDownloader dl = default_pi.getTorrentManager().getURLDownloader( new URL( url ));
-											
-											torrent = dl.download();
-																						
-										}else{
-											
-											String tf = MapUtils.getMapString(map, "torrent_file", null );
+                            VuzeFileComponent[] comps = vf.getComponents();
 
-											if ( tf != null ){
-												
-												File file = new File( tf );
-												
-												if ( !file.canRead() || file.isDirectory()){
-													
-													throw( new Exception( "torrent_file '" + tf + "' is invalid" ));
-												}
-												
-												torrent = default_pi.getTorrentManager().createFromBEncodedFile(file);
-																								
-											}else{
-												
-												throw( new Exception( "torrent_url or torrent_file must be specified" ));
-											}
-										}
-										
-										File	dest = null;
-										
-										String save_folder = MapUtils.getMapString(map, "save_folder", null );
-										
-										if ( save_folder != null ){
-											
-											dest = new File( save_folder, torrent.getName());
-											
-										}else{
-											
-											String save_file = MapUtils.getMapString(map, "save_file", null );
+                            for (VuzeFileComponent comp : comps) {
 
-											if ( save_file != null ){
-												
-												dest = new File( save_file );
-											}
-										}
+                                int comp_type = comp.getType();
 
-										if ( dest != null ){
-											
-											dest.getParentFile().mkdirs();
-										}
-										
-										default_pi.getDownloadManager().addDownload( torrent, null, dest );
+                                if (comp_type == VuzeFileComponent.COMP_TYPE_ADD_TORRENT) {
 
-									}catch( Throwable e ){
-										
-										Debug.out( e );
-									}
-									
-									comp.setProcessed();
-								}
-							}
-						}
+                                    PluginInterface default_pi = getPluginManager().getDefaultPluginInterface();
+
+                                    Map map = comp.getContent();
+
+                                    try {
+                                        Torrent torrent;
+
+                                        String url = MapUtils.getMapString(map, "torrent_url", null);
+
+                                        if (url != null) {
+
+                                            TorrentDownloader dl = default_pi.getTorrentManager().getURLDownloader(new URL(url));
+
+                                            torrent = dl.download();
+
+                                        } else {
+
+                                            String tf = MapUtils.getMapString(map, "torrent_file", null);
+
+                                            if (tf != null) {
+
+                                                File file = new File(tf);
+
+                                                if (!file.canRead() || file.isDirectory()) {
+
+                                                    throw (new Exception("torrent_file '" + tf + "' is invalid"));
+                                                }
+
+                                                torrent = default_pi.getTorrentManager().createFromBEncodedFile(file);
+
+                                            } else {
+
+                                                throw (new Exception("torrent_url or torrent_file must be specified"));
+                                            }
+                                        }
+
+                                        File dest = null;
+
+                                        String save_folder = MapUtils.getMapString(map, "save_folder", null);
+
+                                        if (save_folder != null) {
+
+                                            dest = new File(save_folder, torrent.getName());
+
+                                        } else {
+
+                                            String save_file = MapUtils.getMapString(map, "save_file", null);
+
+                                            if (save_file != null) {
+
+                                                dest = new File(save_file);
+                                            }
+                                        }
+
+                                        if (dest != null) {
+
+                                            dest.getParentFile().mkdirs();
+                                        }
+
+                                        default_pi.getDownloadManager().addDownload(torrent, null, dest);
+
+                                    } catch (Throwable e) {
+
+                                        Debug.out(e);
+                                    }
+
+                                    comp.setProcessed();
+                                }
+                            }
+                        }
 					}
 				});
 		
@@ -1187,19 +1183,19 @@ AzureusCoreImpl
 			   										boolean	found_usable = false;
 		
 			   										NetworkAdminNetworkInterface[] intf = na.getInterfaces();
-		
-			   										for (int i=0;i<intf.length;i++){
-		
-			   											NetworkAdminNetworkInterfaceAddress[] addresses = intf[i].getAddresses();
-		
-			   											for (int j=0;j<addresses.length;j++){
-		
-			   												if ( !addresses[j].isLoopback()){
-		
-			   													found_usable = true;
-			   												}
-			   											}
-			   										}
+
+                                                    for (NetworkAdminNetworkInterface networkAdminNetworkInterface : intf) {
+
+                                                        NetworkAdminNetworkInterfaceAddress[] addresses = networkAdminNetworkInterface.getAddresses();
+
+                                                        for (NetworkAdminNetworkInterfaceAddress address : addresses) {
+
+                                                            if (!address.isLoopback()) {
+
+                                                                found_usable = true;
+                                                            }
+                                                        }
+                                                    }
 		
 			   										// ignore event if nothing usable
 		
@@ -1354,18 +1350,17 @@ AzureusCoreImpl
 	triggerLifeCycleComponentCreated(
 		AzureusCoreComponent component )
 	{
-		Iterator it = lifecycle_listeners.iterator();
-		
-		while( it.hasNext()){
 
-			try{
-				((AzureusCoreLifecycleListener)it.next()).componentCreated(this, component);
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace(e);
-			}
-		}
+        for (Object lifecycle_listener : lifecycle_listeners) {
+
+            try {
+                ((AzureusCoreLifecycleListener) lifecycle_listener).componentCreated(this, component);
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 	
 	private void
@@ -1558,32 +1553,30 @@ AzureusCoreImpl
 				
 		List	sync_listeners 	= new ArrayList();
 		List	async_listeners	= new ArrayList();
-		
-		Iterator it = lifecycle_listeners.iterator();
-			
-		while( it.hasNext()){
-			AzureusCoreLifecycleListener	l = (AzureusCoreLifecycleListener)it.next();
-			
-			if ( l.syncInvokeRequired()){
-				sync_listeners.add( l );
-			}else{
-				async_listeners.add( l );
-			}
-		}
+
+        for (Object lifecycle_listener : lifecycle_listeners) {
+            AzureusCoreLifecycleListener l = (AzureusCoreLifecycleListener) lifecycle_listener;
+
+            if (l.syncInvokeRequired()) {
+                sync_listeners.add(l);
+            } else {
+                async_listeners.add(l);
+            }
+        }
 		
 		try{
 			if (Logger.isEnabled())
 				Logger.log(new LogEvent(LOGID, "Invoking synchronous 'stopping' listeners"));
 
-			for (int i=0;i<sync_listeners.size();i++){		
-				try{
-					((AzureusCoreLifecycleListener)sync_listeners.get(i)).stopping( this );
-					
-				}catch( Throwable e ){
-					
-					Debug.printStackTrace(e);
-				}
-			}
+            for (Object sync_listener1 : sync_listeners) {
+                try {
+                    ((AzureusCoreLifecycleListener) sync_listener1).stopping(this);
+
+                } catch (Throwable e) {
+
+                    Debug.printStackTrace(e);
+                }
+            }
 			
 			if (Logger.isEnabled())
 				Logger.log(new LogEvent(LOGID, "Invoking asynchronous 'stopping' listeners"));
@@ -1618,15 +1611,15 @@ AzureusCoreImpl
 			if (Logger.isEnabled())
 				Logger.log(new LogEvent(LOGID, "Invoking synchronous 'stopped' listeners"));
 
-			for (int i=0;i<sync_listeners.size();i++){		
-				try{
-					((AzureusCoreLifecycleListener)sync_listeners.get(i)).stopped( this );
-					
-				}catch( Throwable e ){
-					
-					Debug.printStackTrace(e);
-				}
-			}
+            for (Object sync_listener : sync_listeners) {
+                try {
+                    ((AzureusCoreLifecycleListener) sync_listener).stopped(this);
+
+                } catch (Throwable e) {
+
+                    Debug.printStackTrace(e);
+                }
+            }
 			
 			if (Logger.isEnabled())
 				Logger.log(new LogEvent(LOGID, "Invoking asynchronous 'stopped' listeners"));
@@ -1674,7 +1667,7 @@ AzureusCoreImpl
 				Class c = Class.forName( "sun.awt.AWTAutoShutdown" );
 	      
 				if (c != null) {
-					c.getMethod( "notifyToolkitThreadFree", new Class[]{} ).invoke( null, new Object[]{} );
+					c.getMethod( "notifyToolkitThreadFree", new Class[]{} ).invoke( null);
 				}
 			} catch (Throwable t) {
 			}
@@ -1714,18 +1707,16 @@ AzureusCoreImpl
 				tg.enumerate( threads, true );
 				
 				boolean	bad_found = false;
-				
-				for (int i=0;i<threads.length;i++){
-					
-					Thread	t = threads[i];
-										
-					if ( t != null && t.isAlive() && t != Thread.currentThread() && !t.isDaemon() && !AEThread2.isOurThread( t )){
-					
-						bad_found = true;
-						
-						break;
-					}
-				}
+
+                for (Thread t : threads) {
+
+                    if (t != null && t.isAlive() && t != Thread.currentThread() && !t.isDaemon() && !AEThread2.isOurThread(t)) {
+
+                        bad_found = true;
+
+                        break;
+                    }
+                }
 				
 				if ( bad_found ){
 										
@@ -1744,32 +1735,30 @@ AzureusCoreImpl
 								tg.enumerate( threads, true );
 								
 								String	bad_found = "";
-								
-								for (int i=0;i<threads.length;i++){
-									
-									Thread	t = threads[i];
-																		
-									if ( t != null && t.isAlive() && !t.isDaemon() && !AEThread2.isOurThread( t )){
-									
-										String	details = t.getName();
-										
-										StackTraceElement[] trace = t.getStackTrace();
-										
-										if ( trace.length > 0 ){
-											
-											details += "[";
-											
-											for ( int j=0;j<trace.length;j++ ){
-											
-												details += (j==0?"":",") + trace[j];
-											}
-											
-											details += "]";
-										}
-										
-										bad_found += (bad_found.length()==0?"":", ") + details;
-									}
-								}
+
+                                for (Thread t : threads) {
+
+                                    if (t != null && t.isAlive() && !t.isDaemon() && !AEThread2.isOurThread(t)) {
+
+                                        String details = t.getName();
+
+                                        StackTraceElement[] trace = t.getStackTrace();
+
+                                        if (trace.length > 0) {
+
+                                            details += "[";
+
+                                            for (int j = 0; j < trace.length; j++) {
+
+                                                details += (j == 0 ? "" : ",") + trace[j];
+                                            }
+
+                                            details += "]";
+                                        }
+
+                                        bad_found += (bad_found.length() == 0 ? "" : ", ") + details;
+                                    }
+                                }
 								
 								Debug.out( "Non-daemon thread(s) found: '" + bad_found + "' - force closing VM" );
 								
@@ -1804,19 +1793,17 @@ AzureusCoreImpl
 		runNonDaemon(new AERunnable() {
 			public void runSupport() {
 
-				Iterator it = lifecycle_listeners.iterator();
-				
-				while( it.hasNext()){
+                for (Object lifecycle_listener : lifecycle_listeners) {
 
-					if (!((AzureusCoreLifecycleListener)it.next())
-							.stopRequested(AzureusCoreImpl.this)) {
-						if (Logger.isEnabled())
-							Logger.log(new LogEvent(LOGID, LogEvent.LT_WARNING,
-									"Request to stop the core has been denied"));
+                    if (!((AzureusCoreLifecycleListener) lifecycle_listener)
+                            .stopRequested(AzureusCoreImpl.this)) {
+                        if (Logger.isEnabled())
+                            Logger.log(new LogEvent(LOGID, LogEvent.LT_WARNING,
+                                    "Request to stop the core has been denied"));
 
-						return;
-					}
-				}
+                        return;
+                    }
+                }
 
 				stop();
 			}
@@ -1857,10 +1844,8 @@ AzureusCoreImpl
             public void runSupport() {
                 checkRestartSupported();
 
-                Iterator it = lifecycle_listeners.iterator();
-                
-                while( it.hasNext()){
-                    AzureusCoreLifecycleListener l = (AzureusCoreLifecycleListener)it.next();
+                for (Object lifecycle_listener : lifecycle_listeners) {
+                    AzureusCoreLifecycleListener l = (AzureusCoreLifecycleListener) lifecycle_listener;
 
                     if (!l.restartRequested(AzureusCoreImpl.this)) {
 
@@ -2572,7 +2557,7 @@ AzureusCoreImpl
 					
 			if ( ui_manager != null ){
 				
-				Map<String,Object>	options = new HashMap<String, Object>();
+				Map<String,Object>	options = new HashMap<>();
 				
 				options.put( UIManager.MB_PARAM_AUTO_CLOSE_MS, 30*1000 );
 				
@@ -2751,7 +2736,7 @@ AzureusCoreImpl
 						
 						provider_found = true;
 						
-						Map<String,Object>	bindings = new HashMap<String, Object>();
+						Map<String,Object>	bindings = new HashMap<>();
 												
 						String intent = "shutdown" + "(\"" + action + "\")";
 
@@ -2810,18 +2795,18 @@ AzureusCoreImpl
 						return( f_task[0] );
 					}
 				};
-				
 
-		for (int i=0;i<operation_listeners.size();i++){
-			
-				// don't catch exceptions here as we want errors from task execution to propagate
-				// back to the invoker
-			
-			if (((AzureusCoreOperationListener)operation_listeners.get(i)).operationCreated( op )){
-				
-				f_task[0] = null;
-			}
-		}
+
+        for (Object operation_listener : operation_listeners) {
+
+            // don't catch exceptions here as we want errors from task execution to propagate
+            // back to the invoker
+
+            if (((AzureusCoreOperationListener) operation_listener).operationCreated(op)) {
+
+                f_task[0] = null;
+            }
+        }
 		
 			// nobody volunteeered to run it for us, we'd better do it
 		

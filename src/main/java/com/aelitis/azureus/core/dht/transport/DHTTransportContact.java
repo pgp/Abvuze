@@ -33,148 +33,148 @@ import com.aelitis.azureus.core.dht.netcoords.DHTNetworkPosition;
 public interface 
 DHTTransportContact
 {
-	public static final int RANDOM_ID_TYPE1	= 1;
-	public static final int RANDOM_ID_TYPE2	= 2;
+	int RANDOM_ID_TYPE1	= 1;
+	int RANDOM_ID_TYPE2	= 2;
 	
-	public int
+	int
 	getMaxFailForLiveCount();
 	
-	public int
+	int
 	getMaxFailForUnknownCount();
 	
-	public int
+	int
 	getInstanceID();
 	
-	public byte[]
+	byte[]
 	getID();
 	
-	public byte
+	byte
 	getProtocolVersion();
 	
-	public long
+	long
 	getClockSkew();
 	
-	public int
+	int
 	getRandomIDType();
 	
-	public void
+	void
 	setRandomID(
-		int	id );
+            int id);
 	
-	public int
+	int
 	getRandomID();
 	
-	public void
+	void
 	setRandomID2(
-		byte[]		id );
+            byte[] id);
 	
-	public byte[]
+	byte[]
 	getRandomID2();
 	
-	public String
+	String
 	getName();
 	
-	public byte[]
+	byte[]
 	getBloomKey();
 	
-	public InetSocketAddress
+	InetSocketAddress
 	getAddress();
 	
-	public InetSocketAddress
+	InetSocketAddress
 	getTransportAddress();
 	
-	public InetSocketAddress
+	InetSocketAddress
 	getExternalAddress();
 	
-	public boolean
+	boolean
 	isAlive(
-		long		timeout );
+            long timeout);
 
-	public void
+	void
 	isAlive(
-		DHTTransportReplyHandler	handler,
-		long						timeout );
+            DHTTransportReplyHandler handler,
+            long timeout);
 	
-	public boolean
+	boolean
 	isValid();
 	
-	public boolean
+	boolean
 	isSleeping();
 	
-	public void
+	void
 	sendPing(
-		DHTTransportReplyHandler	handler );
+            DHTTransportReplyHandler handler);
 	
-	public void
+	void
 	sendImmediatePing(
-		DHTTransportReplyHandler	handler,
-		long						timeout );
+            DHTTransportReplyHandler handler,
+            long timeout);
 
-	public void
+	void
 	sendStats(
-		DHTTransportReplyHandler	handler );
+            DHTTransportReplyHandler handler);
 	
-	public void
+	void
 	sendStore(
-		DHTTransportReplyHandler	handler,
-		byte[][]					keys,
-		DHTTransportValue[][]		value_sets,
-		boolean						immediate );
+            DHTTransportReplyHandler handler,
+            byte[][] keys,
+            DHTTransportValue[][] value_sets,
+            boolean immediate);
 	
-	public void
+	void
 	sendQueryStore(
-		DHTTransportReplyHandler	handler,
-		int							header_length,
-		List<Object[]>				key_details );
+            DHTTransportReplyHandler handler,
+            int header_length,
+            List<Object[]> key_details);
 	
-	public void
+	void
 	sendFindNode(
-		DHTTransportReplyHandler	handler,
-		byte[]						id,
-		short						flags );
+            DHTTransportReplyHandler handler,
+            byte[] id,
+            short flags);
 		
-	public void
+	void
 	sendFindValue(
-		DHTTransportReplyHandler	handler,
-		byte[]						key,
-		int							max_values,
-		short						flags );
+            DHTTransportReplyHandler handler,
+            byte[] key,
+            int max_values,
+            short flags);
 		
-	public void
+	void
 	sendKeyBlock(
-		DHTTransportReplyHandler	handler,
-		byte[]						key_block_request,
-		byte[]						key_block_signature );
+            DHTTransportReplyHandler handler,
+            byte[] key_block_request,
+            byte[] key_block_signature);
 
-	public DHTTransportFullStats
+	DHTTransportFullStats
 	getStats();
 	
-	public void
+	void
 	exportContact(
-		DataOutputStream	os )
+            DataOutputStream os)
 	
 		throws IOException, DHTTransportException;
 	
-	public Map<String, Object> 
+	Map<String, Object>
 	exportContactToMap();
 	
-	public void
+	void
 	remove();
 	
-	public void
+	void
 	createNetworkPositions(
-		boolean		is_local );
+            boolean is_local);
 			
-	public DHTNetworkPosition[]
+	DHTNetworkPosition[]
 	getNetworkPositions();
 	
-	public DHTNetworkPosition
+	DHTNetworkPosition
 	getNetworkPosition(
-		byte	position_type );
+            byte position_type);
 
-	public DHTTransport
+	DHTTransport
 	getTransport();
 	
-	public String
+	String
 	getString();
 }

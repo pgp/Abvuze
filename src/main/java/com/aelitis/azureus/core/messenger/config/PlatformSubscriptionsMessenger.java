@@ -20,6 +20,7 @@
 
 package com.aelitis.azureus.core.messenger.config;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Signature;
 import java.util.*;
 
@@ -70,7 +71,7 @@ PlatformSubscriptionsMessenger
 		
 		parameters.put( "name", name );
 		parameters.put( "subscription_id", sid_str );
-		parameters.put( "version_number", new Long( version ));
+		parameters.put( "version_number", (long) version);
 		parameters.put( "content", content );				
 		
 		if ( create ){
@@ -81,7 +82,7 @@ PlatformSubscriptionsMessenger
 		try{
 			Signature sig = CryptoECCUtils.getSignature( CryptoECCUtils.rawdataToPrivkey( private_key ));
 
-			sig.update( ( name + pk_str + sid_str + version + content ).getBytes( "UTF-8" ));
+			sig.update( ( name + pk_str + sid_str + version + content ).getBytes(StandardCharsets.UTF_8));
 			
 			byte[]	sig_bytes = sig.sign();
 			
@@ -120,19 +121,19 @@ PlatformSubscriptionsMessenger
 		
 		parameters.put( "subscription_ids", sid_list);
 		
-		Map reply = dispatcher.syncInvoke(	OP_GET_SUBS_BY_SID, parameters, is_anon ); 
+		Map reply = dispatcher.syncInvoke(	OP_GET_SUBS_BY_SID, parameters, is_anon );
 
-		for (int i=0;i<sid_list.size();i++){
-			
-			Map	map = (Map)reply.get((String)sid_list.get(i));
-			
-			if ( map != null ){
-				
-				subscriptionDetails details = new subscriptionDetails( map );
-				
-				return( details );
-			}
-		}
+        for (Object o : sid_list) {
+
+            Map map = (Map) reply.get(o);
+
+            if (map != null) {
+
+                subscriptionDetails details = new subscriptionDetails(map);
+
+                return (details);
+            }
+        }
 		
 		throw( new PlatformMessengerException( "Unknown sid '" + ByteFormatter.encodeString(sid) + "'" ));
 	}                       	
@@ -153,19 +154,19 @@ PlatformSubscriptionsMessenger
 					
 		parameters.put( "subscription_ids", sid_list );
 		
-		Map reply = dispatcher.syncInvoke(	OP_GET_POP_BY_SID, parameters ); 
-		
-		for (int i=0;i<sid_list.size();i++){
-			
-			Map	map = (Map)reply.get((String)sid_list.get(i));
-			
-			if ( map != null ){
-				
-				subscriptionInfo info = new subscriptionInfo( map );
-				
-				return( info.getPopularity());
-			}
-		}
+		Map reply = dispatcher.syncInvoke(	OP_GET_POP_BY_SID, parameters );
+
+        for (Object o : sid_list) {
+
+            Map map = (Map) reply.get(o);
+
+            if (map != null) {
+
+                subscriptionInfo info = new subscriptionInfo(map);
+
+                return (info.getPopularity());
+            }
+        }
 		
 		return( -1 );
 	}
@@ -180,11 +181,11 @@ PlatformSubscriptionsMessenger
 		
 		Map parameters = new HashMap();
 		
-		List	sid_list 	= new JSONArray();		
-		for (int i=0;i<sids.size();i++){
-		
-			sid_list.add( Base32.encode( (byte[])sids.get(i) ));
-		}
+		List	sid_list 	= new JSONArray();
+        for (Object sid : sids) {
+
+            sid_list.add(Base32.encode((byte[]) sid));
+        }
 		
 		parameters.put( "subscription_ids", sid_list);
 		
@@ -200,7 +201,7 @@ PlatformSubscriptionsMessenger
 			
 			for (int i=0;i<sids.size();i++){
 				
-				versions.add( new Long(1));
+				versions.add(1L);
 			}
 		}
 		
@@ -214,7 +215,7 @@ PlatformSubscriptionsMessenger
 			
 			for (int i=0;i<sids.size();i++){
 				
-				popularities.add( new Long(-1));
+				popularities.add((long) -1);
 			}
 		}
 	
@@ -304,7 +305,7 @@ PlatformSubscriptionsMessenger
 				byte[]	bytes = (byte[])obj;
 				
 				try{
-					return( new String( bytes, "UTF-8" ));
+					return( new String( bytes, StandardCharsets.UTF_8));
 					
 				}catch( Throwable e ){
 					

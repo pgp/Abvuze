@@ -20,26 +20,26 @@ import org.gudy.azureus2.core3.config.COConfigurationManager;
 public interface 
 PeerControlScheduler 
 {
-	public static final int SCHEDULE_PERIOD_MILLIS = COConfigurationManager.getIntParameter( "peermanager.schedule.time" );
-	public static final int SCHEDULE_PERIOD_MAX_CATCHUP = SCHEDULE_PERIOD_MILLIS>>2;
+	int SCHEDULE_PERIOD_MILLIS = COConfigurationManager.getIntParameter( "peermanager.schedule.time" );
+	int SCHEDULE_PERIOD_MAX_CATCHUP = SCHEDULE_PERIOD_MILLIS>>2;
 	
-	public void
+	void
 	register(
-		PeerControlInstance	instance );
+            PeerControlInstance instance);
 	
-	public void
+	void
 	unregister(
-		PeerControlInstance	instance );
+            PeerControlInstance instance);
 	
-	public void 
+	void
 	updateScheduleOrdering();
 	
-	public SpeedTokenDispenser
+	SpeedTokenDispenser
 	getSpeedTokenDispenser();
 	
 	/**
 	 * 
 	 * @param override, set to true to disable weighted priorities, false to use user-configureable default
 	 */
-	public void overrideWeightedPriorities(boolean override);
+    void overrideWeightedPriorities(boolean override);
 }

@@ -267,11 +267,11 @@ AzureusCoreStats
 						}
 						
 						Collections.sort( lines );
-				
-						for ( int i=0;i<lines.size();i++){
 
-							writer.println((String)lines.get(i));
-						}
+                        for (Object line : lines) {
+
+                            writer.println((String) line);
+                        }
 						
 					}finally{
 						
@@ -300,14 +300,14 @@ AzureusCoreStats
 	addStatsDefinitions(
 		String[][]		stats )
 	{
-		for (int i=0;i<stats.length;i++){
-			
-			String	name = stats[i][0];
-			
-			stats_names.add( name );
-			
-			stats_types.put( name, stats[i][1] );
-		}
+        for (String[] stat : stats) {
+
+            String name = stat[0];
+
+            stats_names.add(name);
+
+            stats_types.put(name, stat[1]);
+        }
 	}
 	
 	public static Map
@@ -315,78 +315,70 @@ AzureusCoreStats
 		Set		types )
 	{
 		Set	expanded = new HashSet();
-		
-		Iterator	it = types.iterator();
-		
-		while( it.hasNext()){
-			
-			String	type = (String)it.next();
-			
-			if ( type.endsWith( ".average" )){
-				
-				type = type.substring(0,type.length()-8);
-			}
-			
-			if ( !type.endsWith("*")){
-				
-				type = type + ".*";
-			}
-			
-			Pattern pattern = Pattern.compile( type );
-						
-			for (int i=0;i<stats_names.size();i++){
-				
-				String	s = (String)stats_names.get(i);
-				
-				if ( pattern.matcher( s ).matches()){
-					
-					expanded.add( s );
-				}
-			}
-			
-			Iterator provider_it = providers.iterator();
-			
-			while( provider_it.hasNext()){
-				
-				Object[]	provider_entry = (Object[])provider_it.next();
-				
-				Set provider_types = (Set)provider_entry[0];
-				
-				Iterator pt_it = provider_types.iterator();
-				
-				while( pt_it.hasNext()){
-					
-					String	s = (String)pt_it.next();
-					
-					if ( pattern.matcher( s ).matches()){
-						
-						expanded.add( s );
-					}
-				}
-			}
-			
-			Iterator derived_it = derived_generators.iterator();
-			
-			while( derived_it.hasNext()){
-				
-				try{
-					
-					((derivedStatsGenerator)derived_it.next()).match( pattern, expanded );
-					
-				}catch( Throwable e ){
-					
-					Debug.printStackTrace( e );
-				}
-			}
-		}
+
+        for (Object type1 : types) {
+
+            String type = (String) type1;
+
+            if (type.endsWith(".average")) {
+
+                type = type.substring(0, type.length() - 8);
+            }
+
+            if (!type.endsWith("*")) {
+
+                type = type + ".*";
+            }
+
+            Pattern pattern = Pattern.compile(type);
+
+            for (Object stats_name : stats_names) {
+
+                String s = (String) stats_name;
+
+                if (pattern.matcher(s).matches()) {
+
+                    expanded.add(s);
+                }
+            }
+
+            for (Object provider : providers) {
+
+                Object[] provider_entry = (Object[]) provider;
+
+                Set provider_types = (Set) provider_entry[0];
+
+                for (Object provider_type : provider_types) {
+
+                    String s = (String) provider_type;
+
+                    if (pattern.matcher(s).matches()) {
+
+                        expanded.add(s);
+                    }
+                }
+            }
+
+            for (Object derived_generator : derived_generators) {
+
+                try {
+
+                    ((derivedStatsGenerator) derived_generator).match(pattern, expanded);
+
+                } catch (Throwable e) {
+
+                    Debug.printStackTrace(e);
+                }
+            }
+        }
 		
 		Map	result = getStatsSupport( expanded );
 		
 		Map	ave = averages;
 		
 		if ( ave != null ){
-			
-			it = result.keySet().iterator();
+
+            Iterator	it = result.keySet().iterator();
 			
 			Map	ave_results = new HashMap();
 			
@@ -400,26 +392,24 @@ AzureusCoreStats
 					
 					Average	average = (Average)a_entry[0];
 					
-					ave_results.put( key + ".average", new Long((long)average.getAverage()));
+					ave_results.put( key + ".average", (long) average.getAverage());
 				}
 			}
 						
 			result.putAll( ave_results );
 		}
-		
-		Iterator derived_it = derived_generators.iterator();
-				
-		while( derived_it.hasNext()){
-			
-			try{
-				
-				((derivedStatsGenerator)derived_it.next()).generate( result );
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace( e );
-			}
-		}
+
+        for (Object derived_generator : derived_generators) {
+
+            try {
+
+                ((derivedStatsGenerator) derived_generator).generate(result);
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 		
 		return( result );
 	}
@@ -429,61 +419,57 @@ AzureusCoreStats
 		Set		types )
 	{
 		Map	result = new HashMap();
-		
-		Iterator it = providers.iterator();
-		
-		while( it.hasNext()){
-			
-			Object[]	provider_entry = (Object[])it.next();
-			
-			Map	provider_result = new HashMap();
 
-			Set	target_types;
-			
-			if ( types == null ){
-				
-				target_types = (Set)provider_entry[0];
-			}else{
-			
-				target_types = types;
-			}
-			
-			try{
-				((AzureusCoreStatsProvider)provider_entry[1]).updateStats( target_types, provider_result );
-				
-				Iterator pit = provider_result.entrySet().iterator();
-				
-				while( pit.hasNext()){
-					
-					Map.Entry	pe = (Map.Entry)pit.next();
-					
-					String	key = (String)pe.getKey();
-					Object	obj	= pe.getValue();
-					
-					if ( obj instanceof Long ){
-						
-						Long	old = (Long)result.get(key);
-						
-						if ( old == null ){
-							
-							result.put( key, obj );
-							
-						}else{
-							
-							long	v = ((Long)obj).longValue();
-							
-							result.put( key, new Long( v + old.longValue()));
-						}
-					}else{
-						
-						result.put( key, obj );
-					}
-				}
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace(e);
-			}
-		}
+        for (Object provider : providers) {
+
+            Object[] provider_entry = (Object[]) provider;
+
+            Map provider_result = new HashMap();
+
+            Set target_types;
+
+            if (types == null) {
+
+                target_types = (Set) provider_entry[0];
+            } else {
+
+                target_types = types;
+            }
+
+            try {
+                ((AzureusCoreStatsProvider) provider_entry[1]).updateStats(target_types, provider_result);
+
+                for (Object o : provider_result.entrySet()) {
+
+                    Map.Entry pe = (Map.Entry) o;
+
+                    String key = (String) pe.getKey();
+                    Object obj = pe.getValue();
+
+                    if (obj instanceof Long) {
+
+                        Long old = (Long) result.get(key);
+
+                        if (old == null) {
+
+                            result.put(key, obj);
+
+                        } else {
+
+                            long v = (Long) obj;
+
+                            result.put(key, v + old.longValue());
+                        }
+                    } else {
+
+                        result.put(key, obj);
+                    }
+                }
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 		
 		return( result );
 	}
@@ -511,18 +497,17 @@ AzureusCoreStats
 	protected static void
 	fireProvidersChangeListeners()
 	{
-		Iterator it = provider_listeners.iterator();
-		
-		while( it.hasNext()){
-			
-			try{
-				((providersChangeListener)it.next()).providersChanged();
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace(e);
-			}
-		}
+
+        for (Object provider_listener : provider_listeners) {
+
+            try {
+                ((providersChangeListener) provider_listener).providersChanged();
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 	
 	public static void
@@ -595,7 +580,7 @@ AzureusCoreStats
 										
 									}else{
 										a			= (Average)a_entry[0];
-										last_value	= ((Long)a_entry[1]).longValue();
+										last_value	= (Long) a_entry[1];
 										
 										new_average = false;
 									}
@@ -606,11 +591,11 @@ AzureusCoreStats
 										
 										if ( !new_average ){
 										
-											a.update(((Long)value).longValue() - last_value);
+											a.update((Long) value - last_value);
 										}
 									}else{
 										
-										a.update(((Long)value).longValue());
+										a.update((Long) value);
 
 									}
 									
@@ -647,20 +632,20 @@ AzureusCoreStats
 	public interface
 	providersChangeListener
 	{
-		public void
+		void
 		providersChanged();
 	}
 	
 	public interface
 	derivedStatsGenerator
 	{
-		public void
+		void
 		match(
-			Pattern		p,
-			Set			required );
+                Pattern p,
+                Set required);
 		
-		public void
+		void
 		generate(
-			Map	map );
+                Map map);
 	}
 }

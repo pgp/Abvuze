@@ -359,13 +359,13 @@ AzureusRestarterImpl
 					String execEXE = "\"-J" + getClassPath().replaceAll("\\\"", "")
 							+ "\" ";
 
-					for (int i = 0; i < properties.length; i++) {
-						execEXE += "\"-J" + properties[i].replaceAll("\\\"", "") + "\" ";
-					}
+                    for (String property : properties) {
+                        execEXE += "\"-J" + property.replaceAll("\\\"", "") + "\" ";
+                    }
 
-					for (int i = 0; i < parameters.length; i++) {
-						execEXE += " \"" + parameters[i].replaceAll("\\\"", "") + "\"";
-					}
+                    for (String parameter : parameters) {
+                        execEXE += " \"" + parameter.replaceAll("\\\"", "") + "\"";
+                    }
 
 					log.println("Launch via " + exeUpdater + " params " + execEXE);
 					result = accessor.shellExecute(null, exeUpdater, execEXE,
@@ -492,15 +492,15 @@ AzureusRestarterImpl
 		//Classic restart way using Runtime.exec directly on java(w)
 		exec = "\"" + JAVA_EXEC_DIR + "javaw\" " + getClassPath() + getLibraryPath();
 
-		for (int i = 0; i < properties.length; i++) {
-			exec += properties[i] + " ";
-		}
+      for (String property : properties) {
+          exec += property + " ";
+      }
 
 		exec += mainClass;
 
-		for (int i = 0; i < parameters.length; i++) {
-			exec += " \"" + parameters[i] + "\"";
-		}
+      for (String parameter : parameters) {
+          exec += " \"" + parameter + "\"";
+      }
 
 		if (exeUpdater != null) {
 			return( restartViaEXE(log, exeUpdater, properties, parameters, exec, update_only));
@@ -548,16 +548,16 @@ AzureusRestarterImpl
   {
 
      String exec = "\"" + JAVA_EXEC_DIR + "java\" " + getClassPath() + getLibraryPath();
-  	 
-     for (int i=0;i<properties.length;i++){
-    	 exec += properties[i] + " ";
-     }
+
+      for (String property : properties) {
+          exec += property + " ";
+      }
     
      exec += mainClass ;
-    
-     for(int i = 0 ; i < parameters.length ; i++) {
-    	 exec += " \"" + parameters[i] + "\"";
-     }
+
+      for (String parameter : parameters) {
+          exec += " \"" + parameter + "\"";
+      }
 
      return( runExternalCommandViaUnixShell( log, exec ));
   }
@@ -583,10 +583,10 @@ AzureusRestarterImpl
   {
     
     String exec = "\"" + JAVA_EXEC_DIR + "java\" " + getClassPath() +	getLibraryPath();
-    
-    for (int i=0;i<properties.length;i++){
-      exec += properties[i] + " ";
-    }
+
+      for (String property : properties) {
+          exec += property + " ";
+      }
     
     int scriptVersion = getUnixScriptVersion();
     boolean restartByScript = Constants.compareVersions(
@@ -597,10 +597,10 @@ AzureusRestarterImpl
     }
     
     exec += mainClass ;
-    
-    for(int i = 0 ; i < parameters.length ; i++) {
-      exec += " \"" + parameters[i] + "\"";
-    }
+
+      for (String parameter : parameters) {
+          exec += " \"" + parameter + "\"";
+      }
     
   	if (restartByScript) {
   		// run script after az shutdown to launch updater and then re-run az

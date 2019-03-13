@@ -30,17 +30,17 @@ import java.net.PasswordAuthentication;
 public interface 
 SEPasswordListener 
 {
-	public PasswordAuthentication
+	PasswordAuthentication
 	getAuthentication(
-		String		realm,
-		URL			tracker );
+            String realm,
+            URL tracker);
 	
-	public void
+	void
 	setAuthenticationOutcome(
-		String		realm,
-		URL			tracker,
-		boolean		success );
+            String realm,
+            URL tracker,
+            boolean success);
 	
-	public void
+	void
 	clearPasswords();
 }

@@ -150,9 +150,9 @@ public class SelectorGuard {
 
   
   public interface GuardListener {
-    public boolean safeModeSelectEnabled();
-    public void spinDetected();
-    public void failureDetected();
+    boolean safeModeSelectEnabled();
+    void spinDetected();
+    void failureDetected();
   }
   
 }

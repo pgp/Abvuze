@@ -28,6 +28,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
@@ -101,7 +102,7 @@ public class VersionCheckClient {
 	private static final long		CACHE_PERIOD	= 5*60*1000;
 	private static boolean secondary_check_done;
 
-	private final List<VersionCheckClientListener> listeners = new ArrayList<VersionCheckClientListener>(1);
+	private final List<VersionCheckClientListener> listeners = new ArrayList<>(1);
 	private boolean startCheckRan = false;
 
 	static{
@@ -343,30 +344,23 @@ public class VersionCheckClient {
 							//installed plugin IDs
 							PluginInterface[] plugins = AzureusCoreFactory.getSingleton().getPluginManager().getPluginInterfaces();
 
-							for (int i=0;i<plugins.length;i++){
+							for (PluginInterface plugin : plugins) {
 
-								PluginInterface		plugin = plugins[i];
+								Map data = plugin.getPluginconfig().getPluginMapParameter("plugin.versionserver.data", null);
 
-								Map	data = plugin.getPluginconfig().getPluginMapParameter( "plugin.versionserver.data", null );
+								if (data != null) {
 
-								if ( data != null ){
-
-									plugin.getPluginconfig().setPluginMapParameter( "plugin.versionserver.data", new HashMap());
+									plugin.getPluginconfig().setPluginMapParameter("plugin.versionserver.data", new HashMap());
 								}
 							}
 						}
 					}catch( Throwable e ){
 					}
-				}
-				catch( UnknownHostException t ) {
+				} catch( IOException t ) {
 					// no internet
 					Debug.outNoStack("VersionCheckClient - " + t.getClass().getName() + ": " + t.getMessage());
-				}
-				catch (IOException t) {
-					// General connection problem.
-					Debug.outNoStack("VersionCheckClient - " + t.getClass().getName() + ": " + t.getMessage());
-				}
-				catch( Throwable t ) {
+				}// General connection problem.
+                catch( Throwable t ) {
 					Debug.out(t);
 					last_check_data_v4 = new HashMap();
 				}
@@ -476,7 +470,7 @@ public class VersionCheckClient {
 
 				try{
 
-					result = Long.parseLong(new String((byte[])b_feat_flags));
+					result = Long.parseLong(new String(b_feat_flags));
 
 				}catch( Throwable e ){
 
@@ -497,7 +491,7 @@ public class VersionCheckClient {
 	public Set<String>
 	getDisabledPluginIDs()
 	{  
-		Set<String>	result = new HashSet<String>();
+		Set<String>	result = new HashSet<>();
 
 		Map m = getMostRecentVersionCheckData();
 
@@ -553,7 +547,7 @@ public class VersionCheckClient {
 	public Set<String>
 	getAutoInstallPluginIDs()
 	{  
-		Set<String>	result = new HashSet<String>();
+		Set<String>	result = new HashSet<>();
 
 		Map m = getMostRecentVersionCheckData();
 
@@ -733,7 +727,7 @@ public class VersionCheckClient {
 	getDHTBootstrap(
 		boolean 	ipv4 )
 	{
-		List<InetSocketAddress>	result = new ArrayList<InetSocketAddress>();
+		List<InetSocketAddress>	result = new ArrayList<>();
 
 		try{
 			Map reply = getVersionCheckInfo( REASON_DHT_BOOTSTRAP, ipv4?AT_V4:AT_V6 );
@@ -778,7 +772,7 @@ public class VersionCheckClient {
 
 		if ( info == null ){
 
-			return( new HashMap<String,Object>());
+			return(new HashMap<>());
 
 		}else{
 
@@ -929,7 +923,7 @@ public class VersionCheckClient {
 
 		String	url_str = "http://" + (v6?UrlUtils.convertIPV6Host(host):host) + (HTTP_SERVER_PORT==80?"":(":" + HTTP_SERVER_PORT)) + "/version?";
 
-		url_str += URLEncoder.encode( new String( BEncoder.encode( data_to_send ), "ISO-8859-1" ), "ISO-8859-1" );
+		url_str += URLEncoder.encode( new String( BEncoder.encode( data_to_send ), StandardCharsets.ISO_8859_1), "ISO-8859-1" );
 
 		URL	url = new URL( url_str );
 
@@ -1043,7 +1037,7 @@ public class VersionCheckClient {
 		String	get_str = "GET " + (for_proxy?("http://" + (v6?UrlUtils.convertIPV6Host( host ):host ) + ":" + HTTP_SERVER_PORT ):"") +"/version?";
 
 		try{
-			get_str += URLEncoder.encode( new String( BEncoder.encode( content ), "ISO-8859-1" ), "ISO-8859-1" );
+			get_str += URLEncoder.encode( new String( BEncoder.encode( content ), StandardCharsets.ISO_8859_1), "ISO-8859-1" );
 
 		}catch( Throwable e ){ 
 		}
@@ -1080,125 +1074,111 @@ public class VersionCheckClient {
 
 		String	get_str = getHTTPGetString( data_to_send, false, v6 );
 
-		Socket	socket = null;
+        try (Socket socket = new Socket()) {
 
-		try{
-			socket = new Socket();
+            if (bind_ip != null) {
 
-			if ( bind_ip != null ){
+                socket.bind(new InetSocketAddress(bind_ip, bind_port));
 
-				socket.bind( new InetSocketAddress( bind_ip, bind_port ));
+            } else if (bind_port != 0) {
 
-			}else if ( bind_port != 0 ){
+                socket.bind(new InetSocketAddress(bind_port));
+            }
 
-				socket.bind( new InetSocketAddress( bind_port ));
-			}
+            socket.setSoTimeout(10000);
 
-			socket.setSoTimeout( 10000 );
+            socket.connect(new InetSocketAddress(host, TCP_SERVER_PORT), 10000);
 
-			socket.connect( new InetSocketAddress( host, TCP_SERVER_PORT ), 10000 );
+            OutputStream os = socket.getOutputStream();
 
-			OutputStream	os = socket.getOutputStream();
+            os.write(get_str.getBytes(StandardCharsets.ISO_8859_1));
 
-			os.write( get_str.getBytes( "ISO-8859-1" ));
+            os.flush();
 
-			os.flush();
+            InputStream is = socket.getInputStream();
 
-			InputStream	is = socket.getInputStream();
+            byte[] buffer = new byte[1];
 
-			byte[]	buffer = new byte[1];
+            String header = "";
 
-			String	header = "";
+            int content_length = -1;
 
-			int content_length = -1;
+            while (true) {
 
-			while( true ){
+                int len = is.read(buffer);
 
-				int	len = is.read( buffer );
+                if (len <= 0) {
 
-				if ( len <= 0 ){
+                    break;
+                }
 
-					break;
-				}
+                header += (char) buffer[0];
 
-				header += (char)buffer[0];
+                if (header.endsWith("\r\n\r\n")) {
 
-				if ( header.endsWith( "\r\n\r\n" )){
+                    header = header.toLowerCase(MessageText.LOCALE_ENGLISH);
 
-					header = header.toLowerCase( MessageText.LOCALE_ENGLISH );
+                    int pos = header.indexOf("content-length:");
 
-					int	pos = header.indexOf( "content-length:" );
+                    if (pos == -1) {
 
-					if ( pos == -1 ){
+                        throw (new IOException("content length missing"));
+                    }
 
-						throw( new IOException( "content length missing" ));
-					}
+                    header = header.substring(pos + 15);
 
-					header = header.substring( pos+15 );
+                    pos = header.indexOf('\r');
 
-					pos = header.indexOf( '\r' );
+                    header = header.substring(0, pos).trim();
 
-					header = header.substring(0,pos).trim();
+                    content_length = Integer.parseInt(header);
 
-					content_length = Integer.parseInt( header );
+                    if (content_length > 10000) {
 
-					if ( content_length > 10000 ){
+                        throw (new IOException("content length too large"));
+                    }
 
-						throw( new IOException( "content length too large" ));
-					}
+                    break;
+                }
 
-					break;
-				}
+                if (header.length() > 2048) {
 
-				if ( header.length() > 2048 ){
+                    throw (new IOException("header too large"));
+                }
+            }
 
-					throw( new IOException( "header too large" ));
-				}
-			}
+            ByteArrayOutputStream baos = new ByteArrayOutputStream(content_length);
 
-			ByteArrayOutputStream	baos = new ByteArrayOutputStream( content_length );
+            buffer = new byte[content_length];
 
-			buffer = new byte[content_length];
+            while (content_length > 0) {
 
-			while( content_length > 0 ){
+                int len = is.read(buffer);
 
-				int	len = is.read( buffer );
+                if (len <= 0) {
 
-				if ( len <= 0 ){
+                    break;
+                }
 
-					break;
-				}
+                baos.write(buffer, 0, len);
 
-				baos.write( buffer, 0, len );
+                content_length -= len;
+            }
 
-				content_length -= len;
-			}
+            if (content_length != 0) {
 
-			if ( content_length != 0 ){
+                throw (new IOException("error reading reply"));
+            }
 
-				throw( new IOException( "error reading reply" ));
-			}
+            byte[] reply_bytes = baos.toByteArray();
 
-			byte[]	reply_bytes = baos.toByteArray();
+            Map reply = BDecoder.decode(new BufferedInputStream(new ByteArrayInputStream(reply_bytes)));
 
-			Map reply = BDecoder.decode( new BufferedInputStream( new ByteArrayInputStream( reply_bytes )));
+            preProcessReply(reply, v6);
 
-			preProcessReply( reply, v6 );
+            return (reply);
 
-			return( reply );
-
-		}finally{
-
-			if ( socket != null ){
-
-				try{
-					socket.close();
-
-				}catch( Throwable e ){
-
-				}
-			}
-		}
+        }
 	}
 
 	private Map
@@ -1333,7 +1313,7 @@ public class VersionCheckClient {
 
 			if ( asn != null ){
 
-				long	advice = as_advice.longValue();
+				long	advice = as_advice;
 
 				if ( advice != 0 ){
 
@@ -1378,7 +1358,7 @@ public class VersionCheckClient {
 		Long lEnabledUISwitcher = (Long) reply.get("ui.toolbar.uiswitcher");
 		if (lEnabledUISwitcher != null) {
 			COConfigurationManager.setBooleanDefault("ui.toolbar.uiswitcher",
-					lEnabledUISwitcher.longValue() == 1);
+                    lEnabledUISwitcher == 1);
 		}
 	}
 
@@ -1482,7 +1462,7 @@ public class VersionCheckClient {
 
 		boolean send_info = COConfigurationManager.getBooleanParameter( "Send Version Info" );
 
-		Map<String,Object> message = new HashMap<String,Object>();
+		Map<String,Object> message = new HashMap<>();
 
 		//always send
 		message.put( "appid",   SystemProperties.getApplicationIdentifier());
@@ -1520,12 +1500,9 @@ public class VersionCheckClient {
 			message.put( "swt_platform", swt_platform );
 
 			Integer swt_version = (Integer)c.getMethod( "getVersion", new Class[]{} ).invoke( null, new Object[]{} );
-			message.put( "swt_version", new Long( swt_version.longValue() ) );
+			message.put( "swt_version", swt_version.longValue());
 		}
-		catch( ClassNotFoundException e ) {  /* ignore */ }
-		catch( NoClassDefFoundError er ) {  /* ignore */ }
-		catch( InvocationTargetException err ) {  /* ignore */ }
-		catch( Throwable t ) {  t.printStackTrace();  }
+		catch( ClassNotFoundException | InvocationTargetException | NoClassDefFoundError e ) {  /* ignore */ } catch( Throwable t ) {  t.printStackTrace();  }
 
 
 		int last_send_time = COConfigurationManager.getIntParameter( "Send Version Info Last Time", -1 );
@@ -1548,7 +1525,7 @@ public class VersionCheckClient {
 
 			if ( last_send_time != -1 && last_send_time < current_send_time ){    	  
 				// time since last    	  
-				message.put( "tsl", new Long(current_send_time-last_send_time));
+				message.put( "tsl", (long) (current_send_time - last_send_time));
 			}
 
 			message.put( "reason", reason );
@@ -1568,7 +1545,7 @@ public class VersionCheckClient {
 			}
 
 			long  max_mem = Runtime.getRuntime().maxMemory()/(1024*1024);
-			message.put( "javamx", new Long( max_mem ) );
+			message.put( "javamx", max_mem);
 
 			String java_rt_name = System.getProperty("java.runtime.name");
 			if (java_rt_name != null) {
@@ -1591,7 +1568,7 @@ public class VersionCheckClient {
 				//removed due to complaints about anonymous stats collection
 				//message.put( "total_bytes_downloaded", new Long( total_bytes_downloaded ) );
 				//message.put( "total_bytes_uploaded", new Long( total_bytes_uploaded ) );
-				message.put( "total_uptime", new Long( total_uptime ) );
+				message.put( "total_uptime", total_uptime);
 				//message.put( "dlstats", stats.getDownloadStats());
 			}
 
@@ -1662,60 +1639,58 @@ public class VersionCheckClient {
 
 					List vs_data = new ArrayList();
 
-					for (int i=0;i<plugins.length;i++){
+					for (PluginInterface plugin : plugins) {
 
-						PluginInterface		plugin = plugins[i];
+						String pid = plugin.getPluginID();
 
-						String  pid = plugin.getPluginID();
-
-						String	info = plugin.getPluginconfig().getPluginStringParameter( "plugin.info" );
+						String info = plugin.getPluginconfig().getPluginStringParameter("plugin.info");
 
 						// filter out built-in and core ones
-						if ( 	( info != null && info.length() > 0 ) ||
-								(	!pid.startsWith( "<" ) && 
-										!pid.startsWith( "azbp" ) &&
-										!pid.startsWith( "azupdater" ) &&
-										!pid.startsWith( "azplatform" ) &&
-										!pids.contains( pid ))){
+						if ((info != null && info.length() > 0) ||
+								(!pid.startsWith("<") &&
+										!pid.startsWith("azbp") &&
+										!pid.startsWith("azupdater") &&
+										!pid.startsWith("azplatform") &&
+										!pids.contains(pid))) {
 
-							if ( info != null && info.length() > 0 ){
+							if (info != null && info.length() > 0) {
 
-								if( info.length() < 256 ){
+								if (info.length() < 256) {
 
 									pid += ":" + info;
 
-								}else{
+								} else {
 
-									Debug.out( "Plugin '" + pid + "' reported excessive info string '" + info + "'" );
+									Debug.out("Plugin '" + pid + "' reported excessive info string '" + info + "'");
 								}
 							}
 
-							pids.add( pid );
+							pids.add(pid);
 						}
 
-						Map	data = plugin.getPluginconfig().getPluginMapParameter( "plugin.versionserver.data", null );
+						Map data = plugin.getPluginconfig().getPluginMapParameter("plugin.versionserver.data", null);
 
-						if ( data != null ){
+						if (data != null) {
 
 							Map payload = new HashMap();
 
-							byte[]	data_bytes = BEncoder.encode( data );
+							byte[] data_bytes = BEncoder.encode(data);
 
-							if ( data_bytes.length > 16*1024 ){
+							if (data_bytes.length > 16 * 1024) {
 
-								Debug.out( "Plugin '" + pid + "' reported excessive version server data (length=" + data_bytes.length + ")" );
+								Debug.out("Plugin '" + pid + "' reported excessive version server data (length=" + data_bytes.length + ")");
 
-								payload.put( "error", "data too long: " + data_bytes.length );
+								payload.put("error", "data too long: " + data_bytes.length);
 
-							}else{
+							} else {
 
-								payload.put( "data", data_bytes );
+								payload.put("data", data_bytes);
 							}
 
-							payload.put( "id", pid);
-							payload.put( "version", plugin.getPluginVersion());
+							payload.put("id", pid);
+							payload.put("version", plugin.getPluginVersion());
 
-							vs_data.add( payload );
+							vs_data.add(payload);
 						}
 					}
 					message.put( "plugins", pids );
@@ -1832,18 +1807,15 @@ public class VersionCheckClient {
 		throws Exception 
 	{
 		TreeMap res = new TreeMap(map);
-		
-		Iterator key_itr = map.keySet().iterator();
-		
-		while (key_itr.hasNext()) {
-			Object key = key_itr.next();
-			Object val = map.get(key);
-			if (val instanceof byte[]) {
-				String as_bytes = ByteFormatter.nicePrint((byte[])val);
-				String as_text = new String((byte[])val, Constants.BYTE_ENCODING);
-				res.put(key, as_text + " [" + as_bytes + "]");
-			}
-		}
+
+        for (Object key : map.keySet()) {
+            Object val = map.get(key);
+            if (val instanceof byte[]) {
+                String as_bytes = ByteFormatter.nicePrint((byte[]) val);
+                String as_text = new String((byte[]) val, Constants.BYTE_ENCODING);
+                res.put(key, as_text + " [" + as_bytes + "]");
+            }
+        }
 
 		Iterator entries = res.entrySet().iterator();
 		Map.Entry entry;

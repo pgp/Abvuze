@@ -23,19 +23,19 @@ package com.aelitis.azureus.core.metasearch;
 public interface 
 MetaSearchListener 
 {
-	public void
+	void
 	engineAdded(
-		Engine		engine );
+            Engine engine);
 	
-	public void
+	void
 	engineUpdated(
-		Engine		engine );
+            Engine engine);
 	
-	public void
+	void
 	engineRemoved(
-		Engine		engine );
+            Engine engine);
 	
-	public void
+	void
 	engineStateChanged(
-		Engine		engine );
+            Engine engine);
 }

@@ -83,18 +83,13 @@ Handler
 		try{
 			return( magnet_url.openConnection());
 			
-		}catch( MalformedURLException e ){
-			
+		} catch( IOException e ){
+
 			Debug.printStackTrace(e);
-			
+
 			return( null );
-			
-		}catch( IOException  e ){
-			
-			Debug.printStackTrace(e);
-			
-			return( null );
+
 		}
-	}
+    }
 
 }

@@ -140,7 +140,7 @@ public class BTMessageDecoder implements MessageStreamDecoder {
   public Message[] removeDecodedMessages() {
     if( messages_last_read.isEmpty() )  return null;
     
-    Message[] msgs = (Message[])messages_last_read.toArray( new Message[messages_last_read.size()] );
+    Message[] msgs = (Message[])messages_last_read.toArray(new Message[0]);
     
     messages_last_read.clear();
     
@@ -206,10 +206,10 @@ public class BTMessageDecoder implements MessageStreamDecoder {
     }
  
     try{
-	    for( int i=0; i < messages_last_read.size(); i++ ) {
-	      Message msg = (Message)messages_last_read.get( i );
-	      msg.destroy();
-	    }
+        for (Object o : messages_last_read) {
+            Message msg = (Message) o;
+            msg.destroy();
+        }
     }catch( RuntimeException e ){
     	// happens if messages modified by alt thread...
     	Debug.out( "hit known threading issue" );

@@ -30,12 +30,12 @@ import java.io.IOException;
 public interface 
 DHTStorageKey 
 {
-	public byte
+	byte
 	getDiversificationType();
 	
-	public void
+	void
 	serialiseStats(
-		DataOutputStream		os )
+            DataOutputStream os)
 	
 		throws IOException;
 }

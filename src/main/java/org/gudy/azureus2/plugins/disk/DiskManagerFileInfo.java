@@ -33,18 +33,18 @@ import org.gudy.azureus2.plugins.download.*;
 public interface 
 DiskManagerFileInfo 
 {
-	public static final int READ = 1;
-	public static final int WRITE = 2;
+	int READ = 1;
+	int WRITE = 2;
 	
-	public static final int PRIORITY_LOW = -1;
-	public static final int PRIORITY_NORMAL = 0;
-	public static final int PRIORITY_HIGH = 1;
+	int PRIORITY_LOW = -1;
+	int PRIORITY_NORMAL = 0;
+	int PRIORITY_HIGH = 1;
 
 		// set methods
 		
-	public void 
+	void
 	setPriority(
-		boolean b );
+            boolean b);
 	
   /**
    * Sets the file's download priority base on a number
@@ -53,13 +53,13 @@ DiskManagerFileInfo
    * 
    * @since 4407
    */
-	public void
+  void
 	setNumericPriority(
-		int		priority );
+          int priority);
 	
-	public void 
+	void
 	setSkipped(
-		boolean b );
+            boolean b);
 	
 		/**
 		 * Mark the file as deleted or not (deleted means the file will be truncated to take up minimum
@@ -67,36 +67,36 @@ DiskManagerFileInfo
 		 * @since 2403
 		 * @param b
 		 */
-	
-	public void
+
+        void
 	setDeleted(boolean b);
 	
 		// links the file to the named destination
 	
-	public void
+	void
 	setLink(
-		File	link_destination );
+            File link_destination);
 	
 		// gets the current link, null if none
 	
-	public File
+	File
 	getLink();
 	
 	 	// get methods
 	 	
-	public int 
+	int
 	getAccessMode();
 	
-	public long 
+	long
 	getDownloaded();
 	
 	/**
 	 * Size when file is complete
 	 */
-	public long
+    long
 	getLength();
 	
-	public File 
+	File
 	getFile();
 	
 		/**
@@ -105,24 +105,24 @@ DiskManagerFileInfo
 		 * @return
 		 * @since 4.3.1.5
 		 */
-	
-	public File
+
+        File
 	getFile(
-		boolean	follow_link );
+                boolean follow_link);
 	
-	public int
+	int
 	getIndex();
 	
-	public int 
+	int
 	getFirstPieceNumber();
 	
-	public long
+	long
 	getPieceSize();
 	
-	public int 
+	int
 	getNumPieces();
 		
-	public boolean 
+	boolean
 	isPriority();
 	
 		/**
@@ -130,8 +130,8 @@ DiskManagerFileInfo
 		 * @return
 		 * @deprecated
 		 */
-	
-	public int
+
+        int
 	getNumericPriorty();
 
 	
@@ -141,26 +141,26 @@ DiskManagerFileInfo
 	 * 
 	 * @since 4.8.1.3
 	 */
-	public int
+    int
 	getNumericPriority();
 
-	public boolean 
+	boolean
 	isSkipped();
 	
-	public boolean
+	boolean
 	isDeleted();
 	
-	public byte[] 
+	byte[]
 	getDownloadHash()
 	
          throws DownloadException;
 	
-	public Download 
+	Download
 	getDownload()
 	
          throws DownloadException;
 	
-	public DiskManagerChannel
+	DiskManagerChannel
 	createChannel()
 	
 		throws DownloadException;
@@ -175,13 +175,13 @@ DiskManagerFileInfo
 		 * @return
 		 * @throws DownloadException
 		 */
-	
-	public DiskManagerRandomReadRequest
+
+        DiskManagerRandomReadRequest
 	createRandomReadRequest(
-		long						file_offset,
-		long						length,
-		boolean						reverse_order,
-		DiskManagerListener			listener )
+                long file_offset,
+                long length,
+                boolean reverse_order,
+                DiskManagerListener listener)
 	
 		throws DownloadException;
 }

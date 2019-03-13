@@ -48,21 +48,19 @@ public class DownloadingRanker {
 
   public ArrayList<PEPeer> rankPeers( int max_to_unchoke, ArrayList<PEPeer> all_peers ) {
   
-  	 ArrayList<PEPeer> best_peers = new ArrayList<PEPeer>();
+  	 ArrayList<PEPeer> best_peers = new ArrayList<>();
   	 long[] bests = new long[ max_to_unchoke ];  //ensure we never rank more peers than needed
   	 
     
     //fill slots with peers who we are currently downloading the fastest from
-    for( int i=0; i < all_peers.size(); i++ ) {
-    	PEPeer peer = all_peers.get( i );
-
-      if( peer.isInteresting() && UnchokerUtil.isUnchokable( peer, false ) ) {  //viable peer found
-        long rate = peer.getStats().getSmoothDataReceiveRate();
-        if( rate > 256 ) {  //filter out really slow peers
-          UnchokerUtil.updateLargestValueFirstSort( rate, bests, peer, best_peers, 0 );
-        }
+      for (PEPeer peer : all_peers) {
+          if (peer.isInteresting() && UnchokerUtil.isUnchokable(peer, false)) {  //viable peer found
+              long rate = peer.getStats().getSmoothDataReceiveRate();
+              if (rate > 256) {  //filter out really slow peers
+                  UnchokerUtil.updateLargestValueFirstSort(rate, bests, peer, best_peers, 0);
+              }
+          }
       }
-    }
     
     
     //if we havent yet picked enough slots
@@ -70,17 +68,15 @@ public class DownloadingRanker {
       int start_pos = best_peers.size();
       
       //fill the remaining slots with peers that we have downloaded from in the past
-      for( int i=0; i < all_peers.size(); i++ ) {
-    	PEPeer peer = all_peers.get( i );
-
-        if( peer.isInteresting() && UnchokerUtil.isUnchokable( peer, false ) && !best_peers.contains( peer ) ) {  //viable peer found
-          long uploaded_ratio = peer.getStats().getTotalDataBytesSent() / (peer.getStats().getTotalDataBytesReceived() + (DiskManager.BLOCK_SIZE-1));
-          //make sure we haven't already uploaded several times as much data as they've sent us
-          if( uploaded_ratio <3) {
-            UnchokerUtil.updateLargestValueFirstSort( peer.getStats().getTotalDataBytesReceived(), bests, peer, best_peers, start_pos );
-          }  
+        for (PEPeer peer : all_peers) {
+            if (peer.isInteresting() && UnchokerUtil.isUnchokable(peer, false) && !best_peers.contains(peer)) {  //viable peer found
+                long uploaded_ratio = peer.getStats().getTotalDataBytesSent() / (peer.getStats().getTotalDataBytesReceived() + (DiskManager.BLOCK_SIZE - 1));
+                //make sure we haven't already uploaded several times as much data as they've sent us
+                if (uploaded_ratio < 3) {
+                    UnchokerUtil.updateLargestValueFirstSort(peer.getStats().getTotalDataBytesReceived(), bests, peer, best_peers, start_pos);
+                }
+            }
         }
-      }
     }
     
     

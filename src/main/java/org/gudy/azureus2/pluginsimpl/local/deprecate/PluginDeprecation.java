@@ -61,9 +61,7 @@ public class PluginDeprecation {
 	private static Set persistent_warnings = Collections.synchronizedSet(new HashSet());
 	private static Set instance_warnings = Collections.synchronizedSet(new HashSet());
 	private static void register(String identifier, int stable_behaviour, int beta_behaviour) {
-		behaviour_mapping.put(identifier, new Integer(
-			Constants.isCVSVersion() ? beta_behaviour : stable_behaviour
-		));
+		behaviour_mapping.put(identifier, Constants.isCVSVersion() ? beta_behaviour : stable_behaviour);
 	}
 	
 	static {
@@ -102,7 +100,7 @@ public class PluginDeprecation {
 			throw new IllegalArgumentException("unknown deprecated call identifier: " + identifier);
 		}
 		
-		int b = behaviour.intValue();
+		int b = behaviour;
 		if (b == IGNORE) {return;}
 		
 		boolean persistent_notify = b == NOTIFY_ONCE;

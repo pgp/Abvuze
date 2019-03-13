@@ -89,15 +89,15 @@ RSSUtils
 				// remove duplicate white space
 			
 			date_str = date_str.replaceAll( "(\\s)+", " " );
-			
-			for (int i=0;i<fallbacks.length;i++){
-				
-				try{
-					return(  new SimpleDateFormat(fallbacks[i], Locale.US ).parse( date_str ));
-					
-				}catch( ParseException f ){
-				}
-			}
+
+            for (String fallback : fallbacks) {
+
+                try {
+                    return (new SimpleDateFormat(fallback, Locale.US).parse(date_str));
+
+                } catch (ParseException f) {
+                }
+            }
 			
 			Debug.outNoStack( "RSSUtils: failed to parse RSS date: " + date_str );
 			
@@ -132,20 +132,20 @@ RSSUtils
 				"yyyy-MM-dd-hh:mm:ss a",				// 2012-03-13-10:33:55 PM
 		};
 
-		
-		for (int i=0;i<formats.length;i++){
 
-			try{
-				
-				SimpleDateFormat format = new SimpleDateFormat( formats[i], Locale.US );
-							
-				return( format.parse( date_str ));
+        for (String format1 : formats) {
 
-			}catch( ParseException e ){
-			
-				// Debug.printStackTrace(e);
-			}
-		}
+            try {
+
+                SimpleDateFormat format = new SimpleDateFormat(format1, Locale.US);
+
+                return (format.parse(date_str));
+
+            } catch (ParseException e) {
+
+                // Debug.printStackTrace(e);
+            }
+        }
 		
 		Debug.outNoStack( "RSSUtils: failed to parse Atom date: " + date_str );
 		
@@ -164,18 +164,13 @@ RSSUtils
 			if ( str.startsWith( "<?xml" )){
 				
 				if ( str.contains( "<feed" ) || str.contains( "<rss" )){
-					
-					InputStream is = new BufferedInputStream( new FileInputStream( file ));
-					
-					try{
-						new RSSFeedImpl( new UtilitiesImpl( null, null ), null, is );
-						
-						return( true );
-						
-					}finally{
-						
-						is.close();
-					}
+
+                    try (InputStream is = new BufferedInputStream(new FileInputStream(file))) {
+                        new RSSFeedImpl(new UtilitiesImpl(null, null), null, is);
+
+                        return (true);
+
+                    }
 				}
 			}
 		}catch( Throwable e ){

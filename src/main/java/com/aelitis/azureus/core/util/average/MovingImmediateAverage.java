@@ -24,7 +24,7 @@ package com.aelitis.azureus.core.util.average;
 public class MovingImmediateAverage implements Average {
   
    private final int periods;
-   private double data[];
+    private double[] data;
    private int pos = 0;
    private double total;
 

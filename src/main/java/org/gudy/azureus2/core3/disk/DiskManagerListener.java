@@ -29,22 +29,22 @@ package org.gudy.azureus2.core3.disk;
 public interface 
 DiskManagerListener 
 {
-	public void
+	void
 	stateChanged(
-		int oldState, 
-		int	newState );
+            int oldState,
+            int newState);
 	
-	public void
+	void
 	filePriorityChanged(
-		DiskManagerFileInfo		file );
+            DiskManagerFileInfo file);
 
-	public void
+	void
 	pieceDoneChanged(
-		DiskManagerPiece		piece );
+            DiskManagerPiece piece);
 	
-	public void
+	void
 	fileAccessModeChanged(
-		DiskManagerFileInfo		file,
-		int						old_mode,
-		int						new_mode );
+            DiskManagerFileInfo file,
+            int old_mode,
+            int new_mode);
 }

@@ -24,5 +24,5 @@ package com.aelitis.azureus.core;
  *
  */
 public interface AzureusCoreRunningListener {
-	public void azureusCoreRunning(AzureusCore core);
+	void azureusCoreRunning(AzureusCore core);
 }

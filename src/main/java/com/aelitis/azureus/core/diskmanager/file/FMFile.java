@@ -35,128 +35,128 @@ import org.gudy.azureus2.core3.util.DirectByteBuffer;
 public interface 
 FMFile 
 {
-	public static final int	FT_LINEAR					= 1;
-	public static final int	FT_COMPACT					= 2;
-	public static final int	FT_PIECE_REORDER			= 3;
-	public static final int	FT_PIECE_REORDER_COMPACT	= 4;
+	int	FT_LINEAR					= 1;
+	int	FT_COMPACT					= 2;
+	int	FT_PIECE_REORDER			= 3;
+	int	FT_PIECE_REORDER_COMPACT	= 4;
 	
-	public static final int	FM_READ		= 1;
-	public static final int FM_WRITE	= 2;
+	int	FM_READ		= 1;
+	int FM_WRITE	= 2;
 	
-	public String
+	String
 	getName();
 	
-	public boolean
+	boolean
 	exists();
 	
-	public FMFileOwner
+	FMFileOwner
 	getOwner();
 	
-	public void
+	void
 	moveFile(
-		File		new_file )
+            File new_file)
 	
 		throws FMFileManagerException;
 	
-	public void
+	void
 	renameFile(
-		String		new_name )
+            String new_name)
 	
 		throws FMFileManagerException;
 	
-	public void
+	void
 	setAccessMode(
-		int		mode )
+            int mode)
 	
 		throws FMFileManagerException;
 	
-	public int
+	int
 	getAccessMode();
 	
-	public void
+	void
 	setStorageType(
-		int		type )
+            int type)
 	
 		throws FMFileManagerException;
 	
-	public int
+	int
 	getStorageType();
 	
-	public void
+	void
 	ensureOpen(
-		String	reason )
+            String reason)
 
 		throws FMFileManagerException;
 	
-	public long
+	long
 	getLength()
 		
 		throws FMFileManagerException;
 
-	public void
+	void
 	setLength(
-		long		length )
+            long length)
 	
 		throws FMFileManagerException;
 	
-	public void
+	void
 	setPieceComplete(
-		int					piece_number,
-		DirectByteBuffer	piece_data )
+            int piece_number,
+            DirectByteBuffer piece_data)
 	
 		throws FMFileManagerException;
 	
-	public void
+	void
 	read(
-		DirectByteBuffer	buffer,
-		long				offset )
+            DirectByteBuffer buffer,
+            long offset)
 	
 		throws FMFileManagerException;
 	
-	public void
+	void
 	read(
-		DirectByteBuffer[]	buffers,
-		long				offset )
+            DirectByteBuffer[] buffers,
+            long offset)
 	
 		throws FMFileManagerException;
 	
-	public void
+	void
 	write(
-		DirectByteBuffer	buffer,
-		long				position )
+            DirectByteBuffer buffer,
+            long position)
 	
 		throws FMFileManagerException;
 	
-	public void
+	void
 	write(
-		DirectByteBuffer[]	buffers,
-		long				position )
+            DirectByteBuffer[] buffers,
+            long position)
 	
 		throws FMFileManagerException;
 	
-	public void
+	void
 	flush()
 	
 		throws FMFileManagerException;
 	
-	public void
+	void
 	close()
 	
 		throws FMFileManagerException;
 	
-	public boolean
+	boolean
 	isOpen();
 	
-	public void
+	void
 	delete()
 	
 		throws FMFileManagerException;
 	
-	public FMFile
+	FMFile
 	createClone()
 	
 		throws FMFileManagerException;
 	
-	public boolean
+	boolean
 	isClone();
 }

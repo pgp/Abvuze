@@ -45,11 +45,11 @@ AZInstanceImpl
 		
 		map.put( "eip", getExternalAddress().getHostAddress().getBytes());
 		
-		map.put( "tp", new Long( getTCPListenPort()));
+		map.put( "tp", (long) getTCPListenPort());
 		
-        map.put( "dp", new Long( getUDPListenPort()));
+        map.put( "dp", (long) getUDPListenPort());
         
-        map.put( "dp2", new Long( getUDPNonDataListenPort()));
+        map.put( "dp2", (long) getUDPNonDataListenPort());
         
         Map<String,Object> props = getProperties();
         

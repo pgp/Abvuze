@@ -22,10 +22,10 @@ package org.gudy.azureus2.core3.disk;
 public interface 
 DiskManagerRequest 
 {
-	public void
+	void
 	requestStarts();
 	
-	public void
+	void
 	requestEnds(
-		boolean	ok );
+            boolean ok);
 }

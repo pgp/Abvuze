@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.Socket;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 
 import org.gudy.azureus2.core3.util.Debug;
@@ -104,7 +105,7 @@ MagnetConnection
 				
 				if ( line.startsWith( "X-Report:")){
 					
-					line = new String( line_bytes, 0, line_bytes_pos, "UTF-8" );
+					line = new String( line_bytes, 0, line_bytes_pos, StandardCharsets.UTF_8);
 					
 					line = line.substring( 9 );
 										

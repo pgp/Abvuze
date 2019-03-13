@@ -23,16 +23,16 @@ package com.aelitis.azureus.core.devices;
 public interface 
 DeviceOfflineDownloaderListener 
 {
-	public void
+	void
 	downloadAdded(
-		DeviceOfflineDownload	download );
+            DeviceOfflineDownload download);
 	
-	public void
+	void
 	downloadChanged(
-		DeviceOfflineDownload	download );
+            DeviceOfflineDownload download);
 	
-	public void
+	void
 	downloadRemoved(
-		DeviceOfflineDownload	download );
+            DeviceOfflineDownload download);
 	
 }

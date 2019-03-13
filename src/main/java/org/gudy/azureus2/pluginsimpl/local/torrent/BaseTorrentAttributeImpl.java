@@ -60,15 +60,13 @@ abstract class BaseTorrentAttributeImpl implements TorrentAttribute {
 		}
 		
 		protected void notifyListeners(TorrentAttributeEvent ev) {
-			Iterator itr = this.listeners.iterator();
-			while (itr.hasNext()) {
-				try {
-					((TorrentAttributeListener)itr.next()).event(ev);
-				}
-				catch (Throwable t) { // Does it need to be Throwable?
-					Debug.printStackTrace(t);
-				}
-			}
+            for (Object listener : this.listeners) {
+                try {
+                    ((TorrentAttributeListener) listener).event(ev);
+                } catch (Throwable t) { // Does it need to be Throwable?
+                    Debug.printStackTrace(t);
+                }
+            }
 		}
 
 }

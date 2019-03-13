@@ -25,49 +25,49 @@ import java.net.InetAddress;
 public interface 
 CachePeer 
 {
-	public static final int PT_NONE				= 1;
-	public static final int PT_CACHE_LOGIC		= 2;
+	int PT_NONE				= 1;
+	int PT_CACHE_LOGIC		= 2;
 	
-	public int
+	int
 	getType();
 	
-	public InetAddress
+	InetAddress
 	getAddress();
 	
-	public int
+	int
 	getPort();
 	
-	public long
+	long
 	getCreateTime(
-		long	now );
+            long now);
 	
-	public long
+	long
 	getInjectTime(
-		long	now );
+            long now);
 	
-	public void
+	void
 	setInjectTime(
-		long	time );
+            long time);
 	
-	public long
+	long
 	getSpeedChangeTime(
-		long	now );
+            long now);
 	
-	public void
+	void
 	setSpeedChangeTime(
-		long	time );
+            long time);
 	
-	public boolean
+	boolean
 	getAutoReconnect();
 	
-	public void
+	void
 	setAutoReconnect(
-		boolean		auto );
+            boolean auto);
 	
-	public boolean
+	boolean
 	sameAs(
-		CachePeer	other );
+            CachePeer other);
 	
-	public String
+	String
 	getString();
 }

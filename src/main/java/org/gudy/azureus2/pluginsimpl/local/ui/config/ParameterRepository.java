@@ -68,48 +68,47 @@ public class ParameterRepository
     if (def == null)
       return;
 
-    for (int i = 0; i < parameters.length; i++) {
-      Parameter parameter = parameters[i];
-      if (!(parameter instanceof ParameterImpl))
-        continue;
-      String sKey = ((ParameterImpl)parameter).getKey();
+        for (Parameter parameter : parameters) {
+            if (!(parameter instanceof ParameterImpl))
+                continue;
+            String sKey = ((ParameterImpl) parameter).getKey();
 
-      if(parameter instanceof StringParameterImpl) {
-        def.addParameter(sKey,
-                         ((StringParameterImpl)parameter).getDefaultValue());
-      } else if(parameter instanceof IntParameterImpl) {
-        def.addParameter(sKey,
-                         ((IntParameterImpl)parameter).getDefaultValue());
-      } else if(parameter instanceof BooleanParameterImpl) {
-        def.addParameter(sKey,
-                         ((BooleanParameterImpl)parameter).getDefaultValue());
-      } else if(parameter instanceof FileParameter) {
-        def.addParameter(sKey,
-                         ((FileParameter)parameter).getDefaultValue());
-      } else if(parameter instanceof DirectoryParameterImpl) {
-        def.addParameter(sKey,
-                         ((DirectoryParameterImpl)parameter).getDefaultValue());
-      } else if(parameter instanceof IntsParameter) {
-        def.addParameter(sKey,
-                         ((IntsParameter)parameter).getDefaultValue());
-      } else if(parameter instanceof StringListParameterImpl) {
-        def.addParameter(sKey,
-                         ((StringListParameterImpl)parameter).getDefaultValue());
-      } else if(parameter instanceof ColorParameter) {
-        def.addParameter(sKey + ".red",
-                         ((ColorParameter)parameter).getDefaultRed());
-        def.addParameter(sKey + ".green",
-                         ((ColorParameter)parameter).getDefaultGreen());
-        def.addParameter(sKey + ".blue",
-                         ((ColorParameter)parameter).getDefaultBlue());
-      }
-    }
+            if (parameter instanceof StringParameterImpl) {
+                def.addParameter(sKey,
+                        ((StringParameterImpl) parameter).getDefaultValue());
+            } else if (parameter instanceof IntParameterImpl) {
+                def.addParameter(sKey,
+                        ((IntParameterImpl) parameter).getDefaultValue());
+            } else if (parameter instanceof BooleanParameterImpl) {
+                def.addParameter(sKey,
+                        ((BooleanParameterImpl) parameter).getDefaultValue());
+            } else if (parameter instanceof FileParameter) {
+                def.addParameter(sKey,
+                        ((FileParameter) parameter).getDefaultValue());
+            } else if (parameter instanceof DirectoryParameterImpl) {
+                def.addParameter(sKey,
+                        ((DirectoryParameterImpl) parameter).getDefaultValue());
+            } else if (parameter instanceof IntsParameter) {
+                def.addParameter(sKey,
+                        ((IntsParameter) parameter).getDefaultValue());
+            } else if (parameter instanceof StringListParameterImpl) {
+                def.addParameter(sKey,
+                        ((StringListParameterImpl) parameter).getDefaultValue());
+            } else if (parameter instanceof ColorParameter) {
+                def.addParameter(sKey + ".red",
+                        ((ColorParameter) parameter).getDefaultRed());
+                def.addParameter(sKey + ".green",
+                        ((ColorParameter) parameter).getDefaultGreen());
+                def.addParameter(sKey + ".blue",
+                        ((ColorParameter) parameter).getDefaultBlue());
+            }
+        }
 	}	
 	
 	public String[] getNames()
 	{
 	  Set keys = params.keySet();
-	  return (String[])(keys.toArray(new String[keys.size()]));
+	  return (String[])(keys.toArray(new String[0]));
 	}
 	
 	public Parameter[] getParameterBlock(String key)

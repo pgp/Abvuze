@@ -35,13 +35,13 @@ package org.gudy.azureus2.plugins.logging;
  */
 public interface LoggerChannel {
 	/** Information Log Type */
-	public static final int LT_INFORMATION = 1;
+    int LT_INFORMATION = 1;
 
 	/** Warning Log Type */
-	public static final int LT_WARNING = 2;
+    int LT_WARNING = 2;
 
 	/** Error Log Type */
-	public static final int LT_ERROR = 3;
+    int LT_ERROR = 3;
 
 	/**
 	 * Returns the name of the Logger Channel
@@ -49,7 +49,7 @@ public interface LoggerChannel {
 	 * @return Logger channel name
 	 * @since 2.0.7.0
 	 */
-	public String getName();
+    String getName();
 
 	/**
 	 * Indicates whether or not logging is enabled - use to optimise calls to 
@@ -62,7 +62,7 @@ public interface LoggerChannel {
 	 * 
 	 * @since 2.3.0.2
 	 */
-	public boolean isEnabled();
+    boolean isEnabled();
 
 	/**
 	 * This causes the channel to also write to logs/<i>name</i> files in a cyclic 
@@ -70,9 +70,9 @@ public interface LoggerChannel {
 	 * 
 	 * @since 2.4.0.2
 	 */
-	public void setDiagnostic();
+    void setDiagnostic();
 
-	public void setDiagnostic( long max_file_size, boolean timestamp );
+	void setDiagnostic(long max_file_size, boolean timestamp);
 
 	/**
 	 * logging to file is disabled by default in non-beta builds. This forces writing to file
@@ -80,14 +80,14 @@ public interface LoggerChannel {
 	 * @param force_to_file
 	 * @since 4401
 	 */
-	public void setForce( boolean force_to_file );
+    void setForce(boolean force_to_file);
 
 	/**
 	 * @since 4401
 	 * @return
 	 */
-	
-	public boolean getForce();
+
+    boolean getForce();
 	
 	/**
 	 * Log a message of a specific type to this channel's logger
@@ -97,7 +97,7 @@ public interface LoggerChannel {
 	 * 
 	 * @since 2.0.7.0
 	 */
-	public void log(int log_type, String data);
+    void log(int log_type, String data);
 
 	/**
 	 * log text with implicit type {@link #LT_INFORMATION}
@@ -106,7 +106,7 @@ public interface LoggerChannel {
 	 * 
 	 * @since 2.1.0.0
 	 */
-	public void log(String data);
+    void log(String data);
 
 	/**
 	 * log an error with implicit type of {@link #LT_ERROR}
@@ -115,7 +115,7 @@ public interface LoggerChannel {
 	 * 
 	 * @since 2.0.7.0
 	 */
-	public void log(Throwable error);
+    void log(Throwable error);
 
 	/**
 	 * log an error with implicit type of {@link #LT_ERROR}
@@ -125,7 +125,7 @@ public interface LoggerChannel {
 	 * 
 	 * @since 2.0.7.0
 	 */
-	public void log(String data, Throwable error);
+    void log(String data, Throwable error);
 
 	/**
 	 * Log a string against a list of objects
@@ -137,7 +137,7 @@ public interface LoggerChannel {
 	 * 
 	 * @since 2.3.0.7
 	 */
-	public void log(Object[] relatedTo, int log_type, String data);
+    void log(Object[] relatedTo, int log_type, String data);
 
 	/**
 	 * Log an error against an object.
@@ -149,7 +149,7 @@ public interface LoggerChannel {
 	 * 
 	 * @since 2.3.0.7
 	 */
-	public void log(Object relatedTo, int log_type, String data);
+    void log(Object relatedTo, int log_type, String data);
 
 	/**
 	 * Log an error against an object.
@@ -162,7 +162,7 @@ public interface LoggerChannel {
 	 * @since 2.3.0.7
 	 */
 
-	public void log(Object relatedTo, String data, Throwable error);
+    void log(Object relatedTo, String data, Throwable error);
 
 	/**
 	 * Log an error against a list of objects
@@ -174,7 +174,7 @@ public interface LoggerChannel {
 	 * 
 	 * @since 2.3.0.7
 	 */
-	public void log(Object[] relatedTo, String data, Throwable error);
+    void log(Object[] relatedTo, String data, Throwable error);
 	
 	/**
 	 * Log an error against a list of objects with implicit type {@link #LT_INFORMATION}
@@ -184,7 +184,7 @@ public interface LoggerChannel {
 	 * @param data text to log
 	 * @since 2.5.0.1
 	 */
-	public void log(Object[] relatedTo, String data);
+    void log(Object[] relatedTo, String data);
 
 	/**
 	 * Log an error against an object with implicit type {@link #LT_INFORMATION}
@@ -195,7 +195,7 @@ public interface LoggerChannel {
 	 * 
 	 * @since 2.5.0.1
 	 */
-	public void log(Object relatedTo, String data);
+    void log(Object relatedTo, String data);
 	
 	/**
 	 * raise an alert to the user, if UI present
@@ -209,7 +209,7 @@ public interface LoggerChannel {
 	 * 
 	 * @since 2.0.8.0
 	 */
-	public void logAlert(int alert_type, String message);
+    void logAlert(int alert_type, String message);
 
 	/**
 	 * Alert the user of an error
@@ -219,7 +219,7 @@ public interface LoggerChannel {
 	 * 
 	 * @since 2.1.0.2
 	 */
-	public void logAlert(String message, Throwable e);
+    void logAlert(String message, Throwable e);
 
 	/**
 	 * Raise an alert to the user, if UI present. Subsequent, identical messages
@@ -230,7 +230,7 @@ public interface LoggerChannel {
 	 * 
 	 * @since 2.1.0.2
 	 */
-	public void logAlertRepeatable(int alert_type, String message);
+    void logAlertRepeatable(int alert_type, String message);
 
 	/**
 	 * Raise an alert to the user, if UI present. Subsequent, identical messages
@@ -241,7 +241,7 @@ public interface LoggerChannel {
 	 * 
 	 * @since 2.1.0.2
 	 */
-	public void logAlertRepeatable(String message, Throwable e);
+    void logAlertRepeatable(String message, Throwable e);
 
 	/**
 	 * Add a LoggerChannelListener to this LoggerChannel
@@ -250,7 +250,7 @@ public interface LoggerChannel {
 	 * 
 	 * @since 2.0.8.0
 	 */
-	public void addListener(LoggerChannelListener l);
+    void addListener(LoggerChannelListener l);
 
 	/**
 	 * Remove a reviously added LoggerChannelListener
@@ -259,7 +259,7 @@ public interface LoggerChannel {
 	 * 
 	 * @since 2.0.8.0
 	 */
-	public void removeListener(LoggerChannelListener l);
+    void removeListener(LoggerChannelListener l);
 
 	/**
 	 * Retrieve the parent Logger object for this LoggerChannel.
@@ -268,5 +268,5 @@ public interface LoggerChannel {
 	 * 
 	 * @since 2.3.0.0
 	 */
-	public Logger getLogger();
+    Logger getLogger();
 }

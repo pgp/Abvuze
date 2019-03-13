@@ -29,5 +29,5 @@ public interface BEncodableObject
 	/**
 	 * @return Must return an object that is bencodable
 	 */
-	public Object toBencodeObject();
+    Object toBencodeObject();
 }

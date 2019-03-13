@@ -47,8 +47,8 @@ MenuItemListener
 	 * For table context menu items this will be TableRow[] of selected rows <BR>
 	 * For {@link MenuManager#MENU_DOWNLOAD_CONTEXT} this will be an array of {@link Download} <BR>
    */
-	public void
+  void
 	selected(
-		MenuItem			menu,
-		Object 				target );
+          MenuItem menu,
+          Object target);
 }

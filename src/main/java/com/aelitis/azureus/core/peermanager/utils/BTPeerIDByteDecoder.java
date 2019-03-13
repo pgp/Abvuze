@@ -398,18 +398,16 @@ public class BTPeerIDByteDecoder {
 					peerID[i] = (byte)fallback_char;
 			}
 			sPeerID = new String(peerID, Constants.BYTE_ENCODING);
-		}
-		catch (UnsupportedEncodingException ignore) {}
-		catch (Throwable e) {}
+		} catch (Throwable ignore) {}
 
 		return( sPeerID );
 	}
 	
 	private static String makePeerIDReadableAndUsable(byte[] peer_id) {
 		boolean as_ascii = true;
-		for (int i=0; i<peer_id.length; i++) {
-			int b = 0xFF & peer_id[i];
-			if (b < 32 || b > 127 || b == 10 || b == 9 || b==13) {
+		for (byte b1 : peer_id) {
+			int b = 0xFF & b1;
+			if (b < 32 || b > 127 || b == 10 || b == 9 || b == 13) {
 				as_ascii = false;
 				break;
 			}

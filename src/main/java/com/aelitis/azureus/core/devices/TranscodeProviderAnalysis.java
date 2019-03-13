@@ -23,32 +23,32 @@ package com.aelitis.azureus.core.devices;
 public interface 
 TranscodeProviderAnalysis 
 {
-	public static final int PT_TRANSCODE_REQUIRED	= 1;	// Boolean
-	public static final int PT_DURATION_MILLIS		= 2;	// Long
-	public static final int PT_VIDEO_WIDTH			= 3;	// Long
-	public static final int PT_VIDEO_HEIGHT			= 4;	// Long
-	public static final int PT_SOURCE_SIZE			= 6;	// Long
-	public static final int PT_ESTIMATED_XCODE_SIZE	= 7;	// Long
+	int PT_TRANSCODE_REQUIRED	= 1;	// Boolean
+	int PT_DURATION_MILLIS		= 2;	// Long
+	int PT_VIDEO_WIDTH			= 3;	// Long
+	int PT_VIDEO_HEIGHT			= 4;	// Long
+	int PT_SOURCE_SIZE			= 6;	// Long
+	int PT_ESTIMATED_XCODE_SIZE	= 7;	// Long
 
-	public static final int PT_FORCE_TRANSCODE		= 5;	// Boolean (set)
+	int PT_FORCE_TRANSCODE		= 5;	// Boolean (set)
 
 	
-	public void
+	void
 	cancel();
 	
-	public boolean
+	boolean
 	foundVideoStream();
 	
-	public boolean
+	boolean
 	getBooleanProperty(
-		int		property );
+            int property);
 	
-	public void
+	void
 	setBooleanProperty(
-		int			property,
-		boolean		value );
+            int property,
+            boolean value);
 	
-	public long
+	long
 	getLongProperty(
-		int		property );
+            int property);
 }

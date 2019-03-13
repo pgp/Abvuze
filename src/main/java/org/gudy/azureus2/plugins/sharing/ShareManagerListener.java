@@ -29,24 +29,24 @@ package org.gudy.azureus2.plugins.sharing;
 public interface 
 ShareManagerListener 
 {
-	public void
+	void
 	resourceAdded(
-		ShareResource		resource );
+            ShareResource resource);
 	
-	public void
+	void
 	resourceModified(
-		ShareResource		old_resource,
-		ShareResource		new_resource );
+            ShareResource old_resource,
+            ShareResource new_resource);
 	
-	public void
+	void
 	resourceDeleted(
-		ShareResource		resource );
+            ShareResource resource);
 	
-	public void
+	void
 	reportProgress(
-		int		percent_complete );
+            int percent_complete);
 	
-	public void
+	void
 	reportCurrentTask(
-		String	task_description );
+            String task_description);
 }

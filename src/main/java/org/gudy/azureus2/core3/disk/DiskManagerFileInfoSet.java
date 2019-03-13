@@ -23,9 +23,9 @@ package org.gudy.azureus2.core3.disk;
  * @create 01.05.2008
  */
 public interface DiskManagerFileInfoSet {
-	public boolean[] setStorageTypes(boolean[] toChange, int newStroageType);
-	public void setPriority(int[] toChange);
-	public void setSkipped(boolean[] toChange, boolean setSkipped);
-	public DiskManagerFileInfo[] getFiles();
-	public int nbFiles();
+	boolean[] setStorageTypes(boolean[] toChange, int newStroageType);
+	void setPriority(int[] toChange);
+	void setSkipped(boolean[] toChange, boolean setSkipped);
+	DiskManagerFileInfo[] getFiles();
+	int nbFiles();
 }

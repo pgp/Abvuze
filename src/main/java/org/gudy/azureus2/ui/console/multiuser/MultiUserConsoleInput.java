@@ -106,16 +106,15 @@ public class MultiUserConsoleInput extends ConsoleInput
 		if( ! UserProfile.ADMIN.equals( getUserProfile().getUserType() ) )
 		{
 			Set commandNames = command.getCommandNames();
-			for (Iterator iter = commandNames.iterator(); iter.hasNext();) {
-				String cmdName = (String) iter.next();
-				if( adminCommands.contains(cmdName) )
-					return;
-				if( ! UserProfile.USER.equals( getUserProfile().getUserType() ) )
-				{
-					if( userCommands.contains(cmdName))
-						return;
-				}
-			}
+            for (Object commandName : commandNames) {
+                String cmdName = (String) commandName;
+                if (adminCommands.contains(cmdName))
+                    return;
+                if (!UserProfile.USER.equals(getUserProfile().getUserType())) {
+                    if (userCommands.contains(cmdName))
+                        return;
+                }
+            }
 		}	
 		super.registerCommand(command);
 	}

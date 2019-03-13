@@ -22,6 +22,7 @@ package com.aelitis.azureus.core.networkmanager.admin.impl;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.gudy.azureus2.core3.internat.MessageText;
@@ -161,7 +162,7 @@ NetworkAdminUDPTester
 
 		Random 	random = new Random();
 
-		data_to_send.put( "id", new Long( random.nextLong()));		  
+		data_to_send.put( "id", random.nextLong());
 
 		try{
 			packet_handler.setExplicitBindAddress( bind_ip );	  
@@ -174,7 +175,7 @@ NetworkAdminUDPTester
 			try{
 				for (int i=0;i<3;i++){
 
-					data_to_send.put( "seq", new Long(i));
+					data_to_send.put( "seq", (long) i);
 
 					try{
 
@@ -213,7 +214,7 @@ NetworkAdminUDPTester
 
 						if ( reason != null ) {
 
-							throw( new NetworkAdminException( new String( reason, "UTF8")));
+							throw( new NetworkAdminException( new String( reason, StandardCharsets.UTF_8)));
 						}
 
 						return( InetAddress.getByAddress( ip_bytes ));
@@ -236,7 +237,7 @@ NetworkAdminUDPTester
 			}finally{
 
 				try{
-					data_to_send.put( "seq", new Long(99));
+					data_to_send.put( "seq", 99L);
 
 					long connection_id = 0x8000000000000000L | random.nextLong();
 

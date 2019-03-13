@@ -60,7 +60,7 @@ DHTImpl
 	private final Properties				properties;
 	private final DHTLogger				logger;
 	
-	private final CopyOnWriteList<DHTListener>	listeners = new CopyOnWriteList<DHTListener>();
+	private final CopyOnWriteList<DHTListener>	listeners = new CopyOnWriteList<>();
 	
 	private boolean	runstate_startup 	= true;
 	private boolean	sleeping			= false;
@@ -401,19 +401,19 @@ DHTImpl
 		
 		if ( x == null ){
 			
-			properties.put( name, new Integer( def ));
+			properties.put( name, def);
 			
 			return( def );
 		}
 		
-		return( x.intValue());
+		return(x);
 	}
 	
 	public int
 	getIntProperty(
 		String		name )
 	{
-		return(((Integer)properties.get(name)).intValue());
+		return((Integer) properties.get(name));
 	}
 	
 	public boolean

@@ -246,11 +246,11 @@ CacheFileWithoutCacheMT
 	{
 		try{
 			synchronized( this ){
-			
-				for (int i=0;i<files.length;i++){
-					
-					files[i].setAccessMode( mode==CF_READ?FMFile.FM_READ:FMFile.FM_WRITE );
-				}
+
+                for (FMFile file : files) {
+
+                    file.setAccessMode(mode == CF_READ ? FMFile.FM_READ : FMFile.FM_WRITE);
+                }
 			}
 		}catch( FMFileManagerException e ){
 			
@@ -455,11 +455,11 @@ CacheFileWithoutCacheMT
 		throws CacheFileManagerException
 	{
 		int	read_length	= 0;
-		
-		for (int i=0;i<buffers.length;i++){
-			
-			read_length += buffers[i].remaining(DirectByteBuffer.SS_CACHE);
-		}
+
+        for (DirectByteBuffer buffer : buffers) {
+
+            read_length += buffer.remaining(DirectByteBuffer.SS_CACHE);
+        }
 		
 		FMFile file = null;
 		
@@ -543,11 +543,11 @@ CacheFileWithoutCacheMT
 		throws CacheFileManagerException
 	{
 		int	write_length	= 0;
-		
-		for (int i=0;i<buffers.length;i++){
-			
-			write_length += buffers[i].remaining(DirectByteBuffer.SS_CACHE);
-		}
+
+        for (DirectByteBuffer buffer : buffers) {
+
+            write_length += buffer.remaining(DirectByteBuffer.SS_CACHE);
+        }
 		
 		try{			
 			base_file.write( buffers, position );
@@ -603,11 +603,11 @@ CacheFileWithoutCacheMT
 		throws CacheFileManagerException
 	{
 		int	write_length	= 0;
-		
-		for (int i=0;i<buffers.length;i++){
-			
-			write_length += buffers[i].remaining(DirectByteBuffer.SS_CACHE);
-		}
+
+        for (DirectByteBuffer buffer1 : buffers) {
+
+            write_length += buffer1.remaining(DirectByteBuffer.SS_CACHE);
+        }
 		
 		boolean	write_ok	= false;
 		
@@ -627,11 +627,11 @@ CacheFileWithoutCacheMT
 		}finally{
 			
 			if ( write_ok ){
-				
-				for (int i=0;i<buffers.length;i++){
 
-					buffers[i].returnToPool();
-				}
+                for (DirectByteBuffer buffer : buffers) {
+
+                    buffer.returnToPool();
+                }
 			}
 		}
 	}
@@ -664,23 +664,21 @@ CacheFileWithoutCacheMT
 	{
 		try{		
 			synchronized( this ){
-				
-				for (int i=0;i<files.length;i++){
-					
-					FMFile file = files[i];
-					
-					if ( file.isClone()){
-					
-						// System.out.println( "Destroyed clone " + file.getName());
-						
-						synchronized( CacheFileWithoutCacheMT.class ){
-							
-							num_clones--;
-						}
-					}
-					
-					file.close();
-				}
+
+                for (FMFile file : files) {
+
+                    if (file.isClone()) {
+
+                        // System.out.println( "Destroyed clone " + file.getName());
+
+                        synchronized (CacheFileWithoutCacheMT.class) {
+
+                            num_clones--;
+                        }
+                    }
+
+                    file.close();
+                }
 			}			
 		}catch( FMFileManagerException e ){
 			

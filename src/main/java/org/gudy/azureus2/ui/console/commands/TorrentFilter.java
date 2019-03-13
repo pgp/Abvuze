@@ -93,11 +93,11 @@ public class TorrentFilter {
 	{
 		Pattern pattern = Pattern.compile(wildcardToPattern(filter), Pattern.CASE_INSENSITIVE);
 		List list = new ArrayList();
-		for (Iterator iter = torrents.iterator(); iter.hasNext();) {
-			DownloadManager dm = (DownloadManager) iter.next();
-			if( pattern.matcher(dm.getDisplayName()).matches() )
-				list.add(dm);
-		}
+        for (Object torrent : torrents) {
+            DownloadManager dm = (DownloadManager) torrent;
+            if (pattern.matcher(dm.getDisplayName()).matches())
+                list.add(dm);
+        }
 		return list;
 	}
 	
@@ -115,17 +115,17 @@ public class TorrentFilter {
 
 		char[] chars = wild.toCharArray();
 
-		for (int i = 0; i < chars.length; ++i) {
-			if (chars[i] == '*')
-				buffer.append(".*");
-			else if (chars[i] == '?')
-				buffer.append(".");
-			else if ("+()^$.{}[]|\\".indexOf(chars[i]) != -1)
-				buffer.append('\\').append(chars[i]); // prefix all metacharacters
-													// with backslash
-			else
-				buffer.append(chars[i]);
-		}
+        for (char aChar : chars) {
+            if (aChar == '*')
+                buffer.append(".*");
+            else if (aChar == '?')
+                buffer.append(".");
+            else if ("+()^$.{}[]|\\".indexOf(aChar) != -1)
+                buffer.append('\\').append(aChar); // prefix all metacharacters
+                // with backslash
+            else
+                buffer.append(aChar);
+        }
 		return buffer.toString().toLowerCase();
 	}
 	
@@ -156,13 +156,13 @@ public class TorrentFilter {
 		// first, try to match the whole list concatenated as a string
 		StringBuilder allArgs = new StringBuilder();
 		boolean first = true;
-		for (Iterator iter = args.iterator(); iter.hasNext();) {
-			if( ! first ) 
-				allArgs.append(",");
-			else
-				first = false;
-			allArgs.append(iter.next());
-		}
+        for (Object arg1 : args) {
+            if (!first)
+                allArgs.append(",");
+            else
+                first = false;
+            allArgs.append(arg1);
+        }
 		List torrents;
 		torrents = matchWildcard(torrentsToMatch, allArgs.toString());
 		if( torrents.size() > 0 )
@@ -171,9 +171,9 @@ public class TorrentFilter {
 		if( torrents.size() > 0 )
 			return torrents;
 		// if no torrents then handle each argument individually
-		for (Iterator iter = args.iterator(); iter.hasNext();) {
-			torrents.addAll(getTorrents(torrentsToMatch, (String)iter.next()) );
-		}
+        for (Object arg : args) {
+            torrents.addAll(getTorrents(torrentsToMatch, (String) arg));
+        }
 		return torrents;
 	}
 }

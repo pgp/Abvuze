@@ -46,8 +46,8 @@ LinkFileMap
 		 * reworked
 		 */
 	
-	private final Map<wrapper,Entry>	name_map 	= new HashMap<wrapper,Entry>();
-	private final Map<Integer,Entry>	index_map 	= new HashMap<Integer,Entry>();
+	private final Map<wrapper,Entry>	name_map 	= new HashMap<>();
+	private final Map<Integer,Entry>	index_map 	= new HashMap<>();
 	
 	public File
 	get(
@@ -242,7 +242,7 @@ LinkFileMap
 				return( index_map.values().iterator());
 			}
 			
-			Set<Entry> entries = new HashSet<Entry>( index_map.values());
+			Set<Entry> entries = new HashSet<>(index_map.values());
 			
 			entries.addAll( name_map.values());
 			

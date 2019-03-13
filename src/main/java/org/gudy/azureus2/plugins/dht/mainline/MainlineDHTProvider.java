@@ -35,10 +35,10 @@ public interface MainlineDHTProvider {
 	 * @param ip_addr IP address of peer.
 	 * @param port DHT port of peer.
 	 */
-	public void notifyOfIncomingPort(String ip_addr, int port);
+    void notifyOfIncomingPort(String ip_addr, int port);
 	
 	/**
 	 * Returns the DHT port used by the plugin.
 	 */
-	public int getDHTPort();
+    int getDHTPort();
 }

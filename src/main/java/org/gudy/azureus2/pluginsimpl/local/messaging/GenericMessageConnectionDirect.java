@@ -172,7 +172,7 @@ GenericMessageConnectionDirect
 				
 				if ( inbound_rls == null ){
 					
-					inbound_rls = new ArrayList<LimitedRateGroup>();
+					inbound_rls = new ArrayList<>();
 				}
 				
 				inbound_rls.add( limiter );
@@ -218,7 +218,7 @@ GenericMessageConnectionDirect
 				
 				if ( outbound_rls == null ){
 					
-					outbound_rls = new ArrayList<LimitedRateGroup>();
+					outbound_rls = new ArrayList<>();
 				}
 				
 				outbound_rls.add( limiter );
@@ -356,20 +356,20 @@ GenericMessageConnectionDirect
 			DirectByteBuffer[]	payload = new GenericMessageEncoder().encodeMessage( gm )[0].getRawData();
 			
 			int	size = initial_data.remaining();
-			
-			for (int i=0;i<payload.length;i++){
-				
-				size += payload[i].remaining( DirectByteBuffer.SS_MSG );
-			}
+
+            for (DirectByteBuffer directByteBuffer1 : payload) {
+
+                size += directByteBuffer1.remaining(DirectByteBuffer.SS_MSG);
+            }
 			
 			ByteBuffer	temp = ByteBuffer.allocate( size );
 			
 			temp.put( initial_data );
-			
-			for (int i=0;i<payload.length;i++){
-			
-				temp.put( payload[i].getBuffer( DirectByteBuffer.SS_MSG ));
-			}
+
+            for (DirectByteBuffer directByteBuffer : payload) {
+
+                temp.put(directByteBuffer.getBuffer(DirectByteBuffer.SS_MSG));
+            }
 			
 			temp.rewind();
 			
@@ -539,21 +539,21 @@ GenericMessageConnectionDirect
 	    synchronized( this ){
 	    	
 	    	if ( inbound_rls != null ){
-	    		
-	    		for (int i=0;i<inbound_rls.size();i++){
-	    			
-	    			connection.addRateLimiter((LimitedRateGroup)inbound_rls.get(i),false);
-	    		}
+
+                for (LimitedRateGroup inbound_rl : inbound_rls) {
+
+                    connection.addRateLimiter(inbound_rl, false);
+                }
 	    		
 	    		inbound_rls = null;
 	    	}
 	    	
 	    	if ( outbound_rls != null ){
-	    		
-	    		for (int i=0;i<outbound_rls.size();i++){
-	    			
-	    			connection.addRateLimiter((LimitedRateGroup)outbound_rls.get(i),true);
-	    		}
+
+                for (LimitedRateGroup outbound_rl : outbound_rls) {
+
+                    connection.addRateLimiter(outbound_rl, true);
+                }
 	    		
 	    		outbound_rls = null;
 	    	}

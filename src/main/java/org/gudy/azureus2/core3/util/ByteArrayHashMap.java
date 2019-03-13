@@ -160,8 +160,8 @@ ByteArrayHashMap<T>
 
 
     public void clear() {
-      
-        Entry<T> tab[] = table;
+
+        Entry<T>[] tab = table;
         for (int i = 0; i < tab.length; i++) 
             tab[i] = null;
         size = 0;
@@ -170,16 +170,16 @@ ByteArrayHashMap<T>
     public List<byte[]>
     keys()
     {
-    	List<byte[]>	res = new ArrayList<byte[]>();
-    	
-        for (int j = 0; j < table.length; j++) {
-	         Entry<T> e = table[j];
-	         while( e != null ){
-               	res.add( e.key );
-                	
-                 e = e.next;
-	        }
-	    }
+    	List<byte[]>	res = new ArrayList<>();
+
+        for (Entry<T> tEntry : table) {
+            Entry<T> e = tEntry;
+            while (e != null) {
+                res.add(e.key);
+
+                e = e.next;
+            }
+        }
         
         return( res );
     }
@@ -187,16 +187,16 @@ ByteArrayHashMap<T>
     public List<T>
     values()
     {
-    	List<T>	res = new ArrayList<T>();
-    	
-        for (int j = 0; j < table.length; j++) {
-	         Entry<T> e = table[j];
-	         while( e != null ){
-               	res.add( e.value );
-                	
+    	List<T>	res = new ArrayList<>();
+
+        for (Entry<T> tEntry : table) {
+            Entry<T> e = tEntry;
+            while (e != null) {
+                res.add(e.value);
+
                 e = e.next;
-	        }
-	    }
+            }
+        }
         
         return( res );
     }
@@ -209,16 +209,16 @@ ByteArrayHashMap<T>
     public ByteArrayHashMap<T>
     duplicate()
     {
-    	ByteArrayHashMap<T>	res = new ByteArrayHashMap<T>(size,loadFactor);
-    	
-        for (int j = 0; j < table.length; j++) {
-	         Entry<T> e = table[j];
-	         while( e != null ){
-              	res.put( e.key, e.value );
-               	
-               e = e.next;
-	        }
-	    }
+    	ByteArrayHashMap<T>	res = new ByteArrayHashMap<>(size, loadFactor);
+
+        for (Entry<T> tEntry : table) {
+            Entry<T> e = tEntry;
+            while (e != null) {
+                res.put(e.key, e.value);
+
+                e = e.next;
+            }
+        }
        
        return( res );
     }
@@ -315,14 +315,14 @@ ByteArrayHashMap<T>
 
  
     void addEntry(int hash, byte[] key, T value, int bucketIndex) {
-        table[bucketIndex] = new Entry<T>(hash, key, value, table[bucketIndex]);
+        table[bucketIndex] = new Entry<>(hash, key, value, table[bucketIndex]);
         if (size++ >= threshold) 
             resize(2 * table.length);
     }
 
  
     void createEntry(int hash, byte[] key, T value, int bucketIndex) {
-        table[bucketIndex] = new Entry<T>(hash, key, value, table[bucketIndex]);
+        table[bucketIndex] = new Entry<>(hash, key, value, table[bucketIndex]);
         size++;
     }
     
@@ -332,10 +332,10 @@ ByteArrayHashMap<T>
     	int	hash = 0;
     	
     	int	len = x.length;
-    	
-        for (int i = 0; i < len; i++){
-      
-        	hash = 31*hash + x[i];
+
+        for (byte x1 : x) {
+
+            hash = 31 * hash + x1;
         }
         
         return( hash );

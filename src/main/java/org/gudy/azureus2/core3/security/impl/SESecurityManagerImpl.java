@@ -78,18 +78,18 @@ SESecurityManagerImpl
 	
 	static{
 		String[]	types = { "JKS", "GKR", "BKS" };
-		
-		for (int i=0;i<types.length;i++){
-			try{
-				KeyStore.getInstance( types[i] );
-				
-				KEYSTORE_TYPE	= types[i];
-				
-				break;
-				
-			}catch( Throwable e ){
-			}
-		}
+
+        for (String type : types) {
+            try {
+                KeyStore.getInstance(type);
+
+                KEYSTORE_TYPE = type;
+
+                break;
+
+            } catch (Throwable e) {
+            }
+        }
 		
 		if ( KEYSTORE_TYPE == null ){
 			
@@ -120,7 +120,7 @@ SESecurityManagerImpl
 	protected String	keystore_name;
 	protected String	truststore_name;
 	
-	protected final List<SECertificateListener>		certificate_listeners 	= new ArrayList<SECertificateListener>();
+	protected final List<SECertificateListener>		certificate_listeners 	= new ArrayList<>();
 	
 	protected final CopyOnWriteList	password_listeners 		= new CopyOnWriteList();
 	
@@ -189,19 +189,19 @@ SESecurityManagerImpl
 				"org.spongycastle.jce.provider.BouncyCastleProvider"};
 			
 		String	provider = null;
-		
-		for (int i=0;i<providers.length;i++){
-				
-			try{
-				Class.forName(providers[i]).newInstance();
-		
-				provider	 = providers[i];
-				
-				break;
-				
-			}catch( Throwable e ){
-			}
-		}
+
+        for (String provider1 : providers) {
+
+            try {
+                Class.forName(provider1).newInstance();
+
+                provider = provider1;
+
+                break;
+
+            } catch (Throwable e) {
+            }
+        }
 		
 		if ( provider == null ){
 			
@@ -590,21 +590,12 @@ SESecurityManagerImpl
 			if ( !new File(name).exists()){
 		
 				keystore.load(null,null);
-			
-				FileOutputStream	out = null;
-				
-				try{
-					out = new FileOutputStream(name);
-			
-					keystore.store(out, SESecurityManager.SSL_PASSWORD.toCharArray());
-			
-				}finally{
-					
-					if ( out != null ){
-						
-						out.close();
-					}						
-				}
+
+                try (FileOutputStream out = new FileOutputStream(name)) {
+
+                    keystore.store(out, SESecurityManager.SSL_PASSWORD.toCharArray());
+
+                }
 				
 				return( true );
 				
@@ -656,21 +647,12 @@ SESecurityManagerImpl
 				keystore.load(null,null);
 				
 			}else{
-			
-				FileInputStream		in 	= null;
-	
-				try{
-					in = new FileInputStream( tf_file );
-			
-					keystore.load(in, SESecurityManager.SSL_PASSWORD.toCharArray());
-					
-				}finally{
-					
-					if ( in != null ){
-						
-						in.close();
-					}
-				}
+
+                try (FileInputStream in = new FileInputStream(tf_file)) {
+
+                    keystore.load(in, SESecurityManager.SSL_PASSWORD.toCharArray());
+
+                }
 			}
 		}catch( Throwable e ){
 			
@@ -735,21 +717,12 @@ SESecurityManagerImpl
 			key_store.load(null,null);
 			
 		}else{
-			
-			InputStream kis = null;
-			
-			try{
-				kis = new FileInputStream(keystore_name);
-			
-				key_store.load(kis, SESecurityManager.SSL_PASSWORD.toCharArray());
-				
-			}finally{
-				
-				if ( kis != null ){
-					
-					kis.close();
-				}
-			}
+
+            try (InputStream kis = new FileInputStream(keystore_name)) {
+
+                key_store.load(kis, SESecurityManager.SSL_PASSWORD.toCharArray());
+
+            }
 		}
 		
 		keyManagerFactory.init(key_store, SESecurityManager.SSL_PASSWORD.toCharArray());
@@ -1109,7 +1082,7 @@ SESecurityManagerImpl
 				
 				TrustManagerFactory tmf = getTrustManagerFactory();
 				
-				final List<X509TrustManager>	default_tms = new ArrayList<X509TrustManager>();
+				final List<X509TrustManager>	default_tms = new ArrayList<>();
 				
 				if ( tmf != null ){
 					
@@ -1122,7 +1095,7 @@ SESecurityManagerImpl
 					}
 				}
 				
-				final List<Object>	trustedChains = new ArrayList<Object>();
+				final List<Object>	trustedChains = new ArrayList<>();
 								
 				TrustManager[] trustAllCerts = 
 					SESecurityManager.getAllTrustingTrustManager(
@@ -1206,7 +1179,7 @@ SESecurityManagerImpl
 
 					String[] cs = socket.getEnabledCipherSuites();
 					
-					List<String> new_cs = new ArrayList<String>();
+					List<String> new_cs = new ArrayList<>();
 					
 					for ( String x: cs ){
 						
@@ -1218,7 +1191,7 @@ SESecurityManagerImpl
 						}
 					}
 
-					socket.setEnabledCipherSuites( new_cs.toArray(new String[new_cs.size()]));
+					socket.setEnabledCipherSuites( new_cs.toArray(new String[0]));
 				}
 				
 				socket.startHandshake();
@@ -1561,25 +1534,16 @@ SESecurityManagerImpl
 			}
 			
 			key_store.setKeyEntry( alias, public_key, SESecurityManager.SSL_PASSWORD.toCharArray(), certChain );
-			
-			FileOutputStream	out = null;
-			
-			try{
-				out = new FileOutputStream(keystore_name);
-			
-				key_store.store(out, SESecurityManager.SSL_PASSWORD.toCharArray());
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace( e );
-				
-			}finally{
-				
-				if ( out != null ){
-					
-					out.close();
-				}
-			}
+
+            try (FileOutputStream out = new FileOutputStream(keystore_name)) {
+
+                key_store.store(out, SESecurityManager.SSL_PASSWORD.toCharArray());
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+
+            }
 		}finally{
 			
 			this_mon.exit();
@@ -1607,21 +1571,12 @@ SESecurityManagerImpl
 				}
 							
 				keystore.setCertificateEntry(alias, cert);
-	
-				FileOutputStream	out = null;
-				
-				try{
-					out = new FileOutputStream(truststore_name);
-			
-					keystore.store(out, SESecurityManager.SSL_PASSWORD.toCharArray());
-			
-				}finally{
-					
-					if ( out != null ){
-						
-						out.close();
-					}						
-				}
+
+                try (FileOutputStream out = new FileOutputStream(truststore_name)) {
+
+                    keystore.store(out, SESecurityManager.SSL_PASSWORD.toCharArray());
+
+                }
 			}
 			
 				// pick up the changed trust store
@@ -1672,23 +1627,21 @@ SESecurityManagerImpl
 				Debug.printStackTrace(e);
 			}
 		}
-		
-		Iterator	it = password_listeners.iterator();
-		
-		while( it.hasNext()){
-			
-			try{
-				PasswordAuthentication res = ((SEPasswordListener)it.next()).getAuthentication( realm, tracker );
-				
-				if ( res != null ){
-					
-					return( res );
-				}
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace(e);
-			}
-		}
+
+        for (Object password_listener : password_listeners) {
+
+            try {
+                PasswordAuthentication res = ((SEPasswordListener) password_listener).getAuthentication(realm, tracker);
+
+                if (res != null) {
+
+                    return (res);
+                }
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 		
 		return( null );
 	}
@@ -1705,13 +1658,11 @@ SESecurityManagerImpl
 			
 			thread_listener.setAuthenticationOutcome(realm, tracker, success);
 		}
-		
-		Iterator	it = password_listeners.iterator();
-		
-		while( it.hasNext()){
-			
-			((SEPasswordListener)it.next()).setAuthenticationOutcome( realm, tracker, success );
-		}
+
+        for (Object password_listener : password_listeners) {
+
+            ((SEPasswordListener) password_listener).setAuthenticationOutcome(realm, tracker, success);
+        }
 	}
 		
 	public void
@@ -1753,19 +1704,17 @@ SESecurityManagerImpl
 			
 			thread_listener.clearPasswords();
 		}
-		
-		Iterator	it = password_listeners.iterator();
-		
-		while( it.hasNext()){
-			
-			try{				
-				((SEPasswordListener)it.next()).clearPasswords();
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace(e);
-			}
-		}
+
+        for (Object password_listener : password_listeners) {
+
+            try {
+                ((SEPasswordListener) password_listener).clearPasswords();
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 	
 	public void
@@ -1967,9 +1916,9 @@ SESecurityManagerImpl
 			return( trimmed );
 		}
 		
-	};
-	
-	public static void
+	}
+
+    public static void
 	main(
 		String[]	args )
 	{

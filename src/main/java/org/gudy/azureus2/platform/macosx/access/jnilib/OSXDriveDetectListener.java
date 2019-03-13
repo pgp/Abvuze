@@ -23,6 +23,6 @@ import java.util.Map;
 
 public interface OSXDriveDetectListener
 {
-	public void driveDetected(File mount, Map driveInfo);
-	public void driveRemoved(File mount, Map driveInfo);
+	void driveDetected(File mount, Map driveInfo);
+	void driveRemoved(File mount, Map driveInfo);
 }

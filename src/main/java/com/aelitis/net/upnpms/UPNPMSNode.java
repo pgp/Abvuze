@@ -23,9 +23,9 @@ package com.aelitis.net.upnpms;
 public interface 
 UPNPMSNode 
 {
-	public String
+	String
 	getID();
 	
-	public String
+	String
 	getTitle();
 }

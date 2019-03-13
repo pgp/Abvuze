@@ -22,61 +22,61 @@ package org.gudy.azureus2.plugins.disk;
 public interface 
 DiskManagerRequest 
 {
-	public static final int	REQUEST_READ	= 1;
+	int	REQUEST_READ	= 1;
 	
-	public void
+	void
 	setType(
-		int			type );
+            int type);
 	
-	public void
+	void
 	setOffset(
-		long		offset );
+            long offset);
 	
-	public void
+	void
 	setLength(
-		long		length );
+            long length);
 	
 		/**
 		 * Get the number of bytes available for immediate reading from the request given its current
 		 * position. If this information is not known (download not running) then -1 is returned
 		 * @return
 		 */
-	
-	public long
+
+        long
 	getAvailableBytes();
 	
 		/**
 		 * Get the number of bytes remaining to be read for the request
 		 * @return
 		 */
-	
-	public long
+
+        long
 	getRemaining();
 	
-	public void
+	void
 	run();
 	
-	public void
+	void
 	cancel();
 	
 		/**
 		 * Beware that invoking this method signifies that the media is being streamed and therefore may undergo transformations such as MOOV atom relocation in mp4s
 		 * @param agent
 		 */
-	
-	public void
+
+        void
 	setUserAgent(
-		String		agent );
+                String agent);
 	
-	public void
+	void
 	setMaximumReadChunkSize(
-		int			size );
+            int size);
 	
-	public void
+	void
 	addListener(
-		DiskManagerListener	listener );
+            DiskManagerListener listener);
 	
-	public void
+	void
 	removeListener(
-		DiskManagerListener	listener );
+            DiskManagerListener listener);
 }

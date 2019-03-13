@@ -307,17 +307,15 @@ DMWriterImpl
 		try{
 			this_mon.enter();
 
-			Iterator	it = write_requests.iterator();
-			
-			while( it.hasNext()){
-				
-				DiskManagerWriteRequest	request = (DiskManagerWriteRequest)it.next();
-				
-				if ( request.getPieceNumber() == piece_number ){
-					
-					return( true );
-				}
-			}
+            for (Object write_request : write_requests) {
+
+                DiskManagerWriteRequest request = (DiskManagerWriteRequest) write_request;
+
+                if (request.getPieceNumber() == piece_number) {
+
+                    return (true);
+                }
+            }
 			
 			return( false );
 			
@@ -428,8 +426,8 @@ DMWriterImpl
 						
 						chunks.add( 
 								new Object[]{ current_piece.getFile(),
-								new Long( file_pos ),
-								new Integer((int)file_limit )});
+                                        file_pos,
+                                        (int) file_limit});
 											
 						buffer_position = (int)file_limit;
 					}
@@ -678,7 +676,7 @@ DMWriterImpl
 
 			final DiskManagerFileInfoImpl	file = (DiskManagerFileInfoImpl)stuff[0];
 			
-			buffer.limit( DirectByteBuffer.SS_DR, ((Integer)stuff[2]).intValue());
+			buffer.limit( DirectByteBuffer.SS_DR, (Integer) stuff[2]);
 						
 			if ( file.getAccessMode() == DiskManagerFileInfo.READ ){
 				
@@ -733,7 +731,7 @@ DMWriterImpl
 				
 			disk_access.queueWriteRequest(
 				file.getCacheFile(),
-				((Long)stuff[1]).longValue(),
+                    (Long) stuff[1],
 				buffer,
 				handover_buffer,
 				delegate_listener );

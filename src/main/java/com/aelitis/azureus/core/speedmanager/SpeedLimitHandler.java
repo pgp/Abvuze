@@ -21,6 +21,7 @@
 package com.aelitis.azureus.core.speedmanager;
 
 import java.net.InetAddress;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -155,23 +156,23 @@ SpeedLimitHandler
 	private final LoggerChannel	logger;
 	
 	private TimerEventPeriodic		schedule_event;
-	private List<ScheduleRule>		current_rules	= new ArrayList<ScheduleRule>();
+	private List<ScheduleRule>		current_rules	= new ArrayList<>();
 	private ScheduleRule			active_rule;
 	
 	private boolean					prioritiser_enabled = true;
 	private TimerEventPeriodic		prioritiser_event;
-	private List<Prioritiser>		current_prioritisers = new ArrayList<Prioritiser>();
+	private List<Prioritiser>		current_prioritisers = new ArrayList<>();
 	
-	private Map<String,IPSet>		current_ip_sets 			= new HashMap<String,IPSet>();
-	private final Map<String,RateLimiter>	ip_set_rate_limiters_up 	= new HashMap<String,RateLimiter>();
-	private final Map<String,RateLimiter>	ip_set_rate_limiters_down 	= new HashMap<String,RateLimiter>();
+	private Map<String,IPSet>		current_ip_sets 			= new HashMap<>();
+	private final Map<String,RateLimiter>	ip_set_rate_limiters_up 	= new HashMap<>();
+	private final Map<String,RateLimiter>	ip_set_rate_limiters_down 	= new HashMap<>();
 	private TimerEventPeriodic		ip_set_event;
 
 	private boolean					net_limit_listener_added;
 	
-	private Map<Integer,List<NetLimit>>		net_limits	= new HashMap<Integer,List<NetLimit>>();
+	private Map<Integer,List<NetLimit>>		net_limits	= new HashMap<>();
 	
-	private final List<String> predefined_profile_names = new ArrayList<String>();
+	private final List<String> predefined_profile_names = new ArrayList<>();
 	
 	{
 		predefined_profile_names.add( "null" );
@@ -415,7 +416,7 @@ SpeedLimitHandler
 			}
 		}
 		
-		List<Object[]> tag_nls = new ArrayList<Object[]>();
+		List<Object[]> tag_nls = new ArrayList<>();
 		
 		for ( Map.Entry<Integer, List<NetLimit>> entry: net_limits.entrySet()){
 			
@@ -526,7 +527,7 @@ SpeedLimitHandler
 	{
 		if ( net_limits == null ){
 			
-			net_limits = new ArrayList<NetLimit>();
+			net_limits = new ArrayList<>();
 			
 			net_limits.add( null );
 		}
@@ -672,7 +673,7 @@ SpeedLimitHandler
 	{
 		Map	map = loadConfig();
 				
-		List<String> profiles = new ArrayList<String>();
+		List<String> profiles = new ArrayList<>();
 		
 		List<Map> list = (List<Map>)map.get( "profiles" );
 
@@ -719,7 +720,7 @@ SpeedLimitHandler
 			}
 		}
 		
-		List<String> result = new ArrayList<String>();
+		List<String> result = new ArrayList<>();
 		
 		result.add( "Profile not found" );
 
@@ -783,7 +784,7 @@ SpeedLimitHandler
 			}
 		}
 		
-		List<String> result = new ArrayList<String>();
+		List<String> result = new ArrayList<>();
 		
 		result.add( "Profile not found" );
 
@@ -794,7 +795,7 @@ SpeedLimitHandler
 	getProfilesForDownload(
 		byte[]		hash )
 	{
-		List<String> result = new ArrayList<String>();
+		List<String> result = new ArrayList<>();
 
 		Map	map = loadConfig();
 		
@@ -835,7 +836,7 @@ SpeedLimitHandler
 		
 		List<Map> list = (List<Map>)map.get( "profiles" );
 
-		List<String>	hash_strs = new ArrayList<String>();
+		List<String>	hash_strs = new ArrayList<>();
 		
 		for ( byte[] hash: hashes ){
 			
@@ -922,7 +923,7 @@ SpeedLimitHandler
 
 		if ( list == null ){
 			
-			list = new ArrayList<Map>();
+			list = new ArrayList<>();
 			
 			map.put( "profiles", list );
 		}
@@ -966,20 +967,20 @@ SpeedLimitHandler
 	private synchronized List<String>
 	loadSchedule()
 	{
-		List<String>	result = new ArrayList<String>();
+		List<String>	result = new ArrayList<>();
 		
 		List list = COConfigurationManager.getListParameter( "speed.limit.handler.schedule.lines", new ArrayList());
 		List<String> schedule_lines = BDecoder.decodeStrings( BEncoder.cloneList(list) );
 	
 		boolean	enabled = true;
 		
-		List<ScheduleRule>	rules 	= new ArrayList<ScheduleRule>();
-		Map<String,IPSet>	ip_sets	= new HashMap<String, IPSet>();
+		List<ScheduleRule>	rules 	= new ArrayList<>();
+		Map<String,IPSet>	ip_sets	= new HashMap<>();
 		
-		Map<Integer,List<NetLimit>> new_net_limits	= new HashMap<Integer, List<NetLimit>>();
-		List<NetLimit>				net_limits_list = new ArrayList<SpeedLimitHandler.NetLimit>();
+		Map<Integer,List<NetLimit>> new_net_limits	= new HashMap<>();
+		List<NetLimit>				net_limits_list = new ArrayList<>();
 		
-		List<Prioritiser>	new_prioritisers = new ArrayList<Prioritiser>();
+		List<Prioritiser>	new_prioritisers = new ArrayList<>();
 		
 		boolean checked_lts_enabled = false;
 		boolean	lts_enabled	= false;
@@ -1036,7 +1037,7 @@ SpeedLimitHandler
 					int		peer_down_lim	= 0;
 
 					
-					Set<String>	categories_or_tags = new HashSet<String>();
+					Set<String>	categories_or_tags = new HashSet<>();
 					
 					IPSet set = null;
 					
@@ -1056,78 +1057,87 @@ SpeedLimitHandler
 							
 							String lc_rhs = rhs.toLowerCase( Locale.US );
 
-							if ( lc_lhs.equals( "inverse" )){
-							
-								inverse = lc_rhs.equals( "yes" );
-								
-							}else if ( lc_lhs.equals( "up" )){
-								
-								up_lim = (int)parseRate( lc_rhs );
-								
-							}else if ( lc_lhs.equals( "down" )){
-								
-								down_lim = (int)parseRate( lc_rhs );
-								
-							}else if ( lc_lhs.equals( "peer_up" )){
-								
-								peer_up_lim = (int)parseRate( lc_rhs );
-								
-							}else if ( lc_lhs.equals( "peer_down" )){
-								
-								peer_down_lim = (int)parseRate( lc_rhs );
-								
-							}else if ( lc_lhs.equals( "cat" ) || lc_lhs.equals( "tag" )){
-								
-								String[] cats = rhs.split( " " );
-								
-								for ( String cat: cats ){
-									
-									cat = cat.trim();
-									
-									if ( cat.length() > 0 ){
-										
-										categories_or_tags.add( cat );
-									}
-								}
-							}else{
-								
-								String name = lhs;
-							
-								String def = rhs.replace(';', ' ');
-														
-								set = ip_sets.get( name );
-								
-								if ( set == null ){
-									
-									set = new IPSet( name );
-									
-									ip_sets.put( name, set );
-								}
-								
-								bits = def.split( " " );
-								
-								for ( String bit: bits ){
-									
-									bit = bit.trim();
-									
-									if ( bit.length() > 0 ){
-										
-										IPSet other_set = ip_sets.get( bit );
-										
-										if ( other_set != null && other_set != set ){
-											
-											set.addSet( other_set );
-											
-										}else{
-											
-											if ( !set.addCIDRorCCetc( bit )){
-											
-												result.add( "CIDR, CC, Network or ip_set reference '" + bit + "' isn't valid" );
-											}
-										}
-									}
-								}
-							}
+                            switch (lc_lhs) {
+                                case "inverse":
+
+                                    inverse = lc_rhs.equals("yes");
+
+                                    break;
+                                case "up":
+
+                                    up_lim = (int) parseRate(lc_rhs);
+
+                                    break;
+                                case "down":
+
+                                    down_lim = (int) parseRate(lc_rhs);
+
+                                    break;
+                                case "peer_up":
+
+                                    peer_up_lim = (int) parseRate(lc_rhs);
+
+                                    break;
+                                case "peer_down":
+
+                                    peer_down_lim = (int) parseRate(lc_rhs);
+
+                                    break;
+                                case "cat":
+                                case "tag":
+
+                                    String[] cats = rhs.split(" ");
+
+                                    for (String cat : cats) {
+
+                                        cat = cat.trim();
+
+                                        if (cat.length() > 0) {
+
+                                            categories_or_tags.add(cat);
+                                        }
+                                    }
+                                    break;
+                                default:
+
+                                    String name = lhs;
+
+                                    String def = rhs.replace(';', ' ');
+
+                                    set = ip_sets.get(name);
+
+                                    if (set == null) {
+
+                                        set = new IPSet(name);
+
+                                        ip_sets.put(name, set);
+                                    }
+
+                                    bits = def.split(" ");
+
+                                    for (String bit : bits) {
+
+                                        bit = bit.trim();
+
+                                        if (bit.length() > 0) {
+
+                                            IPSet other_set = ip_sets.get(bit);
+
+                                            if (other_set != null && other_set != set) {
+
+                                                set.addSet(other_set);
+
+                                            } else {
+
+                                                if (!set.addCIDRorCCetc(bit)) {
+
+                                                    result.add("CIDR, CC, Network or ip_set reference '" + bit + "' isn't valid");
+                                                }
+                                            }
+                                        }
+                                    }
+                                    break;
+                            }
 						}
 					}
 					
@@ -1337,7 +1347,7 @@ SpeedLimitHandler
 					
 					if ( limits == null ){
 						
-						limits = new ArrayList<NetLimit>();
+						limits = new ArrayList<>();
 						
 						new_net_limits.put( type, limits );
 					}
@@ -1468,7 +1478,7 @@ SpeedLimitHandler
 				
 				String[]	_bits = line.split( " " );
 							
-				List<String>	bits = new ArrayList<String>();
+				List<String>	bits = new ArrayList<>();
 				
 				for ( String b: _bits ){
 					
@@ -1480,58 +1490,70 @@ SpeedLimitHandler
 					}
 				}
 				
-				List<String>	errors = new ArrayList<String>();
+				List<String>	errors = new ArrayList<>();
 				
 				if ( bits.size() >= 6 ){
 					
 					String	freq_str = bits.get(0).toLowerCase( Locale.US );
 					
 					byte	freq = 0;
-					
-					if ( freq_str.equals( "daily" )){
-						
-						freq = ScheduleRule.FR_DAILY;
-						
-					}else if ( freq_str.equals( "weekdays" )){
-						
-						freq = ScheduleRule.FR_WEEKDAY;
-						
-					}else if ( freq_str.equals( "weekends" )){
-						
-						freq = ScheduleRule.FR_WEEKEND;
-						
-					}else if ( freq_str.equals( "mon" )){
-						
-						freq = ScheduleRule.FR_MON;
-						
-					}else if ( freq_str.equals( "tue" )){
-						
-						freq = ScheduleRule.FR_TUE;
-						
-					}else if ( freq_str.equals( "wed" )){
-						
-						freq = ScheduleRule.FR_WED;
-						
-					}else if ( freq_str.equals( "thu" )){
-						
-						freq = ScheduleRule.FR_THU;
-						
-					}else if ( freq_str.equals( "fri" )){
-						
-						freq = ScheduleRule.FR_FRI;
-						
-					}else if ( freq_str.equals( "sat" )){
-						
-						freq = ScheduleRule.FR_SAT;
-						
-					}else if ( freq_str.equals( "sun" )){
-						
-						freq = ScheduleRule.FR_SUN;
-						
-					}else{
-						
-						errors.add( "frequency '" + freq_str + "' is invalid" );
-					}
+
+                    switch (freq_str) {
+                        case "daily":
+
+                            freq = ScheduleRule.FR_DAILY;
+
+                            break;
+                        case "weekdays":
+
+                            freq = ScheduleRule.FR_WEEKDAY;
+
+                            break;
+                        case "weekends":
+
+                            freq = ScheduleRule.FR_WEEKEND;
+
+                            break;
+                        case "mon":
+
+                            freq = ScheduleRule.FR_MON;
+
+                            break;
+                        case "tue":
+
+                            freq = ScheduleRule.FR_TUE;
+
+                            break;
+                        case "wed":
+
+                            freq = ScheduleRule.FR_WED;
+
+                            break;
+                        case "thu":
+
+                            freq = ScheduleRule.FR_THU;
+
+                            break;
+                        case "fri":
+
+                            freq = ScheduleRule.FR_FRI;
+
+                            break;
+                        case "sat":
+
+                            freq = ScheduleRule.FR_SAT;
+
+                            break;
+                        case "sun":
+
+                            freq = ScheduleRule.FR_SUN;
+
+                            break;
+                        default:
+
+                            errors.add("frequency '" + freq_str + "' is invalid");
+                            break;
+                    }
 					
 					String	profile = bits.get(1);
 					
@@ -1589,7 +1611,7 @@ SpeedLimitHandler
 									
 								if ( extensions == null ){
 									
-									extensions = new ArrayList<SpeedLimitHandler.ScheduleRuleExtensions>( bits.size()-6 );
+									extensions = new ArrayList<>(bits.size() - 6);
 								}
 								
 								int	et;
@@ -1632,27 +1654,32 @@ SpeedLimitHandler
 									
 									if ( extensions == null ){
 										
-										extensions = new ArrayList<SpeedLimitHandler.ScheduleRuleExtensions>( bits.size()-6 );
+										extensions = new ArrayList<>(bits.size() - 6);
 									}
 									
 									int	et;
-									
-									if ( ext_cmd.equals( "start_tag" )){
-										
-										et = ScheduleRuleExtensions.ET_START_TAG;
-										
-									}else if ( ext_cmd.equals( "stop_tag" )){
-										
-										et = ScheduleRuleExtensions.ET_STOP_TAG;
-										
-									}else if ( ext_cmd.equals( "pause_tag" )){
-										
-										et = ScheduleRuleExtensions.ET_PAUSE_TAG;
-										
-									}else{
-										
-										et = ScheduleRuleExtensions.ET_RESUME_TAG;
-									}									
+
+                                    switch (ext_cmd) {
+                                        case "start_tag":
+
+                                            et = ScheduleRuleExtensions.ET_START_TAG;
+
+                                            break;
+                                        case "stop_tag":
+
+                                            et = ScheduleRuleExtensions.ET_STOP_TAG;
+
+                                            break;
+                                        case "pause_tag":
+
+                                            et = ScheduleRuleExtensions.ET_PAUSE_TAG;
+
+                                            break;
+                                        default:
+
+                                            et = ScheduleRuleExtensions.ET_RESUME_TAG;
+                                            break;
+                                    }
 									
 									extensions.add( new ScheduleRuleExtensions( et, tag ));
 									
@@ -1661,11 +1688,11 @@ SpeedLimitHandler
 							}else if ( 	ext_cmd.equals( "enable_net_limit" ) || 
 										ext_cmd.equals( "disable_net_limit" )){
 								
-								List<NetLimit>	limits = new ArrayList<SpeedLimitHandler.NetLimit>();
+								List<NetLimit>	limits = new ArrayList<>();
 								
 								String[] nls = ext_param.split( ";" );
 								
-								List<String> missing = new ArrayList<String>();
+								List<String> missing = new ArrayList<>();
 								
 								for ( String nl: nls ){
 									
@@ -1707,7 +1734,7 @@ SpeedLimitHandler
 									
 									if ( extensions == null ){
 										
-										extensions = new ArrayList<SpeedLimitHandler.ScheduleRuleExtensions>( bits.size()-6 );
+										extensions = new ArrayList<>(bits.size() - 6);
 									}
 	
 									extensions.add( new ScheduleRuleExtensions( et, limits ));
@@ -1806,7 +1833,7 @@ SpeedLimitHandler
 			
 			current_ip_sets = ip_sets;
 			
-			Map<IPSet,Integer>	id_map 		= new HashMap<IPSet, Integer>();
+			Map<IPSet,Integer>	id_map 		= new HashMap<>();
 			int					id_max		= -1;
 			
 			for ( int i=0;i<2;i++ ){
@@ -1816,7 +1843,7 @@ SpeedLimitHandler
 					String name = s.getName();
 					
 					try{
-						String config_key = "speed.limit.handler.ipset_n." + Base32.encode( name.getBytes( "UTF-8" ));
+						String config_key = "speed.limit.handler.ipset_n." + Base32.encode( name.getBytes(StandardCharsets.UTF_8));
 						
 						if ( i == 0 ){
 							
@@ -2129,7 +2156,7 @@ SpeedLimitHandler
 								
 								if ( to_be_removed == null ){
 									
-									to_be_removed = new ArrayList<RateLimiter>();
+									to_be_removed = new ArrayList<>();
 									
 									peer.setUserData( RLD_TO_BE_REMOVED_KEY, to_be_removed );
 								}
@@ -2156,7 +2183,7 @@ SpeedLimitHandler
 								
 								if ( to_be_removed == null ){
 									
-									to_be_removed = new ArrayList<RateLimiter>();
+									to_be_removed = new ArrayList<>();
 									
 									peer.setUserData( RLU_TO_BE_REMOVED_KEY, to_be_removed );
 								}
@@ -2255,7 +2282,7 @@ SpeedLimitHandler
 		private final org.gudy.azureus2.plugins.download.DownloadManager		download_manager;
 		private final boolean													has_cats_or_tags;
 		
-		final List<Runnable>	listener_removers = new ArrayList<Runnable>();
+		final List<Runnable>	listener_removers = new ArrayList<>();
 		
 		private volatile boolean	destroyed;
 		
@@ -2459,10 +2486,10 @@ SpeedLimitHandler
 			Download	download )
 		{
 		}
-	};
+	}
 
-	
-	private void
+
+    private void
 	peersAdded(
 		Download	download,
 		PeerManager	peer_manager,
@@ -2512,7 +2539,7 @@ SpeedLimitHandler
 				
 				if ( category_or_tags == null && set.getCategoriesOrTags() != null ){
 				
-					category_or_tags = new HashSet<String>();
+					category_or_tags = new HashSet<>();
 					
 					String cat = download.getAttribute( category_attribute );
 					
@@ -2603,7 +2630,7 @@ SpeedLimitHandler
 					peer_net = AENetworkClassifier.categoriseAddress( peer.getIp());
 				}
 				
-				Set<IPSet>	added_to_sets = new HashSet<IPSet>();
+				Set<IPSet>	added_to_sets = new HashSet<>();
 				
 				if ( l_address != 0 ){
 									
@@ -2622,7 +2649,7 @@ SpeedLimitHandler
 						
 						Set<String> set_cats_or_tags = set.getCategoriesOrTags();
 						
-						if ( set_cats_or_tags == null || new HashSet<String>( set_cats_or_tags ).removeAll( category_or_tags )){
+						if ( set_cats_or_tags == null || new HashSet<>(set_cats_or_tags).removeAll( category_or_tags )){
 						
 							boolean	hit = false;
 							
@@ -2675,7 +2702,7 @@ SpeedLimitHandler
 						
 						Set<String> set_cats_or_tags = set.getCategoriesOrTags();
 						
-						if ( set_cats_or_tags == null || new HashSet<String>( set_cats_or_tags ).removeAll( category_or_tags )){
+						if ( set_cats_or_tags == null || new HashSet<>(set_cats_or_tags).removeAll( category_or_tags )){
 												
 							boolean	hit = ccs.contains( peer_cc );
 																
@@ -2735,7 +2762,7 @@ SpeedLimitHandler
 						
 						Set<String> set_cats_or_tags = set.getCategoriesOrTags();
 						
-						if ( set_cats_or_tags == null || new HashSet<String>( set_cats_or_tags ).removeAll( category_or_tags )){
+						if ( set_cats_or_tags == null || new HashSet<>(set_cats_or_tags).removeAll( category_or_tags )){
 												
 							boolean	hit = nets.contains( peer_net );
 								
@@ -2907,7 +2934,7 @@ SpeedLimitHandler
 		
 		synchronized( this ){
 			
-			prioritisers = new ArrayList<Prioritiser>( current_prioritisers );
+			prioritisers = new ArrayList<>(current_prioritisers);
 		}
 		
 		synchronized( extensions_lock ){
@@ -3016,29 +3043,34 @@ SpeedLimitHandler
 					String lc_profile_name = profile_name.toLowerCase();
 					
 					if ( predefined_profile_names.contains( lc_profile_name)){
-						
-						if ( lc_profile_name.equals( "pause_all" )){
-							
-							active_rule = latest_match;
-							
-							is_rule_pause_all = true;
-							
-							setRulePauseAllActive( true );
-							
-						}else if ( lc_profile_name.equals( "resume_all" )){
-							
-							active_rule = latest_match;
-							
-							setRulePauseAllActive( false );
-							
-						}else if ( lc_profile_name.equals( "null" )){
 
-							active_rule = latest_match;
-							
-						}else{
-							
-							Debug.out( "Unknown pre-def name '" + profile_name + "'" );
-						}
+                        switch (lc_profile_name) {
+                            case "pause_all":
+
+                                active_rule = latest_match;
+
+                                is_rule_pause_all = true;
+
+                                setRulePauseAllActive(true);
+
+                                break;
+                            case "resume_all":
+
+                                active_rule = latest_match;
+
+                                setRulePauseAllActive(false);
+
+                                break;
+                            case "null":
+
+                                active_rule = latest_match;
+
+                                break;
+                            default:
+
+                                Debug.out("Unknown pre-def name '" + profile_name + "'");
+                                break;
+                        }
 						
 					}else if ( profileExists( profile_name )){
 	
@@ -3124,7 +3156,7 @@ SpeedLimitHandler
 	public List<String>
 	getSchedule()
 	{
-		List<String>	result = new ArrayList<String>();
+		List<String>	result = new ArrayList<>();
 		
 		result.add( "# Enter rules on separate lines below this section - see http://wiki.vuze.com/w/Speed_Limit_Scheduler for more details" );
 		result.add( "# Rules are of the following types:" );
@@ -3240,7 +3272,7 @@ SpeedLimitHandler
 	trim(
 		LimitedRateGroup[]	groups )
 	{
-		List<LimitedRateGroup> result = new ArrayList<LimitedRateGroup>();
+		List<LimitedRateGroup> result = new ArrayList<>();
 		
 		for ( LimitedRateGroup group: groups ){
 			
@@ -3328,8 +3360,8 @@ SpeedLimitHandler
 				
 		String log_str = "";
 		
-		Map <TagFeatureRunState,List<Object[]>>		rs_ops = new HashMap<TagFeatureRunState, List<Object[]>>();
-		Map <TagFeatureRateLimit,List<Object[]>>	rl_ops = new HashMap<TagFeatureRateLimit, List<Object[]>>();
+		Map <TagFeatureRunState,List<Object[]>>		rs_ops = new HashMap<>();
+		Map <TagFeatureRateLimit,List<Object[]>>	rl_ops = new HashMap<>();
 		
 		for (Map.Entry<Integer,List<NetLimit>> entry: net_limits.entrySet()){
 			
@@ -3406,7 +3438,7 @@ SpeedLimitHandler
 							
 							if ( list == null ){
 								
-								list = new ArrayList<Object[]>();
+								list = new ArrayList<>();
 								
 								rs_ops.put( rs, list );
 							}
@@ -3430,7 +3462,7 @@ SpeedLimitHandler
 					
 					if ( list == null ){
 						
-						list = new ArrayList<Object[]>();
+						list = new ArrayList<>();
 						
 						rl_ops.put( tag_rl, list );
 					}
@@ -3595,7 +3627,7 @@ SpeedLimitHandler
     	String				key,
     	boolean				b )
     {
-    	map.put( key, Long.valueOf(b?1:0));
+    	map.put( key, (long) (b ? 1 : 0));
     }
     
     private boolean
@@ -3619,7 +3651,7 @@ SpeedLimitHandler
     	String				key,
     	int					i )
     {
-    	map.put( key, new Long( i ));
+    	map.put( key, (long) i);
     }
     
     private int
@@ -3644,7 +3676,7 @@ SpeedLimitHandler
     	String				s )
     {
     	try{
-    		map.put( key, s.getBytes( "UTF-8" ));
+    		map.put( key, s.getBytes(StandardCharsets.UTF_8));
     		
     	}catch( Throwable e ){
     	}
@@ -3664,7 +3696,7 @@ SpeedLimitHandler
        	}else if ( obj instanceof byte[] ){
        	
     		try{
-    			return( new String((byte[])obj, "UTF-8" ));
+    			return( new String((byte[])obj, StandardCharsets.UTF_8));
     			
     		}catch( Throwable e ){
 	    	}
@@ -3740,9 +3772,9 @@ SpeedLimitHandler
 	    private int			lan_up_limit;
 	    private int			lan_down_limit;
 	    
-	    private final Map<String,int[]>	download_limits = new HashMap<String, int[]>();
-	    private final Map<String,int[]>	category_limits = new HashMap<String, int[]>();
-	    private final Map<String,int[]>	tag_limits 		= new HashMap<String, int[]>();
+	    private final Map<String,int[]>	download_limits = new HashMap<>();
+	    private final Map<String,int[]>	category_limits = new HashMap<>();
+	    private final Map<String,int[]>	tag_limits 		= new HashMap<>();
 	    
 	    private 
 	    LimitDetails()
@@ -3833,7 +3865,7 @@ SpeedLimitHandler
 	    private Map<String,Object>
 	    export()
 	    {
-	    	Map<String,Object>	map = new HashMap<String, Object>();
+	    	Map<String,Object>	map = new HashMap<>();
 	    	
 	    	exportBoolean( map, "aue", auto_up_enabled );
 	    	exportBoolean( map, "ause", auto_up_seeding_enabled );
@@ -3848,13 +3880,13 @@ SpeedLimitHandler
 	    	exportInt( map, "ldl", lan_down_limit );
 
 	    	
-	    	List<Map<String,Object>>	d_list = new ArrayList<Map<String,Object>>();
+	    	List<Map<String,Object>>	d_list = new ArrayList<>();
 	    	
 	    	map.put( "dms", d_list );
 	    	
 	    	for ( Map.Entry<String,int[]> entry: download_limits.entrySet()){
 	    		
-	    		Map<String,Object> m = new HashMap<String,Object>();
+	    		Map<String,Object> m = new HashMap<>();
 	    		
 	    		d_list.add( m );
 	    		
@@ -3863,13 +3895,13 @@ SpeedLimitHandler
 	    		exportInt( m, "d", entry.getValue()[1]);
 	    	}
 	    	
-	    	List<Map<String,Object>>	c_list = new ArrayList<Map<String,Object>>();
+	    	List<Map<String,Object>>	c_list = new ArrayList<>();
 	    	
 	    	map.put( "cts", c_list );
 	    	
 	    	for ( Map.Entry<String,int[]> entry: category_limits.entrySet()){
 	    		
-	    		Map<String,Object> m = new HashMap<String,Object>();
+	    		Map<String,Object> m = new HashMap<>();
 	    		
 	    		c_list.add( m );
 	    		
@@ -3878,13 +3910,13 @@ SpeedLimitHandler
 	    		exportInt( m, "d", entry.getValue()[1]);
 	    	}
 	    	
-	    	List<Map<String,Object>>	t_list = new ArrayList<Map<String,Object>>();
+	    	List<Map<String,Object>>	t_list = new ArrayList<>();
 	    	
 	    	map.put( "tgs", t_list );
 	    	
 	    	for ( Map.Entry<String,int[]> entry: tag_limits.entrySet()){
 	    		
-	    		Map<String,Object> m = new HashMap<String,Object>();
+	    		Map<String,Object> m = new HashMap<>();
 	    		
 	    		t_list.add( m );
 	    		
@@ -4062,7 +4094,7 @@ SpeedLimitHandler
 		    	    
 			GlobalManager gm = core.getGlobalManager();
 
-			Set<DownloadManager>	all_managers = new HashSet<DownloadManager>( gm.getDownloadManagers());
+			Set<DownloadManager>	all_managers = new HashSet<>(gm.getDownloadManagers());
 			
 			for ( Map.Entry<String,int[]> entry: download_limits.entrySet()){
 				
@@ -4089,9 +4121,9 @@ SpeedLimitHandler
 			
 				//cats
 			
-			Set<Category> all_categories = new HashSet<Category>( Arrays.asList(CategoryManager.getCategories()));
+			Set<Category> all_categories = new HashSet<>(Arrays.asList(CategoryManager.getCategories()));
 			 
-			Map<String, Category> cat_map = new HashMap<String, Category>();
+			Map<String, Category> cat_map = new HashMap<>();
 			
 			for ( Category c: all_categories ){
 				
@@ -4127,7 +4159,7 @@ SpeedLimitHandler
 			
 			List<TagType> all_tts = tm.getTagTypes();
 			
-			Set<Tag>	all_rl_tags = new HashSet<Tag>();
+			Set<Tag>	all_rl_tags = new HashSet<>();
 			
 			for ( TagType tt: all_tts ){
 				
@@ -4198,7 +4230,7 @@ SpeedLimitHandler
 	    	boolean	is_current,
 	    	boolean	use_hashes )
 	    {
-			List<String> result = new ArrayList<String>();
+			List<String> result = new ArrayList<>();
 			
 			result.add( "Global Limits" );
 				    	    
@@ -4301,7 +4333,7 @@ SpeedLimitHandler
 		    
 			Category[] categories = CategoryManager.getCategories();
 		 
-			Map<String, Category> cat_map = new HashMap<String, Category>();
+			Map<String, Category> cat_map = new HashMap<>();
 			
 			for ( Category c: categories ){
 				
@@ -4316,7 +4348,7 @@ SpeedLimitHandler
 		    int	total_cat_limits_up 	= 0;
 		    int	total_cat_limits_down 	= 0;
 
-		    Map<String,int[]> sorted_category_limits = new TreeMap<String, int[]>( category_limits );
+		    Map<String,int[]> sorted_category_limits = new TreeMap<>(category_limits);
 		    
 			for ( Map.Entry<String,int[]> entry: sorted_category_limits.entrySet()){
 		    	
@@ -4370,7 +4402,7 @@ SpeedLimitHandler
 		    
 		    TagManager tm = TagManagerFactory.getTagManager();
 		    
-		    Map<String,int[]> sorted_tag_limts = new TreeMap<String, int[]>( tag_limits );
+		    Map<String,int[]> sorted_tag_limts = new TreeMap<>(tag_limits);
 		    
 			for ( Map.Entry<String,int[]> entry: sorted_tag_limts.entrySet()){
 		    	
@@ -4458,7 +4490,7 @@ SpeedLimitHandler
 		    
 		    if ( is_current ){
 		    	
-				Map<LimitedRateGroup,List<Object>> plugin_limiters = new HashMap<LimitedRateGroup, List<Object>>();
+				Map<LimitedRateGroup,List<Object>> plugin_limiters = new HashMap<>();
 	
 				List<DownloadManager> dms = gm.getDownloadManagers();
 				
@@ -4474,7 +4506,7 @@ SpeedLimitHandler
 							
 							if ( entries == null ){
 								
-								entries = new ArrayList<Object>();
+								entries = new ArrayList<>();
 								
 								plugin_limiters.put( g, entries );
 								
@@ -4504,7 +4536,7 @@ SpeedLimitHandler
 		    						
 		    						if ( entries == null ){
 		    							
-		    							entries = new ArrayList<Object>();
+		    							entries = new ArrayList<>();
 		    							
 		    							plugin_limiters.put( g, entries );
 		    							
@@ -4532,7 +4564,7 @@ SpeedLimitHandler
 			    	
 			    }else{
 			    	
-			    	List<String>	plugin_lines = new ArrayList<String>();
+			    	List<String>	plugin_lines = new ArrayList<>();
 			    	
 			    	for ( Map.Entry<LimitedRateGroup,List<Object>> entry: plugin_limiters.entrySet()){
 			    		
@@ -4608,7 +4640,7 @@ SpeedLimitHandler
 		private List<ScheduleRule>
 		splitByDay()
 		{
-			List<ScheduleRule>	result = new ArrayList<ScheduleRule>();
+			List<ScheduleRule>	result = new ArrayList<>();
 			
 			if ( to_mins > from_mins ){
 			
@@ -5162,8 +5194,8 @@ SpeedLimitHandler
 		private final String		name;
 		
 		private long[][]			ranges 			= new long[0][];
-		private final Set<String>			country_codes 	= new HashSet<String>();
-		private final Set<String>			networks	 	= new HashSet<String>();
+		private final Set<String>			country_codes 	= new HashSet<>();
+		private final Set<String>			networks	 	= new HashSet<>();
 		
 		private boolean	inverse;
 		
@@ -5569,8 +5601,8 @@ SpeedLimitHandler
 			
 			private int upload_priority;
 			
-			private final Set<PEPeer>	added_peers 	= new HashSet<PEPeer>();
-			private final Set<PEPeer>	pending_peers 	= new HashSet<PEPeer>();
+			private final Set<PEPeer>	added_peers 	= new HashSet<>();
+			private final Set<PEPeer>	pending_peers 	= new HashSet<>();
 			
 			private 
 			TagPeerImpl(
@@ -5618,7 +5650,7 @@ SpeedLimitHandler
 								
 								if ( to_remove == null ){
 									
-									to_remove = new ArrayList<PEPeer>();
+									to_remove = new ArrayList<>();
 								}
 																
 								to_remove.add( peer );
@@ -5642,7 +5674,7 @@ SpeedLimitHandler
 							
 							if ( to_add == null ){
 								
-								to_add = new ArrayList<PEPeer>();
+								to_add = new ArrayList<>();
 							}
 
 							to_add.add( peer );
@@ -5743,7 +5775,7 @@ SpeedLimitHandler
 					
 					pending_peers.clear();
 
-					to_remove = new ArrayList<PEPeer>( added_peers );
+					to_remove = new ArrayList<>(added_peers);
 					
 					added_peers.clear();
 				}
@@ -5792,7 +5824,7 @@ SpeedLimitHandler
 			{
 				synchronized( this ){
 				
-					return( new ArrayList<PEPeer>( added_peers ));
+					return(new ArrayList<>(added_peers));
 				}
 			}
 			
@@ -5801,7 +5833,7 @@ SpeedLimitHandler
 			{
 				synchronized( this ){
 					
-					return( new HashSet<Taggable>( added_peers ));
+					return(new HashSet<>(added_peers));
 				}
 			}
 			
@@ -6009,9 +6041,9 @@ SpeedLimitHandler
 		private int	check_ticks		= 1;
 		private int skip_ticks		= 0;
 		
-		private final List<Object[]>				temp_states = new ArrayList<Object[]>();
+		private final List<Object[]>				temp_states = new ArrayList<>();
 		
-		private final List<PrioritiserTagState>	tag_states = new ArrayList<PrioritiserTagState>();
+		private final List<PrioritiserTagState>	tag_states = new ArrayList<>();
 		
 		private int					phase 					= 0;
 		private int					phase_0_stable_waits	= 0;
@@ -6029,13 +6061,13 @@ SpeedLimitHandler
 		
 		private int					phase_2_max_detected = 0;
 		
-		private final Map<PrioritiserTagState,int[]>		phase_2_limits = new HashMap<PrioritiserTagState, int[]>();
+		private final Map<PrioritiserTagState,int[]>		phase_2_limits = new HashMap<>();
 		
 		private int					phase_4_tag_state	= 0;
 		
-		private final Map<PrioritiserTagState,int[]>		phase_4_limits = new HashMap<PrioritiserTagState, int[]>();
+		private final Map<PrioritiserTagState,int[]>		phase_4_limits = new HashMap<>();
 		
-		private final Set<PrioritiserTagState>	wake_on_active_tags = new HashSet<PrioritiserTagState>();
+		private final Set<PrioritiserTagState>	wake_on_active_tags = new HashSet<>();
 		
 		private
 		Prioritiser()
@@ -6206,7 +6238,7 @@ SpeedLimitHandler
 				return;
 			}
 						
-			List<PrioritiserTagState>	active_tags = new ArrayList<PrioritiserTagState>();
+			List<PrioritiserTagState>	active_tags = new ArrayList<>();
 
 			boolean	adjusting = false;
 			
@@ -6318,95 +6350,93 @@ SpeedLimitHandler
 				if ( phase_0_stable_waits < 1 ){
 					
 					phase_0_stable_waits++;
-				
-					for ( int i=0;i<active_tags.size();i++){
-						
-						PrioritiserTagState tag_state = active_tags.get(i);
-						
-						int	limit 	= tag_state.getLimit();
-						int rate	= tag_state.getRate();
-						
-						boolean	stable = tag_state.isStable();
-						
-						if ( limit == -1 ){
-							
-							limit = 0;	// no upload
-						}
-						
-						if ( stable && sameRate( limit, rate )){
-							
-							// looking good
-							
-						}else{
-														
-								// if we have a probe result then we can use this to see how far away we are from that value
-								// and react accordingly. In particular if we have a 'weak' tag with varying rates the we need to be more
-								// lenient as it'll get hammered down
-							
-							boolean	weak_tag		= false;
-							boolean	weakly_stable 	= false;
-							
-							int	probe_rate = tag_state.getProbeRate();
-							
-							if ( tag_state.getStrength() < 5 && probe_rate > 0 ){
-									
-								weak_tag = true;
-								
-								if ( rate >= 80*probe_rate/100 ){
-										
-									weakly_stable = true;
-								}
-							}
 
-							if ( weakly_stable ){
-								
-								int target = Math.max( probe_rate*2, rate );
-								
-								target = Math.min( max, target );
-								
-								target -= 2048;
-								
-								if ( target < 1024 ){
-									
-									target = 1024;
-								}
-								
-								tag_state.setLimit( target, "0: weak stable" );
-								
-							}else{
-								
-								all_good = false;
-								
-									// reduce limit
-								
-								if ( limit > 0 ){
-									
-									if ( stable ){
-										
-										int target = rate;
-										
-										if ( target < 1024 ){
-											
-											target = 1024;
-										}
-										
-										tag_state.setLimit( target, "0: reducing to current" );
-										
-									}else{
-										
-										int target = rate - 2048;
-										
-										if ( target <= 1024 ){
-											
-											target = -1;
-										}
-										
-										tag_state.setLimit( target, "0: reducing, unstable" );
-									}
-								}
-							}
-						}
-					}
+                    for (PrioritiserTagState tag_state : active_tags) {
+
+                        int limit = tag_state.getLimit();
+                        int rate = tag_state.getRate();
+
+                        boolean stable = tag_state.isStable();
+
+                        if (limit == -1) {
+
+                            limit = 0;    // no upload
+                        }
+
+                        if (stable && sameRate(limit, rate)) {
+
+                            // looking good
+
+                        } else {
+
+                            // if we have a probe result then we can use this to see how far away we are from that value
+                            // and react accordingly. In particular if we have a 'weak' tag with varying rates the we need to be more
+                            // lenient as it'll get hammered down
+
+                            boolean weak_tag = false;
+                            boolean weakly_stable = false;
+
+                            int probe_rate = tag_state.getProbeRate();
+
+                            if (tag_state.getStrength() < 5 && probe_rate > 0) {
+
+                                weak_tag = true;
+
+                                if (rate >= 80 * probe_rate / 100) {
+
+                                    weakly_stable = true;
+                                }
+                            }
+
+                            if (weakly_stable) {
+
+                                int target = Math.max(probe_rate * 2, rate);
+
+                                target = Math.min(max, target);
+
+                                target -= 2048;
+
+                                if (target < 1024) {
+
+                                    target = 1024;
+                                }
+
+                                tag_state.setLimit(target, "0: weak stable");
+
+                            } else {
+
+                                all_good = false;
+
+                                // reduce limit
+
+                                if (limit > 0) {
+
+                                    if (stable) {
+
+                                        int target = rate;
+
+                                        if (target < 1024) {
+
+                                            target = 1024;
+                                        }
+
+                                        tag_state.setLimit(target, "0: reducing to current");
+
+                                    } else {
+
+                                        int target = rate - 2048;
+
+                                        if (target <= 1024) {
+
+                                            target = -1;
+                                        }
+
+                                        tag_state.setLimit(target, "0: reducing, unstable");
+                                    }
+                                }
+                            }
+                        }
+                    }
 				}
 				
 				//System.out.println( "all good->" + all_good );

@@ -66,7 +66,7 @@ LightWeightSeedManager
 	private final Map lws_map = new HashMap();
 	
 	private boolean					started;
-	final Set<LWSDownload>		dht_add_queue = new HashSet<LWSDownload>();
+	final Set<LWSDownload>		dht_add_queue = new HashSet<>();
 	
 	private boolean				borked;
 	private DHTTrackerPlugin	public_dht_tracker_plugin;
@@ -144,17 +144,15 @@ LightWeightSeedManager
 				
 								public_dht_tracker_plugin = plugin;
 								
-								to_add = new HashSet<LWSDownload>( dht_add_queue );
+								to_add = new HashSet<>(dht_add_queue);
 								
 								dht_add_queue.clear();
 							}
-							
-							Iterator<LWSDownload> it = to_add.iterator();
-							
-							while( it.hasNext()){
-								
-								addDownload( it.next());
-							}
+
+                            for (LWSDownload lwsDownload : to_add) {
+
+                                addDownload(lwsDownload);
+                            }
 						}finally{
 							
 							init_sem.releaseForever();
@@ -254,17 +252,17 @@ LightWeightSeedManager
 
 			to_process = new ArrayList( lws_map.values());
 		}
-		
-		for ( int i=0;i<to_process.size();i++){
-			
-			try{
-				((LightWeightSeed)to_process.get(i)).checkDeactivation();
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace(e);
-			}
-		}
+
+        for (Object to_process1 : to_process) {
+
+            try {
+                ((LightWeightSeed) to_process1).checkDeactivation();
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 	
 	protected void

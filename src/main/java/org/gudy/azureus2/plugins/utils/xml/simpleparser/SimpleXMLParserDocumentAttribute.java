@@ -22,9 +22,9 @@
 public interface 
 SimpleXMLParserDocumentAttribute
 {
-	public String
+	String
 	getName();
 	
-	public String
+	String
 	getValue();
 }

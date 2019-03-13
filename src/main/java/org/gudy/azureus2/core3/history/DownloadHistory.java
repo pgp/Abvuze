@@ -25,30 +25,30 @@ package org.gudy.azureus2.core3.history;
 public interface 
 DownloadHistory 
 {
-	public long
+	long
 	getUID();
 	
-	public byte[]
+	byte[]
 	getTorrentHash();
 	
-	public String
+	String
 	getName();
 	
-	public long
+	long
 	getSize();
 	
-	public String
+	String
 	getSaveLocation();
 	
-	public long
+	long
 	getAddTime();
 	
-	public long
+	long
 	getCompleteTime();
 	
-	public long
+	long
 	getRemoveTime();
 	
-	public void
+	void
 	setRedownloading();
 }

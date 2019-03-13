@@ -25,6 +25,7 @@ package com.aelitis.azureus.core.content;
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -123,7 +124,7 @@ RelatedContentSearcher
 	private volatile BloomFilter	key_bloom_without_local;
 	private volatile long			last_key_bloom_update = -1;
 	
-	private Set<String>	ignore_words = new HashSet<String>();
+	private Set<String>	ignore_words = new HashSet<>();
 	
 	{
 		String ignore = "a, in, of, at, the, and, or, if, to, an, for, with";
@@ -143,8 +144,8 @@ RelatedContentSearcher
 	
 	
 	
-	private ByteArrayHashMap<ForeignBloom>		harvested_blooms 	= new ByteArrayHashMap<ForeignBloom>();
-	private ByteArrayHashMap<String>			harvested_fails 	= new ByteArrayHashMap<String>();
+	private ByteArrayHashMap<ForeignBloom>		harvested_blooms 	= new ByteArrayHashMap<>();
+	private ByteArrayHashMap<String>			harvested_fails 	= new ByteArrayHashMap<>();
 	
 	private volatile BloomFilter harvest_op_requester_bloom = BloomFilterFactory.createAddOnly( 2048 );
 	private volatile BloomFilter harvest_se_requester_bloom = BloomFilterFactory.createAddRemove4Bit( 512 );
@@ -267,7 +268,7 @@ RelatedContentSearcher
 				{
 					boolean search_cvs_only = SEARCH_CVS_ONLY_DEFAULT;
 					
-					final Set<String>	hashes_sync_me = new HashSet<String>();
+					final Set<String>	hashes_sync_me = new HashSet<>();
 					
 					try{	
 						
@@ -293,7 +294,7 @@ RelatedContentSearcher
 									{
 										if ( property_name == SearchResult.PR_VERSION ){
 											
-											return( new Long( c.getVersion()));
+											return((long) c.getVersion());
 											
 										}else if ( property_name == SearchResult.PR_NAME ){
 											
@@ -311,25 +312,25 @@ RelatedContentSearcher
 											
 												// this rank isn't that accurate, scale down
 											
-											return( new Long( c.getRank() / 4 ));
+											return((long) (c.getRank() / 4));
 											
 										}else if ( property_name == SearchResult.PR_SEED_COUNT ){
 											
-											return( new Long( c.getSeeds()));
+											return((long) c.getSeeds());
 											
 										}else if ( property_name == SearchResult.PR_LEECHER_COUNT ){
 											
-											return( new Long( c.getLeechers()));
+											return((long) c.getLeechers());
 											
 										}else if ( property_name == SearchResult.PR_SUPER_SEED_COUNT ){
 											
 											if ( c.getContentNetwork() != ContentNetwork.CONTENT_NETWORK_UNKNOWN ){
 												
-												return( new Long( 1 ));
+												return(1L);
 												
 											}else{
 												
-												return( new Long( 0 ));
+												return(0L);
 											}
 										}else if ( property_name == SearchResult.PR_PUB_DATE ){
 												
@@ -398,16 +399,16 @@ RelatedContentSearcher
 						
 						try{	
 							final List<DistributedDatabaseContact> 	initial_hinted_contacts = searchForeignBlooms( term );
-							final Set<DistributedDatabaseContact>	extra_hinted_contacts	= new HashSet<DistributedDatabaseContact>();
+							final Set<DistributedDatabaseContact>	extra_hinted_contacts	= new HashSet<>();
 							
 							Collections.shuffle( initial_hinted_contacts );
 							
 							// test injection of local 
 							// hinted_contacts.add( 0, ddb.getLocalContact());
 							
-							final LinkedList<DistributedDatabaseContact>	contacts_to_search = new LinkedList<DistributedDatabaseContact>();
+							final LinkedList<DistributedDatabaseContact>	contacts_to_search = new LinkedList<>();
 
-							final Map<InetSocketAddress,DistributedDatabaseContact> contact_map = new HashMap<InetSocketAddress, DistributedDatabaseContact>();
+							final Map<InetSocketAddress,DistributedDatabaseContact> contact_map = new HashMap<>();
 														
 							for ( DistributedDatabaseContact c: initial_hinted_contacts ){
 								
@@ -902,7 +903,7 @@ RelatedContentSearcher
 			}
 		}
 		
-		Map<String,RelatedContent>	result = new HashMap<String,RelatedContent>();
+		Map<String,RelatedContent>	result = new HashMap<>();
 		
 		Iterator<DownloadInfo>	it1 = getDHTInfos( search_cvs_only ).iterator();
 		
@@ -910,7 +911,7 @@ RelatedContentSearcher
 		
 		synchronized( manager.rcm_lock ){
 		
-			it2 = new ArrayList<DownloadInfo>( RelatedContentManager.transient_info_cache.values()).iterator();
+			it2 = new ArrayList<>(RelatedContentManager.transient_info_cache.values()).iterator();
 		}
 
 		Iterator<DownloadInfo>	it3 = manager.getRelatedContentAsList().iterator();
@@ -1055,7 +1056,7 @@ RelatedContentSearcher
 			}
 		}
 		
-		List<RelatedContent> list = new ArrayList<RelatedContent>( result.values());
+		List<RelatedContent> list = new ArrayList<>(result.values());
 		
 		int	max = is_local?(is_popularity?MAX_LOCAL_POPULAR_RESULTS:Integer.MAX_VALUE):MAX_REMOTE_SEARCH_RESULTS;
 		
@@ -1140,7 +1141,7 @@ RelatedContentSearcher
 		try{
 			Boolean	supports_duplicates = (Boolean)observer.getProperty( SearchObserver.PR_SUPPORTS_DUPLICATES );
 			
-			Map<String,Object>	request = new HashMap<String,Object>();
+			Map<String,Object>	request = new HashMap<>();
 			
 			request.put( "t", term );
 		
@@ -1171,7 +1172,7 @@ RelatedContentSearcher
 				return( null );
 			}
 			
-			Map<String,Object> reply = (Map<String,Object>)BDecoder.decode((byte[])value.getValue( byte[].class ));
+			Map<String,Object> reply = BDecoder.decode((byte[])value.getValue( byte[].class ));
 			
 			List<Map<String,Object>>	list = (List<Map<String,Object>>)reply.get( "l" );
 			
@@ -1327,7 +1328,7 @@ RelatedContentSearcher
 			
 			list = (List<Map<String,Object>>)reply.get( "c" );
 
-			List<DistributedDatabaseContact>	contacts = new ArrayList<DistributedDatabaseContact>();
+			List<DistributedDatabaseContact>	contacts = new ArrayList<>();
 			
 			if ( list != null ){
 			
@@ -1373,7 +1374,7 @@ RelatedContentSearcher
 		DistributedDatabaseContact		contact )
 	{
 		try{
-			Map<String,Object>	request = new HashMap<String,Object>();
+			Map<String,Object>	request = new HashMap<>();
 			
 			request.put( "x", "f" );
 		
@@ -1390,7 +1391,7 @@ RelatedContentSearcher
 			
 			if ( value != null ){
 			
-				Map<String,Object> reply = (Map<String,Object>)BDecoder.decode((byte[])value.getValue( byte[].class ));
+				Map<String,Object> reply = BDecoder.decode((byte[])value.getValue( byte[].class ));
 			
 				Map<String,Object>	m = (Map<String,Object>)reply.get( "f" );
 				
@@ -1410,10 +1411,10 @@ RelatedContentSearcher
 		ForeignBloom	f_bloom )
 	{
 		try{
-			Map<String,Object>	request = new HashMap<String,Object>();
+			Map<String,Object>	request = new HashMap<>();
 			
 			request.put( "x", "u" );
-			request.put( "s", new Long( f_bloom.getFilter().getEntryCount()));
+			request.put( "s", (long) f_bloom.getFilter().getEntryCount());
 		
 			DistributedDatabaseKey key = ddb.createKey( BEncoder.encode( request ));
 			
@@ -1430,7 +1431,7 @@ RelatedContentSearcher
 			
 			if ( value != null ){
 			
-				Map<String,Object> reply = (Map<String,Object>)BDecoder.decode((byte[])value.getValue( byte[].class ));
+				Map<String,Object> reply = BDecoder.decode((byte[])value.getValue( byte[].class ));
 			
 				Map<String,Object>	m = (Map<String,Object>)reply.get( "f" );
 				
@@ -1467,7 +1468,7 @@ RelatedContentSearcher
 		DistributedDatabaseContact		originator,
 		Map<String,Object>				request )
 	{
-		Map<String,Object>	response = new HashMap<String,Object>();
+		Map<String,Object>	response = new HashMap<>();
 		
 		try{	
 			boolean	originator_is_neighbour = false;
@@ -1532,7 +1533,7 @@ RelatedContentSearcher
 								
 							}else{
 								
-								response.put( "s", new Long( existing_size ));
+								response.put( "s", (long) existing_size);
 							}
 						}
 					}
@@ -1565,61 +1566,59 @@ RelatedContentSearcher
 												
 						List<RelatedContent>	matches = matchContent( term, min_seeds, min_leechers, false, search_cvs_only );
 								
-						List<Map<String,Object>> l_list = new ArrayList<Map<String,Object>>();
-						
-						for (int i=0;i<matches.size();i++){
-							
-							RelatedContent	c = matches.get(i);
-							
-							Map<String,Object>	map = new HashMap<String, Object>();
-							
-							l_list.add( map );
-							
-							ImportExportUtils.exportLong( map, "v", c.getVersion());
-							ImportExportUtils.exportString( map, "n", c.getTitle());
-							ImportExportUtils.exportLong( map, "s", c.getSize());
-							ImportExportUtils.exportLong( map, "r", c.getRank());
-							ImportExportUtils.exportLong( map, "d", c.getLastSeenSecs());
-							ImportExportUtils.exportLong( map, "p", c.getPublishDate()/(60*60*1000));
-							ImportExportUtils.exportLong( map, "l", c.getLeechers());
-							ImportExportUtils.exportLong( map, "z", c.getSeeds());
-							ImportExportUtils.exportLong( map, "c", c.getContentNetwork());
-							
-							byte[] hash = c.getHash();
-							
-							if ( hash != null ){
-								
-								map.put( "h", hash );
-							}
-							
-							byte[] tracker_keys = c.getTrackerKeys();
-							
-							if ( tracker_keys != null ){
-								map.put( "k", tracker_keys );
-							}
-							
-							byte[] ws_keys	= c.getWebSeedKeys();
-							
-							if ( ws_keys != null ){
-								map.put( "w", ws_keys );
-							}
-							
-							String[] tags = c.getTags();
-							
-							if ( tags != null ){
-								map.put( "g", manager.encodeTags( tags ));
-							}
-							
-							byte nets = c.getNetworksInternal();
-							
-							if ( 	nets != RelatedContentManager.NET_NONE &&  
-									nets != RelatedContentManager.NET_PUBLIC ){
-								
-								map.put( "o", new Long( nets&0x00ff));
-							}
-							
-								// don't bother with tracker as no use to caller really
-						}
+						List<Map<String,Object>> l_list = new ArrayList<>();
+
+                        for (RelatedContent c : matches) {
+
+                            Map<String, Object> map = new HashMap<>();
+
+                            l_list.add(map);
+
+                            ImportExportUtils.exportLong(map, "v", c.getVersion());
+                            ImportExportUtils.exportString(map, "n", c.getTitle());
+                            ImportExportUtils.exportLong(map, "s", c.getSize());
+                            ImportExportUtils.exportLong(map, "r", c.getRank());
+                            ImportExportUtils.exportLong(map, "d", c.getLastSeenSecs());
+                            ImportExportUtils.exportLong(map, "p", c.getPublishDate() / (60 * 60 * 1000));
+                            ImportExportUtils.exportLong(map, "l", c.getLeechers());
+                            ImportExportUtils.exportLong(map, "z", c.getSeeds());
+                            ImportExportUtils.exportLong(map, "c", c.getContentNetwork());
+
+                            byte[] hash = c.getHash();
+
+                            if (hash != null) {
+
+                                map.put("h", hash);
+                            }
+
+                            byte[] tracker_keys = c.getTrackerKeys();
+
+                            if (tracker_keys != null) {
+                                map.put("k", tracker_keys);
+                            }
+
+                            byte[] ws_keys = c.getWebSeedKeys();
+
+                            if (ws_keys != null) {
+                                map.put("w", ws_keys);
+                            }
+
+                            String[] tags = c.getTags();
+
+                            if (tags != null) {
+                                map.put("g", manager.encodeTags(tags));
+                            }
+
+                            byte nets = c.getNetworksInternal();
+
+                            if (nets != RelatedContentManager.NET_NONE &&
+                                    nets != RelatedContentManager.NET_PUBLIC) {
+
+                                map.put("o", (long) (nets & 0x00ff));
+                            }
+
+                            // don't bother with tracker as no use to caller really
+                        }
 						
 						response.put( "l", l_list );
 					
@@ -1627,7 +1626,7 @@ RelatedContentSearcher
 						
 						if ( bloom_hits.size() > 0 ){
 							
-							List<Map>	c_list = new ArrayList<Map>();
+							List<Map>	c_list = new ArrayList<>();
 							
 							for ( DistributedDatabaseContact c: bloom_hits ){
 								
@@ -1644,7 +1643,7 @@ RelatedContentSearcher
 								}else{
 									m.put( "a", address.getAddress().getHostAddress());
 									
-									m.put( "p", new Long( address.getPort()));
+									m.put( "p", (long) address.getPort());
 								}
 							}
 							
@@ -1754,7 +1753,7 @@ RelatedContentSearcher
 		
 		String[] words = new String( chars ).split( " " );
 		
-		List<String>	result = new ArrayList<String>( words.length );
+		List<String>	result = new ArrayList<>(words.length);
 		
 		for ( String word: words ){
 			
@@ -1799,8 +1798,8 @@ RelatedContentSearcher
 	{
 		synchronized( manager.rcm_lock ){
 												
-			Set<String>	dht_only_words 		= new HashSet<String>();
-			Set<String>	non_dht_words 		= new HashSet<String>();
+			Set<String>	dht_only_words 		= new HashSet<>();
+			Set<String>	non_dht_words 		= new HashSet<>();
 			
 			List<DownloadInfo>		dht_infos		= getDHTInfos( SEARCH_CVS_ONLY_DEFAULT );
 			
@@ -1850,14 +1849,14 @@ RelatedContentSearcher
 			
 			BloomFilter non_dht_bloom = BloomFilterFactory.createAddOnly( non_dht_desired_bits );
 
-			List<String>	non_dht_words_rand = new ArrayList<String>( non_dht_words );
+			List<String>	non_dht_words_rand = new ArrayList<>(non_dht_words);
 			
 			Collections.shuffle( non_dht_words_rand );
 			
 			for ( String word: non_dht_words_rand ){
 				
 				try{
-					byte[]	bytes = word.getBytes( "UTF8" );
+					byte[]	bytes = word.getBytes(StandardCharsets.UTF_8);
 					
 					all_bloom.add( bytes );
 					
@@ -1874,14 +1873,14 @@ RelatedContentSearcher
 				}
 			}
 				
-			List<String>	dht_only_words_rand = new ArrayList<String>( dht_only_words );
+			List<String>	dht_only_words_rand = new ArrayList<>(dht_only_words);
 			
 			Collections.shuffle( dht_only_words_rand );
 
 			for ( String word: dht_only_words_rand ){
 				
 				try{
-					byte[]	bytes = word.getBytes( "UTF8" );
+					byte[]	bytes = word.getBytes(StandardCharsets.UTF_8);
 					
 					all_bloom.add( bytes );
 					
@@ -1927,9 +1926,9 @@ RelatedContentSearcher
 			vals = dht_plugin.getValues();
 		}
 		
-		Set<String>	unique_keys = new HashSet<String>();
+		Set<String>	unique_keys = new HashSet<>();
 		
-		List<DownloadInfo>	dht_infos = new ArrayList<DownloadInfo>();
+		List<DownloadInfo>	dht_infos = new ArrayList<>();
 		
 		for ( DHTPluginValue val: vals ){
 			
@@ -1970,7 +1969,7 @@ RelatedContentSearcher
 		System.out.println( "test key bloom" );
 		
 		try{
-			Map<String,int[]>	all_words 		= new HashMap<String,int[]>();
+			Map<String,int[]>	all_words 		= new HashMap<>();
 	
 			synchronized( manager.rcm_lock ){
 				
@@ -2032,8 +2031,8 @@ RelatedContentSearcher
 				String 	word 	= entry.getKey();
 				int[]	source 	= entry.getValue();
 				
-				boolean	r1 = bloom.contains( word.getBytes("UTF-8") );
-				boolean r2 = bloom.contains( (word + random.nextLong()).getBytes("UTF-8"));
+				boolean	r1 = bloom.contains( word.getBytes(StandardCharsets.UTF_8) );
+				boolean r2 = bloom.contains( (word + random.nextLong()).getBytes(StandardCharsets.UTF_8));
 				
 				System.out.println( word + " -> " + r1 + "/" +r2 );
 				
@@ -2280,173 +2279,168 @@ outer:
 	{
 		boolean is_popularity = isPopularity( term );
 
-		List<DistributedDatabaseContact>	result = new ArrayList<DistributedDatabaseContact>();
-		
-		try{
-			String[]	 bits = Constants.PAT_SPLIT_SPACE.split(term.toLowerCase());
-	
-				// note that we don't need to unescape tags in this process as tags are escaped when
-				// inserted into the blooms and include the 'tag:' prefix
-			
-			int[]			bit_types 		= new int[bits.length];
-			byte[][]		bit_bytes	 	= new byte[bit_types.length][];
-			byte[][][]		extras			= new byte[bit_types.length][][];
-			
-			for (int i=0;i<bits.length;i++){
-				
-				String bit = bits[i].trim();
-				
-				if ( bit.length() > 0 ){
-					
-					char	c = bit.charAt(0);
-					
-					if ( c == '+' ){
-						
-						bit_types[i] = 1;
-						
-						bit = bit.substring(1);
-						
-					}else if ( c == '-' ){
-						
-						bit_types[i] = 2;
-						
-						bit = bit.substring(1);
-					}
-					
-					if ( bit.startsWith( "(" ) && bit.endsWith((")"))){
-						
-						bit_types[i] = 3;	// ignore
-						
-					}else if ( bit.contains( "|" )){
-											
-						String[]	parts = bit.split( "\\|" );
-						
-						List<String>	p = new ArrayList<String>();
-						
-						for ( String part: parts ){
-							
-							part = part.trim();
-							
-							if ( part.length() > 0 ){
-								
-								p.add( part );
-							}
-						}
-						
-						if ( p.size() == 0 ){
-							
-							bit_types[i] = 3;
-							
-						}else{
-							
-							bit_types[i] = 4;
-	
-							extras[i] = new byte[p.size()][];
-							
-							for ( int j=0;j<p.size();j++){
-								
-								extras[i][j] = p.get(j).getBytes( "UTF8" );
-							}
-						}
-					}
-					
-					bit_bytes[i] = bit.getBytes( "UTF8" );
-				}
-			}
-			
-			synchronized( harvested_blooms ){
-				
-				for ( ForeignBloom fb: harvested_blooms.values()){
-					
-					if ( is_popularity ){
-						
-						result.add( fb.getContact());
-						
-					}else{
-						
-						BloomFilter filter = fb.getFilter();
-						
-						boolean	failed 	= false;
-						int		matches	= 0;
-						
-						for (int i=0;i<bit_bytes.length;i++){
-							
-							byte[]	bit = bit_bytes[i];
-							
-							if ( bit == null || bit.length == 0 ){
-								
-								continue;
-							}
-							
-							int	type = bit_types[i];
-							
-							if ( type == 3 ){
-								
-								continue;
-							}
-							
-							if ( type == 0 || type == 1 ){
-								
-								if ( filter.contains( bit )){
-									
-									matches++;
-									
-								}else{
-									
-									failed	= true;
-									
-									break;
-								}
-							}else if ( type == 2 ){
-							
-								if ( !filter.contains( bit )){
-									
-									matches++;
-									
-								}else{
-									
-									failed	= true;
-									
-									break;
-								}
-							}else if ( type == 4 ){
-								
-								byte[][]	parts = extras[i];
-								
-								int	old_matches = matches;
-								
-								for ( byte[] p: parts ){
-									
-									if ( filter.contains( p )){
-									
-										matches++;
-										
-										break;
-									}
-								}
-								
-								if ( matches == old_matches ){
-									
-									failed = true;
-									
-									break;
-								}
-							}
-						}
-						
-						if ( matches > 0 && !failed ){
-							
-							result.add( fb.getContact());
-						}
-					}
-				}
-			}
-		}catch( UnsupportedEncodingException e ){
-			
-			Debug.out( e );
-		}
-		
-		return( result );
+		List<DistributedDatabaseContact>	result = new ArrayList<>();
+
+        String[]	 bits = Constants.PAT_SPLIT_SPACE.split(term.toLowerCase());
+
+        // note that we don't need to unescape tags in this process as tags are escaped when
+        // inserted into the blooms and include the 'tag:' prefix
+
+        int[]			bit_types 		= new int[bits.length];
+        byte[][]		bit_bytes	 	= new byte[bit_types.length][];
+        byte[][][]		extras			= new byte[bit_types.length][][];
+
+        for (int i=0;i<bits.length;i++){
+
+            String bit = bits[i].trim();
+
+            if ( bit.length() > 0 ){
+
+                char	c = bit.charAt(0);
+
+                if ( c == '+' ){
+
+                    bit_types[i] = 1;
+
+                    bit = bit.substring(1);
+
+                }else if ( c == '-' ){
+
+                    bit_types[i] = 2;
+
+                    bit = bit.substring(1);
+                }
+
+                if ( bit.startsWith( "(" ) && bit.endsWith((")"))){
+
+                    bit_types[i] = 3;	// ignore
+
+                }else if ( bit.contains( "|" )){
+
+                    String[]	parts = bit.split( "\\|" );
+
+                    List<String>	p = new ArrayList<String>();
+
+                    for ( String part: parts ){
+
+                        part = part.trim();
+
+                        if ( part.length() > 0 ){
+
+                            p.add( part );
+                        }
+                    }
+
+                    if ( p.size() == 0 ){
+
+                        bit_types[i] = 3;
+
+                    }else{
+
+                        bit_types[i] = 4;
+
+                        extras[i] = new byte[p.size()][];
+
+                        for ( int j=0;j<p.size();j++){
+
+                            extras[i][j] = p.get(j).getBytes(StandardCharsets.UTF_8);
+                        }
+                    }
+                }
+
+                bit_bytes[i] = bit.getBytes(StandardCharsets.UTF_8);
+            }
+        }
+
+        synchronized( harvested_blooms ){
+
+            for ( ForeignBloom fb: harvested_blooms.values()){
+
+                if ( is_popularity ){
+
+                    result.add( fb.getContact());
+
+                }else{
+
+                    BloomFilter filter = fb.getFilter();
+
+                    boolean	failed 	= false;
+                    int		matches	= 0;
+
+                    for (int i=0;i<bit_bytes.length;i++){
+
+                        byte[]	bit = bit_bytes[i];
+
+                        if ( bit == null || bit.length == 0 ){
+
+                            continue;
+                        }
+
+                        int	type = bit_types[i];
+
+                        if ( type == 3 ){
+
+                            continue;
+                        }
+
+                        if ( type == 0 || type == 1 ){
+
+                            if ( filter.contains( bit )){
+
+                                matches++;
+
+                            }else{
+
+                                failed	= true;
+
+                                break;
+                            }
+                        }else if ( type == 2 ){
+
+                            if ( !filter.contains( bit )){
+
+                                matches++;
+
+                            }else{
+
+                                failed	= true;
+
+                                break;
+                            }
+                        }else if ( type == 4 ){
+
+                            byte[][]	parts = extras[i];
+
+                            int	old_matches = matches;
+
+                            for ( byte[] p: parts ){
+
+                                if ( filter.contains( p )){
+
+                                    matches++;
+
+                                    break;
+                                }
+                            }
+
+                            if ( matches == old_matches ){
+
+                                failed = true;
+
+                                break;
+                            }
+                        }
+                    }
+
+                    if ( matches > 0 && !failed ){
+
+                        result.add( fb.getContact());
+                    }
+                }
+            }
+        }
+
+        return( result );
 	}
 	
 	private static void

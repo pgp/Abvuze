@@ -56,10 +56,10 @@ public class MenuItemManager {
 
 	private AEMonitor items_mon = new AEMonitor("MenuManager:items");
 	
-	private ArrayList<MenuItemManagerListener> listeners = new ArrayList<MenuItemManagerListener>(0);
+	private ArrayList<MenuItemManagerListener> listeners = new ArrayList<>(0);
 
 	private MenuItemManager() {
-		items_map = new HashMap<String, Map<String, List<MenuItem>>>();
+		items_map = new HashMap<>();
 	}
 
 	/**
@@ -87,7 +87,7 @@ public class MenuItemManager {
 				
 				if (mTypes == null) {
 						// LinkedHashMap to preserve order
-					mTypes = new LinkedHashMap<String, List<MenuItem>>();
+					mTypes = new LinkedHashMap<>();
 					
 					items_map.put(sMenuID, mTypes);
 				}
@@ -96,7 +96,7 @@ public class MenuItemManager {
 				
 				if ( mis == null ){
 					
-					mis = new ArrayList<MenuItem>(1);
+					mis = new ArrayList<>(1);
 					
 					mTypes.put( name, mis );
 				}
@@ -214,7 +214,7 @@ public class MenuItemManager {
 			
 			if (sMenuID == null) {local_menu_item_map = null;}
 			
-			ArrayList<MenuItem> l = new ArrayList<MenuItem>();
+			ArrayList<MenuItem> l = new ArrayList<>();
 			
 			if ( local_menu_item_map != null ){
 				
@@ -238,7 +238,7 @@ public class MenuItemManager {
 				}
 			}
 			
-			return l.toArray(new MenuItem[l.size()]);
+			return l.toArray(new MenuItem[0]);
 			
 		}finally{
 			
@@ -251,15 +251,15 @@ public class MenuItemManager {
 	 * For {@link MenuContext}, use the hack {@link MenuContextImpl#context}
 	 */
 	public MenuItem[] getAllAsArray(String[] menu_ids) {
-		ArrayList<MenuItem> l  = new ArrayList<MenuItem>();
-		for (int i=0; i<menu_ids.length; i++) {
-			if (menu_ids[i] != null) {
-				triggerMenuItemQuery(menu_ids[i]);
-			}
-			extractMenuItems(menu_ids[i], l);
-		}
+		ArrayList<MenuItem> l  = new ArrayList<>();
+        for (String menu_id : menu_ids) {
+            if (menu_id != null) {
+                triggerMenuItemQuery(menu_id);
+            }
+            extractMenuItems(menu_id, l);
+        }
 		extractMenuItems(null, l);
-		return l.toArray(new MenuItem[l.size()]);
+		return l.toArray(new MenuItem[0]);
 	}
 	
 	private void extractMenuItems(String menu_id, ArrayList<MenuItem> l) {

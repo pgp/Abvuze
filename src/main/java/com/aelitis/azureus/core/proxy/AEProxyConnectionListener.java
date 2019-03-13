@@ -27,7 +27,7 @@ package com.aelitis.azureus.core.proxy;
 public interface 
 AEProxyConnectionListener 
 {
-	public void
+	void
 	connectionClosed(
-		AEProxyConnection	connection );
+            AEProxyConnection connection);
 }

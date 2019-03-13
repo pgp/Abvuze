@@ -286,11 +286,11 @@ DHTUDPUtils
 		throws IOException
 	{
 		serialiseLength(os,data.length,max_length);
-		
-		for (int i=0;i<data.length;i++){
-			
-			serialiseByteArray( os, data[i], max_length );
-		}
+
+        for (byte[] datum : data) {
+
+            serialiseByteArray(os, datum, max_length);
+        }
 	}
 	
 	protected static byte[][]
@@ -386,11 +386,11 @@ DHTUDPUtils
 		throws IOException, DHTTransportException
 	{
 		serialiseLength(os,values.length,max_length);
-		
-		for (int i=0;i<values.length;i++){
-			
-			serialiseTransportValues( packet, os, values[i], skew );
-		}	
+
+        for (DHTTransportValue[] value : values) {
+
+            serialiseTransportValues(packet, os, value, skew);
+        }
 	}
 	
 	public static final int	DHTTRANSPORTCONTACT_SIZE	= 2 + INETSOCKETADDRESS_IPV4_SIZE;
@@ -514,11 +514,11 @@ DHTUDPUtils
 		throws IOException, DHTTransportException
 	{
 		serialiseLength( os, values.length, 65535 );
-	
-		for (int i=0;i<values.length;i++){
-			
-			serialiseTransportValue( packet, os, values[i], skew );
-		}
+
+        for (DHTTransportValue value : values) {
+
+            serialiseTransportValue(packet, os, value, skew);
+        }
 	}
 	
 	protected static DHTTransportValue
@@ -708,21 +708,21 @@ DHTUDPUtils
 		throws IOException
 	{
 		serialiseLength( os, contacts.length, 65535 );
-		
-		for (int i=0;i<contacts.length;i++){
-			
-			try{
-				serialiseContact( os, contacts[i] );
-				
-			}catch( DHTTransportException e ){
-				
-				Debug.printStackTrace(e);
-				
-					// not much we can do here to recover - shouldn't fail anyways
-				
-				throw( new IOException(e.getMessage()));
-			}
-		}
+
+        for (DHTTransportContact contact : contacts) {
+
+            try {
+                serialiseContact(os, contact);
+
+            } catch (DHTTransportException e) {
+
+                Debug.printStackTrace(e);
+
+                // not much we can do here to recover - shouldn't fail anyways
+
+                throw (new IOException(e.getMessage()));
+            }
+        }
 	}
 
 	protected static DHTTransportContact[]
@@ -734,7 +734,7 @@ DHTUDPUtils
 	{
 		int	len = deserialiseLength( is, 65535 );
 		
-		List<DHTTransportContact>	l = new ArrayList<DHTTransportContact>( len );
+		List<DHTTransportContact>	l = new ArrayList<>(len);
 		
 		for (int i=0;i<len;i++){
 			
@@ -773,21 +773,21 @@ DHTUDPUtils
 		}
 		
 		serialiseLength( os, contacts.length, 64 );
-		
-		for (int i=0;i<contacts.length;i++){
-			
-			try{
-				serialiseAltContact( os, contacts[i] );
-				
-			}catch( DHTTransportException e ){
-				
-				Debug.printStackTrace(e);
-				
-					// not much we can do here to recover - shouldn't fail anyways
-				
-				throw( new IOException(e.getMessage()));
-			}
-		}
+
+        for (DHTTransportAlternativeContact contact : contacts) {
+
+            try {
+                serialiseAltContact(os, contact);
+
+            } catch (DHTTransportException e) {
+
+                Debug.printStackTrace(e);
+
+                // not much we can do here to recover - shouldn't fail anyways
+
+                throw (new IOException(e.getMessage()));
+            }
+        }
 	}
 
 	protected static DHTTransportAlternativeContact[]
@@ -798,7 +798,7 @@ DHTUDPUtils
 	{
 		int	len = deserialiseLength( is, 64 );
 		
-		List<DHTTransportAlternativeContact>	l = new ArrayList<DHTTransportAlternativeContact>( len );
+		List<DHTTransportAlternativeContact>	l = new ArrayList<>(len);
 		
 		for (int i=0;i<len;i++){
 			
@@ -880,18 +880,16 @@ DHTUDPUtils
 		if ( reply.getProtocolVersion() >= DHTTransportUDP.PROTOCOL_VERSION_GENERIC_NETPOS ){
 			
 			boolean	v1_found = false;
-			
-			for (int i=0;i<nps.length;i++){
-					
-				DHTNetworkPosition	np = nps[i];
-				
-				if ( np.getPositionType() == DHTNetworkPosition.POSITION_TYPE_VIVALDI_V1 ){
-					
-					v1_found	= true;
-					
-					break;
-				}
-			}
+
+            for (DHTNetworkPosition np : nps) {
+
+                if (np.getPositionType() == DHTNetworkPosition.POSITION_TYPE_VIVALDI_V1) {
+
+                    v1_found = true;
+
+                    break;
+                }
+            }
 			
 			if ( !v1_found ){
 				
@@ -912,29 +910,27 @@ DHTUDPUtils
 			}
 			
 			os.writeByte((byte)nps.length);
-						
-			for (int i=0;i<nps.length;i++){
-					
-				DHTNetworkPosition	np = nps[i];
-				
-				os.writeByte( np.getPositionType());
-				os.writeByte( np.getSerialisedSize());
-				
-				np.serialise( os );
-			}
+
+            for (DHTNetworkPosition np : nps) {
+
+                os.writeByte(np.getPositionType());
+                os.writeByte(np.getSerialisedSize());
+
+                np.serialise(os);
+            }
 		}else{
 			
 				// dead code these days 
-			
-			for (int i=0;i<nps.length;i++){
-				
-				if ( nps[i].getPositionType() == DHTNetworkPosition.POSITION_TYPE_VIVALDI_V1 ){
-										
-					nps[i].serialise( os );
-					
-					return;
-				}
-			}
+
+            for (DHTNetworkPosition np : nps) {
+
+                if (np.getPositionType() == DHTNetworkPosition.POSITION_TYPE_VIVALDI_V1) {
+
+                    np.serialise(os);
+
+                    return;
+                }
+            }
 
 			Debug.out( "Vivaldi V1 missing" );
 			
@@ -985,14 +981,14 @@ DHTUDPUtils
 				DHTNetworkPosition[] x	= new DHTNetworkPosition[ entries - skipped ];
 				
 				int	pos = 0;
-				
-				for (int i=0;i<nps.length;i++){
-					
-					if ( nps[i] != null ){
-						
-						x[pos++] = nps[i];
-					}
-				}
+
+                for (DHTNetworkPosition np : nps) {
+
+                    if (np != null) {
+
+                        x[pos++] = np;
+                    }
+                }
 				
 				nps	= x;
 			}
@@ -1334,8 +1330,8 @@ DHTUDPUtils
 		return( res );
 	}
 	
-	private static final List<DHTTransportUDPImpl>			transports 		= new ArrayList<DHTTransportUDPImpl>();
-	private static final List<DHTTransportAlternativeNetwork>	alt_networks 	= new ArrayList<DHTTransportAlternativeNetwork>();
+	private static final List<DHTTransportUDPImpl>			transports 		= new ArrayList<>();
+	private static final List<DHTTransportAlternativeNetwork>	alt_networks 	= new ArrayList<>();
 	
 	protected static void
 	registerTransport(
@@ -1387,29 +1383,27 @@ DHTUDPUtils
 		int			network,
 		int			max )
 	{
-		List<DHTTransportAlternativeContact>	result_list = new ArrayList<DHTTransportAlternativeContact>(max);
+		List<DHTTransportAlternativeContact>	result_list = new ArrayList<>(max);
 		
 		if ( max > 0 ){
 			
 			TreeSet<DHTTransportAlternativeContact> result_set =
-				new TreeSet<DHTTransportAlternativeContact>(
-					new Comparator<DHTTransportAlternativeContact>() 
-					{
-						public int 
-						compare(
-							DHTTransportAlternativeContact o1,
-							DHTTransportAlternativeContact o2 ) 
-						{
-							int res = o1.getAge() - o2.getAge();
-							
-							if ( res == 0 ){
-								
-								res = o1.getID() - o2.getID();
-							}
-							
-							return( res );
-						}
-					});
+                    new TreeSet<>(
+                            new Comparator<DHTTransportAlternativeContact>() {
+                                public int
+                                compare(
+                                        DHTTransportAlternativeContact o1,
+                                        DHTTransportAlternativeContact o2) {
+                                    int res = o1.getAge() - o2.getAge();
+
+                                    if (res == 0) {
+
+                                        res = o1.getID() - o2.getID();
+                                    }
+
+                                    return (res);
+                                }
+                            });
 			
 			synchronized( transports ){
 

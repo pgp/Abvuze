@@ -49,10 +49,10 @@ ConfigParameterImpl
 	parameterChanged(
 		String parameterName)
 	{
-		for ( int i=0;i<listeners.size();i++){
-			
-			((ConfigParameterListener)listeners.get(i)).configParameterChanged( this );
-		}
+        for (Object listener : listeners) {
+
+            ((ConfigParameterListener) listener).configParameterChanged(this);
+        }
 	}
 	
 	public void

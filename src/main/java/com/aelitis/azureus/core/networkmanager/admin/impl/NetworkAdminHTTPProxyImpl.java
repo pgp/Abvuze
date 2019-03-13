@@ -315,27 +315,31 @@ NetworkAdminHTTPProxyImpl
 															 String	lhs = token.substring( 0, pos ).trim().toLowerCase( MessageText.LOCALE_ENGLISH );
 															 String	rhs = token.substring( pos+1 ).trim();
 
-															 if ( lhs.equals( "server" )){
-																 
-																 if ( !response.startsWith( "200" )){
-																	
-																	 server_name = rhs;
-																 }
-															 }else if ( lhs.equals( "via" )){
-																	 
-																 server_name = rhs;
-																 
-																 int	p = server_name.indexOf(' ');
-																 
-																 if ( p != -1 ){
-																	 
-																	 server_name = server_name.substring( p+1 ).trim();
-																 }
-																 
-															 }else if ( lhs.equals( "proxy-authenticate" )){
-																 
-																 auth = rhs;
-															 }
+                                                             switch (lhs) {
+                                                                 case "server":
+
+                                                                     if (!response.startsWith("200")) {
+
+                                                                         server_name = rhs;
+                                                                     }
+                                                                     break;
+                                                                 case "via":
+
+                                                                     server_name = rhs;
+
+                                                                     int p = server_name.indexOf(' ');
+
+                                                                     if (p != -1) {
+
+                                                                         server_name = server_name.substring(p + 1).trim();
+                                                                     }
+
+                                                                     break;
+                                                                 case "proxy-authenticate":
+
+                                                                     auth = rhs;
+                                                                     break;
+                                                             }
 														 }
 													 }
 												 }

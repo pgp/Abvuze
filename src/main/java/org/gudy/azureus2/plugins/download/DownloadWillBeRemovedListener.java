@@ -29,9 +29,9 @@ package org.gudy.azureus2.plugins.download;
 public interface 
 DownloadWillBeRemovedListener 
 {
-	public void
+	void
 	downloadWillBeRemoved(
-		Download	download )
+            Download download)
 	
 		throws DownloadRemovalVetoException;
 }

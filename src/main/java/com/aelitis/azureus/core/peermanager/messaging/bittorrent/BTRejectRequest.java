@@ -66,9 +66,9 @@ public class BTRejectRequest implements BTMessage {
   
   public int getType() {  return Message.TYPE_PROTOCOL_PAYLOAD;  }
     
-  public byte getVersion() { return version; };
+  public byte getVersion() { return version; }
 
-  public String getDescription() {
+    public String getDescription() {
     if( description == null ) {
       description = BTMessage.ID_BT_REJECT_REQUEST + " piece #" + piece_number + ":" + piece_offset + "->" + (piece_offset + length -1);
     }

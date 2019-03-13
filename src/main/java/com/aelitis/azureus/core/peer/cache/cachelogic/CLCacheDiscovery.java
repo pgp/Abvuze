@@ -65,7 +65,7 @@ CLCacheDiscovery
 		if (Length > Max)
 			Length = Max;
 
-		Result = new String();
+		Result = "";
 		for (Index = 0; Index < Length; Index++) {
 			Value = Bytes[Index] & 0xff;
 			if (Value < 16)
@@ -290,7 +290,7 @@ CLCacheDiscovery
 			if (Bytes[0] != CDPVersion)
 				throw new Exception("Unsupported CDP version");
 
-			farmID = new String();
+			farmID = "";
 			for (Index = 0; Index < Bytes[6]; Index++)
 				farmID += (char)Bytes[MinSize + Index];
 
@@ -323,10 +323,10 @@ CLCacheDiscovery
 			CachePeer[]	peers = new CLCacheDiscovery().lookup( torrent );
 			
 			System.out.println( "peers=" + peers.length );
-			
-			for (int i=0;i<peers.length;i++){
-				
-				System.out.println( "    cache: " + peers[i].getAddress() + ":" + peers[i].getPort() );
+
+			for (CachePeer peer : peers) {
+
+				System.out.println("    cache: " + peer.getAddress() + ":" + peer.getPort());
 			}
 		}catch( Throwable e ){
 			

@@ -26,23 +26,23 @@ import java.net.NetworkInterface;
 public interface 
 MCGroupAdapter 
 {
-	public void
+	void
 	received(
-		NetworkInterface	network_interface,
-		InetAddress			local_address,
-		InetSocketAddress	originator,
-		byte[]				data,
-		int					length );
+            NetworkInterface network_interface,
+            InetAddress local_address,
+            InetSocketAddress originator,
+            byte[] data,
+            int length);
 	
-	public void
+	void
 	interfaceChanged(
-		NetworkInterface	network_interface );
+            NetworkInterface network_interface);
 	
-	public void
+	void
 	trace(
-		String		str );
+            String str);
 	
-	public void
+	void
 	log(
-		Throwable	e );
+            Throwable e);
 }

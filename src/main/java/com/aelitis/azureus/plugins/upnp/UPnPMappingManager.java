@@ -55,9 +55,9 @@ UPnPMappingManager
 	
 	private UPnPPlugin	plugin;
 	
-	private List<UPnPMapping>	mappings	= new ArrayList<UPnPMapping>();
+	private List<UPnPMapping>	mappings	= new ArrayList<>();
 	
-	private CopyOnWriteList<UPnPMappingManagerListener>			listeners	= new CopyOnWriteList<UPnPMappingManagerListener>();
+	private CopyOnWriteList<UPnPMappingManagerListener>			listeners	= new CopyOnWriteList<>();
 	
 	private AsyncDispatcher	async_dispatcher = new AsyncDispatcher();
 	
@@ -114,101 +114,99 @@ UPnPMappingManager
 				// either UDP OR TCP until a HARD reset so we need to change both ports...
 			
 			UPnPMapping[]	maps = getMappings();
-			
-			for (int i=0;i<maps.length;i++){
-				
-				UPnPMapping	map = maps[i];
-				
-				if ( map.isEnabled() && map.isTCP()){
-					
-					List	others = getMappingEx( false, map.getPort());
-					
-					if ( others.size() == 0 ){
-						
-						continue;
-					}
-					
-					boolean	enabled = false;
-					
-					for (int j=0;j<others.size();j++){
-					
-						UPnPMapping	other = (UPnPMapping)others.get(j);
-						
-						if ( other.isEnabled()){
-							
-							enabled	= true;
-						}
-					}
-					
-					if ( enabled ){
-						
-						int	new_port_1;
-						int	new_port_2;
-						
-						while( true ){
-						
-							int	new_port = RandomUtils.generateRandomNetworkListenPort();
-						
-							if ( getMapping( true, new_port ) == null && getMapping( false, new_port ) == null){
-								
-								new_port_1 = new_port;
-								
-								break;
-							}
-						}
-						
-						while( true ){
-							
-							int	new_port = RandomUtils.generateRandomNetworkListenPort();
-						
-							if ( getMapping( true, new_port ) == null && getMapping( false, new_port ) == null){
-								
-								if ( new_port_1 != new_port ){
-									
-									new_port_2 = new_port;
-								
-									break;
-								}
-							}
-						}
-						
-						String	others_str = "";
-						
-						for (int j=0;j<others.size();j++){
-						
-							UPnPMapping	other = (UPnPMapping)others.get(j);
-							
-							if ( other.isEnabled()){
-																
-								others_str += (others_str.length()==0?"":",") + other.getString( new_port_2 );
-							}
-						}
-						
-						plugin.logAlert( 
-								LoggerChannel.LT_WARNING,
-								"upnp.portchange.alert",
-								new String[]{ 
-										map.getString( new_port_1 ),
-										String.valueOf( map.getPort()),
-										others_str,
-										String.valueOf( map.getPort())});
 
-						map.setPort( new_port_1 );
-						
-						for (int j=0;j<others.size();j++){
-							
-							UPnPMapping	other = (UPnPMapping)others.get(j);
-							
-							if ( other.isEnabled()){
-	
-								other.setPort( new_port_2 );
-							}
-						}
-						
-						save_config	= true;
-					}
-				}
-			}
+            for (UPnPMapping map : maps) {
+
+                if (map.isEnabled() && map.isTCP()) {
+
+                    List others = getMappingEx(false, map.getPort());
+
+                    if (others.size() == 0) {
+
+                        continue;
+                    }
+
+                    boolean enabled = false;
+
+                    for (Object other3 : others) {
+
+                        UPnPMapping other = (UPnPMapping) other3;
+
+                        if (other.isEnabled()) {
+
+                            enabled = true;
+                        }
+                    }
+
+                    if (enabled) {
+
+                        int new_port_1;
+                        int new_port_2;
+
+                        while (true) {
+
+                            int new_port = RandomUtils.generateRandomNetworkListenPort();
+
+                            if (getMapping(true, new_port) == null && getMapping(false, new_port) == null) {
+
+                                new_port_1 = new_port;
+
+                                break;
+                            }
+                        }
+
+                        while (true) {
+
+                            int new_port = RandomUtils.generateRandomNetworkListenPort();
+
+                            if (getMapping(true, new_port) == null && getMapping(false, new_port) == null) {
+
+                                if (new_port_1 != new_port) {
+
+                                    new_port_2 = new_port;
+
+                                    break;
+                                }
+                            }
+                        }
+
+                        String others_str = "";
+
+                        for (Object other2 : others) {
+
+                            UPnPMapping other = (UPnPMapping) other2;
+
+                            if (other.isEnabled()) {
+
+                                others_str += (others_str.length() == 0 ? "" : ",") + other.getString(new_port_2);
+                            }
+                        }
+
+                        plugin.logAlert(
+                                LoggerChannel.LT_WARNING,
+                                "upnp.portchange.alert",
+                                new String[]{
+                                        map.getString(new_port_1),
+                                        String.valueOf(map.getPort()),
+                                        others_str,
+                                        String.valueOf(map.getPort())});
+
+                        map.setPort(new_port_1);
+
+                        for (Object other1 : others) {
+
+                            UPnPMapping other = (UPnPMapping) other1;
+
+                            if (other.isEnabled()) {
+
+                                other.setPort(new_port_2);
+                            }
+                        }
+
+                        save_config = true;
+                    }
+                }
+            }
 		}
 		
 		if ( save_config ){
@@ -323,7 +321,7 @@ UPnPMappingManager
 						
 						for (int i=0;i<ports.size();i++){
 
-							int		port = ((Integer)ports.get(i)).intValue();
+							int		port = (Integer) ports.get(i);
 							
 							if ( config_mappings.size() <= i ){
 							
@@ -438,16 +436,14 @@ UPnPMappingManager
 		int		port )
 	{
 		synchronized( mappings ){
-			
-			for (int i=0;i<mappings.size();i++){
-				
-				UPnPMapping	mapping = (UPnPMapping)mappings.get(i);
-				
-				if ( mapping.isTCP() == tcp && mapping.getPort() == port ){
-					
-					return( mapping );
-				}
-			}
+
+            for (UPnPMapping mapping : mappings) {
+
+                if (mapping.isTCP() == tcp && mapping.getPort() == port) {
+
+                    return (mapping);
+                }
+            }
 		}
 		
 		return( null );
@@ -461,16 +457,14 @@ UPnPMappingManager
 		List	res = new ArrayList();
 		
 		synchronized( mappings ){
-			
-			for (int i=0;i<mappings.size();i++){
-				
-				UPnPMapping	mapping = (UPnPMapping)mappings.get(i);
-				
-				if ( mapping.isTCP() == tcp && mapping.getPort() == port ){
-					
-					res.add( mapping );
-				}
-			}
+
+            for (UPnPMapping mapping : mappings) {
+
+                if (mapping.isTCP() == tcp && mapping.getPort() == port) {
+
+                    res.add(mapping);
+                }
+            }
 		}
 		
 		return( res );

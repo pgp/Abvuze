@@ -161,11 +161,11 @@ public class UpdaterUtils
 				target.getParentFile().mkdirs();
 				
 				pw = new PrintWriter(new FileWriter(target));
-	
-				for (int i=0;i<lines.length;i++){
-				
-					pw.println( lines[i] );
-				}
+
+                for (String line : lines) {
+
+                    pw.println(line);
+                }
 				
 				pw.println( "plugin.install_if_missing=yes" );
 				

@@ -37,7 +37,7 @@ SimpleTimer
 	
 	protected static final Timer	timer;
 	
-	static final CopyOnWriteList<TimerTickReceiver>		tick_receivers = new CopyOnWriteList<TimerTickReceiver>( true );
+	static final CopyOnWriteList<TimerTickReceiver>		tick_receivers = new CopyOnWriteList<>(true);
 	
 	static{
 		timer = new Timer("Simple Timer",32);
@@ -145,9 +145,9 @@ SimpleTimer
 	public interface
 	TimerTickReceiver
 	{
-		public void
+		void
 		tick(
-			long		mono_now,
-			int			tick_ount );
+                long mono_now,
+                int tick_ount);
 	}
 }

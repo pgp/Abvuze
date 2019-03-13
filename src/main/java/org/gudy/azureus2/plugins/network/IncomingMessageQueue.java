@@ -33,28 +33,28 @@ public interface IncomingMessageQueue {
    * Register queue listener.
    * @param listener to register
    */
-  public void registerListener( IncomingMessageQueueListener listener );
+  void registerListener(IncomingMessageQueueListener listener);
   
   /**
    * Register queue listener that will get to process messages *ahead* of the core.
    * @param listener
    */
-  public void registerPriorityListener( IncomingMessageQueueListener listener );
+  void registerPriorityListener(IncomingMessageQueueListener listener);
 
   
   /**
    * Remove registration of queue listener.
    * @param listener to remove
    */
-  public void deregisterListener( IncomingMessageQueueListener listener );
+  void deregisterListener(IncomingMessageQueueListener listener);
   
   
   /**
    * Notifty the queue (and its listeners) of a message received externally on the queue's behalf.
    * @param message received externally
    */
-  public void notifyOfExternalReceive( Message message ) throws IOException;
+  void notifyOfExternalReceive(Message message) throws IOException;
   
-  public int getPercentDoneOfCurrentMessage();
+  int getPercentDoneOfCurrentMessage();
   
 }

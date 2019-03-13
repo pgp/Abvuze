@@ -37,16 +37,16 @@ public interface
 DiskManagerHelper 
 	extends DiskManager
 {
-	public DiskAccessController
+	DiskAccessController
 	getDiskAccessController();
 	
-	public DMPieceList
+	DMPieceList
 	getPieceList(
-		int	piece_number );
+            int piece_number);
 		
-	public byte[]
+	byte[]
 	getPieceHash(
-		int	piece_number )
+            int piece_number)
 	
 		throws TOTorrentException;
 		
@@ -56,60 +56,60 @@ DiskManagerHelper
 	 * @param reason
 	 */
 
-	public void
+    void
 	setFailed(
-		String		reason );
+            String reason);
 	
-	public void
+	void
 	setFailed(
-		DiskManagerFileInfo	file,
-		String				reason );
+            DiskManagerFileInfo file,
+            String reason);
 	
-	public long
+	long
 	getAllocated();
 	
-	public void
+	void
 	setAllocated(
-		long		num );
+            long num);
 	
-	public void
+	void
 	setPercentDone(
-		int			num );
+            int num);
 		
-	public void
+	void
 	setPieceDone(
-		DiskManagerPieceImpl	piece,
-		boolean					done );
+            DiskManagerPieceImpl piece,
+            boolean done);
 	
-	public TOTorrent
+	TOTorrent
 	getTorrent();
 	
-	public String[]
+	String[]
 	getStorageTypes();
 	
-	public String getStorageType(int fileIndex);
+	String getStorageType(int fileIndex);
 	
-	public void
+	void
 	accessModeChanged(
-		DiskManagerFileInfoImpl		file,
-		int							old_mode,
-		int							new_mode );
+            DiskManagerFileInfoImpl file,
+            int old_mode,
+            int new_mode);
 	
-	public void
+	void
     skippedFileSetChanged(
-	    	DiskManagerFileInfo	file );
+            DiskManagerFileInfo file);
 	
-	public void 
+	void
 	priorityChanged(
-		DiskManagerFileInfo	file );
+            DiskManagerFileInfo file);
 	
-	public String
+	String
 	getInternalName();
 	
-	public DownloadManagerState
+	DownloadManagerState
 	getDownloadState();
 	
-	public DiskManagerRecheckScheduler
+	DiskManagerRecheckScheduler
 	getRecheckScheduler();
 
 }

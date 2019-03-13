@@ -37,27 +37,27 @@ RSSItem
 		/**
 		 * Get the item's title, null if not defined
 		 */
-	
-	public String
+
+        String
 	getTitle();
 	
-	public String
+	String
 	getDescription();
 	
-	public URL
+	URL
 	getLink();
 	
-	public Date
+	Date
 	getPublicationDate();
 	
-	public String
+	String
 	getUID();
 	
 		/**
 		 * Gets the items underlying XML node for extraction of extensions 
 		 * @return
 		 */
-	
-	public SimpleXMLParserDocumentNode
+
+        SimpleXMLParserDocumentNode
 	getNode();
 }

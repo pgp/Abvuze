@@ -111,76 +111,76 @@ PEPeerTransportDebugger
 		byte[]	data = new byte[length];
 			
 		buffer.get(data);
-		
-		for (int i=0;i<data.length;i++){
-			
-			if ( data_read_pos == data_read.length ){
-		
-				if ( state == BT_READING_LENGTH_AND_TYPE ){
-					
-					ByteBuffer bb = ByteBuffer.wrap( data_read );
-					
-					int	len = bb.getInt();
-					
-					state = bb.get();
-										
-					//System.out.println( "Header: len = " + len + ", state = " + state );
-					
-					if ( len == 1 ){
 
-							// messages with no body
+        for (byte datum : data) {
 
-						//System.out.println( "msg:" + state );
-						
-						state = BT_READING_LENGTH_AND_TYPE;
-						
-						data_read		= new byte[5];
-						
-					}else{
-						
-						data_read	= new byte[len-1];
-					}
-					
-				}else{
-					
-						// messages with body
-					
-					//System.out.println( "msg:" + state );
-					
-					if ( state == 7 ){  //bt piece
-					
-						ByteBuffer bb = ByteBuffer.wrap( data_read );
-						
-						int	piece_number 	= bb.getInt();
-						int piece_offset	= bb.getInt();
-												
-				       	long	overall_offset = ((long)piece_number)*piece_length + piece_offset;
-			        	
-			        	while(bb.hasRemaining()){
-			        		
-							byte	v = bb.get();
-							
-							if ((byte)overall_offset != v ){
-								
-								System.out.println( "piece: write is bad at " + overall_offset +
-													": expected = " + (byte)overall_offset + ", actual = " + v );
-								
-								break;
-							}
-							
-							overall_offset++;       		
-			        	}				
-					}
-					
-					state = BT_READING_LENGTH_AND_TYPE;
-					
-					data_read		= new byte[5];
-				}
-				
-				data_read_pos	= 0;
-			}
-			
-			data_read[data_read_pos++] = data[i];
-		}
+            if (data_read_pos == data_read.length) {
+
+                if (state == BT_READING_LENGTH_AND_TYPE) {
+
+                    ByteBuffer bb = ByteBuffer.wrap(data_read);
+
+                    int len = bb.getInt();
+
+                    state = bb.get();
+
+                    //System.out.println( "Header: len = " + len + ", state = " + state );
+
+                    if (len == 1) {
+
+                        // messages with no body
+
+                        //System.out.println( "msg:" + state );
+
+                        state = BT_READING_LENGTH_AND_TYPE;
+
+                        data_read = new byte[5];
+
+                    } else {
+
+                        data_read = new byte[len - 1];
+                    }
+
+                } else {
+
+                    // messages with body
+
+                    //System.out.println( "msg:" + state );
+
+                    if (state == 7) {  //bt piece
+
+                        ByteBuffer bb = ByteBuffer.wrap(data_read);
+
+                        int piece_number = bb.getInt();
+                        int piece_offset = bb.getInt();
+
+                        long overall_offset = ((long) piece_number) * piece_length + piece_offset;
+
+                        while (bb.hasRemaining()) {
+
+                            byte v = bb.get();
+
+                            if ((byte) overall_offset != v) {
+
+                                System.out.println("piece: write is bad at " + overall_offset +
+                                        ": expected = " + (byte) overall_offset + ", actual = " + v);
+
+                                break;
+                            }
+
+                            overall_offset++;
+                        }
+                    }
+
+                    state = BT_READING_LENGTH_AND_TYPE;
+
+                    data_read = new byte[5];
+                }
+
+                data_read_pos = 0;
+            }
+
+            data_read[data_read_pos++] = datum;
+        }
 	}
 }

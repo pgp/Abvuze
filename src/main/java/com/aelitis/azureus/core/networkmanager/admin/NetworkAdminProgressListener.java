@@ -23,7 +23,7 @@ package com.aelitis.azureus.core.networkmanager.admin;
 public interface 
 NetworkAdminProgressListener 
 {
-	public void
+	void
 	reportProgress(
-		String		task );
+            String task);
 }

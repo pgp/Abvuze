@@ -90,7 +90,7 @@ AsyncDispatcher
 				
 				if ( queue_tail == null ){
 					
-					queue_tail = new LinkedList<AERunnable>();
+					queue_tail = new LinkedList<>();
 				}
 				
 				if ( is_priority ){

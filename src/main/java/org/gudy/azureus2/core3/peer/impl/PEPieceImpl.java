@@ -96,7 +96,7 @@ public class PEPieceImpl
 		if (written ==null)
 			downloaded =new boolean[nbBlocks];
 		else
-			downloaded =(boolean[])written.clone();
+			downloaded = written.clone();
 
         writers =new String[nbBlocks];
 		writes =new ArrayList(0);

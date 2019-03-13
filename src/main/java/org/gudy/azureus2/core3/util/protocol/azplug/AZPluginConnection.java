@@ -49,7 +49,7 @@ AZPluginConnection
 	private String	response_msg	= "OK";
 	
 	private InputStream					input_stream;
-	private final Map<String,List<String>> 	headers = new HashMap<String, List<String>>();
+	private final Map<String,List<String>> 	headers = new HashMap<>();
 	
 	protected
 	AZPluginConnection(
@@ -77,21 +77,19 @@ AZPluginConnection
 		String[]	bits = url.split( "&" );
 		
 		Map args = new HashMap();
-		
-		for (int i=0;i<bits.length;i++ ){
-			
-			String	bit = bits[i];
-			
-			String[] x = bit.split( "=" );
-			
-			if ( x.length == 2 ){
-				
-				String	lhs = x[0];
-				String	rhs = UrlUtils.decode(x[1] );
-				
-				args.put( lhs.toLowerCase(), rhs );
-			}
-		}
+
+        for (String bit : bits) {
+
+            String[] x = bit.split("=");
+
+            if (x.length == 2) {
+
+                String lhs = x[0];
+                String rhs = UrlUtils.decode(x[1]);
+
+                args.put(lhs.toLowerCase(), rhs);
+            }
+        }
 		
 		String	plugin_id = (String)args.get( "id" );
 		
@@ -202,7 +200,7 @@ AZPluginConnection
        	
        	if ( values == null ){
        		
-       		values = new ArrayList<String>();
+       		values = new ArrayList<>();
        		
        		headers.put( name, values );
        	}

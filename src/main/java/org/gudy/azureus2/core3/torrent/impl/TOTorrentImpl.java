@@ -25,6 +25,7 @@ package org.gudy.azureus2.core3.torrent.impl;
 
 import java.io.*;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.gudy.azureus2.core3.logging.LogRelation;
@@ -64,7 +65,7 @@ TOTorrentImpl
 	protected static final String TK_HASH_OVERRIDE		= "hash-override";
 	
 	protected static final List	TK_ADDITIONAL_OK_ATTRS = 
-		Arrays.asList(new String[]{ TK_COMMENT_UTF8, AZUREUS_PROPERTIES, TK_WEBSEED_BT, TK_WEBSEED_GR });
+		Arrays.asList(TK_COMMENT_UTF8, AZUREUS_PROPERTIES, TK_WEBSEED_BT, TK_WEBSEED_GR);
 	
 	private byte[]							torrent_name;
 	private byte[]							torrent_name_utf8;
@@ -328,27 +329,25 @@ TOTorrentImpl
 		if (sets.length > 0 ){
 			
 			List	announce_list = new ArrayList();
-			
-			for (int i=0;i<sets.length;i++){
-				
-				TOTorrentAnnounceURLSet	set = sets[i];
-				
-				URL[]	urls = set.getAnnounceURLs();
-				
-				if ( urls.length == 0 ){
-					
-					continue;
-				}
-				
-				List sub_list = new ArrayList();
-				
-				announce_list.add( sub_list );
-				
-				for (int j=0;j<urls.length;j++){
-					
-					sub_list.add( writeStringToMetaData( urls[j].toString())); 
-				}
-			}
+
+            for (TOTorrentAnnounceURLSet set : sets) {
+
+                URL[] urls = set.getAnnounceURLs();
+
+                if (urls.length == 0) {
+
+                    continue;
+                }
+
+                List sub_list = new ArrayList();
+
+                announce_list.add(sub_list);
+
+                for (URL url : urls) {
+
+                    sub_list.add(writeStringToMetaData(url.toString()));
+                }
+            }
 			
 			if ( announce_list.size() > 0 ){
 				
@@ -363,7 +362,7 @@ TOTorrentImpl
 		
 		if ( creation_date != 0 ){
 			
-			root.put( TK_CREATION_DATE, new Long( creation_date ));
+			root.put( TK_CREATION_DATE, creation_date);
 		}
 		
 		if ( created_by != null ){
@@ -375,7 +374,7 @@ TOTorrentImpl
 		
 		root.put( TK_INFO, info );
 		
-		info.put( TK_PIECE_LENGTH, new Long( piece_length ));
+		info.put( TK_PIECE_LENGTH, piece_length);
 		
 		if ( pieces == null ){
 			
@@ -407,47 +406,41 @@ TOTorrentImpl
 		
 			TOTorrentFile	file = files[0];
 			
-			info.put( TK_LENGTH, new Long( file.getLength()));
+			info.put( TK_LENGTH, file.getLength());
 			
 		}else{
 	
 			List	meta_files = new ArrayList();
 		
 			info.put( TK_FILES, meta_files );
-		
-			for (int i=0;i<files.length;i++){
-				
-				TOTorrentFileImpl	file	= files[i];
-				
-				Map	file_map = file.serializeToMap();
-		
-				meta_files.add( file_map );
-				
-			}
+
+            for (TOTorrentFileImpl file : files) {
+
+                Map file_map = file.serializeToMap();
+
+                meta_files.add(file_map);
+
+            }
 		}
-		
-		Iterator info_it = additional_info_properties.keySet().iterator();
-		
-		while( info_it.hasNext()){
-		
-			String	key = (String)info_it.next();
-			
-			info.put( key, additional_info_properties.get( key ));	
-		}
-		
-		Iterator it = additional_properties.keySet().iterator();
-		
-		while( it.hasNext()){
-			
-			String	key = (String)it.next();
-			
-			Object	value = additional_properties.get( key );
-			
-			if ( value != null ){
-				
-				root.put( key, value );
-			}
-		}
+
+        for (Object o1 : additional_info_properties.keySet()) {
+
+            String key = (String) o1;
+
+            info.put(key, additional_info_properties.get(key));
+        }
+
+        for (Object o : additional_properties.keySet()) {
+
+            String key = (String) o;
+
+            Object value = additional_properties.get(key);
+
+            if (value != null) {
+
+                root.put(key, value);
+            }
+        }
 		
 		return( root );
 	}
@@ -484,13 +477,9 @@ TOTorrentImpl
 	public String
 	getUTF8Name()
 	{
-		try {
-			return torrent_name_utf8 == null ? null : new String(torrent_name_utf8,
-					"utf8");
-		} catch (UnsupportedEncodingException e) {
-			return null;
-		}
-	}
+        return torrent_name_utf8 == null ? null : new String(torrent_name_utf8,
+                StandardCharsets.UTF_8);
+    }
 	
 	protected void
 	setNameUTF8(
@@ -754,7 +743,7 @@ TOTorrentImpl
 	
 		throws TOTorrentException
 	{
-		additional_info_properties.put( TK_PRIVATE, new Long(_private_torrent?1:0));
+		additional_info_properties.put( TK_PRIVATE, (long) (_private_torrent ? 1 : 0));
 		
 			// update torrent hash
 		
@@ -793,11 +782,11 @@ TOTorrentImpl
 	getSize()
 	{
 		long	res = 0;
-		
-		for (int i=0;i<files.length;i++){
-			
-			res += files[i].getLength();
-		}
+
+        for (TOTorrentFileImpl file : files) {
+
+            res += file.getLength();
+        }
 		
 		return( res );
 	}
@@ -1038,18 +1027,16 @@ TOTorrentImpl
 	removeAdditionalProperties()
 	{
 		Map	new_props = new HashMap();
-		
-		Iterator it = additional_properties.keySet().iterator();
-		
-		while( it.hasNext()){
-			
-			String	key = (String)it.next();
-			
-			if ( TK_ADDITIONAL_OK_ATTRS.contains(key)){
-			
-				new_props.put( key, additional_properties.get( key ));
-			}
-		}
+
+        for (Object o : additional_properties.keySet()) {
+
+            String key = (String) o;
+
+            if (TK_ADDITIONAL_OK_ATTRS.contains(key)) {
+
+                new_props.put(key, additional_properties.get(key));
+            }
+        }
 		
 		additional_properties = new_props;
 	}
@@ -1193,72 +1180,68 @@ TOTorrentImpl
 			System.out.println( "hash = " + ByteFormatter.nicePrint( hash ));
 			System.out.println( "piece length = " + getPieceLength() );
 			System.out.println( "pieces = " + getNumberOfPieces() );
-			
-			Iterator info_it = additional_info_properties.keySet().iterator();
-			
-			while( info_it.hasNext()){
-			
-				String	key = (String)info_it.next();
-				Object	value = additional_info_properties.get( key );
-				
-				try{
-				
-					System.out.println( "info prop '" + key + "' = '" + 
-										( value instanceof byte[]?new String((byte[])value, Constants.DEFAULT_ENCODING):value.toString()) + "'" );
-				}catch( UnsupportedEncodingException e){
-				
-					System.out.println( "info prop '" + key + "' = unsupported encoding!!!!");	
-				}
-			}	
-					
-			Iterator it = additional_properties.keySet().iterator();
-			
-			while( it.hasNext()){
-			
-				String	key = (String)it.next();
-				Object	value = additional_properties.get( key );
-				
-				try{
-				
-					System.out.println( "prop '" + key + "' = '" + 
-										( value instanceof byte[]?new String((byte[])value, Constants.DEFAULT_ENCODING):value.toString()) + "'" );
-				}catch( UnsupportedEncodingException e){
-				
-					System.out.println( "prop '" + key + "' = unsupported encoding!!!!");	
-				}
-			}
+
+            for (Object o1 : additional_info_properties.keySet()) {
+
+                String key = (String) o1;
+                Object value = additional_info_properties.get(key);
+
+                try {
+
+                    System.out.println("info prop '" + key + "' = '" +
+                            (value instanceof byte[] ? new String((byte[]) value, Constants.DEFAULT_ENCODING) : value.toString()) + "'");
+                } catch (UnsupportedEncodingException e) {
+
+                    System.out.println("info prop '" + key + "' = unsupported encoding!!!!");
+                }
+            }
+
+            for (Object o : additional_properties.keySet()) {
+
+                String key = (String) o;
+                Object value = additional_properties.get(key);
+
+                try {
+
+                    System.out.println("prop '" + key + "' = '" +
+                            (value instanceof byte[] ? new String((byte[]) value, Constants.DEFAULT_ENCODING) : value.toString()) + "'");
+                } catch (UnsupportedEncodingException e) {
+
+                    System.out.println("prop '" + key + "' = unsupported encoding!!!!");
+                }
+            }
 			
 			if ( pieces == null ){
 			
 				System.out.println( "\tpieces = null" );
 				
 			}else{
-				for (int i=0;i<pieces.length;i++){
-				
-					System.out.println( "\t" + ByteFormatter.nicePrint(pieces[i]));
-				}
-			}
-											 
-			for (int i=0;i<files.length;i++){
-				
-				byte[][]path_comps = files[i].getPathComponents();
-				
-				String	path_str = "";
-				
-				for (int j=0;j<path_comps.length;j++){
-					
-					try{
-					
-						path_str += (j==0?"":File.separator) + new String( path_comps[j], Constants.DEFAULT_ENCODING );
+                for (byte[] piece : pieces) {
 
-					}catch( UnsupportedEncodingException e ){
-	
-						System.out.println( "file - unsupported encoding!!!!");	
-					}
-				}
-				
-				System.out.println( "\t" + path_str + " (" + files[i].getLength() + ")" );
+                    System.out.println("\t" + ByteFormatter.nicePrint(piece));
+                }
 			}
+
+            for (TOTorrentFileImpl file : files) {
+
+                byte[][] path_comps = file.getPathComponents();
+
+                String path_str = "";
+
+                for (int j = 0; j < path_comps.length; j++) {
+
+                    try {
+
+                        path_str += (j == 0 ? "" : File.separator) + new String(path_comps[j], Constants.DEFAULT_ENCODING);
+
+                    } catch (UnsupportedEncodingException e) {
+
+                        System.out.println("file - unsupported encoding!!!!");
+                    }
+                }
+
+                System.out.println("\t" + path_str + " (" + file.getLength() + ")");
+            }
 		}catch( TOTorrentException e ){
 			
 			Debug.printStackTrace( e );
@@ -1276,7 +1259,7 @@ TOTorrentImpl
 			
 			if ( listeners != null ){
 				
-				to_fire = new ArrayList<TOTorrentListener>( listeners );
+				to_fire = new ArrayList<>(listeners);
 			}
 		}finally{
 			
@@ -1307,7 +1290,7 @@ TOTorrentImpl
 			
 			if ( listeners == null ){
 				
-				listeners = new ArrayList<TOTorrentListener>();
+				listeners = new ArrayList<>();
 			}
 			
 			listeners.add( l );

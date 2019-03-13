@@ -40,7 +40,7 @@ ConfigSectionHolder
 		
 		if ( _pi != null ){
 			
-			pi = new WeakReference<PluginInterface>( _pi );
+			pi = new WeakReference<>(_pi);
 		}
 	}
 	

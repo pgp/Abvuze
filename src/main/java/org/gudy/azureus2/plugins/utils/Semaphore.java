@@ -29,10 +29,10 @@ package org.gudy.azureus2.plugins.utils;
 public interface 
 Semaphore 
 {
-	public void
+	void
 	reserve();
 	
-	public boolean
+	boolean
 	reserveIfAvailable();
 	
 		/**
@@ -40,15 +40,15 @@ Semaphore
 		 * @param timeout_millis	time to wait
 		 * @return true -> semaphore reserved, false -> timeout exceeded
 		 */
-	
-	public boolean
+
+        boolean
 	reserve(
-		long	timeout_millis );
+                long timeout_millis);
 	
-	public void
+	void
 	release();
 	
-	public void
+	void
 	releaseAllWaiters();
 	
 }

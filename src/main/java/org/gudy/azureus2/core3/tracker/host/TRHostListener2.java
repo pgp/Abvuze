@@ -27,9 +27,9 @@ import org.gudy.azureus2.core3.tracker.server.TRTrackerServerListener2;
 public interface 
 TRHostListener2 
 {
-	public boolean
+	boolean
 	handleExternalRequest(
-		TRTrackerServerListener2.ExternalRequest		request )
+            TRTrackerServerListener2.ExternalRequest request)
 	
 		throws IOException;
 }

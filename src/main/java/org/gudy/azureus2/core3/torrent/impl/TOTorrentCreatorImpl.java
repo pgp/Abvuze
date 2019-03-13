@@ -50,12 +50,12 @@ TOTorrentCreatorImpl
 	
 	private boolean					is_desc;
 	
-	private final Map<String,File>		linkage_map		= new HashMap<String, File>();
+	private final Map<String,File>		linkage_map		= new HashMap<>();
 	private File					descriptor_dir;
 	
 	private TOTorrentCreateImpl		torrent;
 
-	private final List<TOTorrentProgressListener>	listeners = new ArrayList<TOTorrentProgressListener>();
+	private final List<TOTorrentProgressListener>	listeners = new ArrayList<>();
 	
 	public 
 	TOTorrentCreatorImpl(
@@ -190,7 +190,7 @@ TOTorrentCreatorImpl
 				throw( new TOTorrentException( "Invalid descriptor file", TOTorrentException.RT_READ_FAILS ));
 			}
 			
-			List<DescEntry>	desc_entries = new ArrayList<DescEntry>();
+			List<DescEntry>	desc_entries = new ArrayList<>();
 			
 			BDecoder.decodeStrings( file_map );
 			
@@ -333,16 +333,16 @@ TOTorrentCreatorImpl
 				File temp = descriptor_dir;
 				
 				int	prefix_length = descriptor_dir.getAbsolutePath().length() + 1;
-				
-				for ( int i=0;i<logical_path.size();i++ ){
-					
-					temp = new File( temp, logical_path.get( i ));
-					
-					if ( top_level_file == null ){
-						
-						top_level_file = temp;
-					}
-				}
+
+                for (String s : logical_path) {
+
+                    temp = new File(temp, s);
+
+                    if (top_level_file == null) {
+
+                        top_level_file = temp;
+                    }
+                }
 				
 				if ( target.isDirectory()){
 				
@@ -454,11 +454,11 @@ TOTorrentCreatorImpl
 			File[]	dir_files = file.listFiles();
 			
 			long	length = 0;
-			
-			for (int i=0;i<dir_files.length;i++){
-				
-				length += getTorrentDataSizeFromFileOrDir( dir_files[i] );
-			}
+
+            for (File dir_file : dir_files) {
+
+                length += getTorrentDataSizeFromFileOrDir(dir_file);
+            }
 			
 			return( length );
 		}

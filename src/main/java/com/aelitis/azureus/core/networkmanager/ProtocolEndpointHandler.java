@@ -25,15 +25,15 @@ import java.net.InetSocketAddress;
 public interface 
 ProtocolEndpointHandler 
 {
-	public int
+	int
 	getType();
 	
-	public ProtocolEndpoint
+	ProtocolEndpoint
 	create(
-		InetSocketAddress		address );
+            InetSocketAddress address);
 	
-	public ProtocolEndpoint
+	ProtocolEndpoint
 	create(
-		ConnectionEndpoint		connection_endpoint,
-		InetSocketAddress		address );
+            ConnectionEndpoint connection_endpoint,
+            InetSocketAddress address);
 }

@@ -23,15 +23,15 @@ package org.gudy.azureus2.plugins.utils.subscriptions;
 public interface 
 Subscription 
 {
-	public String
+	String
 	getID();
 	
-	public String
+	String
 	getName();
 	
-	public boolean
+	boolean
 	isSearchTemplate();
 	
-	public SubscriptionResult[]
+	SubscriptionResult[]
 	getResults();
 }

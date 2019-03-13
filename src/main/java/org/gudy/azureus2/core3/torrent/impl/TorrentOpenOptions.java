@@ -105,13 +105,13 @@ public class TorrentOpenOptions
 
 	private Map<Integer, File> initial_linkage_map = null;
 
-	private final CopyOnWriteList<FileListener> fileListeners = new CopyOnWriteList<FileListener>(1);
+	private final CopyOnWriteList<FileListener> fileListeners = new CopyOnWriteList<>(1);
 
-	public Map<String, Boolean> peerSource 		= new HashMap<String, Boolean>();
+	public Map<String, Boolean> peerSource 		= new HashMap<>();
 	
-	private Map<String, Boolean> enabledNetworks = new HashMap<String, Boolean>();
+	private Map<String, Boolean> enabledNetworks = new HashMap<>();
 	
-	private List<Tag>	initialTags = new ArrayList<Tag>();
+	private List<Tag>	initialTags = new ArrayList<>();
 
 	private List<List<String>>	updatedTrackers;
 	
@@ -178,14 +178,14 @@ public class TorrentOpenOptions
 		// this.torrent = ... // no clone
 		// this.initial_linkage_map = ... // no clone
 		// this.files = ... // no clone
-		this.peerSource = toBeCloned.peerSource == null ? null : new HashMap<String, Boolean>(toBeCloned.peerSource);
-		this.enabledNetworks = toBeCloned.enabledNetworks == null ? null : new HashMap<String, Boolean>(toBeCloned.enabledNetworks);
-		this.initialTags = toBeCloned.initialTags == null ? null : new ArrayList<Tag>(toBeCloned.initialTags);
+		this.peerSource = toBeCloned.peerSource == null ? null : new HashMap<>(toBeCloned.peerSource);
+		this.enabledNetworks = toBeCloned.enabledNetworks == null ? null : new HashMap<>(toBeCloned.enabledNetworks);
+		this.initialTags = toBeCloned.initialTags == null ? null : new ArrayList<>(toBeCloned.initialTags);
 		
 		if ( toBeCloned.updatedTrackers != null ){
-			updatedTrackers = new ArrayList<List<String>>();
+			updatedTrackers = new ArrayList<>();
 			for (List<String> l: toBeCloned.updatedTrackers){
-				updatedTrackers.add( new ArrayList<String>( l ));
+				updatedTrackers.add(new ArrayList<>(l));
 			}
 		}
 		this.max_up 		= toBeCloned.max_up;
@@ -271,7 +271,7 @@ public class TorrentOpenOptions
 	public Map<String, Boolean>
 	getEnabledNetworks()
 	{
-		return( new HashMap<String, Boolean>( enabledNetworks ));
+		return(new HashMap<>(enabledNetworks));
 	}
 	
 	public void
@@ -303,71 +303,69 @@ public class TorrentOpenOptions
 			};
 			List downloadManagers = AzureusCoreFactory.getSingleton().getGlobalManager().getDownloadManagers();
 
-			for (int x = 0; x < segments.length; x++) {
-				String[] segmentArray = segments[x];
-				for (int i = 0; i < segmentArray.length; i++) {
-					int l = segmentArray[i].length();
-					if (l <= 1) {
-						continue;
-					}
-					segmentArray[i] = segmentArray[i].toLowerCase();
-					totalSegmentsLengths += l;
-				}
-			}
+            for (String[] segmentArray : segments) {
+                for (int i = 0; i < segmentArray.length; i++) {
+                    int l = segmentArray[i].length();
+                    if (l <= 1) {
+                        continue;
+                    }
+                    segmentArray[i] = segmentArray[i].toLowerCase();
+                    totalSegmentsLengths += l;
+                }
+            }
 
 			String temp_dir = AETemporaryFileHandler.getTempDirectory().getAbsolutePath().toLowerCase( Locale.US );
 			
 			int maxMatches = 0;
 			DownloadManager match = null;
-			for (Iterator iter = downloadManagers.iterator(); iter.hasNext();) {
-				DownloadManager dm = (DownloadManager) iter.next();
+            for (Object downloadManager : downloadManagers) {
+                DownloadManager dm = (DownloadManager) downloadManager;
 
-				if (dm.getState() == DownloadManager.STATE_ERROR) {
-					continue;
-				}
+                if (dm.getState() == DownloadManager.STATE_ERROR) {
+                    continue;
+                }
 
-				DownloadManagerState dms = dm.getDownloadState();
-				
-				if ( 	dms.getFlag( DownloadManagerState.FLAG_LOW_NOISE ) ||
-						dms.getFlag( DownloadManagerState.FLAG_METADATA_DOWNLOAD )){
-					
-					continue;
-				}
-				
-					// had users with files ending up in the temp dir (5100/5200) so as an attempt to stop this
-					// lets excluded anything dodgy (might also have been to do with metadata downloads we now
-					// filter above)
-				
-				if ( dm.getSaveLocation().getAbsolutePath().toLowerCase( Locale.US ).startsWith( temp_dir )){
-					
-					continue;
-				}
-				
-				int numMatches = 0;
+                DownloadManagerState dms = dm.getDownloadState();
 
-				String dmName = dm.getDisplayName().toLowerCase();
+                if (dms.getFlag(DownloadManagerState.FLAG_LOW_NOISE) ||
+                        dms.getFlag(DownloadManagerState.FLAG_METADATA_DOWNLOAD)) {
 
-				for (int x = 0; x < segments.length; x++) {
-					String[] segmentArray = segments[x];
-					for (int i = 0; i < segmentArray.length; i++) {
-						int l = segmentArray[i].length();
-						if (l <= 1) {
-							continue;
-						}
+                    continue;
+                }
 
-						String segment = segmentArray[i];
+                // had users with files ending up in the temp dir (5100/5200) so as an attempt to stop this
+                // lets excluded anything dodgy (might also have been to do with metadata downloads we now
+                // filter above)
 
-						if (dmName.contains(segment)) {
-							numMatches += l;
-						}
-					}
-				}
+                if (dm.getSaveLocation().getAbsolutePath().toLowerCase(Locale.US).startsWith(temp_dir)) {
 
-				if (numMatches > maxMatches) {
-					maxMatches = numMatches;
-					match = dm;
-				}
-			}
+                    continue;
+                }
+
+                int numMatches = 0;
+
+                String dmName = dm.getDisplayName().toLowerCase();
+
+                for (String[] segmentArray : segments) {
+                    for (String s : segmentArray) {
+                        int l = s.length();
+                        if (l <= 1) {
+                            continue;
+                        }
+
+                        String segment = s;
+
+                        if (dmName.contains(segment)) {
+                            numMatches += l;
+                        }
+                    }
+                }
+
+                if (numMatches > maxMatches) {
+                    maxMatches = numMatches;
+                    match = dm;
+                }
+            }
 			if (match != null) {
 				//System.out.println(match + ": " + (maxMatches * 100 / totalSegmentsLengths) + "%\n");
 				int iMatchLevel = (maxMatches * 100 / totalSegmentsLengths);
@@ -393,7 +391,7 @@ public class TorrentOpenOptions
 	public List<Tag>
 	getInitialTags()
 	{
-		return( new ArrayList<Tag>( initialTags ));
+		return(new ArrayList<>(initialTags));
 	}
 	
 	public void
@@ -435,7 +433,7 @@ public class TorrentOpenOptions
 		
 		if ( torrent == null ){
 			
-			return( new ArrayList<List<String>>(0));
+			return(new ArrayList<>(0));
 			
 		}else{
 		
@@ -552,27 +550,26 @@ public class TorrentOpenOptions
 
 	public boolean allFilesMoving() {
 		TorrentOpenFileOptions[] files = getFiles();
-		for (int j = 0; j < files.length; j++) {
-			if (files[j].isLinked()) {
-				return false;
-			}
-		}
+        for (TorrentOpenFileOptions file : files) {
+            if (file.isLinked()) {
+                return false;
+            }
+        }
 		return true;
 	}
 
 	public boolean allFilesExist() {
 		// check if all selected files exist
 		TorrentOpenFileOptions[] files = getFiles();
-		for (int i = 0; i < files.length; i++) {
-			TorrentOpenFileOptions fileInfo = files[i];
-			if (!fileInfo.isToDownload())
-				continue;
+        for (TorrentOpenFileOptions fileInfo : files) {
+            if (!fileInfo.isToDownload())
+                continue;
 
-			File file = fileInfo.getDestFileFullName();
-			if (!file.exists() || file.length() != fileInfo.lSize) {
-				return false;
-			}
-		}
+            File file = fileInfo.getDestFileFullName();
+            if (!file.exists() || file.length() != fileInfo.lSize) {
+                return false;
+            }
+        }
 		return true;
 	}
 
@@ -597,19 +594,17 @@ public class TorrentOpenOptions
 		} else {
 			// should only be one file
 			TorrentOpenFileOptions[] fileInfos = getFiles();
-			for (int i = 0; i < fileInfos.length; i++) {
-				TorrentOpenFileOptions info = fileInfos[i];
+            for (TorrentOpenFileOptions info : fileInfos) {
+                File file = info.getDestFileFullName();
+                int idx = 0;
+                while (file.exists()) {
+                    idx++;
+                    file = new File(info.getDestPathName(), idx + "-"
+                            + info.getDestFileName());
+                }
 
-				File file = info.getDestFileFullName();
-				int idx = 0;
-				while (file.exists()) {
-					idx++;
-					file = new File(info.getDestPathName(), idx + "-"
-							+ info.getDestFileName());
-				}
-
-				info.setDestFileName(file.getName(),false);
-			}
+                info.setDestFileName(file.getName(), false);
+            }
 		}
 	}
 
@@ -690,7 +685,7 @@ public class TorrentOpenOptions
 
 			Set<String> tracker_hosts = TorrentUtils.getUniqueTrackerHosts( torrent );
 			
-			final Set<String>	networks = new HashSet<String>();
+			final Set<String>	networks = new HashSet<>();
 				
 			boolean	decentralised = false;
 			
@@ -819,8 +814,8 @@ public class TorrentOpenOptions
 							
 							enabledNetworks.put( AENetworkClassifier.AT_PUBLIC, false );
 						}	
-					};
-				}
+					}
+                }
 			}
 			
 			boolean	enable_tor = networks.contains( AENetworkClassifier.AT_TOR );
@@ -868,9 +863,9 @@ public class TorrentOpenOptions
 	}
 	
 	public interface FileListener {
-		public void toDownloadChanged(TorrentOpenFileOptions torrentOpenFileOptions, boolean toDownload);
-		public void priorityChanged(TorrentOpenFileOptions torrentOpenFileOptions, int priority );
-		public void parentDirChanged();
+		void toDownloadChanged(TorrentOpenFileOptions torrentOpenFileOptions, boolean toDownload);
+		void priorityChanged(TorrentOpenFileOptions torrentOpenFileOptions, int priority);
+		void parentDirChanged();
 	}
 
 	public void fileDownloadStateChanged(

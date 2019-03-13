@@ -22,18 +22,18 @@ package com.aelitis.azureus.core.dht;
 public interface 
 DHTStorageKeyStats 
 {
-	public int
+	int
 	getReadsPerMinute();
 	
-	public int
+	int
 	getSize();
 	
-	public int
+	int
 	getEntryCount();
 	
-	public byte
+	byte
 	getDiversification();
 	
-	public String
+	String
 	getString();
 }

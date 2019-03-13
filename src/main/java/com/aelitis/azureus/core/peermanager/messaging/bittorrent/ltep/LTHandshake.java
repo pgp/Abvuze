@@ -223,7 +223,7 @@ public class LTHandshake implements LTMessage {
 		Long crypto = (Long)data_dict.get("e");
 		if(crypto == null)
 			return null;
-		return Boolean.valueOf(crypto.longValue() == 1);
+		return crypto.longValue() == 1;
 	}
 	
 	public Map getExtensionMapping() {
@@ -260,17 +260,17 @@ public class LTHandshake implements LTMessage {
 	
 			if ( enable_pex ){
 				
-				ext.put( ID_UT_PEX, new Long( SUBID_UT_PEX ));
+				ext.put( ID_UT_PEX, (long) SUBID_UT_PEX);
 			}
 			
 			if ( enable_md ){
 				
-				ext.put( ID_UT_METADATA, new Long( SUBID_UT_METADATA ));
+				ext.put( ID_UT_METADATA, (long) SUBID_UT_METADATA);
 			}
 			
 			if ( enable_uo ){
 				
-				ext.put( ID_UT_UPLOAD_ONLY, new Long( SUBID_UT_UPLOAD_ONLY ));
+				ext.put( ID_UT_UPLOAD_ONLY, (long) SUBID_UT_UPLOAD_ONLY);
 			}
 		}
 	}
@@ -287,7 +287,7 @@ public class LTHandshake implements LTMessage {
 			data_dict.put( "m", ext );
 		}
 		
-		ext.put( id, new Long( subid ));
+		ext.put( id, subid);
 	}
 			
 	public String getFeatureID() {return LTMessage.LT_FEATURE_ID;}

@@ -32,22 +32,22 @@ import java.util.Map;
 public interface 
 TrackerTorrentRequest 
 {
-	public static final int RT_ANNOUNCE		= 1;
-	public static final int	RT_SCRAPE		= 2;
-	public static final int	RT_FULL_SCRAPE	= 3;
+	int RT_ANNOUNCE		= 1;
+	int	RT_SCRAPE		= 2;
+	int	RT_FULL_SCRAPE	= 3;
 	
-	public int
+	int
 	getRequestType();
 	
-	public TrackerTorrent
+	TrackerTorrent
 	getTorrent();
 	
-	public TrackerPeer
+	TrackerPeer
 	getPeer();
 	
-	public String
+	String
 	getRequest();
 	
-	public Map
+	Map
 	getResponse();
 }

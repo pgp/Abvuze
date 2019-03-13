@@ -29,12 +29,12 @@ public class CopyOnWriteMap<K,V> {
 	private volatile Map<K,V> map;
 	
 	public CopyOnWriteMap() {
-		this.map = new HashMap<K,V>(4);
+		this.map = new HashMap<>(4);
 	}
 	
 	public V put(K key, V val) {
 		synchronized(this) {
-			HashMap<K,V> new_map = new HashMap<K,V>(map);
+			HashMap<K,V> new_map = new HashMap<>(map);
 			V result = new_map.put(key, val);
 			this.map = new_map;
 			return( result );
@@ -43,7 +43,7 @@ public class CopyOnWriteMap<K,V> {
 	
 	public void putAll(Map<K,V> m ) {
 		synchronized(this) {
-			HashMap<K,V> new_map = new HashMap<K,V>(map);
+			HashMap<K,V> new_map = new HashMap<>(map);
 			new_map.putAll( m );
 			this.map = new_map;
 		}
@@ -55,7 +55,7 @@ public class CopyOnWriteMap<K,V> {
 	
 	public V remove(Object key) {
 		synchronized(this) {
-			HashMap<K,V> new_map = new HashMap<K,V>(map);
+			HashMap<K,V> new_map = new HashMap<>(map);
 			V res = new_map.remove(key);
 			this.map = new_map;
 			return res;

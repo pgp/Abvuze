@@ -23,25 +23,25 @@ package com.aelitis.azureus.plugins.net.netstatus;
 public interface 
 NetStatusProtocolTesterListener 
 {
-	public void
+	void
 	sessionAdded(
-		NetStatusProtocolTesterBT.Session	session );
+            NetStatusProtocolTesterBT.Session session);
 	
-	public void
+	void
 	complete(
-		NetStatusProtocolTesterBT			tester );
+            NetStatusProtocolTesterBT tester);
 	
-	public void
+	void
 	log(
-		String		str,
-		boolean		is_detailed );
+            String str,
+            boolean is_detailed);
 	
-	public void
+	void
 	logError(
-		String		str );
+            String str);
 	
-	public void
+	void
 	logError(
-		String		str,
-		Throwable	e );
+            String str,
+            Throwable e);
 }

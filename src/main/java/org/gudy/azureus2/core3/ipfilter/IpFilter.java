@@ -37,11 +37,11 @@ import java.net.InetAddress;
 public interface 
 IpFilter 
 {
-	public File getFile();
+	File getFile();
 	
-	public void save() throws Exception;
+	void save() throws Exception;
 	
-	public void 
+	void
 	reload()
 	
 		throws Exception;
@@ -52,137 +52,137 @@ IpFilter
 	 * @deprecated
 	 * @return
 	 */
-	public List
+    List
 	getIpRanges();
 	
-	public IpRange[] 
+	IpRange[]
 	getRanges();
 
-	public boolean 
+	boolean
 	isInRange(
-		String ipAddress);
+            String ipAddress);
   
-	public boolean 
+	boolean
 	isInRange(
-		String 	ipAddress, 
-		String 	torrent_name,
-		byte[]	torrent_hash );
+            String ipAddress,
+            String torrent_name,
+            byte[] torrent_hash);
 	
-	public boolean 
+	boolean
 	isInRange(
-		String 	ipAddress, 
-		String 	torrent_name,
-		byte[]	torrent_hash,
-		boolean	loggable );
+            String ipAddress,
+            String torrent_name,
+            byte[] torrent_hash,
+            boolean loggable);
 	
-	public boolean 
+	boolean
 	isInRange(
-		InetAddress 	ipAddress, 
-		String 			torrent_name,
-		byte[]			torrent_hash,
-		boolean			loggable );
+            InetAddress ipAddress,
+            String torrent_name,
+            byte[] torrent_hash,
+            boolean loggable);
 	
-	public IpRange
+	IpRange
 	createRange(
-		boolean sessionOnly);
+            boolean sessionOnly);
 	
-	public void
+	void
 	addRange(
-		IpRange	range );
+            IpRange range);
 	
-	public void
+	void
 	removeRange(
-		IpRange	range );
+            IpRange range);
 	
-	public int 
+	int
 	getNbRanges();
 	
-	public int 
+	int
 	getNbIpsBlocked();
 	
-	public int 
+	int
 	getNbIpsBlockedAndLoggable();
 	
-	public BlockedIp[] 
+	BlockedIp[]
 	getBlockedIps();
 	
-	public void 
+	void
 	clearBlockedIPs();
 	
-	public boolean 
+	boolean
 	ban(
-		String 	ipAddress,
-		String	torrent_name,
-		boolean	manual );
+            String ipAddress,
+            String torrent_name,
+            boolean manual);
 	
-	public boolean 
+	boolean
 	ban(
-		String 	ipAddress,
-		String	torrent_name,
-		boolean	manual,
-		int		ban_for_mins );
+            String ipAddress,
+            String torrent_name,
+            boolean manual,
+            int ban_for_mins);
 	
-	public void
+	void
 	unban(String ipAddress);
 	
-	public void
+	void
 	unban(String ipAddress, boolean block);
 
-	public int
+	int
 	getNbBannedIps();
 	
-	public BannedIp[]
+	BannedIp[]
 	getBannedIps();
 	
-	public void
+	void
 	clearBannedIps();
 	
-	public void
+	void
 	addExcludedHash(
-		byte[]		hash );
+            byte[] hash);
 	
-	public void
+	void
 	removeExcludedHash(
-		byte[]		hash );
+            byte[] hash);
 	
-	public boolean
+	boolean
 	isEnabled();
 
-	public void
+	void
 	setEnabled(
-		boolean	enabled );
+            boolean enabled);
 	
-	public boolean
+	boolean
 	getInRangeAddressesAreAllowed();
 	
-	public void
+	void
 	setInRangeAddressesAreAllowed(
-		boolean	b );
+            boolean b);
 
-	public void
+	void
 	markAsUpToDate();
 	
-	public long
+	long
 	getLastUpdateTime();
 	
-	public long
+	long
 	getTotalAddressesInRange();
 	
-	public void
+	void
 	addListener(
-		IPFilterListener	l );
+            IPFilterListener l);
 	
-	public void
+	void
 	removeListener(
-		IPFilterListener	l );
+            IPFilterListener l);
 	
-	public void
+	void
 	addExternalHandler(
-		IpFilterExternalHandler	handler );
+            IpFilterExternalHandler handler);
 	
-	public void
+	void
 	removeExternalHandler(
-		IpFilterExternalHandler	handler );
+            IpFilterExternalHandler handler);
 
 	void reloadSync()
 			throws Exception;

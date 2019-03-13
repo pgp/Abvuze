@@ -201,11 +201,15 @@ public class DownloadEventNotifierImpl implements DownloadEventNotifier {
 		public void downloadAdded(Download download) {download.addActivationListener(this);}
 		public void downloadRemoved(Download download) {download.removeActivationListener(this);}
 		public boolean activationRequested(DownloadActivationEvent event) {
-			Iterator itr = this.listeners.iterator();
-			while (itr.hasNext()) {
-				try {if (((DownloadActivationListener)itr.next()).activationRequested(event)) {return true;}}
-				catch (Throwable t) {Debug.printStackTrace(t);}
-			}
+            for (Object listener : this.listeners) {
+                try {
+                    if (((DownloadActivationListener) listener).activationRequested(event)) {
+                        return true;
+                    }
+                } catch (Throwable t) {
+                    Debug.printStackTrace(t);
+                }
+            }
 			return false;
 		}
 	}
@@ -214,11 +218,13 @@ public class DownloadEventNotifierImpl implements DownloadEventNotifier {
 		public void downloadAdded(Download download) {download.addCompletionListener(this);}
 		public void downloadRemoved(Download download) {download.removeCompletionListener(this);}
 		public void onCompletion(Download download) {
-			Iterator itr = this.listeners.iterator();
-			while (itr.hasNext()) {
-				try {((DownloadCompletionListener)itr.next()).onCompletion(download);}
-				catch (Throwable t) {Debug.printStackTrace(t);}
-			}
+            for (Object listener : this.listeners) {
+                try {
+                    ((DownloadCompletionListener) listener).onCompletion(download);
+                } catch (Throwable t) {
+                    Debug.printStackTrace(t);
+                }
+            }
 		}
 	}
 	
@@ -226,18 +232,22 @@ public class DownloadEventNotifierImpl implements DownloadEventNotifier {
 		public void downloadAdded(Download download) {download.addListener(this);}
 		public void downloadRemoved(Download download) {download.removeListener(this);}
 		public void stateChanged(Download download, int old_state, int new_state) {
-			Iterator itr = this.listeners.iterator();
-			while (itr.hasNext()) {
-				try {((DownloadListener)itr.next()).stateChanged(download, old_state, new_state);}
-				catch (Throwable t) {Debug.printStackTrace(t);}
-			}
+            for (Object listener : this.listeners) {
+                try {
+                    ((DownloadListener) listener).stateChanged(download, old_state, new_state);
+                } catch (Throwable t) {
+                    Debug.printStackTrace(t);
+                }
+            }
 		}
 		public void positionChanged(Download download, int old_position, int new_position) {
-			Iterator itr = this.listeners.iterator();
-			while (itr.hasNext()) {
-				try {((DownloadListener)itr.next()).positionChanged(download, old_position, new_position);}
-				catch (Throwable t) {Debug.printStackTrace(t);}
-			}			
+            for (Object listener : this.listeners) {
+                try {
+                    ((DownloadListener) listener).positionChanged(download, old_position, new_position);
+                } catch (Throwable t) {
+                    Debug.printStackTrace(t);
+                }
+            }
 		}
 	}
 
@@ -245,18 +255,22 @@ public class DownloadEventNotifierImpl implements DownloadEventNotifier {
 		public void downloadAdded(Download download) {download.addPeerListener(this);}
 		public void downloadRemoved(Download download) {download.removePeerListener(this);}
 		public void	peerManagerAdded(Download download, PeerManager peer_manager) {
-			Iterator itr = this.listeners.iterator();
-			while (itr.hasNext()) {
-				try {((DownloadPeerListener)itr.next()).peerManagerAdded(download, peer_manager);}
-				catch (Throwable t) {Debug.printStackTrace(t);}
-			}			
+            for (Object listener : this.listeners) {
+                try {
+                    ((DownloadPeerListener) listener).peerManagerAdded(download, peer_manager);
+                } catch (Throwable t) {
+                    Debug.printStackTrace(t);
+                }
+            }
 		}
 		public void	peerManagerRemoved(Download download, PeerManager peer_manager) {
-			Iterator itr = this.listeners.iterator();
-			while (itr.hasNext()) {
-				try {((DownloadPeerListener)itr.next()).peerManagerRemoved(download, peer_manager);}
-				catch (Throwable t) {Debug.printStackTrace(t);}
-			}			
+            for (Object listener : this.listeners) {
+                try {
+                    ((DownloadPeerListener) listener).peerManagerRemoved(download, peer_manager);
+                } catch (Throwable t) {
+                    Debug.printStackTrace(t);
+                }
+            }
 		}
 	}
 
@@ -264,11 +278,13 @@ public class DownloadEventNotifierImpl implements DownloadEventNotifier {
 		public void downloadAdded(Download download) {download.addPropertyListener(this);}
 		public void downloadRemoved(Download download) {download.removePropertyListener(this);}
 		public void	propertyChanged(Download download, DownloadPropertyEvent event) {
-			Iterator itr = this.listeners.iterator();
-			while (itr.hasNext()) {
-				try {((DownloadPropertyListener)itr.next()).propertyChanged(download, event);}
-				catch (Throwable t) {Debug.printStackTrace(t);}
-			}			
+            for (Object listener : this.listeners) {
+                try {
+                    ((DownloadPropertyListener) listener).propertyChanged(download, event);
+                } catch (Throwable t) {
+                    Debug.printStackTrace(t);
+                }
+            }
 		}
 	}
 
@@ -276,12 +292,15 @@ public class DownloadEventNotifierImpl implements DownloadEventNotifier {
 		public void downloadAdded(Download download) {download.addDownloadWillBeRemovedListener(this);}
 		public void downloadRemoved(Download download) {download.removeDownloadWillBeRemovedListener(this);}
 		public void	downloadWillBeRemoved(Download download) throws DownloadRemovalVetoException {
-			Iterator itr = this.listeners.iterator();
-			while (itr.hasNext()) {
-				try {((DownloadWillBeRemovedListener)itr.next()).downloadWillBeRemoved(download);}
-				catch (DownloadRemovalVetoException e) {throw e;}
-				catch (Throwable t) {Debug.printStackTrace(t);}
-			}			
+            for (Object listener : this.listeners) {
+                try {
+                    ((DownloadWillBeRemovedListener) listener).downloadWillBeRemoved(download);
+                } catch (DownloadRemovalVetoException e) {
+                    throw e;
+                } catch (Throwable t) {
+                    Debug.printStackTrace(t);
+                }
+            }
 		}
 	}
 	
@@ -295,11 +314,13 @@ public class DownloadEventNotifierImpl implements DownloadEventNotifier {
 		public void downloadAdded(Download d) {d.addAttributeListener(this, ta, event_type);}
 		public void downloadRemoved(Download d) {d.removeAttributeListener(this, ta, event_type);}
 		public void attributeEventOccurred(Download d, TorrentAttribute ta, int event_type) {
-			Iterator itr = this.listeners.iterator();
-			while (itr.hasNext()) {
-				try {((DownloadAttributeListener)itr.next()).attributeEventOccurred(d, ta, event_type);}
-				catch (Throwable t) {Debug.printStackTrace(t);}
-			}						
+            for (Object listener : this.listeners) {
+                try {
+                    ((DownloadAttributeListener) listener).attributeEventOccurred(d, ta, event_type);
+                } catch (Throwable t) {
+                    Debug.printStackTrace(t);
+                }
+            }
 		}
 	}
 
@@ -309,18 +330,22 @@ public class DownloadEventNotifierImpl implements DownloadEventNotifier {
 		public void downloadAdded(Download download) {download.addTrackerListener(this, this.instant_notify);}
 		public void downloadRemoved(Download download) {download.removeTrackerListener(this);}
 		public void scrapeResult(DownloadScrapeResult result) {
-			Iterator itr = this.listeners.iterator();
-			while (itr.hasNext()) {
-				try {((DownloadTrackerListener)itr.next()).scrapeResult(result);}
-				catch (Throwable t) {Debug.printStackTrace(t);}
-			}			
+            for (Object listener : this.listeners) {
+                try {
+                    ((DownloadTrackerListener) listener).scrapeResult(result);
+                } catch (Throwable t) {
+                    Debug.printStackTrace(t);
+                }
+            }
 		}
 		public void announceResult(DownloadAnnounceResult result) {
-			Iterator itr = this.listeners.iterator();
-			while (itr.hasNext()) {
-				try {((DownloadTrackerListener)itr.next()).announceResult(result);}
-				catch (Throwable t) {Debug.printStackTrace(t);}
-			}
+            for (Object listener : this.listeners) {
+                try {
+                    ((DownloadTrackerListener) listener).announceResult(result);
+                } catch (Throwable t) {
+                    Debug.printStackTrace(t);
+                }
+            }
 		}
 	}
 	

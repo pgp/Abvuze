@@ -284,9 +284,9 @@ SpeedManagerPingMapperImpl
 				
 				p.add( m );
 				
-				m.put( "x", new Long(ping.getX()));
-				m.put( "y", new Long(ping.getY()));
-				m.put( "m", new Long(ping.getMetric()));
+				m.put( "x", (long) ping.getX());
+				m.put( "y", (long) ping.getY());
+				m.put( "m", (long) ping.getMetric());
 			}
 			
 			saveLimits( map, "lbus", last_bad_ups );
@@ -325,13 +325,13 @@ SpeedManagerPingMapperImpl
 		List	l = (List)map.get(name);
 		
 		if ( l != null ){
-			
-			for (int i=0;i<l.size();i++){
-				
-				Map m = (Map)l.get(i);
-							
-				result. add(loadLimit( m ));
-			}
+
+            for (Object o : l) {
+
+                Map m = (Map) o;
+
+                result.add(loadLimit(m));
+            }
 		}
 		
 		return( result );
@@ -352,7 +352,7 @@ SpeedManagerPingMapperImpl
 		
 		int	hits = ((Long)m.get( "h" )).intValue();
 
-		long	when = ((Long)m.get("w")).longValue();
+		long	when = (Long) m.get("w");
 		
 		byte[]	t_bytes = (byte[])m.get("t");
 		
@@ -368,15 +368,15 @@ SpeedManagerPingMapperImpl
 		List			limits )
 	{
 		List	l = new ArrayList();
-		
-		for (int i=0;i<limits.size();i++){
-			
-			limitEstimate limit = (limitEstimate)limits.get(i);
-			
-			Map	m = saveLimit( limit );
-			
-			l.add( m );
-		}
+
+        for (Object limit1 : limits) {
+
+            limitEstimate limit = (limitEstimate) limit1;
+
+            Map m = saveLimit(limit);
+
+            l.add(m);
+        }
 		
 		map.put( name, l );
 	}
@@ -392,15 +392,15 @@ SpeedManagerPingMapperImpl
 		
 		Map	m = new HashMap();
 		
-		m.put( "s", new Long( limit.getBytesPerSec()));
+		m.put( "s", (long) limit.getBytesPerSec());
 		
 		m.put( "m", String.valueOf( limit.getMetricRating()));
 		
 		m.put( "t", String.valueOf( limit.getEstimateType()));
 		
-		m.put( "h", new Long( limit.getHits()));
+		m.put( "h", (long) limit.getHits());
 		
-		m.put( "w", new Long( limit.getWhen()));	
+		m.put( "w", limit.getWhen());
 		
 		return( m );
 	}
@@ -712,7 +712,7 @@ SpeedManagerPingMapperImpl
 	public synchronized SpeedManagerPingZone[]
 	getZones()
 	{
-		return((SpeedManagerPingZone[])regions.toArray( new SpeedManagerPingZone[regions.size()] ));
+		return((SpeedManagerPingZone[])regions.toArray(new SpeedManagerPingZone[0]));
 	}
 	
 	public synchronized SpeedManagerLimitEstimate
@@ -744,13 +744,13 @@ SpeedManagerPingMapperImpl
 	public synchronized SpeedManagerLimitEstimate[]
 	getBadUploadHistory()
 	{
-		return((SpeedManagerLimitEstimate[])last_bad_ups.toArray(new SpeedManagerLimitEstimate[last_bad_ups.size()]));
+		return((SpeedManagerLimitEstimate[])last_bad_ups.toArray(new SpeedManagerLimitEstimate[0]));
 	}
 
 	public synchronized SpeedManagerLimitEstimate[]
 	getBadDownloadHistory()
 	{
-		return((SpeedManagerLimitEstimate[])last_bad_downs.toArray(new SpeedManagerLimitEstimate[last_bad_downs.size()]));	
+		return((SpeedManagerLimitEstimate[])last_bad_downs.toArray(new SpeedManagerLimitEstimate[0]));
 	}
 	                             	
 	protected SpeedManagerLimitEstimate
@@ -1255,18 +1255,18 @@ SpeedManagerPingMapperImpl
 				}
 			}
 		}else{
-			for (int i=0;i<segments.size();i++){
-			
-				int[]	seg = (int[])segments.get(i);
-			
-				int	var = seg[3];
-			
-				if ( var >= worst_var ){
-				
-					estimate_seg 	= seg;
-					estimate_var	= var;
-				}
-			}
+            for (Object segment : segments) {
+
+                int[] seg = (int[]) segment;
+
+                int var = seg[3];
+
+                if (var >= worst_var) {
+
+                    estimate_seg = seg;
+                    estimate_var = var;
+                }
+            }
 		}
 		
 		int	estimate_speed;
@@ -1441,21 +1441,19 @@ SpeedManagerPingMapperImpl
 		String	str = "";
 		
 		if ( limits != null ){
-			
-			Iterator	it = limits.iterator();
-			
-			while( it.hasNext()){
-				
-				str += (str.length()==0?"":",");
-				
-				limitEstimate	l = (limitEstimate)it.next();
-				
-				if ( short_form ){
-					str += getShortString( l );
-				}else{
-					str += l.getString();
-				}
-			}
+
+            for (Object limit : limits) {
+
+                str += (str.length() == 0 ? "" : ",");
+
+                limitEstimate l = (limitEstimate) limit;
+
+                if (short_form) {
+                    str += getShortString(l);
+                } else {
+                    str += l.getString();
+                }
+            }
 		}
 		
 		return( str );

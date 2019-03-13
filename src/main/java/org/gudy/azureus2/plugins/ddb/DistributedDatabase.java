@@ -33,124 +33,124 @@ import com.aelitis.azureus.plugins.dht.DHTPluginInterface;
 public interface 
 DistributedDatabase 
 {
-	public static final int	OP_NONE				= 0x00000000;
-	public static final int	OP_EXHAUSTIVE_READ	= 0x00000001;
-	public static final int	OP_PRIORITY_HIGH	= 0x00000002;
+	int	OP_NONE				= 0x00000000;
+	int	OP_EXHAUSTIVE_READ	= 0x00000001;
+	int	OP_PRIORITY_HIGH	= 0x00000002;
 	
 		// diversification types
 	
-	public static final byte	DT_NONE			= 1;
-	public static final byte	DT_FREQUENCY	= 2;
-	public static final byte	DT_SIZE			= 3;
+	byte	DT_NONE			= 1;
+	byte	DT_FREQUENCY	= 2;
+	byte	DT_SIZE			= 3;
 	
 		// dht types
 	
-	public static final int	DHT_MAIN	= 1;
-	public static final int	DHT_CVS		= 2;
+	int	DHT_MAIN	= 1;
+	int	DHT_CVS		= 2;
 	
-	public boolean
+	boolean
 	isAvailable();
 
-	public boolean
+	boolean
 	isInitialized();
 	
-	public boolean
+	boolean
 	isExtendedUseAllowed();
 	
-	public String
+	String
 	getNetwork();
 	
-	public DHTPluginInterface
+	DHTPluginInterface
 	getDHTPlugin();
 	
-	public DistributedDatabaseContact
+	DistributedDatabaseContact
 	getLocalContact();
 	
-	public DistributedDatabaseKey
+	DistributedDatabaseKey
 	createKey(
-		Object			key )
+            Object key)
 	
 		throws DistributedDatabaseException;
 	
-	public DistributedDatabaseKey
+	DistributedDatabaseKey
 	createKey(
-		Object			key,
-		String			description )
+            Object key,
+            String description)
 	
 		throws DistributedDatabaseException;
 	
 
-	public DistributedDatabaseValue
+	DistributedDatabaseValue
 	createValue(
-		Object			value )
+            Object value)
 	
 		throws DistributedDatabaseException;
 		
-	public DistributedDatabaseContact
+	DistributedDatabaseContact
 	importContact(
-		InetSocketAddress				address )
+            InetSocketAddress address)
 	
 		throws DistributedDatabaseException;
 	
-	public DistributedDatabaseContact
+	DistributedDatabaseContact
 	importContact(
-		InetSocketAddress				address,
-		byte							protocol_version )
+            InetSocketAddress address,
+            byte protocol_version)
 	
 		throws DistributedDatabaseException;
 	
-	public DistributedDatabaseContact
+	DistributedDatabaseContact
 	importContact(
-		InetSocketAddress				address,
-		byte							protocol_version,
-		int								preferred_dht )
+            InetSocketAddress address,
+            byte protocol_version,
+            int preferred_dht)
 	
 		throws DistributedDatabaseException;
 	
-	public DistributedDatabaseContact
+	DistributedDatabaseContact
 	importContact(
-		Map<String,Object>				map )
+            Map<String, Object> map)
 	
 		throws DistributedDatabaseException;
 	
-	public void
+	void
 	write(
-		DistributedDatabaseListener		listener,
-		DistributedDatabaseKey			key,
-		DistributedDatabaseValue		value )
+            DistributedDatabaseListener listener,
+            DistributedDatabaseKey key,
+            DistributedDatabaseValue value)
 	
 		throws DistributedDatabaseException;
 	
-	public void
+	void
 	write(
-		DistributedDatabaseListener		listener,
-		DistributedDatabaseKey			key,
-		DistributedDatabaseValue[]		values )
+            DistributedDatabaseListener listener,
+            DistributedDatabaseKey key,
+            DistributedDatabaseValue[] values)
 	
 		throws DistributedDatabaseException;
 
-	public void
+	void
 	read(
-		DistributedDatabaseListener		listener,
-		DistributedDatabaseKey			key,
-		long							timeout )
+            DistributedDatabaseListener listener,
+            DistributedDatabaseKey key,
+            long timeout)
 	
 		throws DistributedDatabaseException;
 	
-	public void
+	void
 	read(
-		DistributedDatabaseListener		listener,
-		DistributedDatabaseKey			key,
-		long							timeout,
-		int								options )
+            DistributedDatabaseListener listener,
+            DistributedDatabaseKey key,
+            long timeout,
+            int options)
 	
 		throws DistributedDatabaseException;
 	
-	public void
+	void
 	readKeyStats(
-		DistributedDatabaseListener		listener,
-		DistributedDatabaseKey			key,
-		long							timeout )
+            DistributedDatabaseListener listener,
+            DistributedDatabaseKey key,
+            long timeout)
 	
 		throws DistributedDatabaseException;
 	
@@ -159,46 +159,46 @@ DistributedDatabase
 		 * @param key
 		 * @return
 		 */
-	
-	public List<DistributedDatabaseValue>
+
+        List<DistributedDatabaseValue>
 	getValues(
-		DistributedDatabaseKey			key )
+                DistributedDatabaseKey key)
 		
 		throws DistributedDatabaseException;
 	
-	public void
+	void
 	delete(
-		DistributedDatabaseListener		listener,
-		DistributedDatabaseKey			key )
+            DistributedDatabaseListener listener,
+            DistributedDatabaseKey key)
 	
 		throws DistributedDatabaseException;
 	
-	public void
+	void
 	delete(
-		DistributedDatabaseListener		listener,
-		DistributedDatabaseKey			key,
-		DistributedDatabaseContact[]	targets )
+            DistributedDatabaseListener listener,
+            DistributedDatabaseKey key,
+            DistributedDatabaseContact[] targets)
 	
 		throws DistributedDatabaseException;
 
-	public void
+	void
 	addTransferHandler(
-		DistributedDatabaseTransferType		type,
-		DistributedDatabaseTransferHandler	handler )
+            DistributedDatabaseTransferType type,
+            DistributedDatabaseTransferHandler handler)
 	
 		throws DistributedDatabaseException;
 	
-	public DistributedDatabaseTransferType
+	DistributedDatabaseTransferType
 	getStandardTransferType(
-		int		standard_type )
+            int standard_type)
 	
 		throws DistributedDatabaseException;
 	
-	public void
+	void
 	addListener(
-		DistributedDatabaseListener		l );
+            DistributedDatabaseListener l);
 	
-	public void
+	void
 	removeListener(
-		DistributedDatabaseListener		l );
+            DistributedDatabaseListener l);
 }

@@ -68,20 +68,20 @@ DownloadUtils
 
 				value = "";
 
-				for ( int i=0; i<bits.length; i++ ){
+                for (String bit1 : bits) {
 
-					String bit = bits[i].trim();
+                    String bit = bit1.trim();
 
-					if ( bit.length() == 0 ){
+                    if (bit.length() == 0) {
 
-						continue;
-					}
+                        continue;
+                    }
 
-					if ( !bit.startsWith( extension_prefix+"=" )){
+                    if (!bit.startsWith(extension_prefix + "=")) {
 
-						value += "&" + bit;
-					}
-				}
+                        value += "&" + bit;
+                    }
+                }
 			}
 
 			value += extension;
@@ -121,20 +121,20 @@ DownloadUtils
 
 			value = "";
 
-			for ( int i=0; i<bits.length; i++ ){
+            for (String bit1 : bits) {
 
-				String bit = bits[i].trim();
+                String bit = bit1.trim();
 
-				if ( bit.length() == 0 ){
+                if (bit.length() == 0) {
 
-					continue;
-				}
+                    continue;
+                }
 
-				if ( !bit.startsWith(extension_prefix+"=")){
+                if (!bit.startsWith(extension_prefix + "=")) {
 
-					value += "&" + bit;
-				}
-			}
+                    value += "&" + bit;
+                }
+            }
 
 			if ( value.length() == 0 ){
 				

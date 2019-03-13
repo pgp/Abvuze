@@ -160,7 +160,7 @@ public interface TableCell {
    * @return True - Sort Value changed. <br>
    *         False - Sort Value was already set to object supplied.
    */
-  public boolean setSortValue(Comparable valueToSort);
+  boolean setSortValue(Comparable valueToSort);
 
   /** Sets a long value that the column sorting will act on. 
    *
@@ -168,21 +168,21 @@ public interface TableCell {
    * @return True - Sort Value changed. <br>
    *         False - Sort Value was already set to value supplied.
    */
-  public boolean setSortValue(long valueToSort);
+  boolean setSortValue(long valueToSort);
   
   /**
    * Sets a float value that the column sorting will act upon.
    * @param valueToSort float sort value
    * @return true if sort value changed, or false if sort value already set to value supplied
    */
-  public boolean setSortValue( float valueToSort );
+  boolean setSortValue(float valueToSort);
   
 
   /** Retrieves the sorting value
    *
    * @return Object that will be sorted on
    */
-  public Comparable getSortValue();
+  Comparable getSortValue();
 
   /** Determines if the user has chosen to display the cell
    *
@@ -204,7 +204,7 @@ public interface TableCell {
    *
    * @since 2.3.0.7
    */
-  public void invalidate();
+  void invalidate();
 
   /**
    * Set the cell's tooltip display.
@@ -215,7 +215,7 @@ public interface TableCell {
    * @see #addToolTipListener(TableCellToolTipListener)
    * @since 2.1.0.2
    */
-  public void setToolTip(Object tooltip);
+  void setToolTip(Object tooltip);
   /**
    * Retrieve the tooltip object assigned to this cell
    * 
@@ -224,7 +224,7 @@ public interface TableCell {
    * @see #addToolTipListener(TableCellToolTipListener)
    * @since 2.1.0.2
    */
-  public Object getToolTip();
+  Object getToolTip();
 
   
   /**
@@ -234,7 +234,7 @@ public interface TableCell {
    * @return disposal state
    * @since 2.3.0.7
    */
-  public boolean isDisposed();
+  boolean isDisposed();
   
   /**
    * Retrieves the number of lines available for setting text
@@ -243,7 +243,7 @@ public interface TableCell {
    *
    * @since 3.0.1.1
    */
-  public int getMaxLines();
+  int getMaxLines();
 
   //////////////////////////////////
   // Start TYPE_GRAPHIC functions //
@@ -254,14 +254,14 @@ public interface TableCell {
    *
    * @return if you are filling the cell, this is the width your image should be
    */
-  public int getWidth();
+  int getWidth();
 
   /** Retrieve the height of the cell's drawing area (excluding any margin) for
    * TableColumn objects of TYPE_GRAPHIC only.
    *
    * @return if you are filling the cell, this is the height your image should be
    */
-  public int getHeight();
+  int getHeight();
   
   /** Sets the image to be drawn.
    * <p>
@@ -278,14 +278,14 @@ public interface TableCell {
    * @return true - image was changed.<br>
    *         false = image was the same
    */
-  public boolean setGraphic(Graphic img);
+  boolean setGraphic(Graphic img);
 
   /** Retrieve the SWT graphic related to this table item for
    * TableColumn objects of TYPE_GRAPHIC only.
    *
    * @return the Image that is draw in the cell, or null if there is none.
    */
-  public Graphic getGraphic();
+  Graphic getGraphic();
   
   /** TODO:
   /** Sets the image to be drawn to the file specified for
@@ -305,7 +305,7 @@ public interface TableCell {
    *
    * @param bFillCell true - the whole cell is filled by the graphic
    */
-  public void setFillCell(boolean bFillCell);
+  void setFillCell(boolean bFillCell);
 
 	/**
 	 * @return
@@ -323,7 +323,7 @@ public interface TableCell {
    *
    * @param height new margin height
    */
-  public void setMarginHeight(int height);
+  void setMarginHeight(int height);
 
 	/**
 	 * @return
@@ -341,7 +341,7 @@ public interface TableCell {
    *
    * @param width new margin width
    */
-  public void setMarginWidth(int width);
+  void setMarginWidth(int width);
   
   // End TYPE_GRAPHIC functions
   
@@ -349,34 +349,34 @@ public interface TableCell {
    *
    * @param listener Listener Object to be called when refresh is needed.
    */
-  public void addRefreshListener(TableCellRefreshListener listener);
+  void addRefreshListener(TableCellRefreshListener listener);
   /** Remove a previously added TableCellRefreshListener
    *
    * @param listener Previously added listener
    */
-  public void removeRefreshListener(TableCellRefreshListener listener);
+  void removeRefreshListener(TableCellRefreshListener listener);
 
   /** Adds a listener that triggers when the TableCell has been disposed
    *
    * @param listener listener object to be called
    */
-  public void addDisposeListener(TableCellDisposeListener listener);
+  void addDisposeListener(TableCellDisposeListener listener);
   /** Remove a previously added TableCellDisposeListener
    *
    * @param listener Previously added listener
    */
-  public void removeDisposeListener(TableCellDisposeListener listener);
+  void removeDisposeListener(TableCellDisposeListener listener);
 
   /** Adds a listener related to tooltip actions
    *
    * @param listener listener object to be called
    */
-  public void addToolTipListener(TableCellToolTipListener listener);
+  void addToolTipListener(TableCellToolTipListener listener);
   /** Remove a previously added TableCellToolTipListener
    *
    * @param listener Previously added listener
    */
-  public void removeToolTipListener(TableCellToolTipListener listener);
+  void removeToolTipListener(TableCellToolTipListener listener);
   
   /**
    * Adds a listener that triggers when a TableCell that belongs to this column
@@ -386,13 +386,13 @@ public interface TableCell {
    * 
    * @since 2.3.0.7
    */
-  public void addMouseListener(TableCellMouseListener listener);
+  void addMouseListener(TableCellMouseListener listener);
   /** Remove a previously added TableCellMouseListener
   *
   * @param listener Previously added listener
    * @since 2.3.0.7
   */
-  public void removeMouseListener(TableCellMouseListener listener);
+  void removeMouseListener(TableCellMouseListener listener);
   
   /**
    * A listener is added for every type of cell listener the supplied object 
@@ -400,7 +400,7 @@ public interface TableCell {
    *  
    * @param listenerObject Object implementing some cell listeneters
    */
-  public void addListeners(Object listenerObject);
+  void addListeners(Object listenerObject);
 
   /**
    * Returns a Graphic of what's behind the cell  
@@ -409,7 +409,7 @@ public interface TableCell {
    *
    * @since 3.0.3.5
    */
-  public Graphic getBackgroundGraphic();
+  Graphic getBackgroundGraphic();
 
 	/**
 	 * Return the position of the mouse relative to the cell.
@@ -419,12 +419,12 @@ public interface TableCell {
 	 *
 	 * @since 3.0.4.3
 	 */
-	public int[] getMouseOffset();
+    int[] getMouseOffset();
 
 	/**
 	 * Returns text that's meant for the clipboard
 	 * 
 	 * @since 4.3.1.5
 	 */
-	public String getClipboardText();
+    String getClipboardText();
 }

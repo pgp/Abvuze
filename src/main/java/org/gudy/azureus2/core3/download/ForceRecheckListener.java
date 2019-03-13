@@ -24,5 +24,5 @@ package org.gudy.azureus2.core3.download;
  */
 public interface ForceRecheckListener
 {
-	public void forceRecheckComplete(DownloadManager dm);
+	void forceRecheckComplete(DownloadManager dm);
 }

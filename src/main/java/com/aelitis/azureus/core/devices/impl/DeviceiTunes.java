@@ -579,7 +579,7 @@ DeviceiTunes
 						
 			TranscodeFileImpl[] files = getFiles();
 				
-			List<TranscodeFileImpl>	to_copy = new ArrayList<TranscodeFileImpl>();
+			List<TranscodeFileImpl>	to_copy = new ArrayList<>();
 				
 			boolean	borked_exist = false;
 			

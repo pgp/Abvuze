@@ -25,7 +25,7 @@ import com.aelitis.azureus.core.dht.transport.DHTTransportContact;
 public interface 
 DHTNATPuncherListener 
 {
-	public void
+	void
 	rendezvousChanged(
-		DHTTransportContact		rendezvous );
+            DHTTransportContact rendezvous);
 }

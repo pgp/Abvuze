@@ -27,30 +27,30 @@ package org.gudy.azureus2.plugins.peers;
 public interface 
 PeerManagerStats 
 {
-	public int
+	int
 	getConnectedSeeds();
 	
-	public int
+	int
 	getConnectedLeechers();
 	
 		// session stats
 	
-	public long
+	long
 	getDownloaded();
 	
-	public long
+	long
 	getUploaded();
 	
-	public long
+	long
 	getDownloadAverage();
 	
-	public long
+	long
 	getUploadAverage();
 	
-	public long
+	long
 	getDiscarded();
 	
-	public long
+	long
 	getHashFailBytes();
 	
 		// rate controls
@@ -61,8 +61,8 @@ PeerManagerStats
 	 * @since 4.4.0.7 
 	 * @return
 	 */
-	
-	public int getPermittedBytesToReceive();
+
+    int getPermittedBytesToReceive();
 	
 	/**
 	 * The given number of data (payload) bytes have been received.
@@ -75,8 +75,8 @@ PeerManagerStats
 	 * 
 	 *@since 4.4.0.7 
 	 */
-	
-	public void permittedReceiveBytesUsed(int bytes);
+
+    void permittedReceiveBytesUsed(int bytes);
 
 	/**
 	 * For an external process sending bytes on behalf of this download this gives the current
@@ -84,8 +84,8 @@ PeerManagerStats
 	 * @since 4.4.0.7 
 	 * @return
 	 */
-	
-	public int getPermittedBytesToSend();
+
+    int getPermittedBytesToSend();
 	
 	/**
 	 * The given number of data (payload) bytes have been sent.
@@ -98,6 +98,6 @@ PeerManagerStats
 	 * 
 	 * @since 4.4.0.7
 	 */
-		
-	public void permittedSendBytesUsed(int bytes);
+
+    void permittedSendBytesUsed(int bytes);
 }

@@ -352,12 +352,10 @@ UDPConnectionManager
 	{
 		synchronized( connection_sets ){
 
-			Iterator	it = connection_sets.values().iterator();
-			
-			while( it.hasNext()){
-				
-				((UDPConnectionSet)it.next()).poll();
-			}
+            for (Object o : connection_sets.values()) {
+
+                ((UDPConnectionSet) o).poll();
+            }
 		}
 	}
 	
@@ -378,7 +376,7 @@ UDPConnectionManager
 						
 						set.removed();
 						
-						recently_dead_keys.put( key, new Long( SystemTime.getCurrentTime()));
+						recently_dead_keys.put( key, SystemTime.getCurrentTime());
 						
 						if (Logger.isEnabled()){
 							
@@ -402,7 +400,7 @@ UDPConnectionManager
 					
 				set.removed();
 				
-				recently_dead_keys.put( key, new Long( SystemTime.getCurrentTime()));
+				recently_dead_keys.put( key, SystemTime.getCurrentTime());
 				
 				if (Logger.isEnabled()){
 					
@@ -709,7 +707,7 @@ UDPConnectionManager
 		
 		while( it.hasNext()){
 			
-			long	dead_time = ((Long)it.next()).longValue();
+			long	dead_time = (Long) it.next();
 		
 			if ( dead_time > now || now - dead_time > DEAD_KEY_RETENTION_PERIOD ){
 								
@@ -777,7 +775,7 @@ UDPConnectionManager
 												Logger.log(new LogEvent(LOGID, "Idle limit exceeded for " + set.getName() + ", removing" ));
 											}
 											
-											recently_dead_keys.put( set.getKey(), new Long( SystemTime.getCurrentTime()));
+											recently_dead_keys.put( set.getKey(), SystemTime.getCurrentTime());
 											
 											it.remove();
 											
@@ -797,13 +795,13 @@ UDPConnectionManager
 						}
 						
 						if ( failed_sets != null ){
-							
-							for (int i=0;i<failed_sets.size();i++){
-								
-								Object[]	entry = (Object[])failed_sets.get(i);
-								
-								((UDPConnectionSet)entry[0]).failed((Throwable)entry[1]);
-							}
+
+                            for (Object failed_set : failed_sets) {
+
+                                Object[] entry = (Object[]) failed_set;
+
+                                ((UDPConnectionSet) entry[0]).failed((Throwable) entry[1]);
+                            }
 						}
 					}
 					

@@ -30,121 +30,121 @@ import org.gudy.azureus2.core3.util.Constants;
 public interface 
 TRTrackerServer 
 {
-	public static final String	DEFAULT_NAME	= Constants.APP_NAME;
+	String	DEFAULT_NAME	= Constants.APP_NAME;
 	
-	public static final int DEFAULT_MIN_RETRY_DELAY 		= 120;
-	public static final int DEFAULT_MAX_RETRY_DELAY 		= 3600;
-	public static final int DEFAULT_INC_BY					= 60;
-	public static final int DEFAULT_INC_PER			 		= 10;
-	public static final int DEFAULT_SCRAPE_RETRY_PERCENTAGE	= 200;
+	int DEFAULT_MIN_RETRY_DELAY 		= 120;
+	int DEFAULT_MAX_RETRY_DELAY 		= 3600;
+	int DEFAULT_INC_BY					= 60;
+	int DEFAULT_INC_PER			 		= 10;
+	int DEFAULT_SCRAPE_RETRY_PERCENTAGE	= 200;
 	
-	public static final int	DEFAULT_SCRAPE_CACHE_PERIOD				= 5000;
-	public static final int	DEFAULT_ANNOUNCE_CACHE_PERIOD			= 500;
-	public static final int	DEFAULT_ANNOUNCE_CACHE_PEER_THRESHOLD	= 500;
+	int	DEFAULT_SCRAPE_CACHE_PERIOD				= 5000;
+	int	DEFAULT_ANNOUNCE_CACHE_PERIOD			= 500;
+	int	DEFAULT_ANNOUNCE_CACHE_PEER_THRESHOLD	= 500;
 	
-	public static final int DEFAULT_TRACKER_PORT 		= 6969;
-	public static final int DEFAULT_TRACKER_PORT_SSL	= 7000;
+	int DEFAULT_TRACKER_PORT 		= 6969;
+	int DEFAULT_TRACKER_PORT_SSL	= 7000;
 		
-	public static final int DEFAULT_NAT_CHECK_SECS		= 15;
+	int DEFAULT_NAT_CHECK_SECS		= 15;
 	
-	public String
+	String
 	getName();
 	
-	public int
+	int
 	getPort();
 	
-	public String
+	String
 	getHost();
 	
-	public InetAddress
+	InetAddress
 	getBindIP();
 	
-	public void
+	void
 	setReady();
 	
-	public void
+	void
 	setEnabled(
-		boolean	enabled );
+            boolean enabled);
 	
-	public boolean
+	boolean
 	isSSL();
 	
-	public void
+	void
 	setEnableKeepAlive(
-		boolean	enable );
+            boolean enable);
 	
-	public TRTrackerServerTorrent
+	TRTrackerServerTorrent
 	permit(
-		String		originator,
-		byte[]		hash,
-		boolean		explicit  )
+            String originator,
+            byte[] hash,
+            boolean explicit)
 		
 		throws TRTrackerServerException;
 		
-	public TRTrackerServerTorrent
+	TRTrackerServerTorrent
 	permit(
-		String		originator,
-		byte[]		hash,
-		boolean		explicit,
-		boolean		enabled )
+            String originator,
+            byte[] hash,
+            boolean explicit,
+            boolean enabled)
 		
 		throws TRTrackerServerException;
 	
-	public void
+	void
 	deny(
-		byte[]		hash,
-		boolean		explicit )
+            byte[] hash,
+            boolean explicit)
 		
 		throws TRTrackerServerException;
 		
-	public TRTrackerServerTorrentStats
+	TRTrackerServerTorrentStats
 	getStats(
-		byte[]		hash );
+            byte[] hash);
 		
-	public TRTrackerServerPeer[]
+	TRTrackerServerPeer[]
 	getPeers(
-		byte[]		hash );
+            byte[] hash);
 
-	public TRTrackerServerStats
+	TRTrackerServerStats
 	getStats();
 	
-	public void
+	void
 	setBiasedPeers(
-		Set		ips );
+            Set ips);
 	
-	public void
+	void
 	addListener(
-		TRTrackerServerListener	l );
+            TRTrackerServerListener l);
 		
-	public void
+	void
 	removeListener(
-		TRTrackerServerListener	l );
+            TRTrackerServerListener l);
 	
-	public void
+	void
 	addListener2(
-		TRTrackerServerListener2	l );
+            TRTrackerServerListener2 l);
 		
-	public void
+	void
 	removeListener2(
-		TRTrackerServerListener2	l );
+            TRTrackerServerListener2 l);
 	
 	
-	public void
+	void
 	addRequestListener(
-		TRTrackerServerRequestListener	l );
+            TRTrackerServerRequestListener l);
 	
-	public void
+	void
 	removeRequestListener(
-		TRTrackerServerRequestListener	l );
+            TRTrackerServerRequestListener l);
 	
-	public void
+	void
 	addAuthenticationListener(
-		TRTrackerServerAuthenticationListener	l );
+            TRTrackerServerAuthenticationListener l);
 	
-	public void
+	void
 	removeAuthenticationListener(
-		TRTrackerServerAuthenticationListener	l );
+            TRTrackerServerAuthenticationListener l);
 	
-	public void
+	void
 	close();
 }

@@ -23,80 +23,80 @@ package com.aelitis.azureus.core.tracker;
 public interface 
 TrackerPeerSource 
 {
-	public static final int TP_UNKNOWN		= 0;
-	public static final int TP_TRACKER		= 1;
-	public static final int TP_HTTP_SEED	= 2;
-	public static final int TP_DHT			= 3;
-	public static final int TP_LAN			= 4;
-	public static final int TP_PEX			= 5;
-	public static final int TP_INCOMING		= 6;
-	public static final int TP_PLUGIN		= 7;
+	int TP_UNKNOWN		= 0;
+	int TP_TRACKER		= 1;
+	int TP_HTTP_SEED	= 2;
+	int TP_DHT			= 3;
+	int TP_LAN			= 4;
+	int TP_PEX			= 5;
+	int TP_INCOMING		= 6;
+	int TP_PLUGIN		= 7;
 	
-	public static final int ST_UNKNOWN		= 0;
-	public static final int ST_DISABLED		= 1;
-	public static final int ST_STOPPED		= 2;
-	public static final int ST_QUEUED		= 3;
-	public static final int ST_UPDATING		= 4;
-	public static final int ST_ONLINE 		= 5;
-	public static final int ST_ERROR		= 6;
-	public static final int ST_AVAILABLE	= 7;
-	public static final int ST_UNAVAILABLE	= 8;
-	public static final int ST_INITIALISING	= 9;
+	int ST_UNKNOWN		= 0;
+	int ST_DISABLED		= 1;
+	int ST_STOPPED		= 2;
+	int ST_QUEUED		= 3;
+	int ST_UPDATING		= 4;
+	int ST_ONLINE 		= 5;
+	int ST_ERROR		= 6;
+	int ST_AVAILABLE	= 7;
+	int ST_UNAVAILABLE	= 8;
+	int ST_INITIALISING	= 9;
 
 	
-	public int
+	int
 	getType();
 	
-	public String
+	String
 	getName();
 	
-	public int
+	int
 	getStatus();
 	
-	public String
+	String
 	getStatusString();
 	
-	public int
+	int
 	getSeedCount();
 	
-	public int
+	int
 	getLeecherCount();
 	
-	public int
+	int
 	getPeers();
 	
 		/**
 		 * If the tracker source supports 'number downloads completed' this will be >= 0 
 		 * @return
 		 */
-	
-	public int
+
+        int
 	getCompletedCount();
 	
-	public int
+	int
 	getLastUpdate();
 	
-	public int
+	int
 	getSecondsToUpdate();
 	
-	public int
+	int
 	getInterval();
 	
-	public int
+	int
 	getMinInterval();
 	
-	public boolean
+	boolean
 	isUpdating();
 	
-	public boolean
+	boolean
 	canManuallyUpdate();
 	
-	public void
+	void
 	manualUpdate();
 	
-	public boolean
+	boolean
 	canDelete();
 	
-	public void
+	void
 	delete();
 }

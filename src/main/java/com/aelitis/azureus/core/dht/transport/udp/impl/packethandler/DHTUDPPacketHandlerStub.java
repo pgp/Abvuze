@@ -27,10 +27,10 @@ import com.aelitis.azureus.core.dht.transport.udp.impl.DHTUDPPacketReply;
 public interface 
 DHTUDPPacketHandlerStub 
 {
-	public void
+	void
 	send(
-		DHTUDPPacketReply			reply,
-		InetSocketAddress			destination_address )
+            DHTUDPPacketReply reply,
+            InetSocketAddress destination_address)
 	
 		throws DHTUDPPacketHandlerException;
 }

@@ -31,7 +31,7 @@ public interface DHTRouterObserver {
 	 * @param contact
 	 * the added contact
 	 */
-	public void added(DHTRouterContact contact);
+    void added(DHTRouterContact contact);
 	
 	/**
 	 * Observer method invoked when a contact is removed from the routing table.
@@ -39,7 +39,7 @@ public interface DHTRouterObserver {
 	 * @param contact
 	 * the removed contact
 	 */
-	public void removed(DHTRouterContact contact);
+    void removed(DHTRouterContact contact);
 	
 	/**
 	 * Observer method invoked when a contact changes between a bucket entry and a
@@ -48,7 +48,7 @@ public interface DHTRouterObserver {
 	 * @param contact
 	 * the contact that changed location
 	 */
-	public void locationChanged(DHTRouterContact contact);
+    void locationChanged(DHTRouterContact contact);
 	
 	/**
 	 * Observer method invoked when a contact is found to be alive.
@@ -56,7 +56,7 @@ public interface DHTRouterObserver {
 	 * @param contact
 	 * the contact now alive
 	 */
-	public void nowAlive(DHTRouterContact contact);
+    void nowAlive(DHTRouterContact contact);
 	
 	/**
 	 * Observer method invoked when a contact is found to be failing.
@@ -64,14 +64,14 @@ public interface DHTRouterObserver {
 	 * @param contact
 	 * the contact now failing
 	 */
-	public void nowFailing(DHTRouterContact contact);
+    void nowFailing(DHTRouterContact contact);
 	
 	/**
 	 * Router is not longer in use
 	 * @param router
 	 */
-	
-	public void
+
+    void
 	destroyed(
-		DHTRouter	router );
+            DHTRouter router);
 }

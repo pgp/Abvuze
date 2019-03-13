@@ -129,14 +129,14 @@ public class MenuItemImpl implements MenuItem {
 	}
 
 	public void invokeMenuWillBeShownListeners(Object target) {
-		for (Iterator iter = fill_listeners.iterator(); iter.hasNext();) {
-			try {
-				MenuItemFillListener l = (MenuItemFillListener) iter.next();
-				l.menuWillBeShown(this, target);
-			} catch (Throwable e) {
-				Debug.printStackTrace(e);
-			}
-		}
+        for (Object fill_listener : fill_listeners) {
+            try {
+                MenuItemFillListener l = (MenuItemFillListener) fill_listener;
+                l.menuWillBeShown(this, target);
+            } catch (Throwable e) {
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 
 	public void addFillListener(MenuItemFillListener listener) {
@@ -155,9 +155,9 @@ public class MenuItemImpl implements MenuItem {
 			invokeListenersSingle(null);
 			return;
 		}
-		for (int i = 0; i < rows.length; i++) {
-			invokeListenersSingle(rows[i]);
-		}
+        for (Object row : rows) {
+            invokeListenersSingle(row);
+        }
 	}
 	 
 	  public void addMultiListener(MenuItemListener l) {
@@ -227,14 +227,14 @@ public class MenuItemImpl implements MenuItem {
 
 	protected void invokeListenersOnList(CopyOnWriteList listeners_to_notify,
 			Object target) {
-		for (Iterator iter = listeners_to_notify.iterator(); iter.hasNext();) {
-			try {
-				MenuItemListener l = (MenuItemListener) iter.next();
-				l.selected(this, target);
-			} catch (Throwable e) {
-				Debug.printStackTrace(e);
-			}
-		}
+        for (Object o : listeners_to_notify) {
+            try {
+                MenuItemListener l = (MenuItemListener) o;
+                l.selected(this, target);
+            } catch (Throwable e) {
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 	
 	protected void removeWithEvents(int root_menu_event, int sub_menu_event) {
@@ -264,7 +264,9 @@ public class MenuItemImpl implements MenuItem {
 		// This should make this.children be empty...
 		MenuItem[] children = this.getItems();
 		if (children != null) {
-			for (int i=0; i<children.length; i++) {children[i].remove();}
+            for (MenuItem child : children) {
+                child.remove();
+            }
 		}
 	}
 	
@@ -281,7 +283,7 @@ public class MenuItemImpl implements MenuItem {
 		if (!(data instanceof Boolean)) {
 			throw new RuntimeException("Invalid data assigned to menu item, should be boolean: " + data);
 		}
-		return ((Boolean)data).booleanValue();
+		return (Boolean) data;
 	}
 	
 	public void setContext(MenuContextImpl context) {

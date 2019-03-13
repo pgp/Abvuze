@@ -51,16 +51,14 @@ public class SaveLocationChange {
 	 * String representation of this object.
 	 */
 	public final String toString() {
-		StringBuilder res = new StringBuilder("SaveLocationChange: ");
-		res.append("DL-LOC=");
-		res.append(download_location);
-		res.append(", DL-NAME=");
-		res.append(download_name);
-		res.append(", TOR-LOC=");
-		res.append(torrent_location);
-		res.append(", TOR-NAME=");
-		res.append(torrent_name);
-		return res.toString();
+		return "SaveLocationChange: " + "DL-LOC=" +
+				download_location +
+				", DL-NAME=" +
+				download_name +
+				", TOR-LOC=" +
+				torrent_location +
+				", TOR-NAME=" +
+				torrent_name;
 	}
 	
 	/**

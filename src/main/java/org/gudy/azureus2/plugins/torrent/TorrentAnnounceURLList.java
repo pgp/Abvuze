@@ -32,22 +32,22 @@ import java.net.*;
 public interface 
 TorrentAnnounceURLList 
 {
-	public TorrentAnnounceURLListSet[]
+	TorrentAnnounceURLListSet[]
 	getSets();
 	
-	public void
+	void
 	setSets(
-		TorrentAnnounceURLListSet[]		sets );
+            TorrentAnnounceURLListSet[] sets);
 	
 		/**
 		 * create a new set. This is NOT added to the list, you have to manually add it afterwards
 		 * @param urls
 		 * @return
 		 */
-	
-	public TorrentAnnounceURLListSet
+
+        TorrentAnnounceURLListSet
 	create(
-		URL[]		urls );
+                URL[] urls);
 
 		/**
 		 * Adds a set to the torrent at the end of the list. If the torrent currently has NO announcelist
@@ -56,10 +56,10 @@ TorrentAnnounceURLList
 		 * Duplicate set entries are ignored
 		 * @param urls
 		 */
-	
-	public void
+
+        void
 	addSet(
-		URL[]		urls );
+                URL[] urls);
 	
 	/**
 	 * Adds a set to the torrent at the front of the list. If the torrent currently has NO announcelist
@@ -68,8 +68,8 @@ TorrentAnnounceURLList
 	 * Duplicate set entries are ignored
 	 * @param urls
 	 */
-	
-	public void
+
+    void
 	insertSetAtFront(
-		URL[]		urls );
+            URL[] urls);
 }

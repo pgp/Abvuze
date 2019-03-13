@@ -25,103 +25,103 @@ import org.gudy.azureus2.plugins.disk.DiskManagerFileInfo;
 public interface 
 TranscodeJob 
 {
-	public static final int	ST_QUEUED		= 0;
-	public static final int	ST_RUNNING		= 1;
-	public static final int	ST_PAUSED		= 2;
-	public static final int	ST_COMPLETE		= 3;
-	public static final int	ST_CANCELLED	= 4;
-	public static final int	ST_FAILED		= 5;
-	public static final int	ST_STOPPED		= 6;
-	public static final int	ST_REMOVED		= 7;
+	int	ST_QUEUED		= 0;
+	int	ST_RUNNING		= 1;
+	int	ST_PAUSED		= 2;
+	int	ST_COMPLETE		= 3;
+	int	ST_CANCELLED	= 4;
+	int	ST_FAILED		= 5;
+	int	ST_STOPPED		= 6;
+	int	ST_REMOVED		= 7;
 
-	public String
+	String
 	getName();
 	
-	public TranscodeTarget
+	TranscodeTarget
 	getTarget();
 	
-	public TranscodeProfile
+	TranscodeProfile
 	getProfile();
 	
-	public DiskManagerFileInfo
+	DiskManagerFileInfo
 	getFile();
 	
-	public TranscodeFile
+	TranscodeFile
 	getTranscodeFile();
 	
-	public int
+	int
 	getTranscodeRequirement();
 	
-	public int
+	int
 	getIndex();
 	
-	public int
+	int
 	getState();
 	
-	public long
+	long
 	getDownloadETA();
 	
-	public int
+	int
 	getPercentComplete();
 	
-	public long
+	long
 	getETASecs();
 	
-	public String
+	String
 	getETA();
 	
-	public String
+	String
 	getError();
 	
-	public void
+	void
 	setEnableAutoRetry(
-		boolean		enabled );
+            boolean enabled);
 	
-	public boolean
+	boolean
 	getEnableAutoRetry();
 	
-	public void
+	void
 	setPreferDirectInput(
-		boolean		prefer );
+            boolean prefer);
 	
-	public boolean
+	boolean
 	getPreferDirectInput();
 	
-	public boolean
+	boolean
 	canPause();
 	
-	public void
+	void
 	pause();
 	
-	public void
+	void
 	resume();
 	
-	public void
+	void
 	queue();
 	
-	public void
+	void
 	stop();
 	
-	public void
+	void
 	remove()
 	
 		throws TranscodeActionVetoException;
 	
-	public void
+	void
 	removeForce();
 	
-	public void
+	void
 	moveUp();
 	
-	public void
+	void
 	moveDown();
 
-	public long
+	long
 	getProcessTime();
 	
-	public void
+	void
 	analyseNow(
-		TranscodeAnalysisListener	listener )
+            TranscodeAnalysisListener listener)
 	
 		throws TranscodeException;
 }

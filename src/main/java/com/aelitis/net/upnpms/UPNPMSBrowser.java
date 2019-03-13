@@ -23,7 +23,7 @@ package com.aelitis.net.upnpms;
 public interface 
 UPNPMSBrowser 
 {
-	public UPNPMSContainer
+	UPNPMSContainer
 	getRoot()
 			
 		throws UPnPMSException;

@@ -23,8 +23,8 @@ package com.aelitis.azureus.core.networkmanager.admin;
 public interface 
 NetworkAdminSpeedTestScheduledTestListener 
 {
-	public void stage(NetworkAdminSpeedTestScheduledTest test, String step);
+	void stage(NetworkAdminSpeedTestScheduledTest test, String step);
 
-	public void complete(NetworkAdminSpeedTestScheduledTest test );
+	void complete(NetworkAdminSpeedTestScheduledTest test);
 
 }

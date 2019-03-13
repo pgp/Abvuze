@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Constructor;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -144,7 +145,7 @@ DeviceImpl
 	}
 	
 	
-	private static List<Pattern> device_renames = new ArrayList<Pattern>();
+	private static List<Pattern> device_renames = new ArrayList<>();
 	
 	static{
 		try{
@@ -245,9 +246,9 @@ DeviceImpl
 	
 	private boolean			transcoding;
 	
-	private Map<String,Object>	persistent_properties 	= new LightHashMap<String, Object>(1);
+	private Map<String,Object>	persistent_properties 	= new LightHashMap<>(1);
 
-	private Map<Object,Object>	transient_properties 	= new LightHashMap<Object, Object>(1);
+	private Map<Object,Object>	transient_properties 	= new LightHashMap<>(1);
 	
 	private long						device_files_last_mod;
 	private boolean						device_files_dirty;
@@ -255,10 +256,10 @@ DeviceImpl
 	
 	private WeakReference<Map<String,Map<String,?>>> device_files_ref;
 	
-	private CopyOnWriteList<TranscodeTargetListener>	listeners = new CopyOnWriteList<TranscodeTargetListener>();
+	private CopyOnWriteList<TranscodeTargetListener>	listeners = new CopyOnWriteList<>();
 	
-	private Map<Object,String>	errors 	= new HashMap<Object, String>();
-	private Map<Object,String>	infos	= new HashMap<Object, String>();
+	private Map<Object,String>	errors 	= new HashMap<>();
+	private Map<Object,String>	infos	= new HashMap<>();
 	
 	private CopyOnWriteList<DeviceListener>		device_listeners;
 
@@ -383,7 +384,7 @@ DeviceImpl
 		
 		synchronized( persistent_properties ){
 			
-			pp_copy = new HashMap<String, Object>( persistent_properties );
+			pp_copy = new HashMap<>(persistent_properties);
 		}
 
 		if ( for_export ){
@@ -886,7 +887,7 @@ DeviceImpl
 					loadDeviceFile();
 				}
 				
-				List<TranscodeFile> result = new ArrayList<TranscodeFile>();
+				List<TranscodeFile> result = new ArrayList<>();
 								
 				Iterator<Map.Entry<String,Map<String,?>>> it = device_files.entrySet().iterator();
 					
@@ -907,7 +908,7 @@ DeviceImpl
 					}
 				}
 				
-				return( result.toArray( new TranscodeFileImpl[ result.size() ]));
+				return( result.toArray(new TranscodeFileImpl[0]));
 			}
 		}catch( Throwable e ){
 			
@@ -1022,7 +1023,7 @@ DeviceImpl
 	allocateUniqueFileName(
 		String		str )
 	{
-		Set<String> name_set = new HashSet<String>();
+		Set<String> name_set = new HashSet<>();
 		
 		for (Map<String,?> entry: device_files.values()){
 			
@@ -1300,7 +1301,7 @@ DeviceImpl
 	getTranscodeProfiles(
 		String		classification )
 	{		
-		List<TranscodeProfile>	profiles = new ArrayList<TranscodeProfile>();
+		List<TranscodeProfile>	profiles = new ArrayList<>();
 		
 		DeviceManagerImpl dm = getManager();
 						
@@ -1318,7 +1319,7 @@ DeviceImpl
 			profiles.addAll( Arrays.asList( ps ));
 		}
 		
-		return( profiles.toArray( new TranscodeProfile[profiles.size()] ));
+		return( profiles.toArray(new TranscodeProfile[0]));
 	}
 	
 	public TranscodeProfile
@@ -1437,7 +1438,7 @@ DeviceImpl
 	public String[][] 
 	getDisplayProperties() 
 	{
-		List<String[]> dp = new ArrayList<String[]>();
+		List<String[]> dp = new ArrayList<>();
 		
 	    getDisplayProperties( dp );
 	    	    
@@ -1670,7 +1671,7 @@ DeviceImpl
 					return( def );
 				}
 				
-				return( new String( value, "UTF-8" ));
+				return( new String( value, StandardCharsets.UTF_8));
 				
 			}catch( Throwable e ){
 				
@@ -1701,7 +1702,7 @@ DeviceImpl
 						
 					}else{
 					
-						persistent_properties.put( prop, value.getBytes( "UTF-8" ));
+						persistent_properties.put( prop, value.getBytes(StandardCharsets.UTF_8));
 					}
 					
 					dirty = true;
@@ -2002,7 +2003,7 @@ DeviceImpl
 				
 				for (byte[] value: values ){
 				
-					res[pos++] = new String( value, "UTF-8" );
+					res[pos++] = new String( value, StandardCharsets.UTF_8);
 				}
 				
 				return( res );
@@ -2026,11 +2027,11 @@ DeviceImpl
 		synchronized( persistent_properties ){
 			
 			try{
-				List<byte[]> values_list = new ArrayList<byte[]>();
+				List<byte[]> values_list = new ArrayList<>();
 				
 				for (String value: values ){
 					
-					values_list.add( value.getBytes( "UTF-8" ));
+					values_list.add( value.getBytes(StandardCharsets.UTF_8));
 				}
 				
 				persistent_properties.put( prop, values_list );
@@ -2094,7 +2095,7 @@ DeviceImpl
 					return;
 				}
 				
-				l1 = new HashMap<Object, Object>();
+				l1 = new HashMap<>();
 				
 				transient_properties.put( key1, l1 );
 			}
@@ -2164,10 +2165,10 @@ DeviceImpl
 			
 			if ( device_files == null ){
 				
-				device_files = new HashMap<String, Map<String,?>>();
+				device_files = new HashMap<>();
 			}
 		
-			device_files_ref = new WeakReference<Map<String,Map<String,?>>>( device_files );
+			device_files_ref = new WeakReference<>(device_files);
 			
 			log( "Loaded device file for " + getName() + ": files=" + device_files.size());
 		}
@@ -2452,7 +2453,7 @@ DeviceImpl
 			
 			if ( device_listeners == null ){
 				
-				device_listeners = new CopyOnWriteList<DeviceListener>();
+				device_listeners = new CopyOnWriteList<>();
 			}
 			
 			device_listeners.add( listener );

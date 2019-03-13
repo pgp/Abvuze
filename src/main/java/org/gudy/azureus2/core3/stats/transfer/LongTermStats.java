@@ -25,77 +25,77 @@ import java.util.Date;
 public interface 
 LongTermStats 
 {
-	public static final int ST_PROTOCOL_UPLOAD		= 0;
-	public static final int ST_DATA_UPLOAD			= 1;
-	public static final int ST_PROTOCOL_DOWNLOAD	= 2;
-	public static final int ST_DATA_DOWNLOAD		= 3;
-	public static final int ST_DHT_UPLOAD			= 4;
-	public static final int ST_DHT_DOWNLOAD			= 5;
+	int ST_PROTOCOL_UPLOAD		= 0;
+	int ST_DATA_UPLOAD			= 1;
+	int ST_PROTOCOL_DOWNLOAD	= 2;
+	int ST_DATA_DOWNLOAD		= 3;
+	int ST_DHT_UPLOAD			= 4;
+	int ST_DHT_DOWNLOAD			= 5;
 	
-	public static final int PT_CURRENT_HOUR			= 0;
-	public static final int PT_CURRENT_DAY			= 1;
-	public static final int PT_CURRENT_WEEK			= 2;	// sun is start of week
-	public static final int PT_CURRENT_MONTH		= 3;
+	int PT_CURRENT_HOUR			= 0;
+	int PT_CURRENT_DAY			= 1;
+	int PT_CURRENT_WEEK			= 2;	// sun is start of week
+	int PT_CURRENT_MONTH		= 3;
 	
-	public static final int PT_SLIDING_HOUR			= 10;
-	public static final int PT_SLIDING_DAY			= 11;
-	public static final int PT_SLIDING_WEEK			= 12;
+	int PT_SLIDING_HOUR			= 10;
+	int PT_SLIDING_DAY			= 11;
+	int PT_SLIDING_WEEK			= 12;
 
-	public static final String[] PT_NAMES = 
+	String[] PT_NAMES =
 		{ "hour", "day", "week", "month", "", "", "", "", "", "",
 		  "sliding hour", "sliding day", "sliding week"
 		};
 	
-	public boolean
+	boolean
 	isEnabled();
 	
-	public long[]
+	long[]
 	getCurrentRateBytesPerSecond();
 	
-	public long[]
+	long[]
 	getTotalUsageInPeriod(
-		Date		start_date,
-		Date		end_date );
+            Date start_date,
+            Date end_date);
 	
-	public long[]
+	long[]
 	getTotalUsageInPeriod(
-		int			period_type,
-		double		multiplier );
+            int period_type,
+            double multiplier);
 	
-	public long[]
+	long[]
 	getTotalUsageInPeriod(
-		int					period_type,
-		double				multiplier,
-		RecordAccepter		accepter );
+            int period_type,
+            double multiplier,
+            RecordAccepter accepter);
 	
-	public void
+	void
 	addListener(
-		long						min_delta_bytes,
-		LongTermStatsListener		listener );
+            long min_delta_bytes,
+            LongTermStatsListener listener);
 	
-	public void
+	void
 	removeListener(
-		LongTermStatsListener		listener );
+            LongTermStatsListener listener);
 	
-	public void
+	void
 	reset();
 	
-	public interface
+	interface
 	RecordAccepter
 	{
-		public boolean
+		boolean
 		acceptRecord(
-			long		timestamp );
+                long timestamp);
 	}
 	
-	public interface
+	interface
 	GenericStatsSource
 	{
-		public int
+		int
 		getEntryCount();
 		
-		public long[]
+		long[]
 		getStats(
-			String		id );
+                String id);
 	}
 }

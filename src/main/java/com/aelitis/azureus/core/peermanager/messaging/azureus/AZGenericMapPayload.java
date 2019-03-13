@@ -60,9 +60,9 @@ public class AZGenericMapPayload implements AZMessage {
   
   public int getType() {  return Message.TYPE_PROTOCOL_PAYLOAD;  }
  
-  public byte getVersion() { return version; };
+  public byte getVersion() { return version; }
 
-  public Map getMapPayload() {  return msg_map;  }
+    public Map getMapPayload() {  return msg_map;  }
   
  
   public String getDescription() {   return getID();  }

@@ -103,7 +103,7 @@ StreamManager
 	
 	private AsyncDispatcher	dispatcher = new AsyncDispatcher();
 	
-	private List<SMDImpl>		streamers = new ArrayList<SMDImpl>();
+	private List<SMDImpl>		streamers = new ArrayList<>();
 	
 	private
 	StreamManager()
@@ -134,7 +134,7 @@ StreamManager
 								
 								synchronized( StreamManager.this ){
 									
-									to_cancel = new ArrayList<SMDImpl>( streamers );
+									to_cancel = new ArrayList<>(streamers);
 									
 									streamers.clear();
 								}
@@ -225,7 +225,7 @@ StreamManager
 			
 			Class<?> epwClass = emp_pi.getPlugin().getClass().getClassLoader().loadClass( "com.azureus.plugins.azemp.ui.swt.emp.EmbeddedPlayerWindowSWT" );
 			
-			Method method = epwClass.getMethod( "prepareWindow", new Class[] { String.class });
+			Method method = epwClass.getMethod( "prepareWindow", String.class);
 			
 			return( method != null );
 			
@@ -361,12 +361,12 @@ StreamManager
 
 				Class<?> epwClass = emp_pi.getPlugin().getClass().getClassLoader().loadClass( "com.azureus.plugins.azemp.ui.swt.emp.EmbeddedPlayerWindowSWT" );
 				
-				Method method = epwClass.getMethod( "prepareWindow", new Class[] { String.class });
+				Method method = epwClass.getMethod( "prepareWindow", String.class);
 				
-				final Object player = method.invoke(null, new Object[] { file.getFile( true ).getName() });
+				final Object player = method.invoke(null, file.getFile( true ).getName());
 			
-				final Method buffering_method	= player.getClass().getMethod( "bufferingPlayback", new Class[] { Map.class });
-				final Method is_active_method	= player.getClass().getMethod( "isActive", new Class[] {});
+				final Method buffering_method	= player.getClass().getMethod( "bufferingPlayback", Map.class);
+				final Method is_active_method	= player.getClass().getMethod( "isActive");
 
 				final StreamManagerDownloadListener original_listener = listener;
 				
@@ -403,13 +403,13 @@ StreamManager
 							try{
 								original_listener.failed(error);
 								
-								Map<String,Object> b_map = new HashMap<String,Object>();
+								Map<String,Object> b_map = new HashMap<>();
 								
-								b_map.put( "state", new Integer( 3 ));
+								b_map.put( "state", 3);
 								b_map.put( "msg", Debug.getNestedExceptionMessage( error ));
 								
 								try{
-									buffering_method.invoke(player, new Object[] { b_map });
+									buffering_method.invoke(player, b_map);
 	
 								}catch( Throwable e ){
 									
@@ -496,12 +496,12 @@ StreamManager
 						
 						listener.updateActivity( "Analysing media" );
 						
-						final Map<String,Object> b_map = new HashMap<String,Object>();
+						final Map<String,Object> b_map = new HashMap<>();
 						
-						b_map.put( "state", new Integer( 1 ));
+						b_map.put( "state", 1);
 						b_map.put( "msg", MessageText.getString( "stream.analysing.media" ));
 						
-						buffering_method.invoke(player, new Object[] { b_map });
+						buffering_method.invoke(player, b_map);
 
 						final TranscodeJob tj = queue.add( dmr, profile, file, true );
 											
@@ -603,7 +603,7 @@ StreamManager
 												b_map.put( "dl_time", SystemTime.getMonotonousTime() - stream_start );
 												
 												try{
-													buffering_method.invoke(player, new Object[] { b_map });
+													buffering_method.invoke(player, b_map);
 
 												}catch( Throwable e ){
 													
@@ -639,18 +639,18 @@ StreamManager
 								
 								if ( map == null ){
 									
-									map = new HashMap<String, Map<String,Object>>();
+									map = new HashMap<>();
 									
 								}else{
 									
-									map = new HashMap<String, Map<String,Object>>( map );
+									map = new HashMap<>(map);
 								}
 								
 								Map<String,Object> file_map = map.get( String.valueOf( file_index ));
 								
 								if ( file_map == null ){
 								
-									file_map = new HashMap<String, Object>();
+									file_map = new HashMap<>();
 									
 									map.put( String.valueOf( file_index ), file_map );
 								}
@@ -695,15 +695,15 @@ StreamManager
 				
 				listener.updateActivity( "MetaData read: duration=" + TimeFormatter.formatColon( duration/1000) + ", width=" + video_width + ", height=" + video_height );
 				
-				Method smd_method = player.getClass().getMethod( "setMetaData", new Class[] { Map.class });
+				Method smd_method = player.getClass().getMethod( "setMetaData", Map.class);
 				
-				Map<String,Object>	md_map = new HashMap<String,Object>();
+				Map<String,Object>	md_map = new HashMap<>();
 				
 				md_map.put( "duration", duration );
 				md_map.put( "width", video_width );
 				md_map.put( "height", video_height );
 				
-				smd_method.invoke( player, new Object[] { md_map });
+				smd_method.invoke( player, md_map);
 
 				final long	bytes_per_sec = file.getLength() / (duration/1000);
 			
@@ -757,11 +757,11 @@ StreamManager
 						boolean	error_reported = false;
 						
 						try{
-							Method start_method 		= player.getClass().getMethod( "startPlayback", new Class[] { URL.class });
-							Method pause_method 		= player.getClass().getMethod( "pausePlayback", new Class[] {});
-							Method resume_method 		= player.getClass().getMethod( "resumePlayback", new Class[] {});
-							Method buffering_method		= player.getClass().getMethod( "bufferingPlayback", new Class[] { Map.class });
-							Method play_stats_method	= player.getClass().getMethod( "playStats", new Class[] { Map.class });
+							Method start_method 		= player.getClass().getMethod( "startPlayback", URL.class);
+							Method pause_method 		= player.getClass().getMethod( "pausePlayback");
+							Method resume_method 		= player.getClass().getMethod( "resumePlayback");
+							Method buffering_method		= player.getClass().getMethod( "bufferingPlayback", Map.class);
+							Method play_stats_method	= player.getClass().getMethod( "playStats", Map.class);
 
 							int tick_count = 0;
 							
@@ -827,7 +827,7 @@ StreamManager
 											
 											listener.updateActivity( "Resuming playback" );
 											
-											resume_method.invoke(player, new Object[] {});
+											resume_method.invoke(player);
 
 											playback_paused = false;
 										}
@@ -837,7 +837,7 @@ StreamManager
 											
 											listener.updateActivity( "Pausing playback to prevent stall" );
 																							
-											pause_method.invoke(player, new Object[] {});
+											pause_method.invoke(player);
 	
 											playback_paused = true;
 										}
@@ -848,7 +848,7 @@ StreamManager
 										
 										listener.ready();
 											
-										start_method.invoke(player, new Object[] { url });
+										start_method.invoke(player, url);
 										
 										playback_started = true;
 									}
@@ -860,11 +860,11 @@ StreamManager
 											
 										long contiguous_done = active_edm.getContiguousAvailableBytes( file_index>=0?file_index:active_edm.getPrimaryFileIndex(), 0, 0 );
 									
-										Map<String,Object> map = new HashMap<String,Object>();
+										Map<String,Object> map = new HashMap<>();
 										
-										map.put( "buffer_min", new Long( config_buffer_secs ));
-										map.put( "buffer_secs", new Integer( buffer_secs ));
-										map.put( "buffer_bytes", new Long( buffer ));
+										map.put( "buffer_min", (long) config_buffer_secs);
+										map.put( "buffer_secs", buffer_secs);
+										map.put( "buffer_bytes", buffer);
 										
 										map.put( "stream_rate", bytes_per_sec );
 										
@@ -878,15 +878,15 @@ StreamManager
 										map.put( "file_size", file.getLength());
 										map.put( "cont_done", contiguous_done );
 										
-										play_stats_method.invoke(player, new Object[] { map });
+										play_stats_method.invoke(player, map);
 									}
 								}else{
 									
 									DownloadStats stats = download.getStats();
 
-									Map<String,Object> map = new HashMap<String,Object>();
+									Map<String,Object> map = new HashMap<>();
 									
-									map.put( "state", new Integer( 2 ));
+									map.put( "state", 2);
 
 									if ( preview_mode && !complete ){
 										
@@ -905,20 +905,20 @@ StreamManager
 											preview_eta = (int)(( buffer_to_use - buffer_secs ) * secs_per_sec);
 										}
 										
-										map.put( "eta", new Integer( preview_eta ));
+										map.put( "eta", preview_eta);
 										
 										map.put( "preview", 1 );
 										
 									}else{
 										
-										map.put( "eta", new Integer( eta ));
+										map.put( "eta", eta);
 										
 										map.put( "preview", 0 );
 									}
 									
-									map.put( "buffer_min", new Long( config_buffer_secs ));
-									map.put( "buffer_secs", new Integer( buffer_secs ));
-									map.put( "buffer_bytes", new Long( buffer ));
+									map.put( "buffer_min", (long) config_buffer_secs);
+									map.put( "buffer_secs", buffer_secs);
+									map.put( "buffer_bytes", buffer);
 									
 									map.put( "stream_rate", bytes_per_sec );
 									
@@ -926,7 +926,7 @@ StreamManager
 									map.put( "dl_size", stats.getDownloaded());
 									map.put( "dl_time", SystemTime.getMonotonousTime() - stream_start );
 									
-									buffering_method.invoke(player, new Object[] { map });
+									buffering_method.invoke(player, map);
 								}
 								
 								Thread.sleep( TIMER_PERIOD );

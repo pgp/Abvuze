@@ -27,8 +27,8 @@ package org.gudy.azureus2.plugins.download;
 public interface 
 DownloadPropertyListener 
 {
-	public void
+	void
 	propertyChanged(
-		Download				download,
-		DownloadPropertyEvent	event );
+            Download download,
+            DownloadPropertyEvent event);
 }

@@ -192,38 +192,36 @@ IPCInterfaceImpl
 		}catch( NoSuchMethodException e ){
 			
 			Method[]	methods = target.getClass().getMethods();
-			
-			for (int i=0;i<methods.length;i++){
-				
-				Method	method = methods[i];
-				
-				Class[] method_params = method.getParameterTypes();
-				
-				if ( method.getName().equals( methodName ) && method_params.length == paramTypes.length ){
-					
-					boolean	ok = true;
-					
-					for (int j=0;j<method_params.length;j++){
-						
-						Class	declared 	= method_params[j];
-						Class	supplied	= paramTypes[j];
-						
-						if ( !declared.isAssignableFrom( supplied )){
-					
-							ok	= false;
-							
-							break;
-						}
-					}
-					
-					if ( ok ){
-						
-						mtd = method;
-						
-						break;
-					}
-				}
-			}
+
+            for (Method method : methods) {
+
+                Class[] method_params = method.getParameterTypes();
+
+                if (method.getName().equals(methodName) && method_params.length == paramTypes.length) {
+
+                    boolean ok = true;
+
+                    for (int j = 0; j < method_params.length; j++) {
+
+                        Class declared = method_params[j];
+                        Class supplied = paramTypes[j];
+
+                        if (!declared.isAssignableFrom(supplied)) {
+
+                            ok = false;
+
+                            break;
+                        }
+                    }
+
+                    if (ok) {
+
+                        mtd = method;
+
+                        break;
+                    }
+                }
+            }
 			
 			if ( mtd == null ){
 				
@@ -255,38 +253,36 @@ IPCInterfaceImpl
 		}catch( NoSuchMethodException e ){
 			
 			Method[]	methods = target.getClass().getMethods();
-			
-			for (int i=0;i<methods.length;i++){
-				
-				Method	method = methods[i];
-				
-				Class[] method_params = method.getParameterTypes();
-				
-				if ( method.getName().equals( methodName ) && method_params.length == paramTypes.length ){
-					
-					boolean	ok = true;
-					
-					for (int j=0;j<method_params.length;j++){
-						
-						Class	declared 	= method_params[j];
-						Class	supplied	= paramTypes[j];
-						
-						if ( !declared.isAssignableFrom( supplied )){
-					
-							ok	= false;
-							
-							break;
-						}
-					}
-					
-					if ( ok ){
-						
-						mtd = method;
-						
-						break;
-					}
-				}
-			}
+
+            for (Method method : methods) {
+
+                Class[] method_params = method.getParameterTypes();
+
+                if (method.getName().equals(methodName) && method_params.length == paramTypes.length) {
+
+                    boolean ok = true;
+
+                    for (int j = 0; j < method_params.length; j++) {
+
+                        Class declared = method_params[j];
+                        Class supplied = paramTypes[j];
+
+                        if (!declared.isAssignableFrom(supplied)) {
+
+                            ok = false;
+
+                            break;
+                        }
+                    }
+
+                    if (ok) {
+
+                        mtd = method;
+
+                        break;
+                    }
+                }
+            }
 			
 			if ( mtd == null ){
 				
@@ -308,18 +304,16 @@ IPCInterfaceImpl
 			if ( target_use_accessor == null ){
 				
 				PluginInterface[] pis = plugin_initializer.getPlugins();
-				
-				for (int i=0;i<pis.length;i++){
-					
-					PluginInterface pi = pis[i];
-					
-					if ( pi.getPlugin().getClass().getName().equals( plugin_class )){
-						
-						target_use_accessor = pi.getPlugin();
-						
-						break;
-					}
-				}
+
+                for (PluginInterface pi : pis) {
+
+                    if (pi.getPlugin().getClass().getName().equals(plugin_class)) {
+
+                        target_use_accessor = pi.getPlugin();
+
+                        break;
+                    }
+                }
 			}
 			
 			if ( target_use_accessor == null ){

@@ -39,69 +39,69 @@ import org.gudy.azureus2.plugins.network.RateLimiter;
 public interface 
 Peer 
 {
-	public final static int CONNECTING 		= PEPeer.CONNECTING;
-	public final static int HANDSHAKING 	= PEPeer.HANDSHAKING;
-	public final static int TRANSFERING 	= PEPeer.TRANSFERING;
-	public final static int CLOSING 		= PEPeer.CLOSING;
-	public final static int DISCONNECTED 	= PEPeer.DISCONNECTED;
+	int CONNECTING 		= PEPeer.CONNECTING;
+	int HANDSHAKING 	= PEPeer.HANDSHAKING;
+	int TRANSFERING 	= PEPeer.TRANSFERING;
+	int CLOSING 		= PEPeer.CLOSING;
+	int DISCONNECTED 	= PEPeer.DISCONNECTED;
   
 
-	public final static Object PR_PRIORITY_CONNECTION 	= new Object();
-	public final static Object PR_PROTOCOL				= new Object();
-	public final static Object PR_PROTOCOL_QUALIFIER	= new Object();
+	Object PR_PRIORITY_CONNECTION 	= new Object();
+	Object PR_PROTOCOL				= new Object();
+	Object PR_PROTOCOL_QUALIFIER	= new Object();
 	
-	public void
+	void
 	bindConnection(
-		ConnectionStub		stub );
+            ConnectionStub stub);
 	
-	public PeerManager
+	PeerManager
 	getManager();
 	
-	public int getState();	// from above set
+	int getState();	// from above set
 
-	public byte[] getId();
+	byte[] getId();
   
   
 	/**
 	 * Get the peer's local TCP connection port.
 	 * @return local port
 	 */
-	
-	public String getIp();
+
+    String getIp();
 
 	/**
 	 * Get the TCP port this peer is listening for incoming connections on.
 	 * @return TCP port, or 0 if port is unknown
 	 */
-	public int getTCPListenPort();
+    int getTCPListenPort();
 
 	/**
 	 * Get the UDP port this peer is listening for incoming connections on.
 	 * @return UDP port, or 0 if port is unknown
 	 */
-	public int getUDPListenPort();
+    int getUDPListenPort();
 
 	/**
 	 * Get the UDP port this peer is listening on for non-data connections
 	 * @return
 	 */
 
-	public int
+    int
 	getUDPNonDataListenPort();
 
-	public int getPort();
+	int getPort();
 	
-	public boolean
+	boolean
 	isLANLocal();
 	
-	public boolean[] getAvailable();
+	boolean[] getAvailable();
 	/**
 	 * @param pieceNumber int
 	 * @return true if this peers makes this piece available
 	 */
-	public boolean isPieceAvailable(int pieceNumber);
+    boolean isPieceAvailable(int pieceNumber);
    
-	public boolean
+	boolean
 	isTransferAvailable();
 	
 		/**
@@ -110,14 +110,14 @@ Peer
 		 * @param max
 		 * @return
 		 */
-	
-	public int
+
+        int
 	readBytes(
-		int	max );
+                int max);
 	
-	public int
+	int
 	writeBytes(
-		int	max );
+            int max);
 	
 	/**
 	 * This is much list isTransferAvailable(), except is more comprehensive.
@@ -126,91 +126,91 @@ Peer
 	 * to try to check each thing on it's own.
 	 * @return true if several factors say downloading can be tried.
 	 */
-	public boolean isDownloadPossible();
+    boolean isDownloadPossible();
 	
-	public boolean isChoked();
+	boolean isChoked();
 
-	public boolean isChoking();
+	boolean isChoking();
 
-	public boolean isInterested();
+	boolean isInterested();
 
-	public boolean isInteresting();
+	boolean isInteresting();
 
-	public boolean isSeed();
+	boolean isSeed();
  
-	public boolean isSnubbed();
+	boolean isSnubbed();
 	
-	public long getSnubbedTime();
+	long getSnubbedTime();
  
-	public void setSnubbed( boolean b);
+	void setSnubbed(boolean b);
 	
-	public PeerStats getStats();
+	PeerStats getStats();
  	
-	public boolean isIncoming();
+	boolean isIncoming();
 
 		/**
 		 * @deprecated This erroneously returns percent in 1000 (i.e. 100% = 1000 :) Therefore replaces
 		 * with something more accurately named!
 		 * @return
 		 */
-	
-	public int getPercentDone();
 
-	public int getPercentDoneInThousandNotation();
-	
-	public String getClient();
+        int getPercentDone();
 
-	public boolean isOptimisticUnchoke();
+	int getPercentDoneInThousandNotation();
+	
+	String getClient();
+
+	boolean isOptimisticUnchoke();
   
-	public void setOptimisticUnchoke( boolean is_optimistic );
+	void setOptimisticUnchoke(boolean is_optimistic);
 		
-	public List
+	List
 	getExpiredRequests();
   		
-	public List
+	List
 	getRequests();
 	
-	public int
+	int
 	getMaximumNumberOfRequests();
 	
-	public int
+	int
 	getNumberOfRequests();
 
-	public void
+	void
 	cancelRequest(
-		PeerReadRequest	request );
+            PeerReadRequest request);
 
-	public boolean
+	boolean
 	requestAllocationStarts(
-		int[]	base_priorities );
+            int[] base_priorities);
 	
-	public int[]
+	int[]
 	getPriorityOffsets();
 	       	       	
-	public void
+	void
 	requestAllocationComplete();
 	
-	public boolean 
+	boolean
 	addRequest(
-		PeerReadRequest	request );
+            PeerReadRequest request);
 
 
-	public void
+	void
 	close(
-		String 		reason,
-		boolean 	closedOnError,
-		boolean 	attemptReconnect );
+            String reason,
+            boolean closedOnError,
+            boolean attemptReconnect);
 	
-	public int
+	int
 	getPercentDoneOfCurrentIncomingRequest();
 		
-	public int[] 
+	int[]
 	getOutgoingRequestedPieceNumbers(); 
 	
-	public int
+	int
 	getOutgoingRequestCount();
 	
-	public int
+	int
 	getPercentDoneOfCurrentOutgoingRequest();
   
   /**
@@ -218,7 +218,7 @@ Peer
    * @param listener
    * @deprecated use addListener( PeerListener2 )
    */
-	public void	addListener( PeerListener	listener );
+  void	addListener(PeerListener listener);
 	
 
   /**
@@ -226,59 +226,59 @@ Peer
    * @param listener
    * @deprecated use removeListener( PeerListener2 )
    */
-	public void removeListener(	PeerListener listener );
+  void removeListener(PeerListener listener);
   
 	  /**
 	   * Add peer listener.
 	   * @param listener
 	   */
-	public void	addListener( PeerListener2	listener );
+      void	addListener(PeerListener2 listener);
 	
 
   /**
    * Remove peer listener.
    * @param listener
    */
-	public void removeListener(	PeerListener2 listener );
+  void removeListener(PeerListener2 listener);
   
   
   /**
    * Get the network connection that backs this peer.
    * @return connection
    */
-  public Connection getConnection();
+  Connection getConnection();
   
   
   /**
    * Whether or not this peer supports the advanced messaging API.
    * @return true if extended messaging is supported, false if not
    */
-  public boolean supportsMessaging();
+  boolean supportsMessaging();
   
   
   /**
    * Get the list of messages that this peer and us mutually understand.
    * @return messages available for use, or null of supported is yet unknown
    */
-  public Message[] getSupportedMessages();
+  Message[] getSupportedMessages();
 
-  public void
+  void
   setUserData(
-	Object	key,
-	Object	value );
+          Object key,
+          Object value);
   
-  public Object
+  Object
   getUserData(
-	Object	key );
+          Object key);
   
-  public byte[] getHandshakeReservedBytes();
+  byte[] getHandshakeReservedBytes();
   
-  public boolean
+  boolean
   isPriorityConnection();
   
-  public void
+  void
   setPriorityConnection(
-		boolean		is_priority );
+          boolean is_priority);
   
 	  /**
 	   * @since 4.7.0.3
@@ -286,17 +286,17 @@ Peer
 	   * @param is_upload		false -> download limit
 	   */
 
-  public void
+      void
   addRateLimiter(
-		  RateLimiter		limiter,
-		  boolean			is_upload );
+              RateLimiter limiter,
+              boolean is_upload);
 
-  public void
+  void
   removeRateLimiter(
-		  RateLimiter		limiter,
-		  boolean			is_upload );
+          RateLimiter limiter,
+          boolean is_upload);
   
-  public RateLimiter[]
+  RateLimiter[]
   getRateLimiters(
-   		 boolean	is_upload );
+          boolean is_upload);
 }

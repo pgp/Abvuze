@@ -35,76 +35,76 @@ import org.gudy.azureus2.core3.util.*;
 public interface 
 TRTrackerServerTorrent 
 {
-	public HashWrapper
+	HashWrapper
 	getHash();
 	
-	public TRTrackerServerPeer[]
+	TRTrackerServerPeer[]
 	getPeers();
 	
-	public TRTrackerServerPeerBase[]
+	TRTrackerServerPeerBase[]
 	getQueuedPeers();
 	
-	public TRTrackerServerTorrentStats
+	TRTrackerServerTorrentStats
 	getStats();
 	
-	public void
+	void
 	disableCaching();
 	
-	public void
+	void
 	setMinBiasedPeers(
-		int		num );
+            int num);
 	
-	public void
+	void
 	setEnabled(
-		boolean	enabled );
+            boolean enabled);
 	
-	public boolean
+	boolean
 	isEnabled();
 	
-	public void
+	void
 	setRedirects(
-		URL[]		urls );
+            URL[] urls);
 	
-	public URL[]
+	URL[]
 	getRedirects();
 	
-	public TRTrackerServerTorrent
+	TRTrackerServerTorrent
 	addLink(
-		String	link );
+            String link);
 	
-	public void
+	void
 	removeLink(
-		String	link );
+            String link);
 	
-	public void
+	void
 	addExplicitBiasedPeer(
-		String		ip,
-		int			port );
+            String ip,
+            int port);
 	
-	public void
+	void
 	remove(
-		TRTrackerServerPeerBase		peer );
+            TRTrackerServerPeerBase peer);
 	
-	public void
+	void
 	addListener(
-		TRTrackerServerTorrentListener	l );
+            TRTrackerServerTorrentListener l);
 	
-	public void
+	void
 	removeListener(
-		TRTrackerServerTorrentListener	l );
+            TRTrackerServerTorrentListener l);
 	
-	public void
+	void
 	addPeerListener(
-		TRTrackerServerTorrentPeerListener	l );
+            TRTrackerServerTorrentPeerListener l);
 	
-	public void
+	void
 	removePeerListener(
-		TRTrackerServerTorrentPeerListener	l );
+            TRTrackerServerTorrentPeerListener l);
 	
-	public void
+	void
 	importPeers(
-		List		peers );
+            List peers);
 	
-	public String
+	String
 	getString();
 }

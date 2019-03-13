@@ -147,25 +147,23 @@ AENetworkClassifier
 		urls.add( torrent.getAnnounceURL());
 		
 		TOTorrentAnnounceURLSet[] sets = torrent.getAnnounceURLGroup().getAnnounceURLSets();
-		
-		for (int i=0;i<sets.length;i++){
-			
-			URL[]	u = sets[i].getAnnounceURLs();
+
+		for (TOTorrentAnnounceURLSet set : sets) {
+
+			URL[] u = set.getAnnounceURLs();
 
 			Collections.addAll(urls, u);
 		}
 		
-		List<String>	available_networks = new ArrayList<String>();
-		
-		for (int i=0;i<urls.size();i++){
-			
-			URL	u = (URL)urls.get(i);
-					
-			String	network = categoriseAddress( u.getHost());
-			
-			if ( !available_networks.contains( network )){
-				
-				available_networks.add( network );
+		List<String>	available_networks = new ArrayList<>();
+
+		for (URL u : urls) {
+
+			String network = categoriseAddress(u.getHost());
+
+			if (!available_networks.contains(network)) {
+
+				available_networks.add(network);
 			}
 		}
 		
@@ -177,7 +175,7 @@ AENetworkClassifier
 		
 		boolean	prompt = COConfigurationManager.getBooleanParameter( "Network Selection Prompt" );
 		
-		List<String>	res = new ArrayList<String>();
+		List<String>	res = new ArrayList<>();
 
 		if ( prompt && listeners.size() > 0 ){
 
@@ -185,32 +183,32 @@ AENetworkClassifier
 			
 			available_networks.toArray( t_nets );
 
-			for (int i=0;i<listeners.size();i++){
-				
-				try{
-					String[]	selected = ((AENetworkClassifierListener)listeners.get(i)).selectNetworks(
-											display_name,
-											t_nets );
-					
-					if ( selected != null ){
+			for (Object listener : listeners) {
+
+				try {
+					String[] selected = ((AENetworkClassifierListener) listener).selectNetworks(
+							display_name,
+							t_nets);
+
+					if (selected != null) {
 
 						Collections.addAll(res, selected);
 					}
-				}catch( Throwable e ){
-					
+				} catch (Throwable e) {
+
 					Debug.printStackTrace(e);
 				}
 			}
 			
 		}else{
 				// use enabled defaults to proceed
-			
-			
-			for (int i=0;i<available_networks.size();i++){
-				
-				if ( COConfigurationManager.getBooleanParameter( "Network Selection Default." + available_networks.get(i))){
-			
-					res.add( available_networks.get(i));
+
+
+			for (String available_network : available_networks) {
+
+				if (COConfigurationManager.getBooleanParameter("Network Selection Default." + available_network)) {
+
+					res.add(available_network);
 				}
 			}
 		}
@@ -225,7 +223,7 @@ AENetworkClassifier
 	public static String[]
 	getDefaultNetworks()
 	{
-		List<String>	res = new ArrayList<String>();
+		List<String>	res = new ArrayList<>();
 
 		for ( String net: AT_NETWORKS ){
 			

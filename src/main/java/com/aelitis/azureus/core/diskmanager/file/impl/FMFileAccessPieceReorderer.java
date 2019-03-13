@@ -142,18 +142,16 @@ FMFileAccessPieceReorderer
 				long	file_offset_in_torrent = 0;
 				
 				TOTorrentFile[] files = torrent.getFiles();
-				
-				for (int i=0;i<files.length;i++){
-					
-					TOTorrentFile	f = files[i];
-					
-					if ( f == _torrent_file ){
-						
-						break;
-					}
-					
-					file_offset_in_torrent	+= f.getLength();
-				}
+
+                for (TOTorrentFile f : files) {
+
+                    if (f == _torrent_file) {
+
+                        break;
+                    }
+
+                    file_offset_in_torrent += f.getLength();
+                }
 																
 				int first_piece_offset 	= (int)( file_offset_in_torrent % piece_size );
 
@@ -866,7 +864,7 @@ FMFileAccessPieceReorderer
 				return;
 			}
 			
-			current_length 		= l_len.longValue();
+			current_length 		= l_len;
 			next_piece_index	= l_next.intValue();
 			
 			if ( piece_bytes.length != num_pieces * 4 ){
@@ -977,30 +975,28 @@ FMFileAccessPieceReorderer
 	{
 		Map	map = new HashMap();
 		
-		map.put( "st",		new Long( storage_type ));
-		map.put( "len", 	new Long( current_length ));
-		map.put( "next", 	new Long( next_piece_index ));
+		map.put( "st", (long) storage_type);
+		map.put( "len", current_length);
+		map.put( "next", next_piece_index);
 		
 		byte[]	pieces_bytes = new byte[ piece_map.length * 4 ];
 		
 		int	pos = 0;
-		
-		for (int i=0;i<piece_map.length;i++){
-		
-			int	value = piece_map[i];
-			
-			if ( value == -1 ){
-				
-				pieces_bytes[pos++] = pieces_bytes[pos++] = pieces_bytes[pos++] = pieces_bytes[pos++] = (byte)0xff;
-				
-			}else{
-				
-				pieces_bytes[pos++] = (byte)( value >> 24 );
-				pieces_bytes[pos++] = (byte)( value >> 16 );
-				pieces_bytes[pos++] = (byte)( value >> 8 );
-				pieces_bytes[pos++] = (byte)( value );
-			}
-		}
+
+        for (int value : piece_map) {
+
+            if (value == -1) {
+
+                pieces_bytes[pos++] = pieces_bytes[pos++] = pieces_bytes[pos++] = pieces_bytes[pos++] = (byte) 0xff;
+
+            } else {
+
+                pieces_bytes[pos++] = (byte) (value >> 24);
+                pieces_bytes[pos++] = (byte) (value >> 16);
+                pieces_bytes[pos++] = (byte) (value >> 8);
+                pieces_bytes[pos++] = (byte) (value);
+            }
+        }
 		
 		map.put( "pieces", 	pieces_bytes );
 		

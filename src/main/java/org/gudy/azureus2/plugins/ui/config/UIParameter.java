@@ -26,5 +26,5 @@ package org.gudy.azureus2.plugins.ui.config;
  * @since 3.0.5.3
  */
 public interface UIParameter extends Parameter {
-	public UIParameterContext getContext();
+	UIParameterContext getContext();
 }

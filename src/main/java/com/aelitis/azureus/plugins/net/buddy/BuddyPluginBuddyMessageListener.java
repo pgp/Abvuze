@@ -25,9 +25,9 @@ import java.util.Map;
 public interface 
 BuddyPluginBuddyMessageListener 
 {
-	public void
+	void
 	messageQueued(
-		BuddyPluginBuddyMessage		message );
+            BuddyPluginBuddyMessage message);
 	
 		/**
 		 * Indicates that a message has been delivered to the buddy
@@ -36,18 +36,18 @@ BuddyPluginBuddyMessageListener
 		 * @return true if message procesing complete, false if failed and require re-invocation of this listener periodically to 
 		 * attempt processing again
 		 */
-	
-	public boolean
+
+        boolean
 	deliverySucceeded(
-		BuddyPluginBuddyMessage		message,
-		Map							reply );
+                BuddyPluginBuddyMessage message,
+                Map reply);
 	
-	public void
+	void
 	deliveryFailed(
-		BuddyPluginBuddyMessage		message,
-		BuddyPluginException		cause );
+            BuddyPluginBuddyMessage message,
+            BuddyPluginException cause);
 	
-	public void
+	void
 	messageDeleted(
-		BuddyPluginBuddyMessage		message );
+            BuddyPluginBuddyMessage message);
 }

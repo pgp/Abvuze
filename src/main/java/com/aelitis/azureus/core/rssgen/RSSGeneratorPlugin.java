@@ -27,6 +27,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
@@ -115,7 +116,7 @@ RSSGeneratorPlugin
 		}
 		
 		defaults.put( WebPlugin.PR_ENABLE,
-			Boolean.valueOf(COConfigurationManager.getBooleanParameter("Plugin.default.device.rss.enable", false)));
+                COConfigurationManager.getBooleanParameter("Plugin.default.device.rss.enable", false));
 		defaults.put( WebPlugin.PR_DISABLABLE, Boolean.TRUE);
 	    defaults.put( WebPlugin.PR_PORT, rss_port );
 	    defaults.put( WebPlugin.PR_ACCESS, rss_access );
@@ -134,7 +135,7 @@ RSSGeneratorPlugin
 	}
 	
 	
-	private static final Map<String,Provider>	providers = new TreeMap<String, Provider>();
+	private static final Map<String,Provider>	providers = new TreeMap<>();
 	
 	private HyperlinkParameter		test_param;
 	private BooleanParameter		enable_low_noise;
@@ -266,7 +267,7 @@ RSSGeneratorPlugin
 			
 			response.setContentType( "text/html; charset=UTF-8" );
 			
-			PrintWriter pw = new PrintWriter(new OutputStreamWriter( response.getOutputStream(), "UTF-8" ));
+			PrintWriter pw = new PrintWriter(new OutputStreamWriter( response.getOutputStream(), StandardCharsets.UTF_8));
 
 			pw.println( "<HTML><HEAD><TITLE>Vuze Feeds etc.</TITLE></HEAD><BODY>" );
 			
@@ -327,7 +328,7 @@ RSSGeneratorPlugin
 	Provider
 		extends TrackerWebPageGenerator
 	{
-		public boolean
+		boolean
 		isEnabled();
 	}
 }

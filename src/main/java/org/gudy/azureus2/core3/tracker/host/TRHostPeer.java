@@ -29,27 +29,27 @@ package org.gudy.azureus2.core3.tracker.host;
 public interface 
 TRHostPeer 
 {
-	public boolean
+	boolean
 	isSeed();
 	
-	public long
+	long
 	getUploaded();
 	
-	public long
+	long
 	getDownloaded();
 	
-	public long
+	long
 	getAmountLeft();
 	
-	public String
+	String
 	getIP();
 	
-	public String
+	String
 	getIPRaw();
 	
-	public int
+	int
 	getPort();
 	
-	public byte[]
+	byte[]
 	getPeerID();
 }

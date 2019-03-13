@@ -25,6 +25,7 @@ import java.net.InetSocketAddress;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -74,7 +75,7 @@ HTTPNetworkManager
 	private long	total_invalid_requests;
 	private long	total_ok_requests;
 	
-	final CopyOnWriteList<URLHandler>	url_handlers = new CopyOnWriteList<URLHandler>();
+	final CopyOnWriteList<URLHandler>	url_handlers = new CopyOnWriteList<>();
 	
 	private 
 	HTTPNetworkManager()
@@ -98,27 +99,27 @@ HTTPNetworkManager
 						{
 							if ( types.contains( AzureusCoreStats.ST_NET_HTTP_IN_REQUEST_COUNT )){
 								
-								values.put( AzureusCoreStats.ST_NET_HTTP_IN_REQUEST_COUNT, new Long( total_requests ));
+								values.put( AzureusCoreStats.ST_NET_HTTP_IN_REQUEST_COUNT, total_requests);
 							}	
 							
 							if ( types.contains( AzureusCoreStats.ST_NET_HTTP_IN_REQUEST_OK_COUNT )){
 								
-								values.put( AzureusCoreStats.ST_NET_HTTP_IN_REQUEST_OK_COUNT, new Long( total_ok_requests ));
+								values.put( AzureusCoreStats.ST_NET_HTTP_IN_REQUEST_OK_COUNT, total_ok_requests);
 							}					
 
 							if ( types.contains( AzureusCoreStats.ST_NET_HTTP_IN_REQUEST_INVALID_COUNT )){
 								
-								values.put( AzureusCoreStats.ST_NET_HTTP_IN_REQUEST_INVALID_COUNT, new Long( total_invalid_requests ));
+								values.put( AzureusCoreStats.ST_NET_HTTP_IN_REQUEST_INVALID_COUNT, total_invalid_requests);
 							}					
 
 							if ( types.contains( AzureusCoreStats.ST_NET_HTTP_IN_REQUEST_WEBSEED_COUNT )){
 								
-								values.put( AzureusCoreStats.ST_NET_HTTP_IN_REQUEST_WEBSEED_COUNT, new Long( total_webseed_requests ));
+								values.put( AzureusCoreStats.ST_NET_HTTP_IN_REQUEST_WEBSEED_COUNT, total_webseed_requests);
 							}	
 							
 							if ( types.contains( AzureusCoreStats.ST_NET_HTTP_IN_REQUEST_GETRIGHT_COUNT )){
 								
-								values.put( AzureusCoreStats.ST_NET_HTTP_IN_REQUEST_GETRIGHT_COUNT, new Long( total_getright_requests));							}					
+								values.put( AzureusCoreStats.ST_NET_HTTP_IN_REQUEST_GETRIGHT_COUNT, total_getright_requests);							}
 
 						}
 				  });
@@ -176,7 +177,7 @@ HTTPNetworkManager
 			    		try{
 			    				// format is GET url HTTP/1.1<NL>
 			    			
-				    		String	url = new String( line_bytes, "ISO-8859-1" );
+				    		String	url = new String( line_bytes, StandardCharsets.ISO_8859_1);
 				    		
 				    		int	space = url.indexOf(' ');
 				    		
@@ -255,7 +256,7 @@ HTTPNetworkManager
 				    		
 				    		if ( hash_str != null ){
 			    				
-			    				byte[]	hash = URLDecoder.decode( hash_str, "ISO-8859-1" ).getBytes( "ISO-8859-1" );
+			    				byte[]	hash = URLDecoder.decode( hash_str, "ISO-8859-1" ).getBytes(StandardCharsets.ISO_8859_1);
 			    								    				
 			    				PeerManagerRegistration reg_data = PeerManager.getSingleton().manualMatchHash( address, hash );
 			    				
@@ -300,16 +301,16 @@ HTTPNetworkManager
 					    					
 					    					target_url.append( "/files/" );
 					    					
-					    					target_url.append( URLEncoder.encode(  new String( file.getTorrent().getHash(), "ISO-8859-1" ), "ISO-8859-1" ));
+					    					target_url.append( URLEncoder.encode(  new String( file.getTorrent().getHash(), StandardCharsets.ISO_8859_1), "ISO-8859-1" ));
 					    					
 					    					byte[][]	bits = file.getPathComponents();
-					    					
-					    					for (int i=0;i<bits.length;i++){
-					    						
-					    						target_url.append( "/" );
-					    						
-					    						target_url.append( URLEncoder.encode( new String( bits[i], "ISO-8859-1" ), "ISO-8859-1" ));
-					    					}
+
+                                            for (byte[] bit : bits) {
+
+                                                target_url.append("/");
+
+                                                target_url.append(URLEncoder.encode(new String(bit, StandardCharsets.ISO_8859_1), "ISO-8859-1"));
+                                            }
 					    					
 					    					ok	= true;
 					    					
@@ -648,7 +649,7 @@ HTTPNetworkManager
 						"Connection: Close" + NL +
 						"Content-Length: " + ( bytes.length + 4 )+ NL +
 						NL + 
-						new String( length, "ISO-8859-1" ) + new String( bytes, "ISO-8859-1" ) );
+						new String( length, StandardCharsets.ISO_8859_1) + new String( bytes, StandardCharsets.ISO_8859_1) );
 				
 			}catch( Throwable e ){
 			}
@@ -694,16 +695,10 @@ HTTPNetworkManager
 		final String				data )
 	{
 		byte[]	bytes;
-		
-		try{
-			bytes = data.getBytes( "ISO-8859-1" );
-			
-		}catch( UnsupportedEncodingException e ){
-			
-			bytes = data.getBytes();
-		}
-				
-		final ByteBuffer bb = ByteBuffer.wrap( bytes );
+
+        bytes = data.getBytes(StandardCharsets.ISO_8859_1);
+
+        final ByteBuffer bb = ByteBuffer.wrap( bytes );
 		
 		try{
 			transport.write( bb, false );
@@ -801,14 +796,14 @@ HTTPNetworkManager
 	public interface
 	URLHandler
 	{
-		public boolean
+		boolean
 		matches(
-			String		url );
+                String url);
 		
-		public void
+		void
 		handle(
-			TransportHelper		transport,
-			String				header_so_far );
+                TransportHelper transport,
+                String header_so_far);
 		
 	}
 }

@@ -23,8 +23,8 @@ package com.aelitis.azureus.core.vuzefile;
 public interface 
 VuzeFileProcessor 
 {
-	public void
+	void
 	process(
-		VuzeFile[]		files,
-		int				expected_types );
+            VuzeFile[] files,
+            int expected_types);
 }

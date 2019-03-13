@@ -25,8 +25,8 @@ import java.util.*;
 public interface 
 AzureusCoreStatsProvider 
 {
-	public void
+	void
 	updateStats(
-		Set<String>				types,
-		Map<String,Object>		values );
+            Set<String> types,
+            Map<String, Object> values);
 }

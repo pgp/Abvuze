@@ -159,16 +159,16 @@ NetStatusProtocolTester
 				DHT	target_dht = null;
 				
 				int	target_network	= Constants.isCVSVersion()?DHT.NW_CVS:DHT.NW_MAIN;
-				
-				for (int i=0;i<dhts.length;i++){
-					
-					if ( dhts[i].getTransport().getNetwork() == target_network ){
-						
-						target_dht = dhts[i];
-						
-						break;
-					}
-				}
+
+                for (DHT dht : dhts) {
+
+                    if (dht.getTransport().getNetwork() == target_network) {
+
+                        target_dht = dht;
+
+                        break;
+                    }
+                }
 				
 				if ( target_dht == null ){
 					
@@ -334,13 +334,13 @@ NetStatusProtocolTester
 		
 		Map	request = new HashMap();
 		
-		request.put( "v", new Long( CURRENT_VERSION ));
+		request.put( "v", (long) CURRENT_VERSION);
 				
-		request.put( "t", new Long( TEST_TYPE_BT ));
+		request.put( "t", (long) TEST_TYPE_BT);
 			
 		request.put( "h", bt_tester.getServerHash());
 			
-		request.put( "c", new Long( use_crypto?1:0 ));
+		request.put( "c", (long) (use_crypto ? 1 : 0));
 		
 		Map	reply = sendRequest( contact, request );
 				
@@ -423,7 +423,7 @@ NetStatusProtocolTester
 		
 		Long	test_type	= (Long)request.get( "t" );
 		
-		reply.put( "v", new Long( CURRENT_VERSION ));
+		reply.put( "v", (long) CURRENT_VERSION);
 		
 		if ( test_type != null ){
 			
@@ -466,7 +466,7 @@ NetStatusProtocolTester
 						
 						Long	l_crypto = (Long)request.get( "c" );
 						
-						boolean	use_crypto = l_crypto!=null&&l_crypto.longValue()==1;
+						boolean	use_crypto = l_crypto!=null&& l_crypto ==1;
 						
 						bt_tester.testOutbound( adjusted_originator, their_hash, use_crypto );
 						
@@ -505,23 +505,23 @@ NetStatusProtocolTester
 								
 								synchronized( active_tests ){
 
-									for (int i=0;i<active_tests.size();i++){
-										
-										NetStatusProtocolTesterBT tester = (NetStatusProtocolTesterBT)active_tests.get(i);
-										
-										long start = tester.getStartTime( now );
-										
-										if ( now - start > MAX_TEST_TIME ){
-											
-											to_remove.add( tester );
-										}
-									}
+                                    for (Object active_test : active_tests) {
+
+                                        NetStatusProtocolTesterBT tester = (NetStatusProtocolTesterBT) active_test;
+
+                                        long start = tester.getStartTime(now);
+
+                                        if (now - start > MAX_TEST_TIME) {
+
+                                            to_remove.add(tester);
+                                        }
+                                    }
 								}
-								
-								for ( int i=0;i<to_remove.size();i++ ){
-									
-									removeFromActive( (NetStatusProtocolTesterBT)to_remove.get(i));
-								}
+
+                                for (Object o : to_remove) {
+
+                                    removeFromActive((NetStatusProtocolTesterBT) o);
+                                }
 							}
 						});
 			}

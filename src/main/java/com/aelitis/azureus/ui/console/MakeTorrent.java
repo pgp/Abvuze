@@ -70,7 +70,7 @@ public class MakeTorrent implements TOTorrentProgressListener {
     String pieceSizeStr = (String) parameters.get("force_piece_size_pow2");
     if(pieceSizeStr != null) {
       try {     
-        long pieceSize = 1l << Integer.parseInt(pieceSizeStr);
+        long pieceSize = 1L << Integer.parseInt(pieceSizeStr);
         
         TOTorrentCreator creator = TOTorrentFactory.createFromFileOrDirWithFixedPieceLength(fSrc,url,pieceSize);
         
@@ -121,7 +121,7 @@ public class MakeTorrent implements TOTorrentProgressListener {
     
   }
   
-  public static void main(String args[]) {
+  public static void main(String[] args) {
     if(args.length < 2) {
       usage();
       SESecurityManager.exitVM(0);
@@ -161,7 +161,7 @@ public class MakeTorrent implements TOTorrentProgressListener {
     if(parameter == null)
       return false;
     if(parameter.equalsIgnoreCase("--v") || parameter.equalsIgnoreCase("--verbose")) {
-      parameters.put("verbose",new Integer(1));      
+      parameters.put("verbose", 1);
     }
     if(parameter.startsWith("--")) {
       try {    
@@ -174,8 +174,8 @@ public class MakeTorrent implements TOTorrentProgressListener {
           sep = "=";
         }
         boolean valid = false;
-        for(int i = 0 ; i < validKeys.length ;i++) {
-          if(validKeys[i].equalsIgnoreCase(key)) {
+        for (String validKey : validKeys) {
+          if (validKey.equalsIgnoreCase(key)) {
             valid = true;
             break;
           }

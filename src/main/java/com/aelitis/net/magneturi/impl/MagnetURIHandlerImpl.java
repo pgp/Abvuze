@@ -21,6 +21,7 @@ package com.aelitis.net.magneturi.impl;
 
 import java.io.*;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
@@ -81,11 +82,11 @@ MagnetURIHandlerImpl
 	
 	private int		port;
 	
-	private CopyOnWriteList<MagnetURIHandlerListener>	listeners	= new CopyOnWriteList<MagnetURIHandlerListener>();
+	private CopyOnWriteList<MagnetURIHandlerListener>	listeners	= new CopyOnWriteList<>();
 	
 	private Map		info_map 	= new HashMap();
 	
-	private Map<String,ResourceProvider>	resources = new HashMap<String, ResourceProvider>();
+	private Map<String,ResourceProvider>	resources = new HashMap<>();
 	
 	protected
 	MagnetURIHandlerImpl()
@@ -335,10 +336,10 @@ MagnetURIHandlerImpl
 		
 			// magnet:?xt=urn:sha1:YNCKHTQCWBTRNJIV4WNAE52SJUQCZO5C
 		
-		Map<String,String>		original_params 			= new HashMap<String,String>();
-		Map<String,String>		lc_params					= new HashMap<String,String>();
+		Map<String,String>		original_params 			= new HashMap<>();
+		Map<String,String>		lc_params					= new HashMap<>();
 		
-		List<String> 	source_params	= new ArrayList<String>();
+		List<String> 	source_params	= new ArrayList<>();
 		
 		int	pos	= get.indexOf( '?' );
 		
@@ -447,7 +448,7 @@ MagnetURIHandlerImpl
 			
 		}else if ( get.startsWith( "/magnet10/canHandle.img?" )){
 
-			String urn = (String)lc_params.get( "xt" );
+			String urn = lc_params.get( "xt" );
 
 			if ( urn != null && urn.toLowerCase( MessageText.LOCALE_ENGLISH ).startsWith( "urn:btih:")){
 			
@@ -512,7 +513,7 @@ MagnetURIHandlerImpl
 			
 			boolean	ok = false;
 			
-			String urn = (String)lc_params.get( "xt" );
+			String urn = lc_params.get( "xt" );
 
 			if ( urn == null ){
 				
@@ -559,7 +560,7 @@ MagnetURIHandlerImpl
 			
 			if ( ok ){
 				
-				if ( "image".equalsIgnoreCase((String)lc_params.get( "result" ))){
+				if ( "image".equalsIgnoreCase(lc_params.get( "result" ))){
 					
 					for ( MagnetURIHandlerListener listener: listeners ){
 
@@ -583,14 +584,14 @@ MagnetURIHandlerImpl
 			
 		}else if ( get.startsWith( "/download/" )){
 			
-			final PrintWriter	pw = new PrintWriter( new OutputStreamWriter( os, "UTF-8" ));
+			final PrintWriter	pw = new PrintWriter( new OutputStreamWriter( os, StandardCharsets.UTF_8));
 
 			try{			
 				pw.print( "HTTP/1.0 200 OK" + NL ); 
 
 				pw.flush();
 						
-				String urn = (String)lc_params.get( "xt" );
+				String urn = lc_params.get( "xt" );
 				
 				if ( urn == null || !( urn.toLowerCase( MessageText.LOCALE_ENGLISH ).startsWith( "urn:sha1:") || urn.toLowerCase( MessageText.LOCALE_ENGLISH ).startsWith( "urn:btih:"))){
 					if (Logger.isEnabled())
@@ -602,39 +603,37 @@ MagnetURIHandlerImpl
 				
 				String	encoded = urn.substring(9);
 				
-				List<InetSocketAddress>	sources = new ArrayList<InetSocketAddress>();
-				
-				for (int i=0;i<source_params.size();i++){
+				List<InetSocketAddress>	sources = new ArrayList<>();
+
+                for (String source : source_params) {
+
+                    int p = source.indexOf(':');
+
+                    if (p != -1) {
+
+                        try {
+                            String host = source.substring(0, p);
+                            int port = Integer.parseInt(source.substring(p + 1));
+
+                            // deal with somwe borked "/ip-address;:port strings
+
+                            if (host.startsWith("/")) {
+
+                                host = host.substring(1);
+                            }
+
+                            InetSocketAddress sa = new InetSocketAddress(host, port);
+
+                            sources.add(sa);
+
+                        } catch (Throwable e) {
+
+                            Debug.printStackTrace(e);
+                        }
+                    }
+                }
 					
-					String	source = (String)source_params.get(i);
-					
-					int	p = source.indexOf(':');
-					
-					if ( p != -1 ){
-						
-						try{
-							String 	host 	= source.substring(0,p);
-							int		port 	= Integer.parseInt( source.substring(p+1));
-							
-								// deal with somwe borked "/ip-address;:port strings
-							
-							if ( host.startsWith( "/" )){
-								
-								host = host.substring(1);
-							}
-							
-							InetSocketAddress	sa = new InetSocketAddress( host, port );
-							
-							sources.add( sa );
-							
-						}catch( Throwable e ){
-							
-							Debug.printStackTrace(e);
-						}
-					}
-				}
-					
-				final InetSocketAddress[]	s = sources.toArray( new InetSocketAddress[ sources.size()] );
+				final InetSocketAddress[]	s = sources.toArray(new InetSocketAddress[0]);
 				
 				if (Logger.isEnabled())
 					Logger.log(new LogEvent(LOGID, "MagnetURIHandler: download of '"
@@ -691,7 +690,7 @@ MagnetURIHandlerImpl
 					
 					final AESemaphore wait_sem = new AESemaphore( "download-waiter" );
 					
-					List<Runnable> tasks = new ArrayList<Runnable>();
+					List<Runnable> tasks = new ArrayList<>();
 					
 					for ( final MagnetURIHandlerListener listener: listeners ){
 					
@@ -877,7 +876,7 @@ MagnetURIHandlerImpl
 			}
 		}else if ( get.startsWith( "/getinfo?" )){
 
-			String name = (String)lc_params.get( "name" );
+			String name = lc_params.get( "name" );
 
 			if ( name != null ){
 				
@@ -887,17 +886,15 @@ MagnetURIHandlerImpl
 				
 				if ( info != null ){					
 					
-					value = info.intValue();
+					value = info;
 					
 				}else{
 					
 					for ( MagnetURIHandlerListener listener: listeners ){
 						
 							// no idea why we copy, but let's keep doing so
-						
-						HashMap paramsCopy = new HashMap();
-						
-						paramsCopy.putAll( original_params);
+
+						HashMap paramsCopy = new HashMap(original_params);
 
 						value = listener.get( name, paramsCopy );
 						
@@ -912,7 +909,7 @@ MagnetURIHandlerImpl
 					
 						// no value, see if we have a default
 					
-					String	def_str = (String)lc_params.get( "default" );
+					String	def_str = lc_params.get( "default" );
 
 					if ( def_str != null ){
 						
@@ -928,7 +925,7 @@ MagnetURIHandlerImpl
 					
 						// have a value, see if we have a max
 					
-					String	max_str = (String)lc_params.get( "max" );
+					String	max_str = lc_params.get( "max" );
 
 					if ( max_str != null ){
 						
@@ -968,7 +965,7 @@ MagnetURIHandlerImpl
 
 						// divmod -> encode div+1 as width, mod+1 as height
 					
-					String	div_mod = (String)lc_params.get( "divmod" );
+					String	div_mod = lc_params.get( "divmod" );
 					
 					if ( div_mod != null ){
 						
@@ -979,7 +976,7 @@ MagnetURIHandlerImpl
 						
 					}else{
 						
-						String	div = (String)lc_params.get( "div" );
+						String	div = lc_params.get( "div" );
 						
 						if ( div != null ){
 							
@@ -987,7 +984,7 @@ MagnetURIHandlerImpl
 							
 						}else{
 							
-							String	mod = (String)lc_params.get( "mod" );
+							String	mod = lc_params.get( "mod" );
 							
 							if ( mod != null ){
 								
@@ -996,7 +993,7 @@ MagnetURIHandlerImpl
 						}
 					}
 
-					String	img_type = (String)lc_params.get( "img_type" );
+					String	img_type = lc_params.get( "img_type" );
 					
 					if ( img_type != null && img_type.equals( "png" )){
 						
@@ -1025,7 +1022,7 @@ MagnetURIHandlerImpl
 			
 		}else if ( get.startsWith( "/setinfo?" )){
 
-			String name 	= (String)lc_params.get( "name" );
+			String name 	= lc_params.get( "name" );
 			
 			if ( name != null ){
 
@@ -1034,10 +1031,8 @@ MagnetURIHandlerImpl
 				for ( MagnetURIHandlerListener listener: listeners ){
 					
 						// no idea why we copy, but let's keep on doing so
-					
-					HashMap paramsCopy = new HashMap();
-					
-					paramsCopy.putAll( original_params );
+
+					HashMap paramsCopy = new HashMap(original_params);
 					
 					result = listener.set( name, paramsCopy );
 					
@@ -1050,7 +1045,7 @@ MagnetURIHandlerImpl
 				int	width 	= result?20:10;
 				int height 	= result?20:10;
 				
-				String	img_type = (String)lc_params.get( "img_type" );
+				String	img_type = lc_params.get( "img_type" );
 
 				if ( img_type != null && img_type.equals( "png" )){
 					
@@ -1094,7 +1089,7 @@ MagnetURIHandlerImpl
 				headers_str += (headers_str.length()==0?"":"\n") + header;
 			}
 			
-			String script = "var headers = \"" + new String( Base64.encode( headers_str.getBytes( "UTF-8" ))) + "\";";
+			String script = "var headers = \"" + new String( Base64.encode( headers_str.getBytes(StandardCharsets.UTF_8))) + "\";";
 
 			
 			writeReply( os, "application/x-javascript", script );
@@ -1281,7 +1276,7 @@ MagnetURIHandlerImpl
 		String		name,
 		int			info )
 	{
-		info_map.put( name, new Integer(info));
+		info_map.put( name, info);
 		
 		Logger.log(new LogEvent(LOGID, LogEvent.LT_INFORMATION,"MagnetURIHandler: global info registered: " + name + " -> " + info ));
 	}

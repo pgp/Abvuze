@@ -566,16 +566,16 @@ public class ProxyLoginHandler {
       byte rep = reply.get();
 
       if( rep != 0 ) {
-        String error_msgs[] = {
-            "",
-            "General SOCKS server failure",
-            "connection not allowed by ruleset",
-            "Network unreachable",
-            "Host unreachable",
-            "Connection refused (authentication failure?)",
-            "TTL expired (can mean authentication failure)",
-            "Command not supported",
-            "Address type not supported" };
+          String[] error_msgs = {
+                  "",
+                  "General SOCKS server failure",
+                  "connection not allowed by ruleset",
+                  "Network unreachable",
+                  "Host unreachable",
+                  "Connection refused (authentication failure?)",
+                  "TTL expired (can mean authentication failure)",
+                  "Command not supported",
+                  "Address type not supported"};
         String error_msg = rep < error_msgs.length ? error_msgs[ rep ] : "Unknown error";
         throw new IOException( "SOCKS request failure [" + error_msg + "/" + rep + "]" );
       }
@@ -612,13 +612,13 @@ public class ProxyLoginHandler {
     /**
      * The proxied connection attempt succeeded.
      */
-    public void connectSuccess() ;
+    void connectSuccess() ;
     
     /**
      * The proxied connection attempt failed.
      * @param failure_msg failure reason
      */
-    public void connectFailure( Throwable failure_msg );
+    void connectFailure(Throwable failure_msg);
   }
   
 }

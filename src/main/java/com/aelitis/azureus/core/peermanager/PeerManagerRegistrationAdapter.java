@@ -26,25 +26,25 @@ import com.aelitis.azureus.core.networkmanager.NetworkConnection;
 public interface 
 PeerManagerRegistrationAdapter 
 {
-	public byte[][]
+	byte[][]
 	getSecrets();
 	
-	public boolean
+	boolean
 	manualRoute(
-		NetworkConnection		connection );
+            NetworkConnection connection);
 	
-	public boolean
+	boolean
 	isPeerSourceEnabled(
-		String		peer_source );
+            String peer_source);
 	
-	public boolean
+	boolean
 	activateRequest(
-		InetSocketAddress		remote_address );
+            InetSocketAddress remote_address);
 	
-	public void
+	void
 	deactivateRequest(
-		InetSocketAddress		remote_address );
+            InetSocketAddress remote_address);
 	
-	public String
+	String
 	getDescription();
 }

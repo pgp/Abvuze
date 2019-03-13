@@ -169,7 +169,7 @@ TranscodeJobImpl
 		throws IOException
 	{
 		try{
-			Map<String,Object> map = new HashMap<String, Object>();
+			Map<String,Object> map = new HashMap<>();
 			
 			synchronized( this ){
 				

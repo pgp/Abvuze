@@ -22,9 +22,9 @@ package com.aelitis.azureus.core.nat;
 public interface 
 NATTraversal 
 {
-	public void
+	void
 	cancel();
 	
-	public boolean
+	boolean
 	isCancelled();
 }

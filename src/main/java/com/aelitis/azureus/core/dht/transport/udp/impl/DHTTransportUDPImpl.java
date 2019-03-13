@@ -24,6 +24,7 @@ import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
@@ -352,17 +353,17 @@ DHTTransportUDPImpl
 							
 							this_mon.exit();
 						}
-						
-						for (int i=0;i<listeners.size();i++){
-							
-							try{
-								((DHTTransportListener)listeners.get(i)).resetNetworkPositions();
-								
-							}catch( Throwable e ){
-								
-								Debug.printStackTrace(e);
-							}
-						}
+
+                        for (Object listener : listeners) {
+
+                            try {
+                                ((DHTTransportListener) listener).resetNetworkPositions();
+
+                            } catch (Throwable e) {
+
+                                Debug.printStackTrace(e);
+                            }
+                        }
 					}
 				}
 				
@@ -467,11 +468,11 @@ DHTTransportUDPImpl
 		long	alien_count	= 0;
 		
 		long[]	aliens = stats.getAliens();
-		
-		for (int i=0;i<aliens.length;i++){
-			
-			alien_count	+= aliens[i];
-		}
+
+        for (long alien : aliens) {
+
+            alien_count += alien;
+        }
 		
 		long	alien_fv_count = aliens[ DHTTransportStats.AT_FIND_VALUE ];
 		
@@ -520,17 +521,17 @@ DHTTransportUDPImpl
 				}
 				
 				if ( old_reachable != reachable ){
-					
-					for (int i=0;i<listeners.size();i++){
-						
-						try{
-							((DHTTransportListener)listeners.get(i)).reachabilityChanged( reachable );
-							
-						}catch( Throwable e ){
-							
-							Debug.printStackTrace(e);
-						}
-					}	
+
+                    for (Object listener : listeners) {
+
+                        try {
+                            ((DHTTransportListener) listener).reachabilityChanged(reachable);
+
+                        } catch (Throwable e) {
+
+                            Debug.printStackTrace(e);
+                        }
+                    }
 				}
 			}
 		}
@@ -708,18 +709,18 @@ DHTTransportUDPImpl
 		
 		InetSocketAddress	address = new InetSocketAddress( external_address, port );
 		
-		local_contact = new DHTTransportUDPContactImpl( true, this, address, address, protocol_version, local_contact.getInstanceID(), 0, (byte)0 );		
+		local_contact = new DHTTransportUDPContactImpl( true, this, address, address, protocol_version, local_contact.getInstanceID(), 0, (byte)0 );
 
-		for (int i=0;i<listeners.size();i++){
-			
-			try{
-				((DHTTransportListener)listeners.get(i)).localContactChanged( local_contact );
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace(e);
-			}
-		}
+        for (Object listener : listeners) {
+
+            try {
+                ((DHTTransportListener) listener).localContactChanged(local_contact);
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 	
 	public void
@@ -892,16 +893,16 @@ DHTTransportUDPImpl
 	informLocalAddress(
 		String	address )
 	{
-		for (int i=0;i<listeners.size();i++){
-			
-			try{
-				((DHTTransportListener)listeners.get(i)).currentAddress( address );
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace(e);
-			}
-		}		
+        for (Object listener : listeners) {
+
+            try {
+                ((DHTTransportListener) listener).currentAddress(address);
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 		
 	protected void
@@ -1298,17 +1299,17 @@ DHTTransportUDPImpl
 			logger.log( "External address changed: " + s_address );
 			
 			Debug.out( "DHTTransport: address changed to " + s_address );
-			
-			for (int i=0;i<listeners.size();i++){
-				
-				try{
-					((DHTTransportListener)listeners.get(i)).localContactChanged( local_contact );
-					
-				}catch( Throwable e ){
-					
-					Debug.printStackTrace(e);
-				}
-			}
+
+            for (Object listener : listeners) {
+
+                try {
+                    ((DHTTransportListener) listener).localContactChanged(local_contact);
+
+                } catch (Throwable e) {
+
+                    Debug.printStackTrace(e);
+                }
+            }
 		}catch( Throwable e ){
 			
 			Debug.printStackTrace(e);
@@ -1387,7 +1388,7 @@ DHTTransportUDPImpl
 	exportContactToMap(
 		DHTTransportContact	contact )
 	{
-		Map<String,Object>		result = new HashMap<String, Object>();
+		Map<String,Object>		result = new HashMap<>();
 		
 		result.put( "v",contact.getProtocolVersion());
 		
@@ -1425,7 +1426,7 @@ DHTTransportUDPImpl
 		try{
 			if ( a == null ){
 				
-				address = InetSocketAddress.createUnresolved( new String((byte[])map.get("h"), "UTF-8" ), port );
+				address = InetSocketAddress.createUnresolved( new String((byte[])map.get("h"), StandardCharsets.UTF_8), port );
 			}else{
 			
 				address = new InetSocketAddress( InetAddress.getByAddress( a ), port );
@@ -2175,7 +2176,7 @@ DHTTransportUDPImpl
 			byte[]				current_prefix			= null;
 			Iterator<byte[]>	current_suffixes 		= null;
 						
-			List<DHTUDPPacketRequestQueryStorage> requests = new ArrayList<DHTUDPPacketRequestQueryStorage>();
+			List<DHTUDPPacketRequestQueryStorage> requests = new ArrayList<>();
 	
 outer:	
 			while( it.hasNext()){
@@ -2185,7 +2186,7 @@ outer:
 				DHTUDPPacketRequestQueryStorage	request = 
 					new DHTUDPPacketRequestQueryStorage( this, connection_id, local_contact, contact );
 
-				List<Object[]> packet_key_details = new ArrayList<Object[]>();
+				List<Object[]> packet_key_details = new ArrayList<>();
 				
 				while( space > 0 && it.hasNext()){
 					
@@ -2213,7 +2214,7 @@ outer:
 							continue outer ;
 						}
 						
-						List<byte[]> s = new ArrayList<byte[]>();
+						List<byte[]> s = new ArrayList<>();
 						
 						packet_key_details.add( new Object[]{ current_prefix, s });
 						
@@ -2320,21 +2321,19 @@ outer:
 						checkComplete()
 						{
 							DHTUDPPacketHandlerException last_error = null;
-							
-							for ( int i=0;i<replies.length;i++ ){
-							
-								Object o = replies[i];
-								
-								if ( o == null ){
-									
-									return;
-								}
-								
-								if ( o instanceof DHTUDPPacketHandlerException ){
-									
-									last_error = (DHTUDPPacketHandlerException)o;
-								}
-							}
+
+                            for (Object o : replies) {
+
+                                if (o == null) {
+
+                                    return;
+                                }
+
+                                if (o instanceof DHTUDPPacketHandlerException) {
+
+                                    last_error = (DHTUDPPacketHandlerException) o;
+                                }
+                            }
 							
 							if ( last_error != null ){
 							
@@ -2348,7 +2347,7 @@ outer:
 									
 								}else{
 									
-									List<byte[]> response = new ArrayList<byte[]>();
+									List<byte[]> response = new ArrayList<>();
 							
 									for ( int i=0;i<replies.length;i++ ){
 									
@@ -3216,12 +3215,12 @@ outer:
 	
 		// the _state networks are populated via ping requests to other peers
 	
-	private final Map<Integer, DHTTransportAlternativeNetworkImpl>	alt_net_states 		= new HashMap<Integer, DHTTransportAlternativeNetworkImpl>();
+	private final Map<Integer, DHTTransportAlternativeNetworkImpl>	alt_net_states 		= new HashMap<>();
 	
 		// the _providers represent a local source of contacts that are used as a primary
 		// source of contacts for replying to other peers ping requests
 		
-	private volatile Map<Integer, DHTTransportAlternativeNetwork>		alt_net_providers	= new HashMap<Integer, DHTTransportAlternativeNetwork>();
+	private volatile Map<Integer, DHTTransportAlternativeNetwork>		alt_net_providers	= new HashMap<>();
 	
 	private final Object	alt_net_providers_lock = new Object();
 	
@@ -3245,7 +3244,7 @@ outer:
 	{
 		synchronized( alt_net_providers_lock ){
 			
-			Map<Integer, DHTTransportAlternativeNetwork> new_providers = new HashMap<Integer, DHTTransportAlternativeNetwork>( alt_net_providers );
+			Map<Integer, DHTTransportAlternativeNetwork> new_providers = new HashMap<>(alt_net_providers);
 			
 			new_providers.put( network.getNetworkType(), network );
 			
@@ -3259,7 +3258,7 @@ outer:
 	{
 		synchronized( alt_net_providers_lock ){
 			
-			Map<Integer, DHTTransportAlternativeNetwork> new_providers = new HashMap<Integer, DHTTransportAlternativeNetwork>( alt_net_providers );
+			Map<Integer, DHTTransportAlternativeNetwork> new_providers = new HashMap<>(alt_net_providers);
 			
 			Iterator< Map.Entry<Integer, DHTTransportAlternativeNetwork>> it = new_providers.entrySet().iterator();
 			
@@ -3287,7 +3286,7 @@ outer:
 		
 		if ( total_required > 0 ){
 			
-			List<DHTTransportContact> targets = new ArrayList<DHTTransportContact>( ROUTABLE_CONTACT_HISTORY_MAX );
+			List<DHTTransportContact> targets = new ArrayList<>(ROUTABLE_CONTACT_HISTORY_MAX);
 			
 			try{
 				this_mon.enter();
@@ -3341,7 +3340,7 @@ outer:
 
 			if ( alt_nets.length > 0 ){
 				
-				List<DHTTransportAlternativeContact>	alt_contacts = new ArrayList<DHTTransportAlternativeContact>();
+				List<DHTTransportAlternativeContact>	alt_contacts = new ArrayList<>();
 								
 				Map<Integer, DHTTransportAlternativeNetwork> providers = alt_net_providers;
 				
@@ -3418,7 +3417,7 @@ outer:
 
 					if ( wanted == null ){
 						
-						wanted = new ArrayList<int[]>( alt_net_states.size());
+						wanted = new ArrayList<>(alt_net_states.size());
 					}
 					
 					wanted.add( new int[]{ net_type, req } );

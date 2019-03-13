@@ -87,18 +87,16 @@ public class AddFind extends OptionsConsoleCommand {
 		boolean finding = commands.hasOption('f');
 
 		String[] whatelse = commands.getArgs();
-		for (int i = 0; i < whatelse.length; i++) {
-			String arg = whatelse[i];
-			try {
-				// firstly check if it is a valid URL
-				new URL(arg);
-				addRemote(ci, arg, outputDir);
-			} catch (MalformedURLException e)
-			{
-				// assume that it's a local file or file id from a previous find
-				addLocal(ci, arg, outputDir, scansubdir, finding);				
-			}
-		}
+        for (String arg : whatelse) {
+            try {
+                // firstly check if it is a valid URL
+                new URL(arg);
+                addRemote(ci, arg, outputDir);
+            } catch (MalformedURLException e) {
+                // assume that it's a local file or file id from a previous find
+                addLocal(ci, arg, outputDir, scansubdir, finding);
+            }
+        }
 	}
 
 	/**
@@ -212,11 +210,11 @@ public class AddFind extends OptionsConsoleCommand {
 		}
 		else
 		{
-			for (int i = 0; i < toadd.length; i++) {
-				ci.downloadTorrent(toadd[i].getAbsolutePath(), outputDir);
-				ci.out.println("> '" + toadd[i].getAbsolutePath() + "' added.");
-				ci.torrents.clear();
-			}
+            for (File file : toadd) {
+                ci.downloadTorrent(file.getAbsolutePath(), outputDir);
+                ci.out.println("> '" + file.getAbsolutePath() + "' added.");
+                ci.torrents.clear();
+            }
 		}
 		ci.out.println("> -----");
 	}

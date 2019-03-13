@@ -32,77 +32,77 @@ package org.gudy.azureus2.core3.disk;
 public interface 
 DiskManagerPiece
 {
-	public DiskManager	getManager();
+	DiskManager	getManager();
 
-	public int			getLength();
-	public int         	getPieceNumber();
-	public int			getNbBlocks();
-	public int			getBlockSize( int block_index );
+	int			getLength();
+	int         	getPieceNumber();
+	int			getNbBlocks();
+	int			getBlockSize(int block_index);
 
-	public short		getReadCount();
-	public void			setReadCount(short c);
+	short		getReadCount();
+	void			setReadCount(short c);
 
-	public boolean		calcNeeded();
-	public void			clearNeeded();
+	boolean		calcNeeded();
+	void			clearNeeded();
 	
 	/** @return true if any file the piece covers is neither Do Not Download nor Delete.
 	 * This is not a real-time indicator.  Also, the results are not reliable for pieces that are Done.
 	 * Use calcNeeded() for guaranteed correct and up to date results
 	 * @see calcNeeded(), clearNeeded(), setNeeded(), setNeeded(boolean)
 	 */
-	public boolean		isNeeded();
-	public void			setNeeded();
-	public void			setNeeded(boolean b);
+    boolean		isNeeded();
+	void			setNeeded();
+	void			setNeeded(boolean b);
 
 	// a piece is Written if data has been written to storage for every block (without concern for if it's checked)  
-    public boolean      isWritten();
-	public int			getNbWritten();
-	public boolean[] 	getWritten();
+    boolean      isWritten();
+	int			getNbWritten();
+	boolean[] 	getWritten();
 	
 	/**
 	 * @param blockNumber int
 	 * @return true if the given blockNumber has already been written to disk
 	 */
-	public boolean		isWritten(int blockNumber);
-	public void			setWritten(int blockNumber);
+    boolean		isWritten(int blockNumber);
+	void			setWritten(int blockNumber);
 
 	// a piece is Checking if a hash check has been setup and the hash check hasn't finalized the result yet
 	// this flag is asynch, so be careful, and it's also transitory (comapared to most of the others being kinda sticky)
 
-	public void			setChecking();
-    public boolean 		isChecking();
+	void			setChecking();
+    boolean 		isChecking();
     
-    public boolean		isNeedsCheck();
+    boolean		isNeedsCheck();
 
-    public boolean		spansFiles();
+    boolean		spansFiles();
     
-	public boolean		calcDone();
+	boolean		calcDone();
 	/** @return true when the hash check has passed and the DiskManager has asyncronously updated the Done status.
 	 * There is nothing further to be done regarding downloading for pieces that are Done.
 	 */
-	public boolean		isDone();
-	public void			setDone(boolean b);
+    boolean		isDone();
+	void			setDone(boolean b);
 
     /**
      * @return true if a piece is Needed and not Done
      */
-    public boolean      isInteresting();
+    boolean      isInteresting();
 
     /** This must not be used to qualify pieces in End Game Mode.
 	 * @return true if a piece is Needed but is not fully; Requested, Downloaded, Written, Checking, or Done.
 	 */
-	public boolean		isDownloadable();
-	public void 		setDownloadable();
+    boolean		isDownloadable();
+	void 		setDownloadable();
 	    
      /**
      * returns true if all the files that the piece spans are skipped
      * @return
      */
-    public boolean	    isSkipped();
+     boolean	    isSkipped();
     
-    public void 		reDownloadBlock(int blockNumber);
-    public void			reset();
+    void 		reDownloadBlock(int blockNumber);
+    void			reset();
     
-    public String
+    String
     getString();
 }

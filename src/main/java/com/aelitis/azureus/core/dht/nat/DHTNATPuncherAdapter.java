@@ -25,8 +25,8 @@ import java.util.Map;
 public interface 
 DHTNATPuncherAdapter 
 {
-	public Map
+	Map
 	getClientData(
-		InetSocketAddress	originator,
-		Map					originator_client_data );
+            InetSocketAddress originator,
+            Map originator_client_data);
 }

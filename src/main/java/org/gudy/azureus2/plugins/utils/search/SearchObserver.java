@@ -23,21 +23,21 @@ package org.gudy.azureus2.plugins.utils.search;
 public interface 
 SearchObserver 
 {
-	public static final int PR_MAX_RESULTS_WANTED	= 1;	// Long
-	public static final int PR_SUPPORTS_DUPLICATES	= 2;	// Boolean
+	int PR_MAX_RESULTS_WANTED	= 1;	// Long
+	int PR_SUPPORTS_DUPLICATES	= 2;	// Boolean
 	
-	public void
+	void
 	resultReceived(
-		SearchInstance		search,
-		SearchResult		result );
+            SearchInstance search,
+            SearchResult result);
 	
-	public void
+	void
 	complete();
 	
-	public void
+	void
 	cancelled();
 	
-	public Object
+	Object
 	getProperty(
-		int		property );
+            int property);
 }

@@ -215,10 +215,10 @@ DownloadManagerController
 	private long		priority_connection_count;
 	
 	private static final int				HTTP_SEEDS_MAX	= 64;
-	private final LinkedList<ExternalSeedPeer>	http_seeds = new LinkedList<ExternalSeedPeer>();
+	private final LinkedList<ExternalSeedPeer>	http_seeds = new LinkedList<>();
 	
 	private int	md_info_dict_size;
-	private volatile WeakReference<byte[]>	md_info_dict_ref = new WeakReference<byte[]>( null );
+	private volatile WeakReference<byte[]>	md_info_dict_ref = new WeakReference<>(null);
 	
 	private static final int MD_INFO_PEER_HISTORY_MAX 		= 128;
 
@@ -507,22 +507,22 @@ DownloadManagerController
 								int	num_dls = 0;
 								
 									// be optimistic and share out the bytes between non-seeds
-								
-								for (int i=0;i<managers.size();i++){
-									
-									DownloadManager	dm = (DownloadManager)managers.get(i);
-									
-									if ( dm.getStats().getDownloadCompleted( false ) == 1000 ){
-										
+
+								for (Object manager : managers) {
+
+									DownloadManager dm = (DownloadManager) manager;
+
+									if (dm.getStats().getDownloadCompleted(false) == 1000) {
+
 										continue;
 									}
-									
-									int	state = dm.getState();
-									
-									if ( 	state != DownloadManager.STATE_ERROR &&
+
+									int state = dm.getState();
+
+									if (state != DownloadManager.STATE_ERROR &&
 											state != DownloadManager.STATE_STOPPING &&
-											state != DownloadManager.STATE_STOPPED ){
-										
+											state != DownloadManager.STATE_STOPPED) {
+
 										num_dls++;
 									}
 								}
@@ -553,46 +553,38 @@ DownloadManagerController
 						DownloadManagerState	dms = download_manager.getDownloadState();
 						
 						String[]	sources = PEPeerSource.PS_SOURCES;
-						
-						for (int i=0;i<sources.length;i++){
-							
-							String	s = sources[i];
-							
-							boolean	ok = false;
-							
-							for (int j=0;j<allowed_sources.length;j++){
-								
-								if ( s.equals( allowed_sources[j] )){
-									
+
+						for (String s : sources) {
+
+							boolean ok = false;
+
+							for (String allowed_source : allowed_sources) {
+
+								if (s.equals(allowed_source)) {
+
 									ok = true;
-									
+
 									break;
 								}
 							}
-							
-							if ( !ok ){
-								
-								dms.setPeerSourcePermitted( s, false );
+
+							if (!ok) {
+
+								dms.setPeerSourcePermitted(s, false);
 							}
 						}
 						
 						PEPeerManager pm = getPeerManager();
 						
 						if ( pm != null ){
-							
-							Set<String>	allowed = new HashSet<String>();
-							
-							allowed.addAll( Arrays.asList( allowed_sources ));
-							
-							Iterator<PEPeer> it = pm.getPeers().iterator();
-						
-							while( it.hasNext()){
-								
-								PEPeer peer = it.next();
-								
-								if ( !allowed.contains( peer.getPeerSource())){
-									
-									pm.removePeer( peer, "Peer source not permitted" );
+
+							Set<String> allowed = new HashSet<>(Arrays.asList(allowed_sources));
+
+							for (PEPeer peer : pm.getPeers()) {
+
+								if (!allowed.contains(peer.getPeerSource())) {
+
+									pm.removePeer(peer, "Peer source not permitted");
 								}
 							}
 						}
@@ -626,12 +618,10 @@ DownloadManagerController
 		}
 		
 		if ( limiters != null ){
-			
-			for (int i=0;i<limiters.size();i++){
-				
-				Object[]	entry = limiters.get(i);
-				
-				temp.addRateLimiter((LimitedRateGroup)entry[0],((Boolean)entry[1]).booleanValue());
+
+			for (Object[] entry : limiters) {
+
+				temp.addRateLimiter((LimitedRateGroup) entry[0], (Boolean) entry[1]);
 			}
 		}
 		
@@ -959,11 +949,11 @@ DownloadManagerController
 					   download_manager.deleteTorrentFile();
 				   }
          
-				   List<ExternalSeedPeer> to_remove = new ArrayList<ExternalSeedPeer>();
+				   List<ExternalSeedPeer> to_remove;
 
 				   synchronized( http_seeds ){
 
-					   to_remove.addAll( http_seeds );
+					   to_remove = new ArrayList<>(http_seeds);
 					   
 					   http_seeds.clear();
 				   }
@@ -1253,7 +1243,7 @@ DownloadManagerController
 		
 			DownloadManagerState state = download_manager.getDownloadState();
 			
-			cached_networks = new HashSet<String>( Arrays.asList( state.getNetworks()));
+			cached_networks = new HashSet<>(Arrays.asList(state.getNetworks()));
 			
 			state.addListener( 
 				new DownloadManagerStateAttributeListener()
@@ -1268,7 +1258,7 @@ DownloadManagerController
 
 						synchronized( cached_networks_lock ){
 
-							cached_networks = new HashSet<String>( Arrays.asList( state.getNetworks()));
+							cached_networks = new HashSet<>(Arrays.asList(state.getNetworks()));
 						}
 						
 						PEPeerManager	pm = peer_manager;
@@ -1318,7 +1308,7 @@ DownloadManagerController
 			
 		}else{
 			
-			return( cache.toArray( new String[ cache.size()]));
+			return( cache.toArray(new String[0]));
 		}
 	}
 		// secrets for inbound connections, support all
@@ -1434,14 +1424,14 @@ DownloadManagerController
 		try{
 			control_mon.enter();
 			
-			ArrayList<Object[]>	new_limiters = new ArrayList<Object[]>( external_rate_limiters_cow==null?1:external_rate_limiters_cow.size()+1);
+			ArrayList<Object[]>	new_limiters = new ArrayList<>(external_rate_limiters_cow == null ? 1 : external_rate_limiters_cow.size() + 1);
 			
 			if ( external_rate_limiters_cow != null ){
 				
 				new_limiters.addAll( external_rate_limiters_cow );
 			}
 			
-			new_limiters.add( new Object[]{ group, Boolean.valueOf(upload)});
+			new_limiters.add( new Object[]{ group, upload});
 			
 			external_rate_limiters_cow = new_limiters;
 			
@@ -1471,7 +1461,7 @@ DownloadManagerController
 				
 			}else{
 			
-				List<LimitedRateGroup> 	result = new ArrayList<LimitedRateGroup>();
+				List<LimitedRateGroup> 	result = new ArrayList<>();
 				
 				for ( Object[] entry: external_rate_limiters_cow ){
 					
@@ -1481,7 +1471,7 @@ DownloadManagerController
 					}
 				}
 				
-				return( result.toArray( new LimitedRateGroup[ result.size() ]));
+				return( result.toArray(new LimitedRateGroup[0]));
 			}
 		}finally{
 			
@@ -1501,15 +1491,13 @@ DownloadManagerController
 			
 			if ( external_rate_limiters_cow != null ){
 				
-				ArrayList<Object[]>	new_limiters = new ArrayList<Object[]>( external_rate_limiters_cow.size()-1);
-				
-				for (int i=0;i<external_rate_limiters_cow.size();i++){
-					
-					Object[]	entry = external_rate_limiters_cow.get(i);
-					
-					if ( entry[0] != group ){
-						
-						new_limiters.add( entry );
+				ArrayList<Object[]>	new_limiters = new ArrayList<>(external_rate_limiters_cow.size() - 1);
+
+				for (Object[] entry : external_rate_limiters_cow) {
+
+					if (entry[0] != group) {
+
+						new_limiters.add(entry);
 					}
 				}
 				
@@ -1734,24 +1722,23 @@ DownloadManagerController
 		
 		DiskManagerFileInfo[] files = fileFacadeSet.getFiles();
 
-		for (int i = 0; i < files.length; i++) {
-			DiskManagerFileInfo fileInfo = files[i];
+		for (DiskManagerFileInfo fileInfo : files) {
 			if (!fileInfo.isSkipped()) {
 				File file = fileInfo.getFile(true);
 				try {
 					long start = SystemTime.getMonotonousTime();
-					
-					boolean 	exists = file.exists();
-					
+
+					boolean exists = file.exists();
+
 					long elapsed = SystemTime.getMonotonousTime() - start;
-					
-					if ( elapsed >= 500 ){
-						
-						Debug.out( "Accessing '" + file.getAbsolutePath() + "' in '" + getDisplayName() + "' took " + elapsed + "ms - possibly offline" );
+
+					if (elapsed >= 500) {
+
+						Debug.out("Accessing '" + file.getAbsolutePath() + "' in '" + getDisplayName() + "' took " + elapsed + "ms - possibly offline");
 					}
-					
-					if ( !exists ){
-						
+
+					if (!exists) {
+
 						// For multi-file torrents, complain if the save directory is missing.
 						if (!this.download_manager.getTorrent().isSimpleTorrent()) {
 							File save_path = this.download_manager.getAbsoluteSaveLocation();
@@ -1759,23 +1746,23 @@ DownloadManagerController
 								file = save_path; // We're going to abort very soon, so it's OK to overwrite this.
 							}
 						}
-														
+
 						setFailed(MessageText.getString("DownloadManager.error.datamissing")
 								+ " " + file);
 						return false;
-						
-					} else if (fileInfo.getLength() < file.length()) { 
-						
-							// file may be incremental creation - don't complain if too small
-						
-							// don't bitch if the user is happy with this
-						
-						if ( !COConfigurationManager.getBooleanParameter("File.truncate.if.too.large")){
-							
+
+					} else if (fileInfo.getLength() < file.length()) {
+
+						// file may be incremental creation - don't complain if too small
+
+						// don't bitch if the user is happy with this
+
+						if (!COConfigurationManager.getBooleanParameter("File.truncate.if.too.large")) {
+
 							setFailed(MessageText.getString("DownloadManager.error.badsize")
 									+ " " + file + "(" + fileInfo.getLength() + "/" + file.length() + ")");
-							
-							
+
+
 							return false;
 						}
 					}
@@ -1838,21 +1825,19 @@ DownloadManagerController
 
 		boolean has_dnd_files = false;
 
-		for (int i = 0; i < active.length; i++) {
+		for (DiskManagerFileInfo file : active) {
 
-			DiskManagerFileInfo file = active[i];
-
-			if ( file.isSkipped()){
+			if (file.isSkipped()) {
 
 				has_dnd_files = true;
-				
-			}else if (file.getDownloaded() != file.getLength()) {
+
+			} else if (file.getDownloaded() != file.getLength()) {
 
 				complete_excluding_dnd = false;
-				
+
 			}
-			
-			if(has_dnd_files && !complete_excluding_dnd)
+
+			if (has_dnd_files && !complete_excluding_dnd)
 				break; // we can bail out early
 		}
 
@@ -2218,7 +2203,7 @@ DownloadManagerController
 		
 				data = BEncoder.encode((Map)torrent.serialiseToMap().get( "info" ));
 			
-				md_info_dict_ref = new WeakReference<byte[]>( data );
+				md_info_dict_ref = new WeakReference<>(data);
 			}
 			
 			return( data );
@@ -2339,17 +2324,17 @@ DownloadManagerController
 		reply.put( "dl", info );
 		
 		try{
-			info.put( "u_lim", new Long( getUploadRateLimitBytesPerSecond()));
-			info.put( "d_lim", new Long( getDownloadRateLimitBytesPerSecond()));
+			info.put( "u_lim", (long) getUploadRateLimitBytesPerSecond());
+			info.put( "d_lim", (long) getDownloadRateLimitBytesPerSecond());
 			
-			info.put( "u_rate", new Long( stats.getProtocolSendRate() + stats.getDataSendRate()));
-			info.put( "d_rate", new Long( stats.getProtocolReceiveRate() + stats.getDataReceiveRate()));
+			info.put( "u_rate", stats.getProtocolSendRate() + stats.getDataSendRate());
+			info.put( "d_rate", stats.getProtocolReceiveRate() + stats.getDataReceiveRate());
 			
-			info.put( "u_slot", new Long( getMaxUploads()));
-			info.put( "c_max", new Long( getMaxConnections()[0]));
+			info.put( "u_slot", (long) getMaxUploads());
+			info.put( "c_max", (long) getMaxConnections()[0]);
 			
-			info.put( "c_leech", new Long( download_manager.getNbPeers()));
-			info.put( "c_seed", new Long( download_manager.getNbSeeds()));
+			info.put( "c_leech", (long) download_manager.getNbPeers());
+			info.put( "c_seed", (long) download_manager.getNbSeeds());
 			
 			PEPeerManager pm = peer_manager;
 			
@@ -2361,7 +2346,7 @@ DownloadManagerController
 				
 				List<PEPeer> peers = pm.getPeers();
 				
-				List<Long>	slot_up = new ArrayList<Long>();
+				List<Long>	slot_up = new ArrayList<>();
 				
 				info.put( "slot_up", slot_up );
 				
@@ -2401,8 +2386,8 @@ DownloadManagerController
 	
 				Map params = new HashMap();
 	
-				params.put( "supports_503", new Long(0));
-				params.put( "transient", new Long(1));
+				params.put( "supports_503", 0L);
+				params.put( "transient", 1L);
 	
 				config.put("httpseeds-params", params);
 	
@@ -2410,7 +2395,7 @@ DownloadManagerController
 				
 				if ( new_seeds.size() > 0 ){
 					
-					List<ExternalSeedPeer> to_remove = new ArrayList<ExternalSeedPeer>();
+					List<ExternalSeedPeer> to_remove = new ArrayList<>();
 					
 					synchronized( http_seeds ){
 						
@@ -2535,7 +2520,7 @@ DownloadManagerController
 			// too early in initialisation sequence to action this - it'll get reinvoked later anyway
 			if (info.length == 0) return;
 			
-			final List<DiskManagerFileInfo> delayed_prio_changes = new ArrayList<DiskManagerFileInfo>(0);
+			final List<DiskManagerFileInfo> delayed_prio_changes = new ArrayList<>(0);
 			
 			try {
 				facade_mon.enter();
@@ -2625,8 +2610,7 @@ DownloadManagerController
 
 				files_facade_destroyed = true;
 
-				for (int i = 0; i < facadeFiles.length; i++)
-					facadeFiles[i].close();
+				for (fileInfoFacade facadeFile : facadeFiles) facadeFile.close();
 			} finally {
 				facade_mon.exit();
 			}
@@ -2671,7 +2655,7 @@ DownloadManagerController
 					
 				}else{
 					
-					existing_listeners = new ArrayList<DiskManagerFileInfoListener>( listeners );
+					existing_listeners = new ArrayList<>(listeners);
 				}
 			}
 			
@@ -2683,11 +2667,11 @@ DownloadManagerController
 	 			// transfer any existing listeners across
 	 		
 	   		if ( existing_listeners != null ){
-	   			
-	   			for (int i=0;i<existing_listeners.size();i++){
-	   				
-	   				new_delegate.addListener( existing_listeners.get(i));
-	   			}
+
+				for (DiskManagerFileInfoListener existing_listener : existing_listeners) {
+
+					new_delegate.addListener(existing_listener);
+				}
 	   		}
 		}
 

@@ -60,17 +60,17 @@ public class WriteController implements AzureusCoreStatsProvider{
 			});
 	}
 	
-  private volatile ArrayList<RateControlledEntity> normal_priority_entities = new ArrayList<RateControlledEntity>();  //copied-on-write
-  private volatile ArrayList<RateControlledEntity> boosted_priority_entities = new ArrayList<RateControlledEntity>();  //copied-on-write
-  private volatile ArrayList<RateControlledEntity> high_priority_entities = new ArrayList<RateControlledEntity>();  //copied-on-write
+  private volatile ArrayList<RateControlledEntity> normal_priority_entities = new ArrayList<>();  //copied-on-write
+  private volatile ArrayList<RateControlledEntity> boosted_priority_entities = new ArrayList<>();  //copied-on-write
+  private volatile ArrayList<RateControlledEntity> high_priority_entities = new ArrayList<>();  //copied-on-write
   private final AEMonitor entities_mon = new AEMonitor( "WriteController:EM" );
   private int next_normal_position = 0;
   private int next_boost_position = 0;
   private int next_high_position = 0;
     
 
-  private long	booster_process_time;;
-  private int	booster_normal_written;
+  private long	booster_process_time;
+    private int	booster_normal_written;
   private int	booster_stat_index;
   private final int[]	booster_normal_writes 	= new int[5];
   private final int[]	booster_gifts 			= new int[5];
@@ -133,35 +133,35 @@ public class WriteController implements AzureusCoreStatsProvider{
 					ArrayList ref = normal_priority_entities;
 
 					writer.println( "normal - " + ref.size());
-					    
-					for (int i=0;i<ref.size();i++){
-						
-						RateControlledEntity entity = (RateControlledEntity)ref.get( i );
 
-						writer.println( entity.getString());
-					}
+                    for (Object o2 : ref) {
+
+                        RateControlledEntity entity = (RateControlledEntity) o2;
+
+                        writer.println(entity.getString());
+                    }
 					
 					ref = boosted_priority_entities;
 
 					writer.println( "boosted - " + ref.size());
-					    
-					for (int i=0;i<ref.size();i++){
-						
-						RateControlledEntity entity = (RateControlledEntity)ref.get( i );
 
-						writer.println( entity.getString());
-					}
+                    for (Object o1 : ref) {
+
+                        RateControlledEntity entity = (RateControlledEntity) o1;
+
+                        writer.println(entity.getString());
+                    }
 					
 					ref = high_priority_entities;
 
 					writer.println( "priority - " + ref.size());
-					    
-					for (int i=0;i<ref.size();i++){
-						
-						RateControlledEntity entity = (RateControlledEntity)ref.get( i );
 
-						writer.println( entity.getString());
-					}
+                    for (Object o : ref) {
+
+                        RateControlledEntity entity = (RateControlledEntity) o;
+
+                        writer.println(entity.getString());
+                    }
 				}finally{
 					
 					writer.exdent();
@@ -177,22 +177,22 @@ public class WriteController implements AzureusCoreStatsProvider{
   {
 	  if ( types.contains( AzureusCoreStats.ST_NET_WRITE_CONTROL_WAIT_COUNT )){
 
-		  values.put( AzureusCoreStats.ST_NET_WRITE_CONTROL_WAIT_COUNT, new Long( wait_count ));
+		  values.put( AzureusCoreStats.ST_NET_WRITE_CONTROL_WAIT_COUNT, wait_count);
 	  }
 	  
 	  if ( types.contains( AzureusCoreStats.ST_NET_WRITE_CONTROL_NP_COUNT )){
 
-		  values.put( AzureusCoreStats.ST_NET_WRITE_CONTROL_NP_COUNT, new Long( non_progress_count ));
+		  values.put( AzureusCoreStats.ST_NET_WRITE_CONTROL_NP_COUNT, non_progress_count);
 	  }
 	  
 	  if ( types.contains( AzureusCoreStats.ST_NET_WRITE_CONTROL_P_COUNT )){
 
-		  values.put( AzureusCoreStats.ST_NET_WRITE_CONTROL_P_COUNT, new Long( progress_count ));
+		  values.put( AzureusCoreStats.ST_NET_WRITE_CONTROL_P_COUNT, progress_count);
 	  }
 
 	  if ( types.contains( AzureusCoreStats.ST_NET_WRITE_CONTROL_ENTITY_COUNT )){
 
-		  values.put( AzureusCoreStats.ST_NET_WRITE_CONTROL_ENTITY_COUNT, new Long( high_priority_entities.size() + boosted_priority_entities.size() + normal_priority_entities.size()));
+		  values.put( AzureusCoreStats.ST_NET_WRITE_CONTROL_ENTITY_COUNT, (long) (high_priority_entities.size() + boosted_priority_entities.size() + normal_priority_entities.size()));
 	  }
 	  
 	  if ( 	types.contains( AzureusCoreStats.ST_NET_WRITE_CONTROL_CON_COUNT ) ||
@@ -204,26 +204,24 @@ public class WriteController implements AzureusCoreStatsProvider{
 		  int	connections			= 0;
 		  
 		  ArrayList[] refs = { normal_priority_entities, boosted_priority_entities, high_priority_entities };
-		    
-		  for (int i=0;i<refs.length;i++){
-			  
-			  ArrayList	ref = refs[i];
-			 
-			  for (int j=0;j<ref.size();j++){
-				  
-			      RateControlledEntity entity = (RateControlledEntity)ref.get( j );
-			      
-			      connections 		+= entity.getConnectionCount( write_waiter );
-			      
-			      ready_connections += entity.getReadyConnectionCount( write_waiter );
-			      
-			      ready_bytes		+= entity.getBytesReadyToWrite();
-			  }
-		  }
+
+          for (ArrayList ref : refs) {
+
+              for (Object o : ref) {
+
+                  RateControlledEntity entity = (RateControlledEntity) o;
+
+                  connections += entity.getConnectionCount(write_waiter);
+
+                  ready_connections += entity.getReadyConnectionCount(write_waiter);
+
+                  ready_bytes += entity.getBytesReadyToWrite();
+              }
+          }
 		  
-		  values.put( AzureusCoreStats.ST_NET_WRITE_CONTROL_CON_COUNT, new Long( connections ));
-		  values.put( AzureusCoreStats.ST_NET_WRITE_CONTROL_READY_CON_COUNT, new Long( ready_connections ));
-		  values.put( AzureusCoreStats.ST_NET_WRITE_CONTROL_READY_BYTE_COUNT, new Long( ready_bytes ));
+		  values.put( AzureusCoreStats.ST_NET_WRITE_CONTROL_CON_COUNT, (long) connections);
+		  values.put( AzureusCoreStats.ST_NET_WRITE_CONTROL_READY_CON_COUNT, (long) ready_connections);
+		  values.put( AzureusCoreStats.ST_NET_WRITE_CONTROL_READY_BYTE_COUNT, ready_bytes);
 	  }
   }
   
@@ -302,8 +300,8 @@ public class WriteController implements AzureusCoreStatsProvider{
  		    try{  
  		    	entities_mon.enter();
  		    	
- 		    	ArrayList<RateControlledEntity> new_normal 	= new ArrayList<RateControlledEntity>();
- 		    	ArrayList<RateControlledEntity> new_boosted = new ArrayList<RateControlledEntity>();
+ 		    	ArrayList<RateControlledEntity> new_normal 	= new ArrayList<>();
+ 		    	ArrayList<RateControlledEntity> new_boosted = new ArrayList<>();
  		    	
  		    	for ( RateControlledEntity e: normal_priority_entities ){
  		    		
@@ -495,7 +493,7 @@ public class WriteController implements AzureusCoreStatsProvider{
 				  
 				  int position = next_normal_position;
 				  
-				  List<RateControlledEntity> ready = new ArrayList<RateControlledEntity>();
+				  List<RateControlledEntity> ready = new ArrayList<>();
 				  
 				  while( num_checked < normal_size ) {
 					  position = position >= normal_size ? 0 : position; 
@@ -585,7 +583,7 @@ public class WriteController implements AzureusCoreStatsProvider{
 	
 		  while( num_checked < normal_size ) {
 			  next_normal_position = next_normal_position >= normal_size ? 0 : next_normal_position;  //make circular
-			  RateControlledEntity entity = (RateControlledEntity)normal_ref.get( next_normal_position );
+			  RateControlledEntity entity = normal_ref.get( next_normal_position );
 			  next_normal_position++;
 			  num_checked++;
 			  if( entity.canProcess( write_waiter ) ) {  //is ready

@@ -35,5 +35,5 @@ public interface TableColumnCreationListener
 	 *
 	 * @since 3.1.1.1
 	 */
-	public void tableColumnCreated(TableColumn column);
+    void tableColumnCreated(TableColumn column);
 }

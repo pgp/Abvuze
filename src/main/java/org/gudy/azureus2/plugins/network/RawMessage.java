@@ -33,11 +33,11 @@ public interface RawMessage extends Message {
    * Get the raw data payload for this message.
    * @return raw payload
    */
-  public ByteBuffer[] getRawPayload();
+  ByteBuffer[] getRawPayload();
   
   /**
    * Get the message this raw message is based upon.
    * @return original message
    */
-  public Message getOriginalMessage();
+  Message getOriginalMessage();
 }

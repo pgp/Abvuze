@@ -38,291 +38,291 @@ import com.aelitis.azureus.core.util.LinkFileMap;
 public interface 
 DownloadManagerState 
 {
-	public static final String AT_VERSION					= "version";
-	public static final String AT_CATEGORY					= "category";
-	public static final String AT_NETWORKS					= "networks";
-	public static final String AT_USER						= "user";
-	public static final String AT_PEER_SOURCES				= "peersources";
-	public static final String AT_PEER_SOURCES_DENIED		= "peersourcesdenied";
-	public static final String AT_TRACKER_CLIENT_EXTENSIONS	= "trackerclientextensions";
-	public static final String AT_FILE_LINKS_DEPRECATED		= "filelinks";
-	public static final String AT_FILE_LINKS2				= "filelinks2";
-	public static final String AT_FILE_STORE_TYPES			= "storetypes";
-	public static final String AT_FILE_DOWNLOADED			= "filedownloaded";
-	public static final String AT_FLAGS						= "flags";
-	public static final String AT_PARAMETERS				= "parameters";
-	public static final String AT_DISPLAY_NAME              = "displayname";
-	public static final String AT_USER_COMMENT              = "comment";
-	public static final String AT_RELATIVE_SAVE_PATH        = "relativepath";
-	public static final String AT_SECRETS				 	= "secrets";
-	public static final String AT_RESUME_STATE		 		= "resumecomplete";
-	public static final String AT_PRIMARY_FILE		 		= "primaryfile";
-	public static final String AT_PRIMARY_FILE_IDX		 	= "primaryfileidx";
-	public static final String AT_TIME_SINCE_DOWNLOAD		= "timesincedl";
-	public static final String AT_TIME_SINCE_UPLOAD			= "timesinceul";
-	public static final String AT_AVAIL_BAD_TIME			= "badavail";
-	public static final String AT_TIME_STOPPED				= "timestopped";
-	public static final String AT_INCOMP_FILE_SUFFIX		= "incompfilesuffix";
-	public static final String AT_SCRAPE_CACHE				= "scrapecache";	// long value, seeds in upper word, leechers in lower
-	public static final String AT_SCRAPE_CACHE_SOURCE		= "scsrc";			// int value - 0=tracker; 1=subscription etc
-	public static final String AT_REORDER_MIN_MB			= "reordermb";
-	public static final String AT_MD_INFO_DICT_SIZE			= "mdinfodictsize";
-	public static final String AT_FILE_OTHER_HASHES			= "fileotherhashes";
-	public static final String AT_CANONICAL_SD_DMAP			= "canosavedir";
-	public static final String AT_DND_SUBFOLDER				= "dnd_sf";
-	public static final String AT_PEAK_RECEIVE_RATE			= "pkdo";
-	public static final String AT_PEAK_SEND_RATE			= "pkup";
-	public static final String AT_DL_FILE_ALERTS			= "df_alerts";
-	public static final String AT_SHARE_RATIO_PROGRESS		= "sr.prog";		// long: left word - timestamp in secs, right word sr in 1000ths
-	public static final String AT_FILES_EXPANDED			= "file.expand";	// boolean
-	public static final String AT_MERGED_DATA				= "mergedata";		// long
-	public static final String AT_DND_PREFIX				= "dnd_pfx";		// string
-	public static final String AT_AGGREGATE_SCRAPE_CACHE	= "agsc";			// string <update_time_mins>,<seeds>,<leechers>
-	public static final String AT_COMPLETE_LAST_TIME		= "complt";			// long - last time download reported complete, -1 if reported incomplete, 0 if unknown
-	public static final String AT_LAST_ADDED_TO_ACTIVE_TAG	= "last.act.tag";	// long - last time added to active tag
+	String AT_VERSION					= "version";
+	String AT_CATEGORY					= "category";
+	String AT_NETWORKS					= "networks";
+	String AT_USER						= "user";
+	String AT_PEER_SOURCES				= "peersources";
+	String AT_PEER_SOURCES_DENIED		= "peersourcesdenied";
+	String AT_TRACKER_CLIENT_EXTENSIONS	= "trackerclientextensions";
+	String AT_FILE_LINKS_DEPRECATED		= "filelinks";
+	String AT_FILE_LINKS2				= "filelinks2";
+	String AT_FILE_STORE_TYPES			= "storetypes";
+	String AT_FILE_DOWNLOADED			= "filedownloaded";
+	String AT_FLAGS						= "flags";
+	String AT_PARAMETERS				= "parameters";
+	String AT_DISPLAY_NAME              = "displayname";
+	String AT_USER_COMMENT              = "comment";
+	String AT_RELATIVE_SAVE_PATH        = "relativepath";
+	String AT_SECRETS				 	= "secrets";
+	String AT_RESUME_STATE		 		= "resumecomplete";
+	String AT_PRIMARY_FILE		 		= "primaryfile";
+	String AT_PRIMARY_FILE_IDX		 	= "primaryfileidx";
+	String AT_TIME_SINCE_DOWNLOAD		= "timesincedl";
+	String AT_TIME_SINCE_UPLOAD			= "timesinceul";
+	String AT_AVAIL_BAD_TIME			= "badavail";
+	String AT_TIME_STOPPED				= "timestopped";
+	String AT_INCOMP_FILE_SUFFIX		= "incompfilesuffix";
+	String AT_SCRAPE_CACHE				= "scrapecache";	// long value, seeds in upper word, leechers in lower
+	String AT_SCRAPE_CACHE_SOURCE		= "scsrc";			// int value - 0=tracker; 1=subscription etc
+	String AT_REORDER_MIN_MB			= "reordermb";
+	String AT_MD_INFO_DICT_SIZE			= "mdinfodictsize";
+	String AT_FILE_OTHER_HASHES			= "fileotherhashes";
+	String AT_CANONICAL_SD_DMAP			= "canosavedir";
+	String AT_DND_SUBFOLDER				= "dnd_sf";
+	String AT_PEAK_RECEIVE_RATE			= "pkdo";
+	String AT_PEAK_SEND_RATE			= "pkup";
+	String AT_DL_FILE_ALERTS			= "df_alerts";
+	String AT_SHARE_RATIO_PROGRESS		= "sr.prog";		// long: left word - timestamp in secs, right word sr in 1000ths
+	String AT_FILES_EXPANDED			= "file.expand";	// boolean
+	String AT_MERGED_DATA				= "mergedata";		// long
+	String AT_DND_PREFIX				= "dnd_pfx";		// string
+	String AT_AGGREGATE_SCRAPE_CACHE	= "agsc";			// string <update_time_mins>,<seeds>,<leechers>
+	String AT_COMPLETE_LAST_TIME		= "complt";			// long - last time download reported complete, -1 if reported incomplete, 0 if unknown
+	String AT_LAST_ADDED_TO_ACTIVE_TAG	= "last.act.tag";	// long - last time added to active tag
 	
-	public static Object[][] ATTRIBUTE_DEFAULTS = {
-		{ AT_VERSION,								new Integer( -1 )},
-		{ AT_TIME_SINCE_DOWNLOAD,					new Integer( -1 )},
-		{ AT_TIME_SINCE_UPLOAD,						new Integer( -1 )},
-		{ AT_AVAIL_BAD_TIME,						new Long( -1 )},
-		{ AT_SCRAPE_CACHE,							new Long( -1 )},
-		{ AT_SCRAPE_CACHE_SOURCE,					new Integer( 0 )},
-		{ AT_REORDER_MIN_MB,						new Integer( -1 )},
-		{ AT_SHARE_RATIO_PROGRESS,					new Long( 0 )},
+	Object[][] ATTRIBUTE_DEFAULTS = {
+		{ AT_VERSION, -1},
+		{ AT_TIME_SINCE_DOWNLOAD, -1},
+		{ AT_TIME_SINCE_UPLOAD, -1},
+		{ AT_AVAIL_BAD_TIME, (long) -1},
+		{ AT_SCRAPE_CACHE, (long) -1},
+		{ AT_SCRAPE_CACHE_SOURCE, 0},
+		{ AT_REORDER_MIN_MB, -1},
+		{ AT_SHARE_RATIO_PROGRESS, 0L},
 	};
 	
-	public static final long FLAG_ONLY_EVER_SEEDED						= Download.FLAG_ONLY_EVER_SEEDED;
-	public static final long FLAG_SCAN_INCOMPLETE_PIECES				= Download.FLAG_SCAN_INCOMPLETE_PIECES;
-	public static final long FLAG_DISABLE_AUTO_FILE_MOVE    			= Download.FLAG_DISABLE_AUTO_FILE_MOVE;
-	public static final long FLAG_MOVE_ON_COMPLETION_DONE   			= Download.FLAG_MOVE_ON_COMPLETION_DONE;
-	public static final long FLAG_LOW_NOISE								= Download.FLAG_LOW_NOISE;
-	public static final long FLAG_ALLOW_PERMITTED_PEER_SOURCE_CHANGES	= Download.FLAG_ALLOW_PERMITTED_PEER_SOURCE_CHANGES;
-	public static final long FLAG_DO_NOT_DELETE_DATA_ON_REMOVE  		= Download.FLAG_DO_NOT_DELETE_DATA_ON_REMOVE;
-	public static final long FLAG_FORCE_DIRECT_DELETE			  		= Download.FLAG_FORCE_DIRECT_DELETE;
-	public static final long FLAG_DISABLE_IP_FILTER				  		= Download.FLAG_DISABLE_IP_FILTER;
-	public static final long FLAG_METADATA_DOWNLOAD				  		= Download.FLAG_METADATA_DOWNLOAD;
-	public static final long FLAG_ERROR_REPORTED				  		= Download.FLAG_ERROR_REPORTED;
-	public static final long FLAG_INITIAL_NETWORKS_SET					= Download.FLAG_INITIAL_NETWORKS_SET;
+	long FLAG_ONLY_EVER_SEEDED						= Download.FLAG_ONLY_EVER_SEEDED;
+	long FLAG_SCAN_INCOMPLETE_PIECES				= Download.FLAG_SCAN_INCOMPLETE_PIECES;
+	long FLAG_DISABLE_AUTO_FILE_MOVE    			= Download.FLAG_DISABLE_AUTO_FILE_MOVE;
+	long FLAG_MOVE_ON_COMPLETION_DONE   			= Download.FLAG_MOVE_ON_COMPLETION_DONE;
+	long FLAG_LOW_NOISE								= Download.FLAG_LOW_NOISE;
+	long FLAG_ALLOW_PERMITTED_PEER_SOURCE_CHANGES	= Download.FLAG_ALLOW_PERMITTED_PEER_SOURCE_CHANGES;
+	long FLAG_DO_NOT_DELETE_DATA_ON_REMOVE  		= Download.FLAG_DO_NOT_DELETE_DATA_ON_REMOVE;
+	long FLAG_FORCE_DIRECT_DELETE			  		= Download.FLAG_FORCE_DIRECT_DELETE;
+	long FLAG_DISABLE_IP_FILTER				  		= Download.FLAG_DISABLE_IP_FILTER;
+	long FLAG_METADATA_DOWNLOAD				  		= Download.FLAG_METADATA_DOWNLOAD;
+	long FLAG_ERROR_REPORTED				  		= Download.FLAG_ERROR_REPORTED;
+	long FLAG_INITIAL_NETWORKS_SET					= Download.FLAG_INITIAL_NETWORKS_SET;
 	
-	public static final String	PARAM_MAX_PEERS							= "max.peers";
-	public static final String	PARAM_MAX_PEERS_WHEN_SEEDING			= "max.peers.when.seeding";
-	public static final String	PARAM_MAX_PEERS_WHEN_SEEDING_ENABLED	= "max.peers.when.seeding.enabled";
-	public static final String	PARAM_MAX_SEEDS							= "max.seeds";
-	public static final String	PARAM_MAX_UPLOADS						= "max.uploads";
-	public static final String	PARAM_MAX_UPLOADS_WHEN_SEEDING			= "max.uploads.when.seeding";
-	public static final String	PARAM_MAX_UPLOADS_WHEN_SEEDING_ENABLED	= "max.uploads.when.seeding.enabled";
-	public static final String	PARAM_STATS_COUNTED						= "stats.counted";
-	public static final String	PARAM_DOWNLOAD_ADDED_TIME				= "stats.download.added.time";
-	public static final String	PARAM_DOWNLOAD_COMPLETED_TIME			= "stats.download.completed.time";
-	public static final String	PARAM_DOWNLOAD_FILE_COMPLETED_TIME		= "stats.download.file.completed.time";
-	public static final String	PARAM_DOWNLOAD_LAST_ACTIVE_TIME			= "stats.download.last.active.time";
-	public static final String	PARAM_MAX_UPLOAD_WHEN_BUSY				= "max.upload.when.busy";
-	public static final String  PARAM_DND_FLAGS							= "dndflags";
-	public static final String  PARAM_RANDOM_SEED						= "rand";
-	public static final String	PARAM_UPLOAD_PRIORITY					= "up.pri";
-	public static final String	PARAM_MIN_SHARE_RATIO					= "sr.min";		// in thousandths - 1000 = sr of 1.0
-	public static final String	PARAM_MAX_SHARE_RATIO					= "sr.max";		// in thousandths - 1000 = sr of 1.0
+	String	PARAM_MAX_PEERS							= "max.peers";
+	String	PARAM_MAX_PEERS_WHEN_SEEDING			= "max.peers.when.seeding";
+	String	PARAM_MAX_PEERS_WHEN_SEEDING_ENABLED	= "max.peers.when.seeding.enabled";
+	String	PARAM_MAX_SEEDS							= "max.seeds";
+	String	PARAM_MAX_UPLOADS						= "max.uploads";
+	String	PARAM_MAX_UPLOADS_WHEN_SEEDING			= "max.uploads.when.seeding";
+	String	PARAM_MAX_UPLOADS_WHEN_SEEDING_ENABLED	= "max.uploads.when.seeding.enabled";
+	String	PARAM_STATS_COUNTED						= "stats.counted";
+	String	PARAM_DOWNLOAD_ADDED_TIME				= "stats.download.added.time";
+	String	PARAM_DOWNLOAD_COMPLETED_TIME			= "stats.download.completed.time";
+	String	PARAM_DOWNLOAD_FILE_COMPLETED_TIME		= "stats.download.file.completed.time";
+	String	PARAM_DOWNLOAD_LAST_ACTIVE_TIME			= "stats.download.last.active.time";
+	String	PARAM_MAX_UPLOAD_WHEN_BUSY				= "max.upload.when.busy";
+	String  PARAM_DND_FLAGS							= "dndflags";
+	String  PARAM_RANDOM_SEED						= "rand";
+	String	PARAM_UPLOAD_PRIORITY					= "up.pri";
+	String	PARAM_MIN_SHARE_RATIO					= "sr.min";		// in thousandths - 1000 = sr of 1.0
+	String	PARAM_MAX_SHARE_RATIO					= "sr.max";		// in thousandths - 1000 = sr of 1.0
 	
-	public static final int DEFAULT_MAX_UPLOADS		= 4;
-	public static final int MIN_MAX_UPLOADS			= 2;
-	public static final int DEFAULT_UPLOAD_PRIORITY	= 0;
+	int DEFAULT_MAX_UPLOADS		= 4;
+	int MIN_MAX_UPLOADS			= 2;
+	int DEFAULT_UPLOAD_PRIORITY	= 0;
 	
-	public static Object[][] PARAMETERS = {
-		{ PARAM_MAX_PEERS,							new Integer( 0 ) },
-		{ PARAM_MAX_PEERS_WHEN_SEEDING,				new Integer( 0 ) },
+	Object[][] PARAMETERS = {
+		{ PARAM_MAX_PEERS, 0},
+		{ PARAM_MAX_PEERS_WHEN_SEEDING, 0},
 		{ PARAM_MAX_PEERS_WHEN_SEEDING_ENABLED, Boolean.FALSE},
-		{ PARAM_MAX_SEEDS,							new Integer( 0 ) },
-		{ PARAM_MAX_UPLOADS,						new Long( DEFAULT_MAX_UPLOADS ) },
-		{ PARAM_MAX_UPLOADS_WHEN_SEEDING, 			new Integer( DEFAULT_MAX_UPLOADS ) },
+		{ PARAM_MAX_SEEDS, 0},
+		{ PARAM_MAX_UPLOADS, (long) DEFAULT_MAX_UPLOADS},
+		{ PARAM_MAX_UPLOADS_WHEN_SEEDING, DEFAULT_MAX_UPLOADS},
 		{ PARAM_MAX_UPLOADS_WHEN_SEEDING_ENABLED, Boolean.FALSE},
 		{ PARAM_STATS_COUNTED, Boolean.FALSE},
-		{ PARAM_DOWNLOAD_ADDED_TIME,				new Long( 0 ) },
-		{ PARAM_DOWNLOAD_FILE_COMPLETED_TIME, 		new Long( 0 ) },
-		{ PARAM_DOWNLOAD_COMPLETED_TIME, 			new Long( 0 ) },
-		{ PARAM_DOWNLOAD_LAST_ACTIVE_TIME, new Long( 0 ) },
-		{ PARAM_MAX_UPLOAD_WHEN_BUSY,				new Long( 0 ) },
-		{ PARAM_DND_FLAGS, 							new Long( 0 ) },
-		{ PARAM_RANDOM_SEED, 						new Long( 0 ) },
-		{ PARAM_UPLOAD_PRIORITY, 					new Integer( DEFAULT_UPLOAD_PRIORITY ) },
-		{ PARAM_MIN_SHARE_RATIO, 					new Integer( 0 ) },
-		{ PARAM_MAX_SHARE_RATIO, 					new Integer( 0 ) },
+		{ PARAM_DOWNLOAD_ADDED_TIME, 0L},
+		{ PARAM_DOWNLOAD_FILE_COMPLETED_TIME, 0L},
+		{ PARAM_DOWNLOAD_COMPLETED_TIME, 0L},
+		{ PARAM_DOWNLOAD_LAST_ACTIVE_TIME, 0L},
+		{ PARAM_MAX_UPLOAD_WHEN_BUSY, 0L},
+		{ PARAM_DND_FLAGS, 0L},
+		{ PARAM_RANDOM_SEED, 0L},
+		{ PARAM_UPLOAD_PRIORITY, DEFAULT_UPLOAD_PRIORITY},
+		{ PARAM_MIN_SHARE_RATIO, 0},
+		{ PARAM_MAX_SHARE_RATIO, 0},
 	};
 		
-	public TOTorrent
+	TOTorrent
 	getTorrent();
 	
-	public DownloadManager
+	DownloadManager
 	getDownloadManager();
 	
-	public File 
-	getStateFile( );
+	File
+	getStateFile();
 	
-	public void
+	void
 	setFlag(
-		long		flag,
-		boolean		set );
+            long flag,
+            boolean set);
 	
-	public boolean
+	boolean
 	getFlag(
-		long		flag );
+            long flag);
 	
-	public long
+	long
 	getFlags();
 
 		/**
 		 * Reset to default value
 		 * @param name
 		 */
-	
-	public void
+
+        void
 	setParameterDefault(
-		String	name );
+                String name);
 	
-	public int
+	int
 	getIntParameter(
-		String	name );
+            String name);
 	
-	public void
+	void
 	setIntParameter(
-		String	name,
-		int		value );
+            String name,
+            int value);
 	
-	public long
+	long
 	getLongParameter(
-		String	name );
+            String name);
 	
-	public void
+	void
 	setLongParameter(
-		String	name,
-		long	value );
+            String name,
+            long value);
 	
-	public boolean
+	boolean
 	getBooleanParameter(
-		String	name );
+            String name);
 	
-	public void
+	void
 	setBooleanParameter(
-		String		name,
-		boolean		value );
+            String name,
+            boolean value);
 	
-	public void
+	void
 	clearResumeData();
 	
-	public Map
+	Map
 	getResumeData();
 	
-	public void
+	void
 	setResumeData(
-		Map	data );
+            Map data);
 	
-	public boolean
+	boolean
 	isResumeDataComplete();
 	
-	public void
+	void
 	clearTrackerResponseCache();
 	
-	public Map
+	Map
 	getTrackerResponseCache();
 	
-	public void
+	void
 	setTrackerResponseCache(
-		Map		value );
+            Map value);
 	
-	public Category 
+	Category
 	getCategory();
 	
-	public void 
+	void
 	setCategory(
-		Category cat );
+            Category cat);
 	
-	public String getDisplayName();
-	public void setDisplayName(String name);
+	String getDisplayName();
+	void setDisplayName(String name);
 	
-	public String getUserComment();
-	public void setUserComment(String name);
+	String getUserComment();
+	void setUserComment(String name);
 	
-	public String getRelativeSavePath();
+	String getRelativeSavePath();
 
-	public void setPrimaryFile(DiskManagerFileInfo dmfi);
-	public DiskManagerFileInfo getPrimaryFile();
+	void setPrimaryFile(DiskManagerFileInfo dmfi);
+	DiskManagerFileInfo getPrimaryFile();
 
-	public String
+	String
 	getTrackerClientExtensions();
 	
-	public void
+	void
 	setTrackerClientExtensions(
-		String		value );
+            String value);
 	
-	public String[]		// from AENetworkClassifier constants
+	String[]		// from AENetworkClassifier constants
 	getNetworks();
 	
-	public boolean 
+	boolean
 	isNetworkEnabled(
-	    String		network); //from AENetworkClassifier constants
+            String network); //from AENetworkClassifier constants
 	
-	public void
+	void
 	setNetworks(
-		String[]	networks );	// from AENetworkClassifier constants
+            String[] networks);	// from AENetworkClassifier constants
 	
-	public void
+	void
 	setNetworkEnabled(
-	    String		network,				// from AENetworkClassifier constants
-	    boolean		enabled);
+            String network,                // from AENetworkClassifier constants
+            boolean enabled);
 	
-	public String[]		// from PEPeerSource constants
+	String[]		// from PEPeerSource constants
 	getPeerSources();
 	
-	public boolean
+	boolean
 	isPeerSourcePermitted(
-		String		peerSource );
+            String peerSource);
 	
-	public void
+	void
 	setPeerSourcePermitted(
-		String		peerSource,
-		boolean		permitted );
+            String peerSource,
+            boolean permitted);
 	
-	public boolean
+	boolean
 	isPeerSourceEnabled(
-	    String		peerSource); // from PEPeerSource constants
+            String peerSource); // from PEPeerSource constants
 	
-	public void
+	void
 	setPeerSources(
-		String[]	sources );	// from PEPeerSource constants
+            String[] sources);	// from PEPeerSource constants
 
-	public void
+	void
 	setPeerSourceEnabled(
-	    String		source,		// from PEPeerSource constants
-	    boolean		enabled);
+            String source,        // from PEPeerSource constants
+            boolean enabled);
 	
 		// file links
 	
-	public void
+	void
 	setFileLink(
-		int		source_index,
-		File	link_source,
-		File	link_destination );
+            int source_index,
+            File link_source,
+            File link_destination);
 
-	public void
+	void
 	setFileLinks(
-		List<Integer>	source_indexes,
-		List<File>		link_sources,
-		List<File>		link_destinations );
+            List<Integer> source_indexes,
+            List<File> link_sources,
+            List<File> link_destinations);
 	
-	public void
+	void
 	clearFileLinks();
 	
-	public File
+	File
 	getFileLink(
-		int		source_index,
-		File	link_source );
+            int source_index,
+            File link_source);
 	
 		/**
 		 * returns a File -> File map of the defined links (empty if no links)
 		 * @return
 		 */
-	
-	public LinkFileMap
+
+        LinkFileMap
 	getFileLinks();
 	
 	/**
@@ -332,48 +332,48 @@ DownloadManagerState
 	
 	// General access - make sure you use an AT_ value defined above when calling
 	// these methods.
-	public void setAttribute(String	name, String value);
-	public String getAttribute(String name);
-	public void	setMapAttribute(String name, Map value);
-	public Map getMapAttribute(String name);
-	public void	setListAttribute(String	name, String[] values);
-	public String[]	getListAttribute(String	name);
-	public String getListAttribute(String name, int idx);
-	public void setIntAttribute(String name, int value);
-	public int getIntAttribute(String name);
-	public void setLongAttribute(String name, long value);
-	public long getLongAttribute(String name);
-	public void setBooleanAttribute(String name, boolean value);
-	public boolean getBooleanAttribute(String name);	
-	public boolean hasAttribute(String name);
+    void setAttribute(String name, String value);
+	String getAttribute(String name);
+	void	setMapAttribute(String name, Map value);
+	Map getMapAttribute(String name);
+	void	setListAttribute(String name, String[] values);
+	String[]	getListAttribute(String name);
+	String getListAttribute(String name, int idx);
+	void setIntAttribute(String name, int value);
+	int getIntAttribute(String name);
+	void setLongAttribute(String name, long value);
+	long getLongAttribute(String name);
+	void setBooleanAttribute(String name, boolean value);
+	boolean getBooleanAttribute(String name);
+	boolean hasAttribute(String name);
 	
-	public void
+	void
 	setActive(
-		boolean	active );
+            boolean active);
 	
-	public void discardFluff();
+	void discardFluff();
 	
-	public void
+	void
 	save();
 	
-	public boolean
+	boolean
 	exportState(
-		File	target_dir );
+            File target_dir);
 	
 		/**
 		 * deletes the saved state
 		 */
-	
-	public void
+
+        void
 	delete();
 	
-	public void
+	void
 	addListener(
-		DownloadManagerStateListener	l );
+            DownloadManagerStateListener l);
 	
-	public void
+	void
 	removeListener(
-		DownloadManagerStateListener	l );
+            DownloadManagerStateListener l);
 
 	/**
 	 * @param name
@@ -381,9 +381,9 @@ DownloadManagerState
 	 */
 	boolean parameterExists(String name);
 	
-	public void generateEvidence(IndentWriter writer);
+	void generateEvidence(IndentWriter writer);
 	
-	public void dump( IndentWriter writer );
+	void dump(IndentWriter writer);
 	
 	/**
 	 * This method should only be invoked in matching try-finally pairs. If it is invoked with true
@@ -394,8 +394,8 @@ DownloadManagerState
 	 *            when set to true prevents flushing of the state/increments the internal nesting
 	 *            counter, decrements/allows flush otherwise
 	 */
-	public void suppressStateSave(boolean suppress);
+    void suppressStateSave(boolean suppress);
 	
-	public void addListener(DownloadManagerStateAttributeListener l, String attribute, int event_type);
-	public void removeListener(DownloadManagerStateAttributeListener l, String attribute, int event_type);
+	void addListener(DownloadManagerStateAttributeListener l, String attribute, int event_type);
+	void removeListener(DownloadManagerStateAttributeListener l, String attribute, int event_type);
 }

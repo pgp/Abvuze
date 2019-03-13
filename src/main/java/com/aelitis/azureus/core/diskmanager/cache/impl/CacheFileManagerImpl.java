@@ -427,7 +427,7 @@ CacheFileManagerImpl
 						this_mon.enter();
 						
 						if (	cache_entries.size() > 0 &&
-								(CacheEntry)cache_entries.keySet().iterator().next() == oldest_entry ){
+								cache_entries.keySet().iterator().next() == oldest_entry ){
 							
 								// hmm, something wrong with cache as the flush should have got rid
 								// of at least the oldest entry
@@ -472,11 +472,9 @@ CacheFileManagerImpl
 
 					// System.out.println( "cache file count = " + cache_files.size());
 
-					Iterator	cf_it = cache_files.keySet().iterator();
+					for (Object o1 : cache_files.keySet()) {
 
-					while(cf_it.hasNext()){
-
-						((CacheFileWithCache)cf_it.next()).updateStats();
+						((CacheFileWithCache) o1).updateStats();
 					}
 
 					if ( --cleaner_ticks == 0 ){
@@ -499,17 +497,15 @@ CacheFileManagerImpl
 
 							if ( cache_entries.size() > 0 ){
 
-								Iterator it = cache_entries.keySet().iterator();
+								for (Object o : cache_entries.keySet()) {
 
-								while( it.hasNext()){
-
-									CacheEntry	entry = (CacheEntry)it.next();
+									CacheEntry entry = (CacheEntry) o;
 
 									// System.out.println( "oldest entry = " + ( now - entry.getLastUsed()));
 
-									if ( entry.isDirty()){
+									if (entry.isDirty()) {
 
-										dirty_files.add( entry.getFile());
+										dirty_files.add(entry.getFile());
 									}
 								}
 							}
@@ -521,38 +517,36 @@ CacheFileManagerImpl
 							this_mon.exit();
 						}
 
-						Iterator	it = dirty_files.iterator();
+						for (Object dirty_file : dirty_files) {
 
-						while( it.hasNext()){
+							CacheFileWithCache file = (CacheFileWithCache) dirty_file;
 
-							CacheFileWithCache	file = (CacheFileWithCache)it.next();
+							try {
 
-							try{
+								TOTorrentFile tf = file.getTorrentFile();
 
-								TOTorrentFile	tf = file.getTorrentFile();
+								long min_flush_size = -1;
 
-								long	min_flush_size	= -1;
+								if (tf != null) {
 
-								if ( tf != null ){
-
-									min_flush_size	= tf.getTorrent().getPieceLength();
+									min_flush_size = tf.getTorrent().getPieceLength();
 
 								}
 
-								file.flushOldDirtyData( oldest, min_flush_size );
+								file.flushOldDirtyData(oldest, min_flush_size);
 
-							}catch( CacheFileManagerException e ){
+							} catch (CacheFileManagerException e) {
 
-								file.setPendingException( e );
+								file.setPendingException(e);
 
 								// if this fails then the error should reoccur on a "proper"
 								// flush later and be reported
 
-								Debug.printStackTrace( e );
+								Debug.printStackTrace(e);
 
-							}catch( Throwable e ){
+							} catch (Throwable e) {
 
-								Debug.printStackTrace( e );
+								Debug.printStackTrace(e);
 							}
 						}
 					}
@@ -589,16 +583,14 @@ CacheFileManagerImpl
 				
 				int		my_count = 0;
 
-				Iterator it = cache_entries.keySet().iterator();
-				
-				while( it.hasNext()){
-					
-					CacheEntry	entry = (CacheEntry)it.next();
-					
-					total_cache_size	+= entry.getLength();
-					
-					if ( entry.getFile() == file ){
-						
+				for (Object o : cache_entries.keySet()) {
+
+					CacheEntry entry = (CacheEntry) o;
+
+					total_cache_size += entry.getLength();
+
+					if (entry.getFile() == file) {
+
 						my_count++;
 					}
 				}

@@ -142,14 +142,14 @@ TOTorrentCreateImpl
 	private long							piece_count;
 	private boolean							add_other_hashes;
 	
-	private final List<TOTorrentProgressListener>							progress_listeners = new ArrayList<TOTorrentProgressListener>();
+	private final List<TOTorrentProgressListener>							progress_listeners = new ArrayList<>();
 	
 	private int	reported_progress;
 		
-	private Set<String>	ignore_set = new HashSet<String>();
+	private Set<String>	ignore_set = new HashSet<>();
 	
 	private Map<String,File>	linkage_map;
-	private final Map<String,String>	linked_tf_map = new HashMap<String, String>();
+	private final Map<String,String>	linked_tf_map = new HashMap<>();
 	
 	private boolean	cancelled;
 	
@@ -275,10 +275,10 @@ TOTorrentCreateImpl
 		
 		report( "Torrent.create.progress.hashing");
 
-		for (int i=0;i<progress_listeners.size();i++){
-					
-			((TOTorrentProgressListener)progress_listeners.get(i)).reportProgress( 0 );
-		}
+        for (TOTorrentProgressListener progress_listener : progress_listeners) {
+
+            progress_listener.reportProgress(0);
+        }
 			
 		boolean add_other_per_file_hashes 	= add_other_hashes&&!getSimpleTorrent();
 		
@@ -315,7 +315,7 @@ TOTorrentCreateImpl
 	
 			}else{
 			
-				List<TOTorrentFileImpl>	encoded = new ArrayList<TOTorrentFileImpl>();
+				List<TOTorrentFileImpl>	encoded = new ArrayList<>();
 			
 				ignored = processDir( file_hasher, _torrent_base, encoded, _torrent_base.getName(), "" );
 			
@@ -369,7 +369,7 @@ TOTorrentCreateImpl
 			// sort contents so that multiple encodes of a dir always
 			// generate same torrent
 		
-		List<File> file_list = new ArrayList<File>(Arrays.asList(dir_file_list));
+		List<File> file_list = new ArrayList<>(Arrays.asList(dir_file_list));
 		
 		if ( file_comparator == null ){
 		
@@ -386,7 +386,7 @@ TOTorrentCreateImpl
 		
 		for (int i=0;i<file_list.size();i++){
 			
-			File	file = (File)file_list.get(i);
+			File	file = file_list.get(i);
 			
 			String	file_name = file.getName();
 			
@@ -452,17 +452,17 @@ TOTorrentCreateImpl
 	pieceHashed(
 		int		piece_number )
 	{
-		for (int i=0;i<progress_listeners.size();i++){
-		
-			int	this_progress = (int)((piece_number*100)/piece_count );
-			
-			if ( this_progress != reported_progress ){
-				
-				reported_progress = this_progress;
-				
-				((TOTorrentProgressListener)progress_listeners.get(i)).reportProgress( reported_progress );
-			}
-		}
+        for (TOTorrentProgressListener progress_listener : progress_listeners) {
+
+            int this_progress = (int) ((piece_number * 100) / piece_count);
+
+            if (this_progress != reported_progress) {
+
+                reported_progress = this_progress;
+
+                progress_listener.reportProgress(reported_progress);
+            }
+        }
 	}
 	
 	protected long
@@ -569,11 +569,11 @@ TOTorrentCreateImpl
 				
 				root = root + File.separator + name;
 			}
-			
-			for (int i=0;i<dir_files.length;i++){
-				
-				length += getTotalFileSizeSupport( dir_files[i], root );
-			}
+
+            for (File dir_file : dir_files) {
+
+                length += getTotalFileSizeSupport(dir_file, root);
+            }
 			
 			return( length );
 		}
@@ -605,11 +605,11 @@ TOTorrentCreateImpl
 		if ( progress_listeners.size() > 0 ){
 			
 			String	prefix = MessageText.getString(resource_key);
-			
-			for (int i=0;i<progress_listeners.size();i++){
-				
-				((TOTorrentProgressListener)progress_listeners.get(i)).reportCurrentTask( prefix + (additional_text==null?"":additional_text ));
-			}
+
+            for (TOTorrentProgressListener progress_listener : progress_listeners) {
+
+                progress_listener.reportCurrentTask(prefix + (additional_text == null ? "" : additional_text));
+            }
 		}
 	}
 

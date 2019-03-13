@@ -27,7 +27,6 @@ import java.util.List;
 
 
 import com.aelitis.azureus.core.util.dns.DNSJavaImpl;
-import org.gudy.azureus2.core3.util.Debug;
 
 
 public class DNSUtils {

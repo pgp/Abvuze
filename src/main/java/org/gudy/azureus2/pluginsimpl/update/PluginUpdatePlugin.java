@@ -24,6 +24,7 @@ package org.gudy.azureus2.pluginsimpl.update;
  *
  */
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.zip.*;
 import java.net.URL;
@@ -162,22 +163,20 @@ PluginUpdatePlugin
 			
 		int mandatory_count 	= 0;
 		int non_mandatory_count	= 0;
-		
-		for (int i=0;i<plugins.length;i++){
-			
-			PluginInterface	pi = plugins[i];
-						
-			boolean	pi_mandatory = pi.getPluginState().isMandatory();
-						
-			if ( pi_mandatory ){
-					
-				mandatory_count++;
-					
-			}else{
-					
-				non_mandatory_count++;
-			}
-		}
+
+        for (PluginInterface pi : plugins) {
+
+            boolean pi_mandatory = pi.getPluginState().isMandatory();
+
+            if (pi_mandatory) {
+
+                mandatory_count++;
+
+            } else {
+
+                non_mandatory_count++;
+            }
+        }
 		
 		final int f_non_mandatory_count	= non_mandatory_count;
 		final int f_mandatory_count		= mandatory_count;
@@ -208,77 +207,70 @@ PluginUpdatePlugin
 						String[] rps = vc.getRecommendedPlugins();
 						
 						boolean	found_one = false;
-						
-						for (int i=0;i<rps.length;i++){
-							
-							String	rp_id = rps[i];
-							
-							if ( plugin_manager.getPluginInterfaceByID( rp_id, false ) != null ){
-								
-									// already installed
-								
-								continue;
-							}
-							
-							final String	config_key = "recommended.processed." + rp_id;
-							
-							if ( !plugin_config.getPluginBooleanParameter( config_key, false )){
-								
-								try{
-									final PluginInstaller installer = plugin_interface.getPluginManager().getPluginInstaller();
-									
-									StandardPlugin[]	sps = installer.getStandardPlugins();
-									
-									for (int j=0;j<sps.length;j++){
-										
-										final StandardPlugin	sp = sps[j];
-										
-										if ( sp.getId().equals( rp_id )){
-										
-											found_one = true;
-											
-											checker.getCheckInstance().addListener(
-												new UpdateCheckInstanceListener()
-												{
-													public void
-													cancelled(
-														UpdateCheckInstance		instance )
-													{													
-													}
-													
-													public void
-													complete(
-														UpdateCheckInstance		instance )
-													{
-														if ( instance.getUpdates().length == 0 ){
-															
-															installRecommendedPlugin( installer, sp );
-															
-															plugin_config.setPluginParameter( config_key, true );
-														}
-													}
-												});
-											
-											break;
-										}
-									}
-									
-								}catch( Throwable e ){
-									
-								}
-							}
-							
-							if ( found_one ){
-								
-								break;
-							}
-						}
+
+                        for (String rp_id : rps) {
+
+                            if (plugin_manager.getPluginInterfaceByID(rp_id, false) != null) {
+
+                                // already installed
+
+                                continue;
+                            }
+
+                            final String config_key = "recommended.processed." + rp_id;
+
+                            if (!plugin_config.getPluginBooleanParameter(config_key, false)) {
+
+                                try {
+                                    final PluginInstaller installer = plugin_interface.getPluginManager().getPluginInstaller();
+
+                                    StandardPlugin[] sps = installer.getStandardPlugins();
+
+                                    for (final StandardPlugin sp : sps) {
+
+                                        if (sp.getId().equals(rp_id)) {
+
+                                            found_one = true;
+
+                                            checker.getCheckInstance().addListener(
+                                                    new UpdateCheckInstanceListener() {
+                                                        public void
+                                                        cancelled(
+                                                                UpdateCheckInstance instance) {
+                                                        }
+
+                                                        public void
+                                                        complete(
+                                                                UpdateCheckInstance instance) {
+                                                            if (instance.getUpdates().length == 0) {
+
+                                                                installRecommendedPlugin(installer, sp);
+
+                                                                plugin_config.setPluginParameter(config_key, true);
+                                                            }
+                                                        }
+                                                    });
+
+                                            break;
+                                        }
+                                    }
+
+                                } catch (Throwable e) {
+
+                                }
+                            }
+
+                            if (found_one) {
+
+                                break;
+                            }
+                        }
 						
 						if ( !found_one ){
 							
 							Set<String>	auto_install = vc.getAutoInstallPluginIDs();
 							
-							final List<String>	to_do = new ArrayList<String>();
+							final List<String>	to_do = new ArrayList<>();
 							
 							for ( String pid: auto_install ){
 								
@@ -307,7 +299,7 @@ PluginUpdatePlugin
 										
 										UpdateManager update_manager = plugin_interface.getUpdateManager();
 										
-										final List<UpdateCheckInstance>	l_instances = new ArrayList<UpdateCheckInstance>();
+										final List<UpdateCheckInstance>	l_instances = new ArrayList<>();
 										
 										update_manager.addListener( 
 											new UpdateManagerListener()
@@ -374,7 +366,7 @@ PluginUpdatePlugin
 										
 										PluginInstaller installer = plugin_interface.getPluginManager().getPluginInstaller();
 										
-										List<InstallablePlugin>	sps = new ArrayList<InstallablePlugin>();
+										List<InstallablePlugin>	sps = new ArrayList<>();
 										
 										for ( String pid: to_do ){
 											
@@ -399,7 +391,7 @@ PluginUpdatePlugin
 								 		
 										if ( sps.size() > 0 ){
 											
-											Map<Integer, Object> properties = new HashMap<Integer, Object>();
+											Map<Integer, Object> properties = new HashMap<>();
 									
 											properties.put( UpdateCheckInstance.PT_UI_STYLE, UpdateCheckInstance.PT_UI_STYLE_NONE );
 												
@@ -407,7 +399,7 @@ PluginUpdatePlugin
 	
 											try{
 												installer.install(
-													sps.toArray( new InstallablePlugin[ sps.size()]),
+													sps.toArray(new InstallablePlugin[0]),
 													false,
 													properties,
 													new PluginInstallationListener() {
@@ -435,8 +427,8 @@ PluginUpdatePlugin
 												log.log( "Auto install failed", e );
 											}
 										}
-									};
-								}.start();
+									}
+                                }.start();
 							}
 						}
 					}
@@ -543,78 +535,76 @@ PluginUpdatePlugin
 			List	plugins_to_check 			= new ArrayList();
 			List	plugins_to_check_ids		= new ArrayList();
 			Map		plugins_to_check_names		= new HashMap();
-			
-			for (int i=0;i<plugins.length;i++){
-				
-				PluginInterface	pi = plugins[i];
-				
-				if ( pi.getPluginState().isDisabled()){
-					
-						// if it is disabled because it failed to load, carry on and check for updates as the newer version
-						// may be there to fix the load failure!
-					
-					if ( !pi.getPluginState().hasFailed()){
-						
-						continue;
-					}
-				}
-				
-				String	mand = pi.getPluginProperties().getProperty( "plugin.mandatory");
-				
-				boolean	pi_mandatory = mand != null && mand.trim().toLowerCase().equals("true");
-				
-				if ( pi_mandatory != mandatory ){
-					
-					continue;
-				}
-				
-				String	id 		= pi.getPluginID();
-				String	version = pi.getPluginVersion();
-				String	name	= pi.getPluginName();
-				
-				if ( ids_to_check != null ){
-				
-					boolean	id_selected = false;
-					
-					for (int j=0;j<ids_to_check.length;j++){
-						
-						if ( ids_to_check[j].equals( id )){
-							
-							id_selected = true;
-							
-							break;
-						}
-					}
-					
-					if ( !id_selected ){
-						
-						continue;
-					}
-				}
-				
-				if ( version != null ){
-					
-					if ( plugins_to_check_ids.contains( id )){
-						
-						String	s = (String)plugins_to_check_names.get(id);
-						
-						if ( !name.equals( id )){
-							
-							plugins_to_check_names.put( id, s+","+name);
-						}						
-					}else{
-						plugins_to_check_ids.add( id );
-						
-						plugins_to_check.add( pi );
-						
-						plugins_to_check_names.put( id, name.equals(id)?"":name);
-					}
-				}
-				
-				String location = pi.getPluginDirectoryName();
-				
-				log.log( LoggerChannel.LT_INFORMATION, (mandatory?"*":"-") + pi.getPluginName() + ", id = " + id + (version==null?"":(", version = " + pi.getPluginVersion())) + (location==null?"":( ", loc = " + location)));
-			}
+
+            for (PluginInterface pi : plugins) {
+
+                if (pi.getPluginState().isDisabled()) {
+
+                    // if it is disabled because it failed to load, carry on and check for updates as the newer version
+                    // may be there to fix the load failure!
+
+                    if (!pi.getPluginState().hasFailed()) {
+
+                        continue;
+                    }
+                }
+
+                String mand = pi.getPluginProperties().getProperty("plugin.mandatory");
+
+                boolean pi_mandatory = mand != null && mand.trim().toLowerCase().equals("true");
+
+                if (pi_mandatory != mandatory) {
+
+                    continue;
+                }
+
+                String id = pi.getPluginID();
+                String version = pi.getPluginVersion();
+                String name = pi.getPluginName();
+
+                if (ids_to_check != null) {
+
+                    boolean id_selected = false;
+
+                    for (String s : ids_to_check) {
+
+                        if (s.equals(id)) {
+
+                            id_selected = true;
+
+                            break;
+                        }
+                    }
+
+                    if (!id_selected) {
+
+                        continue;
+                    }
+                }
+
+                if (version != null) {
+
+                    if (plugins_to_check_ids.contains(id)) {
+
+                        String s = (String) plugins_to_check_names.get(id);
+
+                        if (!name.equals(id)) {
+
+                            plugins_to_check_names.put(id, s + "," + name);
+                        }
+                    } else {
+                        plugins_to_check_ids.add(id);
+
+                        plugins_to_check.add(pi);
+
+                        plugins_to_check_names.put(id, name.equals(id) ? "" : name);
+                    }
+                }
+
+                String location = pi.getPluginDirectoryName();
+
+                log.log(LoggerChannel.LT_INFORMATION, (mandatory ? "*" : "-") + pi.getPluginName() + ", id = " + id + (version == null ? "" : (", version = " + pi.getPluginVersion())) + (location == null ? "" : (", loc = " + location)));
+            }
 			
 			SFPluginDetailsLoader loader = SFPluginDetailsLoaderFactory.getSingleton();
 			
@@ -654,230 +644,226 @@ PluginUpdatePlugin
 				
 				log.log( LoggerChannel.LT_INFORMATION, "Downloaded plugin info = " + id_info );
 			}
-			
-			for ( int i=0;i<plugins_to_check.size();i++){
-				
-				if ( checker.getCheckInstance().isCancelled()){
-					
-					throw( new Exception( "Update check cancelled" )); // XXX: Uh?
-				}
-				
-				final PluginInterface	pi_being_checked 	= (PluginInterface)plugins_to_check.get(i);
-				final String			plugin_id 			= pi_being_checked.getPluginID();
-					
-				boolean	found	= false;
-				
-				for (int j=0;j<ids.length;j++){
-					
-					if ( ids[j].equalsIgnoreCase( plugin_id )){
-						
-						found	= true;
-						
-						break;
-					}
-				}
-				
-				if ( !found ){
-					
-					if ( !pi_being_checked.getPluginState().isBuiltIn()){
-						
-						log.log( LoggerChannel.LT_INFORMATION, "Skipping " + plugin_id + " as not listed on web site");
-					}
 
-					continue;
-				}
-				
-				String			plugin_names		= (String)plugins_to_check_names.get( plugin_id );
-				//final boolean	plugin_unloadable 	= ((Boolean)plugins_to_check_unloadable.get( plugin_id )).booleanValue();
-				
-				log.log( LoggerChannel.LT_INFORMATION, "Checking " + plugin_id);
-				
-				try{
-					checker.reportProgress( "Loading details for " + plugin_id + "/" + pi_being_checked.getPluginName());
+            for (Object o : plugins_to_check) {
 
-					SFPluginDetails	details = loader.getPluginDetails( plugin_id );
-	
-					if ( plugin_names.length() == 0 ){
-						
-						plugin_names = details.getName();
-					}
-					
-					boolean az_cvs = plugin_interface.getUtilities().isCVSVersion();
-					
-					String pi_version_info = pi_being_checked.getPluginProperties().getProperty( "plugin.version.info" );
-					
-					String az_plugin_version	= pi_being_checked.getPluginVersion();
-					
-					String sf_plugin_version	= details.getVersion();
-					
-					String sf_comp_version		= sf_plugin_version;
-					
-					if ( az_cvs ){
-						
-						String	sf_cvs_version = details.getCVSVersion();
-						
-						if ( sf_cvs_version.length() > 0 ){
-							
-								// sf cvs version ALWAYS ends in _CVS
-							
-							sf_plugin_version	= sf_cvs_version;
-							
-							sf_comp_version = sf_plugin_version.substring(0,sf_plugin_version.length()-4);
-						}
-					}
-					
-					if (	 sf_comp_version.length() == 0 ||
-							!Character.isDigit(sf_comp_version.charAt(0))){
-						
-						log.log( LoggerChannel.LT_INFORMATION, "Skipping " + plugin_id + " as no valid version to check");
+                if (checker.getCheckInstance().isCancelled()) {
 
-						continue;					
-					}
-					
-					// 	System.out.println("comp version = " + sf_comp_version );
-					
-					int	comp = PluginUtils.comparePluginVersions( az_plugin_version, sf_comp_version );
-					
-						// if they're the same version and latest is CVS then stick a _CVS on
-						// the end of current to avoid confusion
-					
-					log.log( LoggerChannel.LT_INFORMATION, 
-								"    Current: " + az_plugin_version + 
-								(comp==0&&sf_plugin_version.endsWith( "_CVS")?"_CVS":"")+
-								", Latest: " + sf_plugin_version + (pi_version_info==null?"":" [" + pi_version_info + "]"));
-					
-					checker.reportProgress( "    current=" + az_plugin_version + (comp==0&&sf_plugin_version.endsWith( "_CVS")?"_CVS":"") + ", latest=" + sf_plugin_version );
-					
-					if ( comp < 0 && ! ( pi_being_checked.getPlugin() instanceof UpdatableComponent)){
-													
-							// only update if newer verison + plugin itself doesn't handle
-							// the update
-						
-						String sf_plugin_download	= details.getDownloadURL();
-						
-						if ( az_cvs ){
-							
-							String	sf_cvs_version = details.getCVSVersion();
-							
-							if ( sf_cvs_version.length() > 0 ){
-								
-								sf_plugin_download	= details.getCVSDownloadURL();
-							}
-						}
+                    throw (new Exception("Update check cancelled")); // XXX: Uh?
+                }
 
-						log.log( LoggerChannel.LT_INFORMATION, "    Description:" );
-						
-						List	update_desc = new ArrayList();
-						
-						List	desc_lines = HTMLUtils.convertHTMLToText( "", details.getDescription());
-						
-						logMultiLine( "        ", desc_lines );
-						
-						update_desc.addAll( desc_lines );
-						
-						log.log( LoggerChannel.LT_INFORMATION, "    Comment:" );
-						
-						List	comment_lines = HTMLUtils.convertHTMLToText( "    ", details.getComment());
+                final PluginInterface pi_being_checked = (PluginInterface) o;
+                final String plugin_id = pi_being_checked.getPluginID();
 
-						logMultiLine( "    ", comment_lines );
-						
-						update_desc.addAll( comment_lines );
-						
-						String msg =   "A newer version (version " + sf_plugin_version + ") of plugin '" + 
-										plugin_id + "' " +
-										(plugin_names.length()==0?"":"(" + plugin_names + ") " ) +
-										"is available. ";
-						
-						log.log( LoggerChannel.LT_INFORMATION, "" );
-						
-						log.log( 	LoggerChannel.LT_INFORMATION, "        " + msg + "Download from "+
-									sf_plugin_download);
-						
-						ResourceDownloaderFactory rdf =  plugin_interface.getUtilities().getResourceDownloaderFactory();
-						
-						ResourceDownloader direct_rdl 		= rdf.create( new URL( sf_plugin_download ));
-						ResourceDownloader direct_ap_rdl 	= rdf.createWithAutoPluginProxy( new URL( sf_plugin_download ));
+                boolean found = false;
 
-							// work out what the torrent download will be, if it exists 
-							// sf_plugin_download will be something like ../plugins/safepeer_2.4.zip
-							//     torrent is safepeer_2.4.zip.torrent
-						
-						String	torrent_download = Constants.AELITIS_TORRENTS;
-						
-						int	slash_pos = sf_plugin_download.lastIndexOf("/");
-						
-						if ( slash_pos == -1 ){
-							
-							torrent_download += sf_plugin_download;
-							
-						}else{
-							
-							torrent_download += sf_plugin_download.substring( slash_pos + 1 );
-						}
-						
-						torrent_download	+= ".torrent";
-						
-						ResourceDownloader torrent_rdl 		= rdf.create( new URL( torrent_download ));
-						//ResourceDownloader torrent_ap_rdl 	= rdf.createWithAutoPluginProxy( new URL( torrent_download ));
+                for (String id : ids) {
 
-						torrent_rdl	= rdf.getSuffixBasedDownloader( torrent_rdl );
-						
-							// create an alternate downloader with torrent attempt first
-						
-						ResourceDownloader alternate_rdl = rdf.getAlternateDownloader( new ResourceDownloader[]{ torrent_rdl, direct_rdl, direct_ap_rdl });
-						
-							// get size so it is cached
-						
-						rdf.getTimeoutDownloader(rdf.getRetryDownloader(alternate_rdl,RD_SIZE_RETRIES),RD_SIZE_TIMEOUT).getSize();
-																			
-						String[]	update_d = new String[update_desc.size()];
-						
-						update_desc.toArray( update_d );
-							
-						num_updates_found++;
-						
-							// see if unloadable
-						
-						boolean	plugin_unloadable 	= true;
-						
-						for (int j=0;j<plugins.length;j++){
-							
-							PluginInterface pi = plugins[j];
-							
-							if ( pi.getPluginID().equals( plugin_id )){
-								
-								plugin_unloadable &= pi.getPluginState().isUnloadable();
-							}
-						}
-						
-						if ( plugin_unloadable ){
-							
-							checker.reportProgress( "Plugin is unloadable" );
-						}
-						
-						Update update = 
-							addUpdate( 
-								pi_being_checked,
-								checker,
-								plugin_id + "/" + plugin_names,
-								update_d,
-								az_plugin_version,
-								sf_plugin_version,
-								alternate_rdl,
-								sf_plugin_download.toLowerCase().endsWith(".jar"),
-								plugin_unloadable?Update.RESTART_REQUIRED_NO:Update.RESTART_REQUIRED_YES,
-								true );
-			
-						update.setRelativeURLBase( details.getRelativeURLBase());
-						update.setDescriptionURL(details.getInfoURL());
-					}
-				}catch( Throwable e ){
+                    if (id.equalsIgnoreCase(plugin_id)) {
 
-					checker.reportProgress( "Failed to load details for plugin '" + plugin_id + "': " + Debug.getNestedExceptionMessage(e));
-					
-					log.log("    Plugin check failed", e ); 
-				}
-			}
+                        found = true;
+
+                        break;
+                    }
+                }
+
+                if (!found) {
+
+                    if (!pi_being_checked.getPluginState().isBuiltIn()) {
+
+                        log.log(LoggerChannel.LT_INFORMATION, "Skipping " + plugin_id + " as not listed on web site");
+                    }
+
+                    continue;
+                }
+
+                String plugin_names = (String) plugins_to_check_names.get(plugin_id);
+                //final boolean	plugin_unloadable 	= ((Boolean)plugins_to_check_unloadable.get( plugin_id )).booleanValue();
+
+                log.log(LoggerChannel.LT_INFORMATION, "Checking " + plugin_id);
+
+                try {
+                    checker.reportProgress("Loading details for " + plugin_id + "/" + pi_being_checked.getPluginName());
+
+                    SFPluginDetails details = loader.getPluginDetails(plugin_id);
+
+                    if (plugin_names.length() == 0) {
+
+                        plugin_names = details.getName();
+                    }
+
+                    boolean az_cvs = plugin_interface.getUtilities().isCVSVersion();
+
+                    String pi_version_info = pi_being_checked.getPluginProperties().getProperty("plugin.version.info");
+
+                    String az_plugin_version = pi_being_checked.getPluginVersion();
+
+                    String sf_plugin_version = details.getVersion();
+
+                    String sf_comp_version = sf_plugin_version;
+
+                    if (az_cvs) {
+
+                        String sf_cvs_version = details.getCVSVersion();
+
+                        if (sf_cvs_version.length() > 0) {
+
+                            // sf cvs version ALWAYS ends in _CVS
+
+                            sf_plugin_version = sf_cvs_version;
+
+                            sf_comp_version = sf_plugin_version.substring(0, sf_plugin_version.length() - 4);
+                        }
+                    }
+
+                    if (sf_comp_version.length() == 0 ||
+                            !Character.isDigit(sf_comp_version.charAt(0))) {
+
+                        log.log(LoggerChannel.LT_INFORMATION, "Skipping " + plugin_id + " as no valid version to check");
+
+                        continue;
+                    }
+
+                    // 	System.out.println("comp version = " + sf_comp_version );
+
+                    int comp = PluginUtils.comparePluginVersions(az_plugin_version, sf_comp_version);
+
+                    // if they're the same version and latest is CVS then stick a _CVS on
+                    // the end of current to avoid confusion
+
+                    log.log(LoggerChannel.LT_INFORMATION,
+                            "    Current: " + az_plugin_version +
+                                    (comp == 0 && sf_plugin_version.endsWith("_CVS") ? "_CVS" : "") +
+                                    ", Latest: " + sf_plugin_version + (pi_version_info == null ? "" : " [" + pi_version_info + "]"));
+
+                    checker.reportProgress("    current=" + az_plugin_version + (comp == 0 && sf_plugin_version.endsWith("_CVS") ? "_CVS" : "") + ", latest=" + sf_plugin_version);
+
+                    if (comp < 0 && !(pi_being_checked.getPlugin() instanceof UpdatableComponent)) {
+
+                        // only update if newer verison + plugin itself doesn't handle
+                        // the update
+
+                        String sf_plugin_download = details.getDownloadURL();
+
+                        if (az_cvs) {
+
+                            String sf_cvs_version = details.getCVSVersion();
+
+                            if (sf_cvs_version.length() > 0) {
+
+                                sf_plugin_download = details.getCVSDownloadURL();
+                            }
+                        }
+
+                        log.log(LoggerChannel.LT_INFORMATION, "    Description:");
+
+                        List desc_lines = HTMLUtils.convertHTMLToText("", details.getDescription());
+
+                        logMultiLine("        ", desc_lines);
+
+                        List update_desc = new ArrayList(desc_lines);
+
+                        log.log(LoggerChannel.LT_INFORMATION, "    Comment:");
+
+                        List comment_lines = HTMLUtils.convertHTMLToText("    ", details.getComment());
+
+                        logMultiLine("    ", comment_lines);
+
+                        update_desc.addAll(comment_lines);
+
+                        String msg = "A newer version (version " + sf_plugin_version + ") of plugin '" +
+                                plugin_id + "' " +
+                                (plugin_names.length() == 0 ? "" : "(" + plugin_names + ") ") +
+                                "is available. ";
+
+                        log.log(LoggerChannel.LT_INFORMATION, "");
+
+                        log.log(LoggerChannel.LT_INFORMATION, "        " + msg + "Download from " +
+                                sf_plugin_download);
+
+                        ResourceDownloaderFactory rdf = plugin_interface.getUtilities().getResourceDownloaderFactory();
+
+                        ResourceDownloader direct_rdl = rdf.create(new URL(sf_plugin_download));
+                        ResourceDownloader direct_ap_rdl = rdf.createWithAutoPluginProxy(new URL(sf_plugin_download));
+
+                        // work out what the torrent download will be, if it exists
+                        // sf_plugin_download will be something like ../plugins/safepeer_2.4.zip
+                        //     torrent is safepeer_2.4.zip.torrent
+
+                        String torrent_download = Constants.AELITIS_TORRENTS;
+
+                        int slash_pos = sf_plugin_download.lastIndexOf("/");
+
+                        if (slash_pos == -1) {
+
+                            torrent_download += sf_plugin_download;
+
+                        } else {
+
+                            torrent_download += sf_plugin_download.substring(slash_pos + 1);
+                        }
+
+                        torrent_download += ".torrent";
+
+                        ResourceDownloader torrent_rdl = rdf.create(new URL(torrent_download));
+                        //ResourceDownloader torrent_ap_rdl 	= rdf.createWithAutoPluginProxy( new URL( torrent_download ));
+
+                        torrent_rdl = rdf.getSuffixBasedDownloader(torrent_rdl);
+
+                        // create an alternate downloader with torrent attempt first
+
+                        ResourceDownloader alternate_rdl = rdf.getAlternateDownloader(new ResourceDownloader[]{torrent_rdl, direct_rdl, direct_ap_rdl});
+
+                        // get size so it is cached
+
+                        rdf.getTimeoutDownloader(rdf.getRetryDownloader(alternate_rdl, RD_SIZE_RETRIES), RD_SIZE_TIMEOUT).getSize();
+
+                        String[] update_d = new String[update_desc.size()];
+
+                        update_desc.toArray(update_d);
+
+                        num_updates_found++;
+
+                        // see if unloadable
+
+                        boolean plugin_unloadable = true;
+
+                        for (PluginInterface pi : plugins) {
+
+                            if (pi.getPluginID().equals(plugin_id)) {
+
+                                plugin_unloadable &= pi.getPluginState().isUnloadable();
+                            }
+                        }
+
+                        if (plugin_unloadable) {
+
+                            checker.reportProgress("Plugin is unloadable");
+                        }
+
+                        Update update =
+                                addUpdate(
+                                        pi_being_checked,
+                                        checker,
+                                        plugin_id + "/" + plugin_names,
+                                        update_d,
+                                        az_plugin_version,
+                                        sf_plugin_version,
+                                        alternate_rdl,
+                                        sf_plugin_download.toLowerCase().endsWith(".jar"),
+                                        plugin_unloadable ? Update.RESTART_REQUIRED_NO : Update.RESTART_REQUIRED_YES,
+                                        true);
+
+                        update.setRelativeURLBase(details.getRelativeURLBase());
+                        update.setDescriptionURL(details.getInfoURL());
+                    }
+                } catch (Throwable e) {
+
+                    checker.reportProgress("Failed to load details for plugin '" + plugin_id + "': " + Debug.getNestedExceptionMessage(e));
+
+                    log.log("    Plugin check failed", e);
+                }
+            }
 						
 		}catch( Throwable e ){
 			if (!"Update check cancelled".equals(e.getMessage())) {
@@ -1041,7 +1027,7 @@ PluginUpdatePlugin
 				final File	user_dir	= new File( plugin_interface.getUtilities().getAzureusUserDir());
 				final File	prog_dir	= new File( plugin_interface.getUtilities().getAzureusProgramDir());
 	
-				Map<String,List<String[]>> install_properties = new HashMap<String, List<String[]>>();
+				Map<String,List<String[]>> install_properties = new HashMap<>();
 				
 					// .jar files get copied straight in with the right version number
 					// .zip files need to be unzipped. There are various possibilities for
@@ -1070,15 +1056,10 @@ PluginUpdatePlugin
 							test_file.delete();
 						}
 
-						FileOutputStream os = new FileOutputStream(test_file);
-						
-						try{
-							os.write(32);
-							
-						}finally{
-							
-							os.close();
-						}
+                        try (FileOutputStream os = new FileOutputStream(test_file)) {
+                            os.write(32);
+
+                        }
 
 						ok = test_file.delete();
 					}catch( Throwable e ){					
@@ -1170,7 +1151,7 @@ PluginUpdatePlugin
 								}
 										
 								try{
-									LineNumberReader lnr = new LineNumberReader( new InputStreamReader( new ByteArrayInputStream( baos.toByteArray()), "UTF-8"));
+									LineNumberReader lnr = new LineNumberReader( new InputStreamReader( new ByteArrayInputStream( baos.toByteArray()), StandardCharsets.UTF_8));
 									
 									while( true ){
 										
@@ -1197,7 +1178,7 @@ PluginUpdatePlugin
 												
 												if ( commands == null ){
 													
-													commands = new ArrayList<String[]>();
+													commands = new ArrayList<>();
 													
 													install_properties.put( command[0], commands );
 												}
@@ -1606,36 +1587,39 @@ PluginUpdatePlugin
 											"plugin.version",
 											"plugin.langfile"
 										};
-									
-									for (int z=0;z<prop_names.length;z++){
-										
-										String	prop_name = prop_names[z];
-										
-										String	old_name = old_props.getProperty( prop_name );
-										String	new_name = new_props.getProperty( prop_name );
-											
-										if ( new_name != null ){
-											
-											if ( prop_name.equals( "plugin.name")){
-												props_to_delete.add( "plugin.names" );
-											}else if ( prop_name.equals( "plugin.names")){
-												props_to_delete.add( "plugin.name" );
-											}else if ( prop_name.equals( "plugin.class")){
-												props_to_delete.add( "plugin.classes" );
-											}else if ( prop_name.equals( "plugin.classes")){
-												props_to_delete.add( "plugin.class" );
+
+                                    for (String prop_name : prop_names) {
+
+                                        String old_name = old_props.getProperty(prop_name);
+                                        String new_name = new_props.getProperty(prop_name);
+
+                                        if (new_name != null) {
+
+											switch (prop_name) {
+												case "plugin.name":
+													props_to_delete.add("plugin.names");
+													break;
+												case "plugin.names":
+													props_to_delete.add("plugin.name");
+													break;
+												case "plugin.class":
+													props_to_delete.add("plugin.classes");
+													break;
+												case "plugin.classes":
+													props_to_delete.add("plugin.class");
+													break;
 											}
-		
-											if ( old_name == null ){
-												
-												props_to_insert.put( prop_name, new_name );
-												
-											}else if ( !new_name.equals( old_name )){
-												
-												props_to_replace.put( prop_name, new_name );									
-											}
-										}
-									}
+
+                                            if (old_name == null) {
+
+                                                props_to_insert.put(prop_name, new_name);
+
+                                            } else if (!new_name.equals(old_name)) {
+
+                                                props_to_replace.put(prop_name, new_name);
+                                            }
+                                        }
+                                    }
 									
 									File	tmp_file;
 									
@@ -1650,77 +1634,60 @@ PluginUpdatePlugin
 										
 										tmp_file = new File( initial_target.getParentFile(), initial_target.getName() + ".tmp" );
 									}
-									
-									LineNumberReader	lnr = null;
-									
-									PrintWriter			tmp = null;
-									
-									try{
-										lnr = new LineNumberReader(new FileReader( origin ));
-									
-										tmp = new PrintWriter(new FileWriter( tmp_file ));			
-									
-										Iterator	it = props_to_insert.keySet().iterator();
-										
-										while( it.hasNext()){
-											
-											String	pn = (String)it.next();
-											
-											String	pv = (String)props_to_insert.get(pn);
-										
-											log.log("    Inserting property:" + pn + "=" + pv );
-											
-											tmp.println( pn + "=" + pv );
-										}	
-									
-										while(true){
-											
-											String	line = lnr.readLine();
-											
-											if ( line == null ){
-												
-												break;
-											}
-											
-											int	ep = line.indexOf('=');
-											
-											if( ep != -1 ){
-												
-												String	pn = line.substring(0,ep).trim();
-		
-												if ( props_to_delete.contains(pn)){
-													
-													log.log("    Deleting property:" + pn );
-													
-												}else{
-													
-													String rv = (String)props_to_replace.get( pn );
-													
-													if ( rv != null ){
-														
-														log.log("    Replacing property:" + pn + " with " + rv );
-													
-														tmp.println( pn + "=" + rv );
-														
-													}else{
-														
-														tmp.println( line );
-													}
-												}
-											}else{
-		
-												tmp.println( line );
-											}
-										}
-									}finally{
-										
-										lnr.close();
-										
-										if ( tmp != null ){
-											
-											tmp.close();
-										}
-									}
+
+                                    try (LineNumberReader lnr = new LineNumberReader(new FileReader(origin)); PrintWriter tmp = new PrintWriter(new FileWriter(tmp_file))) {
+
+                                        for (Object o : props_to_insert.keySet()) {
+
+                                            String pn = (String) o;
+
+                                            String pv = (String) props_to_insert.get(pn);
+
+                                            log.log("    Inserting property:" + pn + "=" + pv);
+
+                                            tmp.println(pn + "=" + pv);
+                                        }
+
+                                        while (true) {
+
+                                            String line = lnr.readLine();
+
+                                            if (line == null) {
+
+                                                break;
+                                            }
+
+                                            int ep = line.indexOf('=');
+
+                                            if (ep != -1) {
+
+                                                String pn = line.substring(0, ep).trim();
+
+                                                if (props_to_delete.contains(pn)) {
+
+                                                    log.log("    Deleting property:" + pn);
+
+                                                } else {
+
+                                                    String rv = (String) props_to_replace.get(pn);
+
+                                                    if (rv != null) {
+
+                                                        log.log("    Replacing property:" + pn + " with " + rv);
+
+                                                        tmp.println(pn + "=" + rv);
+
+                                                    } else {
+
+                                                        tmp.println(line);
+                                                    }
+                                                }
+                                            } else {
+
+                                                tmp.println(line);
+                                            }
+                                        }
+                                    }
 									
 									File	bak_file	= new File( origin.getParentFile(), origin.getName() + ".bak" );
 
@@ -1758,35 +1725,26 @@ PluginUpdatePlugin
 								}else if ( final_target != null && final_target.getName().equalsIgnoreCase( "update.txt" )){
 									
 									update_txt_found	= true;
-									
-									LineNumberReader lnr = null;
-	
-									try{
-										lnr = new LineNumberReader( new FileReader( final_target ));
-																			
-										while(true){
-											
-											String	line = lnr.readLine();
-											
-											if (line == null ){
-												
-												break;
-											}
-											
-											log.log( LoggerChannel.LT_INFORMATION, line );
-										}
-										
-									}catch( Throwable e ){
-										
-										Debug.printStackTrace( e );
-										
-									}finally{
-										
-										if ( lnr != null ){
-											
-											lnr.close();
-										}
-									}
+
+                                    try (LineNumberReader lnr = new LineNumberReader(new FileReader(final_target))) {
+
+                                        while (true) {
+
+                                            String line = lnr.readLine();
+
+                                            if (line == null) {
+
+                                                break;
+                                            }
+
+                                            log.log(LoggerChannel.LT_INFORMATION, line);
+                                        }
+
+                                    } catch (Throwable e) {
+
+                                        Debug.printStackTrace(e);
+
+                                    }
 								}
 							}
 						}finally{
@@ -1805,16 +1763,14 @@ PluginUpdatePlugin
 					PluginInterface[]	plugins = plugin.getPluginManager().getPlugins();
 					
 					boolean	plugin_unloadable 	= true;
-					
-					for (int j=0;j<plugins.length;j++){
-						
-						PluginInterface pi = plugins[j];
-						
-						if ( pi.getPluginID().equals( plugin_id )){
-							
-							plugin_unloadable &= pi.getPluginState().isUnloadable();
-						}
-					}
+
+                    for (PluginInterface pi : plugins) {
+
+                        if (pi.getPluginID().equals(plugin_id)) {
+
+                            plugin_unloadable &= pi.getPluginState().isUnloadable();
+                        }
+                    }
 					
 					if ( !plugin_unloadable ){
 						
@@ -1967,14 +1923,14 @@ PluginUpdatePlugin
 			File[]	files = from_file.listFiles();
 			
 			if ( files != null ){
-				
-				for (int i=0;i<files.length;i++){
-										
-					if ( addInstallationActions( installer, install_properties, prefix + "/" + files[i].getName(), files[i], new File( to_file, files[i].getName()))){
-						
-						defer_restart = true;
-					}
-				}
+
+                for (File file : files) {
+
+                    if (addInstallationActions(installer, install_properties, prefix + "/" + file.getName(), file, new File(to_file, file.getName()))) {
+
+                        defer_restart = true;
+                    }
+                }
 			}
 		}else{
 			
@@ -1987,24 +1943,28 @@ PluginUpdatePlugin
 				for( String[] command: commands ){
 					
 					String	cmd = command[1];
-					
-					if ( cmd.equals( "chmod" )){
-						
-						if ( !Constants.isWindows ){
-							
-							log.log( "Applying " + cmd + " " + command[2] + " to " + to_file );
-							
-							installer.addChangeRightsAction( command[2], to_file.getAbsolutePath());
-						}
-					}else if ( cmd.equals( "rm" )){
-						
-						log.log( "Deleting " + to_file );
-						
-						installer.addRemoveAction( to_file.getAbsolutePath());
-						
-					}else if ( cmd.equals( "defer_restart" )){
-						
-						defer_restart = true;
+
+					switch (cmd) {
+						case "chmod":
+
+							if (!Constants.isWindows) {
+
+								log.log("Applying " + cmd + " " + command[2] + " to " + to_file);
+
+								installer.addChangeRightsAction(command[2], to_file.getAbsolutePath());
+							}
+							break;
+						case "rm":
+
+							log.log("Deleting " + to_file);
+
+							installer.addRemoveAction(to_file.getAbsolutePath());
+
+							break;
+						case "defer_restart":
+
+							defer_restart = true;
+							break;
 					}
 				}
 			}
@@ -2026,40 +1986,38 @@ PluginUpdatePlugin
 			File[]	files = to_file.listFiles();
 			
 			if ( files != null ){
-				
-				for (int i=0;i<files.length;i++){
-							
-					File file = files[i];
-					
-					String	file_name = file.getName();
-					
-					if ( file_name.equals( "." ) || file_name.equals( ".." )){
-						
-						continue;
-					}
-					
-					String	new_prefix = prefix + "/" + file_name;
-					
-					boolean	match = false;
-					
-					for ( String s: install_properties.keySet()){
-					
-						if ( s.startsWith( new_prefix )){
-							
-							match = true;
-							
-							break;
-						}
-					}
-					
-					if ( match ){
-					
-						if ( applyInstallProperties( install_properties, new_prefix, files[i] )){
-							
-							defer_restart = true;
-						}
-					}
-				}
+
+                for (File file : files) {
+
+                    String file_name = file.getName();
+
+                    if (file_name.equals(".") || file_name.equals("..")) {
+
+                        continue;
+                    }
+
+                    String new_prefix = prefix + "/" + file_name;
+
+                    boolean match = false;
+
+                    for (String s : install_properties.keySet()) {
+
+                        if (s.startsWith(new_prefix)) {
+
+                            match = true;
+
+                            break;
+                        }
+                    }
+
+                    if (match) {
+
+                        if (applyInstallProperties(install_properties, new_prefix, file)) {
+
+                            defer_restart = true;
+                        }
+                    }
+                }
 			}
 		}else{
 						
@@ -2070,27 +2028,31 @@ PluginUpdatePlugin
 				for( String[] command: commands ){
 					
 					String	cmd = command[1];
-					
-					if ( cmd.equals( "chmod" )){
-						
-						if ( !Constants.isWindows ){
-							
-							runCommand(
-								new String[]{
-									"chmod",
-									command[2],
-									to_file.getAbsolutePath().replaceAll(" ", "\\ ")
-								});
-						}
-					}else if ( cmd.equals( "rm" )){
-						
-						log.log( "Deleting " + to_file );
-						
-						to_file.delete();
 
-					}else if ( cmd.equals( "defer_restart" )){
-						
-						defer_restart = true;
+					switch (cmd) {
+						case "chmod":
+
+							if (!Constants.isWindows) {
+
+								runCommand(
+										new String[]{
+												"chmod",
+												command[2],
+												to_file.getAbsolutePath().replaceAll(" ", "\\ ")
+										});
+							}
+							break;
+						case "rm":
+
+							log.log("Deleting " + to_file);
+
+							to_file.delete();
+
+							break;
+						case "defer_restart":
+
+							defer_restart = true;
+							break;
 					}
 				}
 			}
@@ -2187,9 +2149,9 @@ PluginUpdatePlugin
 		String		indent,
 		List		lines )
 	{
-		for (int i=0;i<lines.size();i++){
-			
-			log.log( LoggerChannel.LT_INFORMATION, indent + (String)lines.get(i) );
-		}
+        for (Object line : lines) {
+
+            log.log(LoggerChannel.LT_INFORMATION, indent + line);
+        }
 	}
 }

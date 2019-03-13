@@ -27,35 +27,35 @@ import java.util.Map;
 public interface 
 VuzeFile 
 {
-	public String
+	String
 	getName();
 	
-	public VuzeFileComponent[]
+	VuzeFileComponent[]
 	getComponents();
 	
-	public VuzeFileComponent
+	VuzeFileComponent
 	addComponent(
-		int		type,
-		Map		content );
+            int type,
+            Map content);
 	
-	public byte[]
+	byte[]
 	exportToBytes()
 	
 		throws IOException;
 	
-	public Map
+	Map
 	exportToMap()
 	
 		throws IOException;
 	
-	public String
+	String
 	exportToJSON()
 	
 		throws IOException;
 	
-	public void
+	void
 	write(
-		File	target )
+            File target)
 	
 		throws IOException;
 }

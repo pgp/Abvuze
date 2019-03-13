@@ -29,23 +29,23 @@ import org.gudy.azureus2.plugins.tag.Tag;
 public interface 
 TorrentOptions 
 {
-	public Torrent
+	Torrent
 	getTorrent();
 	
-	public List<Tag>
+	List<Tag>
 	getTags();
 	
-	public void
+	void
 	addTag(
-		Tag		tag );
+            Tag tag);
 	
-	public void
+	void
 	removeTag(
-		Tag		tag );
+            Tag tag);
 	
-	public void
+	void
 	accept();
 	
-	public void
+	void
 	cancel();
 }

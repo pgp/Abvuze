@@ -29,6 +29,6 @@ package com.aelitis.azureus.ui.mdi;
  */
 public interface MdiListener
 {
-	public void mdiEntrySelected(MdiEntry newEntry,
-			MdiEntry oldEntry);
+	void mdiEntrySelected(MdiEntry newEntry,
+                          MdiEntry oldEntry);
 }

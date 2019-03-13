@@ -23,31 +23,31 @@ package com.aelitis.azureus.core.devices;
 public interface 
 TranscodeProfile 
 {
-	public String
+	String
 	getUID();
 	
-	public String
+	String
 	getName();
 	
-	public String
+	String
 	getDescription();
 	
-	public boolean
+	boolean
 	isStreamable();
 	
-	public String
+	String
 	getIconURL();
 	
-	public int
+	int
 	getIconIndex();
 	
-	public String
+	String
 	getFileExtension();
 	
-	public String
+	String
 	getDeviceClassification();
 	
-	public TranscodeProvider
+	TranscodeProvider
 	getProvider()
 	
 		throws TranscodeException;

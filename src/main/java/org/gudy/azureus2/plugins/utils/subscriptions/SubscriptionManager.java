@@ -28,25 +28,25 @@ import org.gudy.azureus2.plugins.utils.search.SearchProvider;
 public interface 
 SubscriptionManager 
 {
-	public static final String SO_ANONYMOUS = "_anonymous_";
-	public static final String SO_NAME		= SearchProvider.SP_SEARCH_NAME;
+	String SO_ANONYMOUS = "_anonymous_";
+	String SO_NAME		= SearchProvider.SP_SEARCH_NAME;
 	
-	public Subscription[] 
+	Subscription[]
 	getSubscriptions();
 	
-	public void
+	void
 	requestSubscription(
-		URL			url );
+            URL url);
 	
-	public void
+	void
 	requestSubscription(
-		URL						url,
-		Map<String,Object>		options );
+            URL url,
+            Map<String, Object> options);
 	
-	public void
+	void
 	requestSubscription(
-		SearchProvider		sp,
-		Map<String,Object>	search_parameters )
+            SearchProvider sp,
+            Map<String, Object> search_parameters)
 		
 			throws SubscriptionException;
 }

@@ -28,50 +28,50 @@ import org.gudy.azureus2.plugins.disk.DiskManagerFileInfo;
 public interface 
 TranscodeProvider 
 {
-	public static final int TP_VUZE	= 1;
+	int TP_VUZE	= 1;
 	
-	public int
+	int
 	getID();
 	
-	public String
+	String
 	getName();
 	
-	public TranscodeProfile[]
+	TranscodeProfile[]
 	getProfiles();
 	
-	public TranscodeProfile[]
+	TranscodeProfile[]
 	getProfiles(
-		String	classification_prefix );
+            String classification_prefix);
 	
-	public TranscodeProfile
+	TranscodeProfile
 	getProfile(
-		String		UID );
+            String UID);
 	
-	public TranscodeProfile
+	TranscodeProfile
 	addProfile(
-		File		file )
+            File file)
 	
 		throws TranscodeException;
 	
-	public TranscodeProviderAnalysis
-	analyse( 
-		TranscodeProviderAdapter	adapter,
-		DiskManagerFileInfo			input,
-		TranscodeProfile			profile )	
+	TranscodeProviderAnalysis
+	analyse(
+            TranscodeProviderAdapter adapter,
+            DiskManagerFileInfo input,
+            TranscodeProfile profile)
 	
 		throws TranscodeException;
 	
-	public TranscodeProviderJob
-	transcode( 
-		TranscodeProviderAdapter	adapter,
-		TranscodeProviderAnalysis	analysis,
-		boolean						force,
-		DiskManagerFileInfo			input,
-		TranscodeProfile			profile,
-		URL							output )
+	TranscodeProviderJob
+	transcode(
+            TranscodeProviderAdapter adapter,
+            TranscodeProviderAnalysis analysis,
+            boolean force,
+            DiskManagerFileInfo input,
+            TranscodeProfile profile,
+            URL output)
 	
 		throws TranscodeException;
 	
-	public File
+	File
 	getAssetDirectory();
 }

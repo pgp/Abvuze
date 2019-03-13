@@ -45,7 +45,7 @@ CorePatchChecker
 	
 	protected PluginInterface	plugin_interface;
 	
-	private Map<UpdateCheckInstance,Update>	my_updates = new HashMap<UpdateCheckInstance, Update>(1);
+	private Map<UpdateCheckInstance,Update>	my_updates = new HashMap<>(1);
 	
 	public void 
 	initialize(
@@ -128,39 +128,36 @@ CorePatchChecker
 		Update[]	updates = instance.getUpdates();
 		
 		final PluginInterface updater_plugin = plugin_interface.getPluginManager().getPluginInterfaceByClass( UpdaterUpdateChecker.class );
-		
-		for (int i=0;i<updates.length;i++){
-			
-			final Update	update = updates[i];
-						
-			Object	user_object = update.getUserObject();
-			
-			if ( user_object != null && user_object == updater_plugin ){
-				
-				// OK, we have an updater update
-				
-				if (Logger.isEnabled())
-					Logger.log(new LogEvent(LOGID, "Core Patcher: updater update found"));
-				
-				update.setRestartRequired( Update.RESTART_REQUIRED_MAYBE );
-				
-				update.addListener(new UpdateListener() {
-					public void complete(Update update) {
-						if (Logger.isEnabled())
-							Logger.log(new LogEvent(LOGID,
-									"Core Patcher: updater update complete"));
 
-						patch(instance, update, updater_plugin);
-					}
-					
-					public void 
-					cancelled(
-						Update update ) 
-					{						
-					}
-				});
-			}
-		}
+        for (final Update update : updates) {
+
+            Object user_object = update.getUserObject();
+
+            if (user_object != null && user_object == updater_plugin) {
+
+                // OK, we have an updater update
+
+                if (Logger.isEnabled())
+                    Logger.log(new LogEvent(LOGID, "Core Patcher: updater update found"));
+
+                update.setRestartRequired(Update.RESTART_REQUIRED_MAYBE);
+
+                update.addListener(new UpdateListener() {
+                    public void complete(Update update) {
+                        if (Logger.isEnabled())
+                            Logger.log(new LogEvent(LOGID,
+                                    "Core Patcher: updater update complete"));
+
+                        patch(instance, update, updater_plugin);
+                    }
+
+                    public void
+                    cancelled(
+                            Update update) {
+                    }
+                });
+            }
+        }
 	}
 	
 	protected void
@@ -189,32 +186,32 @@ CorePatchChecker
 			
 			int		highest_p		= -1;
 			File	highest_p_file 	= null;
-			
-			for (int i=0;i<files.length;i++){
-			
-				String	name = files[i].getName();
-				
-				if ( name.startsWith( patch_prefix ) && name.endsWith( ".pat" )){
-			
-					if (Logger.isEnabled())
-						Logger.log(new LogEvent(LOGID, "Core Patcher: found patch file '"
-								+ name + "'"));
-					
-					try{
-						int	this_p = Integer.parseInt( name.substring( patch_prefix.length(), name.indexOf( ".pat" )));
-						
-						if ( this_p > highest_p ){
-							
-							highest_p = this_p;
-							
-							highest_p_file	= files[i];
-						}
-					}catch( Throwable e ){
-						
-						Debug.printStackTrace( e );
-					}
-				}
-			}
+
+            for (File file : files) {
+
+                String name = file.getName();
+
+                if (name.startsWith(patch_prefix) && name.endsWith(".pat")) {
+
+                    if (Logger.isEnabled())
+                        Logger.log(new LogEvent(LOGID, "Core Patcher: found patch file '"
+                                + name + "'"));
+
+                    try {
+                        int this_p = Integer.parseInt(name.substring(patch_prefix.length(), name.indexOf(".pat")));
+
+                        if (this_p > highest_p) {
+
+                            highest_p = this_p;
+
+                            highest_p_file = file;
+                        }
+                    } catch (Throwable e) {
+
+                        Debug.printStackTrace(e);
+                    }
+                }
+            }
 			
 			if ( CorePatchLevel.getCurrentPatchLevel() >= highest_p ){
 				
@@ -236,30 +233,23 @@ CorePatchChecker
 				if (Logger.isEnabled())
 					Logger.log(new LogEvent(LOGID, "Core Patcher: applying patch '"
 							+ highest_p_file.toString() + "'"));
-				
-				InputStream pis = new FileInputStream( highest_p_file );
-					
-				try{
-					patchAzureus2( instance, pis, "P" + highest_p, plugin_interface.getLogger().getChannel( "CorePatcher" ));
-					
-					Logger.log(new LogAlert(LogAlert.UNREPEATABLE, LogAlert.AT_INFORMATION,
-							"Patch " + highest_p_file.getName() + " ready to be applied"));
-					
-					String done_file = highest_p_file.toString();
-					
-					done_file = done_file.substring(0,done_file.length()-1) + "x";
-					
-					highest_p_file.renameTo( new File( done_file ));
-					
-						// flip the original update over to 'restart required'
-					
-					updater_update.setRestartRequired( Update.RESTART_REQUIRED_YES );
-				}finally{
-					try{
-						pis.close();
-					}catch( Throwable e ){
-					}
-				}
+
+                try (InputStream pis = new FileInputStream(highest_p_file)) {
+                    patchAzureus2(instance, pis, "P" + highest_p, plugin_interface.getLogger().getChannel("CorePatcher"));
+
+                    Logger.log(new LogAlert(LogAlert.UNREPEATABLE, LogAlert.AT_INFORMATION,
+                            "Patch " + highest_p_file.getName() + " ready to be applied"));
+
+                    String done_file = highest_p_file.toString();
+
+                    done_file = done_file.substring(0, done_file.length() - 1) + "x";
+
+                    highest_p_file.renameTo(new File(done_file));
+
+                    // flip the original update over to 'restart required'
+
+                    updater_update.setRestartRequired(Update.RESTART_REQUIRED_YES);
+                }
 			}
 		}catch( Throwable e ){
 			
@@ -331,20 +321,20 @@ CorePatchChecker
 				try{
 					is.close();
 				}catch( Throwable e ){
-				};
-			}
+				}
+            }
 			if ( os != null ){
 				try{
 					os.close();
 				}catch( Throwable e ){
-				};
-			}
+				}
+            }
 			if ( pis != null ){
 				try{
 					pis.close();
 				}catch( Throwable e ){
-				};
-			}
+				}
+            }
 		}
 	}
 }

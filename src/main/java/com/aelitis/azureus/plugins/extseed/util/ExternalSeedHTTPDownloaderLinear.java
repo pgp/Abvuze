@@ -180,7 +180,7 @@ ExternalSeedHTTPDownloaderLinear
 	
 		private volatile boolean	destroyed;
 		
-		private List<Request>		requests = new ArrayList<Request>();
+		private List<Request>		requests = new ArrayList<>();
 			
 		private RandomAccessFile	raf				= null;
 		private File				scratch_file	= null;

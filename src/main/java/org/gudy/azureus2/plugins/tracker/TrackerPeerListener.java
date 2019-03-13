@@ -27,7 +27,7 @@ package org.gudy.azureus2.plugins.tracker;
 public interface 
 TrackerPeerListener 
 {
-	public void
+	void
 	eventOccurred(
-		TrackerPeerEvent		ev );
+            TrackerPeerEvent ev);
 }

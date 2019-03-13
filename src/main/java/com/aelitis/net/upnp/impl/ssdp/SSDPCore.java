@@ -230,16 +230,16 @@ SSDPCore
 	interfaceChanged(
 		NetworkInterface	network_interface )
 	{
-		for (int i=0;i<listeners.size();i++){
-			
-			try{
-				((UPnPSSDPListener)listeners.get(i)).interfaceChanged(network_interface);
-				
-			}catch( Throwable e ){
-				
-				adapter.log(e);
-			}
-		}	
+        for (Object listener : listeners) {
+
+            try {
+                ((UPnPSSDPListener) listener).interfaceChanged(network_interface);
+
+            } catch (Throwable e) {
+
+                adapter.log(e);
+            }
+        }
 	}
 	
 	public void
@@ -275,7 +275,7 @@ SSDPCore
 		//	System.out.println( originator + ":" + str );
 		//}
 				
-		List<String>	lines = new ArrayList<String>();
+		List<String>	lines = new ArrayList<>();
 		
 		int	pos = 0;
 		
@@ -310,7 +310,7 @@ SSDPCore
 			return;
 		}
 		
-		String	header = (String)lines.get(0);
+		String	header = lines.get(0);
 		
 			// Gudy's  Root: http://192.168.0.1:5678/igd.xml, uuid:upnp-InternetGatewayDevice-1_0-12345678900001::upnp:rootdevice, upnp:rootdevice
 			// Parg's  Root: http://192.168.0.1:49152/gateway.xml, uuid:824ff22b-8c7d-41c5-a131-44f534e12555::upnp:rootdevice, upnp:rootdevice
@@ -326,7 +326,7 @@ SSDPCore
 		
 		for (int i=1;i<lines.size();i++){
 			
-			String	line = (String)lines.get(i);
+			String	line = lines.get(i);
 			
 			int	c_pos = line.indexOf(":");
 			
@@ -336,64 +336,73 @@ SSDPCore
 			
 			String	key	= line.substring( 0, c_pos ).trim().toUpperCase();
 			String 	val = line.substring( c_pos+1 ).trim();
-			
-			if ( key.equals("LOCATION" )){
-				
-				try{
-						// xbox throws us a '*' on bootup
-					
-					if ( !val.equals( "*" )){
-						
-						location	= new URL( val );
-					}
-				}catch( MalformedURLException e ){
-						
-					if ( !val.contains( "//" )){
-						
-							// seen missing protocol
-						
-						val = "http://" + val;
-						
-						try{
-							location	= new URL( val );
-							
-						}catch( Throwable f ){
-						}
-					}
-					
-					if ( location == null ){
-					
-						adapter.log( e );
-					}
-				}			
-			}else if ( key.equals( "NT" )){
-				
-				nt	= val;
-				
-			}else if ( key.equals( "USN" )){
-				
-				usn	= val;
-				
-			}else if ( key.equals( "NTS" )){
-				
-				nts	= val;
-				
-			}else if ( key.equals( "ST" )){
-				
-				st	= val;
-				
-			}else if ( key.equals( "AL" )){
-				
-				al	= val;
-				
-			}else if ( key.equals( "MX" )){
-				
-				mx	= val;
-				
-			}else if ( key.equals( "SERVER" )){
 
-				server = val;
-			}
+            switch (key) {
+                case "LOCATION":
+
+                    try {
+                        // xbox throws us a '*' on bootup
+
+                        if (!val.equals("*")) {
+
+                            location = new URL(val);
+                        }
+                    } catch (MalformedURLException e) {
+
+                        if (!val.contains("//")) {
+
+                            // seen missing protocol
+
+                            val = "http://" + val;
+
+                            try {
+                                location = new URL(val);
+
+                            } catch (Throwable f) {
+                            }
+                        }
+
+                        if (location == null) {
+
+                            adapter.log(e);
+                        }
+                    }
+                    break;
+                case "NT":
+
+                    nt = val;
+
+                    break;
+                case "USN":
+
+                    usn = val;
+
+                    break;
+                case "NTS":
+
+                    nts = val;
+
+                    break;
+                case "ST":
+
+                    st = val;
+
+                    break;
+                case "AL":
+
+                    al = val;
+
+                    break;
+                case "MX":
+
+                    mx = val;
+
+                    break;
+                case "SERVER":
+
+                    server = val;
+                    break;
+            }
 		}
 			
 		//if ( location != null && location.getHost().equals( "192.168.0.135")){
@@ -615,16 +624,16 @@ SSDPCore
 		String				st,
 		String				al )
 	{
-		for (int i=0;i<listeners.size();i++){
-			
-			try{
-				((UPnPSSDPListener)listeners.get(i)).receivedResult(network_interface,local_address,originator,usn,location,st,al);
-				
-			}catch( Throwable e ){
-				
-				adapter.log(e);
-			}
-		}
+        for (Object listener : listeners) {
+
+            try {
+                ((UPnPSSDPListener) listener).receivedResult(network_interface, local_address, originator, usn, location, st, al);
+
+            } catch (Throwable e) {
+
+                adapter.log(e);
+            }
+        }
 	}
 	
 	protected void
@@ -637,16 +646,16 @@ SSDPCore
 		String				nt,
 		String				nts )
 	{
-		for (int i=0;i<listeners.size();i++){
-			
-			try{
-				((UPnPSSDPListener)listeners.get(i)).receivedNotify(network_interface,local_address,originator,usn,location,nt,nts);
-				
-			}catch( Throwable e ){
-				
-				adapter.log(e);
-			}
-		}
+        for (Object listener : listeners) {
+
+            try {
+                ((UPnPSSDPListener) listener).receivedNotify(network_interface, local_address, originator, usn, location, nt, nts);
+
+            } catch (Throwable e) {
+
+                adapter.log(e);
+            }
+        }
 	}
 	
 	protected String[]
@@ -656,20 +665,20 @@ SSDPCore
 		InetAddress			originator,
 		String				st )
 	{
-		for (int i=0;i<listeners.size();i++){
-			
-			try{
-				String[]	res = ((UPnPSSDPListener)listeners.get(i)).receivedSearch(network_interface,local_address,originator,st );
-				
-				if ( res != null ){
-					
-					return( res );
-				}
-			}catch( Throwable e ){
-				
-				adapter.log(e);
-			}
-		}
+        for (Object listener : listeners) {
+
+            try {
+                String[] res = ((UPnPSSDPListener) listener).receivedSearch(network_interface, local_address, originator, st);
+
+                if (res != null) {
+
+                    return (res);
+                }
+            } catch (Throwable e) {
+
+                adapter.log(e);
+            }
+        }
 		
 		return( null );
 	}

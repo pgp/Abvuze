@@ -24,5 +24,5 @@ package org.gudy.azureus2.core3.torrentdownloader;
  * @author  Tobias Minich
  */
 public interface TorrentDownloaderCallBackInterface {
-    public void TorrentDownloaderEvent(int state, TorrentDownloader inf);
+    void TorrentDownloaderEvent(int state, TorrentDownloader inf);
 }

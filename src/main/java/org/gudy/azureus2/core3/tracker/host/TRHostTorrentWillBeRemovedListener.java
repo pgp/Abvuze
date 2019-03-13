@@ -29,9 +29,9 @@ package org.gudy.azureus2.core3.tracker.host;
 public interface 
 TRHostTorrentWillBeRemovedListener 
 {
-	public void
+	void
 	torrentWillBeRemoved(
-		TRHostTorrent	torrent )
+            TRHostTorrent torrent)
 	
 		throws TRHostTorrentRemovalVetoException;
 }

@@ -30,130 +30,130 @@ public interface
 DeviceMediaRenderer
 	extends Device, TranscodeTarget
 {	
-	public static final int RS_PS3		= 1;
-	public static final int RS_XBOX		= 2;
-	public static final int RS_ITUNES	= 3;
-	public static final int RS_WII		= 4;
-	public static final int RS_BROWSER	= 5;
-	public static final int RS_OTHER	= 6;
+	int RS_PS3		= 1;
+	int RS_XBOX		= 2;
+	int RS_ITUNES	= 3;
+	int RS_WII		= 4;
+	int RS_BROWSER	= 5;
+	int RS_OTHER	= 6;
 
 		/**
 		 * THIS WILL CHANGE!!!
 		 * @return	RS_<x>
 		 */
 
-	public int
+        int
 	getRendererSpecies();
 
-	public boolean
+	boolean
 	canFilterFilesView();
 	
-	public void
+	void
 	setFilterFilesView(
-		boolean	filter );
+            boolean filter);
 	
-	public boolean
+	boolean
 	getFilterFilesView();
 	
 		// copy to device
 	
-	public boolean
+	boolean
 	canCopyToDevice();
 	
-	public boolean
+	boolean
 	getAutoCopyToDevice();
 		
-	public void
+	void
 	setAutoCopyToDevice(
-		boolean		auto );
+            boolean auto);
 	
-	public int
+	int
 	getCopyToDevicePending();
 	
-	public boolean
+	boolean
 	canAutoStartDevice();
 	
-	public boolean
+	boolean
 	getAutoStartDevice();
 	
-	public void
+	void
 	setAutoStartDevice(
-		boolean		auto );
+            boolean auto);
 	
 		// copy to folder
 	
-	public boolean
+	boolean
 	canCopyToFolder();
 	
-	public void
+	void
 	setCanCopyToFolder(
-		boolean		can );
+            boolean can);
 	
-	public File
+	File
 	getCopyToFolder();
 	
-	public void
+	void
 	setCopyToFolder(
-		File		file );
+            File file);
 	
-	public int
+	int
 	getCopyToFolderPending();
 	
-	public boolean
+	boolean
 	getAutoCopyToFolder();
 		
-	public void
+	void
 	setAutoCopyToFolder(
-		boolean		auto );
+            boolean auto);
 	
-	public void
+	void
 	manualCopy()
 	
 		throws DeviceManagerException;
 	
 		// associate
 	
-	public boolean
+	boolean
 	canAssociate();
 	
-	public void
+	void
 	associate(
-		UnassociatedDevice	assoc );
+            UnassociatedDevice assoc);
 	
-	public boolean
+	boolean
 	canShowCategories();
 	
-	public void
+	void
 	setShowCategories(
-		boolean	b );
+            boolean b);
 	
-	public boolean
+	boolean
 	getShowCategories();
 	
-	public boolean
+	boolean
 	isRSSPublishEnabled();
 	
-	public void
+	void
 	setRSSPublishEnabled(
-		boolean		enabled );
+            boolean enabled);
 	
-	public long
+	long
 	getAutoShareToTagID();
 	
-	public void
+	void
 	setAutoShareToTagID(
-		long		id );
+            long id);
 	
-	public InetAddress
+	InetAddress
 	getAddress();
 	
-	public boolean
+	boolean
 	canRestrictAccess();
 	
-	public String
+	String
 	getAccessRestriction();
 	
-	public void
+	void
 	setAccessRestriction(
-		String		str );
+            String str);
 }

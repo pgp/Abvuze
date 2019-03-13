@@ -25,20 +25,20 @@ import java.util.Map;
 public interface 
 BuddyPluginAZ2ChatListener 
 {
-	public void
+	void
 	messageReceived(
-		BuddyPluginAZ2.chatParticipant	participant,
-		Map								msg );
+            BuddyPluginAZ2.chatParticipant participant,
+            Map msg);
 	
-	public void
+	void
 	participantAdded(
-		BuddyPluginAZ2.chatParticipant	participant );
+            BuddyPluginAZ2.chatParticipant participant);
 	
-	public void
+	void
 	participantChanged(
-		BuddyPluginAZ2.chatParticipant	participant );
+            BuddyPluginAZ2.chatParticipant participant);
 	
-	public void
+	void
 	participantRemoved(
-		BuddyPluginAZ2.chatParticipant	participant );
+            BuddyPluginAZ2.chatParticipant participant);
 }

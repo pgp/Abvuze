@@ -46,17 +46,17 @@ DHTRouterFactory
 		DHTLogger					logger )
 	{
 		DHTRouterImpl	res = new DHTRouterImpl( K, B, max_rep_per_node, id, attachment, logger );
-		
-		for( int i=0;i<observers.size();i++){
-			
-			try{
-				((DHTRouterFactoryObserver)observers.get(i)).routerCreated( res );
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace(e);
-			}
-		}
+
+        for (Object observer : observers) {
+
+            try {
+                ((DHTRouterFactoryObserver) observer).routerCreated(res);
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 		
 		return( res );
 	}

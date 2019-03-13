@@ -30,7 +30,7 @@ package org.gudy.azureus2.core3.tracker.client;
 public interface 
 TRTrackerScraperListener 
 {
-	public void
+	void
 	scrapeReceived(
-		TRTrackerScraperResponse		response );	
+            TRTrackerScraperResponse response);
 }

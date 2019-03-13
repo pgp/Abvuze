@@ -23,10 +23,10 @@ package org.gudy.azureus2.plugins.utils.search;
 public interface 
 SearchListener 
 {
-	public void
+	void
 	receivedResults(
-		SearchProviderResults[]		results );
+            SearchProviderResults[] results);
 	
-	public void
+	void
 	completed();
 }

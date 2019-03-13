@@ -32,43 +32,43 @@ import org.gudy.azureus2.plugins.torrent.*;
 public interface 
 TrackerTorrent
 {
-	public static final int	TS_STARTED		= 0;
-	public static final int	TS_STOPPED		= 1;
-	public static final int	TS_PUBLISHED	= 2;
+	int	TS_STARTED		= 0;
+	int	TS_STOPPED		= 1;
+	int	TS_PUBLISHED	= 2;
 	
-	public void
+	void
 	start()
 	
 		throws TrackerException;
 	
-	public void
+	void
 	stop()
 	
 		throws TrackerException;
 
-	public void
+	void
 	remove()
 	
 		throws TrackerTorrentRemovalVetoException;
 	
-	public boolean
+	boolean
 	canBeRemoved()
 	
 		throws TrackerTorrentRemovalVetoException;
 
-	public Torrent
+	Torrent
 	getTorrent();
 	
-	public TrackerPeer[]
+	TrackerPeer[]
 	getPeers();
 	
-	public int
+	int
 	getStatus();
 	
-	public int
+	int
 	getSeedCount();
 	
-	public int
+	int
 	getLeecherCount();
 	
 		/**
@@ -76,103 +76,103 @@ TrackerTorrent
 		 * is disabled.
 		 * @return
 		 */
-	
-	public int
+
+        int
 	getBadNATCount();
 	
-	public long
+	long
 	getTotalUploaded();
 	
-	public long
+	long
 	getTotalDownloaded();
 	
-	public long
+	long
 	getAverageUploaded();
 	
-	public long
+	long
 	getAverageDownloaded();
 	
-	public long
+	long
 	getTotalLeft();
 	
-	public long
+	long
 	getCompletedCount();
 	
 		/**
 		 * total bytes received by the tracker for this torrent - announce and scrape requests
 		 * @return
 		 */
-	
-	public long
+
+        long
 	getTotalBytesIn();
 	
 		/**
 		 * average rate of bytes in
 		 * @return
 		 */
-	
-	public long
+
+        long
 	getAverageBytesIn();
 	
 		/**
 		 * total bytes sent as response by the tracker - announce and scrape responses
 		 * @return
 		 */
-	
-	public long
+
+        long
 	getTotalBytesOut();
 	
 		/**
 		 * average bytes sent
 		 * @return
 		 */
-	
-	public long
+
+        long
 	getAverageBytesOut();
 	
-	public long
+	long
 	getScrapeCount();
 
-	public long
+	long
 	getAverageScrapeCount();
 	
-	public long
+	long
 	getAnnounceCount();
 
-	public long
+	long
 	getAverageAnnounceCount();
 	
 		/**
 		 * stops the tracker from caching replies to announces/scrapes for this torrent
 		 */
-	
-	public void
+
+        void
 	disableReplyCaching();
 	
-	public boolean
+	boolean
 	isPassive();
 	
 		/**
 		 * @since 2.3.0.5
 		 * @return
 		 */
-	
-	public long
+
+        long
 	getDateAdded();
 	
-	public void
+	void
 	addListener(
-		TrackerTorrentListener	listener );
+            TrackerTorrentListener listener);
 	
-	public void
+	void
 	removeListener(
-		TrackerTorrentListener	listener );
+            TrackerTorrentListener listener);
 	
-	public void
+	void
 	addRemovalListener(
-		TrackerTorrentWillBeRemovedListener	listener );
+            TrackerTorrentWillBeRemovedListener listener);
 	
-	public void
+	void
 	removeRemovalListener(
-		TrackerTorrentWillBeRemovedListener	listener );
+            TrackerTorrentWillBeRemovedListener listener);
 }

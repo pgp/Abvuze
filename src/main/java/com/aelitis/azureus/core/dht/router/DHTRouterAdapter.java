@@ -27,17 +27,17 @@ package com.aelitis.azureus.core.dht.router;
 public interface 
 DHTRouterAdapter 
 {
-	public void
+	void
 	requestAdd(
-		DHTRouterContact	contact );
+            DHTRouterContact contact);
 	
-	public void
+	void
 	requestPing(
-		DHTRouterContact	contact );
+            DHTRouterContact contact);
 	
-	public void
+	void
 	requestLookup(
-		byte[]	id,
-		String	description );
+            byte[] id,
+            String description);
 
 }

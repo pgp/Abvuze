@@ -38,7 +38,7 @@ BasicPluginConfigModel
 	/**
 	 * @since 3.0.5.3
 	 */
-	public String BLANK_RESOURCE = "_blank";
+    String BLANK_RESOURCE = "_blank";
 	
 	/**
 	 * @deprecated use addBooleanParameter2
@@ -49,12 +49,12 @@ BasicPluginConfigModel
 	 * 
 	 * @since 2.1.0.0
 	 */
-	
-	public void
+
+    void
 	addBooleanParameter(
-		String 		key,
-		String 		resource_name,
-		boolean 	defaultValue );
+            String key,
+            String resource_name,
+            boolean defaultValue);
 	
 	/**
 	 * @deprecated user addStringParameter2
@@ -65,12 +65,12 @@ BasicPluginConfigModel
 	 * 
 	 * @since 2.1.0.0
 	 */
-	
-	public void
+
+    void
 	addStringParameter(
-		String 		key,
-		String 		resource_name,
-		String	 	defaultValue );
+            String key,
+            String resource_name,
+            String defaultValue);
 	
 	
 	/**
@@ -82,11 +82,11 @@ BasicPluginConfigModel
 	 * 
 	 * @since 2.1.0.2
 	 */
-	public BooleanParameter
+    BooleanParameter
 	addBooleanParameter2(
-		String 		key,
-		String 		resource_name,
-		boolean 	defaultValue );
+            String key,
+            String resource_name,
+            boolean defaultValue);
 
 	/**
 	 * 
@@ -96,11 +96,11 @@ BasicPluginConfigModel
 	 * @return
 	 * @since 2.1.0.2
 	 */
-	public StringParameter
+    StringParameter
 	addStringParameter2(
-		String 		key,
-		String 		resource_name,
-		String	 	defaultValue );
+            String key,
+            String resource_name,
+            String defaultValue);
 	
 	/**
 	 * 
@@ -111,12 +111,12 @@ BasicPluginConfigModel
 	 * @return
 	 * @since 2.1.0.2
 	 */
-	public StringListParameter
+    StringListParameter
 	addStringListParameter2(
-		String 		key,
-		String 		resource_name,
-		String[]	values,
-		String	 	defaultValue );
+            String key,
+            String resource_name,
+            String[] values,
+            String defaultValue);
 
 	/**
 	 * 
@@ -128,13 +128,13 @@ BasicPluginConfigModel
 	 * @return
 	 * @since 2.3.0.6
 	 */
-	public StringListParameter
+    StringListParameter
 	addStringListParameter2(
-		String 		key,
-		String 		resource_name,
-		String[]	values,
-		String[]	labels,
-		String	 	defaultValue );
+            String key,
+            String resource_name,
+            String[] values,
+            String[] labels,
+            String defaultValue);
 
 	/**
 	 * 
@@ -145,12 +145,12 @@ BasicPluginConfigModel
 	 * @return
 	 * @since 2.1.0.2
 	 */
-	public PasswordParameter
+    PasswordParameter
 	addPasswordParameter2(
-		String 		key,
-		String 		resource_name,
-		int			encoding_type,		// see PasswordParameter.ET_ constants
-		byte[]	 	defaultValue );		// plain default value
+            String key,
+            String resource_name,
+            int encoding_type,        // see PasswordParameter.ET_ constants
+            byte[] defaultValue);		// plain default value
 
 	/**
 	 * 
@@ -160,11 +160,11 @@ BasicPluginConfigModel
 	 * @return
 	 * @since 2.1.0.2
 	 */
-	public IntParameter
+    IntParameter
 	addIntParameter2(
-		String 		key,
-		String 		resource_name,
-		int	 		defaultValue );
+            String key,
+            String resource_name,
+            int defaultValue);
 
 	/**
 	 * 
@@ -176,13 +176,13 @@ BasicPluginConfigModel
 	 * @return
 	 * @since 3.0.3.5
 	 */
-	public IntParameter
+    IntParameter
 	addIntParameter2(
-		String 		key,
-		String 		resource_name,
-		int	 		defaultValue,
-		int         min_value,
-		int         max_value);
+            String key,
+            String resource_name,
+            int defaultValue,
+            int min_value,
+            int max_value);
 	
 	/**
 	 * 
@@ -190,9 +190,9 @@ BasicPluginConfigModel
 	 * @return
 	 * @since 2.1.0.2
 	 */
-	public LabelParameter
+    LabelParameter
 	addLabelParameter2(
-		String 		resource_name );
+            String resource_name);
 	
 	/**
 	 * @since 4005
@@ -200,16 +200,16 @@ BasicPluginConfigModel
 	 * @param value
 	 * @return
 	 */
-	
-	public InfoParameter
+
+    InfoParameter
 	addInfoParameter2(
-		String 		resource_name,
-		String		value );
+            String resource_name,
+            String value);
 
 	/**
 	 * @since 2.5.0.2
 	 */
-	public HyperlinkParameter addHyperlinkParameter2(String resource_name, String url_location);
+    HyperlinkParameter addHyperlinkParameter2(String resource_name, String url_location);
 
 	/**
 	 * 
@@ -219,11 +219,11 @@ BasicPluginConfigModel
 	 * @return
 	 * @since 2.1.0.2
 	 */
-	public DirectoryParameter
+    DirectoryParameter
 	addDirectoryParameter2(
-		String 		key,
-		String 		resource_name,
-		String	 	defaultValue );
+            String key,
+            String resource_name,
+            String defaultValue);
 	
 	/**
 	 * 
@@ -233,11 +233,11 @@ BasicPluginConfigModel
 	 * @return
 	 * @since 2.5.0.1
 	 */
-	public FileParameter
+    FileParameter
 	addFileParameter2(
-		String 		key,
-		String 		resource_name,
-		String	 	defaultValue );
+            String key,
+            String resource_name,
+            String defaultValue);
 	
 	/**
 	 * 
@@ -248,12 +248,12 @@ BasicPluginConfigModel
 	 * @return
 	 * @since 2.5.0.1
 	 */
-	public FileParameter
+    FileParameter
 	addFileParameter2(
-		String 		key,
-		String 		resource_name,
-		String	 	defaultValue,
-		String[]    file_extensions);
+            String key,
+            String resource_name,
+            String defaultValue,
+            String[] file_extensions);
 	
 	/**
 	 * 
@@ -262,10 +262,10 @@ BasicPluginConfigModel
 	 * @return
 	 * @since 2.1.0.2
 	 */
-	public ActionParameter
+    ActionParameter
 	addActionParameter2(
-		String 		label_resource_name,
-		String		action_resource_name );
+            String label_resource_name,
+            String action_resource_name);
 	
 	/**
 	 * @since 3.0.3.5
@@ -276,18 +276,18 @@ BasicPluginConfigModel
 	 * @param b
 	 * @return
 	 */
-	public ColorParameter addColorParameter2(String key, String resource_name, int r, int g, int b);
+    ColorParameter addColorParameter2(String key, String resource_name, int r, int g, int b);
 	
 	/**
 	 * Creates a {@link UIParameter} object to add to this config model object.
 	 * 
 	 * @since 3.0.5.3
 	 */
-	public UIParameter addUIParameter2(UIParameterContext context, String name);
+    UIParameter addUIParameter2(UIParameterContext context, String name);
 	
-	public UITextArea
+	UITextArea
 	addTextArea(
-		String	resource_name );
+            String resource_name);
 	
 	/**
 	 * 
@@ -296,18 +296,18 @@ BasicPluginConfigModel
 	 * @return
 	 * @since 2.3.0.0
 	 */
-	public ParameterGroup
+    ParameterGroup
 	createGroup(
-		String		resource_name,
-		Parameter[]	parameters );
+            String resource_name,
+            Parameter[] parameters);
 
 	/**
 	 * @since 5601
 	 * @param resource_name
 	 * @return
 	 */
-	
-	public ParameterTabFolder
+
+    ParameterTabFolder
 	createTabFolder();
 	
 	/**
@@ -315,7 +315,7 @@ BasicPluginConfigModel
 	 * @return
 	 * @since 2.3.0.5
 	 */
-	public String
+    String
 	getSection();
 	
 	/**
@@ -323,7 +323,7 @@ BasicPluginConfigModel
 	 * @return
 	 * @since 2.3.0.5
 	 */
-	public String
+    String
 	getParentSection();
 	
 	/**
@@ -332,7 +332,7 @@ BasicPluginConfigModel
 	 * @return parameter list
 	 * @since 2.3.0.5
 	 */
-	public Parameter[]
+    Parameter[]
 	getParameters();
 	
 	/**
@@ -342,5 +342,5 @@ BasicPluginConfigModel
 	 * 
 	 * @since 3.0.5.3
 	 */
-	public void setLocalizedName(String name);
+    void setLocalizedName(String name);
 }

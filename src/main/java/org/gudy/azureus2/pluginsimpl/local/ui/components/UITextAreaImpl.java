@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -53,7 +54,7 @@ UITextAreaImpl
 	
 	AEMonitor file_mon = new AEMonitor("filemon");
 	
-	LinkedList<String>	delay_text	= new LinkedList<String>();
+	LinkedList<String>	delay_text	= new LinkedList<>();
 	int					delay_size	= 0;
 	
 	FrequencyLimitedDispatcher	dispatcher = 
@@ -167,7 +168,7 @@ UITextAreaImpl
 					break;
 				}
 				
-				String	s = (String)delay_text.removeFirst();
+				String	s = delay_text.removeFirst();
 				
 				delay_size -= s.length();
 			}
@@ -187,18 +188,16 @@ UITextAreaImpl
 
 			if ( delay_text.size() == 1 ){
 				
-				text = (String)delay_text.get(0);
+				text = delay_text.get(0);
 				
 			}else{
 				
 				StringBuilder sb = new StringBuilder( delay_size );
-				
-				Iterator<String>	it = delay_text.iterator();
-				
-				while( it.hasNext()){
-				
-					sb.append( it.next());
-				}
+
+                for (String s : delay_text) {
+
+                    sb.append(s);
+                }
 				
 				text = sb.toString();
 			}
@@ -322,7 +321,7 @@ UITextAreaImpl
 					if ( poop_file != null ){
 						
 						try{
-							pw = new PrintWriter( new OutputStreamWriter( new FileOutputStream( poop_file ), "UTF-8" ));
+							pw = new PrintWriter( new OutputStreamWriter( new FileOutputStream( poop_file ), StandardCharsets.UTF_8));
 						
 							pw.print( buffer.toString());
 							

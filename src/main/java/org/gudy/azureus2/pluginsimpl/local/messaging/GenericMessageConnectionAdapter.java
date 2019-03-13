@@ -29,65 +29,65 @@ import org.gudy.azureus2.plugins.utils.PooledByteBuffer;
 public interface 
 GenericMessageConnectionAdapter 
 {
-	public void
+	void
 	setOwner(
-		GenericMessageConnectionImpl	_owner );
+            GenericMessageConnectionImpl _owner);
 	
-	public GenericMessageEndpoint
+	GenericMessageEndpoint
 	getEndpoint();
 	
-	public int
+	int
 	getMaximumMessageSize();
 	
-	public String
+	String
 	getType();
 	
-	public int
+	int
 	getTransportType();
 
-	public void
+	void
 	connect(
-		ByteBuffer			initial_data,
-		ConnectionListener	listener );
+            ByteBuffer initial_data,
+            ConnectionListener listener);
 	
-	public void
+	void
 	accepted();
 	
-	public void
+	void
 	send(
-		PooledByteBuffer			message )
+            PooledByteBuffer message)
 	
 		throws MessageException;
 	
-	public void
+	void
 	addInboundRateLimiter(
-		RateLimiter		limiter );
+            RateLimiter limiter);
 	
-	public void
+	void
 	removeInboundRateLimiter(
-		RateLimiter		limiter );
+            RateLimiter limiter);
 
-	public void
+	void
 	addOutboundRateLimiter(
-		RateLimiter		limiter );
+            RateLimiter limiter);
 	
-	public void
+	void
 	removeOutboundRateLimiter(
-		RateLimiter		limiter );
+            RateLimiter limiter);
 	
-	public void
+	void
 	close()
 	
 		throws MessageException;
 	
-	public interface
+	interface
 	ConnectionListener
 	{
-		public void
+		void
 		connectSuccess();
 		
-		public void 
-		connectFailure( 
-			Throwable failure_msg );
+		void
+		connectFailure(
+                Throwable failure_msg);
 	}
 }

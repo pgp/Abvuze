@@ -23,31 +23,31 @@ package com.aelitis.azureus.plugins.net.buddy;
 public interface 
 BuddyPluginListener 
 {
-	public void
+	void
 	initialised(
-		boolean		available );
+            boolean available);
 	
-	public void
+	void
 	buddyAdded(
-		BuddyPluginBuddy	buddy );
+            BuddyPluginBuddy buddy);
 	
-	public void
+	void
 	buddyRemoved(
-		BuddyPluginBuddy	buddy );
+            BuddyPluginBuddy buddy);
 
-	public void
+	void
 	buddyChanged(
-		BuddyPluginBuddy	buddy );
+            BuddyPluginBuddy buddy);
 	
-	public void
+	void
 	messageLogged(
-		String		str,
-		boolean		is_error );
+            String str,
+            boolean is_error);
 	
-	public void
+	void
 	enabledStateChanged(
-		boolean enabled );
+            boolean enabled);
 	
-	public void
+	void
 	updated();
 }

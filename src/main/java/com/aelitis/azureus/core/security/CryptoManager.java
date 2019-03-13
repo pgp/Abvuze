@@ -26,64 +26,64 @@ CryptoManager
 {
 		// don't even THINK about changing this!!!!
 
-	public static final String	CRYPTO_CONFIG_PREFIX = "core.crypto.";
+	String	CRYPTO_CONFIG_PREFIX = "core.crypto.";
 	
-	public static final int HANDLER_ECC	= 1;
+	int HANDLER_ECC	= 1;
 	
-	public static final int[] HANDLERS = { HANDLER_ECC };
+	int[] HANDLERS = { HANDLER_ECC };
 	
-	public byte[]
+	byte[]
 	getSecureID();
 	
-	public CryptoHandler
+	CryptoHandler
 	getECCHandler();
 	
-	public byte[]
+	byte[]
 	obfuscate(
-		byte[]		data );
+            byte[] data);
 	
-	public byte[]
+	byte[]
 	deobfuscate(
-		byte[]		data );
+            byte[] data);
 	
-	public void
+	void
 	clearPasswords();
 	
-	public void
+	void
 	clearPasswords(
-		int	password_handler_type );
+            int password_handler_type);
 
-	public void
+	void
 	addPasswordHandler(
-		CryptoManagerPasswordHandler		handler );
+            CryptoManagerPasswordHandler handler);
 	
-	public void
+	void
 	removePasswordHandler(
-		CryptoManagerPasswordHandler		handler );
+            CryptoManagerPasswordHandler handler);
 	
-	public void
+	void
 	addKeyListener(
-		CryptoManagerKeyListener		listener );
+            CryptoManagerKeyListener listener);
 	
-	public void
+	void
 	removeKeyListener(
-		CryptoManagerKeyListener		listener );
+            CryptoManagerKeyListener listener);
 	
-	public void
+	void
 	setSRPParameters(
-		byte[]		salt,
-		BigInteger	verifier );
+            byte[] salt,
+            BigInteger verifier);
 		
-	public SRPParameters
+	SRPParameters
 	getSRPParameters();
 	
-	public interface
+	interface
 	SRPParameters
 	{		
-		public byte[]
+		byte[]
 		getSalt();
 		
-		public BigInteger
+		BigInteger
 		getVerifier();
 	}
 }

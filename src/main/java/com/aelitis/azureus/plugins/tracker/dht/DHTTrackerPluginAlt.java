@@ -75,7 +75,7 @@ DHTTrackerPluginAlt
 	private DatagramSocket	current_server;
 	private Throwable		last_server_error;
 	
-	private ByteArrayHashMap<Object[]>	tid_map = new ByteArrayHashMap<Object[]>();
+	private ByteArrayHashMap<Object[]>	tid_map = new ByteArrayHashMap<>();
 
 	private TimerEventPeriodic	timer_event;
 	
@@ -404,29 +404,25 @@ DHTTrackerPluginAlt
 		List<Object[]>	timeouts = null;
 		
 		synchronized( tid_map ){
-			
-			Iterator<byte[]> it = tid_map.keys().iterator();
-			
-			while( it.hasNext()){
-				
-				byte[] key = it.next();
-				
-				Object[]	value = tid_map.get( key );
-				
-				long time = (Long)value[1];
-				
-				if ( now - time > RPC_TIMEOUT ){
-					
-					tid_map.remove( key );
-					
-					if ( timeouts == null ){
-						
-						timeouts = new ArrayList<Object[]>();
-					}
-					
-					timeouts.add(new Object[]{ key, value[0] });
-				}
-			}
+
+            for (byte[] key : tid_map.keys()) {
+
+                Object[] value = tid_map.get(key);
+
+                long time = (Long) value[1];
+
+                if (now - time > RPC_TIMEOUT) {
+
+                    tid_map.remove(key);
+
+                    if (timeouts == null) {
+
+                        timeouts = new ArrayList<>();
+                    }
+
+                    timeouts.add(new Object[]{key, value[0]});
+                }
+            }
 		}
 		
 		if ( timeouts != null ){
@@ -465,9 +461,9 @@ DHTTrackerPluginAlt
 		
 		private List<DHTTransportAlternativeContact>	initial_contacts;
 		
-		private ByteArrayHashMap<InetSocketAddress>	active_queries = new ByteArrayHashMap<InetSocketAddress>();
+		private ByteArrayHashMap<InetSocketAddress>	active_queries = new ByteArrayHashMap<>();
 		
-		private Set<InetSocketAddress>		queried_nodes = new HashSet<InetSocketAddress>();
+		private Set<InetSocketAddress>		queried_nodes = new HashSet<>();
 		
 		Comparator<byte[]>	comparator = 
 			new Comparator<byte[]>()
@@ -511,24 +507,22 @@ DHTTrackerPluginAlt
 				}
 			};
 			
-		private TreeMap<byte[],InetSocketAddress>	to_query = new TreeMap<byte[], InetSocketAddress>( comparator );
+		private TreeMap<byte[],InetSocketAddress>	to_query = new TreeMap<>(comparator);
 
 		private TreeMap<byte[],InetSocketAddress>	heard_from =
-				new TreeMap<byte[], InetSocketAddress>(
-					new Comparator<byte[]>()
-					{
-						public int 
-						compare(
-							byte[] o1, 
-							byte[] o2) 
-						{
-							return( -comparator.compare(o1, o2));
-						}
-					});
+                new TreeMap<>(
+                        new Comparator<byte[]>() {
+                            public int
+                            compare(
+                                    byte[] o1,
+                                    byte[] o2) {
+                                return (-comparator.compare(o1, o2));
+                            }
+                        });
 		
 		private long	found_peer_time;
 		
-		private Set<InetSocketAddress>	found_peers = new HashSet<InetSocketAddress>();
+		private Set<InetSocketAddress>	found_peers = new HashSet<>();
 		
 		private int		query_count;
 		private int		timeout_count;
@@ -568,12 +562,12 @@ DHTTrackerPluginAlt
 				
 			queried_nodes.add( address );
 			
-			Map<String,Object> map = new HashMap<String,Object>();
+			Map<String,Object> map = new HashMap<>();
 						
 			map.put( "q", "get_peers" );
 			map.put( "y", "q" );
 			
-			Map<String,Object> args = new HashMap<String,Object>();
+			Map<String,Object> args = new HashMap<>();
 			
 			map.put( "a", args );
 			
@@ -581,7 +575,7 @@ DHTTrackerPluginAlt
 			
 			args.put( "info_hash", torrent_hash );
 			
-			args.put( "noseed", new Long( no_seeds?1:0 ));
+			args.put( "noseed", (long) (no_seeds ? 1 : 0));
 					
 			byte[]	tid = send( this, server, address, map );
 				
@@ -901,14 +895,14 @@ DHTTrackerPluginAlt
 	protected interface
 	LookupListener
 	{
-		public void
+		void
 		foundPeer(
-			InetSocketAddress	address );
+                InetSocketAddress address);
 		
-		public boolean
+		boolean
 		isComplete();
 		
-		public void
+		void
 		completed();
 	}
 }

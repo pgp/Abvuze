@@ -169,7 +169,7 @@ DeviceInternetGatewayImpl
 	protected Set<mapping>
 	getRequiredMappings()
 	{
-		Set<mapping>	res = new TreeSet<mapping>();
+		Set<mapping>	res = new TreeSet<>();
 			
 		UPnPMapping[]		required_mappings 	= current_mappings;
 
@@ -193,7 +193,7 @@ DeviceInternetGatewayImpl
 	{
 		UPnPPluginService.serviceMapping[] actual_mappings = service.getMappings();
 		
-		Set<mapping> actual = new TreeSet<mapping>();
+		Set<mapping> actual = new TreeSet<>();
 		
 		for ( UPnPPluginService.serviceMapping act_mapping: actual_mappings ){
 		

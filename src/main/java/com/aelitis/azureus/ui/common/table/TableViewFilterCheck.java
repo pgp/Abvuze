@@ -27,13 +27,13 @@ package com.aelitis.azureus.ui.common.table;
  */
 public interface TableViewFilterCheck<DATASOURCETYPE>
 {
-	public boolean filterCheck(DATASOURCETYPE ds, String filter, boolean regex);
+	boolean filterCheck(DATASOURCETYPE ds, String filter, boolean regex);
 
-	public void filterSet(String filter);
+	void filterSet(String filter);
 
-	public interface TableViewFilterCheckEx<DATASOURCETYPE>
+	interface TableViewFilterCheckEx<DATASOURCETYPE>
 		extends TableViewFilterCheck<DATASOURCETYPE>
 	{
-		public void viewChanged(TableView<DATASOURCETYPE> view);
+		void viewChanged(TableView<DATASOURCETYPE> view);
 	}
 }

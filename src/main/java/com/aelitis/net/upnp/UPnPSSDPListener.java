@@ -26,34 +26,34 @@ import java.net.URL;
 public interface 
 UPnPSSDPListener 
 {
-	public void
+	void
 	receivedResult(
-		NetworkInterface	network_interface,
-		InetAddress			local_address,
-		InetAddress			originator,
-		String				USN,
-		URL					location,
-		String				ST,
-		String				AL );
+            NetworkInterface network_interface,
+            InetAddress local_address,
+            InetAddress originator,
+            String USN,
+            URL location,
+            String ST,
+            String AL);
 	
-	public void
+	void
 	receivedNotify(
-		NetworkInterface	network_interface,
-		InetAddress			local_address,
-		InetAddress			originator,
-		String				USN,
-		URL					location,
-		String				NT,
-		String				NTS );
+            NetworkInterface network_interface,
+            InetAddress local_address,
+            InetAddress originator,
+            String USN,
+            URL location,
+            String NT,
+            String NTS);
 
-	public String[]
+	String[]
 	receivedSearch(
-		NetworkInterface	network_interface,
-		InetAddress			local_address,
-		InetAddress			originator,
-		String				ST );
+            NetworkInterface network_interface,
+            InetAddress local_address,
+            InetAddress originator,
+            String ST);
 	
-	public void
+	void
 	interfaceChanged(
-		NetworkInterface	network_interface );
+            NetworkInterface network_interface);
 }

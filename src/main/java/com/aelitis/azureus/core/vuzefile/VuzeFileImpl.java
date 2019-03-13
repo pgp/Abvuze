@@ -116,19 +116,17 @@ VuzeFileImpl
 		List	list = new ArrayList();
 		
 		vuze_map.put( "components", list );
-		
-		for (int i=0;i<components.length;i++){
-			
-			VuzeFileComponent comp = components[i];
-			
-			Map	entry = new HashMap();
-			
-			entry.put( "type", new Long( comp.getType()));
-			
-			entry.put( "content", comp.getContent());
-			
-			list.add( entry );
-		}
+
+        for (VuzeFileComponent comp : components) {
+
+            Map entry = new HashMap();
+
+            entry.put("type", (long) comp.getType());
+
+            entry.put("content", comp.getContent());
+
+            list.add(entry);
+        }
 				
 		return( map );
 	}
@@ -155,15 +153,11 @@ VuzeFileImpl
 	
 		throws IOException 
 	{
-		FileOutputStream	fos = new FileOutputStream( target );
-		
-		try{
-			fos.write( exportToBytes());
-			
-		}finally{
-			
-			fos.close();
-		}
+
+        try (FileOutputStream fos = new FileOutputStream(target)) {
+            fos.write(exportToBytes());
+
+        }
 	}
 	
 	protected static class

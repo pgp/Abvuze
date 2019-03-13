@@ -153,7 +153,7 @@ PluginEngine
 			return( false );
 		}
 		
-		return( val.booleanValue());
+		return(val);
 	}
 	public boolean
 	isActive()
@@ -193,24 +193,22 @@ PluginEngine
 			
 			return( true );
 		}
-		
-		for (int i=0;i<FIELD_MAP.length;i++){
-			
-			int[]	entry = FIELD_MAP[i];
-			
-			if ( entry[1] == field ){
-				
-				for (int j=0;j<supports.length;j++){
-					
-					if ( supports[j] == entry[0] ){
-						
-						return( true );
-					}
-				}
-				
-				break;
-			}
-		}
+
+        for (int[] entry : FIELD_MAP) {
+
+            if (entry[1] == field) {
+
+                for (int support : supports) {
+
+                    if (support == entry[0]) {
+
+                        return (true);
+                    }
+                }
+
+                break;
+            }
+        }
 		
 		return( false );
 	}
@@ -281,40 +279,43 @@ PluginEngine
 		Map search_parameters = new HashMap();
 		
 		String	term = null;
-		
-		for (int i=0;i<params.length;i++){
-			
-			SearchParameter param = params[i];
-			
-			String pattern 	= param.getMatchPattern();
-			String value	= param.getValue();
-			
-			if ( pattern.equals( "s" )){
-				
-				term = value;
-				
-				search_parameters.put( SearchProvider.SP_SEARCH_TERM, value );
-				
-			}else if ( pattern.equals( "m" )){
-			
-				search_parameters.put( SearchProvider.SP_MATURE, Boolean.valueOf(value));
 
-			}else if ( pattern.equals( "n" )){
-				
-				String[] networks = value.split(",");
-				
-				search_parameters.put( SearchProvider.SP_NETWORKS, networks );
+        for (SearchParameter param : params) {
 
-			}else{
-				
-				Debug.out( "Unrecognised search parameter '" + pattern + "=" + value + "' ignored" );
-			}
-		}
+            String pattern = param.getMatchPattern();
+            String value = param.getValue();
+
+            switch (pattern) {
+                case "s":
+
+                    term = value;
+
+                    search_parameters.put(SearchProvider.SP_SEARCH_TERM, value);
+
+                    break;
+                case "m":
+
+                    search_parameters.put(SearchProvider.SP_MATURE, Boolean.valueOf(value));
+
+                    break;
+                case "n":
+
+                    String[] networks = value.split(",");
+
+                    search_parameters.put(SearchProvider.SP_NETWORKS, networks);
+
+                    break;
+                default:
+
+                    Debug.out("Unrecognised search parameter '" + pattern + "=" + value + "' ignored");
+                    break;
+            }
+        }
 			
 		final String f_term = term;
 		
 		try{
-			final List<PluginResult>	results = new ArrayList<PluginResult>();
+			final List<PluginResult>	results = new ArrayList<>();
 			
 			final AESemaphore	sem = new AESemaphore( "waiter" );
 
@@ -375,7 +376,7 @@ PluginEngine
 					{
 						if ( property == PR_MAX_RESULTS_WANTED ){
 							
-							return( new Long( desired_max_matches ));
+							return((long) desired_max_matches);
 						}
 						
 						return( null );
@@ -389,7 +390,7 @@ PluginEngine
 				listener.resultsComplete( this );
 			}
 			
-			return((Result[])results.toArray(new Result[results.size()]));
+			return results.toArray(new Result[results.size()]);
 			
 		}catch( Throwable e ){
 			

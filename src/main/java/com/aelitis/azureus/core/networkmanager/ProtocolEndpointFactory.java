@@ -32,7 +32,7 @@ ProtocolEndpointFactory
 	private static ProtocolEndpointHandler tcp_handler = null;
 	private static ProtocolEndpointHandler udp_handler = null;
 	
-	private static final Map<Integer,ProtocolEndpointHandler>	other_handlers = new HashMap<Integer, ProtocolEndpointHandler>();
+	private static final Map<Integer,ProtocolEndpointHandler>	other_handlers = new HashMap<>();
 	
 	static{
 		ProtocolEndpointTCP.register();

@@ -27,7 +27,7 @@ package org.gudy.azureus2.plugins.config;
 public interface 
 ConfigParameterListener 
 {
-	public void
+	void
 	configParameterChanged(
-		ConfigParameter	param );
+            ConfigParameter param);
 }

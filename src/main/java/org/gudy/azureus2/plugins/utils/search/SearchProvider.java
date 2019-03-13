@@ -27,36 +27,36 @@ SearchProvider
 {
 		// properties
 	
-	public static final int PR_ID							= 0;	// getProperty only; Long
-	public static final int PR_NAME							= 1;	// mandatory; String
-	public static final int PR_ICON_URL						= 2;	// optional; String
-	public static final int PR_DOWNLOAD_LINK_LOCATOR		= 3;	// optional; String
-	public static final int PR_REFERER						= 4;	// optional; String
-	public static final int PR_SUPPORTS_RESULT_FIELDS		= 5;	// optional; int[]
-	public static final int PR_USE_ACCURACY_FOR_RANK		= 6;	// optional; Boolean
+	int PR_ID							= 0;	// getProperty only; Long
+	int PR_NAME							= 1;	// mandatory; String
+	int PR_ICON_URL						= 2;	// optional; String
+	int PR_DOWNLOAD_LINK_LOCATOR		= 3;	// optional; String
+	int PR_REFERER						= 4;	// optional; String
+	int PR_SUPPORTS_RESULT_FIELDS		= 5;	// optional; int[]
+	int PR_USE_ACCURACY_FOR_RANK		= 6;	// optional; Boolean
 	
 		// search parameters
 	
-	public static final String	SP_SEARCH_NAME			 	= "t";	// String; title of search for display purposes
-	public static final String	SP_SEARCH_TERM			 	= "s";	// String
-	public static final String	SP_MATURE				 	= "m";	// Boolean
-	public static final String	SP_NETWORKS				 	= "n";	// String[]
-	public static final String	SP_MIN_SEEDS				= "z";	// Long
-	public static final String	SP_MIN_LEECHERS				= "l";	// Long
+	String	SP_SEARCH_NAME			 	= "t";	// String; title of search for display purposes
+	String	SP_SEARCH_TERM			 	= "s";	// String
+	String	SP_MATURE				 	= "m";	// Boolean
+	String	SP_NETWORKS				 	= "n";	// String[]
+	String	SP_MIN_SEEDS				= "z";	// Long
+	String	SP_MIN_LEECHERS				= "l";	// Long
 	
-	public SearchInstance
+	SearchInstance
 	search(
-		Map<String,Object>	search_parameters,
-		SearchObserver		observer )
+            Map<String, Object> search_parameters,
+            SearchObserver observer)
 	
 		throws SearchException;
 	
-	public Object
+	Object
 	getProperty(
-		int			property );
+            int property);
 	
-	public void
+	void
 	setProperty(
-		int			property,
-		Object		value );
+            int property,
+            Object value);
 }

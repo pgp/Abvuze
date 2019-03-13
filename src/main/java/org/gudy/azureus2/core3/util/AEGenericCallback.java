@@ -20,7 +20,7 @@ package org.gudy.azureus2.core3.util;
 public interface 
 AEGenericCallback 
 {
-	public Object
+	Object
 	invoke(
-		Object		arg );
+            Object arg);
 }

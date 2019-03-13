@@ -25,7 +25,7 @@ package org.gudy.azureus2.core3.history;
 public interface 
 DownloadHistoryListener 
 {
-	public void
+	void
 	downloadHistoryEventOccurred(
-		DownloadHistoryEvent		event );
+            DownloadHistoryEvent event);
 }

@@ -32,20 +32,20 @@ import java.io.*;
 public interface 
 ResourceDownloaderListener 
 {
-	public void
+	void
 	reportPercentComplete(
-		ResourceDownloader	downloader,
-		int					percentage );
+            ResourceDownloader downloader,
+            int percentage);
 	
-	public void
+	void
 	reportAmountComplete(
-		ResourceDownloader	downloader,
-		long				amount );
+            ResourceDownloader downloader,
+            long amount);
 	
-	public void
+	void
 	reportActivity(
-		ResourceDownloader	downloader,
-		String				activity );
+            ResourceDownloader downloader,
+            String activity);
 	
 		/**
 		 * 
@@ -55,14 +55,14 @@ ResourceDownloaderListener
 		 * if there are alternative download sources they will be tried. If there are no
 		 * other sources then the download will be "failed" 
 		 */
-	
-	public boolean
+
+        boolean
 	completed(
-		ResourceDownloader	downloader,
-		InputStream			data );
+                ResourceDownloader downloader,
+                InputStream data);
 	
-	public void
+	void
 	failed(
-		ResourceDownloader			downloader,
-		ResourceDownloaderException e );
+            ResourceDownloader downloader,
+            ResourceDownloaderException e);
 }

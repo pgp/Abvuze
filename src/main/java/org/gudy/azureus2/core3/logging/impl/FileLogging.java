@@ -126,9 +126,9 @@ public class FileLogging implements ILogEventListener {
 				iLogFileMaxMB = 2;
 				timeStampFormat = "HH:mm:ss.SSS ";
 
-				for (int i = 0; i < ignoredComponents.length; i++) {
-					ignoredComponents[i].clear();
-				}
+                for (ArrayList ignoredComponent : ignoredComponents) {
+                    ignoredComponent.clear();
+                }
 				
 				reloadLogToFileParam();
 			} else {
@@ -143,11 +143,11 @@ public class FileLogging implements ILogEventListener {
 				for (int i = 0; i < ignoredComponents.length; i++) {
 					ignoredComponents[i].clear();
 					int logType = indexToLogType(i);
-					for (int j = 0; j < configurableLOGIDs.length; j++) {
-						if (!config.getBooleanParameter("bLog." + logType + "."
-								+ configurableLOGIDs[j], true))
-							ignoredComponents[i].add(configurableLOGIDs[j]);
-					}
+                    for (LogIDs configurableLOGID : configurableLOGIDs) {
+                        if (!config.getBooleanParameter("bLog." + logType + "."
+                                + configurableLOGID, true))
+                            ignoredComponents[i].add(configurableLOGID);
+                    }
 				}
 			}
 			

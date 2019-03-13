@@ -268,27 +268,20 @@ ConfigurationChecker
 			  
 			  Properties props = new Properties();
 
-			  InputStream is = new FileInputStream( prop_file );
+			  try (InputStream is = new FileInputStream(prop_file)) {
+				  props.load(is);
 
-			  try{
-				  props.load( is );
+				  for (Map.Entry<Object, Object> objectObjectEntry : props.entrySet()) {
 
-				  Iterator it = props.entrySet().iterator();
+					  Map.Entry entry = (Map.Entry) objectObjectEntry;
 
-				  while( it.hasNext()){
+					  String key = (String) entry.getKey();
+					  String value = (String) entry.getValue();
 
-					  Map.Entry entry = (Map.Entry)it.next();
+					  Logger.log(new LogEvent(LOGID, "    " + key + "=" + value));
 
-					  String	key 	= (String)entry.getKey();
-					  String	value 	= (String)entry.getValue();
-					  
-					  Logger.log(new LogEvent(LOGID, "    " + key + "=" + value ));
-					  
-					  System.setProperty( key, value );
+					  System.setProperty(key, value);
 				  }
-			  }finally{
-
-				  is.close();
 			  }
 		  }
 	  }catch( Throwable e ){
@@ -709,13 +702,13 @@ ConfigurationChecker
 	                             "General_sDefaultTorrent_Directory",
 	                             "Watch Torrent Folder Path",
 	                             "Completed Files Directory" };
-	    for( int i=0; i < path_params.length; i++ ) {
-	      if( path_params[i].endsWith( SystemProperties.SEP ) ) {
-	        String new_path = path_params[i].substring( 0, path_params[i].length() - 1 );
-	        COConfigurationManager.setParameter( path_params[i], new_path );
-	        changed = true;
-	      }
-	    }
+        for (String path_param : path_params) {
+            if (path_param.endsWith(SystemProperties.SEP)) {
+                String new_path = path_param.substring(0, path_param.length() - 1);
+                COConfigurationManager.setParameter(path_param, new_path);
+                changed = true;
+            }
+        }
       
       
       //2105 removed the language file web-update functionality,
@@ -733,16 +726,15 @@ ConfigurationChecker
         });
         
         if ( files != null ){
-	        for( int i=0; i < files.length; i++ ) {
-	          File file = files[ i ];
-	          if( file.exists() ) {
-	          	if (Logger.isEnabled())
-								Logger.log(new LogEvent(LOGID, LogEvent.LT_WARNING,
-										"ConfigurationChecker:: removing old language file: "
-												+ file.getAbsolutePath()));
-	            file.renameTo( new File( file.getParentFile(), "delme" + file.getName() ) );
-	          }
-	        }
+            for (File file : files) {
+                if (file.exists()) {
+                    if (Logger.isEnabled())
+                        Logger.log(new LogEvent(LOGID, LogEvent.LT_WARNING,
+                                "ConfigurationChecker:: removing old language file: "
+                                        + file.getAbsolutePath()));
+                    file.renameTo(new File(file.getParentFile(), "delme" + file.getName()));
+                }
+            }
         }
         ConfigurationManager.getInstance().removeParameter( "General_bEnableLanguageUpdate" );
         changed = true;

@@ -24,11 +24,11 @@ import java.util.Map;
 public interface 
 SecureMessageServiceClient 
 {
-	public SecureMessageServiceClientMessage
+	SecureMessageServiceClientMessage
 	sendMessage(
-		Map			request,
-		Object		client_data,
-		String		description );
+            Map request,
+            Object client_data,
+            String description);
 	
 		/**
 		 * This shouldn't be required under normal circumstances as message addition causes
@@ -36,18 +36,18 @@ SecureMessageServiceClient
 		 * force a dispatch to occur (e.g. to validate new authentication information immediately
 		 * rather than wait for it to happen naturally)
 		 */
-	
-	public void
+
+        void
 	sendMessages();
 	
-	public SecureMessageServiceClientMessage[]
+	SecureMessageServiceClientMessage[]
 	getMessages();
 	
-	public void
+	void
 	addListener(
-		SecureMessageServiceClientListener	l );
+            SecureMessageServiceClientListener l);
 	
-	public void
+	void
 	removeListener(
-		SecureMessageServiceClientListener	l );
+            SecureMessageServiceClientListener l);
 }

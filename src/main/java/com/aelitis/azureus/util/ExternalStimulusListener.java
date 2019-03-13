@@ -31,11 +31,11 @@ ExternalStimulusListener
 		 * @param values
 		 * @return false if not handled
 		 */
-	
-	public boolean
+
+        boolean
 	receive(
-		String		name,
-		Map			values );
+                String name,
+                Map values);
 	
 		/**
 		 * 
@@ -43,9 +43,9 @@ ExternalStimulusListener
 		 * @param values
 		 * @return Integer.MIN_VALUE if not handled
 		 */
-	
-	public int
+
+        int
 	query(
-		String		name,
-		Map			values );
+                String name,
+                Map values);
 }

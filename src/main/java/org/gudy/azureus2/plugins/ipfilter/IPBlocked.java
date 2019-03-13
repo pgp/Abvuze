@@ -29,20 +29,20 @@ package org.gudy.azureus2.plugins.ipfilter;
 public interface 
 IPBlocked 
 {
-	 public String 
+	 String
 	 getBlockedIP();
 	 
 	 	/**
 	 	 * returns the torrent name the IP was blocked trying to access
 	 	 * @return
 	 	 */
-	 
-	 public String
+
+        String
 	 getBlockedTorrentName();
 	 
-	 public long 
+	 long
 	 getBlockedTime();
 	 
-	 public IPRange 
+	 IPRange
 	 getBlockingRange();
 }

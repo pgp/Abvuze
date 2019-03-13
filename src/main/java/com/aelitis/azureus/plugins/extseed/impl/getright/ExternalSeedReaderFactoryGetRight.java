@@ -20,6 +20,7 @@
 package com.aelitis.azureus.plugins.extseed.impl.getright;
 
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.gudy.azureus2.core3.util.Debug;
@@ -157,7 +158,7 @@ ExternalSeedReaderFactoryGetRight
 					}
 					
 					try{	
-						String	url_str = new String((byte[])urls.get(i), "UTF-8" );
+						String	url_str = new String((byte[])urls.get(i), StandardCharsets.UTF_8);
 						
 							// avoid java encoding ' ' as '+' as this is not conformant with Apache (for example)
 						

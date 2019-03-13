@@ -28,17 +28,17 @@ import com.aelitis.azureus.core.networkmanager.admin.NetworkAdminException;
 public interface 
 NetworkAdminProtocolTester 
 {
-	public InetAddress
+	InetAddress
 	testOutbound(
-		InetAddress		bind_ip,
-		int				bind_port )
+            InetAddress bind_ip,
+            int bind_port)
 	
 		throws NetworkAdminException;
 	
-	public InetAddress
-	testInbound(			
-		InetAddress		bind_ip,
-		int				local_port )
+	InetAddress
+	testInbound(
+            InetAddress bind_ip,
+            int local_port)
 	
 		throws NetworkAdminException;
 }

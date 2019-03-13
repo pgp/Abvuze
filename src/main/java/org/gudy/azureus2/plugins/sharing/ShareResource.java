@@ -33,76 +33,76 @@ import org.gudy.azureus2.plugins.torrent.TorrentAttribute;
 public interface 
 ShareResource 
 {
-	public static final int	ST_FILE			= 1;
-	public static final int	ST_DIR			= 2;
-	public static final int	ST_DIR_CONTENTS	= 3;
+	int	ST_FILE			= 1;
+	int	ST_DIR			= 2;
+	int	ST_DIR_CONTENTS	= 3;
 	
-	public int
+	int
 	getType();
 	
-	public String
+	String
 	getName();
 	
-	public void
+	void
 	delete()
 	
 		throws ShareException, ShareResourceDeletionVetoException;
 	
-	public void
+	void
 	delete(
-		boolean		force )
+            boolean force)
 	
 		throws ShareException, ShareResourceDeletionVetoException;
 
-	public void
+	void
 	setAttribute(
-		TorrentAttribute		attribute,
-		String					value );
+            TorrentAttribute attribute,
+            String value);
 	
 		/**
 		 * @param attribute
 		 * @return	null if no value defined
 		 */
-	
-	public String
+
+        String
 	getAttribute(
-		TorrentAttribute		attribute );
+                TorrentAttribute attribute);
 	
 		/**
 		 * get the defined attributes for this resource
 		 * @return
 		 */
-	
-	public TorrentAttribute[]
+
+        TorrentAttribute[]
 	getAttributes();
 	
-	public Map<String,String>
+	Map<String,String>
 	getProperties();
 	
-	public boolean
+	boolean
 	isPersistent();
 	
-	public boolean
+	boolean
 	canBeDeleted()
 	
 		throws ShareResourceDeletionVetoException;
 	
-	public ShareResourceDirContents
+	ShareResourceDirContents
 	getParent();
 	
-	public void
+	void
 	addChangeListener(
-		ShareResourceListener	l );
+            ShareResourceListener l);
 	
-	public void
+	void
 	removeChangeListener(
-		ShareResourceListener	l );
+            ShareResourceListener l);
 
-	public void
+	void
 	addDeletionListener(
-		ShareResourceWillBeDeletedListener	l );
+            ShareResourceWillBeDeletedListener l);
 	
-	public void
+	void
 	removeDeletionListener(
-		ShareResourceWillBeDeletedListener	l );
+            ShareResourceWillBeDeletedListener l);
 }

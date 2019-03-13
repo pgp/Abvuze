@@ -37,7 +37,7 @@ public class PeerIdentityManager {
 
   private static final AEMonitor 		class_mon	= new AEMonitor( "PeerIdentityManager:class");
 
-  private static final Map<PeerIdentityDataID,DataEntry> dataMap = new LightHashMap<PeerIdentityDataID,DataEntry>();
+  private static final Map<PeerIdentityDataID,DataEntry> dataMap = new LightHashMap<>();
 
   private static int totalIDs = 0;
  
@@ -314,7 +314,7 @@ public class PeerIdentityManager {
   	protected static final class
   	DataEntry
   	{
-  		private final Map<PeerIdentity,String>	_peerMap = new LightHashMap<PeerIdentity, String>();
+  		private final Map<PeerIdentity,String>	_peerMap = new LightHashMap<>();
 	    		
   		private final boolean
   		hasIP(

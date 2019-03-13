@@ -26,36 +26,36 @@ public interface
 TagFeatureExecOnAssign
 	extends TagFeature
 {
-	public static final int ACTION_NONE				= 0x0000;
-	public static final int ACTION_DESTROY			= 0x0001;
-	public static final int ACTION_START			= 0x0002;
-	public static final int ACTION_STOP				= 0x0004;
-	public static final int ACTION_FORCE_START		= 0x0008;
-	public static final int ACTION_NOT_FORCE_START	= 0x0010;
-	public static final int ACTION_SCRIPT			= 0x0020;
-	public static final int ACTION_PAUSE			= 0x0040;
-	public static final int ACTION_RESUME			= 0x0080;
+	int ACTION_NONE				= 0x0000;
+	int ACTION_DESTROY			= 0x0001;
+	int ACTION_START			= 0x0002;
+	int ACTION_STOP				= 0x0004;
+	int ACTION_FORCE_START		= 0x0008;
+	int ACTION_NOT_FORCE_START	= 0x0010;
+	int ACTION_SCRIPT			= 0x0020;
+	int ACTION_PAUSE			= 0x0040;
+	int ACTION_RESUME			= 0x0080;
 	
-	public int
+	int
 	getSupportedActions();
 	
-	public boolean
+	boolean
 	supportsAction(
-		int		action );
+            int action);
 	
-	public boolean
+	boolean
 	isActionEnabled(
-		int		action );
+            int action);
 	
-	public void
+	void
 	setActionEnabled(
-		int			action,
-		boolean		enabled );
+            int action,
+            boolean enabled);
 	
-	public String
+	String
 	getActionScript();
 	
-	public void
+	void
 	setActionScript(
-		String		script );
+            String script);
 }

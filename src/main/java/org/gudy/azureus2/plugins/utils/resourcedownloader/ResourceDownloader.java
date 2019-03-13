@@ -32,8 +32,8 @@ import java.io.InputStream;
 public interface 
 ResourceDownloader 
 {
-	public static final String	PR_STRING_CONTENT_TYPE		= "ContentType";
-	public static final String	PR_BOOLEAN_ANONYMOUS		= "Anonymous";
+	String	PR_STRING_CONTENT_TYPE		= "ContentType";
+	String	PR_BOOLEAN_ANONYMOUS		= "Anonymous";
 
 		// Properties prefixed with URL_ will be passed directly to URL connections. For example
 		// URL_User-Agent will be passed as User-Agent
@@ -42,8 +42,8 @@ ResourceDownloader
 		 * Get a sensible name for the download based on its details (e.g. URL)
 		 * @return
 		 */
-	
-	public String
+
+        String
 	getName();
 	
 		/**
@@ -51,8 +51,8 @@ ResourceDownloader
 		 * @return
 		 * @throws ResourceDownloaderException
 		 */
-	
-	public InputStream
+
+        InputStream
 	download()
 	
 		throws ResourceDownloaderException;
@@ -61,8 +61,8 @@ ResourceDownloader
 		 * Asynchronously download.
 		 *
 		 */
-	
-	public void
+
+        void
 	asyncDownload();
 	
 		/**
@@ -74,16 +74,16 @@ ResourceDownloader
 		 * 
 		 * @throws ResourceDownloaderException
 		 */
-	
-	public long
+
+        long
 	getSize()
 	
 		throws ResourceDownloaderException;
 
-	public void
+	void
 	setProperty(
-		String		name,
-		Object		value )
+            String name,
+            Object value)
 	
 		throws ResourceDownloaderException;
 	
@@ -94,35 +94,35 @@ ResourceDownloader
 		 * @return
 		 * @throws ResourceDownloaderException
 		 */
-	
-	public Object
+
+        Object
 	getProperty(
-		String		name )
+                String name)
 	
 		throws ResourceDownloaderException;
 	
 		/**
 		 * Cancel the download. 
 		 */
-	
-	public void
+
+        void
 	cancel();
 	
-	public boolean
+	boolean
 	isCancelled();
 	
-	public ResourceDownloader
+	ResourceDownloader
 	getClone();
 	
-	public void
+	void
 	reportActivity(
-		String				activity );
+            String activity);
 
-	public void
+	void
 	addListener(
-		ResourceDownloaderListener	l );
+            ResourceDownloaderListener l);
 	
-	public void
+	void
 	removeListener(
-		ResourceDownloaderListener	l );
+            ResourceDownloaderListener l);
 }

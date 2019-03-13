@@ -53,7 +53,7 @@ CategoryImpl
 {
   final String sName;
   private final int type;
-  private final List<DownloadManager> managers = new ArrayList<DownloadManager>();
+  private final List<DownloadManager> managers = new ArrayList<>();
 
   private int upload_speed;
   private int download_speed;
@@ -128,7 +128,7 @@ CategoryImpl
 				Object					value )
 			{
 				if ( type == LDT_CATEGORY_DMADDED )
-					target.downloadManagerAdded((Category) CategoryImpl.this, (DownloadManager)value);
+					target.downloadManagerAdded(CategoryImpl.this, (DownloadManager)value);
 				else if ( type == LDT_CATEGORY_DMREMOVED )
 					target.downloadManagerRemoved(CategoryImpl.this, (DownloadManager)value);
 			}
@@ -185,14 +185,13 @@ CategoryImpl
 	  }else if ( type == Category.TYPE_ALL || all_dms == null ){
 		  return all_dms;
 	  }else{
-		  List<DownloadManager> result = new ArrayList<DownloadManager>();
-		  for (int i=0;i<all_dms.size();i++){
-			  DownloadManager dm = all_dms.get(i);
-			  Category cat = dm.getDownloadState().getCategory();
-			  if ( cat == null || cat.getType() == Category.TYPE_UNCATEGORIZED){
-				  result.add( dm );
-			  }
-		  }
+		  List<DownloadManager> result = new ArrayList<>();
+          for (DownloadManager dm : all_dms) {
+              Category cat = dm.getDownloadState().getCategory();
+              if (cat == null || cat.getType() == Category.TYPE_UNCATEGORIZED) {
+                  result.add(dm);
+              }
+          }
 		  
 		  return( result );
 	  }
@@ -542,9 +541,9 @@ CategoryImpl
   	
   	if ( !core.isStarted()){
   		
-  		return new IdentityHashSet<DownloadManager>();
+  		return new IdentityHashSet<>();
   	}
-	return( new IdentityHashSet<DownloadManager>(getDownloadManagers( core.getGlobalManager().getDownloadManagers())));
+	return(new IdentityHashSet<>(getDownloadManagers(core.getGlobalManager().getDownloadManagers())));
   }
   
   public Set<Taggable> 

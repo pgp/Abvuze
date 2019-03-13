@@ -23,6 +23,7 @@ package com.aelitis.azureus.core.backup.impl;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -413,7 +414,7 @@ BackupManagerImpl
 							
 							File[] backups = target_dir.listFiles();
 							
-							List<File>	backup_dirs = new ArrayList<File>();
+							List<File>	backup_dirs = new ArrayList<>();
 							
 							for ( File f: backups ){
 								
@@ -949,7 +950,7 @@ BackupManagerImpl
 		
 		Iterator<Map.Entry<String,Object>> it = map.entrySet().iterator();
 			
-		Map<String,Object>	replacements = new HashMap<String, Object>();
+		Map<String,Object>	replacements = new HashMap<>();
 		
 		while( it.hasNext()){
 			
@@ -972,7 +973,7 @@ BackupManagerImpl
 			}else if ( value instanceof byte[] ){
 				
 				try{
-					String	str = new String((byte[])value, "UTF-8" );
+					String	str = new String((byte[])value, StandardCharsets.UTF_8);
 					
 					if ( str.startsWith( from )){
 						
@@ -1033,7 +1034,7 @@ BackupManagerImpl
 			}else if ( entry instanceof byte[] ){
 				
 				try{
-					String	str = new String((byte[])entry, "UTF-8" );
+					String	str = new String((byte[])entry, StandardCharsets.UTF_8);
 					
 					if ( str.startsWith( from )){
 						
@@ -1087,7 +1088,7 @@ BackupManagerImpl
 				}
 				
 				File current_user_dir	= new File( SystemProperties.getUserPath());
-				File backup_user_dir 	= new File( new String( temp, "UTF-8" ));
+				File backup_user_dir 	= new File( new String( temp, StandardCharsets.UTF_8));
 				
 				listener.reportProgress( "Current user directory:\t"  + current_user_dir.getAbsolutePath());
 				listener.reportProgress( "Backup's user directory:\t" + backup_user_dir.getAbsolutePath());

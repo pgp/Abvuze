@@ -37,17 +37,17 @@ BasicPluginViewModel
 		 * All UI Components are initially enabled - disable if not required
 		 * @return
 		 */
-	
-	public UITextField
+
+        UITextField
 	getStatus();
 	
-	public UITextField
+	UITextField
 	getActivity();
 	
-	public UITextArea
+	UITextArea
 	getLogArea();
 	
-	public UIProgressBar
+	UIProgressBar
 	getProgress();
 
 	/**
@@ -56,7 +56,7 @@ BasicPluginViewModel
 	 * 
 	 * @since 2.3.0.7
 	 */
-	public void
+    void
 	setConfigSectionID(String id);
 
 	/**
@@ -65,7 +65,7 @@ BasicPluginViewModel
 	 * 
 	 * @since 2.3.0.7
 	 */
-	public String
+    String
 	getConfigSectionID();
 	
 	/**
@@ -82,5 +82,5 @@ BasicPluginViewModel
 	 * @since 3.0.5.3
 	 * @param channel The log channel to listen to.
 	 */
-	public void attachLoggerChannel(LoggerChannel channel);
+    void attachLoggerChannel(LoggerChannel channel);
 }

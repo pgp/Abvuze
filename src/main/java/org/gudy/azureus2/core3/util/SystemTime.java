@@ -36,9 +36,9 @@ public class SystemTime {
 	// the HPC doesn't jump backward but can jump forward in time
 	private static final boolean		SOD_IT_LETS_USE_HPC = false;//	= Constants.isCVSVersion();
 	
-	private static volatile List<TickConsumer>			systemTimeConsumers		= new ArrayList<TickConsumer>();
-	private static volatile List<TickConsumer>			monotoneTimeConsumers	= new ArrayList<TickConsumer>();
-	private static volatile List<ChangeListener>		clock_change_list		= new ArrayList<ChangeListener>();
+	private static volatile List<TickConsumer>			systemTimeConsumers		= new ArrayList<>();
+	private static volatile List<TickConsumer>			monotoneTimeConsumers	= new ArrayList<>();
+	private static volatile List<ChangeListener>		clock_change_list		= new ArrayList<>();
 	//private static long					hpc_base_time;
 	//private static long					hpc_last_time;
 	//private static boolean				no_hcp_logged;
@@ -72,11 +72,11 @@ public class SystemTime {
 	}
 
 	protected interface SystemTimeProvider {
-		public long getTime();
+		long getTime();
 
-		public long getMonoTime();
+		long getMonoTime();
 		
-		public long
+		long
 		getSteppedMonoTime();
 	}
 
@@ -149,19 +149,18 @@ public class SystemTime {
 							change = adjustedTimeOffset - lastOffset;
 
 							if ( change != 0 ){
-							
-								Iterator<ChangeListener> it = clock_change_list.iterator();
-								//Debug.outNoStack("Clock change of " + change + " ms detected, raw=" + rawTime );
-								while (it.hasNext()){
-								
-									try{
-										it.next().clockChangeDetected( rawTime, change );
-										
-									}catch( Throwable e ){
-										
-										Debug.out( e );
-									}
-								}
+
+                                //Debug.outNoStack("Clock change of " + change + " ms detected, raw=" + rawTime );
+                                for (ChangeListener changeListener : clock_change_list) {
+
+                                    try {
+                                        changeListener.clockChangeDetected(rawTime, change);
+
+                                    } catch (Throwable e) {
+
+                                        Debug.out(e);
+                                    }
+                                }
 								lastOffset = adjustedTimeOffset;
 
 								currentTimeOffset = adjustedTimeOffset;
@@ -187,51 +186,42 @@ public class SystemTime {
 						long adjustedTime = stepped_time + currentTimeOffset;
 
 						if ( change != 0 ){
-							Iterator<ChangeListener> it = clock_change_list.iterator();
-							//Debug.outNoStack("Clock change of " + change + " ms completed, curr=" + adjustedTime );
-							while (it.hasNext()){
-							
-								try{
-									it.next().clockChangeCompleted( adjustedTime, change );
-									
-								}catch( Throwable e ){
-									
-									Debug.out( e );
-								}
-							}
+                            //Debug.outNoStack("Clock change of " + change + " ms completed, curr=" + adjustedTime );
+                            for (ChangeListener changeListener : clock_change_list) {
+
+                                try {
+                                    changeListener.clockChangeCompleted(adjustedTime, change);
+
+                                } catch (Throwable e) {
+
+                                    Debug.out(e);
+                                }
+                            }
 						}
 						
 						// copy reference since we use unsynced COW semantics
 						List<TickConsumer> consumersRef = monotoneTimeConsumers;
-						for (int i = 0; i < consumersRef.size(); i++)
-						{
-							TickConsumer cons = consumersRef.get(i);
-							try
-							{
-								cons.consume(stepped_time);
-							} catch (Throwable e)
-							{
-								Debug.printStackTrace(e);
-							}
-						}
+                        for (TickConsumer cons : consumersRef) {
+                            try {
+                                cons.consume(stepped_time);
+                            } catch (Throwable e) {
+                                Debug.printStackTrace(e);
+                            }
+                        }
 						
 						/*
 						 * notify consumers with the external offset, internal
 						 * offset is only meant for updates
 						 */
 						consumersRef = systemTimeConsumers;
-						
-						for (int i = 0; i < consumersRef.size(); i++)
-						{
-							TickConsumer cons = consumersRef.get(i);
-							try
-							{
-								cons.consume(adjustedTime);
-							} catch (Throwable e)
-							{
-								Debug.printStackTrace(e);
-							}
-						}
+
+                        for (TickConsumer cons : consumersRef) {
+                            try {
+                                cons.consume(adjustedTime);
+                            } catch (Throwable e) {
+                                Debug.printStackTrace(e);
+                            }
+                        }
 						
 						try
 						{
@@ -325,18 +315,16 @@ public class SystemTime {
 								change = offset;
 								
 									// clock's changed
-								
-								Iterator<ChangeListener> it = clock_change_list.iterator();
-								
-								while (it.hasNext()){									
-									
-									try{
-										it.next().clockChangeDetected(current_time, change);
-									}catch( Throwable e ){
-										
-										Debug.out( e );
-									}
-								}
+
+                                for (ChangeListener changeListener : clock_change_list) {
+
+                                    try {
+                                        changeListener.clockChangeDetected(current_time, change);
+                                    } catch (Throwable e) {
+
+                                        Debug.out(e);
+                                    }
+                                }
 							}else{
 								change = 0;
 							}
@@ -347,47 +335,40 @@ public class SystemTime {
 						last_time = current_time;
 						
 						if ( change != 0 ){
-							Iterator<ChangeListener> it = clock_change_list.iterator();
-							while (it.hasNext()){									
-								
-								try{
-									it.next().clockChangeCompleted(current_time, change);
-									
-								}catch( Throwable e ){
-									
-									Debug.out( e );
-								}
-							}
+                            for (ChangeListener changeListener : clock_change_list) {
+
+                                try {
+                                    changeListener.clockChangeCompleted(current_time, change);
+
+                                } catch (Throwable e) {
+
+                                    Debug.out(e);
+                                }
+                            }
 						}
 						
 						List consumer_list_ref = systemTimeConsumers;
-						
-						for (int i = 0; i < consumer_list_ref.size(); i++)
-						{
-							TickConsumer cons = (TickConsumer) consumer_list_ref.get(i);
-							try
-							{
-								cons.consume(current_time);
-							} catch (Throwable e)
-							{
-								Debug.printStackTrace(e);
-							}
-						}
+
+                        for (Object o1 : consumer_list_ref) {
+                            TickConsumer cons = (TickConsumer) o1;
+                            try {
+                                cons.consume(current_time);
+                            } catch (Throwable e) {
+                                Debug.printStackTrace(e);
+                            }
+                        }
 						consumer_list_ref = monotoneTimeConsumers;
 						
 						long	mono_time = getMonoTime();
-						
-						for (int i = 0; i < consumer_list_ref.size(); i++)
-						{
-							TickConsumer cons = (TickConsumer) consumer_list_ref.get(i);
-							try
-							{
-								cons.consume(mono_time);
-							} catch (Throwable e)
-							{
-								Debug.printStackTrace(e);
-							}
-						}
+
+                        for (Object o : consumer_list_ref) {
+                            TickConsumer cons = (TickConsumer) o;
+                            try {
+                                cons.consume(mono_time);
+                            } catch (Throwable e) {
+                                Debug.printStackTrace(e);
+                            }
+                        }
 						
 						try
 						{
@@ -517,7 +498,7 @@ public class SystemTime {
 	}
 
 	public interface TickConsumer {
-		public void consume(long current_time);
+		void consume(long current_time);
 	}
 
 	public interface ChangeListener {
@@ -526,13 +507,13 @@ public class SystemTime {
 		 * @param current_time
 		 * @param change_millis
 		 */
-		public void clockChangeDetected(long current_time, long change_millis);
+        void clockChangeDetected(long current_time, long change_millis);
 		/**
 		 * Called after the change is visible to getCurrentTime callers
 		 * @param current_time
 		 * @param change_millis
 		 */
-		public void clockChangeCompleted(long current_time, long change_millis);
+        void clockChangeCompleted(long current_time, long change_millis);
 	}
 
 	public static long 

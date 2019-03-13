@@ -21,6 +21,7 @@
 package com.aelitis.azureus.ui.common.table.impl;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
@@ -170,7 +171,7 @@ public class TableColumnImpl
 
 	private boolean removed;
 	
-	private List<Class<?>> forPluginDataSourceTypes = new ArrayList<Class<?>>();
+	private List<Class<?>> forPluginDataSourceTypes = new ArrayList<>();
 
 	private String iconID;
 
@@ -364,7 +365,7 @@ public class TableColumnImpl
 			this_mon.enter();
 
 			if (cellRefreshListeners == null) {
-				cellRefreshListeners = new ArrayList<TableCellRefreshListener>(1);
+				cellRefreshListeners = new ArrayList<>(1);
 			}
 
 			cellRefreshListeners.add(listener);
@@ -381,10 +382,10 @@ public class TableColumnImpl
 			this_mon.enter();
 
 			if (cellRefreshListeners == null) {
-				return (new ArrayList<TableCellRefreshListener>(0));
+				return (new ArrayList<>(0));
 			}
 
-			return (new ArrayList<TableCellRefreshListener>(cellRefreshListeners));
+			return (new ArrayList<>(cellRefreshListeners));
 
 		} finally {
 
@@ -423,7 +424,7 @@ public class TableColumnImpl
 			this_mon.enter();
 
 			if (cellAddedListeners == null) {
-				cellAddedListeners = new ArrayList<TableCellAddedListener>(1);
+				cellAddedListeners = new ArrayList<>(1);
 			}
 
 			cellAddedListeners.add(listener);
@@ -439,12 +440,12 @@ public class TableColumnImpl
 			this_mon.enter();
 			
 			if (mapOtherCellListeners == null) {
-				mapOtherCellListeners = new HashMap<String, List<Object>>(1);
+				mapOtherCellListeners = new HashMap<>(1);
 			}
 
 			List<Object> list = mapOtherCellListeners.get(listenerID);
 			if (list == null) {
-				list = new ArrayList<Object>(1);
+				list = new ArrayList<>(1);
 				mapOtherCellListeners.put(listenerID, list);
 			}
 
@@ -528,7 +529,7 @@ public class TableColumnImpl
 			this_mon.enter();
 
 			if (cellDisposeListeners == null) {
-				cellDisposeListeners = new ArrayList<TableCellDisposeListener>(1);
+				cellDisposeListeners = new ArrayList<>(1);
 			}
 
 			cellDisposeListeners.add(listener);
@@ -558,7 +559,7 @@ public class TableColumnImpl
 			this_mon.enter();
 
 			if (cellToolTipListeners == null) {
-				cellToolTipListeners = new ArrayList<TableCellToolTipListener>(1);
+				cellToolTipListeners = new ArrayList<>(1);
 			}
 
 			cellToolTipListeners.add(listener);
@@ -587,7 +588,7 @@ public class TableColumnImpl
 			this_mon.enter();
 
 			if (cellMouseListeners == null) {
-				cellMouseListeners = new ArrayList<TableCellMouseListener>(1);
+				cellMouseListeners = new ArrayList<>(1);
 			}
 
 			cellMouseListeners.add(listener);
@@ -621,7 +622,7 @@ public class TableColumnImpl
 			this_mon.enter();
 
 			if (cellMouseMoveListeners == null) {
-				cellMouseMoveListeners = new ArrayList<TableCellMouseMoveListener>(1);
+				cellMouseMoveListeners = new ArrayList<>(1);
 			}
 
 			cellMouseMoveListeners.add(listener);
@@ -651,7 +652,7 @@ public class TableColumnImpl
 			this_mon.enter();
 
 			if (cellClipboardListeners == null) {
-				cellClipboardListeners = new ArrayList<TableCellClipboardListener>(1);
+				cellClipboardListeners = new ArrayList<>(1);
 			}
 
 			cellClipboardListeners.add(listener);
@@ -681,7 +682,7 @@ public class TableColumnImpl
 			this_mon.enter();
 
 			if (cellVisibilityListeners == null) {
-				cellVisibilityListeners = new ArrayList<TableCellVisibilityListener>(1);
+				cellVisibilityListeners = new ArrayList<>(1);
 			}
 
 			cellVisibilityListeners.add(listener);
@@ -711,10 +712,10 @@ public class TableColumnImpl
 			this_mon.enter();
 
 			if (columnExtraInfoListeners == null) {
-				return (new ArrayList<TableColumnExtraInfoListener>(0));
+				return (new ArrayList<>(0));
 			}
 
-			return (new ArrayList<TableColumnExtraInfoListener>(columnExtraInfoListeners));
+			return (new ArrayList<>(columnExtraInfoListeners));
 
 		} finally {
 
@@ -727,7 +728,7 @@ public class TableColumnImpl
 			this_mon.enter();
 
 			if (columnExtraInfoListeners == null) {
-				columnExtraInfoListeners = new ArrayList<TableColumnExtraInfoListener>(1);
+				columnExtraInfoListeners = new ArrayList<>(1);
 			}
 
 			columnExtraInfoListeners.add(listener);
@@ -831,23 +832,21 @@ public class TableColumnImpl
 		Throwable firstError = null;
 
 		//System.out.println(this + " :: invokeCellRefreshListeners" + cellRefreshListeners.size());
-		for (int i = 0; i < cellRefreshListeners.size(); i++) {
-			
-			TableCellRefreshListener l = cellRefreshListeners.get(i); 
+        for (TableCellRefreshListener l : cellRefreshListeners) {
 
-			try {
-				if(l instanceof TableCellLightRefreshListener)
-					((TableCellLightRefreshListener)l).refresh(cell, fastRefresh);
-				else
-					l.refresh(cell);
-			} catch (Throwable e) {
-				
-				if (firstError == null) {
-					firstError = e;
-				}
-				Debug.printStackTrace(e);
-			}
-		}
+            try {
+                if (l instanceof TableCellLightRefreshListener)
+                    ((TableCellLightRefreshListener) l).refresh(cell, fastRefresh);
+                else
+                    l.refresh(cell);
+            } catch (Throwable e) {
+
+                if (firstError == null) {
+                    firstError = e;
+                }
+                Debug.printStackTrace(e);
+            }
+        }
 		
 		if (firstError != null) {
 			throw firstError;
@@ -858,50 +857,50 @@ public class TableColumnImpl
 		if (cellAddedListeners == null) {
 			return;
 		}
-		for (int i = 0; i < cellAddedListeners.size(); i++) {
+        for (TableCellAddedListener cellAddedListener : cellAddedListeners) {
 
-			try {
-				((TableCellAddedListener) (cellAddedListeners.get(i))).cellAdded(cell);
+            try {
+                cellAddedListener.cellAdded(cell);
 
-			} catch (Throwable e) {
+            } catch (Throwable e) {
 
-				Debug.printStackTrace(e);
-			}
-		}
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 
 	public void invokeCellDisposeListeners(TableCell cell) {
 		if (cellDisposeListeners == null) {
 			return;
 		}
-		for (int i = 0; i < cellDisposeListeners.size(); i++) {
-			try {
-				((TableCellDisposeListener) (cellDisposeListeners.get(i))).dispose(cell);
+        for (TableCellDisposeListener cellDisposeListener : cellDisposeListeners) {
+            try {
+                cellDisposeListener.dispose(cell);
 
-			} catch (Throwable e) {
+            } catch (Throwable e) {
 
-				Debug.printStackTrace(e);
-			}
-		}
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 
 	public String getClipboardText(TableCell cell) {
 		if (cellClipboardListeners == null) {
 			return null;
 		}
-		for (int i = 0; i < cellClipboardListeners.size(); i++) {
-			try {
-				String text = ((TableCellClipboardListener) (cellClipboardListeners.get(i))).getClipboardText(cell);
-				
-				if (text != null) {
-					return text;
-				}
+        for (TableCellClipboardListener cellClipboardListener : cellClipboardListeners) {
+            try {
+                String text = cellClipboardListener.getClipboardText(cell);
 
-			} catch (Throwable e) {
+                if (text != null) {
+                    return text;
+                }
 
-				Debug.printStackTrace(e);
-			}
-		}
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 
 		return null;
 	}
@@ -911,24 +910,24 @@ public class TableColumnImpl
 			return;
 		}
 		if (type == TableCellCore.TOOLTIPLISTENER_HOVER) {
-			for (int i = 0; i < cellToolTipListeners.size(); i++) {
-				try {
-					((TableCellToolTipListener) (cellToolTipListeners.get(i))).cellHover(cell);
-				} catch (Throwable e) {
+            for (TableCellToolTipListener cellToolTipListener : cellToolTipListeners) {
+                try {
+                    cellToolTipListener.cellHover(cell);
+                } catch (Throwable e) {
 
-					Debug.printStackTrace(e);
-				}
-			}
+                    Debug.printStackTrace(e);
+                }
+            }
 		} else {
-			for (int i = 0; i < cellToolTipListeners.size(); i++) {
+            for (TableCellToolTipListener cellToolTipListener : cellToolTipListeners) {
 
-				try {
-					((TableCellToolTipListener) (cellToolTipListeners.get(i))).cellHoverComplete(cell);
-				} catch (Throwable e) {
+                try {
+                    cellToolTipListener.cellHoverComplete(cell);
+                } catch (Throwable e) {
 
-					Debug.printStackTrace(e);
-				}
-			}
+                    Debug.printStackTrace(e);
+                }
+            }
 		}
 	}
 
@@ -939,16 +938,16 @@ public class TableColumnImpl
 			return;
 		}
 
-		for (int i = 0; i < listeners.size(); i++) {
-			try {
-				TableCellMouseListener l = (TableCellMouseListener) (listeners.get(i));
+        for (Object listener : listeners) {
+            try {
+                TableCellMouseListener l = (TableCellMouseListener) listener;
 
-				l.cellMouseTrigger(event);
+                l.cellMouseTrigger(event);
 
-			} catch (Throwable e) {
-				Debug.printStackTrace(e);
-			}
-		}
+            } catch (Throwable e) {
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 
 	public void invokeCellVisibilityListeners(TableCellCore cell, int visibility) {
@@ -956,16 +955,16 @@ public class TableColumnImpl
 			return;
 		}
 
-		for (int i = 0; i < cellVisibilityListeners.size(); i++) {
-			try {
-				TableCellVisibilityListener l = (TableCellVisibilityListener) (cellVisibilityListeners.get(i));
+        for (TableCellVisibilityListener cellVisibilityListener : cellVisibilityListeners) {
+            try {
+                TableCellVisibilityListener l = cellVisibilityListener;
 
-				l.cellVisibilityChanged(cell, visibility);
+                l.cellVisibilityChanged(cell, visibility);
 
-			} catch (Throwable e) {
-				Debug.printStackTrace(e);
-			}
-		}
+            } catch (Throwable e) {
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 
 	public void setPositionNoShift(int position) {
@@ -990,14 +989,11 @@ public class TableColumnImpl
 			if (o instanceof String) {
 				return (String) o;
 			} else if (o instanceof byte[]) {
-				try {
-					String s = new String((byte[]) o, "utf-8");
-					// write it back to the map, so we don't continually create new String objects
-					userData.put(key, s);
-					return( s );
-				} catch (UnsupportedEncodingException e) {
-				}
-			}
+                String s = new String((byte[]) o, StandardCharsets.UTF_8);
+                // write it back to the map, so we don't continually create new String objects
+                userData.put(key, s);
+                return( s );
+            }
 		}
 		return null;
 	}
@@ -1147,15 +1143,13 @@ public class TableColumnImpl
 			}
 		}
 		String sItemPrefix = "Column." + sName;
-		mapSettings.put(sItemPrefix, Arrays.asList(new Object[] {
-			new Integer(bVisible ? 1 : 0),
-			new Integer(iPosition),
-			new Integer(iWidth),
-			new Integer(auto_tooltip ? 1 : 0),
-			new Integer(lLastSortValueChange == 0 ? -1 : (bSortAscending ? 1 : 0)),
-			userData != null ? userData : Collections.EMPTY_MAP,
-			new Integer(iAlignment == iDefaultAlignment ? -1 : iAlignment)
-		}));
+		mapSettings.put(sItemPrefix, Arrays.asList(new Integer(bVisible ? 1 : 0),
+                new Integer(iPosition),
+                new Integer(iWidth),
+                new Integer(auto_tooltip ? 1 : 0),
+                new Integer(lLastSortValueChange == 0 ? -1 : (bSortAscending ? 1 : 0)),
+                userData != null ? userData : Collections.EMPTY_MAP,
+                new Integer(iAlignment == iDefaultAlignment ? -1 : iAlignment)));
 		// cleanup old config
 		sItemPrefix = "Table." + sTableID + "." + sName; 
 		if (COConfigurationManager.hasParameter(sItemPrefix + ".width", true)) {
@@ -1266,12 +1260,12 @@ public class TableColumnImpl
 		ArrayList<TableContextMenuItem> menuItems;		
 		if (menuStyle == MENU_STYLE_COLUMN_DATA) {
 			if (menuItemsColumn == null) {
-				menuItemsColumn = new ArrayList<TableContextMenuItem>();
+				menuItemsColumn = new ArrayList<>();
 			}
 			menuItems = menuItemsColumn;
 		} else {
 			if (menuItemsHeader == null) {
-				menuItemsHeader = new ArrayList<TableContextMenuItem>();
+				menuItemsHeader = new ArrayList<>();
 			}
 			menuItems = menuItemsHeader;
 		}

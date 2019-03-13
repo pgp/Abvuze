@@ -42,7 +42,7 @@ public interface UIPluginView {
 	 * 
 	 * @return dependent upon subclasses implementation
 	 */
-	public Object getDataSource();
+    Object getDataSource();
 
 	/**
 	 * ID of the view
@@ -51,30 +51,30 @@ public interface UIPluginView {
 	 * 
 	 * @since 2.3.0.6
 	 */
-	public String getViewID();
+    String getViewID();
 
 	/** 
 	 * Closes the view
 	 * 
 	 * @since 2.3.0.6
 	 */
-	public void closeView();
+    void closeView();
 	
 	/**
 	 * Gets the plugin interface associated with this view, null if none defined
 	 * 
 	 * @since 4.5.1.1
 	 */
-	public PluginInterface getPluginInterface();
+    PluginInterface getPluginInterface();
 
 	/**
 	 * 
 	 * @since 4.6.0.5
 	 */
-	public void setToolBarListener(UIPluginViewToolBarListener l);
+    void setToolBarListener(UIPluginViewToolBarListener l);
 
 	/**
 	 * @since 4.6.0.5
 	 */
-	public UIPluginViewToolBarListener getToolBarListener();
+    UIPluginViewToolBarListener getToolBarListener();
 }

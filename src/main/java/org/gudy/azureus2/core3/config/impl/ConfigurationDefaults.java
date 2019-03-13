@@ -60,9 +60,9 @@ import com.aelitis.azureus.core.speedmanager.impl.v2.*;
 
 public class ConfigurationDefaults {
   
-  private static final Long ZERO	= new Long(0);
-  private static final Long ONE		= new Long(1);
-  private static final Long SIXTY	= new Long(60);
+  private static final Long ZERO	= 0L;
+  private static final Long ONE		= 1L;
+  private static final Long SIXTY	= 60L;
 
   private static final Long FALSE	= ZERO;
   private static final Long TRUE	= ONE;
@@ -126,7 +126,7 @@ public class ConfigurationDefaults {
   protected 
   ConfigurationDefaults() 
   {
-    def = new ConcurrentHashMapWrapper<String,Object>( 2000, 0.75f, 8 );
+    def = new ConcurrentHashMapWrapper<>(2000, 0.75f, 8);
 
     
     /** Core settings **/
@@ -134,16 +134,16 @@ public class ConfigurationDefaults {
     def.put("Override Ip", "");
     def.put("Enable incremental file creation", FALSE);
     def.put("Enable reorder storage mode", FALSE);
-    def.put("Reorder storage mode min MB", new Long( 10 ));
+    def.put("Reorder storage mode min MB", 10L);
     
-    def.put("TCP.Listen.Port", new Long( 6881 ));
+    def.put("TCP.Listen.Port", 6881L);
     def.put("TCP.Listen.Port.Enable", TRUE );
     def.put("TCP.Listen.Port.Override", "");
-    def.put("UDP.Listen.Port", new Long( 6881 ));
+    def.put("UDP.Listen.Port", 6881L);
     def.put("UDP.Listen.Port.Enable", TRUE );
-    def.put("UDP.NonData.Listen.Port", new Long( 6881 ));	// two effective enablers for this, dht + tracker udp client
+    def.put("UDP.NonData.Listen.Port", 6881L);	// two effective enablers for this, dht + tracker udp client
     def.put("UDP.NonData.Listen.Port.Same", TRUE );			// control over whether non-data and data udp port are the same
-    def.put("HTTP.Data.Listen.Port", new Long( Constants.isWindows?80:8080 ));
+    def.put("HTTP.Data.Listen.Port", (long) (Constants.isWindows ? 80 : 8080));
     def.put("HTTP.Data.Listen.Port.Override", ZERO);
     def.put("HTTP.Data.Listen.Port.Enable", FALSE );
     def.put("Listen.Port.Randomize.Enable", FALSE );
@@ -154,27 +154,27 @@ public class ConfigurationDefaults {
     def.put("IPV6 Prefer Addresses",FALSE );
     def.put("IPV4 Prefer Stack", FALSE );
     
-    def.put("max active torrents", new Long(4));
-    def.put("max downloads", new Long(4));
+    def.put("max active torrents", 4L);
+    def.put("max downloads", 4L);
     def.put("min downloads", ONE);
     def.put("Newly Seeding Torrents Get First Priority", TRUE);
     
-    def.put("Max.Peer.Connections.Per.Torrent", new Long(COConfigurationManager.CONFIG_DEFAULT_MAX_CONNECTIONS_PER_TORRENT));
-    def.put("Max.Peer.Connections.Per.Torrent.When.Seeding", new Long(COConfigurationManager.CONFIG_DEFAULT_MAX_CONNECTIONS_PER_TORRENT/2));
+    def.put("Max.Peer.Connections.Per.Torrent", (long) COConfigurationManager.CONFIG_DEFAULT_MAX_CONNECTIONS_PER_TORRENT);
+    def.put("Max.Peer.Connections.Per.Torrent.When.Seeding", (long) (COConfigurationManager.CONFIG_DEFAULT_MAX_CONNECTIONS_PER_TORRENT / 2));
     def.put("Max.Peer.Connections.Per.Torrent.When.Seeding.Enable", TRUE );
-    def.put("Max.Peer.Connections.Total", new Long(COConfigurationManager.CONFIG_DEFAULT_MAX_CONNECTIONS_GLOBAL));
+    def.put("Max.Peer.Connections.Total", (long) COConfigurationManager.CONFIG_DEFAULT_MAX_CONNECTIONS_GLOBAL);
     def.put("Non-Public Peer Extra Slots Per Torrent", 2 );
     def.put("Non-Public Peer Extra Connections Per Torrent", 4 );
     
     def.put( "Peer.Fast.Initial.Unchoke.Enabled", FALSE );
     
-    def.put( "File Max Open", new Long(50));
+    def.put( "File Max Open", 50L);
     def.put( "Use Config File Backups", TRUE);
     
-    def.put( "Max Uploads", new Long(4) );
-    def.put( "Max Uploads Seeding", new Long(4));
+    def.put( "Max Uploads", 4L);
+    def.put( "Max Uploads Seeding", 4L);
     def.put( "enable.seedingonly.maxuploads", FALSE );
-    def.put( "max.uploads.when.busy.inc.min.secs", new Long( 30 ));
+    def.put( "max.uploads.when.busy.inc.min.secs", 30L);
     def.put( "Max Download Speed KBs", ZERO );
     def.put( "Down Rate Limits Include Protocol", TRUE );
     def.put( "Use Request Limiting", TRUE );
@@ -192,18 +192,18 @@ public class ConfigurationDefaults {
     def.put( "AutoSpeed Min Upload KBs", ZERO );
     def.put( "AutoSpeed Max Upload KBs", ZERO );
     def.put( "AutoSpeed Max Increment KBs", ONE);
-    def.put( "AutoSpeed Max Decrement KBs", new Long(4));
-    def.put( "AutoSpeed Choking Ping Millis", new Long(200) );
+    def.put( "AutoSpeed Max Decrement KBs", 4L);
+    def.put( "AutoSpeed Choking Ping Millis", 200L);
     def.put( "AutoSpeed Download Adj Enable", FALSE );
     def.put( "AutoSpeed Download Adj Ratio", "1.0" );
-    def.put( "AutoSpeed Latency Factor", new Long(50));
-    def.put( "AutoSpeed Forced Min KBs", new Long(4));
+    def.put( "AutoSpeed Latency Factor", 50L);
+    def.put( "AutoSpeed Forced Min KBs", 4L);
     def.put( "Auto Upload Speed Debug Enabled", FALSE );
     
     def.put( "Auto Adjust Transfer Defaults", TRUE );	// modified by config checker if user has set own values
     
     def.put( "Bias Upload Enable", TRUE );
-    def.put( "Bias Upload Slack KBs", new Long( 5 ));
+    def.put( "Bias Upload Slack KBs", 5L);
     def.put( "Bias Upload Handle No Limit", TRUE );
     
     def.put( "ASN Autocheck Performed Time", ZERO );
@@ -214,18 +214,18 @@ public class ConfigurationDefaults {
     
     def.put("Use Resume", TRUE);
     def.put("On Resume Recheck All", FALSE);
-    def.put("Save Resume Interval", new Long(5));
+    def.put("Save Resume Interval", 5L);
     def.put("Check Pieces on Completion", TRUE);
     def.put("Merge Same Size Files", TRUE );
     def.put("Merge Same Size Files Extended", FALSE );
-    def.put("Stop Ratio", new Float(0));
+    def.put("Stop Ratio", (float) 0);
     def.put("Stop Peers Ratio", ZERO);
     def.put("Disconnect Seed", TRUE);
     def.put("Seeding Piece Check Recheck Enable", TRUE );
     def.put("priorityExtensions", "");
     def.put("priorityExtensionsIgnoreCase", FALSE);
     def.put("quick.view.exts", ".nfo;.txt;.rar;.gif;.jpg;.png;.bmp" );
-    def.put("quick.view.maxkb", new Long( 512 ));
+    def.put("quick.view.maxkb", 512L);
     
     def.put("Rename Incomplete Files", FALSE );
     def.put("Rename Incomplete Files Extension", ".az!" );
@@ -237,9 +237,9 @@ public class ConfigurationDefaults {
     def.put("Ip Filter Enabled", TRUE);
     def.put("Ip Filter Allow",FALSE);
     def.put("Ip Filter Enable Banning", TRUE);
-    def.put("Ip Filter Ban Block Limit", new Long(4));
+    def.put("Ip Filter Ban Block Limit", 4L);
     def.put("Ip Filter Ban Discard Ratio", "5.0" );
-    def.put("Ip Filter Ban Discard Min KB", new Long(128));
+    def.put("Ip Filter Ban Discard Min KB", 128L);
     def.put("Ip Filter Banning Persistent", TRUE);
     def.put("Ip Filter Enable Description Cache", TRUE);
     def.put("Ip Filter Autoload File", "");
@@ -288,7 +288,7 @@ public class ConfigurationDefaults {
 	}
 	
 	def.put("Default save path", f.getAbsolutePath());
-	def.put("saveTo_list.max_entries", new Long(15));
+	def.put("saveTo_list.max_entries", 15L);
 	
     def.put("update.start",TRUE);
     def.put("update.periodic",TRUE);
@@ -296,7 +296,7 @@ public class ConfigurationDefaults {
     def.put("update.autodownload", FALSE);
     def.put("update.anonymous", FALSE);
 
-    def.put( "Config Verify Frequency", new Long( 30*60*1000 ));
+    def.put( "Config Verify Frequency", (long) (30 * 60 * 1000));
     
     def.put("Send Version Info", TRUE);
     
@@ -305,11 +305,11 @@ public class ConfigurationDefaults {
     def.put("Logging Enable", FALSE);  //file logging
     def.put("Logging Dir", "");
     def.put("Logging Timestamp", "HH:mm:ss.SSS");
-    def.put("Logging Max Size", new Long(5));
+    def.put("Logging Max Size", 5L);
     int[] logComponents = { 0, 1, 2, 4 };
-    for (int i = 0; i < logComponents.length; i++)
+    for (int logComponent : logComponents)
       for (int j = 0; j <= 3; j++)
-        def.put("bLog" + logComponents[i] + "-" + j, TRUE);
+        def.put("bLog" + logComponent + "-" + j, TRUE);
     def.put("Logger.DebugFiles.Enabled", TRUE);
     def.put("Logger.DebugFiles.Enabled.Force", FALSE );
     def.put("Logging Enable UDP Transport", FALSE); 
@@ -343,11 +343,11 @@ public class ConfigurationDefaults {
     def.put( "DNS Alt Servers SOCKS Enable", TRUE );
     
     //old
-    def.put( "Start Num Peers", new Long(-1) );
-    def.put( "Max Upload Speed", new Long(-1) );
-    def.put( "Max Clients", new Long(-1) );
+    def.put( "Start Num Peers", (long) -1);
+    def.put( "Max Upload Speed", (long) -1);
+    def.put( "Max Clients", (long) -1);
     def.put( "Server.shared.port", TRUE );
-    def.put( "Low Port", new Long(6881) );
+    def.put( "Low Port", 6881L);
     def.put( "Already_Migrated", FALSE );
     
     //misc
@@ -409,15 +409,15 @@ public class ConfigurationDefaults {
     def.put( "Stats Export File Details", FALSE );
     def.put( "Stats XSL File", "" );
     def.put( "Stats Enable", FALSE );
-    def.put( "Stats Period", new Long(StatsWriterPeriodic.DEFAULT_SLEEP_PERIOD) );
+    def.put( "Stats Period", (long) StatsWriterPeriodic.DEFAULT_SLEEP_PERIOD);
     def.put( "Stats Dir", "" );
     def.put( "Stats File", StatsWriterPeriodic.DEFAULT_STATS_FILE_NAME );
     def.put( "long.term.stats.enable", TRUE );
-    def.put( "Stats Smoothing Secs", new Long( 2*60 ));
+    def.put( "Stats Smoothing Secs", (long) (2 * 60));
     def.put( "File.Torrent.AutoSkipExtensions", "" );
     def.put( "File.Torrent.AutoSkipMinSizeKB", ZERO );
     def.put( "File.Torrent.IgnoreFiles", TOTorrent.DEFAULT_IGNORE_FILES );
-    def.put( "File.save.peers.max", new Long( TRTrackerAnnouncer.DEFAULT_PEERS_TO_CACHE ) );
+    def.put( "File.save.peers.max", (long) TRTrackerAnnouncer.DEFAULT_PEERS_TO_CACHE);
     def.put( "File.Character.Conversions", DEFAULT_FILE_CONVERSION_CHARS );
 
     	// tracker 
@@ -426,55 +426,55 @@ public class ConfigurationDefaults {
     def.put( "Tracker Key Enable Client", TRUE );
     def.put( "Tracker Key Enable Server", TRUE );
     def.put( "Tracker Separate Peer IDs", FALSE);
-    def.put( "Tracker Client Connect Timeout", new Long(120));
+    def.put( "Tracker Client Connect Timeout", 120L);
     def.put( "Tracker Client Read Timeout", SIXTY );
 	def.put( "Tracker Client Send OS and Java Version", TRUE);
 	def.put( "Tracker Client Show Warnings", TRUE);
 	def.put( "Tracker Client Min Announce Interval", ZERO);
-	def.put( "Tracker Client Numwant Limit", new Long(100));
+	def.put( "Tracker Client Numwant Limit", 100L);
 	def.put( "Tracker Client No Port Announce", FALSE);
 	def.put( "Tracker Client Exclude LAN", TRUE);
 	
     def.put( "Tracker Public Enable", FALSE );
     def.put( "Tracker Log Enable", FALSE );
     def.put( "Tracker Port Enable", FALSE );
-    def.put( "Tracker Port", new Long( TRHost.DEFAULT_PORT ) );
+    def.put( "Tracker Port", (long) TRHost.DEFAULT_PORT);
     def.put( "Tracker Port Backups", "" );
     def.put( "Tracker Port SSL Enable", FALSE );
-    def.put( "Tracker Port SSL", new Long( TRHost.DEFAULT_PORT_SSL ) );
+    def.put( "Tracker Port SSL", (long) TRHost.DEFAULT_PORT_SSL);
     def.put( "Tracker Port SSL Backups", "" );
     def.put( "Tracker Port Force External", FALSE );
     def.put( "Tracker Host Add Our Announce URLs", TRUE );
     def_put( "Tracker IP", "", new IPVerifier());
     
     def.put( "Tracker Port UDP Enable", FALSE );
-    def.put( "Tracker Port UDP Version", new Long(2) );
+    def.put( "Tracker Port UDP Version", 2L);
     def.put( "Tracker Send Peer IDs", TRUE );
-    def.put( "Tracker Max Peers Returned", new Long(100) );
-    def.put( "Tracker Scrape Cache", new Long( TRTrackerServer.DEFAULT_SCRAPE_CACHE_PERIOD ) );
-    def.put( "Tracker Announce Cache", new Long( TRTrackerServer.DEFAULT_ANNOUNCE_CACHE_PERIOD ) );
-    def.put( "Tracker Announce Cache Min Peers", new Long( TRTrackerServer.DEFAULT_ANNOUNCE_CACHE_PEER_THRESHOLD ) );
-    def.put( "Tracker Poll Interval Min", new Long( TRTrackerServer.DEFAULT_MIN_RETRY_DELAY) );
-    def.put( "Tracker Poll Interval Max", new Long( TRTrackerServer.DEFAULT_MAX_RETRY_DELAY) );
-    def.put( "Tracker Poll Seed Interval Mult", new Long(1));
-    def.put( "Tracker Scrape Retry Percentage", new Long( TRTrackerServer.DEFAULT_SCRAPE_RETRY_PERCENTAGE ) );
+    def.put( "Tracker Max Peers Returned", 100L);
+    def.put( "Tracker Scrape Cache", (long) TRTrackerServer.DEFAULT_SCRAPE_CACHE_PERIOD);
+    def.put( "Tracker Announce Cache", (long) TRTrackerServer.DEFAULT_ANNOUNCE_CACHE_PERIOD);
+    def.put( "Tracker Announce Cache Min Peers", (long) TRTrackerServer.DEFAULT_ANNOUNCE_CACHE_PEER_THRESHOLD);
+    def.put( "Tracker Poll Interval Min", (long) TRTrackerServer.DEFAULT_MIN_RETRY_DELAY);
+    def.put( "Tracker Poll Interval Max", (long) TRTrackerServer.DEFAULT_MAX_RETRY_DELAY);
+    def.put( "Tracker Poll Seed Interval Mult", 1L);
+    def.put( "Tracker Scrape Retry Percentage", (long) TRTrackerServer.DEFAULT_SCRAPE_RETRY_PERCENTAGE);
     def.put( "Tracker Password Enable Web", FALSE );
     def.put( "Tracker Password Web HTTPS Only", FALSE);
     def.put( "Tracker Password Enable Torrent", FALSE );
     def.put( "Tracker Username", "" );
     def.put( "Tracker Password", null );
-    def.put( "Tracker Poll Inc By", new Long( TRTrackerServer.DEFAULT_INC_BY ) );
-    def.put( "Tracker Poll Inc Per", new Long( TRTrackerServer.DEFAULT_INC_PER ) );
+    def.put( "Tracker Poll Inc By", (long) TRTrackerServer.DEFAULT_INC_BY);
+    def.put( "Tracker Poll Inc Per", (long) TRTrackerServer.DEFAULT_INC_PER);
     def.put( "Tracker NAT Check Enable", TRUE);
-    def.put( "Tracker NAT Check Timeout", new Long(TRTrackerServer.DEFAULT_NAT_CHECK_SECS));
+    def.put( "Tracker NAT Check Timeout", (long) TRTrackerServer.DEFAULT_NAT_CHECK_SECS);
     def.put( "Tracker Max Seeds Retained", ZERO );
     def.put( "Tracker Max Seeds", ZERO );
-    def.put( "Tracker Max GET Time", new Long(20));
+    def.put( "Tracker Max GET Time", 20L);
     def.put( "Tracker Max POST Time Multiplier", ONE);
-    def.put( "Tracker Max Threads", new Long( 48 ));
+    def.put( "Tracker Max Threads", 48L);
     def.put( "Tracker TCP NonBlocking", FALSE);
     def.put( "Tracker TCP NonBlocking Restrict Request Types", TRUE);
-    def.put( "Tracker TCP NonBlocking Conc Max", new Long(2048));
+    def.put( "Tracker TCP NonBlocking Conc Max", 2048L);
     def.put( "Tracker TCP NonBlocking Immediate Close", FALSE );
     
     def.put( "Tracker Client Scrape Enable", TRUE);
@@ -541,12 +541,12 @@ public class ConfigurationDefaults {
     def.put( "diskmanager.perf.cache.enable", TRUE);
     def.put( "diskmanager.perf.cache.enable.read", FALSE);
     def.put( "diskmanager.perf.cache.enable.write", TRUE);
-    def.put( "diskmanager.perf.cache.size", new Long(4));		// 4 MB
-    def.put( "diskmanager.perf.cache.notsmallerthan", new Long(1024));	// 1024 K
-    def.put( "diskmanager.perf.read.maxthreads", new Long(32));
-    def.put( "diskmanager.perf.read.maxmb", new Long(5));
-    def.put( "diskmanager.perf.write.maxthreads", new Long(32));
-    def.put( "diskmanager.perf.write.maxmb", new Long(5));
+    def.put( "diskmanager.perf.cache.size", 4L);		// 4 MB
+    def.put( "diskmanager.perf.cache.notsmallerthan", 1024L);	// 1024 K
+    def.put( "diskmanager.perf.read.maxthreads", 32L);
+    def.put( "diskmanager.perf.read.maxmb", 5L);
+    def.put( "diskmanager.perf.write.maxthreads", 32L);
+    def.put( "diskmanager.perf.write.maxmb", 5L);
     def.put( "diskmanager.perf.cache.trace", FALSE);
     def.put( "diskmanager.perf.cache.flushpieces", TRUE);
     def.put( "diskmanager.perf.read.aggregate.enable", FALSE );
@@ -578,31 +578,31 @@ public class ConfigurationDefaults {
     
     boolean	tcp_half_open_limited = Constants.isWindows && !(Constants.isWindowsVistaSP2OrHigher || Constants.isWindows7OrHigher );
     
-    def.put( "network.max.simultaneous.connect.attempts", new Long( tcp_half_open_limited?8:24 ));
-    def.put( "network.tcp.max.connections.outstanding", new Long( 2048 ));
+    def.put( "network.max.simultaneous.connect.attempts", (long) (tcp_half_open_limited ? 8 : 24));
+    def.put( "network.tcp.max.connections.outstanding", 2048L);
     def.put( "network.tcp.connect.outbound.enable", TRUE );  
-    def.put( "network.tcp.mtu.size", new Long(1500) );
-    def.put( "network.udp.mtu.size", new Long(1500) );
-    def.put( "network.udp.poll.time", new Long( 100 ));
+    def.put( "network.tcp.mtu.size", 1500L);
+    def.put( "network.udp.mtu.size", 1500L);
+    def.put( "network.udp.poll.time", 100L);
     def.put( "network.tcp.socket.SO_SNDBUF", ZERO );
     def.put( "network.tcp.socket.SO_RCVBUF", ZERO );
     def.put( "network.tcp.socket.IPDiffServ", "" );
-    def.put( "network.tcp.read.select.time", new Long(25));
+    def.put( "network.tcp.read.select.time", 25L);
     def.put( "network.tcp.read.select.min.time", ZERO );
-    def.put( "network.tcp.write.select.time", new Long(25));
+    def.put( "network.tcp.write.select.time", 25L);
     def.put( "network.tcp.write.select.min.time", ZERO );
-    def.put( "network.tcp.connect.select.time", new Long( 100 ));
+    def.put( "network.tcp.connect.select.time", 100L);
     def.put( "network.tcp.connect.select.min.time", ZERO );
 
-    def.put( "network.tracker.tcp.select.time", new Long( 100 ));
+    def.put( "network.tracker.tcp.select.time", 100L);
 
-    def.put( "network.control.write.idle.time", new Long(50));
+    def.put( "network.control.write.idle.time", 50L);
     def.put( "network.control.write.aggressive", FALSE );
-    def.put( "network.control.read.idle.time", new Long(50));
+    def.put( "network.control.read.idle.time", 50L);
     def.put( "network.control.read.aggressive", FALSE );
-    def.put( "network.control.read.processor.count", new Long(1));
-    def.put( "network.control.write.processor.count", new Long(1));
-    def.put( "peermanager.schedule.time", new Long(100));
+    def.put( "network.control.read.processor.count", 1L);
+    def.put( "network.control.write.processor.count", 1L);
+    def.put( "peermanager.schedule.time", 100L);
     def.put( "enable_small_osx_fonts", TRUE );
     def.put( "Play Download Finished Announcement", FALSE);
     def.put( "Play Download Finished Announcement Text", "Download Complete");
@@ -611,10 +611,10 @@ public class ConfigurationDefaults {
     def.put( "Play File Finished Announcement", FALSE);
     def.put( "Play File Finished Announcement Text", "File Complete");
     
-    def.put( "filechannel.rt.buffer.millis", new Long( 60*1000 ));
-    def.put( "filechannel.rt.buffer.pieces", new Long( 5 ));
+    def.put( "filechannel.rt.buffer.millis", (long) (60 * 1000));
+    def.put( "filechannel.rt.buffer.pieces", 5L);
     
-    def.put( "BT Request Max Block Size", new Long(65536));
+    def.put( "BT Request Max Block Size", 65536L);
     def.put( "network.tcp.enable_safe_selector_mode", FALSE );
     def.put( "network.tcp.safe_selector_mode.chunk_size", SIXTY );
     
@@ -631,11 +631,11 @@ public class ConfigurationDefaults {
     
     def.put( "crypto.keys.system.managed", FALSE );
     
-    def.put( "peer.nat.traversal.request.conc.max", new Long(3));
+    def.put( "peer.nat.traversal.request.conc.max", 3L);
 
     // Memory settings
     
-    def.put( "memory.slice.limit.multiplier", new Long(1));
+    def.put( "memory.slice.limit.multiplier", 1L);
     
     // Move on completion settings.
     def.put( "Move Completed When Done", FALSE );
@@ -666,7 +666,7 @@ public class ConfigurationDefaults {
     	
     def.put( "Beta Programme Enabled", FALSE );
     def.put( "def.deletetorrent", TRUE );
-    def.put( "tb.confirm.delete.content", Long.valueOf(0) ); // 0=ask; 1=delete content; 2=delete torrent
+    def.put( "tb.confirm.delete.content", 0L); // 0=ask; 1=delete content; 2=delete torrent
     
     def.put( "br.backup.auto.enable", FALSE );
     def.put( "br.backup.auto.everydays", 1L );
@@ -675,27 +675,27 @@ public class ConfigurationDefaults {
     //temp section for SpeedManagerAlgorithmProviderV2
     
     try{
-	    def.put(SpeedManagerAlgorithmProviderV2.SETTING_DOWNLOAD_MAX_LIMIT, new Long(SMConst.START_DOWNLOAD_RATE_MAX) );
-	    def.put(SpeedManagerAlgorithmProviderV2.SETTING_UPLOAD_MAX_LIMIT, new Long(SMConst.START_UPLOAD_RATE_MAX) );
+	    def.put(SpeedManagerAlgorithmProviderV2.SETTING_DOWNLOAD_MAX_LIMIT, (long) SMConst.START_DOWNLOAD_RATE_MAX);
+	    def.put(SpeedManagerAlgorithmProviderV2.SETTING_UPLOAD_MAX_LIMIT, (long) SMConst.START_UPLOAD_RATE_MAX);
 	
-	    def.put(SpeedManagerAlgorithmProviderV2.SETTING_DHT_GOOD_SET_POINT, new Long(50) );
-	    def.put(SpeedManagerAlgorithmProviderV2.SETTING_DHT_GOOD_TOLERANCE, new Long(100) );
-	    def.put(SpeedManagerAlgorithmProviderV2.SETTING_DHT_BAD_SET_POINT, new Long(900) );
-	    def.put(SpeedManagerAlgorithmProviderV2.SETTING_DHT_BAD_TOLERANCE, new Long(500) );
+	    def.put(SpeedManagerAlgorithmProviderV2.SETTING_DHT_GOOD_SET_POINT, 50L);
+	    def.put(SpeedManagerAlgorithmProviderV2.SETTING_DHT_GOOD_TOLERANCE, 100L);
+	    def.put(SpeedManagerAlgorithmProviderV2.SETTING_DHT_BAD_SET_POINT, 900L);
+	    def.put(SpeedManagerAlgorithmProviderV2.SETTING_DHT_BAD_TOLERANCE, 500L);
 	
 	    	//**** NOTE! This default can be overridden in ConfigurationChecker 
-	    def.put(SpeedManagerImpl.CONFIG_VERSION, new Long(2) );	// 1 == classic, 2 == beta
+	    def.put(SpeedManagerImpl.CONFIG_VERSION, 2L);	// 1 == classic, 2 == beta
 	    
 	    def.put( SpeedLimitMonitor.DOWNLOAD_CONF_LIMIT_SETTING, SpeedLimitConfidence.NONE.getString() );
 	    def.put( SpeedLimitMonitor.UPLOAD_CONF_LIMIT_SETTING, SpeedLimitConfidence.NONE.getString() );
-	    def.put( SpeedLimitMonitor.UPLOAD_CHOKE_PING_COUNT, new Long(1) );
+	    def.put( SpeedLimitMonitor.UPLOAD_CHOKE_PING_COUNT, 1L);
 	
 	    //default V2 algorithm seeding and download mode usage, stored as an Int
-	    def.put( SpeedLimitMonitor.USED_UPLOAD_CAPACITY_SEEDING_MODE, new Long(90) );  
+	    def.put( SpeedLimitMonitor.USED_UPLOAD_CAPACITY_SEEDING_MODE, 90L);
 	    def.put( SpeedLimitMonitor.USED_UPLOAD_CAPACITY_DOWNLOAD_MODE, SIXTY );
 	
 	    def.put( SpeedManagerAlgorithmProviderV2.SETTING_WAIT_AFTER_ADJUST, TRUE );
-	    def.put( SpeedManagerAlgorithmProviderV2.SETTING_INTERVALS_BETWEEN_ADJUST, new Long(2) );
+	    def.put( SpeedManagerAlgorithmProviderV2.SETTING_INTERVALS_BETWEEN_ADJUST, 2L);
 	    
     }catch( Throwable e ){
     	
@@ -703,7 +703,7 @@ public class ConfigurationDefaults {
     
     	// subscriptions
     
-    def.put( "subscriptions.max.non.deleted.results", new Long( 512 ));
+    def.put( "subscriptions.max.non.deleted.results", 512L);
     def.put( "subscriptions.auto.start.downloads", TRUE );
     def.put( "subscriptions.auto.start.min.mb", ZERO );
     def.put( "subscriptions.auto.start.max.mb", ZERO );
@@ -722,7 +722,7 @@ public class ConfigurationDefaults {
   ConfigurationDefaults(
 	Map	_def )
   {
-	  def = new ConcurrentHashMapWrapper<String, Object>((Map<String, Object>)_def );
+	  def = new ConcurrentHashMapWrapper<>((Map<String, Object>) _def);
   }
   
   protected void
@@ -758,7 +758,7 @@ public class ConfigurationDefaults {
     checkParameterExists(p);
     Object o = def.get(p);
     if (o instanceof Number)
-      return ((Number)o).toString();
+      return o.toString();
     return (String)o;
   }
   
@@ -769,12 +769,12 @@ public class ConfigurationDefaults {
   
   public long getLongParameter(String p) throws ConfigurationParameterNotFoundException {
 	    checkParameterExists(p);
-	    return ((Long) def.get(p)).longValue();
+	    return (Long) def.get(p);
   }
   
   public float getFloatParameter(String p) throws ConfigurationParameterNotFoundException {
 	    checkParameterExists(p);
-	    return ((Float) def.get(p)).floatValue();
+	    return (Float) def.get(p);
   }
   
   public byte[] getByteParameter(String p) throws ConfigurationParameterNotFoundException {
@@ -784,7 +784,7 @@ public class ConfigurationDefaults {
   
   public boolean getBooleanParameter(String p) throws ConfigurationParameterNotFoundException {
   	checkParameterExists(p);
-  	return ((Long)def.get(p)).equals(TRUE);
+  	return def.get(p).equals(TRUE);
   }
   
   public boolean hasParameter(String p) {
@@ -810,23 +810,23 @@ public class ConfigurationDefaults {
   }
 
   public void addParameter(String sKey, int iParameter) {
-    def.put(sKey, new Long(iParameter));
+    def.put(sKey, (long) iParameter);
   }
   public void addParameter(String sKey, byte[] bParameter) {
     def.put(sKey, bParameter);
   }
 
   public void addParameter(String sKey, boolean bParameter) {
-    Long lParameter = new Long(bParameter ? 1 : 0);
+    Long lParameter = (long) (bParameter ? 1 : 0);
     def.put(sKey, lParameter);
   }
   
   public void addParameter(String sKey, long lParameter) {
-	    def.put(sKey, new Long(lParameter));
+	    def.put(sKey, lParameter);
   }
   
   public void addParameter(String sKey, float fParameter) {
-	  def.put(sKey, new Float(fParameter));
+	  def.put(sKey, fParameter);
   }
   
   public void registerExternalDefaults(Map addmap) {
@@ -854,51 +854,50 @@ public class ConfigurationDefaults {
   protected void
   runVerifiers()
   {
-	  Iterator	it = parameter_verifiers.entrySet().iterator();
-	  
-	  while( it.hasNext()){
-		  
-		  Map.Entry	entry =(Map.Entry)it.next();
-		  
-		  String	key 		= (String)entry.getKey();
-		  List		verifiers 	= (List)entry.getValue();
-		  
-		  for (int i=0;i<verifiers.size();i++){
-			  
-			  COConfigurationManager.ParameterVerifier	verifier = (COConfigurationManager.ParameterVerifier)verifiers.get(i);
-			  
-			  Object	val_def = getDefaultValueAsObject( key );
-			  Object	val;
-			  
-			  if ( val_def == null ){
-				  
-				  continue;
-			  }
-			  
-			  if ( val_def instanceof String ){
-				
-				  val = COConfigurationManager.getStringParameter( key );
-				  
-			  }else{
-				  
-				  Debug.out( "Unsupported verifier type for parameter '" + key + "' - " + val_def );
-				  
-				  continue;
-			  }
-			  
-			  if ( val == null ){
-				  
-				  continue;
-			  }
-			  
-			  if ( !verifier.verify( key, val )){
-				  
-				  Debug.out( "Parameter '" + key + "', value '" + val +"' failed verification - setting back to default '" + val_def + "'" );
-				  
-				  COConfigurationManager.removeParameter( key );
-			  }
-		  }
-	  }
+
+    for (Object o : parameter_verifiers.entrySet()) {
+
+      Map.Entry entry = (Map.Entry) o;
+
+      String key = (String) entry.getKey();
+      List verifiers = (List) entry.getValue();
+
+      for (Object verifier1 : verifiers) {
+
+        COConfigurationManager.ParameterVerifier verifier = (COConfigurationManager.ParameterVerifier) verifier1;
+
+        Object val_def = getDefaultValueAsObject(key);
+        Object val;
+
+        if (val_def == null) {
+
+          continue;
+        }
+
+        if (val_def instanceof String) {
+
+          val = COConfigurationManager.getStringParameter(key);
+
+        } else {
+
+          Debug.out("Unsupported verifier type for parameter '" + key + "' - " + val_def);
+
+          continue;
+        }
+
+        if (val == null) {
+
+          continue;
+        }
+
+        if (!verifier.verify(key, val)) {
+
+          Debug.out("Parameter '" + key + "', value '" + val + "' failed verification - setting back to default '" + val_def + "'");
+
+          COConfigurationManager.removeParameter(key);
+        }
+      }
+    }
   }
   
   protected static class

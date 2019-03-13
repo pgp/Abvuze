@@ -86,22 +86,20 @@ public class Share extends IConsoleCommand {
 				HashSet	share_map = new HashSet();
 				
 				int	share_num = 0;
-				
-				for (int i=0;i<shares.length;i++){
-					
-					ShareResource	share = shares[i];
-										
-					if ( share instanceof ShareResourceDirContents ){
-						
-						share_map.add( share );
-						
-					}else if ( share.getParent() != null ){
-						
-					}else{
-						
-						ci.out.println( "> " + share_num++ + ": " + shares[i].getName());
-					}
-				}
+
+                for (ShareResource share : shares) {
+
+                    if (share instanceof ShareResourceDirContents) {
+
+                        share_map.add(share);
+
+                    } else if (share.getParent() != null) {
+
+                    } else {
+
+                        ci.out.println("> " + share_num++ + ": " + share.getName());
+                    }
+                }
 				
 				Iterator	it = share_map.iterator();
 				
@@ -147,45 +145,43 @@ public class Share extends IConsoleCommand {
 				ShareResource[]	shares = share_manager.getShares();
 
 				boolean	done = false;
-				
-				for (int i=0;i<shares.length;i++){
-					
-					ShareResource share = shares[i];
-					
-					ShareItem item = null;
-					
-					if ( share instanceof ShareResourceFile ){
-						
-						item = ((ShareResourceFile)share).getItem();
-						
-					}else if ( share instanceof ShareResourceDir ){
-						
-						item = ((ShareResourceDir)share).getItem();
-					}
-					
-					if ( item != null ){
-						
-						try{
-							byte[] item_hash = item.getTorrent().getHash();
-							
-							if ( Arrays.equals( hash, item_hash )){
-								
-								share.delete( force );
-						
-								ci.out.println( "> Share " + share.getName() + " removed" );
-						
-								done = true;
-								
-								break;
-							}
-						}catch( Throwable e ) {
-							
-							ci.out.println( "ERROR: " + e.getMessage() + " ::");
-							
-							Debug.printStackTrace( e );
-						}
-					}
-				}
+
+                for (ShareResource share : shares) {
+
+                    ShareItem item = null;
+
+                    if (share instanceof ShareResourceFile) {
+
+                        item = ((ShareResourceFile) share).getItem();
+
+                    } else if (share instanceof ShareResourceDir) {
+
+                        item = ((ShareResourceDir) share).getItem();
+                    }
+
+                    if (item != null) {
+
+                        try {
+                            byte[] item_hash = item.getTorrent().getHash();
+
+                            if (Arrays.equals(hash, item_hash)) {
+
+                                share.delete(force);
+
+                                ci.out.println("> Share " + share.getName() + " removed");
+
+                                done = true;
+
+                                break;
+                            }
+                        } catch (Throwable e) {
+
+                            ci.out.println("ERROR: " + e.getMessage() + " ::");
+
+                            Debug.printStackTrace(e);
+                        }
+                    }
+                }
 				
 				if ( !done ){
 					
@@ -210,28 +206,28 @@ public class Share extends IConsoleCommand {
 			ShareResource[]	shares = share_manager.getShares();
 
 			boolean	done = false;
-			
-			for (int i=0;i<shares.length;i++){
-				
-				if ( shares[i].getName().equals( path.toString())){
-					
-					try{
-						shares[i].delete();
-					
-						ci.out.println( "> Share " + path.toString() + " removed" );
-					
-						done	= true;
-					
-					}catch( Throwable e ) {
-						
-						ci.out.println( "ERROR: " + e.getMessage() + " ::");
-						
-						Debug.printStackTrace( e );
-					}
 
-					break;
-				}
-			}
+            for (ShareResource share : shares) {
+
+                if (share.getName().equals(path.toString())) {
+
+                    try {
+                        share.delete();
+
+                        ci.out.println("> Share " + path.toString() + " removed");
+
+                        done = true;
+
+                    } catch (Throwable e) {
+
+                        ci.out.println("ERROR: " + e.getMessage() + " ::");
+
+                        Debug.printStackTrace(e);
+                    }
+
+                    break;
+                }
+            }
 			
 			if ( !done ){
 				
@@ -407,17 +403,15 @@ public class Share extends IConsoleCommand {
 		ShareResourceDirContents	node )
 	{
 		ShareResource[]	kids = node.getChildren();
-		
-		for (int i=0;i<kids.length;i++){
-			
-			ShareResource	kid = kids[i];
-			
-			ci.out.println( indent + kid.getName());
 
-			if ( kid instanceof ShareResourceDirContents ){
-				
-				outputChildren( ci, indent + "    ", (ShareResourceDirContents)kid );
-			}
-		}
+        for (ShareResource kid : kids) {
+
+            ci.out.println(indent + kid.getName());
+
+            if (kid instanceof ShareResourceDirContents) {
+
+                outputChildren(ci, indent + "    ", (ShareResourceDirContents) kid);
+            }
+        }
 	}
 }

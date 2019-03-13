@@ -24,20 +24,20 @@ import com.aelitis.azureus.core.dht.speed.DHTSpeedTester;
 public interface 
 SpeedManager 
 {
-	public boolean
+	boolean
 	isAvailable();
 		
-	public void
+	void
 	setEnabled(
-		boolean		enabled );
+            boolean enabled);
 	
-	public boolean
+	boolean
 	isEnabled();
 	
-	public String
+	String
 	getASN();
 	
-	public SpeedManagerLimitEstimate
+	SpeedManagerLimitEstimate
 	getEstimatedUploadCapacityBytesPerSec();
 	
 		/**
@@ -45,44 +45,44 @@ SpeedManager
 		 * @param bytes_per_sec
 		 * @param rating see constants above for help
 		 */
-	
-	public void
+
+        void
 	setEstimatedUploadCapacityBytesPerSec(
-		int		bytes_per_sec,
-		float	estimate_type );
+                int bytes_per_sec,
+                float estimate_type);
 	
-	public SpeedManagerLimitEstimate
+	SpeedManagerLimitEstimate
 	getEstimatedDownloadCapacityBytesPerSec();
 	
-	public void
+	void
 	setEstimatedDownloadCapacityBytesPerSec(
-		int		bytes_per_sec,
-		float	estimate_type );
+            int bytes_per_sec,
+            float estimate_type);
 
-	public void
+	void
 	setSpeedTester(
-		DHTSpeedTester	tester );
+            DHTSpeedTester tester);
 	
-	public DHTSpeedTester
+	DHTSpeedTester
 	getSpeedTester();
 	
-	public SpeedManagerPingSource[]
+	SpeedManagerPingSource[]
 	getPingSources();
 	
-	public SpeedManagerPingMapper
+	SpeedManagerPingMapper
 	getActiveMapper();
 	
-	public SpeedManagerPingMapper[]
+	SpeedManagerPingMapper[]
 	getMappers();
 	
-	public void
+	void
 	reset();
 	
-	public void
+	void
 	addListener(
-		SpeedManagerListener		l );
+            SpeedManagerListener l);
 	
-	public void
+	void
 	removeListener(
-		SpeedManagerListener		l );
+            SpeedManagerListener l);
 }

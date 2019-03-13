@@ -70,11 +70,11 @@ ThreadPool
 								
 								pools	= new ArrayList( busy_pools );
 							}
-							
-							for (int i=0;i<pools.size();i++){
-								
-								((ThreadPool)pools.get(i)).generateEvidence( writer );
-							}
+
+                            for (Object pool : pools) {
+
+                                ((ThreadPool) pool).generateEvidence(writer);
+                            }
 						}finally{
 						
 							writer.exdent();
@@ -106,11 +106,11 @@ ThreadPool
 			
 			pools	= new ArrayList( busy_pools );
 		}
-		
-		for (int i=0;i<pools.size();i++){
-			
-			((ThreadPool)pools.get(i)).checkTimeouts();
-		}
+
+        for (Object pool : pools) {
+
+            ((ThreadPool) pool).checkTimeouts();
+        }
 	}
 	
 	
@@ -337,20 +337,18 @@ ThreadPool
 			{
 				synchronized (ThreadPool.this)
 				{
-					for (int i = 0; i < busy.size(); i++)
-					{
-						threadPoolWorker x = (threadPoolWorker) busy.get(i);
-						AERunnable r = x.runnable;
-						if (r != null)
-						{
-							String name;
-							if (r instanceof ThreadPoolTask)
-								name = ((ThreadPoolTask) r).getName();
-							else
-								name = r.getClass().getName();
-							task_names += (task_names.length() == 0 ? "" : ",") + name;
-						}
-					}
+                    for (Object o : busy) {
+                        threadPoolWorker x = (threadPoolWorker) o;
+                        AERunnable r = x.runnable;
+                        if (r != null) {
+                            String name;
+                            if (r instanceof ThreadPoolTask)
+                                name = ((ThreadPoolTask) r).getName();
+                            else
+                                name = r.getClass().getName();
+                            task_names += (task_names.length() == 0 ? "" : ",") + name;
+                        }
+                    }
 				}
 			} catch (Throwable e)
 			{}
@@ -389,19 +387,17 @@ ThreadPool
 		
 		synchronized( this ){
 
-			Iterator	it = busy.iterator();
-			
-			while( it.hasNext()){
-				
-				threadPoolWorker	worker = (threadPoolWorker)it.next();
-				
-				AERunnable	runnable = worker.getRunnable();
-				
-				if ( runnable != null ){
-					
-					runnables.add( runnable );
-				}
-			}
+            for (Object o : busy) {
+
+                threadPoolWorker worker = (threadPoolWorker) o;
+
+                AERunnable runnable = worker.getRunnable();
+
+                if (runnable != null) {
+
+                    runnables.add(runnable);
+                }
+            }
 		}
 		
 		AERunnable[]	res = new AERunnable[runnables.size()];
@@ -418,19 +414,17 @@ ThreadPool
   		
   		synchronized( this ){
 
-  			Iterator	it = busy.iterator();
-  			
-  			while( it.hasNext()){
-  				
-  				threadPoolWorker	worker = (threadPoolWorker)it.next();
-  				
-  				AERunnable	runnable = worker.getRunnable();
-  				
-  				if ( runnable != null ){
-  					
-  					res++;
-  				}
-  			}
+            for (Object o : busy) {
+
+                threadPoolWorker worker = (threadPoolWorker) o;
+
+                AERunnable runnable = worker.getRunnable();
+
+                if (runnable != null) {
+
+                    res++;
+                }
+            }
   		}
   			
   		return( res );
@@ -517,50 +511,50 @@ ThreadPool
 			}
 			
 			long	now = SystemTime.getMonotonousTime();
-			
-			for (int i=0;i<busy.size();i++){
-					
-				threadPoolWorker	x = (threadPoolWorker)busy.get(i);
-			
-				long	elapsed = now - x.run_start_time;
-					
-				if ( elapsed > ( (long)WARN_TIME * (x.warn_count+1))){
-		
-					x.warn_count++;
-					
-					if ( LOG_WARNINGS ){
-						
-						DebugLight.out( x.getWorkerName() + ": running, elapsed = " + elapsed + ", state = " + x.state );
-					}
-					
-					if ( execution_limit > 0 && elapsed > execution_limit ){
-						
-						if ( LOG_WARNINGS ){
-							
-							DebugLight.out( x.getWorkerName() + ": interrupting" );
-						}
-						
-						AERunnable r = x.runnable;
 
-						if ( r != null ){
-							
-							try{
-								if ( r instanceof ThreadPoolTask ){
-									
-									((ThreadPoolTask)r).interruptTask();
-									
-								}else{
-									
-									x.interrupt();
-								}
-							}catch( Throwable e ){
-								
-								DebugLight.printStackTrace( e );
-							}
-						}
-					}
-				}
-			}
+            for (Object o : busy) {
+
+                threadPoolWorker x = (threadPoolWorker) o;
+
+                long elapsed = now - x.run_start_time;
+
+                if (elapsed > ((long) WARN_TIME * (x.warn_count + 1))) {
+
+                    x.warn_count++;
+
+                    if (LOG_WARNINGS) {
+
+                        DebugLight.out(x.getWorkerName() + ": running, elapsed = " + elapsed + ", state = " + x.state);
+                    }
+
+                    if (execution_limit > 0 && elapsed > execution_limit) {
+
+                        if (LOG_WARNINGS) {
+
+                            DebugLight.out(x.getWorkerName() + ": interrupting");
+                        }
+
+                        AERunnable r = x.runnable;
+
+                        if (r != null) {
+
+                            try {
+                                if (r instanceof ThreadPoolTask) {
+
+                                    ((ThreadPoolTask) r).interruptTask();
+
+                                } else {
+
+                                    x.interrupt();
+                                }
+                            } catch (Throwable e) {
+
+                                DebugLight.printStackTrace(e);
+                            }
+                        }
+                    }
+                }
+            }
 		}
 	}
 	

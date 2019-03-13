@@ -28,24 +28,24 @@ package com.aelitis.azureus.ui.common.viewtitleinfo;
  */
 public interface ViewTitleInfo
 {
-	public static int TITLE_TEXT = 5;
+	int TITLE_TEXT = 5;
 
-	public static int TITLE_INDICATOR_TEXT = 0;
+	int TITLE_INDICATOR_TEXT = 0;
 	
-	public static int TITLE_INDICATOR_COLOR = 8;
+	int TITLE_INDICATOR_COLOR = 8;
 
 	
-	public static int TITLE_ACTIVE_STATE = 9;	// -> Long: 0 - not supported; 1 - active; 2 - inactive
+	int TITLE_ACTIVE_STATE = 9;	// -> Long: 0 - not supported; 1 - active; 2 - inactive
 
-	public static int TITLE_INDICATOR_TEXT_TOOLTIP = 1;
+	int TITLE_INDICATOR_TEXT_TOOLTIP = 1;
 	
-	public static int TITLE_IMAGEID = 2;
+	int TITLE_IMAGEID = 2;
 	
-	public static int TITLE_IMAGE_TOOLTIP = 3;
+	int TITLE_IMAGE_TOOLTIP = 3;
 
-	public static int TITLE_LOGID	= 7;
+	int TITLE_LOGID	= 7;
 	
-	public static int TITLE_EXPORTABLE_DATASOURCE	= 10;
+	int TITLE_EXPORTABLE_DATASOURCE	= 10;
 
 	/**
 	 * 
@@ -54,5 +54,5 @@ public interface ViewTitleInfo
 	 *
 	 * @since 3.1.1.1
 	 */
-	public Object getTitleInfoProperty(int propertyID);
+    Object getTitleInfoProperty(int propertyID);
 }

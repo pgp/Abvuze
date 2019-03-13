@@ -25,16 +25,16 @@ import java.util.List;
 public interface 
 DHTTransportAlternativeNetwork 
 {
-	public static final int	AT_MLDHT_IPV4		= 1;
-	public static final int	AT_MLDHT_IPV6		= 2;
-	public static final int	AT_I2P				= 3;
+	int	AT_MLDHT_IPV4		= 1;
+	int	AT_MLDHT_IPV6		= 2;
+	int	AT_I2P				= 3;
 	
-	public static final int[]	AT_ALL = { AT_MLDHT_IPV4, AT_MLDHT_IPV6, AT_I2P };
+	int[]	AT_ALL = { AT_MLDHT_IPV4, AT_MLDHT_IPV6, AT_I2P };
 	
-	public int
+	int
 	getNetworkType();
 	
-	public List<DHTTransportAlternativeContact>
+	List<DHTTransportAlternativeContact>
 	getContacts(
-		int		max );
+            int max);
 }

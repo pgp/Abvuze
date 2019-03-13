@@ -34,26 +34,26 @@ import java.util.Map;
 public interface 
 Torrent
 {
-	public String
+	String
 	getName();
 	
-	public URL
+	URL
 	getAnnounceURL();
 	
-	public void
+	void
 	setAnnounceURL(
-		URL		url );
+            URL url);
 	
 		/**
 		 * get the announce list for multi-tracker torrents. Will always be present but
 		 * may contain 0 sets which means that this is not a multi-tracker torrent
 		 * @return
 		 */
-	
-	public TorrentAnnounceURLList
+
+        TorrentAnnounceURLList
 	getAnnounceURLList();
 	
-	public byte[]
+	byte[]
 	getHash();
 	
 	/**
@@ -61,48 +61,48 @@ Torrent
 	 * constructed from hash). e.g. we don't know file details
 	 * @return
 	 */
-		
-	public long
+
+    long
 	getSize();
 	
-	public String
+	String
 	getComment();
 	
-	public void
+	void
 	setComment(
-		String		comment );
+            String comment);
 	
 	/**
 	 * UNIX epoch format in seconds
 	 */
-	public long
+    long
 	getCreationDate();
 	
-	public String
+	String
 	getCreatedBy();
 		
-	public long
+	long
 	getPieceSize();
 	
-	public long
+	long
 	getPieceCount();
 	
-	public byte[][]
+	byte[][]
     getPieces();
 	
-	public TorrentFile[]
+	TorrentFile[]
 	getFiles();
 	
-	public String
+	String
 	getEncoding();
 	
-	public void
+	void
 	setEncoding(
-		String		encoding)
+            String encoding)
 	
 		throws TorrentEncodingException;
 	
-	public void
+	void
 	setDefaultEncoding()
 	
 		throws TorrentEncodingException;
@@ -112,17 +112,17 @@ Torrent
 		 * @param name
 		 * @return
 		 */
-	
-	public Object
+
+        Object
 	getAdditionalProperty(
-		String		name );
+                String name);
 
 		/**
 		 * Removal all non-standard properties (excluding plugin-properties below)
 		 * @return
 		 */
-	
-	public Torrent
+
+        Torrent
 	removeAdditionalProperties();
 	
 		/**
@@ -130,32 +130,32 @@ Torrent
 		 * @param name
 		 * @param value
 		 */
-	
-	public void
+
+        void
 	setPluginStringProperty(
-		String		name,
-		String		value );
+                String name,
+                String value);
 	
 		/**
 		 * Get a property specific to this plugin
 		 * @param name
 		 * @return
 		 */
-	
-	public String
+
+        String
 	getPluginStringProperty(
-		String		name );
+                String name);
 	
 		/**
 		 * Sets a map property in the torrent, retrievable via getMapProperty
 		 * @param name	should be unique across plugins (i.e. prefix it with something unique)
 		 * @param value	bencodable Map value
 		 */
-	
-	public void
+
+        void
 	setMapProperty(
-		String		name,
-		Map			value );
+                String name,
+                Map value);
 	
 		/**
 		 * Gets a previously set map value
@@ -163,17 +163,17 @@ Torrent
 		 * @param name	should be unique across plugins (i.e. prefix it with something unique)
 		 * @return
 		 */
-	
-	public Map
+
+        Map
 	getMapProperty(
-		String		name );
+                String name);
 	
 		/**
 		 * A decentralised torrent uses the DHT only as a "tracker"
 		 * @return
 		 */
-	
-	public boolean
+
+        boolean
 	isDecentralised();
 	
 		/**
@@ -181,8 +181,8 @@ Torrent
 		 * "real" tracker is unavailable
 		 * @return
 		 */
-	
-	public boolean
+
+        boolean
 	isDecentralisedBackupEnabled();
 	
 		/**
@@ -190,12 +190,12 @@ Torrent
 		 * torrent to be marked so that it will be 
 		 * @param requested
 		 */
-	
-	public void
+
+        void
 	setDecentralisedBackupRequested(
-		boolean	requested );
+                boolean requested);
 	
-	public boolean
+	boolean
 	isDecentralisedBackupRequested();
 	
 		/**
@@ -203,44 +203,44 @@ Torrent
 		 * has decentralised backup disabled and peer exchange disabled
 		 * @return
 		 */
-	
-	public boolean
+
+        boolean
 	isPrivate();
 	
-	public void
+	void
 	setPrivate(
-		boolean	priv );
+            boolean priv);
 	
 		/**
 		 * @since 2501
 		 * @return
 		 */
-	
-	public boolean
+
+        boolean
 	wasCreatedByUs();
 	
 		/** 
 		 * Gets the magnet URI for the torrent - throws exception if not available
 		 * @return
 		 */
-	
-	public URL
+
+        URL
 	getMagnetURI()
 	
 		throws TorrentException;
 	
-	public Map
+	Map
 	writeToMap()
 	
 		throws TorrentException;
 	
-	public void
+	void
 	writeToFile(
-		File		file )
+            File file)
 	
 		throws TorrentException;
   
-	public byte[]
+	byte[]
 	writeToBEncodedData()
 	
 		throws TorrentException;
@@ -249,8 +249,8 @@ Torrent
 		 * Saves the torrent to its persistent location
 		 * @throws TorrentException
 		 */
-	
-	public void
+
+        void
 	save()
 	
 		throws TorrentException;  
@@ -261,14 +261,14 @@ Torrent
 		 * @param data_dir
 		 * @throws TorrentException
 		 */
-	
-	public void
+
+        void
 	setComplete(
-		File		data_dir )
+                File data_dir)
 	
 		throws TorrentException;
 	
-	public boolean
+	boolean
 	isComplete();
 	
 	/**
@@ -277,9 +277,9 @@ Torrent
 	 * 
 	 * @since 3.0.4.3
 	 */
-	public boolean isSimpleTorrent();
+    boolean isSimpleTorrent();
 	
-	public Torrent
+	Torrent
 	getClone()
 	
 		throws TorrentException;

@@ -31,7 +31,7 @@ public class
 TagTypeWithState
 	extends TagTypeBase
 {
-	private final CopyOnWriteList<Tag>	tags = new CopyOnWriteList<Tag>();
+	private final CopyOnWriteList<Tag>	tags = new CopyOnWriteList<>();
 
 	private TaggableResolver		resolver;
 	

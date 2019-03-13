@@ -86,42 +86,43 @@ RPTorrentManager
 		String		method 	= request.getMethod();
 		Object[]	params	= request.getParams();
 
-		if ( method.equals( "getURLDownloader[URL]")){
+        switch (method) {
+            case "getURLDownloader[URL]":
 
-			try{
-				TorrentDownloader dl = delegate.getURLDownloader((URL)params[0]);
+                try {
+                    TorrentDownloader dl = delegate.getURLDownloader((URL) params[0]);
 
-				RPTorrentDownloader res = RPTorrentDownloader.create( dl );
+                    RPTorrentDownloader res = RPTorrentDownloader.create(dl);
 
-				return( new RPReply( res ));
+                    return (new RPReply(res));
 
-			}catch( TorrentException e ){
+                } catch (TorrentException e) {
 
-				return( new RPReply( e ));
-			}
-		}else if ( method.equals( "getURLDownloader[URL,String,String]")){
+                    return (new RPReply(e));
+                }
+            case "getURLDownloader[URL,String,String]":
 
-			try{
-				TorrentDownloader dl = delegate.getURLDownloader((URL)params[0],(String)params[1],(String)params[2]);
+                try {
+                    TorrentDownloader dl = delegate.getURLDownloader((URL) params[0], (String) params[1], (String) params[2]);
 
-				RPTorrentDownloader res = RPTorrentDownloader.create( dl );
+                    RPTorrentDownloader res = RPTorrentDownloader.create(dl);
 
-				return( new RPReply( res ));
+                    return (new RPReply(res));
 
-			}catch( TorrentException e ){
+                } catch (TorrentException e) {
 
-				return( new RPReply( e ));
-			}
-		}else if ( method.equals( "createFromBEncodedData[byte[]]")){
+                    return (new RPReply(e));
+                }
+            case "createFromBEncodedData[byte[]]":
 
-			try{
-				return( new RPReply( RPTorrent.create( delegate.createFromBEncodedData((byte[])params[0]))));
+                try {
+                    return (new RPReply(RPTorrent.create(delegate.createFromBEncodedData((byte[]) params[0]))));
 
-			}catch( TorrentException e ){
+                } catch (TorrentException e) {
 
-				return( new RPReply(e));
-			}
-		}
+                    return (new RPReply(e));
+                }
+        }
 
 		throw( new RPException( "Unknown method: " + method ));
 	}

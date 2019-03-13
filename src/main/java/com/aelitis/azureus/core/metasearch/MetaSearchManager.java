@@ -29,59 +29,59 @@ import com.aelitis.azureus.core.vuzefile.VuzeFile;
 public interface 
 MetaSearchManager 
 {
-	public MetaSearch
+	MetaSearch
 	getMetaSearch();
 	
-	public boolean
+	boolean
 	isAutoMode();
 			
-	public void
+	void
 	setSelectedEngines(
-		long[]		ids,
-		boolean		auto )
+            long[] ids,
+            boolean auto)
 	
 		throws MetaSearchException;
 	
-	public Engine
+	Engine
 	addEngine(
-		long		id,
-		int			type,
-		String		name,
-		String		json_value )
+            long id,
+            int type,
+            String name,
+            String json_value)
 	
 		throws MetaSearchException;
 	
-	public boolean
+	boolean
 	isImportable(
-		VuzeFile		vf );
+            VuzeFile vf);
 	
-	public Engine
+	Engine
 	importEngine(
-		Map			map,
-		boolean		warn_user )
+            Map map,
+            boolean warn_user)
 	
 		throws MetaSearchException;
 	
-	public Engine
+	Engine
 	getEngine(
-		SearchProvider	sp );
+            SearchProvider sp);
 	
-	public boolean
+	boolean
 	getProxyRequestsEnabled();
 	
-	public void
+	void
 	setProxyRequestsEnabled(
-		boolean		enabled );
+            boolean enabled);
 	
-	public void
+	void
 	addListener(
-		MetaSearchManagerListener		listener );
+            MetaSearchManagerListener listener);
 	
-	public void
+	void
 	removeListener(
-		MetaSearchManagerListener		listener );
+            MetaSearchManagerListener listener);
 	
-	public void
+	void
 	log(
-		String		str );
+            String str);
 }

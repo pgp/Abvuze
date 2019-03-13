@@ -178,9 +178,9 @@ public class UTPeerExchange implements AZStylePeerExchange, LTMessage {
 	  public String getFeatureID() {  return LTMessage.LT_FEATURE_ID;  }  
 	  public int getFeatureSubID() { return LTMessage.SUBID_UT_PEX;  }
 	  public int getType() {  return Message.TYPE_PROTOCOL_PAYLOAD;  }
-	  public byte getVersion() { return version; };
-	  
-	  public String getDescription() {
+	  public byte getVersion() { return version; }
+
+    public String getDescription() {
 	    if( description == null ) {
 	      int add_count = peers_added == null ? 0 : peers_added.length;
 	      int drop_count = peers_dropped == null ? 0 : peers_dropped.length;
@@ -215,9 +215,9 @@ public class UTPeerExchange implements AZStylePeerExchange, LTMessage {
 	    addedNoSeeds.addAll(extractPeers("added6", root, IPv6_SIZE_WITH_PORT,true));
 	    dropped.addAll(extractPeers("dropped6", root, IPv6_SIZE_WITH_PORT,false));
 
-	    PeerItem[] addedArr = (PeerItem[])added.toArray(new PeerItem[added.size()]);
-	    PeerItem[] addedNoSeedsArr = (PeerItem[])addedNoSeeds.toArray(new PeerItem[addedNoSeeds.size()]);
-	    PeerItem[] droppedArr = (PeerItem[])dropped.toArray(new PeerItem[dropped.size()]);
+	    PeerItem[] addedArr = (PeerItem[])added.toArray(new PeerItem[0]);
+	    PeerItem[] addedNoSeedsArr = (PeerItem[])addedNoSeeds.toArray(new PeerItem[0]);
+	    PeerItem[] droppedArr = (PeerItem[])dropped.toArray(new PeerItem[0]);
 	      
 	    return new UTPeerExchange(addedArr, droppedArr,addedNoSeedsArr, version);
 	  }

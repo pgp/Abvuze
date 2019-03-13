@@ -27,57 +27,57 @@ public interface
 PEPeerManagerStats 
 {
   
-	public void discarded(PEPeer peer, int length);
-	public void hashFailed(int length);
+	void discarded(PEPeer peer, int length);
+	void hashFailed(int length);
 	  
-	public void dataBytesReceived(PEPeer peer, int length);
-	public void protocolBytesReceived(PEPeer peer, int length);
+	void dataBytesReceived(PEPeer peer, int length);
+	void protocolBytesReceived(PEPeer peer, int length);
   
-	public void dataBytesSent(PEPeer peer, int length);
-	public void protocolBytesSent(PEPeer peer, int length);
+	void dataBytesSent(PEPeer peer, int length);
+	void protocolBytesSent(PEPeer peer, int length);
   
-  	public void haveNewPiece(int pieceLength);
+  	void haveNewPiece(int pieceLength);
   
-  	public void haveNewConnection( boolean incoming );
+  	void haveNewConnection(boolean incoming);
   	
-	public long getDataReceiveRate();
-	public long getProtocolReceiveRate();
+	long getDataReceiveRate();
+	long getProtocolReceiveRate();
   
-	public long getDataSendRate();
-	public long getProtocolSendRate();
+	long getDataSendRate();
+	long getProtocolSendRate();
    
-	public long getPeakDataReceiveRate();
-	public long getPeakDataSendRate();
+	long getPeakDataReceiveRate();
+	long getPeakDataSendRate();
 	
-	public long getSmoothedDataReceiveRate();
-	public long getSmoothedDataSendRate();
+	long getSmoothedDataReceiveRate();
+	long getSmoothedDataSendRate();
 	
-	public long getTotalDataBytesSent();
-	public long getTotalProtocolBytesSent();
+	long getTotalDataBytesSent();
+	long getTotalProtocolBytesSent();
   
-  	public long getTotalDataBytesReceived();
-  	public long getTotalProtocolBytesReceived();
+  	long getTotalDataBytesReceived();
+  	long getTotalProtocolBytesReceived();
   
-	public long getTotalDataBytesSentNoLan();
-	public long getTotalProtocolBytesSentNoLan();
+	long getTotalDataBytesSentNoLan();
+	long getTotalProtocolBytesSentNoLan();
   
-  	public long getTotalDataBytesReceivedNoLan();
-  	public long getTotalProtocolBytesReceivedNoLan();
+  	long getTotalDataBytesReceivedNoLan();
+  	long getTotalProtocolBytesReceivedNoLan();
 
-	public long getTotalAverage();
+	long getTotalAverage();
 
-	public long getTotalHashFailBytes();
-	public long getTotalDiscarded();
+	long getTotalHashFailBytes();
+	long getTotalDiscarded();
 	
-	public int getTimeSinceLastDataReceivedInSeconds();
-	public int getTimeSinceLastDataSentInSeconds();
+	int getTimeSinceLastDataReceivedInSeconds();
+	int getTimeSinceLastDataSentInSeconds();
 	
-	public int getTotalIncomingConnections();
-	public int getTotalOutgoingConnections();
+	int getTotalIncomingConnections();
+	int getTotalOutgoingConnections();
 	
-	public int getPermittedBytesToReceive();
-	public void permittedReceiveBytesUsed( int bytes );
+	int getPermittedBytesToReceive();
+	void permittedReceiveBytesUsed(int bytes);
 	
-	public int getPermittedBytesToSend();
-	public void	permittedSendBytesUsed(	int bytes );
+	int getPermittedBytesToSend();
+	void	permittedSendBytesUsed(int bytes);
 }

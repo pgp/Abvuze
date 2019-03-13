@@ -36,19 +36,19 @@ import com.aelitis.azureus.ui.common.viewtitleinfo.ViewTitleInfo;
 public interface MdiEntry extends UIPluginView
 {
 
-	public String getParentID();
+	String getParentID();
 
-	public Object getDatasource();
+	Object getDatasource();
 
-	public String getExportableDatasource();
+	String getExportableDatasource();
 
-	public boolean isCloseable();
+	boolean isCloseable();
 
-	public String getId();
+	String getId();
 
-	public MdiEntryVitalityImage addVitalityImage(String imageID);
+	MdiEntryVitalityImage addVitalityImage(String imageID);
 
-	public void addListeners(Object objectWithListeners);
+	void addListeners(Object objectWithListeners);
 
 	/**
 	 * @param l
@@ -82,90 +82,90 @@ public interface MdiEntry extends UIPluginView
 	 */
 	void removeListener(MdiEntryOpenListener l);
 
-	public void addListener(MdiEntryDatasourceListener l);
+	void addListener(MdiEntryDatasourceListener l);
 
-	public void removeListener(MdiEntryDatasourceListener l);
+	void removeListener(MdiEntryDatasourceListener l);
 
-	public void setImageLeftID(String string);
+	void setImageLeftID(String string);
 
-	public void setCollapseDisabled(boolean b);
+	void setCollapseDisabled(boolean b);
 
-	public void addListener(MdiEntryDropListener listener);
+	void addListener(MdiEntryDropListener listener);
 	
-	public void removeListener(MdiEntryDropListener listener);
+	void removeListener(MdiEntryDropListener listener);
 
-	public void setDatasource(Object ds);
+	void setDatasource(Object ds);
 
-	public void setLogID(String logID);
+	void setLogID(String logID);
 
-	public boolean isAdded();
+	boolean isAdded();
 
-	public boolean isDisposed();
+	boolean isDisposed();
 
-	public ViewTitleInfo getViewTitleInfo();
+	ViewTitleInfo getViewTitleInfo();
 
-	public void setViewTitleInfo(ViewTitleInfo viewTitleInfo);
+	void setViewTitleInfo(ViewTitleInfo viewTitleInfo);
 
-	public String getLogID();
+	String getLogID();
 
-	public MultipleDocumentInterface getMDI();
+	MultipleDocumentInterface getMDI();
 
-	public MdiEntryVitalityImage[] getVitalityImages();
+	MdiEntryVitalityImage[] getVitalityImages();
 
-	public boolean close(boolean forceClose);
+	boolean close(boolean forceClose);
 
-	public void updateUI();
+	void updateUI();
 
-	public void redraw();
+	void redraw();
 
-	public void addListener(MdiEntryLogIdListener l);
+	void addListener(MdiEntryLogIdListener l);
 
-	public void removeListener(MdiEntryLogIdListener l);
+	void removeListener(MdiEntryLogIdListener l);
 
-	public void hide();
+	void hide();
 
-	public void requestAttention();
+	void requestAttention();
 	
-	public String getTitle();
+	String getTitle();
 	
-	public void setTitle(String title);
+	void setTitle(String title);
 
-	public void setTitleID(String titleID);
+	void setTitleID(String titleID);
 
-	public String getImageLeftID();
+	String getImageLeftID();
 
-	public boolean isExpanded();
+	boolean isExpanded();
 
-	public void setExpanded(boolean expanded);
+	void setExpanded(boolean expanded);
 	
-	public void setDefaultExpanded(boolean defaultExpanded);
+	void setDefaultExpanded(boolean defaultExpanded);
 	
-	public void expandTo();
+	void expandTo();
 
-	public void setParentID(String id);
+	void setParentID(String id);
 
-	public UIToolBarEnablerBase[] getToolbarEnablers();
+	UIToolBarEnablerBase[] getToolbarEnablers();
 
-	public void addToolbarEnabler(UIToolBarEnablerBase enabler);
+	void addToolbarEnabler(UIToolBarEnablerBase enabler);
 
-	public void removeToolbarEnabler(UIToolBarEnablerBase enabler);
+	void removeToolbarEnabler(UIToolBarEnablerBase enabler);
 
-	public boolean isSelectable();
+	boolean isSelectable();
 
-	public void setSelectable(boolean selectable);
+	void setSelectable(boolean selectable);
 
-	public void setPreferredAfterID(String preferredAfterID);
+	void setPreferredAfterID(String preferredAfterID);
 
-	public String getPreferredAfterID();
+	String getPreferredAfterID();
 	
-	public void
+	void
 	setUserData(
-		Object	key,
-		Object	value );
+            Object key,
+            Object value);
 	
-	public Object
+	Object
 	getUserData(
-		Object	key );
+            Object key);
 
-	public Map<String, Object> getAutoOpenInfo();
+	Map<String, Object> getAutoOpenInfo();
 }

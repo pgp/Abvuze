@@ -25,42 +25,42 @@ import java.io.File;
 public interface 
 BackupManager 
 {
-	public void
+	void
 	backup(
-		File				parent_folder,
-		BackupListener		listener );
+            File parent_folder,
+            BackupListener listener);
 	
-	public void
+	void
 	restore(
-		File				backup_folder,
-		BackupListener		listener );
+            File backup_folder,
+            BackupListener listener);
 		
-	public void
+	void
 	runAutoBackup(
-		BackupListener		listener );
+            BackupListener listener);
 	
-	public long
+	long
 	getLastBackupTime();
 	
-	public String
+	String
 	getLastBackupError();
 	
-	public interface
+	interface
 	BackupListener
 	{	
 		/**
 		 * @return false -> abandon process
 		 */
-	
-		public boolean
+
+        boolean
 		reportProgress(
-			String		str );
+                String str);
 		
-		public void
+		void
 		reportComplete();
 		
-		public void
+		void
 		reportError(
-			Throwable 	error );
+                Throwable error);
 	}
 }

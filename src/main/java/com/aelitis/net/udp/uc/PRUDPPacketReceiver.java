@@ -29,18 +29,18 @@ import java.net.InetSocketAddress;
 public interface 
 PRUDPPacketReceiver 
 {
-	public void
+	void
 	packetReceived(
-		PRUDPPacketHandlerRequest	request,
-		PRUDPPacket					packet,
-		InetSocketAddress			from_address );
+            PRUDPPacketHandlerRequest request,
+            PRUDPPacket packet,
+            InetSocketAddress from_address);
 	
 		/**
 		 * receive failed - timeout
 		 * @param e
 		 */
-	
-	public void
+
+        void
 	error(
-		PRUDPPacketHandlerException	e );
+                PRUDPPacketHandlerException e);
 }

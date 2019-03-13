@@ -28,13 +28,13 @@ import java.util.Map;
  */
 public interface DriveDetector
 {
-	public void driveDetected(File location, Map info);
+	void driveDetected(File location, Map info);
 	
-	public void driveRemoved(File location);
+	void driveRemoved(File location);
 	
-	public void addListener(DriveDetectedListener l);
+	void addListener(DriveDetectedListener l);
 
-	public void removeListener(DriveDetectedListener l);
+	void removeListener(DriveDetectedListener l);
 
-	public DriveDetectedInfo[] getDetectedDriveInfo();
+	DriveDetectedInfo[] getDetectedDriveInfo();
 }

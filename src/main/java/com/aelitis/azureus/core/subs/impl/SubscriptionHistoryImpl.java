@@ -102,36 +102,34 @@ SubscriptionHistoryImpl
 					// first download feed -> mark all existing as read
 						
 			GlobalManager gm = AzureusCoreFactory.getSingleton().getGlobalManager();
-			
-			for (int i=0;i<latest_results.length;i++){
-					
-				SubscriptionResultImpl result = latest_results[i];
-				
-				result.setReadInternal(true);
-				
-					// see if we can associate result with existing download
-				
-				try{
-					String hash_str = result.getAssetHash();
-					
-					if ( hash_str != null ){
-						
-						byte[] hash = Base32.decode( hash_str );
-						
-						DownloadManager dm = gm.getDownloadManager( new HashWrapper( hash ));
-						
-						if ( dm != null ){
-							
-							log( "Adding existing association on first read for '" + dm.getDisplayName());
-							
-							subs.addAssociation( hash );
-						}
-					}
-				}catch( Throwable e ){
-					
-					Debug.printStackTrace(e);
-				}
-			}
+
+            for (SubscriptionResultImpl result : latest_results) {
+
+                result.setReadInternal(true);
+
+                // see if we can associate result with existing download
+
+                try {
+                    String hash_str = result.getAssetHash();
+
+                    if (hash_str != null) {
+
+                        byte[] hash = Base32.decode(hash_str);
+
+                        DownloadManager dm = gm.getDownloadManager(new HashWrapper(hash));
+
+                        if (dm != null) {
+
+                            log("Adding existing association on first read for '" + dm.getDisplayName());
+
+                            subs.addAssociation(hash);
+                        }
+                    }
+                } catch (Throwable e) {
+
+                    Debug.printStackTrace(e);
+                }
+            }
 		}
 		
 		long	now = SystemTime.getCurrentTime();
@@ -153,135 +151,131 @@ SubscriptionHistoryImpl
 			
 			LinkedHashMap<String,SubscriptionResultImpl> results_map = manager.loadResults( subs );
 			
-			SubscriptionResultImpl[] existing_results = results_map.values().toArray( new SubscriptionResultImpl[results_map.size()] );
+			SubscriptionResultImpl[] existing_results = results_map.values().toArray(new SubscriptionResultImpl[0]);
 					
 			ByteArrayHashMap	result_key_map 	= new ByteArrayHashMap();
 			ByteArrayHashMap	result_key2_map = new ByteArrayHashMap();
 			
 			List	new_results = new ArrayList();
 
-			for (int i=0;i<existing_results.length;i++){
-				
-				SubscriptionResultImpl r = existing_results[i];
-				
-				result_key_map.put( r.getKey1(), r );
-				
-				byte[]	key2 = r.getKey2();
-				
-				if ( key2 != null ){
-					
-					result_key2_map.put( key2, r );
-				}
-				
-				new_results.add( r );
-				
-				if ( !r.isDeleted()){
-					
-					if ( r.getRead()){
-						
-						new_read++;
-						
-					}else{
-						
-						new_unread++;
-					}
-				}
-			}
-						
-			for (int i=0;i<latest_results.length;i++){
+            for (SubscriptionResultImpl r : existing_results) {
 
-				SubscriptionResultImpl r = latest_results[i];
-				
-					// we first of all insist on names uniqueness
-				
-				SubscriptionResultImpl existing = (SubscriptionResultImpl)result_key_map.get( r.getKey1());
-				
-				if ( existing == null ){
-					
-						// only if non-unique name do we fall back and use UID to remove duplicate
-						// entries where the name has changed
-					
-					byte[]	key2 = r.getKey2();
-					
-					if ( key2 != null ){
-						
-						existing = (SubscriptionResultImpl)result_key2_map.get( key2 );
-					}
-				}
-				
-				if ( existing == null ){
-					
-					last_new_result = now;
-										
-					new_results.add( r );
-					
-					result_key_map.put( r.getKey1(), r );
-					
-					byte[]	key2 = r.getKey2();
-					
-					if ( key2 != null ){
-						
-						result_key2_map.put( key2, r );
-					}
-					
-					got_new_or_changed_result = true;
-				
-					if ( r.getRead()){
-						
-						new_read++;
-						
-					}else{
-					
-						new_unread++;
-						
-						if ( first_new_result == null ){
-							
-							first_new_result = r;
-						}
-					}
-				}else{
-					
-					if ( existing.updateFrom( r )){
-						
-						got_new_or_changed_result = true;
-					}
-				}
-			}
+                result_key_map.put(r.getKey1(), r);
+
+                byte[] key2 = r.getKey2();
+
+                if (key2 != null) {
+
+                    result_key2_map.put(key2, r);
+                }
+
+                new_results.add(r);
+
+                if (!r.isDeleted()) {
+
+                    if (r.getRead()) {
+
+                        new_read++;
+
+                    } else {
+
+                        new_unread++;
+                    }
+                }
+            }
+
+            for (SubscriptionResultImpl r : latest_results) {
+
+                // we first of all insist on names uniqueness
+
+                SubscriptionResultImpl existing = (SubscriptionResultImpl) result_key_map.get(r.getKey1());
+
+                if (existing == null) {
+
+                    // only if non-unique name do we fall back and use UID to remove duplicate
+                    // entries where the name has changed
+
+                    byte[] key2 = r.getKey2();
+
+                    if (key2 != null) {
+
+                        existing = (SubscriptionResultImpl) result_key2_map.get(key2);
+                    }
+                }
+
+                if (existing == null) {
+
+                    last_new_result = now;
+
+                    new_results.add(r);
+
+                    result_key_map.put(r.getKey1(), r);
+
+                    byte[] key2 = r.getKey2();
+
+                    if (key2 != null) {
+
+                        result_key2_map.put(key2, r);
+                    }
+
+                    got_new_or_changed_result = true;
+
+                    if (r.getRead()) {
+
+                        new_read++;
+
+                    } else {
+
+                        new_unread++;
+
+                        if (first_new_result == null) {
+
+                            first_new_result = r;
+                        }
+                    }
+                } else {
+
+                    if (existing.updateFrom(r)) {
+
+                        got_new_or_changed_result = true;
+                    }
+                }
+            }
 			
 				// see if we need to delete any old ones
 			
 			if ( max_results > 0 && (new_unread + new_read ) > max_results ){
-				
-				for (int i=0;i<new_results.size();i++){
-					
-					SubscriptionResultImpl r = (SubscriptionResultImpl)new_results.get(i);
-					
-					if ( !r.isDeleted()){
-						
-						if ( r.getRead()){
-							
-							new_read--;
-							
-						}else{
-							
-							new_unread--;
-						}
-						
-						r.deleteInternal();
-						
-						got_new_or_changed_result = true;
-						
-						if (( new_unread + new_read ) <= max_results ){
-							
-							break;
-						}
-					}
-				}
+
+                for (Object new_result : new_results) {
+
+                    SubscriptionResultImpl r = (SubscriptionResultImpl) new_result;
+
+                    if (!r.isDeleted()) {
+
+                        if (r.getRead()) {
+
+                            new_read--;
+
+                        } else {
+
+                            new_unread--;
+                        }
+
+                        r.deleteInternal();
+
+                        got_new_or_changed_result = true;
+
+                        if ((new_unread + new_read) <= max_results) {
+
+                            break;
+                        }
+                    }
+                }
 			}
 			
 			if ( got_new_or_changed_result ){
 				
-				result = (SubscriptionResultImpl[])new_results.toArray( new SubscriptionResultImpl[new_results.size()]);
+				result = (SubscriptionResultImpl[])new_results.toArray(new SubscriptionResultImpl[0]);
 				
 				manager.saveResults( subs, result );
 				
@@ -308,7 +302,7 @@ SubscriptionHistoryImpl
 					public void 
 					runSupport()
 					{
-						Map<String,String>	cb_data = new HashMap<String, String>();
+						Map<String,String>	cb_data = new HashMap<>();
 						
 						cb_data.put( "subname", subs.getName());
 						cb_data.put( "subid", subs.getID());
@@ -343,7 +337,7 @@ SubscriptionHistoryImpl
 		{
 			SubscriptionManager subs_man = SubscriptionManagerFactory.getSingleton();
 			
-			String sub_id = (String)data.get( "subid" );
+			String sub_id = data.get( "subid" );
 			
 			final Subscription sub = subs_man.getSubscriptionByID( sub_id );
 			
@@ -518,7 +512,7 @@ SubscriptionHistoryImpl
 			
 			try{
 			
-				long	interval_min = ((Long)schedule.get( "interval" )).longValue();
+				long	interval_min = (Long) schedule.get("interval");
 				
 				if ( interval_min == Integer.MAX_VALUE || interval_min == Long.MAX_VALUE ){
 					
@@ -605,7 +599,7 @@ SubscriptionHistoryImpl
 			
 			LinkedHashMap<String,SubscriptionResultImpl> results_map = manager.loadResults( subs );
 			
-			results = results_map.values().toArray( new SubscriptionResultImpl[results_map.size()] );
+			results = results_map.values().toArray(new SubscriptionResultImpl[0]);
 		}
 		
 		if ( include_deleted ){
@@ -615,16 +609,16 @@ SubscriptionHistoryImpl
 		}else{
 			
 			List	l = new ArrayList( results.length );
+
+            for (SubscriptionResult result : results) {
+
+                if (!result.isDeleted()) {
+
+                    l.add(result);
+                }
+            }
 			
-			for (int i=0;i<results.length;i++){
-				
-				if ( !results[i].isDeleted()){
-					
-					l.add( results[i] );
-				}
-			}
-			
-			return((SubscriptionResult[])l.toArray( new SubscriptionResult[l.size()]));
+			return((SubscriptionResult[])l.toArray(new SubscriptionResult[0]));
 		}
 	}
 	
@@ -652,7 +646,7 @@ SubscriptionHistoryImpl
 			
 			LinkedHashMap<String,SubscriptionResultImpl> results_map = manager.loadResults( subs );
 						
-			SubscriptionResultImpl[] results = results_map.values().toArray( new SubscriptionResultImpl[results_map.size()] );
+			SubscriptionResultImpl[] results = results_map.values().toArray(new SubscriptionResultImpl[0]);
 			
 			for (int i=0;i<results.length;i++){
 				
@@ -689,11 +683,11 @@ SubscriptionHistoryImpl
 		String[] result_ids )
 	{
 		ByteArrayHashMap rids = new ByteArrayHashMap();
-		
-		for (int i=0;i<result_ids.length;i++){
-			
-			rids.put( Base32.decode( result_ids[i]), "" );
-		}
+
+        for (String result_id : result_ids) {
+
+            rids.put(Base32.decode(result_id), "");
+        }
 	
 		boolean	changed = false;
 
@@ -701,19 +695,17 @@ SubscriptionHistoryImpl
 				
 			LinkedHashMap<String,SubscriptionResultImpl> results_map = manager.loadResults( subs );
 			
-			SubscriptionResultImpl[] results = results_map.values().toArray( new SubscriptionResultImpl[results_map.size()] );
+			SubscriptionResultImpl[] results = results_map.values().toArray(new SubscriptionResultImpl[0]);
 
-			for (int i=0;i<results.length;i++){
-				
-				SubscriptionResultImpl result = results[i];
-				
-				if ( !result.isDeleted() && rids.containsKey( result.getKey1())){
-					
-					changed = true;
-					
-					result.deleteInternal();
-				}
-			}
+            for (SubscriptionResultImpl result : results) {
+
+                if (!result.isDeleted() && rids.containsKey(result.getKey1())) {
+
+                    changed = true;
+
+                    result.deleteInternal();
+                }
+            }
 			
 			if ( changed ){
 				
@@ -738,19 +730,17 @@ SubscriptionHistoryImpl
 						
 			LinkedHashMap<String,SubscriptionResultImpl> results_map = manager.loadResults( subs );
 			
-			SubscriptionResultImpl[] results = results_map.values().toArray( new SubscriptionResultImpl[results_map.size()] );
+			SubscriptionResultImpl[] results = results_map.values().toArray(new SubscriptionResultImpl[0]);
 
-			for (int i=0;i<results.length;i++){
-				
-				SubscriptionResultImpl result = results[i];
-				
-				if ( !result.isDeleted()){
-					
-					changed = true;
-				
-					result.deleteInternal();
-				}
-			}
+            for (SubscriptionResultImpl result : results) {
+
+                if (!result.isDeleted()) {
+
+                    changed = true;
+
+                    result.deleteInternal();
+                }
+            }
 			
 			if ( changed ){
 				
@@ -775,19 +765,17 @@ SubscriptionHistoryImpl
 						
 			LinkedHashMap<String,SubscriptionResultImpl> results_map = manager.loadResults( subs );
 			
-			SubscriptionResultImpl[] results = results_map.values().toArray( new SubscriptionResultImpl[results_map.size()] );
+			SubscriptionResultImpl[] results = results_map.values().toArray(new SubscriptionResultImpl[0]);
 
-			for (int i=0;i<results.length;i++){
-				
-				SubscriptionResultImpl result = results[i];
-				
-				if ( !result.getRead()){
-					
-					changed = true;
-				
-					result.setReadInternal( true );
-				}
-			}
+            for (SubscriptionResultImpl result : results) {
+
+                if (!result.getRead()) {
+
+                    changed = true;
+
+                    result.setReadInternal(true);
+                }
+            }
 			
 			if ( changed ){
 				
@@ -812,19 +800,17 @@ SubscriptionHistoryImpl
 						
 			LinkedHashMap<String,SubscriptionResultImpl> results_map = manager.loadResults( subs );
 			
-			SubscriptionResultImpl[] results = results_map.values().toArray( new SubscriptionResultImpl[results_map.size()] );
+			SubscriptionResultImpl[] results = results_map.values().toArray(new SubscriptionResultImpl[0]);
 
-			for (int i=0;i<results.length;i++){
-				
-				SubscriptionResultImpl result = results[i];
-				
-				if ( result.getRead()){
-					
-					changed = true;
-				
-					result.setReadInternal( false );
-				}
-			}
+            for (SubscriptionResultImpl result : results) {
+
+                if (result.getRead()) {
+
+                    changed = true;
+
+                    result.setReadInternal(false);
+                }
+            }
 			
 			if ( changed ){
 				
@@ -849,7 +835,7 @@ SubscriptionHistoryImpl
 		
 		for (int i=0;i<result_ids.length;i++){
 			
-			rid_map.put( Base32.decode( result_ids[i]), Boolean.valueOf(reads[i]));
+			rid_map.put( Base32.decode( result_ids[i]), reads[i]);
 		}
 	
 		boolean	changed = false;
@@ -860,36 +846,34 @@ SubscriptionHistoryImpl
 						
 			LinkedHashMap<String,SubscriptionResultImpl> results_map = manager.loadResults( subs );
 			
-			SubscriptionResultImpl[] results = results_map.values().toArray( new SubscriptionResultImpl[results_map.size()] );
+			SubscriptionResultImpl[] results = results_map.values().toArray(new SubscriptionResultImpl[0]);
 
-			for (int i=0;i<results.length;i++){
-				
-				SubscriptionResultImpl result = results[i];
-				
-				if ( result.isDeleted()){
-					
-					continue;
-				}
-				
-				Boolean	b_read = (Boolean)rid_map.get( result.getKey1());
-				
-				if ( b_read != null ){
-					
-					boolean	read = b_read.booleanValue();
-					
-					if ( result.getRead() != read ){
-						
-						changed = true;
-					
-						result.setReadInternal( read );
-						
-						if ( !read ){
-							
-							newly_unread.add( result );
-						}
-					}
-				}
-			}
+            for (SubscriptionResultImpl result : results) {
+
+                if (result.isDeleted()) {
+
+                    continue;
+                }
+
+                Boolean b_read = (Boolean) rid_map.get(result.getKey1());
+
+                if (b_read != null) {
+
+                    boolean read = b_read;
+
+                    if (result.getRead() != read) {
+
+                        changed = true;
+
+                        result.setReadInternal(read);
+
+                        if (!read) {
+
+                            newly_unread.add(result);
+                        }
+                    }
+                }
+            }
 			
 			if ( changed ){
 				
@@ -905,11 +889,11 @@ SubscriptionHistoryImpl
 		}
 		
 		if ( isAutoDownload()){
-			
-			for (int i=0;i<newly_unread.size();i++){
-				
-				manager.getScheduler().download( subs, (SubscriptionResult)newly_unread.get(i));
-			}
+
+            for (Object o : newly_unread) {
+
+                manager.getScheduler().download(subs, (SubscriptionResult) o);
+            }
 		}
 	}
 	
@@ -920,7 +904,7 @@ SubscriptionHistoryImpl
 			
 			LinkedHashMap<String,SubscriptionResultImpl> results_map = manager.loadResults( subs );
 			
-			SubscriptionResultImpl[] results = results_map.values().toArray( new SubscriptionResultImpl[results_map.size()] );
+			SubscriptionResultImpl[] results = results_map.values().toArray(new SubscriptionResultImpl[0]);
 			
 			if ( results.length > 0 ){
 				
@@ -956,33 +940,31 @@ SubscriptionHistoryImpl
 
 				LinkedHashMap<String,SubscriptionResultImpl> results_map = manager.loadResults( subs );
 				
-				SubscriptionResultImpl[] results = results_map.values().toArray( new SubscriptionResultImpl[results_map.size()] );
-				
-				for (int i=0;i<results.length;i++){
-					
-					SubscriptionResultImpl r = results[i];
-					
-					if ( !r.isDeleted()){
-						
-						if ( r.getRead()){
-							
-							num_read--;
-							
-						}else{
-							
-							num_unread--;
-						}
-						
-						r.deleteInternal();
-						
-						changed = true;
-						
-						if (( num_unread + num_read ) <= max_results ){
-							
-							break;
-						}
-					}
-				}
+				SubscriptionResultImpl[] results = results_map.values().toArray(new SubscriptionResultImpl[0]);
+
+                for (SubscriptionResultImpl r : results) {
+
+                    if (!r.isDeleted()) {
+
+                        if (r.getRead()) {
+
+                            num_read--;
+
+                        } else {
+
+                            num_unread--;
+                        }
+
+                        r.deleteInternal();
+
+                        changed = true;
+
+                        if ((num_unread + num_read) <= max_results) {
+
+                            break;
+                        }
+                    }
+                }
 				
 				if ( changed ){
 					
@@ -1003,23 +985,21 @@ SubscriptionHistoryImpl
 	{
 		int	new_unread	= 0;
 		int	new_read	= 0;
-		
-		for (int i=0;i<results.length;i++){
-			
-			SubscriptionResultImpl result = results[i];
-			
-			if ( !result.isDeleted()){
-				
-				if ( result.getRead()){
-					
-					new_read++;
-					
-				}else{
-					
-					new_unread++;
-				}
-			}
-		}
+
+        for (SubscriptionResultImpl result : results) {
+
+            if (!result.isDeleted()) {
+
+                if (result.getRead()) {
+
+                    new_read++;
+
+                } else {
+
+                    new_unread++;
+                }
+            }
+        }
 		
 		num_read	= new_read;
 		num_unread	= new_unread;
@@ -1101,16 +1081,16 @@ SubscriptionHistoryImpl
 		Map	map = subs.getHistoryConfig();
 		
 		Long	l_enabled	= (Long)map.get( "enabled" );		
-		enabled				= l_enabled==null?true:l_enabled.longValue()==1;
+		enabled				= l_enabled==null?true: l_enabled ==1;
 		
 		Long	l_auto_dl	= (Long)map.get( "auto_dl" );		
-		auto_dl				= l_auto_dl==null?false:l_auto_dl.longValue()==1;
+		auto_dl				= l_auto_dl==null?false: l_auto_dl ==1;
 		
 		Long	l_last_scan = (Long)map.get( "last_scan" );		
-		last_scan			= l_last_scan==null?0:l_last_scan.longValue();
+		last_scan			= l_last_scan==null?0: l_last_scan;
 		
 		Long	l_last_new 	= (Long)map.get( "last_new" );		
-		last_new_result		= l_last_new==null?0:l_last_new.longValue();
+		last_new_result		= l_last_new==null?0: l_last_new;
 		
 		Long	l_num_unread 	= (Long)map.get( "num_unread" );		
 		num_unread				= l_num_unread==null?0:l_num_unread.intValue();
@@ -1122,16 +1102,16 @@ SubscriptionHistoryImpl
 			// enabled
 		
 		Long	l_auto_dl_s	= (Long)map.get( "auto_dl_supported" );		
-		auto_dl_supported	= l_auto_dl_s==null?(last_scan>0):l_auto_dl_s.longValue()==1;
+		auto_dl_supported	= l_auto_dl_s==null?(last_scan>0): l_auto_dl_s ==1;
 
 		Long	l_dl_with_ref	= (Long)map.get( "dl_with_ref" );		
-		dl_with_ref	= l_dl_with_ref==null?true:l_dl_with_ref.longValue()==1;
+		dl_with_ref	= l_dl_with_ref==null?true: l_dl_with_ref ==1;
 		
 		Long	l_interval_override	= (Long)map.get( "interval_override" );		
 		interval_override	= l_interval_override==null?0:l_interval_override.intValue();
 		
 		Long	l_max_results	= (Long)map.get( "max_results" );		
-		max_results				= l_max_results==null?-1:l_max_results.longValue();
+		max_results				= l_max_results==null?-1: l_max_results;
 		
 		String  s_networks 		= ImportExportUtils.importString(map, "nets", null );
 		
@@ -1143,7 +1123,7 @@ SubscriptionHistoryImpl
 		}
 		
 		Long	l_post_noto	= (Long)map.get( "post_noti" );		
-		post_notifications	= l_post_noto==null?false:l_post_noto.longValue()==1;
+		post_notifications	= l_post_noto==null?false: l_post_noto ==1;
 
 	}
 	
@@ -1153,18 +1133,18 @@ SubscriptionHistoryImpl
 	{
 		Map	map = new HashMap();
 		
-		map.put( "enabled", new Long( enabled?1:0 ));
-		map.put( "auto_dl", new Long( auto_dl?1:0 ));
-		map.put( "auto_dl_supported", new Long( auto_dl_supported?1:0));
-		map.put( "last_scan", new Long( last_scan ));
-		map.put( "last_new", new Long( last_new_result ));
-		map.put( "num_unread", new Long( num_unread ));
-		map.put( "num_read", new Long( num_read ));
-		map.put( "dl_with_ref", new Long( dl_with_ref?1:0 ));
-		map.put( "max_results", new Long( max_results ));
+		map.put( "enabled", (long) (enabled ? 1 : 0));
+		map.put( "auto_dl", (long) (auto_dl ? 1 : 0));
+		map.put( "auto_dl_supported", (long) (auto_dl_supported ? 1 : 0));
+		map.put( "last_scan", last_scan);
+		map.put( "last_new", last_new_result);
+		map.put( "num_unread", (long) num_unread);
+		map.put( "num_read", (long) num_read);
+		map.put( "dl_with_ref", (long) (dl_with_ref ? 1 : 0));
+		map.put( "max_results", max_results);
 
 		if ( interval_override > 0 ){
-			map.put( "interval_override", new Long( interval_override ));
+			map.put( "interval_override", (long) interval_override);
 		}
 		if ( networks != null ){
 			String str = "";

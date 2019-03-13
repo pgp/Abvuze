@@ -27,14 +27,14 @@ package org.gudy.azureus2.plugins.utils;
 public interface 
 AggregatedList 
 {
-	public void
+	void
 	add(
-		Object		obj );
+            Object obj);
 	
-	public Object
+	Object
 	remove(
-		Object		obj );
+            Object obj);
 	
-	public void
+	void
 	destroy();
 }

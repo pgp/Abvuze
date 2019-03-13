@@ -27,7 +27,7 @@ package com.aelitis.net.udp.uc;
 public interface 
 PRUDPRequestHandler 
 {
-	public void
+	void
 	process(
-		PRUDPPacketRequest	request );
+            PRUDPPacketRequest request);
 }

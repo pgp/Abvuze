@@ -293,11 +293,11 @@ SpeedManagerImpl
 											
 						int	x	= (adapter.getCurrentDataUploadSpeed(SPEED_AVERAGE_PERIOD) + adapter.getCurrentProtocolUploadSpeed(SPEED_AVERAGE_PERIOD));
 						int	y 	= (adapter.getCurrentDataDownloadSpeed(SPEED_AVERAGE_PERIOD) + adapter.getCurrentProtocolDownloadSpeed(SPEED_AVERAGE_PERIOD));
-						
-						for (int i=0;i<ping_mappers.length;i++){
-							
-							ping_mappers[i].addSpeed( x, y );
-						}
+
+                        for (SpeedManagerPingMapperImpl ping_mapper1 : ping_mappers) {
+
+                            ping_mapper1.addSpeed(x, y);
+                        }
 					}
 					
 					tick_count++;
@@ -553,38 +553,38 @@ SpeedManagerImpl
 						int[]					round_trip_times )
 					{
 						if ( !pm_enabled ){
-							
-							for (int i=0;i<st_contacts.length;i++){
-								
-								st_contacts[i].destroy();
-							}
+
+                            for (DHTSpeedTesterContact st_contact : st_contacts) {
+
+                                st_contact.destroy();
+                            }
 							
 							return;
 						}
 						
 						boolean	sources_changed = false;
-						
-						for (int i=0;i<st_contacts.length;i++){
-							
-							boolean	found = false;
-							
-							for (int j=0;j<last_contact_group.length;j++){
-							
-								if ( st_contacts[i] == last_contact_group[j] ){
-									
-									found = true;
-									
-									break;
-								}
-							}
-							
-							if ( !found ){
-									
-								sources_changed = true;
-								
-								break;
-							}
-						}
+
+                        for (DHTSpeedTesterContact st_contact : st_contacts) {
+
+                            boolean found = false;
+
+                            for (DHTSpeedTesterContact dhtSpeedTesterContact : last_contact_group) {
+
+                                if (st_contact == dhtSpeedTesterContact) {
+
+                                    found = true;
+
+                                    break;
+                                }
+                            }
+
+                            if (!found) {
+
+                                sources_changed = true;
+
+                                break;
+                            }
+                        }
 						
 						last_contact_group = st_contacts;
 						
@@ -701,18 +701,16 @@ SpeedManagerImpl
 	{
 		int	x	= (adapter.getCurrentDataUploadSpeed(SPEED_AVERAGE_PERIOD) + adapter.getCurrentProtocolUploadSpeed(SPEED_AVERAGE_PERIOD));
 		int	y 	= (adapter.getCurrentDataDownloadSpeed(SPEED_AVERAGE_PERIOD) + adapter.getCurrentProtocolDownloadSpeed(SPEED_AVERAGE_PERIOD));
-		
-		for (int i=0;i<ping_mappers.length;i++){
-			
-			ping_mappers[i].addPing( x, y, rtt, re_base );
-		}
-		
-		Iterator it = transient_mappers.iterator();
-		
-		while( it.hasNext()){
-			
-			((SpeedManagerPingMapperImpl)it.next()).addPing( x, y, rtt, re_base );
-		}
+
+        for (SpeedManagerPingMapperImpl ping_mapper1 : ping_mappers) {
+
+            ping_mapper1.addPing(x, y, rtt, re_base);
+        }
+
+        for (Object transient_mapper : transient_mappers) {
+
+            ((SpeedManagerPingMapperImpl) transient_mapper).addPing(x, y, rtt, re_base);
+        }
 	}
 	
 	public boolean
@@ -1028,18 +1026,17 @@ SpeedManagerImpl
 	informListeners(
 		int		type )
 	{
-		Iterator	it = listeners.iterator();
-		
-		while( it.hasNext()){
-			
-			try{
-				((SpeedManagerListener)it.next()).propertyChanged( type );
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace(e);
-			}
-		}
+
+        for (Object listener : listeners) {
+
+            try {
+                ((SpeedManagerListener) listener).propertyChanged(type);
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 	
 	public void

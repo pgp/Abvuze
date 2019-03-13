@@ -23,29 +23,29 @@ package org.gudy.azureus2.plugins.utils.search;
 public interface 
 SearchResult 
 {
-	public static final int	PR_NAME					= 1;	// String
-	public static final int	PR_PUB_DATE				= 2;	// Date
-	public static final int	PR_SIZE					= 3;	// Long
-	public static final int	PR_LEECHER_COUNT		= 4;	// Long	(-1 unknown)
-	public static final int	PR_SEED_COUNT			= 5;	// Long	(-1 unknown)
-	public static final int	PR_SUPER_SEED_COUNT		= 6;	// Long	(-1 unknown)
-	public static final int	PR_CATEGORY				= 7;	// String
-	public static final int	PR_COMMENTS				= 8;	// Long	(-1 unknown)
-	public static final int	PR_VOTES				= 9;	// Long	(-1 unknown)
-	public static final int	PR_CONTENT_TYPE			= 10;	// String  ("video","audio","game")
-	public static final int	PR_DETAILS_LINK			= 11;	// URL as String
-	public static final int	PR_DOWNLOAD_LINK		= 12;	// URL as String
-	public static final int	PR_PLAY_LINK			= 13;	// URL as String
-	public static final int	PR_PRIVATE				= 14;	// Boolean
-	public static final int	PR_DRM_KEY				= 15;	// String
-	public static final int	PR_DOWNLOAD_BUTTON_LINK = 16;	// URL as String
-	public static final int	PR_RANK					= 17;	// Long value, 0->100 (-1 unknown)
-	public static final int	PR_ACCURACY				= 18;	// Long value, 0->100 (-1 unknown)
-	public static final int	PR_VOTES_DOWN			= 19;	// Long	(-1 unknown)
-	public static final int	PR_UID					= 20;	// String
-	public static final int	PR_HASH					= 21;	// byte[] torrent hash
-	public static final int	PR_VERSION				= 22;	// Long (-1 n/a)
-	public static final int	PR_TORRENT_LINK			= 23;	// URL as String - for whatever reason, PR_DOWNLOAD_LINK will be populated with the 'download button link'
+	int	PR_NAME					= 1;	// String
+	int	PR_PUB_DATE				= 2;	// Date
+	int	PR_SIZE					= 3;	// Long
+	int	PR_LEECHER_COUNT		= 4;	// Long	(-1 unknown)
+	int	PR_SEED_COUNT			= 5;	// Long	(-1 unknown)
+	int	PR_SUPER_SEED_COUNT		= 6;	// Long	(-1 unknown)
+	int	PR_CATEGORY				= 7;	// String
+	int	PR_COMMENTS				= 8;	// Long	(-1 unknown)
+	int	PR_VOTES				= 9;	// Long	(-1 unknown)
+	int	PR_CONTENT_TYPE			= 10;	// String  ("video","audio","game")
+	int	PR_DETAILS_LINK			= 11;	// URL as String
+	int	PR_DOWNLOAD_LINK		= 12;	// URL as String
+	int	PR_PLAY_LINK			= 13;	// URL as String
+	int	PR_PRIVATE				= 14;	// Boolean
+	int	PR_DRM_KEY				= 15;	// String
+	int	PR_DOWNLOAD_BUTTON_LINK = 16;	// URL as String
+	int	PR_RANK					= 17;	// Long value, 0->100 (-1 unknown)
+	int	PR_ACCURACY				= 18;	// Long value, 0->100 (-1 unknown)
+	int	PR_VOTES_DOWN			= 19;	// Long	(-1 unknown)
+	int	PR_UID					= 20;	// String
+	int	PR_HASH					= 21;	// byte[] torrent hash
+	int	PR_VERSION				= 22;	// Long (-1 n/a)
+	int	PR_TORRENT_LINK			= 23;	// URL as String - for whatever reason, PR_DOWNLOAD_LINK will be populated with the 'download button link'
 															// from a result in preference to the 'download link' - sometimes these are different... so added this one to 
 															// always return teh 'download link'
 
@@ -55,7 +55,7 @@ SearchResult
 		// AND the reverse mapping in MetaSearchManagerImpl
 		// AND generic XML attributes in xml-http plugin
 	
-	public Object
+	Object
 	getProperty(
-		int		property_name );
+            int property_name);
 }

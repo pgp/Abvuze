@@ -23,7 +23,7 @@ package org.gudy.azureus2.core3.stats.transfer;
 public interface 
 LongTermStatsListener 
 {
-	public void
+	void
 	updated(
-		LongTermStats	stats );
+            LongTermStats stats);
 }

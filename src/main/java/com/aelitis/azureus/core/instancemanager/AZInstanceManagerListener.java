@@ -23,19 +23,19 @@ package com.aelitis.azureus.core.instancemanager;
 public interface 
 AZInstanceManagerListener 
 {
-	public void
+	void
 	instanceFound(
-		AZInstance		instance );
+            AZInstance instance);
 	
-	public void
+	void
 	instanceChanged(
-		AZInstance		instance );
+            AZInstance instance);
 	
-	public void
+	void
 	instanceLost(
-		AZInstance		instance );
+            AZInstance instance);
 	
-	public void
+	void
 	instanceTracked(
-		AZInstanceTracked	instance );
+            AZInstanceTracked instance);
 }

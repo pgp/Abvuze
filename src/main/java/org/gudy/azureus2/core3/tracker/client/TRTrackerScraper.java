@@ -34,52 +34,52 @@ import org.gudy.azureus2.plugins.download.DownloadScrapeResult;
 public interface 
 TRTrackerScraper 
 {
-	public static final int REFRESH_MINIMUM_SECS		= 2*60;
+	int REFRESH_MINIMUM_SECS		= 2*60;
 	
-	public TRTrackerScraperResponse
+	TRTrackerScraperResponse
 	scrape(
-		TOTorrent		torrent );
+            TOTorrent torrent);
 		
 		// scrape an explicit URL from the (multi-tracker) torrent's set of URLs
 	
-	public TRTrackerScraperResponse
+	TRTrackerScraperResponse
 	scrape(
-		TOTorrent		torrent,
-		URL				target_url );
+            TOTorrent torrent,
+            URL target_url);
 	
-	public TRTrackerScraperResponse
+	TRTrackerScraperResponse
 	scrape(
-		TOTorrent		torrent,
-		boolean			force );
+            TOTorrent torrent,
+            boolean force);
 		
-	public TRTrackerScraperResponse
+	TRTrackerScraperResponse
 	scrape(
-		TRTrackerAnnouncer	tracker_client );
+            TRTrackerAnnouncer tracker_client);
 
-	public void
+	void
 	setScrape(
-		TOTorrent				torrent,
-		URL						url,
-		DownloadScrapeResult	result );
+            TOTorrent torrent,
+            URL url,
+            DownloadScrapeResult result);
 	
-	public TRTrackerScraperResponse
+	TRTrackerScraperResponse
 	peekScrape(
-		TOTorrent		torrent,
-		URL				target_url );
+            TOTorrent torrent,
+            URL target_url);
 	
-	public void
+	void
 	remove(
-		TOTorrent		torrent );
+            TOTorrent torrent);
 				
-	public void
+	void
 	setClientResolver(
-		TRTrackerScraperClientResolver	resolver );
+            TRTrackerScraperClientResolver resolver);
 	
-	public void
+	void
 	addListener(
-		TRTrackerScraperListener	l );
+            TRTrackerScraperListener l);
 	
-	public void
+	void
 	removeListener(
-		TRTrackerScraperListener	l );
+            TRTrackerScraperListener l);
 }

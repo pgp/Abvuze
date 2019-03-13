@@ -26,7 +26,7 @@ package org.gudy.azureus2.plugins.update;
 public interface 
 UpdateManagerListener 
 {
-	public void
+	void
 	checkInstanceCreated(
-		UpdateCheckInstance	instance );
+            UpdateCheckInstance instance);
 }

@@ -76,7 +76,7 @@ DeviceUPnPImpl
 {
 	private static final Object UPNPAV_FILE_KEY = new Object();
 		
-	private static final Map<String,AzureusContentFile>	acf_map = new WeakHashMap<String,AzureusContentFile>();
+	private static final Map<String,AzureusContentFile>	acf_map = new WeakHashMap<>();
 	
 	protected static String
 	getDisplayName(
@@ -278,7 +278,7 @@ DeviceUPnPImpl
 	public browseLocation[]
 	getBrowseLocations()
 	{
-		List<browseLocation>	locs = new ArrayList<browseLocation>();
+		List<browseLocation>	locs = new ArrayList<>();
 	
 		UPnPDevice device = device_may_be_null;
 		
@@ -299,7 +299,7 @@ DeviceUPnPImpl
 			}
 		}
 		
-		return( locs.toArray( new browseLocation[ locs.size() ]));
+		return( locs.toArray(new browseLocation[0]));
 	}
 	
 	public boolean
@@ -542,7 +542,7 @@ DeviceUPnPImpl
 	protected void
 	resetUPNPAV()
 	{		
-		Set<String>	to_remove = new HashSet<String>();
+		Set<String>	to_remove = new HashSet<>();
 		
 		synchronized( this ){
 			
@@ -645,7 +645,7 @@ DeviceUPnPImpl
 				new DiskManagerFileInfoStream( 
 					new DiskManagerFileInfoStream.StreamFactory()
 					{
-						private List<Object>	current_requests = new ArrayList<Object>();
+						private List<Object>	current_requests = new ArrayList<>();
 						
 						public StreamDetails 
 						getStream(
@@ -758,11 +758,11 @@ DeviceUPnPImpl
 								
 							}else if ( name.equals( PT_PERCENT_DONE )){
 								
-								return( new Long(1000));
+								return(1000L);
 								
 							}else if ( name.equals( PT_ETA )){
 								
-								return( new Long(0));
+								return(0L);
 							}
 							
 							return( null );
@@ -782,7 +782,7 @@ DeviceUPnPImpl
 				
 				if ( dynamic_xcode_map == null ){
 					
-					dynamic_xcode_map = new HashMap<String,AzureusContentFile>();
+					dynamic_xcode_map = new HashMap<>();
 				}
 				
 				dynamic_xcode_map.put( tf_key, acf );
@@ -908,11 +908,11 @@ DeviceUPnPImpl
 								
 							}else if ( name.equals( PT_PERCENT_DONE )){
 								
-								return( new Long(1000));
+								return(1000L);
 								
 							}else if ( name.equals( PT_ETA )){
 								
-								return( new Long(0));
+								return(0L);
 							}
 							
 							return( null );
@@ -1132,71 +1132,76 @@ DeviceUPnPImpl
 								if ( tf != null ){
 									
 									long	res = 0;
-									
-									if ( name.equals( PT_DURATION )){
-										
-										res = tf.getDurationMillis();
-										
-									}else if ( name.equals( PT_VIDEO_WIDTH )){
-										
-										res = tf.getVideoWidth();
-										
-									}else if ( name.equals( PT_VIDEO_HEIGHT )){
-										
-										res = tf.getVideoHeight();
-										
-									}else if ( name.equals( PT_DATE )){
 
-										res = tf.getCreationDateMillis();
-										
-									}else if ( name.equals( PT_PERCENT_DONE )){
+                                    switch (name) {
+                                        case PT_DURATION:
 
-										if ( tf.isComplete()){
-											
-											res = 1000;
-											
-										}else{
-											
-											TranscodeJob job = tf.getJob();
-											
-											if ( job == null ){
-												
-												res = 0;
-												
-											}else{
-												
-												res = 10*job.getPercentComplete();
-											}
-										}
-										
-										return( res );
-										
-									}else if ( name.equals( PT_ETA )){
+                                            res = tf.getDurationMillis();
 
-										if ( tf.isComplete()){
-											
-											res = 0;
-											
-										}else{
-											
-											TranscodeJob job = tf.getJob();
-											
-											if ( job == null ){
-												
-												res = Long.MAX_VALUE;
-												
-											}else{
-												
-												res = job.getETASecs();
-											}
-										}
-										
-										return( res );
-									}
+                                            break;
+                                        case PT_VIDEO_WIDTH:
+
+                                            res = tf.getVideoWidth();
+
+                                            break;
+                                        case PT_VIDEO_HEIGHT:
+
+                                            res = tf.getVideoHeight();
+
+                                            break;
+                                        case PT_DATE:
+
+                                            res = tf.getCreationDateMillis();
+
+                                            break;
+                                        case PT_PERCENT_DONE:
+
+                                            if (tf.isComplete()) {
+
+                                                res = 1000;
+
+                                            } else {
+
+                                                TranscodeJob job = tf.getJob();
+
+                                                if (job == null) {
+
+                                                    res = 0;
+
+                                                } else {
+
+                                                    res = 10 * job.getPercentComplete();
+                                                }
+                                            }
+
+                                            return (res);
+
+                                        case PT_ETA:
+
+                                            if (tf.isComplete()) {
+
+                                                res = 0;
+
+                                            } else {
+
+                                                TranscodeJob job = tf.getJob();
+
+                                                if (job == null) {
+
+                                                    res = Long.MAX_VALUE;
+
+                                                } else {
+
+                                                    res = job.getETASecs();
+                                                }
+                                            }
+
+                                            return (res);
+                                    }
 									
 									if ( res > 0 ){
 										
-										return( new Long( res ));
+										return(res);
 									}
 								}
 							}
@@ -1344,7 +1349,7 @@ DeviceUPnPImpl
 	{
 		List<Tag> tags = TagManagerFactory.getTagManager().getTagsForTaggable( PluginCoreUtils.unwrap( dl ));
 		
-		List<String>	tag_names = new ArrayList<String>();
+		List<String>	tag_names = new ArrayList<>();
 		
 		for ( Tag tag: tags ){
 			
@@ -1354,7 +1359,7 @@ DeviceUPnPImpl
 			}
 		}
 		
-		tf.setTags( tag_names.toArray( new String[ tag_names.size()] ));
+		tf.setTags( tag_names.toArray(new String[0]));
 	}
 	
 	public void

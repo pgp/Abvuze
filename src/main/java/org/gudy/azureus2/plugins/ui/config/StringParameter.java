@@ -28,19 +28,19 @@ public interface
 StringParameter
 	extends Parameter
 {
-	public void
+	void
 	setValue(
-		String	value );
+            String value);
 	
-	public String
+	String
 	getValue();
 	
 		/**
 		 * @since 5201
 		 * @param visible_line_count
 		 */
-	
-	public void
+
+        void
 	setMultiLine(
-		int	visible_line_count );
+                int visible_line_count);
 }

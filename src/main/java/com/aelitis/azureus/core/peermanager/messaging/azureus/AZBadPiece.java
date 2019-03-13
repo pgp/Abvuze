@@ -77,7 +77,7 @@ AZBadPiece
 		return( Message.TYPE_PROTOCOL_PAYLOAD );
 	}
 
-	public byte getVersion() { return version; };
+	public byte getVersion() { return version; }
 
 	public String 
 	getDescription() 
@@ -99,7 +99,7 @@ AZBadPiece
 			
 			Map	map = new HashMap();
 			
-			map.put( "piece", new Long( piece_number ));
+			map.put( "piece", (long) piece_number);
 			
 			buffer = MessagingUtil.convertPayloadToBencodedByteStream( map, DirectByteBuffer.AL_MSG );
 		} 

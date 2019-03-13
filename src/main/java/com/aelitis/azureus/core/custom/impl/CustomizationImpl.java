@@ -116,67 +116,54 @@ CustomizationImpl
    		String		resource_name )
 	{
 		List	result = new ArrayList();
+
+        try (ZipInputStream zis = new ZipInputStream(
+                new BufferedInputStream(new FileInputStream(contents)))) {
+
+            while (true) {
+
+                ZipEntry entry = zis.getNextEntry();
+
+                if (entry == null) {
+
+                    break;
+                }
+
+                String name = entry.getName();
+
+                int pos = name.indexOf(resource_name + "/");
+
+                if (pos != -1) {
+
+                    if (name.endsWith(".vuze")) {
+
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream(16 * 1024);
+
+                        byte[] buffer = new byte[16 * 1024];
+
+                        while (true) {
+
+                            int len = zis.read(buffer);
+
+                            if (len <= 0) {
+
+                                break;
+                            }
+
+                            baos.write(buffer, 0, len);
+                        }
+
+                        result.add(new ByteArrayInputStream(baos.toByteArray()));
+                    }
+                }
+            }
+        } catch (Throwable e) {
+
+            Debug.out(e);
+
+        }
 		
-		ZipInputStream	zis = null;
-	
-		try{
-			zis = new ZipInputStream( 
-					new BufferedInputStream( new FileInputStream( contents ) ));
-				
-			while( true ){
-				
-				ZipEntry	entry = zis.getNextEntry();
-					
-				if ( entry == null ){
-					
-					break;
-				}
-				
-				String	name = entry.getName();
-				
-				int pos = name.indexOf( resource_name + "/" );
-				
-				if ( pos != -1 ){
-										
-					if ( name.endsWith( ".vuze" )){
-						
-						ByteArrayOutputStream baos = new ByteArrayOutputStream( 16*1024 );
-						
-						byte[]	buffer = new byte[16*1024];
-						
-						while( true ){
-						
-							int	len = zis.read( buffer );
-							
-							if ( len <= 0 ){
-								
-								break;
-							}
-							
-							baos.write( buffer, 0, len );
-						}
-						
-						result.add( new ByteArrayInputStream( baos.toByteArray()));
-					}
-				}
-			}
-		}catch( Throwable e ){
-			
-			Debug.out( e );
-			
-		}finally{
-			
-			if ( zis != null ){
-				
-				try{
-					zis.close();
-					
-				}catch( Throwable e ){
-				}
-			}
-		}
-		
-		return((InputStream[])result.toArray( new InputStream[result.size()]));
+		return((InputStream[])result.toArray(new InputStream[0]));
 	}
 	
 	public void 

@@ -30,10 +30,10 @@ package org.gudy.azureus2.plugins.utils;
 public interface 
 LocaleDecoder 
 {
-	public String
+	String
 	getName();
 	
-	public String
+	String
 	decode(
-		byte[]		encoded_bytes );
+            byte[] encoded_bytes);
 }

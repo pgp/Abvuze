@@ -22,7 +22,7 @@ package com.aelitis.azureus.core;
 public interface 
 AzureusCoreOperationTask 
 {
-	public void
+	void
 	run(
-		AzureusCoreOperation	operation );
+            AzureusCoreOperation operation);
 }

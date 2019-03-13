@@ -42,7 +42,7 @@ AzureusContentDirectoryManager
 	{
 		synchronized( directories ){
 
-			return((AzureusContentDirectory[])directories.toArray( new AzureusContentDirectory[directories.size()]));
+			return((AzureusContentDirectory[])directories.toArray(new AzureusContentDirectory[0]));
 		}
 	}
 }

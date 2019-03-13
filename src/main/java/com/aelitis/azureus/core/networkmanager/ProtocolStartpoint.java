@@ -24,12 +24,12 @@ import java.net.InetSocketAddress;
 public interface 
 ProtocolStartpoint 
 {
-	public int
+	int
 	getType();
 	
-	public InetSocketAddress
+	InetSocketAddress
 	getAddress();
 
-	public String
+	String
 	getDescription();
 }

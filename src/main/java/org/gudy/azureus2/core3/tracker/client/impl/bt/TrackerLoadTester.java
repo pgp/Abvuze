@@ -44,7 +44,7 @@ public class TrackerLoadTester {
     }
   }
      
-  public static void main(String args[]) {
+  public static void main(String[] args) {
     if(args.length < 2) return;
     int nbTorrents = Integer.parseInt(args[0]);
     int nbClientsPerTorrent = Integer.parseInt(args[1]);

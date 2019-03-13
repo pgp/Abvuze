@@ -38,50 +38,48 @@ SubscriptionUtils
 	{
 		List<DownloadManager> 	dms 	= core.getGlobalManager().getDownloadManagers();
 		
-		List<SubscriptionDownloadDetails>	result 	= new ArrayList<SubscriptionDownloadDetails>();
+		List<SubscriptionDownloadDetails>	result 	= new ArrayList<>();
 		
 		SubscriptionManager sub_man = SubscriptionManagerFactory.getSingleton();
+
+        for (DownloadManager dm : dms) {
+
+            TOTorrent torrent = dm.getTorrent();
+
+            if (torrent != null) {
+
+                try {
+                    Subscription[] subs = sub_man.getKnownSubscriptions(torrent.getHash());
+
+                    if (subs != null && subs.length > 0) {
+
+                        if (sub_man.hideSearchTemplates()) {
+
+                            List<Subscription> filtered = new ArrayList<>();
+
+                            for (Subscription s : subs) {
+
+                                if (!s.isSearchTemplate()) {
+
+                                    filtered.add(s);
+                                }
+                            }
+
+                            if (filtered.size() > 0) {
+
+                                result.add(new SubscriptionDownloadDetails(dm, filtered.toArray(new Subscription[0])));
+                            }
+                        } else {
+
+                            result.add(new SubscriptionDownloadDetails(dm, subs));
+                        }
+                    }
+                } catch (Throwable e) {
+                }
+            }
+        }
 		
-		for (int i=0;i<dms.size();i++){
-			
-			DownloadManager	dm = dms.get(i);
-			
-			TOTorrent torrent = dm.getTorrent();
-			
-			if ( torrent != null ){
-				
-				try{
-					Subscription[] subs = sub_man.getKnownSubscriptions( torrent.getHash());
-					
-					if ( subs != null && subs.length > 0 ){
-						
-						if ( sub_man.hideSearchTemplates()){
-							
-							List<Subscription>	filtered = new ArrayList<Subscription>();
-							
-							for ( Subscription s: subs ){
-								
-								if ( !s.isSearchTemplate()){
-									
-									filtered.add( s );
-								}
-							}
-							
-							if ( filtered.size() > 0 ){
-							
-								result.add( new SubscriptionDownloadDetails( dm, filtered.toArray( new Subscription[filtered.size()] )));
-							}
-						}else{
-							
-							result.add( new SubscriptionDownloadDetails( dm, subs ));
-						}
-					}
-				}catch( Throwable e ){
-				}
-			}
-		}
-		
-		return(result.toArray( new SubscriptionDownloadDetails[result.size()]));
+		return(result.toArray(new SubscriptionDownloadDetails[0]));
 	}
 	
 	public static String

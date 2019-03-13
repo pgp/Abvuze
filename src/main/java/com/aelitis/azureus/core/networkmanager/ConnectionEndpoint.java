@@ -58,7 +58,7 @@ ConnectionEndpoint
 			
 			if ( properties == null ){
 				
-				properties = new HashMap<String,Object>( p );
+				properties = new HashMap<>(p);
 				
 			}else{
 				
@@ -108,14 +108,14 @@ ConnectionEndpoint
 			protocols = new ProtocolEndpoint[]{ ep };
 			
 		}else{
-		
-			for (int i=0;i<protocols.length;i++){
-				
-				if ( protocols[i] == ep ){
-					
-					return;
-				}
-			}
+
+            for (ProtocolEndpoint protocol : protocols) {
+
+                if (protocol == ep) {
+
+                    return;
+                }
+            }
 			
 			ProtocolEndpoint[]	new_ep = new ProtocolEndpoint[ protocols.length + 1 ];
 			
@@ -133,15 +133,13 @@ ConnectionEndpoint
 	getLANAdjustedEndpoint()
 	{
 		ConnectionEndpoint	result = new ConnectionEndpoint( notional_address );
-		
-		for (int i=0;i<protocols.length;i++){
 
-			ProtocolEndpoint ep = protocols[i];
-			
-			InetSocketAddress address = ep.getAdjustedAddress( true );
-			
-			ProtocolEndpointFactory.createEndpoint( ep.getType(), result, address );
-		}
+        for (ProtocolEndpoint ep : protocols) {
+
+            InetSocketAddress address = ep.getAdjustedAddress(true);
+
+            ProtocolEndpointFactory.createEndpoint(ep.getType(), result, address);
+        }
 		
 		return( result );
 	}
@@ -179,7 +177,7 @@ ConnectionEndpoint
 			final boolean[] connected = { false };
 			final boolean[] abandoned = { false };
 			
-			final List<Transport> transports = new ArrayList<Transport>( protocols.length );
+			final List<Transport> transports = new ArrayList<>(protocols.length);
 			
 			final ConnectListener listener_delegate = 
 				new ConnectListener()
@@ -379,7 +377,7 @@ ConnectionEndpoint
 								
 								abandoned[0] = true;
 							
-								to_kill = new ArrayList<Transport>( transports );
+								to_kill = new ArrayList<>(transports);
 							}
 							
 							for ( Transport transport: to_kill ){

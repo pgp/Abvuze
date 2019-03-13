@@ -24,8 +24,8 @@ import java.security.cert.X509Certificate;
 public interface 
 CertificateListener 
 {
-	public boolean
+	boolean
 	trustCertificate(
-		String			resource,
-		X509Certificate	cert );
+            String resource,
+            X509Certificate cert);
 }

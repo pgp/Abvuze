@@ -66,9 +66,9 @@ public class BTPiece implements BTMessage {
   
   public int getType() {  return Message.TYPE_DATA_PAYLOAD;  }
     
-  public byte getVersion() { return version; };
-  
-  public String getDescription() {
+  public byte getVersion() { return version; }
+
+    public String getDescription() {
     if( description == null ) {
       description = BTMessage.ID_BT_PIECE + " data for piece #" + piece_number + ":" + piece_offset + "->" + (piece_offset + piece_length -1);
     }

@@ -62,7 +62,7 @@ public class LTMessageEncoder implements MessageStreamEncoder {
 			Byte ext_id = (Byte)this.extension_map.get(message.getID());
 			if (ext_id != null) {
 				//Logger.log(new LogEvent(this.log_object, LOGID,	"Converting LT message to BT message, ext id is " + ext_id));
-				return new RawMessage[] {BTMessageFactory.createBTRawMessage(new BTLTMessage(message, ext_id.byteValue()))};
+				return new RawMessage[] {BTMessageFactory.createBTRawMessage(new BTLTMessage(message, ext_id))};
 			}
 		}
 		
@@ -76,46 +76,43 @@ public class LTMessageEncoder implements MessageStreamEncoder {
 	
 	public void updateSupportedExtensions(Map map) {
 		try {
-			Iterator itr = map.entrySet().iterator();
-			while (itr.hasNext()) {
-				Map.Entry extension = (Map.Entry)itr.next();
-				String ext_name;
-				Object ext_key = extension.getKey();
-				if (ext_key instanceof byte[]) {
-					ext_name = new String((byte[])ext_key, Constants.DEFAULT_ENCODING);
-				}
-				else if (ext_key instanceof String) {
-					ext_name = (String)ext_key;
-				}
-				else {
-					throw new RuntimeException("unexpected type for extension name: " + ext_key.getClass());
-				}
+            for (Object o : map.entrySet()) {
+                Map.Entry extension = (Map.Entry) o;
+                String ext_name;
+                Object ext_key = extension.getKey();
+                if (ext_key instanceof byte[]) {
+                    ext_name = new String((byte[]) ext_key, Constants.DEFAULT_ENCODING);
+                } else if (ext_key instanceof String) {
+                    ext_name = (String) ext_key;
+                } else {
+                    throw new RuntimeException("unexpected type for extension name: " + ext_key.getClass());
+                }
 
-				int ext_value;
-				Object ext_value_obj = extension.getValue();
-				
-				if (ext_value_obj instanceof Long) {
-					ext_value = ((Long)extension.getValue()).intValue();
-				}
-				else if (ext_value_obj instanceof byte[]) {
-					byte[] ext_value_bytes = (byte[])ext_value_obj;
-					if (ext_value_bytes.length == 1) {
-						ext_value = (int)ext_value_bytes[0];
-					}
-					else {
-						throw new RuntimeException("extension id byte array format length != 1: " + ext_value_bytes.length);
-					}
-				}
-				else {
-					throw new RuntimeException("unsupported extension id type: " + ext_value_obj.getClass().getName());
-				}
-				if (extension_map == null) {
-					this.extension_map = new HashMap();
-				}
-				
-				if (ext_value == 0) {this.extension_map.remove(ext_name);}
-				else {this.extension_map.put(ext_name, new Byte((byte)ext_value));}
-			}
+                int ext_value;
+                Object ext_value_obj = extension.getValue();
+
+                if (ext_value_obj instanceof Long) {
+                    ext_value = ((Long) extension.getValue()).intValue();
+                } else if (ext_value_obj instanceof byte[]) {
+                    byte[] ext_value_bytes = (byte[]) ext_value_obj;
+                    if (ext_value_bytes.length == 1) {
+                        ext_value = (int) ext_value_bytes[0];
+                    } else {
+                        throw new RuntimeException("extension id byte array format length != 1: " + ext_value_bytes.length);
+                    }
+                } else {
+                    throw new RuntimeException("unsupported extension id type: " + ext_value_obj.getClass().getName());
+                }
+                if (extension_map == null) {
+                    this.extension_map = new HashMap();
+                }
+
+                if (ext_value == 0) {
+                    this.extension_map.remove(ext_name);
+                } else {
+                    this.extension_map.put(ext_name, (byte) ext_value);
+                }
+            }
 		}
 		catch (Exception e) {
 			if (Logger.isEnabled())
@@ -153,7 +150,7 @@ public class LTMessageEncoder implements MessageStreamEncoder {
 	{
 		if ( custom_handlers == null ){
 			
-			custom_handlers = new HashMap<Integer, LTMessageEncoder.CustomExtensionHandler>();
+			custom_handlers = new HashMap<>();
 		}
 		
 		custom_handlers.put( extension_type, handler );
@@ -194,8 +191,8 @@ public class LTMessageEncoder implements MessageStreamEncoder {
 	public interface
 	CustomExtensionHandler
 	{
-		public Object
+		Object
 		handleExtension(
-			Object[]	args );
+                Object[] args);
 	}
 }

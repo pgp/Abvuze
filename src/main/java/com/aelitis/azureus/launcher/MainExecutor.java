@@ -30,7 +30,7 @@ public class MainExecutor {
 			public void run() {
 				try
 				{
-					Method main = loader.loadClass(mainClass).getMethod("main", new Class[] {String[].class});
+					Method main = loader.loadClass(mainClass).getMethod("main", String[].class);
 					main.invoke(null, new Object[] {args});
 				} catch (Exception e)
 				{

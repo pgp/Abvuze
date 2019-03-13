@@ -23,9 +23,9 @@ package com.aelitis.azureus.core.util.http;
 public interface 
 HTTPAuthHelperListener 
 {
-	public void
+	void
 	cookieFound(
-		HTTPAuthHelper		helper,
-		String				cookie_name,
-		String				cookie_value );
+            HTTPAuthHelper helper,
+            String cookie_name,
+            String cookie_value);
 }

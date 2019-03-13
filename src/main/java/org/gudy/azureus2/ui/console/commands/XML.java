@@ -45,16 +45,12 @@ public class XML extends IConsoleCommand {
 			}
 		} else {
 			try {
-				FileOutputStream os = new FileOutputStream(file);
 
-				try {
+                try (FileOutputStream os = new FileOutputStream(file)) {
 
-					sws.write(os);
+                    sws.write(os);
 
-				} finally {
-
-					os.close();
-				}
+                }
 				ci.out.println("> XML stats successfully written to " + file);
 			} catch (Exception e) {
 				ci.out.println("> Exception while trying to write xml stats:" + e.getMessage());

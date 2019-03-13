@@ -26,6 +26,6 @@ package org.gudy.azureus2.core3.util;
  */
 public interface AECallback
 {
-	public void callbackSuccess(Object o);
-	public void callbackFailure(Throwable t);
+	void callbackSuccess(Object o);
+	void callbackFailure(Throwable t);
 }

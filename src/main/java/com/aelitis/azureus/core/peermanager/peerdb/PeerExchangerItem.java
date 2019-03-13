@@ -38,9 +38,9 @@ public class PeerExchangerItem {
   private final PeerItem 		base_peer;
   private final String			network;
   
-  private final LinkedHashSet<PeerItem> connections_added 		= new LinkedHashSet<PeerItem>();
-  private final LinkedHashSet<PeerItem> connections_dropped 	= new LinkedHashSet<PeerItem>();
-  private final Map<PeerItem,Object> connected_peers = new LightHashMap<PeerItem,Object>();
+  private final LinkedHashSet<PeerItem> connections_added 		= new LinkedHashSet<>();
+  private final LinkedHashSet<PeerItem> connections_dropped 	= new LinkedHashSet<>();
+  private final Map<PeerItem,Object> connected_peers = new LightHashMap<>();
   private final AEMonitor peers_mon = new AEMonitor( "PeerConnectionItem" );
   private boolean maintain_peers_state = true;  //assume we do until explicitly disabled
   private final Helper helper;
@@ -99,9 +99,7 @@ public class PeerExchangerItem {
       if( !maintain_peers_state )  return;
     
       if( !connections_dropped.contains( peer_connection ) ) {
-        if( !connections_added.contains( peer_connection ) ) {
           connections_added.add( peer_connection );  //register new add
-        }
       }
       else {  //was dropped and then re-added
         connections_dropped.remove( peer_connection );  //pull drop and ignore add
@@ -116,9 +114,7 @@ public class PeerExchangerItem {
       if( !maintain_peers_state )  return;
       
       if( !connections_added.contains( peer_connection ) ) {
-        if( !connections_dropped.contains( peer_connection ) ) {
           connections_dropped.add( peer_connection );  //register new drop
-        }
       }
       else {  //was added and then re-dropped
         connections_added.remove( peer_connection );  //pull add and ignore drop
@@ -169,7 +165,7 @@ public class PeerExchangerItem {
 	
 		  int num_to_send = connections_added.size() > MAX_PEERS_PER_VOLLEY ? MAX_PEERS_PER_VOLLEY : connections_added.size();
 	
-		  List<PeerItem> peers = new ArrayList<PeerItem>( num_to_send );
+		  List<PeerItem> peers = new ArrayList<>(num_to_send);
 	
 		  Iterator<PeerItem> it = connections_added.iterator();
 	
@@ -195,7 +191,7 @@ public class PeerExchangerItem {
 			  return( null );
 		  }
 		  
-		  return peers.toArray( new PeerItem[peers.size()]);
+		  return peers.toArray(new PeerItem[0]);
 		  
 	  }finally{
 		  
@@ -237,7 +233,7 @@ public class PeerExchangerItem {
 	
 		  int num_to_send = connections_dropped.size() > MAX_PEERS_PER_VOLLEY ? MAX_PEERS_PER_VOLLEY : connections_dropped.size();
 	
-		  List<PeerItem> peers = new ArrayList<PeerItem>( num_to_send );
+		  List<PeerItem> peers = new ArrayList<>(num_to_send);
 	
 		  Iterator<PeerItem> it = connections_dropped.iterator();
 	
@@ -260,7 +256,7 @@ public class PeerExchangerItem {
 			  return( null );
 		  }
 		  
-		  return peers.toArray( new PeerItem[peers.size()]);
+		  return peers.toArray(new PeerItem[0]);
 		  
 	  }finally{
 		  
@@ -349,7 +345,7 @@ public class PeerExchangerItem {
      * Does this connection item represent a seed peer?
      * @return true if seeding, false if not
      */
-    public boolean isSeed();
+    boolean isSeed();
   }
   
 }

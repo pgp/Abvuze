@@ -27,43 +27,43 @@ import com.aelitis.azureus.core.networkmanager.Transport.ConnectListener;
 public interface 
 ProtocolEndpoint 
 {
-	public static final int	PROTOCOL_TCP	= 1;
-	public static final int	PROTOCOL_UDP	= 2;
-	public static final int	PROTOCOL_UTP	= 3;
+	int	PROTOCOL_TCP	= 1;
+	int	PROTOCOL_UDP	= 2;
+	int	PROTOCOL_UTP	= 3;
 
-	public static final int CONNECT_PRIORITY_SUPER_HIGHEST	= 0;
-	public static final int CONNECT_PRIORITY_HIGHEST		= 1;
-	public static final int CONNECT_PRIORITY_HIGH			= 2;
-	public static final int CONNECT_PRIORITY_MEDIUM			= 3;
-	public static final int CONNECT_PRIORITY_LOW			= 4;
+	int CONNECT_PRIORITY_SUPER_HIGHEST	= 0;
+	int CONNECT_PRIORITY_HIGHEST		= 1;
+	int CONNECT_PRIORITY_HIGH			= 2;
+	int CONNECT_PRIORITY_MEDIUM			= 3;
+	int CONNECT_PRIORITY_LOW			= 4;
 	  
 
-	public int
+	int
 	getType();
 	
-	public ConnectionEndpoint
+	ConnectionEndpoint
 	getConnectionEndpoint();
 	
-	public void
+	void
 	setConnectionEndpoint(
-		ConnectionEndpoint	ce );
+            ConnectionEndpoint ce);
 	
-	public InetSocketAddress
+	InetSocketAddress
 	getAddress();
 	
-	public InetSocketAddress
+	InetSocketAddress
 	getAdjustedAddress(
-		boolean		to_lan );
+            boolean to_lan);
 	
-	public Transport
+	Transport
 	connectOutbound(
-		boolean				connect_with_crypto, 
-		boolean 			allow_fallback, 
-		byte[][]			shared_secrets,
-		ByteBuffer			initial_data,
-		int					priority,
-		ConnectListener 	listener );
+            boolean connect_with_crypto,
+            boolean allow_fallback,
+            byte[][] shared_secrets,
+            ByteBuffer initial_data,
+            int priority,
+            ConnectListener listener);
 	
-	public String
+	String
 	getDescription();
 }

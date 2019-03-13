@@ -25,11 +25,11 @@ import org.gudy.azureus2.core3.download.DownloadManager;
 public interface 
 GlobalManagerEvent 
 {
-	public static final int ET_REQUEST_ATTENTION = 1;
+	int ET_REQUEST_ATTENTION = 1;
 	
-	public int	
+	int
 	getEventType();
 	
-	public DownloadManager
+	DownloadManager
 	getDownload();
 }

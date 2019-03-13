@@ -29,27 +29,27 @@ package org.gudy.azureus2.core3.ipchecker.extipchecker;
 public interface 
 ExternalIPCheckerService 
 {
-	public String
+	String
 	getName();
 	
-	public String
+	String
 	getDescription();
 	
-	public String
+	String
 	getURL();
 	
-	public boolean
+	boolean
 	supportsCheck();
 	
-	public void
+	void
 	initiateCheck(
-		long		timeout	);	// millis
+            long timeout);	// millis
 	
-	public void
+	void
 	addListener(
-		ExternalIPCheckerServiceListener	l );
+            ExternalIPCheckerServiceListener l);
 		
-	public void
+	void
 	removeListener(
-		ExternalIPCheckerServiceListener	l );
+            ExternalIPCheckerServiceListener l);
 }

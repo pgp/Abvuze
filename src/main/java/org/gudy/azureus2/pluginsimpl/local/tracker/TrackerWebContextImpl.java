@@ -44,7 +44,7 @@ TrackerWebContextImpl
 {
 	protected TRTrackerServer		server;
 	
-	protected List<TrackerAuthenticationListener>			auth_listeners	= new ArrayList<TrackerAuthenticationListener>();
+	protected List<TrackerAuthenticationListener>			auth_listeners	= new ArrayList<>();
 	
 	public 
 	TrackerWebContextImpl(
@@ -130,31 +130,31 @@ TrackerWebContextImpl
 		String		user,
 		String		password )
 	{
-		for (int i=0;i<auth_listeners.size();i++){
-			
-			try{
-				TrackerAuthenticationListener listener = auth_listeners.get(i);
-				
-				boolean res;
-				
-				if ( listener instanceof TrackerAuthenticationAdapter ){
-					
-					res = ((TrackerAuthenticationAdapter)listener).authenticate( headers, resource, user, password );
-					
-				}else{
-					
-					res = listener.authenticate( resource, user, password );
-				}
-				
-				if ( res ){
-					
-					return(true );
-				}
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace( e );
-			}
-		}
+        for (TrackerAuthenticationListener auth_listener : auth_listeners) {
+
+            try {
+                TrackerAuthenticationListener listener = auth_listener;
+
+                boolean res;
+
+                if (listener instanceof TrackerAuthenticationAdapter) {
+
+                    res = ((TrackerAuthenticationAdapter) listener).authenticate(headers, resource, user, password);
+
+                } else {
+
+                    res = listener.authenticate(resource, user, password);
+                }
+
+                if (res) {
+
+                    return (true);
+                }
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 		
 		return( false );
 	}
@@ -164,20 +164,20 @@ TrackerWebContextImpl
 		URL			resource,
 		String		user )
 	{
-		for (int i=0;i<auth_listeners.size();i++){
-			
-			try{
-				byte[] res = ((TrackerAuthenticationListener)auth_listeners.get(i)).authenticate( resource, user );
-				
-				if ( res != null ){
-					
-					return( res );
-				}
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace( e );
-			}
-		}
+        for (TrackerAuthenticationListener auth_listener : auth_listeners) {
+
+            try {
+                byte[] res = auth_listener.authenticate(resource, user);
+
+                if (res != null) {
+
+                    return (res);
+                }
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 		
 		return( null );
 	}

@@ -142,28 +142,28 @@ AZInstanceManagerImpl
 	private MCGroup	 	mc_group;
 	private long		search_id_next;
 	
-	final List<Request>		requests = new ArrayList<Request>();
+	final List<Request>		requests = new ArrayList<>();
 	
 	final AZMyInstanceImpl		my_instance;
 	
-	private final Map<String,AZOtherInstanceImpl>						other_instances	= new HashMap<String,AZOtherInstanceImpl>();
+	private final Map<String,AZOtherInstanceImpl>						other_instances	= new HashMap<>();
 	
 	private volatile boolean		initialised;
 	
-	private volatile Map<InetSocketAddress,InetSocketAddress>			tcp_lan_to_ext	= new HashMap<InetSocketAddress,InetSocketAddress>();
-	private volatile Map<InetSocketAddress,InetSocketAddress>			udp_lan_to_ext	= new HashMap<InetSocketAddress,InetSocketAddress>();
-	private volatile Map<InetSocketAddress,InetSocketAddress>			udp2_lan_to_ext	= new HashMap<InetSocketAddress,InetSocketAddress>();
-	private volatile Map<InetSocketAddress,InetSocketAddress>			tcp_ext_to_lan	= new HashMap<InetSocketAddress,InetSocketAddress>();
-	private volatile Map<InetSocketAddress,InetSocketAddress>			udp_ext_to_lan	= new HashMap<InetSocketAddress,InetSocketAddress>();
-	private volatile Map<InetSocketAddress,InetSocketAddress>			udp2_ext_to_lan	= new HashMap<InetSocketAddress,InetSocketAddress>();
+	private volatile Map<InetSocketAddress,InetSocketAddress>			tcp_lan_to_ext	= new HashMap<>();
+	private volatile Map<InetSocketAddress,InetSocketAddress>			udp_lan_to_ext	= new HashMap<>();
+	private volatile Map<InetSocketAddress,InetSocketAddress>			udp2_lan_to_ext	= new HashMap<>();
+	private volatile Map<InetSocketAddress,InetSocketAddress>			tcp_ext_to_lan	= new HashMap<>();
+	private volatile Map<InetSocketAddress,InetSocketAddress>			udp_ext_to_lan	= new HashMap<>();
+	private volatile Map<InetSocketAddress,InetSocketAddress>			udp2_ext_to_lan	= new HashMap<>();
 	
-	private volatile Set<InetAddress>			lan_addresses	= new HashSet<InetAddress>();
-	private volatile Set<InetAddress>			ext_addresses	= new HashSet<InetAddress>();
+	private volatile Set<InetAddress>			lan_addresses	= new HashSet<>();
+	private volatile Set<InetAddress>			ext_addresses	= new HashSet<>();
 	
-	private volatile List<Pattern>					lan_subnets		= new ArrayList<Pattern>();
-	private volatile List<InetSocketAddress>		explicit_peers 	= new ArrayList<InetSocketAddress>();
+	private volatile List<Pattern>					lan_subnets		= new ArrayList<>();
+	private volatile List<InetSocketAddress>		explicit_peers 	= new ArrayList<>();
 	
-	private CopyOnWriteSet<InetAddress>	explicit_addresses = new CopyOnWriteSet<InetAddress>( false );
+	private CopyOnWriteSet<InetAddress>	explicit_addresses = new CopyOnWriteSet<>(false);
 	
 	private volatile boolean		include_well_known_lans	= true;
 	
@@ -416,8 +416,8 @@ AZInstanceManagerImpl
 	{
 		Map	map = new HashMap();
 		
-		map.put( "ver", new Long(MT_VERSION));
-		map.put( "type", new Long(type));
+		map.put( "ver", (long) MT_VERSION);
+		map.put( "type", (long) type);
 		
 		Map	originator = new HashMap();
 		
@@ -440,22 +440,20 @@ AZInstanceManagerImpl
 				
 				if ( explicit_peers.size() > 0 ){
 					
-					map.put( "explicit", new Long(1));
+					map.put( "explicit", 1L);
 				
 					byte[]	explicit_data = BEncoder.encode( map );
-					
-					Iterator	it = explicit_peers.iterator();
-				
-					while( it.hasNext()){
-					
-						mc_group.sendToMember((InetSocketAddress)it.next(), explicit_data );
+
+					for (InetSocketAddress explicit_peer : explicit_peers) {
+
+						mc_group.sendToMember(explicit_peer, explicit_data);
 					}
 				}
 			}else{
 				
 				if ( explicit_peers.contains( member )){
 					
-					map.put( "explicit", new Long(1));
+					map.put( "explicit", 1L);
 				}
 				
 				byte[]	explicit_data = BEncoder.encode( map );
@@ -478,8 +476,8 @@ AZInstanceManagerImpl
 		try{
 			Map	map = BDecoder.decode( data, 0, length );
 						
-			long	version = ((Long)map.get( "ver" )).longValue();
-			long	type	= ((Long)map.get( "type" )).longValue();
+			long	version = (Long) map.get("ver");
+			long	type	= (Long) map.get("type");
 			
 			InetAddress	originator_address = originator.getAddress();
 			
@@ -528,18 +526,16 @@ AZInstanceManagerImpl
 						
 						if ( originator_id.equals( my_instance.getID())){
 							
-							long req_id = ((Long)body.get("rid")).longValue();
+							long req_id = (Long) body.get("rid");
 							
 							try{
 								this_mon.enter();
-								
-								for (int i=0;i<requests.size();i++){
-									
-									Request	req = (Request)requests.get(i);
-									
-									if ( req.getID() == req_id ){
-										
-										req.addReply( instance, body );
+
+								for (Request req : requests) {
+
+									if (req.getID() == req_id) {
+
+										req.addReply(instance, body);
 									}
 								}
 							}finally{
@@ -565,7 +561,7 @@ AZInstanceManagerImpl
 		// System.out.println( "received result: " + ST + "/" + AL );
 		
 
-		long	type = ((Long)body.get( "type")).longValue();
+		long	type = (Long) body.get("type");
 		
 		if ( type == MT_REQUEST_SEARCH ){
 			
@@ -591,7 +587,7 @@ AZInstanceManagerImpl
 				
 				Map	reply = new HashMap();
 				
-				reply.put( "seed", new Long( target.isSeed()?1:0));		
+				reply.put( "seed", (long) (target.isSeed() ? 1 : 0));
 				
 				return( reply );
 				
@@ -627,7 +623,7 @@ AZInstanceManagerImpl
 		try{
 			this_mon.enter();
 			
-			AZOtherInstanceImpl	existing = (AZOtherInstanceImpl)other_instances.get( inst.getID());
+			AZOtherInstanceImpl	existing = other_instances.get( inst.getID());
 			
 			if ( existing == null ){
 				
@@ -730,7 +726,7 @@ AZInstanceManagerImpl
 		try{
 			this_mon.enter();
 
-			return((AZInstance[])other_instances.values().toArray( new AZInstance[other_instances.size()]));
+			return other_instances.values().toArray( new AZInstance[other_instances.size()]);
 			
 		}finally{
 			
@@ -776,9 +772,9 @@ AZInstanceManagerImpl
 		int			udp					= inst.getUDPListenPort();
 		int			udp2				= inst.getUDPNonDataListenPort();
 
-		for (int i=0;i<internal_addresses.size();i++){
-			
-			modifyAddresses( (InetAddress)internal_addresses.get(i), external_address, tcp, udp, udp2, false );
+		for (Object internal_address : internal_addresses) {
+
+			modifyAddresses((InetAddress) internal_address, external_address, tcp, udp, udp2, false);
 		}
 	}
 	
@@ -853,7 +849,7 @@ AZInstanceManagerImpl
 	{
 		// System.out.println( "ModAddress: " + key + " -> " + value + " - " + (add?"add":"remove"));
 		
-		InetSocketAddress	old_value = (InetSocketAddress)map.get(key);
+		InetSocketAddress	old_value = map.get(key);
 
 		boolean	same = old_value != null && old_value.equals( value );
 		
@@ -863,7 +859,7 @@ AZInstanceManagerImpl
 			
 			if ( !same ){
 				
-				new_map	= new HashMap<InetSocketAddress,InetSocketAddress>( map );
+				new_map	= new HashMap<>(map);
 	
 				new_map.put( key, value );
 			}
@@ -871,7 +867,7 @@ AZInstanceManagerImpl
 			
 			if ( same ){
 				
-				new_map	= new HashMap<InetSocketAddress,InetSocketAddress>( map );
+				new_map	= new HashMap<>(map);
 				
 				new_map.remove( key );
 			}
@@ -961,14 +957,12 @@ AZInstanceManagerImpl
 		}
 		
 		String	host_address = address.getHostAddress();
-		
-		for (int i=0;i<lan_subnets.size();i++){
-			
-			Pattern	p = (Pattern)lan_subnets.get(i);
-			
-			if ( p.matcher( host_address ).matches()){
-								
-				return( true );
+
+		for (Pattern p : lan_subnets) {
+
+			if (p.matcher(host_address).matches()) {
+
+				return (true);
 			}
 		}
 		
@@ -978,14 +972,12 @@ AZInstanceManagerImpl
 		}
 		
 		if ( explicit_peers.size() > 0 ){
-			
-			Iterator	it = explicit_peers.iterator();
-			
-			while( it.hasNext()){
 
-				if (((InetSocketAddress)it.next()).getAddress().equals( address )){
-					
-					return( true );
+			for (InetSocketAddress explicit_peer : explicit_peers) {
+
+				if ((explicit_peer).getAddress().equals(address)) {
+
+					return (true);
 				}
 			}
 		}
@@ -1033,12 +1025,12 @@ AZInstanceManagerImpl
 		}
 		
 		Pattern pattern = Pattern.compile( str );
-		
-		for (int i=0;i<lan_subnets.size();i++){
-			
-			if ( pattern.pattern().equals(((Pattern)lan_subnets.get(i)).pattern())){
-				
-				return( false );
+
+		for (Pattern lan_subnet : lan_subnets) {
+
+			if (pattern.pattern().equals(lan_subnet.pattern())) {
+
+				return (false);
 			}
 		}
 		
@@ -1159,7 +1151,7 @@ AZInstanceManagerImpl
 		
 		body.put( "hash", hash );
 		
-		body.put( "seed", new Long( target.isSeed()?1:0 ));
+		body.put( "seed", (long) (target.isSeed() ? 1 : 0));
 		
 		Map	replies = sendRequest( MT_REQUEST_TRACK, body ); 
 				
@@ -1211,12 +1203,12 @@ AZInstanceManagerImpl
 			
 			this_mon.exit();
 		}
-		
-		for (int i=0;i<removed.size();i++){
-			
-			AZOtherInstanceImpl	inst = (AZOtherInstanceImpl)removed.get(i);
-			
-			informRemoved( inst );
+
+		for (Object o : removed) {
+
+			AZOtherInstanceImpl inst = (AZOtherInstanceImpl) o;
+
+			informRemoved(inst);
 		}
 	}
 	
@@ -1225,14 +1217,14 @@ AZInstanceManagerImpl
 		AZOtherInstanceImpl	inst )
 	{
 		removeAddresses( inst );
-		
-		for (int i=0;i<listeners.size();i++){
-			
-			try{
-				((AZInstanceManagerListener)listeners.get(i)).instanceLost( inst );
-				
-			}catch( Throwable e ){
-				
+
+		for (Object listener : listeners) {
+
+			try {
+				((AZInstanceManagerListener) listener).instanceLost(inst);
+
+			} catch (Throwable e) {
+
 				Debug.printStackTrace(e);
 			}
 		}
@@ -1244,13 +1236,13 @@ AZInstanceManagerImpl
 	{
 		addAddresses( inst );
 
-		for (int i=0;i<listeners.size();i++){
-			
-			try{
-				((AZInstanceManagerListener)listeners.get(i)).instanceFound( inst );
-				
-			}catch( Throwable e ){
-				
+		for (Object listener : listeners) {
+
+			try {
+				((AZInstanceManagerListener) listener).instanceFound(inst);
+
+			} catch (Throwable e) {
+
 				Debug.printStackTrace(e);
 			}
 		}
@@ -1266,14 +1258,14 @@ AZInstanceManagerImpl
 			
 			sendAlive();
 		}
-		
-		for (int i=0;i<listeners.size();i++){
-			
-			try{
-				((AZInstanceManagerListener)listeners.get(i)).instanceChanged( inst );
-				
-			}catch( Throwable e ){
-				
+
+		for (Object listener : listeners) {
+
+			try {
+				((AZInstanceManagerListener) listener).instanceChanged(inst);
+
+			} catch (Throwable e) {
+
 				Debug.printStackTrace(e);
 			}
 		}
@@ -1283,13 +1275,13 @@ AZInstanceManagerImpl
 	informTracked(
 		AZInstanceTracked	inst )
 	{
-		for (int i=0;i<listeners.size();i++){
-			
-			try{
-				((AZInstanceManagerListener)listeners.get(i)).instanceTracked( inst );
-				
-			}catch( Throwable e ){
-				
+		for (Object listener : listeners) {
+
+			try {
+				((AZInstanceManagerListener) listener).instanceTracked(inst);
+
+			} catch (Throwable e) {
+
 				Debug.printStackTrace(e);
 			}
 		}
@@ -1336,9 +1328,9 @@ AZInstanceManagerImpl
 				this_mon.exit();
 			}
 			
-			body.put( "type", new Long( type ));
+			body.put( "type", (long) type);
 			
-			body.put( "rid", new Long( id ));
+			body.put( "rid", id);
 			
 			sendMessage( MT_REQUEST, body );
 		}

@@ -30,107 +30,107 @@ import org.gudy.azureus2.plugins.tracker.web.TrackerWebPageResponse;
 public interface 
 PairingManager 
 {
-	public static String CONFIG_SECTION_ID = "Pairing";
+	String CONFIG_SECTION_ID = "Pairing";
 
-	public boolean
+	boolean
 	isEnabled();
 	
-	public boolean
+	boolean
 	isSRPEnabled();
 	
-	public void
+	void
 	setGroup(
-		String		group );
+            String group);
 	
-	public String
+	String
 	getGroup();
 	
-	public List<PairedNode>
+	List<PairedNode>
 	listGroup()
 	
 		throws PairingException;
 	
-	public List<PairedService>
+	List<PairedService>
 	lookupServices(
-		String		access_code )
+            String access_code)
 		
 		throws PairingException;
 		
-	public String
+	String
 	getAccessCode()
 	
 		throws PairingException;
 	
-	public String
+	String
 	peekAccessCode();
 	
-	public String
+	String
 	getReplacementAccessCode()
 	
 		throws PairingException;
 	
-	public File
+	File
 	getQRCode();
 	
-	public void
+	void
 	setSRPPassword(
-		char[]		password );
+            char[] password);
 	
-	public PairedService
+	PairedService
 	addService(
-		String							sid,
-		PairedServiceRequestHandler		handler );
+            String sid,
+            PairedServiceRequestHandler handler);
 	
-	public PairedService
+	PairedService
 	getService(
-		String		sid );
+            String sid);
 	
-	public void 
+	void
 	setEnabled(
-		boolean enabled );
+            boolean enabled);
 
-	public void 
+	void
 	setSRPEnabled(
-		boolean enabled );
+            boolean enabled);
 	
-	public String
+	String
 	getStatus();
 
-	public String
+	String
 	getSRPStatus();
 	
-	public String
+	String
 	getLastServerError();
 
-	public boolean
+	boolean
 	hasActionOutstanding();
 	
-	public PairingTest
+	PairingTest
 	testService(
-		String					sid,
-		PairingTestListener		listener )
+            String sid,
+            PairingTestListener listener)
 	
 		throws PairingException;
 	
-	public boolean
+	boolean
 	handleLocalTunnel(
-		TrackerWebPageRequest		request,
-		TrackerWebPageResponse		response )
+            TrackerWebPageRequest request,
+            TrackerWebPageResponse response)
 	
 		throws IOException;
 		
-	public void
+	void
 	recordRequest(
-		String		name,
-		String		ip,
-		boolean		good );
+            String name,
+            String ip,
+            boolean good);
 	
-	public void
+	void
 	addListener(
-		PairingManagerListener	l );
+            PairingManagerListener l);
 	
-	public void
+	void
 	removeListener(
-		PairingManagerListener	l );
+            PairingManagerListener l);
 
 }

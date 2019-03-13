@@ -29,13 +29,13 @@ public interface MessageStreamFactory {
    * Create message stream encoder.
    * @return encoder
    */
-  public MessageStreamEncoder createEncoder();
+  MessageStreamEncoder createEncoder();
   
   
   /**
    * Create message stream decoder.
    * @return decoder
    */
-  public MessageStreamDecoder createDecoder();
+  MessageStreamDecoder createDecoder();
   
 }

@@ -149,14 +149,14 @@ DHTUDPPacketHelper
 			
 		Map	request_decoders = new HashMap();
 		
-		request_decoders.put( new Integer( ACT_REQUEST_PING ), request_decoder );
-		request_decoders.put( new Integer( ACT_REQUEST_STORE ), request_decoder );
-		request_decoders.put( new Integer( ACT_REQUEST_FIND_NODE ), request_decoder );
-		request_decoders.put( new Integer( ACT_REQUEST_FIND_VALUE ), request_decoder );
-		request_decoders.put( new Integer( ACT_REQUEST_STATS ), request_decoder );		
-		request_decoders.put( new Integer( ACT_DATA ), request_decoder );
-		request_decoders.put( new Integer( ACT_REQUEST_KEY_BLOCK ), request_decoder );
-		request_decoders.put( new Integer( ACT_REQUEST_QUERY_STORE ), request_decoder );
+		request_decoders.put(ACT_REQUEST_PING, request_decoder );
+		request_decoders.put(ACT_REQUEST_STORE, request_decoder );
+		request_decoders.put(ACT_REQUEST_FIND_NODE, request_decoder );
+		request_decoders.put(ACT_REQUEST_FIND_VALUE, request_decoder );
+		request_decoders.put(ACT_REQUEST_STATS, request_decoder );
+		request_decoders.put(ACT_DATA, request_decoder );
+		request_decoders.put(ACT_REQUEST_KEY_BLOCK, request_decoder );
+		request_decoders.put(ACT_REQUEST_QUERY_STORE, request_decoder );
 		
 		PRUDPPacketRequest.registerDecoders( request_decoders );	
 			
@@ -237,14 +237,14 @@ DHTUDPPacketHelper
 			
 		Map	reply_decoders = new HashMap();
 		
-		reply_decoders.put( new Integer( ACT_REPLY_PING ), reply_decoder );
-		reply_decoders.put( new Integer( ACT_REPLY_STORE ), reply_decoder );
-		reply_decoders.put( new Integer( ACT_REPLY_FIND_NODE ), reply_decoder );
-		reply_decoders.put( new Integer( ACT_REPLY_FIND_VALUE ), reply_decoder );
-		reply_decoders.put( new Integer( ACT_REPLY_ERROR ), reply_decoder );
-		reply_decoders.put( new Integer( ACT_REPLY_STATS ), reply_decoder );
-		reply_decoders.put( new Integer( ACT_REPLY_KEY_BLOCK ), reply_decoder );
-		reply_decoders.put( new Integer( ACT_REPLY_QUERY_STORE ), reply_decoder );
+		reply_decoders.put(ACT_REPLY_PING, reply_decoder );
+		reply_decoders.put(ACT_REPLY_STORE, reply_decoder );
+		reply_decoders.put(ACT_REPLY_FIND_NODE, reply_decoder );
+		reply_decoders.put(ACT_REPLY_FIND_VALUE, reply_decoder );
+		reply_decoders.put(ACT_REPLY_ERROR, reply_decoder );
+		reply_decoders.put(ACT_REPLY_STATS, reply_decoder );
+		reply_decoders.put(ACT_REPLY_KEY_BLOCK, reply_decoder );
+		reply_decoders.put(ACT_REPLY_QUERY_STORE, reply_decoder );
 		
 		PRUDPPacketReply.registerDecoders( reply_decoders );
 	}

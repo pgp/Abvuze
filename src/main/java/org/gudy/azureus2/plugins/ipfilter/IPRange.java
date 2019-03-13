@@ -31,50 +31,50 @@ public interface
 IPRange
 	extends Comparable
 {
-	public String
+	String
 	getDescription();
 	
-	public void
+	void
 	setDescription(
-		String	str );
+            String str);
 		
 		/**
 		 * For a range to be usable it has to be valid. To make it valid you have
 		 * to call checkValid. Failure to do so will leave newly created ranges
 		 * as invalid and therefore checks won't be made against it!!!!
 		 */
-	
-	public void
+
+        void
 	checkValid();
 	
-	public boolean
+	boolean
 	isValid();
   
-	public boolean
+	boolean
 	isSessionOnly();
 	
-	public String
+	String
 	getStartIP();
 	
-	public void
+	void
 	setStartIP(
-		String	str );
+            String str);
 		
-	public String
+	String
 	getEndIP();
 	
-	public void
+	void
 	setEndIP(
-		String	str );
+            String str);
   
-	public void
+	void
 	setSessionOnly(
-		boolean sessionOnly );
+            boolean sessionOnly);
 		
-	public boolean 
+	boolean
 	isInRange(
-		String ipAddress );
+            String ipAddress);
 	
-	public void
+	void
 	delete();
 }

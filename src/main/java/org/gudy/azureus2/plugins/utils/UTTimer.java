@@ -33,11 +33,11 @@ UTTimer
 		 * @param performer
 		 * @return
 		 */
-	
-	public UTTimerEvent
+
+        UTTimerEvent
 	addEvent(
-		long					when,
-		UTTimerEventPerformer	performer );
+                long when,
+                UTTimerEventPerformer performer);
 	
 		/**
 		 * Create a periodic event that will fire every specified number of milliseconds until cancelled
@@ -46,16 +46,16 @@ UTTimer
 		 * @param performer
 		 * @return
 		 */
-	
-	public UTTimerEvent
+
+        UTTimerEvent
 	addPeriodicEvent(
-		long					periodic_millis,
-		UTTimerEventPerformer	performer );
+                long periodic_millis,
+                UTTimerEventPerformer performer);
 	
 		/**
 		 * Releases resources associated with this timer and renders it unusable
 		 */
-	
-	public void
+
+        void
 	destroy();
 }

@@ -23,41 +23,41 @@ package com.aelitis.azureus.core.cnetwork;
 public interface 
 ContentNetworkManager 
 {
-	public ContentNetwork[]
+	ContentNetwork[]
 	getContentNetworks();
 	
-	public ContentNetwork
+	ContentNetwork
 	getContentNetwork(
-		long			id );
+            long id);
 
-	public ContentNetwork
+	ContentNetwork
 	getStartupContentNetwork();
 
 		/**
 		 * Checks networks for those that have this URL as their site
 		 * @return matching network, null if none
 		 */
-	
-	public ContentNetwork
+
+        ContentNetwork
 	getContentNetworkForURL(
-		String		url );
+                String url);
 
 	/**
 	 * {@link ContentNetworkListener#networkAdded(ContentNetwork)} will be called
 	 * once the network is added
 	 */
-	public void
+    void
 	addContentNetwork(
-		long			id )
+            long id)
 	
 		throws ContentNetworkException;
 	
-	public void
+	void
 	addListener(
-		ContentNetworkListener		listener );
+            ContentNetworkListener listener);
 	
-	public void
+	void
 	removeListener(
-		ContentNetworkListener		listener );
+            ContentNetworkListener listener);
 
 }

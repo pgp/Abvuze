@@ -22,20 +22,20 @@ package com.aelitis.azureus.core.diskmanager.access;
 public interface 
 DiskAccessRequestListener 
 {
-	public void
+	void
 	requestComplete(
-		DiskAccessRequest	request );
+            DiskAccessRequest request);
 	
-	public void
+	void
 	requestCancelled(
-		DiskAccessRequest	request );
+            DiskAccessRequest request);
 	
-	public void
+	void
 	requestFailed(
-		DiskAccessRequest	request,
-		Throwable			cause );
+            DiskAccessRequest request,
+            Throwable cause);
 	
-	public int
+	int
 	getPriority();
 	
 		/**
@@ -44,8 +44,8 @@ DiskAccessRequestListener
 		 * region and subsequent aggregated requests will be reported with 0 bytes
 		 * @param bytes
 		 */
-	
-	public void
+
+        void
 	requestExecuted(
-		long	bytes );
+                long bytes);
 }

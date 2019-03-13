@@ -66,14 +66,14 @@ PListEditor
 		StringBuilder value = new StringBuilder();
 		StringBuilder find = new StringBuilder();
 		find.append("(?s).*?<key>CFBundleDocumentTypes</key>\\s*<array>.*?<key>CFBundleTypeExtensions</key>\\s*<array>");
-		for(int i = 0 ; i < extensions.length ; i++) {
-			value.append("\n\t\t\t\t<string>");
-			value.append(extensions[i]);
-			value.append("</string>");
-			
-			find.append(".*?");
-			find.append(extensions[i]);
-		}
+        for (String extension : extensions) {
+            value.append("\n\t\t\t\t<string>");
+            value.append(extension);
+            value.append("</string>");
+
+            find.append(".*?");
+            find.append(extension);
+        }
 		value.append("\n\t\t\t");
 		
 		find.append(".*?</array>.*");
@@ -105,12 +105,12 @@ PListEditor
 		StringBuilder value = new StringBuilder();
 		StringBuilder find = new StringBuilder();
 		find.append("(?s).*?<key>").append(key).append("</key>\\s*").append("<array>");
-		for(int i = 0 ; i < values.length ; i++) {
-			find.append("\\s*<").append(valueType).append(">").append(values[i]).append("</").append(valueType).append(">");
-			value.append("\n\t\t\t\t<").append(valueType).append(">");
-			value.append(values[i]);
-			value.append("</").append(valueType).append(">");
-		}
+        for (String value1 : values) {
+            find.append("\\s*<").append(valueType).append(">").append(value1).append("</").append(valueType).append(">");
+            value.append("\n\t\t\t\t<").append(valueType).append(">");
+            value.append(value1);
+            value.append("</").append(valueType).append(">");
+        }
 		find.append("\\s*</array>.*");
 		value.append("\n\t\t\t");
 		
@@ -292,7 +292,7 @@ PListEditor
 		File	file  = new File( plistFile );
 		for(int i = 0 ; i <= 2 ; i++) {
 			if(file != null) {
-				String command[] = new String[] { "touch", file.getAbsolutePath() };
+                String[] command = new String[]{"touch", file.getAbsolutePath()};
 				
 				try{
 					Runtime.getRuntime().exec(command);
@@ -307,7 +307,7 @@ PListEditor
 		}
 	}
 	
-	public static void main(String args[]) {
+	public static void main(String[] args) {
 		try{
 			PListEditor editor = new PListEditor("/Applications/Vuze.app/Contents/Info.plist");
 			editor.setFileTypeExtensions(new String[] {"torrent","tor","vuze","vuz"});

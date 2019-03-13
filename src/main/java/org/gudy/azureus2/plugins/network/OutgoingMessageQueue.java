@@ -32,37 +32,37 @@ public interface OutgoingMessageQueue {
    * Set the message stream encoder that will be used to encode outgoing messages.
    * @param encoder to use
    */
-  public void setEncoder( MessageStreamEncoder encoder );
+  void setEncoder(MessageStreamEncoder encoder);
   
   /**
    * Queue the given message for sending.
    * @param message to send
    */
-  public void sendMessage( Message message );
+  void sendMessage(Message message);
   
   /**
    * Register queue listener.
    * @param listener to register
    */
-  public void registerListener( OutgoingMessageQueueListener listener );
+  void registerListener(OutgoingMessageQueueListener listener);
   
   /**
    * Remove registration of queue listener.
    * @param listener to remove
    */
-  public void deregisterListener( OutgoingMessageQueueListener listener );
+  void deregisterListener(OutgoingMessageQueueListener listener);
   
   /**
    * Notifty the queue (and its listeners) of a message sent externally on the queue's behalf.
    * @param message sent externally
    */
-  public void notifyOfExternalSend( Message message );  
+  void notifyOfExternalSend(Message message);
   
-  public int getPercentDoneOfCurrentMessage();
+  int getPercentDoneOfCurrentMessage();
   
-  public int getDataQueuedBytes();
+  int getDataQueuedBytes();
   
-  public int getProtocolQueuedBytes();
+  int getProtocolQueuedBytes();
   
-  public boolean isBlocked();
+  boolean isBlocked();
 }

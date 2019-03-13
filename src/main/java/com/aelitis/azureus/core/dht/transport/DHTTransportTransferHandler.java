@@ -28,17 +28,17 @@ package com.aelitis.azureus.core.dht.transport;
 public interface 
 DHTTransportTransferHandler 
 {
-	public String
+	String
 	getName();
 	
-	public byte[]
+	byte[]
 	handleRead(
-		DHTTransportContact	originator,
-		byte[]				key );
+            DHTTransportContact originator,
+            byte[] key);
 	
-	public byte[]
+	byte[]
 	handleWrite(
-		DHTTransportContact	originator,
-		byte[]				key,
-		byte[]				value );
+            DHTTransportContact originator,
+            byte[] key,
+            byte[] value);
 }

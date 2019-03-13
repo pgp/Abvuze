@@ -22,18 +22,18 @@ package org.gudy.azureus2.plugins.torrent;
 public interface 
 TorrentCreator 
 {
-	public void
+	void
 	start();
 	
-	public void
+	void
 	cancel();
 	
-	public void
+	void
 	addListener(
-		TorrentCreatorListener listener );
+            TorrentCreatorListener listener);
 	
-	public void
+	void
 	removeListener(
-		TorrentCreatorListener listener );
+            TorrentCreatorListener listener);
 	
 }

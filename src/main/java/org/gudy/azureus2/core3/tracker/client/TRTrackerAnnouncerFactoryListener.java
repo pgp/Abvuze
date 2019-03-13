@@ -29,11 +29,11 @@ package org.gudy.azureus2.core3.tracker.client;
 public interface 
 TRTrackerAnnouncerFactoryListener 
 {
-	public void
+	void
 	clientCreated(
-		TRTrackerAnnouncer	client  );
+            TRTrackerAnnouncer client);
 		
-	public void
+	void
 	clientDestroyed(
-		TRTrackerAnnouncer	client );
+            TRTrackerAnnouncer client);
 }

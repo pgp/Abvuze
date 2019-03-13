@@ -26,6 +26,7 @@ package org.gudy.azureus2.platform.win32;
 
 import java.io.*;
 import java.net.InetAddress;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
@@ -323,16 +324,14 @@ PlatformManagerImpl
     		
     		return;
     	}
-    	
-    	for (int i=0;i<files.length;i++){
-    		
-    		File	file = files[i];
-    		   	   		
-    		if ( file.isFile()){
-    			
-    			copyFilePermissions( parent.getAbsolutePath(), file.getAbsolutePath());
-    		}
-    	}
+
+        for (File file : files) {
+
+            if (file.isFile()) {
+
+                copyFilePermissions(parent.getAbsolutePath(), file.getAbsolutePath());
+            }
+        }
     }
     
 	protected int
@@ -597,37 +596,32 @@ PlatformManagerImpl
 
 		try{
 					
-			List<String>	list = new ArrayList<String>();
+			List<String>	list = new ArrayList<>();
 			
 			if ( local_options.exists()){
-				
-				LineNumberReader lnr = new LineNumberReader( new InputStreamReader( new FileInputStream( local_options ), "UTF-8" ));
-					
-				try{
-					while( true ){
-						
-						String	line = lnr.readLine();
-						
-						if ( line == null ){
-							
-							break;
-						}
-						
-						line = line.trim();
-						
-						if ( line.length() > 0 ){
-							
-							list.add( line );
-						}
-					}
-					
-				}finally{
-					
-					lnr.close();
-				}
+
+                try (LineNumberReader lnr = new LineNumberReader(new InputStreamReader(new FileInputStream(local_options), StandardCharsets.UTF_8))) {
+                    while (true) {
+
+                        String line = lnr.readLine();
+
+                        if (line == null) {
+
+                            break;
+                        }
+
+                        line = line.trim();
+
+                        if (line.length() > 0) {
+
+                            list.add(line);
+                        }
+                    }
+
+                }
 			}
 			
-			return( list.toArray( new String[list.size()]));
+			return( list.toArray(new String[0]));
 					
 		}catch( Throwable e ){
 			
@@ -663,21 +657,16 @@ PlatformManagerImpl
 				boolean	ok = false;
 				
 				try{
-					
-					PrintWriter pw = new PrintWriter( new OutputStreamWriter( new FileOutputStream( local_options ), "UTF-8" ));
-					
-					try{
-						for ( String option: options ){
-							
-							pw.println( option );
-						}
-					
-						ok = true;
-						
-					}finally{
-						
-						pw.close();
-					}
+
+                    try (PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(local_options), StandardCharsets.UTF_8))) {
+                        for (String option : options) {
+
+                            pw.println(option);
+                        }
+
+                        ok = true;
+
+                    }
 				}finally{
 					
 					if ( !ok ){
@@ -1010,12 +999,12 @@ PlatformManagerImpl
 											
 											if ( !local_options.exists()){
 
-												installer.addResource( "local_options", new ByteArrayInputStream( options.getBytes( "UTF-8" )));
+												installer.addResource( "local_options", new ByteArrayInputStream( options.getBytes(StandardCharsets.UTF_8)));
 												
 												installer.addMoveAction( "local_options", local_options.getAbsolutePath());
 											}														
 
-											installer.addResource( "redirect", new ByteArrayInputStream( ( redirect + "\r\n" ).getBytes( "UTF-8" )));
+											installer.addResource( "redirect", new ByteArrayInputStream( ( redirect + "\r\n" ).getBytes(StandardCharsets.UTF_8)));
 											
 											installer.addMoveAction( "redirect", shared_options.getAbsolutePath());
 												
@@ -1097,7 +1086,7 @@ PlatformManagerImpl
 										return;
 									}
 
-									installer.addResource( "redirect", new ByteArrayInputStream( ( redirect + "\r\n" ).getBytes( "UTF-8" )));
+									installer.addResource( "redirect", new ByteArrayInputStream( ( redirect + "\r\n" ).getBytes(StandardCharsets.UTF_8)));
 									
 									installer.addMoveAction( "redirect", shared_options.getAbsolutePath());
 										
@@ -1166,7 +1155,7 @@ PlatformManagerImpl
 		
 		UpdateManager update_manager = pi.getUpdateManager();
 		
-		final List<UpdateCheckInstance>	l_instances = new ArrayList<UpdateCheckInstance>();
+		final List<UpdateCheckInstance>	l_instances = new ArrayList<>();
 		
 		update_manager.addListener( 
 			new UpdateManagerListener()
@@ -2122,33 +2111,33 @@ PlatformManagerImpl
 		}
 				
 		if ( t_type != -1 ){
-			
-			for (int i=0;i<listeners.size();i++){
-				
-				try{
-					int my_res = ((PlatformManagerListener)listeners.get(i)).eventOccurred( t_type );
-					
-					if ( my_res == PlatformManagerListener.RT_SUSPEND_DENY ){
-						
-						res = AEWin32AccessListener.RT_SUSPEND_DENY;
-						
-					}else if ( my_res != -1 ){
-						
-						if ( res != -1 && my_res != res ){
-							
-							Debug.out( "Incompatible result codes: " + res + "/" + my_res );
-							
-						}else{
-							
-							res = my_res;
-						}
-					}
-					
-				}catch( Throwable e ){
-					
-					Debug.printStackTrace(e);
-				}
-			}
+
+            for (Object listener : listeners) {
+
+                try {
+                    int my_res = ((PlatformManagerListener) listener).eventOccurred(t_type);
+
+                    if (my_res == PlatformManagerListener.RT_SUSPEND_DENY) {
+
+                        res = AEWin32AccessListener.RT_SUSPEND_DENY;
+
+                    } else if (my_res != -1) {
+
+                        if (res != -1 && my_res != res) {
+
+                            Debug.out("Incompatible result codes: " + res + "/" + my_res);
+
+                        } else {
+
+                            res = my_res;
+                        }
+                    }
+
+                } catch (Throwable e) {
+
+                    Debug.printStackTrace(e);
+                }
+            }
 		}
 		
 		return( res );

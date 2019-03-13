@@ -32,8 +32,8 @@ import java.net.URL;
 public interface 
 DownloadScrapeResult 
 {
-	public static final int	RT_SUCCESS	= 1;
-	public static final int RT_ERROR	= 2;
+	int	RT_SUCCESS	= 1;
+	int RT_ERROR	= 2;
 	
 	/**
 	 * Gives access to the associated download
@@ -41,7 +41,7 @@ DownloadScrapeResult
    *
    * @since 2.0.7.0
 	 */
-	public Download
+    Download
 	getDownload();
 	
 	/**
@@ -50,7 +50,7 @@ DownloadScrapeResult
    *
    * @since 2.0.7.0
 	 */
-	public int
+    int
 	getResponseType();	// either RT_SUCCESS or RT_ERROR
 	
 	/**
@@ -59,7 +59,7 @@ DownloadScrapeResult
    *
    * @since 2.0.7.0
 	 */
-	public int
+    int
 	getSeedCount();
 	
 	/**
@@ -68,7 +68,7 @@ DownloadScrapeResult
    *
    * @since 2.0.7.0
 	 */
-	public int
+    int
 	getNonSeedCount();
 
   /* Gives the next scrape time
@@ -76,7 +76,7 @@ DownloadScrapeResult
    *
    * @since 2.0.8.0
    */
-  public long
+  long
   getScrapeStartTime();
 
   /** Sets the next scrape time
@@ -85,9 +85,9 @@ DownloadScrapeResult
    *
    * @since 2.1.0.2
    */
-  public void setNextScrapeStartTime(long nextScrapeStartTime);
+  void setNextScrapeStartTime(long nextScrapeStartTime);
   
-  public long
+  long
   getNextScrapeStartTime();
   
   /**
@@ -95,8 +95,8 @@ DownloadScrapeResult
    * @return
    * @since 2.1.0.4
    */
-  
-  public String
+
+  String
   getStatus();
   
 	/**
@@ -104,6 +104,6 @@ DownloadScrapeResult
 	 * @return
 	 */
 
-  public URL
+    URL
   getURL();
 }

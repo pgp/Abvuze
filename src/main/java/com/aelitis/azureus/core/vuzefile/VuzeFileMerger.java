@@ -49,36 +49,32 @@ VuzeFileMerger
 			VuzeFileHandler vfh = VuzeFileHandler.getSingleton();
 			
 			VuzeFile target = vfh.create();
-			
-			for ( int i=0;i<files.length;i++){
-				
-				File f = files[i];
-				
-				if ( f.isDirectory()){
-					
-					continue;
-				}
-				
-				if ( !f.getName().endsWith( ".vuze" )){
-					
-					continue;
-				}
-				
-				VuzeFile vf = vfh.loadVuzeFile( f.getAbsolutePath());
-				
-				System.out.println( "Read " + f );
-				
-				VuzeFileComponent[] comps = vf.getComponents();
-				
-				for (int j=0;j<comps.length;j++){
-					
-					VuzeFileComponent comp = comps[j];
-					
-					target.addComponent( comp.getType(), comp.getContent());
-					
-					System.out.println( "    added component: " + comp.getType());
-				}
-			}
+
+            for (File f : files) {
+
+                if (f.isDirectory()) {
+
+                    continue;
+                }
+
+                if (!f.getName().endsWith(".vuze")) {
+
+                    continue;
+                }
+
+                VuzeFile vf = vfh.loadVuzeFile(f.getAbsolutePath());
+
+                System.out.println("Read " + f);
+
+                VuzeFileComponent[] comps = vf.getComponents();
+
+                for (VuzeFileComponent comp : comps) {
+
+                    target.addComponent(comp.getType(), comp.getContent());
+
+                    System.out.println("    added component: " + comp.getType());
+                }
+            }
 			
 			target.write( output_file );
 			

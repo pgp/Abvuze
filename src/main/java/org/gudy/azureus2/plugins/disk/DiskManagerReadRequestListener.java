@@ -25,13 +25,13 @@ import org.gudy.azureus2.plugins.utils.PooledByteBuffer;
 public interface 
 DiskManagerReadRequestListener 
 {
-	public void
+	void
 	complete(
-		DiskManagerReadRequest		request,
-		PooledByteBuffer			buffer );
+            DiskManagerReadRequest request,
+            PooledByteBuffer buffer);
 	
-	public void
+	void
 	failed(
-		DiskManagerReadRequest		request,
-		DiskManagerException		error );
+            DiskManagerReadRequest request,
+            DiskManagerException error);
 }

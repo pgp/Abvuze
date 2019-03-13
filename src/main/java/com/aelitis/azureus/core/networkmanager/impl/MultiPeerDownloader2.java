@@ -177,15 +177,15 @@ public class MultiPeerDownloader2 implements RateControlledEntity {
 	{
 		int	res = 0;
 
-		for (Iterator it=connections_cow.iterator();it.hasNext();){
+        for (Object o : connections_cow) {
 
-			NetworkConnectionBase connection = (NetworkConnectionBase)it.next();
+            NetworkConnectionBase connection = (NetworkConnectionBase) o;
 
-			if ( connection.getTransportBase().isReadyForRead( waiter ) == 0 ){
+            if (connection.getTransportBase().isReadyForRead(waiter) == 0) {
 
-				res++;
-			}
-		}
+                res++;
+            }
+        }
 
 		return( res );
 	}
@@ -220,23 +220,23 @@ public class MultiPeerDownloader2 implements RateControlledEntity {
 			try{
 				connections_mon.enter();
 
-				for (int i=0;i<pending_actions.size();i++){
-					
-					Object[] entry = (Object[])pending_actions.get(i);
-					
-					NetworkConnectionBase	connection = (NetworkConnectionBase)entry[1];
-					
-					if ( entry[0] == ADD_ACTION ){
-						
-						active_connections.add( connection );
-						
-					}else{
-						
-						active_connections.remove( connection );
-						
-						idle_connections.remove( connection );
-					}
-				}
+                for (Object pending_action : pending_actions) {
+
+                    Object[] entry = (Object[]) pending_action;
+
+                    NetworkConnectionBase connection = (NetworkConnectionBase) entry[1];
+
+                    if (entry[0] == ADD_ACTION) {
+
+                        active_connections.add(connection);
+
+                    } else {
+
+                        active_connections.remove(connection);
+
+                        idle_connections.remove(connection);
+                    }
+                }
 				
 				pending_actions = null;
 				
@@ -389,17 +389,17 @@ public class MultiPeerDownloader2 implements RateControlledEntity {
 
 		int	num = 0;
 
-		for (Iterator it=connections_cow.iterator();it.hasNext();){
+        for (Object o : connections_cow) {
 
-			NetworkConnectionBase connection = (NetworkConnectionBase)it.next();
+            NetworkConnectionBase connection = (NetworkConnectionBase) o;
 
-			if ( num++ > 0 ){
+            if (num++ > 0) {
 
-				str.append( "," );
-			}
+                str.append(",");
+            }
 
-			str.append( connection.getString());
-		}
+            str.append(connection.getString());
+        }
 
 		return( str.toString());
 	}

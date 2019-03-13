@@ -29,5 +29,5 @@ import org.gudy.azureus2.core3.download.DownloadManager;
  */
 public interface HasBeenOpenedListener
 {
-	public void hasBeenOpenedChanged(DownloadManager dm, boolean opened);
+	void hasBeenOpenedChanged(DownloadManager dm, boolean opened);
 }

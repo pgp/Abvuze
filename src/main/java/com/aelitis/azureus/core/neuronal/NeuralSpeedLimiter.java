@@ -78,21 +78,21 @@ public class NeuralSpeedLimiter {
 		while(error > 0.002 && c < 200000) {
 			
 			error = 0;
-			for(int i = 0 ; i <trainingSet.length ; i++) {
-				neuralNetwork.setInput(0, trainingSet[i][0]);
-				neuralNetwork.setInput(1, trainingSet[i][1]);
-				neuralNetwork.setInput(2, trainingSet[i][2]);
-				
-				neuralNetwork.setDesiredOutput(0, trainingSet[i][3]);
-				neuralNetwork.setDesiredOutput(1, trainingSet[i][4]);
-				neuralNetwork.setDesiredOutput(2, trainingSet[i][5]);
-				neuralNetwork.setDesiredOutput(3, trainingSet[i][6]);
-				
-				neuralNetwork.feedForward();
-				error += neuralNetwork.calculateError();
-				neuralNetwork.backPropagate();
-				
-			}
+            for (double[] doubles : trainingSet) {
+                neuralNetwork.setInput(0, doubles[0]);
+                neuralNetwork.setInput(1, doubles[1]);
+                neuralNetwork.setInput(2, doubles[2]);
+
+                neuralNetwork.setDesiredOutput(0, doubles[3]);
+                neuralNetwork.setDesiredOutput(1, doubles[4]);
+                neuralNetwork.setDesiredOutput(2, doubles[5]);
+                neuralNetwork.setDesiredOutput(3, doubles[6]);
+
+                neuralNetwork.feedForward();
+                error += neuralNetwork.calculateError();
+                neuralNetwork.backPropagate();
+
+            }
 			
 			error /= trainingSet.length;
 			
@@ -247,7 +247,7 @@ public class NeuralSpeedLimiter {
 		return (long) ( 1.2* maxUlSpeed * neuralNetwork.getOutput(3));
 	}
 	
-	public static void main(String args[]) {
+	public static void main(String[] args) {
 		new NeuralSpeedLimiter();
 	}
 

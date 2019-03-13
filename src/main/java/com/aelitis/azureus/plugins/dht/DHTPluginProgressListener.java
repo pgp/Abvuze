@@ -27,15 +27,15 @@ package com.aelitis.azureus.plugins.dht;
 public interface 
 DHTPluginProgressListener 
 {
-	public void
+	void
 	reportSize(
-		long	size );
+            long size);
 	
-	public void
+	void
 	reportActivity(
-		String	str );
+            String str);
 	
-	public void
+	void
 	reportCompleteness(
-		int		percent );
+            int percent);
 }

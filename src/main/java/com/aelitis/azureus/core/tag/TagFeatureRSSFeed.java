@@ -23,10 +23,10 @@ package com.aelitis.azureus.core.tag;
 public interface 
 TagFeatureRSSFeed 
 {
-	public boolean
+	boolean
 	isTagRSSFeedEnabled();
 	
-	public void
+	void
 	setTagRSSFeedEnabled(
-		boolean		enable );
+            boolean enable);
 }

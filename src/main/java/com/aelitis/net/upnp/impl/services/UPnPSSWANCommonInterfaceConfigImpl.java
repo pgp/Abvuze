@@ -65,22 +65,20 @@ UPnPSSWANCommonInterfaceConfigImpl
 			UPnPActionArgument[]	args = inv.invoke();
 			
 			long[]	res = new long[2];
-			
-			for (int i=0;i<args.length;i++){
-				
-				UPnPActionArgument	arg = args[i];
-			
-				String	name = arg.getName();
-				
-				if ( name.equalsIgnoreCase("NewLayer1UpstreamMaxBitRate")){
-					
-					res[1] = Long.parseLong( arg.getValue());
-					
-				}else if ( name.equalsIgnoreCase("NewLayer1DownstreamMaxBitRate")){
-					
-					res[0] = Long.parseLong( arg.getValue());
-				}
-			}
+
+            for (UPnPActionArgument arg : args) {
+
+                String name = arg.getName();
+
+                if (name.equalsIgnoreCase("NewLayer1UpstreamMaxBitRate")) {
+
+                    res[1] = Long.parseLong(arg.getValue());
+
+                } else if (name.equalsIgnoreCase("NewLayer1DownstreamMaxBitRate")) {
+
+                    res[0] = Long.parseLong(arg.getValue());
+                }
+            }
 			
 			return( res );
 		}

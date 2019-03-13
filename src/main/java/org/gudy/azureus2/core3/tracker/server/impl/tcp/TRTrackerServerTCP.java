@@ -199,38 +199,25 @@ TRTrackerServerTCP
 											
 						dos_log_file = new File( System.getProperty("user.dir" ) + File.separator + "dos.log" );
 					}
-					
-					PrintWriter pw = null;
-					
-					try{
-						
-						pw = new PrintWriter( new FileWriter( dos_log_file, true ));
-						
-						for (int i=0;i<dos_list.size();i++){
-							
-							DOSEntry	this_entry = (DOSEntry)dos_list.get(i);
-							
-							String ts = new SimpleDateFormat("HH:mm:ss - ").format( new Date(this_entry.last_time ));
-						
-							pw.println( ts + this_entry.ip );
-						}
-						
-					}catch( Throwable e ){
-						
-					}finally{
-						
-						dos_list.clear();
-						
-						if ( pw != null ){
-							
-							try{
-								
-								pw.close();
-								
-							}catch( Throwable e ){
-							}
-						}
-					}
+
+                    try (PrintWriter pw = new PrintWriter(new FileWriter(dos_log_file, true))) {
+
+                        for (Object o : dos_list) {
+
+                            DOSEntry this_entry = (DOSEntry) o;
+
+                            String ts = new SimpleDateFormat("HH:mm:ss - ").format(new Date(this_entry.last_time));
+
+                            pw.println(ts + this_entry.ip);
+                        }
+
+                    } catch (Throwable e) {
+
+                    } finally {
+
+                        dos_list.clear();
+
+                    }
 				}finally{
 					
 					class_mon.exit();

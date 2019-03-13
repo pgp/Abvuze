@@ -286,16 +286,16 @@ AZMyInstanceImpl
 				   	if ( upnp != null ){
 				   		
 				    	String[]	addresses = upnp.getExternalIPAddresses();
-				    	
-				    	for (int i=0;i<addresses.length;i++){
-				    		
-				    		if ( addresses[i].equals( last_external_address.getHostAddress())){
-				    			
-				    			external_address = last_external_address; 
-				    			
-				    			break;
-				    		}
-				    	}
+
+                        for (String address : addresses) {
+
+                            if (address.equals(last_external_address.getHostAddress())) {
+
+                                external_address = last_external_address;
+
+                                break;
+                            }
+                        }
 				    }
 				}catch( Throwable e ){
 				}

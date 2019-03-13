@@ -294,7 +294,7 @@ PluginResult
 				return( def );
 			}
 			
-			return( l.longValue());
+			return(l);
 			
 		}catch( Throwable e ){
 			
@@ -324,7 +324,7 @@ PluginResult
 				return( def );
 			}
 			
-			return( b.booleanValue());
+			return(b);
 			
 		}catch( Throwable e ){
 			
@@ -383,7 +383,7 @@ PluginResult
 	getResultProperty(
 		int		prop )
 	{
-		Integer i_prop = new Integer( prop );
+		Integer i_prop = prop;
 		
 		Object	res = property_cache.get( i_prop );
 		

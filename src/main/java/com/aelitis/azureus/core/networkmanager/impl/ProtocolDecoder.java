@@ -32,7 +32,7 @@ ProtocolDecoder
 	private static final int	TIMEOUT_CHECK		= 5000;
 	private static final int	LOG_TICKS			= 60000 / TIMEOUT_CHECK;
 		
-	static final List<ProtocolDecoder>			decoders	= new ArrayList<ProtocolDecoder>();
+	static final List<ProtocolDecoder>			decoders	= new ArrayList<>();
 	
 	static final AEMonitor	class_mon 	= new AEMonitor( "TCPProtocolDecoder:class" );
 	
@@ -67,7 +67,7 @@ ProtocolDecoder
 								}
 							}
 
-							copy = new ArrayList<ProtocolDecoder>( decoders );
+							copy = new ArrayList<>(decoders);
 							
 						}finally{
 
@@ -76,7 +76,7 @@ ProtocolDecoder
 						
 						if ( copy.size() > 0 ){
 							
-							List<ProtocolDecoder> to_remove = new ArrayList<ProtocolDecoder>();
+							List<ProtocolDecoder> to_remove = new ArrayList<>();
 							
 							long	now = SystemTime.getCurrentTime();
 

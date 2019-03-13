@@ -72,14 +72,14 @@ PEPeerSource
 	getDefaultEnabledPeerSources()
 	{
 		List	res = new ArrayList();
-		
-		for (int i=0;i<PS_SOURCES.length;i++){
-			
-			if ( COConfigurationManager.getBooleanParameter( "Peer Source Selection Default." + PS_SOURCES[i])){
-		
-				res.add( PS_SOURCES[i]);
-			}
-		}
+
+        for (String psSource : PS_SOURCES) {
+
+            if (COConfigurationManager.getBooleanParameter("Peer Source Selection Default." + psSource)) {
+
+                res.add(psSource);
+            }
+        }
 	
 		String[]	x = new String[res.size()];
 	

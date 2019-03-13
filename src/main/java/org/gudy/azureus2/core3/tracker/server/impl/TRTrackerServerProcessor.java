@@ -136,16 +136,16 @@ TRTrackerServerProcessor
 			String[]	permitted_networks = TRTrackerServerImpl.getPermittedNetworks();
 			
 			boolean ok = false;
-			
-			for (int i=0;i<permitted_networks.length;i++){
-				
-				if ( network == permitted_networks[i] ){
-					
-					ok = true;
-					
-					break;
-				}
-			}
+
+            for (String permitted_network : permitted_networks) {
+
+                if (network == permitted_network) {
+
+                    ok = true;
+
+                    break;
+                }
+            }
 			
 			if ( !ok ){
 				
@@ -441,37 +441,35 @@ TRTrackerServerProcessor
 			Map	files = new ByteEncodedKeyHashMap();
 				
 			TRTrackerServerTorrentImpl[] torrents = server.getTorrents();
-			
-			for (int i=0;i<torrents.length;i++){
-				
-				TRTrackerServerTorrentImpl	this_torrent = torrents[i];
-					
-				if ( this_torrent.getRedirects() != null ){
-					
-						// not visible to a full-scrape
-					
-					continue;
-				}
-				
-				server.preProcess( new lightweightPeer(client_ip_address,port,peer_id), this_torrent, request_type, request, null );
 
-				byte[]	torrent_hash = this_torrent.getHash().getHash();
-				
-				try{
-					String	str_hash = new String( torrent_hash,Constants.BYTE_ENCODING );
-					
-					// System.out.println( "tracker - encoding: " + ByteFormatter.nicePrint(torrent_hash) + " -> " + ByteFormatter.nicePrint( str_hash.getBytes( Constants.BYTE_ENCODING )));
-					
-					Map	hash_entry = this_torrent.exportScrapeToMap( request, client_ip_address, true );
-					
-					files.put( str_hash, hash_entry );
-					
-				}catch( UnsupportedEncodingException e ){
-			
-					throw( new TRTrackerServerException( "Encoding error", e ));
+            for (TRTrackerServerTorrentImpl this_torrent : torrents) {
 
-				}
-			}
+                if (this_torrent.getRedirects() != null) {
+
+                    // not visible to a full-scrape
+
+                    continue;
+                }
+
+                server.preProcess(new lightweightPeer(client_ip_address, port, peer_id), this_torrent, request_type, request, null);
+
+                byte[] torrent_hash = this_torrent.getHash().getHash();
+
+                try {
+                    String str_hash = new String(torrent_hash, Constants.BYTE_ENCODING);
+
+                    // System.out.println( "tracker - encoding: " + ByteFormatter.nicePrint(torrent_hash) + " -> " + ByteFormatter.nicePrint( str_hash.getBytes( Constants.BYTE_ENCODING )));
+
+                    Map hash_entry = this_torrent.exportScrapeToMap(request, client_ip_address, true);
+
+                    files.put(str_hash, hash_entry);
+
+                } catch (UnsupportedEncodingException e) {
+
+                    throw (new TRTrackerServerException("Encoding error", e));
+
+                }
+            }
 			
 			Map	root = new HashMap();
 			
@@ -504,7 +502,7 @@ TRTrackerServerProcessor
 			
 			Map	flags = new HashMap();
 			
-			flags.put("min_request_interval", new Long(interval));
+			flags.put("min_request_interval", interval);
 			
 			root.put( "flags", flags );
 		}

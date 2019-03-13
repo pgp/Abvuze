@@ -27,7 +27,7 @@ package org.gudy.azureus2.plugins.ddb;
 public interface 
 DistributedDatabaseListener 
 {
-	public void
+	void
 	event(
-		DistributedDatabaseEvent		event );
+            DistributedDatabaseEvent event);
 }

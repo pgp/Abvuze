@@ -23,10 +23,10 @@ package com.aelitis.azureus.core.util;
 public interface 
 AEPriorityMixin 
 {
-	public static final int PRIORITY_LOW	= 1;
-	public static final int PRIORITY_NORMAL	= 2;
-	public static final int PRIORITY_HIGH	= 3;
+	int PRIORITY_LOW	= 1;
+	int PRIORITY_NORMAL	= 2;
+	int PRIORITY_HIGH	= 3;
 	
-	public int
+	int
 	getPriority();
 }

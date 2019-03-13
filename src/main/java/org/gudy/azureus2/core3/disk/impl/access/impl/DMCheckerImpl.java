@@ -463,21 +463,21 @@ DMCheckerImpl
 					
 			try{
 				class_mon.enter();
-				
-				for (int i=0;i<async_check_queue.size();i++){
-					
-					Object[]	entry = (Object[])async_check_queue.get(i);
-					
-					if ( entry[0] == this ){
-						
-						DiskManagerCheckRequest request = (DiskManagerCheckRequest)entry[1];
-						
-						if ( request.getPieceNumber() == piece_number ){
-							
-							return( true );
-						}
-					}
-				}
+
+                for (Object o : async_check_queue) {
+
+                    Object[] entry = (Object[]) o;
+
+                    if (entry[0] == this) {
+
+                        DiskManagerCheckRequest request = (DiskManagerCheckRequest) entry[1];
+
+                        if (request.getPieceNumber() == piece_number) {
+
+                            return (true);
+                        }
+                    }
+                }
 			}finally{
 				
 				class_mon.exit();

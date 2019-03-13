@@ -32,11 +32,11 @@ import org.gudy.azureus2.core3.download.*;
 public interface 
 GlobalManagerDownloadWillBeRemovedListener 
 {
-	public void
+	void
 	downloadWillBeRemoved(
-		DownloadManager	manager,
-		boolean remove_torrent,
-		boolean remove_data )
+            DownloadManager manager,
+            boolean remove_torrent,
+            boolean remove_data)
 	
 		throws GlobalManagerDownloadRemovalVetoException;
 }

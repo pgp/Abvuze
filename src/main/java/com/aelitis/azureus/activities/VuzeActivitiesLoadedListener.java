@@ -27,5 +27,5 @@ package com.aelitis.azureus.activities;
  */
 public interface VuzeActivitiesLoadedListener
 {
-	public void vuzeActivitiesLoaded();
+	void vuzeActivitiesLoaded();
 }

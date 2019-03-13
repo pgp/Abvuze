@@ -53,9 +53,9 @@ DownloadManager
    *
    * @since 2.0.7.0
 	 */
-	public void 
+    void
 	addDownload(
-		File 	torrent_file )
+            File torrent_file)
 	
 		throws DownloadException;
 	
@@ -67,9 +67,9 @@ DownloadManager
    *
    * @since 2.0.7.0
 	 */
-	public void 
+    void
 	addDownload(
-		URL		url )
+            URL url)
 	
 		throws DownloadException;
 	
@@ -80,11 +80,11 @@ DownloadManager
 	 * @throws DownloadException
 	 * @since 2403
 	 */
-	
-	public void 
+
+    void
 	addDownload(
-		URL			url,
-		boolean		auto_download )
+            URL url,
+            boolean auto_download)
 	
 		throws DownloadException;
 	
@@ -97,10 +97,10 @@ DownloadManager
 	 *
 	 * @since 2.1.0.6
 	 */
-	public void 
+    void
 	addDownload(
-		URL		url,
-		URL 	referer);
+            URL url,
+            URL referer);
 	
 		/**
 		 * add a torrent from a URL and use the supplied request properties
@@ -108,11 +108,11 @@ DownloadManager
 		 * @param request_properties
 		 * @since 3.0.5.3
 		 */
-	
-	public void 
+
+        void
 	addDownload(
-		URL		url,
-		Map		request_properties );
+                URL url,
+                Map request_properties);
 	
 	/**
 	 * Add a torrent from a "Torrent" object. The default torrent file and data locations will be
@@ -124,9 +124,9 @@ DownloadManager
    *
    * @since 2.0.8.0
 	 */
-	public Download
+    Download
 	addDownload(
-		Torrent		torrent )
+            Torrent torrent)
 	
 		throws DownloadException;
 	
@@ -146,11 +146,11 @@ DownloadManager
    * support for null params for torrent_location/data_location since 2.1.0.4
    * @since 2.0.7.0
 	 */
-	public Download
+    Download
 	addDownload(
-		Torrent		torrent,
-		File		torrent_location,
-		File		data_location )
+            Torrent torrent,
+            File torrent_location,
+            File data_location)
 	
 		throws DownloadException;
 	
@@ -163,12 +163,12 @@ DownloadManager
 	 * @return
 	 * @throws DownloadException
 	 */
-	
-	public Download
+
+    Download
 	addDownloadStopped(
-		Torrent		torrent,
-		File		torrent_location,
-		File		data_location )
+            Torrent torrent,
+            File torrent_location,
+            File data_location)
 	
 		throws DownloadException;
 	
@@ -183,19 +183,19 @@ DownloadManager
    *
    * @since 2.0.7.0
 	 */
-	public Download
+    Download
 	addNonPersistentDownload(
-		Torrent		torrent,
-		File		torrent_location,
-		File		data_location )
+            Torrent torrent,
+            File torrent_location,
+            File data_location)
 	
 		throws DownloadException;
 	
-	public Download
+	Download
 	addNonPersistentDownloadStopped(
-		Torrent		torrent,
-		File		torrent_location,
-		File		data_location )
+            Torrent torrent,
+            File torrent_location,
+            File data_location)
 	
 		throws DownloadException;
 	
@@ -204,10 +204,10 @@ DownloadManager
 	 * are (for continuity, like total up/down, file allocation state) - this method allows this to be removed
 	 * @param hash
 	 */
-	
-	public void
+
+    void
 	clearNonPersistentDownloadState(
-		byte[]		hash );
+            byte[] hash);
 		
 	/**
 	 * Gets the download for a particular torrent, returns null if not found
@@ -216,9 +216,9 @@ DownloadManager
    *
    * @since 2.0.7.0
 	 */
-	public Download
+    Download
 	getDownload(
-		Torrent		torrent );
+            Torrent torrent);
 	
 	/**
 	 * Gets a download given its hash
@@ -228,9 +228,9 @@ DownloadManager
 	 * @since 2.3.0.7
 	 */
 
-	public Download
+    Download
 	getDownload(
-		byte[]		hash )
+            byte[] hash)
 	
 		throws DownloadException;
 	
@@ -240,7 +240,7 @@ DownloadManager
    *
    * @since 2.0.7.0
 	 */
-	public Download[]
+    Download[]
 	getDownloads();
 	
 	/**
@@ -251,7 +251,7 @@ DownloadManager
    *
    * @since 2.0.8.0
 	 */
-	public Download[]
+    Download[]
 	getDownloads(boolean bSorted);
 
 	/**
@@ -259,46 +259,46 @@ DownloadManager
 	 * @since 2.1.0.5
 	 *
 	 */
-	
-	public void
+
+    void
 	pauseDownloads();
 	
-	public boolean
+	boolean
 	canPauseDownloads();
 	
 	/**
 	 * resume previously paused downloads
 	 * @since 2.1.0.5
 	 */
-	
-	public void
+
+    void
 	resumeDownloads();
 	
-	public boolean
+	boolean
 	canResumeDownloads();
 	
 	/**
 	 * starts all non-running downloads
 	 * @since 2.1.0.5
 	 */
-	
-	public void
+
+    void
 	startAllDownloads();
 	
 	/**
 	 * stops all running downloads
 	 * @since 2.1.0.5
 	 */
-	
-	public void
+
+    void
 	stopAllDownloads();
 	
 	/**
 	 * Get the download manager statistics
 	 * @return
 	 */
-	
-	public DownloadManagerStats
+
+    DownloadManagerStats
 	getStats();
 	
 		/**
@@ -306,8 +306,8 @@ DownloadManager
 		 * @since 2.3.0.5
 		 * @return
 		 */
-	
-	public boolean
+
+        boolean
 	isSeedingOnly();
 	
     /**
@@ -320,7 +320,7 @@ DownloadManager
 	 * @since 2.0.7.0
 	 * @see #addListener(DownloadManagerListener, boolean)
 	 */
-	public void addListener(DownloadManagerListener l);
+    void addListener(DownloadManagerListener l);
 	
 	/**
 	 * Add a listener that will be informed when a download is added to and removed
@@ -333,7 +333,7 @@ DownloadManager
 	 *   this method is called.
 	 * @since 3.0.0.7
 	 */
-	public void addListener(DownloadManagerListener l, boolean notify_of_current_downloads);
+    void addListener(DownloadManagerListener l, boolean notify_of_current_downloads);
 	
 	/**
 	 * Removes a previously added listener.
@@ -344,7 +344,7 @@ DownloadManager
 	 *   <tt>false</tt> otherwise.
 	 *  @since 3.0.0.7
 	 */
-	public void removeListener(DownloadManagerListener l, boolean notify_of_current_downloads);
+    void removeListener(DownloadManagerListener l, boolean notify_of_current_downloads);
 	
     /**
      * Removes a previously added listener.
@@ -354,15 +354,15 @@ DownloadManager
      * @param l The listener to remove.
      * @since 2.0.7.0
      */
-	public void	removeListener(DownloadManagerListener l);
+    void	removeListener(DownloadManagerListener l);
 	
-	public void
+	void
 	addDownloadWillBeAddedListener(
-		DownloadWillBeAddedListener		listener );
+            DownloadWillBeAddedListener listener);
 	
-	public void
+	void
 	removeDownloadWillBeAddedListener(
-		DownloadWillBeAddedListener		listener );
+            DownloadWillBeAddedListener listener);
 	
 	/**
 	 * Return a {@link DownloadEventNotifier} object which can be used as
@@ -371,7 +371,7 @@ DownloadManager
 	 * 
 	 * @since 3.0.1.5
 	 */
-	public DownloadEventNotifier getGlobalDownloadEventNotifier();
+    DownloadEventNotifier getGlobalDownloadEventNotifier();
 	
 	/**
 	 * Registers an object to be in control of determining the default save
@@ -386,7 +386,7 @@ DownloadManager
 	 * @param manager The new manager object to use.
 	 * @since 3.0.5.3
 	 */
-	public void setSaveLocationManager(SaveLocationManager manager);
+    void setSaveLocationManager(SaveLocationManager manager);
 	
 	/**
 	 * Returns the current {@link SaveLocationManager} object which decides
@@ -395,7 +395,7 @@ DownloadManager
 	 * @return The manager object currently in use.
 	 * @since 3.0.5.3
 	 */
-	public SaveLocationManager getSaveLocationManager();
+    SaveLocationManager getSaveLocationManager();
 	
 	/**
 	 * Returns the default {@link SaveLocationManager} object that controls
@@ -404,19 +404,19 @@ DownloadManager
 	 * @return The default save location manager object.
 	 * @since 3.0.5.3 
 	 */
-	public DefaultSaveLocationManager getDefaultSaveLocationManager();
+    DefaultSaveLocationManager getDefaultSaveLocationManager();
 	
-	public DownloadStub[]
+	DownloadStub[]
 	getDownloadStubs();
 	
-	public DownloadStub
+	DownloadStub
 	lookupDownloadStub(
-		byte[]		hash );
+            byte[] hash);
 	
-	public int
+	int
 	getDownloadStubCount();
 	
-	public void addDownloadStubListener( DownloadStubListener l, boolean inform_of_current );
+	void addDownloadStubListener(DownloadStubListener l, boolean inform_of_current);
 	
-	public void removeDownloadStubListener( DownloadStubListener l );
+	void removeDownloadStubListener(DownloadStubListener l);
 }

@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -305,7 +306,7 @@ AEDiagnosticsLogger
 				
 				if ( pending == null ){
 					
-					pending = new LinkedList<StringBuilder>();
+					pending = new LinkedList<>();
 				}
 				
 				pending.add( str );
@@ -356,7 +357,7 @@ AEDiagnosticsLogger
 				
 			if ( current_writer == null ){
 			
-				current_writer = new PrintWriter( new OutputStreamWriter( new FileOutputStream( log_file, true ), "UTF-8" ));
+				current_writer = new PrintWriter( new OutputStreamWriter( new FileOutputStream( log_file, true ), StandardCharsets.UTF_8));
 			}
 			
 			current_writer.println( str );
@@ -416,7 +417,7 @@ AEDiagnosticsLogger
 					
 				if ( current_writer == null ){
 					
-					current_writer = new PrintWriter( new OutputStreamWriter( new FileOutputStream( log_file, true ), "UTF-8" ));
+					current_writer = new PrintWriter( new OutputStreamWriter( new FileOutputStream( log_file, true ), StandardCharsets.UTF_8));
 				}
 				
 				for ( StringBuilder str: pending ){

@@ -34,11 +34,11 @@ DownloadListener
   /** The Download's state has changed.  This is also triggered if the user
    * toggles the Force Start on/off.
    */
-	public void
+  void
 	stateChanged(
-		Download		download,
-		int				old_state,
-		int				new_state );
+          Download download,
+          int old_state,
+          int new_state);
 
   /** Position of download has changed.
    *
@@ -46,9 +46,9 @@ DownloadListener
    * @param oldPosition position that the download used to be at
    * @param newPosition position that the download is now at
    */
-	public void
+  void
 	positionChanged(
-		Download	download, 
-		int oldPosition,
-		int newPosition );
+          Download download,
+          int oldPosition,
+          int newPosition);
 }

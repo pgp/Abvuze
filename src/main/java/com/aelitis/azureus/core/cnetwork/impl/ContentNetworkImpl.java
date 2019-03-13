@@ -70,7 +70,7 @@ ContentNetworkImpl
 	
 	private Map<String,Object>	pprop_defaults;
 	
-	private Map<Object,Object>	transient_properties = Collections.synchronizedMap( new HashMap<Object,Object>());
+	private Map<Object,Object>	transient_properties = Collections.synchronizedMap(new HashMap<>());
 	
 	private CopyOnWriteList		persistent_listeners = new CopyOnWriteList();
 	
@@ -136,7 +136,7 @@ ContentNetworkImpl
 	
 		throws IOException
 	{
-		Map<String,Object>	map = new HashMap<String,Object>();
+		Map<String,Object>	map = new HashMap<>();
 		
 		other.exportToBEncodedMap(map);
 		
@@ -166,8 +166,8 @@ ContentNetworkImpl
 		ContentNetworkImpl		other )
 	{
 		try{
-			Map<String,Object>	map1 = new HashMap<String,Object>();
-			Map<String,Object>  map2 = new HashMap<String,Object>();
+			Map<String,Object>	map1 = new HashMap<>();
+			Map<String,Object>  map2 = new HashMap<>();
 			
 			exportToBEncodedMap( map1 );
 			
@@ -301,7 +301,7 @@ ContentNetworkImpl
 	setStartupNetwork(
 		boolean		b )
 	{
-		setPersistentProperty( PP_STARTUP_NETWORK, Boolean.valueOf(b));
+		setPersistentProperty( PP_STARTUP_NETWORK, b);
 	}
 	
 	public void
@@ -336,7 +336,7 @@ ContentNetworkImpl
 			
 			if ( new_value instanceof Boolean ){
 				
-				new_value = new Long(((Boolean)new_value)?1:0);
+				new_value = (long) (((Boolean) new_value) ? 1 : 0);
 			}
 			
 			Map props = new HashMap( COConfigurationManager.getMapParameter( key , new HashMap()));
@@ -352,20 +352,18 @@ ContentNetworkImpl
 			
 			COConfigurationManager.setParameter( key, props );
 		}
-		
-		Iterator it = persistent_listeners.iterator();
-		
-		while( it.hasNext()){
-			
-			try{
-				
-				((ContentNetworkPropertyChangeListener)it.next()).propertyChanged(name);
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace(e);
-			}
-		}
+
+        for (Object persistent_listener : persistent_listeners) {
+
+            try {
+
+                ((ContentNetworkPropertyChangeListener) persistent_listener).propertyChanged(name);
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 	
 	public Object

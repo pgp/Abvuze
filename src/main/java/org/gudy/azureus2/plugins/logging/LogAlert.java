@@ -30,17 +30,17 @@ public interface LogAlert {
 	/**
 	 * Log Type: Information 
 	 */
-	public int LT_INFORMATION = 1;
+    int LT_INFORMATION = 1;
 
 	/**
 	 * Log Type: Warning
 	 */
-	public int LT_WARNING = 2;
+    int LT_WARNING = 2;
 
 	/**
 	 * Log Type: Error
 	 */
-	public int LT_ERROR = 3;
+    int LT_ERROR = 3;
 	
 	/**
 	 * How long should to display the alert for - this will be the value that was given
@@ -50,7 +50,7 @@ public interface LogAlert {
 	 * <tt>0</tt> to display it indefinitely, otherwise it is the number of seconds to
 	 * display the value for. 
 	 */
-	public int getGivenTimeoutSecs();
+    int getGivenTimeoutSecs();
 
 	/**
 	 * How long should to display the alert for - this will be either the explicit value
@@ -59,8 +59,8 @@ public interface LogAlert {
 	 * 
 	 * @return How long to display the timeout for - <tt>0</tt> to display it indefinitely,
 	 * otherwise it is the number of seconds to display the value for. 
-	 */	
-	public int getTimeoutSecs();
+	 */
+    int getTimeoutSecs();
 	
 	/**
 	 * Returns the text of the message - this may include formatting tags (for example,
@@ -68,30 +68,30 @@ public interface LogAlert {
 	 * 
 	 * @return The text to display.
 	 */
-	public String getText();
+    String getText();
 
 	/**
 	 * Returns the text of the message - this will have any formatting stripped out.
 	 * 
 	 * @return The text to display. 
 	 */
-	public String getPlainText();
+    String getPlainText();
 
 	/**
 	 * Returns the error associated with the alert - <tt>null</tt> if there is no error.
 	 */
-	public Throwable getError();
+    Throwable getError();
 
 	/**
 	 * Returns the log type of the alert - the value of which will be one of the <tt>LT_</tt>
 	 * constants defined above. 
 	 */
-	public int getType();
+    int getType();
 	
 	/**
 	 * Returns the objects associated with the alert - this will return <tt>null</tt> if
 	 * the alert isn't associated with such any objects.
 	 */
-	public Object[] getContext();
+    Object[] getContext();
 
 }

@@ -370,7 +370,7 @@ public class Entities {
         entities.addEntities(HTML40_ARRAY);
     }
 
-    static interface EntityMap {
+    interface EntityMap {
         void add(String name, int value);
 
         String name(int value);
@@ -383,7 +383,7 @@ public class Entities {
         private IntHashMap mapValueToName = new IntHashMap();
 
         public void add(String name, int value) {
-            mapNameToValue.put(name, new Integer(value));
+            mapNameToValue.put(name, value);
             mapValueToName.put(value, name);
         }
 
@@ -396,7 +396,7 @@ public class Entities {
             if (value == null) {
                 return -1;
             }
-            return ((Integer) value).intValue();
+            return (Integer) value;
         }
     }
 
@@ -406,12 +406,12 @@ public class Entities {
         protected Map mapValueToName;
 
         public void add(String name, int value) {
-            mapNameToValue.put(name, new Integer(value));
-            mapValueToName.put(new Integer(value), name);
+            mapNameToValue.put(name, value);
+            mapValueToName.put(value, name);
         }
 
         public String name(int value) {
-            return (String) mapValueToName.get(new Integer(value));
+            return (String) mapValueToName.get(value);
         }
 
         public int value(String name) {
@@ -419,7 +419,7 @@ public class Entities {
             if (value == null) {
                 return -1;
             }
-            return ((Integer) value).intValue();
+            return (Integer) value;
         }
     }
 
@@ -574,8 +574,8 @@ public class Entities {
     EntityMap map = new Entities.LookupEntityMap();
 
     public void addEntities(String[][] entityArray) {
-        for (int i = 0; i < entityArray.length; ++i) {
-            addEntity(entityArray[i][0], Integer.parseInt(entityArray[i][1]));
+        for (String[] strings : entityArray) {
+            addEntity(strings[0], Integer.parseInt(strings[1]));
         }
     }
 
@@ -603,7 +603,7 @@ public class Entities {
      */
     public String escape(String str) {
         //todo: rewrite to use a Writer
-        StringBuffer buf = new StringBuffer(str.length() * 2);
+        StringBuilder buf = new StringBuilder(str.length() * 2);
         int i;
         for (i = 0; i < str.length(); ++i) {
             char ch = str.charAt(i);
@@ -636,7 +636,7 @@ public class Entities {
      * @return A new escaped <code>String</code>.
      */
     public String unescape(String str) {
-        StringBuffer buf = new StringBuffer(str.length());
+        StringBuilder buf = new StringBuilder(str.length());
         int i;
         for (i = 0; i < str.length(); ++i) {
             char ch = str.charAt(i);
@@ -652,7 +652,7 @@ public class Entities {
                 	try{
 	                    char charAt1 = entityName.charAt(1);
 	                    if (charAt1 == 'x' || charAt1=='X') {
-	                        entityValue = Integer.valueOf(entityName.substring(2), 16).intValue();
+	                        entityValue = Integer.valueOf(entityName.substring(2), 16);
 	                    } else {
 	                        entityValue = Integer.parseInt(entityName.substring(1));
 	                    }

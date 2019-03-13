@@ -81,10 +81,10 @@ StringInterner
 	
 	static{
 		try{
-			for (int i=0;i<COMMON_KEYS.length;i++){
-				
-				byte_map.put( COMMON_KEYS[i].getBytes(Constants.BYTE_ENCODING), COMMON_KEYS[i] );
-				managedInterningSet.add(new WeakStringEntry(COMMON_KEYS[i]));
+			for (String commonKey : COMMON_KEYS) {
+
+				byte_map.put(commonKey.getBytes(Constants.BYTE_ENCODING), commonKey);
+				managedInterningSet.add(new WeakStringEntry(commonKey));
 			}
 		}catch( Throwable e ){
 			
@@ -552,14 +552,14 @@ StringInterner
 					break aging;
 				Collections.sort(remaining, savingsComp);
 				// remove those objects that saved the least amount first
-				weightedRemove: for (int i = 0; i < remaining.size(); i++)
-				{
+				weightedRemove:
+				for (Object o : remaining) {
 					currentSetSize = managedInterningSet.size();
 					if (currentSetSize < SCHEDULED_CLEANUP_GOAL && scheduled)
 						break weightedRemove;
 					if (currentSetSize < IMMEDIATE_CLEANUP_GOAL && !scheduled)
 						break aging;
-					WeakWeightedEntry entry = (WeakWeightedEntry) remaining.get(i);
+					WeakWeightedEntry entry = (WeakWeightedEntry) o;
 					if (TRACE_CLEANUP)
 						System.out.println("weighted remove: " + entry);
 					managedInterningSet.remove(entry);
@@ -570,16 +570,14 @@ StringInterner
 				break aging;
 			if (currentSetSize < IMMEDIATE_CLEANUP_GOAL && !scheduled)
 				break aging;
-			for (Iterator it = managedInterningSet.iterator(); it.hasNext();)
-				((WeakWeightedEntry) it.next()).decHits();
+			for (Object o : managedInterningSet) ((WeakWeightedEntry) o).decHits();
 		}
 		if (TRACE_CLEANUP && scheduled)
 		{
 			List weightTraceSorted = new ArrayList(managedInterningSet);
 			Collections.sort(weightTraceSorted, savingsComp);
 			System.out.println("Remaining elements after cleanup:");
-			for (Iterator it = weightTraceSorted.iterator(); it.hasNext();)
-				System.out.println("\t" + it.next());
+			for (Object o : weightTraceSorted) System.out.println("\t" + o);
 		}
 		if (scheduled)
 			managedInterningSet.compactify(-1f);				

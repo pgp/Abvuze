@@ -106,7 +106,7 @@ public class OutgoingBTHaveMessageAggregator {
     try{
       pending_haves_mon.enter();
     
-      pending_haves.add( new Integer( piece_number ) );
+      pending_haves.add(piece_number);
       if( force ) {
         sendPendingHaves();
       }
@@ -178,20 +178,20 @@ public class OutgoingBTHaveMessageAggregator {
       	// single have -> use BT
       	
       if ( num_haves == 1 || az_have_version < BTMessageFactory.MESSAGE_VERSION_SUPPORTS_PADDING ){
-    	        
-	      for( int i=0; i < num_haves; i++ ){
-	    	  
-	        Integer piece_num = (Integer)pending_haves.get( i );
-	        
-	        outgoing_message_q.addMessage( new BTHave( piece_num.intValue(), bt_have_version ), true );
-	      }
+
+          for (Object pending_have : pending_haves) {
+
+              Integer piece_num = (Integer) pending_have;
+
+              outgoing_message_q.addMessage(new BTHave(piece_num, bt_have_version), true);
+          }
       }else{
     	  
     	  int[]	piece_numbers = new int[num_haves];
     	  
 	      for( int i=0; i < num_haves; i++ ) {
 
-	    	  piece_numbers[i] = ((Integer)pending_haves.get( i )).intValue(); 
+	    	  piece_numbers[i] = (Integer) pending_haves.get(i);
 	      }
 	      
 	      outgoing_message_q.addMessage( new AZHave( piece_numbers, az_have_version ), true );

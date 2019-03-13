@@ -109,19 +109,19 @@ public class PingSourceManager
         double fastestPing = 10000.0;
 
         int len = sources.length;
-        for(int i=0; i<len; i++){
-            PingSourceStats pss = (PingSourceStats) pingAverages.get(sources[i]);
+        for (SpeedManagerPingSource source : sources) {
+            PingSourceStats pss = (PingSourceStats) pingAverages.get(source);
             Average ave = pss.getHistory();
             double pingTime = ave.getAverage();
 
             //find slowest
-            if( pingTime>slowestPing ){
+            if (pingTime > slowestPing) {
                 slowestPing = pingTime;
-                slowestSource=sources[i];
+                slowestSource = source;
             }
 
             //find sped of fastest.
-            if( pingTime<fastestPing ){
+            if (pingTime < fastestPing) {
                 fastestPing = pingTime;
             }
 
@@ -162,23 +162,23 @@ public class PingSourceManager
         double fastB = 10000.0;
         double slowest = 0.0;
         int len = sources.length;
-        for(int i=0; i<len; i++){
-            PingSourceStats pss = (PingSourceStats) pingAverages.get(sources[i]);
+        for (SpeedManagerPingSource source : sources) {
+            PingSourceStats pss = (PingSourceStats) pingAverages.get(source);
             Average ave = pss.getHistory();
             double pingTime = ave.getAverage();
 
             //determine fastest or second fastest.
-            if(pingTime<fastA){
-                fastB=fastA;
-                fastA=pingTime;
-            }else if(pingTime<fastB){
-                fastB=pingTime;
+            if (pingTime < fastA) {
+                fastB = fastA;
+                fastA = pingTime;
+            } else if (pingTime < fastB) {
+                fastB = pingTime;
             }
 
             //determine slowest.
-            if(pingTime>slowest){
+            if (pingTime > slowest) {
                 slowest = pingTime;
-                slowestSource = sources[i];
+                slowestSource = source;
                 resetTimer();
             }
         }//for
@@ -217,23 +217,23 @@ public class PingSourceManager
         double lowestLongTermPing=10000.0;
 
         int len = sources.length;
-        for(int i=0; i<len; i++){
-            PingSourceStats pss = (PingSourceStats) pingAverages.get(sources[i]);
-            
-            if ( pss == null ){
-            	continue;
+        for (SpeedManagerPingSource source : sources) {
+            PingSourceStats pss = (PingSourceStats) pingAverages.get(source);
+
+            if (pss == null) {
+                continue;
             }
             Average a = pss.getLongTermAve();
             double avePingTime = a.getAverage();
 
             //is this a new highest value?
-            if( avePingTime>highestLongTermPing ){
+            if (avePingTime > highestLongTermPing) {
                 highestLongTermPing = avePingTime;
-                highestSource = sources[i];
+                highestSource = source;
             }
 
             //is this a new lowest value?
-            if( avePingTime<lowestLongTermPing ){
+            if (avePingTime < lowestLongTermPing) {
                 lowestLongTermPing = avePingTime;
             }
         }//for

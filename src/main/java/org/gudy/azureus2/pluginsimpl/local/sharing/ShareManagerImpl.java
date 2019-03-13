@@ -110,12 +110,12 @@ ShareManagerImpl
 	private URL[]				announce_urls;
 	private ShareConfigImpl		config;
 	
-	private Map<String,ShareResourceImpl>	shares 		= new HashMap<String, ShareResourceImpl>();
+	private Map<String,ShareResourceImpl>	shares 		= new HashMap<>();
 	
 	private shareScanner		current_scanner;
 	private boolean				scanning;
 	
-	private List<ShareManagerListener>				listeners	= new ArrayList<ShareManagerListener>();
+	private List<ShareManagerListener>				listeners	= new ArrayList<>();
 	
 	protected
 	ShareManagerImpl()
@@ -161,28 +161,24 @@ ShareManagerImpl
 						config.loadConfig(this);
 										
 					}finally{
-					
-						Iterator<ShareResourceImpl> it = shares.values().iterator();
-						
-						while(it.hasNext()){
-						
-							ShareResourceImpl	resource = it.next();
-							
-							if ( resource.getType() == ShareResource.ST_DIR_CONTENTS ){
-					
-								for (int i=0;i<listeners.size();i++){
-									
-									try{
-										
-										listeners.get(i).resourceAdded( resource );
-										
-									}catch( Throwable e ){
-										
-										Debug.printStackTrace( e );
-									}
-								}
-							}
-						}
+
+                        for (ShareResourceImpl resource : shares.values()) {
+
+                            if (resource.getType() == ShareResource.ST_DIR_CONTENTS) {
+
+                                for (ShareManagerListener listener : listeners) {
+
+                                    try {
+
+                                        listener.resourceAdded(resource);
+
+                                    } catch (Throwable e) {
+
+                                        Debug.printStackTrace(e);
+                                    }
+                                }
+                            }
+                        }
 						
 						config.resumeSaving();
 					}
@@ -271,21 +267,17 @@ ShareManagerImpl
 		throws ShareException
 	{
 			// copy set for iteration as consistency check can delete resource
-		
-		Iterator<ShareResourceImpl>	it = new HashSet<ShareResourceImpl>(shares.values()).iterator();
-		
-		while(it.hasNext()){
-			
-			ShareResourceImpl	resource = it.next();
-			
-			try{
-				resource.checkConsistency();
-				
-			}catch( ShareException e ){
-				
-				Debug.printStackTrace(e);
-			}
-		}
+
+        for (ShareResourceImpl resource : new HashSet<>(shares.values())) {
+
+            try {
+                resource.checkConsistency();
+
+            } catch (ShareException e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 	
 	protected void
@@ -322,18 +314,18 @@ ShareManagerImpl
 					// the resource reported is initialised correctly
 				
 				if ( type != ShareResource.ST_DIR_CONTENTS ){
-					
-					for (int i=0;i<listeners.size();i++){
-						
-						try{
-						
-							((ShareManagerListener)listeners.get(i)).resourceAdded( new_resource );
-							
-						}catch( Throwable e ){
-						
-							Debug.printStackTrace( e );
-						}
-					}
+
+                    for (ShareManagerListener listener : listeners) {
+
+                        try {
+
+                            listener.resourceAdded(new_resource);
+
+                        } catch (Throwable e) {
+
+                            Debug.printStackTrace(e);
+                        }
+                    }
 				}
 			}
 		}catch( Throwable e ){
@@ -455,18 +447,16 @@ ShareManagerImpl
 					
 					throw( new ShareException( "ShareManager: Tracker must be configured"));
 				}
-			
-				for (int i=0;i<tracker_url_sets.length;i++){
-				
-					URL[]	tracker_urls = tracker_url_sets[i];
-			
-					if ( tracker_urls[0].getProtocol().equalsIgnoreCase( protocol )){
-					
-						announce_urls = tracker_urls;
-						
-						break;
-					}
-				}
+
+                for (URL[] tracker_urls : tracker_url_sets) {
+
+                    if (tracker_urls[0].getProtocol().equalsIgnoreCase(protocol)) {
+
+                        announce_urls = tracker_urls;
+
+                        break;
+                    }
+                }
 				
 				if ( announce_urls == null ){
 					
@@ -501,7 +491,7 @@ ShareManagerImpl
 		throws ShareException
 	{
 		try{
-			return((ShareResourceImpl)shares.get(file.getCanonicalFile().toString()));
+			return shares.get(file.getCanonicalFile().toString());
 			
 		}catch( IOException e ){
 			
@@ -591,7 +581,7 @@ ShareManagerImpl
 	
 		throws ShareException
 	{
-		return( (ShareResourceFile)ShareResourceFileImpl.getResource( this, file ));
+		return ShareResourceFileImpl.getResource( this, file );
 	}
 	
 	public ShareResourceDir
@@ -649,7 +639,7 @@ ShareManagerImpl
 	
 		throws ShareException
 	{
-		return( (ShareResourceDir)ShareResourceDirImpl.getResource( this, file ));
+		return ShareResourceDirImpl.getResource( this, file );
 	}
 	
 	protected ShareResource
@@ -701,24 +691,24 @@ ShareManagerImpl
 			shares.put(name, new_resource );
 			
 			config.saveConfig();
-			
-			for (int i=0;i<listeners.size();i++){
-				
-				try{
-					
-					if ( modified ){
-						
-						((ShareManagerListener)listeners.get(i)).resourceModified( old_resource, new_resource );
-					
-					}else{
-						
-						((ShareManagerListener)listeners.get(i)).resourceAdded( new_resource );				
-					}
-				}catch( Throwable e ){
-					
-					Debug.printStackTrace( e );
-				}
-			}
+
+            for (ShareManagerListener listener : listeners) {
+
+                try {
+
+                    if (modified) {
+
+                        listener.resourceModified(old_resource, new_resource);
+
+                    } else {
+
+                        listener.resourceAdded(new_resource);
+                    }
+                } catch (Throwable e) {
+
+                    Debug.printStackTrace(e);
+                }
+            }
 			
 			return( new_resource );
 			
@@ -763,7 +753,7 @@ ShareManagerImpl
 			
 			reportCurrentTask( "Adding dir contents '" + name + "', recursive = " + recursive );
 	
-			ShareResource	old_resource = (ShareResource)shares.get( name );
+			ShareResource	old_resource = shares.get( name );
 			
 			if ( old_resource != null ){
 				
@@ -780,18 +770,18 @@ ShareManagerImpl
 			shares.put( name, new_resource );
 			
 			config.saveConfig();
-			
-			for (int i=0;i<listeners.size();i++){
-				
-				try{
-					
-					((ShareManagerListener)listeners.get(i)).resourceAdded( new_resource );
-					
-				}catch( Throwable e ){
-					
-					Debug.printStackTrace( e );
-				}
-			}
+
+            for (ShareManagerListener listener : listeners) {
+
+                try {
+
+                    listener.resourceAdded(new_resource);
+
+                } catch (Throwable e) {
+
+                    Debug.printStackTrace(e);
+                }
+            }
 			
 			return( new_resource );
 			
@@ -834,18 +824,18 @@ ShareManagerImpl
 			config.saveConfig();
 			
 			if ( fire_listeners ){
-				
-				for (int i=0;i<listeners.size();i++){
-					
-					try{
-						
-						((ShareManagerListener)listeners.get(i)).resourceDeleted( resource );
-						
-					}catch( Throwable e ){
-						
-						Debug.printStackTrace( e );
-					}
-				}
+
+                for (ShareManagerListener listener : listeners) {
+
+                    try {
+
+                        listener.resourceDeleted(resource);
+
+                    } catch (Throwable e) {
+
+                        Debug.printStackTrace(e);
+                    }
+                }
 			}
 		}finally{
 			
@@ -912,7 +902,7 @@ ShareManagerImpl
 			
 			if ( properties == null ){
 				
-				properties = new HashMap<String, String>();
+				properties = new HashMap<>();
 			}
 			
 			if ( !properties.containsKey( ShareManager.PR_PERSISTENT )){
@@ -939,34 +929,34 @@ ShareManagerImpl
 	reportProgress(
 		int		percent_complete )
 	{
-		for (int i=0;i<listeners.size();i++){
-			
-			try{
-				
-				((ShareManagerListener)listeners.get(i)).reportProgress( percent_complete );
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace( e );
-			}
-		}		
+        for (ShareManagerListener listener : listeners) {
+
+            try {
+
+                listener.reportProgress(percent_complete);
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 	
 	public void
 	reportCurrentTask(
 		String	task_description )
 	{
-		for (int i=0;i<listeners.size();i++){
-			
-			try{
-				
-				((ShareManagerListener)listeners.get(i)).reportCurrentTask( task_description );
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace( e );
-			}
-		}			
+        for (ShareManagerListener listener : listeners) {
+
+            try {
+
+                listener.reportCurrentTask(task_description);
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 
 	protected void
@@ -1011,22 +1001,20 @@ ShareManagerImpl
 			ShareResource[]	shares = getShares();
 			
 			HashSet	share_map = new HashSet();
-						
-			for ( int i=0;i<shares.length;i++ ){
-				
-				ShareResource	share = shares[i];
-									
-				if ( share instanceof ShareResourceDirContents ){
-					
-					share_map.add( share );
-					
-				}else if ( share.getParent() != null ){
-					
-				}else{
-					
-					writer.println( getDebugName( share ));
-				}
-			}
+
+            for (ShareResource share : shares) {
+
+                if (share instanceof ShareResourceDirContents) {
+
+                    share_map.add(share);
+
+                } else if (share.getParent() != null) {
+
+                } else {
+
+                    writer.println(getDebugName(share));
+                }
+            }
 			
 			Iterator	it = share_map.iterator();
 	
@@ -1076,18 +1064,16 @@ ShareManagerImpl
 			writer.indent();
 
 			ShareResource[]	kids = node.getChildren();
-			
-			for (int i=0;i<kids.length;i++){
-				
-				ShareResource	kid = kids[i];
-				
-				writer.println( getDebugName( kid ));
-	
-				if ( kid instanceof ShareResourceDirContents ){
-					
-					generate( writer, (ShareResourceDirContents)kid );
-				}
-			}
+
+            for (ShareResource kid : kids) {
+
+                writer.println(getDebugName(kid));
+
+                if (kid instanceof ShareResourceDirContents) {
+
+                    generate(writer, (ShareResourceDirContents) kid);
+                }
+            }
 		}finally{
 			
 			writer.exdent();

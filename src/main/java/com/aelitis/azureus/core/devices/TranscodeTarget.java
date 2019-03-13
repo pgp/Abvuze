@@ -26,71 +26,71 @@ import java.io.File;
 public interface 
 TranscodeTarget 
 {
-	public static final int TRANSCODE_UNKNOWN			= -1;
-	public static final int TRANSCODE_NEVER				= 1;
-	public static final int TRANSCODE_WHEN_REQUIRED		= 2;
-	public static final int TRANSCODE_ALWAYS			= 3;
+	int TRANSCODE_UNKNOWN			= -1;
+	int TRANSCODE_NEVER				= 1;
+	int TRANSCODE_WHEN_REQUIRED		= 2;
+	int TRANSCODE_ALWAYS			= 3;
 	
-	public String
+	String
 	getID();
 	
-	public Device
+	Device
 	getDevice();
 	
-	public TranscodeFile[]
+	TranscodeFile[]
 	getFiles();
 	
-	public File
+	File
 	getWorkingDirectory();
 	
-	public void
+	void
 	setWorkingDirectory(
-		File		directory );
+            File directory);
 	
-	public TranscodeProfile[]
+	TranscodeProfile[]
 	getTranscodeProfiles();
 		
-	public TranscodeProfile
+	TranscodeProfile
 	getDefaultTranscodeProfile()
 	
 		throws TranscodeException;
 	
-	public void
+	void
 	setDefaultTranscodeProfile(
-		TranscodeProfile		profile );
+            TranscodeProfile profile);
 	
-	public TranscodeProfile
+	TranscodeProfile
 	getBlankProfile();
 	
-	public int
+	int
 	getTranscodeRequirement();
 	
-	public void
+	void
 	setTranscodeRequirement(
-		int		req );
+            int req);
 	
-	public boolean
+	boolean
 	getAlwaysCacheFiles();
 	
-	public void
+	void
 	setAlwaysCacheFiles(
-		boolean		always_cache );
+            boolean always_cache);
 
-	public boolean
+	boolean
 	isTranscoding();
 	
-	public boolean
+	boolean
 	isNonSimple();
 	
-	public boolean
+	boolean
 	isAudioCompatible(
-		TranscodeFile		file );
+            TranscodeFile file);
 	
-	public void
+	void
 	addListener(
-		TranscodeTargetListener		listener );
+            TranscodeTargetListener listener);
 	
-	public void
+	void
 	removeListener(
-		TranscodeTargetListener		listener );
+            TranscodeTargetListener listener);
 }

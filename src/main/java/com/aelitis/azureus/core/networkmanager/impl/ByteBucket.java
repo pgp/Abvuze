@@ -28,21 +28,21 @@ package com.aelitis.azureus.core.networkmanager.impl;
 public interface 
 ByteBucket 
 {
-	public int 
+	int
 	getRate();
 	 
-	public void 
+	void
 	setRate(
-		int rate_bytes_per_sec );
+            int rate_bytes_per_sec);
 	 
-	public int 
+	int
 	getAvailableByteCount();
 	
-	public void 
-	setBytesUsed( 
-		int bytes_used );
+	void
+	setBytesUsed(
+            int bytes_used);
 	
-	public void
+	void
 	setFrozen(
-		boolean	frozen );
+            boolean frozen);
 }

@@ -263,17 +263,17 @@ AEProxyConnectionImpl
 				
 				Debug.printStackTrace(e);
 			}
-			
-			for (int i=0;i<listeners.size();i++){
-				
-				try{
-					((AEProxyConnectionListener)listeners.get(i)).connectionClosed( this );
-					
-				}catch( Throwable e ){
-					
-					Debug.printStackTrace(e);
-				}
-			}
+
+            for (Object listener : listeners) {
+
+                try {
+                    ((AEProxyConnectionListener) listener).connectionClosed(this);
+
+                } catch (Throwable e) {
+
+                    Debug.printStackTrace(e);
+                }
+            }
 		}finally{
 			
 			server.close( this );

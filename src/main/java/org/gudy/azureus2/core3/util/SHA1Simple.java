@@ -46,22 +46,22 @@ public final class SHA1Simple {
     
     int a,b,c,d,e;
     
-	   w0 = (int)((((M[pos] & 0xff) << 24) |((M[pos+1] & 0xff) << 16) |((M[pos+2] & 0xff) <<  8) |((M[pos+3] & 0xff) <<  0)));	pos+=4;	
-	   w1 = (int)((((M[pos] & 0xff) << 24) |((M[pos+1] & 0xff) << 16) |((M[pos+2] & 0xff) <<  8) |((M[pos+3] & 0xff) <<  0)));	pos+=4;	
-	   w2 = (int)((((M[pos] & 0xff) << 24) |((M[pos+1] & 0xff) << 16) |((M[pos+2] & 0xff) <<  8) |((M[pos+3] & 0xff) <<  0)));	pos+=4;	
-	   w3 = (int)((((M[pos] & 0xff) << 24) |((M[pos+1] & 0xff) << 16) |((M[pos+2] & 0xff) <<  8) |((M[pos+3] & 0xff) <<  0)));	pos+=4;	
-	   w4 = (int)((((M[pos] & 0xff) << 24) |((M[pos+1] & 0xff) << 16) |((M[pos+2] & 0xff) <<  8) |((M[pos+3] & 0xff) <<  0)));	pos+=4;	
-	   w5 = (int)((((M[pos] & 0xff) << 24) |((M[pos+1] & 0xff) << 16) |((M[pos+2] & 0xff) <<  8) |((M[pos+3] & 0xff) <<  0)));	pos+=4;	
-	   w6 = (int)((((M[pos] & 0xff) << 24) |((M[pos+1] & 0xff) << 16) |((M[pos+2] & 0xff) <<  8) |((M[pos+3] & 0xff) <<  0)));	pos+=4;	
-	   w7 = (int)((((M[pos] & 0xff) << 24) |((M[pos+1] & 0xff) << 16) |((M[pos+2] & 0xff) <<  8) |((M[pos+3] & 0xff) <<  0)));	pos+=4;	
-	   w8 = (int)((((M[pos] & 0xff) << 24) |((M[pos+1] & 0xff) << 16) |((M[pos+2] & 0xff) <<  8) |((M[pos+3] & 0xff) <<  0)));	pos+=4;	
-	   w9 = (int)((((M[pos] & 0xff) << 24) |((M[pos+1] & 0xff) << 16) |((M[pos+2] & 0xff) <<  8) |((M[pos+3] & 0xff) <<  0)));	pos+=4;	
-	   w10 = (int)((((M[pos] & 0xff) << 24) |((M[pos+1] & 0xff) << 16) |((M[pos+2] & 0xff) <<  8) |((M[pos+3] & 0xff) <<  0)));	pos+=4;	
-	   w11 = (int)((((M[pos] & 0xff) << 24) |((M[pos+1] & 0xff) << 16) |((M[pos+2] & 0xff) <<  8) |((M[pos+3] & 0xff) <<  0)));	pos+=4;	
-	   w12 = (int)((((M[pos] & 0xff) << 24) |((M[pos+1] & 0xff) << 16) |((M[pos+2] & 0xff) <<  8) |((M[pos+3] & 0xff) <<  0)));	pos+=4;	
-	   w13 = (int)((((M[pos] & 0xff) << 24) |((M[pos+1] & 0xff) << 16) |((M[pos+2] & 0xff) <<  8) |((M[pos+3] & 0xff) <<  0)));	pos+=4;	
-	   w14 = (int)((((M[pos] & 0xff) << 24) |((M[pos+1] & 0xff) << 16) |((M[pos+2] & 0xff) <<  8) |((M[pos+3] & 0xff) <<  0)));	pos+=4;	
-	   w15 = (int)((((M[pos] & 0xff) << 24) |((M[pos+1] & 0xff) << 16) |((M[pos+2] & 0xff) <<  8) |((M[pos+3] & 0xff) <<  0)));	pos+=4;	
+	   w0 = (((M[pos] & 0xff) << 24) |((M[pos+1] & 0xff) << 16) |((M[pos+2] & 0xff) <<  8) |((M[pos+3] & 0xff) <<  0));	pos+=4;
+	   w1 = (((M[pos] & 0xff) << 24) |((M[pos+1] & 0xff) << 16) |((M[pos+2] & 0xff) <<  8) |((M[pos+3] & 0xff) <<  0));	pos+=4;
+	   w2 = (((M[pos] & 0xff) << 24) |((M[pos+1] & 0xff) << 16) |((M[pos+2] & 0xff) <<  8) |((M[pos+3] & 0xff) <<  0));	pos+=4;
+	   w3 = (((M[pos] & 0xff) << 24) |((M[pos+1] & 0xff) << 16) |((M[pos+2] & 0xff) <<  8) |((M[pos+3] & 0xff) <<  0));	pos+=4;
+	   w4 = (((M[pos] & 0xff) << 24) |((M[pos+1] & 0xff) << 16) |((M[pos+2] & 0xff) <<  8) |((M[pos+3] & 0xff) <<  0));	pos+=4;
+	   w5 = (((M[pos] & 0xff) << 24) |((M[pos+1] & 0xff) << 16) |((M[pos+2] & 0xff) <<  8) |((M[pos+3] & 0xff) <<  0));	pos+=4;
+	   w6 = (((M[pos] & 0xff) << 24) |((M[pos+1] & 0xff) << 16) |((M[pos+2] & 0xff) <<  8) |((M[pos+3] & 0xff) <<  0));	pos+=4;
+	   w7 = (((M[pos] & 0xff) << 24) |((M[pos+1] & 0xff) << 16) |((M[pos+2] & 0xff) <<  8) |((M[pos+3] & 0xff) <<  0));	pos+=4;
+	   w8 = (((M[pos] & 0xff) << 24) |((M[pos+1] & 0xff) << 16) |((M[pos+2] & 0xff) <<  8) |((M[pos+3] & 0xff) <<  0));	pos+=4;
+	   w9 = (((M[pos] & 0xff) << 24) |((M[pos+1] & 0xff) << 16) |((M[pos+2] & 0xff) <<  8) |((M[pos+3] & 0xff) <<  0));	pos+=4;
+	   w10 = (((M[pos] & 0xff) << 24) |((M[pos+1] & 0xff) << 16) |((M[pos+2] & 0xff) <<  8) |((M[pos+3] & 0xff) <<  0));	pos+=4;
+	   w11 = (((M[pos] & 0xff) << 24) |((M[pos+1] & 0xff) << 16) |((M[pos+2] & 0xff) <<  8) |((M[pos+3] & 0xff) <<  0));	pos+=4;
+	   w12 = (((M[pos] & 0xff) << 24) |((M[pos+1] & 0xff) << 16) |((M[pos+2] & 0xff) <<  8) |((M[pos+3] & 0xff) <<  0));	pos+=4;
+	   w13 = (((M[pos] & 0xff) << 24) |((M[pos+1] & 0xff) << 16) |((M[pos+2] & 0xff) <<  8) |((M[pos+3] & 0xff) <<  0));	pos+=4;
+	   w14 = (((M[pos] & 0xff) << 24) |((M[pos+1] & 0xff) << 16) |((M[pos+2] & 0xff) <<  8) |((M[pos+3] & 0xff) <<  0));	pos+=4;
+	   w15 = (((M[pos] & 0xff) << 24) |((M[pos+1] & 0xff) << 16) |((M[pos+2] & 0xff) <<  8) |((M[pos+3] & 0xff) <<  0));	pos+=4;
 
     
     a = h0 ; b = h1 ; c = h2 ; d = h3 ; e = h4;

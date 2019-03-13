@@ -26,28 +26,28 @@ import java.util.Map;
 public interface 
 SubscriptionManagerListener 
 {
-	public void
+	void
 	subscriptionAdded(
-		Subscription		subscription );
+            Subscription subscription);
 	
-	public void
+	void
 	subscriptionChanged(
-		Subscription		subscription );
+            Subscription subscription);
 	
-	public void
+	void
 	subscriptionSelected(
-		Subscription		subscription );
+            Subscription subscription);
 	
-	public void
+	void
 	subscriptionRemoved(
-		Subscription		subscription );
+            Subscription subscription);
 	
-	public void
+	void
 	associationsChanged(
-		byte[]				association_hash );
+            byte[] association_hash);
 	
-	public void
+	void
 	subscriptionRequested(
-		URL						url,
-		Map<String, Object> 	options );
+            URL url,
+            Map<String, Object> options);
 }

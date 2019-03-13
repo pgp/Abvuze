@@ -61,9 +61,9 @@ RPRequestHandler
         RPRequest                   request,
         RPRequestAccessController   access_controller )
     {
-        Long    connection_id   = new Long( request.getConnectionId());
+        Long    connection_id   = request.getConnectionId();
 
-        replyCache  cached_reply = connection_id.longValue()==0?null:(replyCache)reply_cache.get(connection_id);
+        replyCache  cached_reply = connection_id ==0?null:(replyCache)reply_cache.get(connection_id);
 
         if ( cached_reply != null ){
 
@@ -150,7 +150,7 @@ RPRequestHandler
                             // problem here, if someone changes the mode here they'll lose their
                             // connection coz they'll be denied access :)
 
-                        boolean b = ((Boolean)request.getParams()[0]).booleanValue();
+                        boolean b = (Boolean) request.getParams()[0];
 
                         LoggerChannel[] channels = plugin_interface.getLogger().getChannels();
 
@@ -162,11 +162,11 @@ RPRequestHandler
 
                                     // we gotta add the client's address range
 
-                                for (int i=0;i<channels.length;i++){
+                                for (LoggerChannel channel : channels) {
 
-                                    channels[i].log(
+                                    channel.log(
                                             LoggerChannel.LT_INFORMATION,
-                                        "Adding range for client '" + client_ip + "' as allow/deny flag changed to allow" );
+                                            "Adding range for client '" + client_ip + "' as allow/deny flag changed to allow");
                                 }
 
                                 filter.createAndAddRange(
@@ -184,18 +184,18 @@ RPRequestHandler
 
                             IPRange[]   ranges = filter.getRanges();
 
-                            for (int i=0;i<ranges.length;i++){
+                            for (IPRange range : ranges) {
 
-                                if ( ranges[i].isInRange(client_ip)){
+                                if (range.isInRange(client_ip)) {
 
-                                    for (int j=0;j<channels.length;j++){
+                                    for (LoggerChannel channel : channels) {
 
-                                        channels[j].log(
+                                        channel.log(
                                                 LoggerChannel.LT_INFORMATION,
-                                                "deleting range '" + ranges[i].getStartIP() + "-" + ranges[i].getEndIP() + "' for client '" + client_ip + "' as allow/deny flag changed to deny" );
+                                                "deleting range '" + range.getStartIP() + "-" + range.getEndIP() + "' for client '" + client_ip + "' as allow/deny flag changed to deny");
                                     }
 
-                                    ranges[i].delete();
+                                    range.delete();
                                 }
                             }
 

@@ -23,18 +23,18 @@ package org.gudy.azureus2.plugins.utils;
 public interface 
 PowerManagementListener
 {
-	public static final int ST_SLEEP = 1;
+	int ST_SLEEP = 1;
 	
-	public String
+	String
 	getPowerName();
 	
-	public boolean
+	boolean
 	requestPowerStateChange(
-		int		new_state,
-		Object	data );
+            int new_state,
+            Object data);
 
-	public void
+	void
 	informPowerStateChange(
-		int		new_state,
-		Object	data );
+            int new_state,
+            Object data);
 }

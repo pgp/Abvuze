@@ -68,18 +68,18 @@ HTMLUtils
 			
 			String	token 	= null;
 			int		p1		= -1;
-			
-			for (int i=0;i<tokens.length;i++){
-				
-				int	x = lc_text.indexOf( tokens[i], pos );
-				
-				if ( x != -1 ){
-					if ( p1 == -1 || x < p1 ){
-						token	= tokens[i];
-						p1		= x;
-					}
-				}
-			}
+
+            for (String token1 : tokens) {
+
+                int x = lc_text.indexOf(token1, pos);
+
+                if (x != -1) {
+                    if (p1 == -1 || x < p1) {
+                        token = token1;
+                        p1 = x;
+                    }
+                }
+            }
 
 			if ( p1 == -1 ){
 				
@@ -107,13 +107,12 @@ HTMLUtils
 	  
 	  StringBuilder result = new StringBuilder();
 	  String separator = "";
-	  Iterator iter = list.iterator();
-	  while(iter.hasNext()) {
-	    String line = iter.next().toString();
-	    result.append(separator);
-	    result.append(line);
-	    separator = "\n";
-	  }
+        for (Object o : list) {
+            String line = o.toString();
+            result.append(separator);
+            result.append(line);
+            separator = "\n";
+        }
 	  
 	  return result.toString();
 	}
@@ -437,12 +436,12 @@ HTMLUtils
 		System.out.println( obj[0] );
 		
 		List	urls = (List)obj[1];
-		
-		for (int i=0;i<urls.size();i++){
-			
-			Object[]	entry = (Object[])urls.get(i);
-			
-			System.out.println( "    " + entry[0] + ((int[])entry[1])[0] + "," + ((int[])entry[1])[1] );
-		}
+
+        for (Object url : urls) {
+
+            Object[] entry = (Object[]) url;
+
+            System.out.println("    " + entry[0] + ((int[]) entry[1])[0] + "," + ((int[]) entry[1])[1]);
+        }
 	}
 }

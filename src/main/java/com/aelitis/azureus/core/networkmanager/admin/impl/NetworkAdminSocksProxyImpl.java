@@ -137,7 +137,7 @@ NetworkAdminSocksProxyImpl
 		
 		if ( versions.size() > 0 ){
 	
-			return((String[])versions.toArray( new String[versions.size()]));
+			return((String[])versions.toArray(new String[0]));
 			
 		}
 		

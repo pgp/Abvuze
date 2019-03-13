@@ -25,6 +25,7 @@ package org.gudy.azureus2.core3.tracker.server.impl.tcp;
 
 import java.io.*;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.zip.GZIPOutputStream;
 
@@ -594,7 +595,7 @@ TRTrackerServerProcessorTCP
 					
 					if (lowercase_input_header.contains(lc_azureus_name)){
 				
-						root.put( "aztracker", new Long(1));
+						root.put( "aztracker", 1L);
 					}
 				}
 
@@ -631,27 +632,25 @@ TRTrackerServerProcessorTCP
 						String	resp = "HTTP/1.1 " + reason + " " + tr_excep.getResponseText() + NL;
 						
 						Map	headers = tr_excep.getResponseHeaders();
-						
-						Iterator	it = headers.entrySet().iterator();
-						
-						while( it.hasNext()){
-							
-							Map.Entry	entry = (Map.Entry)it.next();
-							
-							String	key 	= (String)entry.getKey();
-							String	value 	= (String)entry.getValue();
-							
-							if ( key.equalsIgnoreCase( "connection" )){
-								
-								if ( !value.equalsIgnoreCase( "close" )){
-									
-									Debug.out( "Ignoring 'Connection' header" );
-									
-									continue;
-								}
-							}
-							resp += key + ": " + value + NL;
-						}
+
+                        for (Object o : headers.entrySet()) {
+
+                            Map.Entry entry = (Map.Entry) o;
+
+                            String key = (String) entry.getKey();
+                            String value = (String) entry.getValue();
+
+                            if (key.equalsIgnoreCase("connection")) {
+
+                                if (!value.equalsIgnoreCase("close")) {
+
+                                    Debug.out("Ignoring 'Connection' header");
+
+                                    continue;
+                                }
+                            }
+                            resp += key + ": " + value + NL;
+                        }
 
 						resp += "Connection: close" + NL;
 
@@ -738,7 +737,7 @@ TRTrackerServerProcessorTCP
 				
 				xml.append( "</RESULT>" );
 				
-				data			= xml.toString().getBytes("UTF-8" );
+				data			= xml.toString().getBytes(StandardCharsets.UTF_8);
 				
 				header_start = HTTP_RESPONSE_XML_START;
 

@@ -59,7 +59,7 @@ public class Move extends IConsoleCommand {
 		}
 		int number = Math.abs(ncommand);
 		if (number == 0 || number > ci.torrents.size()) {
-			ci.out.println("> Command 'move': Torrent #" + Integer.toString(number) + " unknown.");
+			ci.out.println("> Command 'move': Torrent #" + number + " unknown.");
 			return;
 		}
 		DownloadManager dm = (DownloadManager) ci.torrents.get(number - 1);
@@ -72,24 +72,24 @@ public class Move extends IConsoleCommand {
 		if (moveto) {
 			gm.moveTo(dm, nmoveto - 1);
 			gm.fixUpDownloadManagerPositions();
-			ci.out.println("> Torrent #" + Integer.toString(number) + " (" + name + ") moved to #" + Integer.toString(nmoveto) + ".");
+			ci.out.println("> Torrent #" + number + " (" + name + ") moved to #" + nmoveto + ".");
 		} else if (ncommand > 0) {
 			if (gm.isMoveableUp(dm)) {
 				while (gm.isMoveableUp(dm))
 					gm.moveUp(dm);
 				gm.fixUpDownloadManagerPositions();
-				ci.out.println("> Torrent #" + Integer.toString(number) + " (" + name + ") moved to top.");
+				ci.out.println("> Torrent #" + number + " (" + name + ") moved to top.");
 			} else {
-				ci.out.println("> Torrent #" + Integer.toString(number) + " (" + name + ") already at top.");
+				ci.out.println("> Torrent #" + number + " (" + name + ") already at top.");
 			}
 		} else {
 			if (gm.isMoveableDown(dm)) {
 				while (gm.isMoveableDown(dm))
 					gm.moveDown(dm);
 				gm.fixUpDownloadManagerPositions();
-				ci.out.println("> Torrent #" + Integer.toString(number) + " (" + name + ") moved to bottom.");
+				ci.out.println("> Torrent #" + number + " (" + name + ") moved to bottom.");
 			} else {
-				ci.out.println("> Torrent #" + Integer.toString(number) + " (" + name + ") already at bottom.");
+				ci.out.println("> Torrent #" + number + " (" + name + ") already at bottom.");
 			}
 		}
 	}

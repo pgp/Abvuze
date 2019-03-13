@@ -29,250 +29,250 @@ public interface
 Subscription 
 	extends UtilitiesImpl.PluginSubscription
 {
-	public static final int AZ_VERSION	= 1;
+	int AZ_VERSION	= 1;
 	
-	public static final Object	VUZE_FILE_COMPONENT_SUBSCRIPTION_KEY = new Object();
+	Object	VUZE_FILE_COMPONENT_SUBSCRIPTION_KEY = new Object();
 
-	public static final int	ADD_TYPE_CREATE		= 1;
-	public static final int	ADD_TYPE_IMPORT		= 2;
-	public static final int	ADD_TYPE_LOOKUP		= 3;
+	int	ADD_TYPE_CREATE		= 1;
+	int	ADD_TYPE_IMPORT		= 2;
+	int	ADD_TYPE_LOOKUP		= 3;
 
 		/**
 		 * Returns local name if set
 		 * @return
 		 */
-	
-	public String
+
+        String
 	getName();
 	
-	public String
+	String
 	getName(
-		boolean	use_local );
+            boolean use_local);
 	
-	public void
+	void
 	setLocalName(
-		String		str );
+            String str);
 	
-	public void
+	void
 	setName(
-		String		str )
+            String str)
 	
 		throws SubscriptionException;
 	
-	public String
+	String
 	getNameEx();
 	
-	public String
+	String
 	getQueryKey();
 	
-	public String
+	String
 	getID();
 	
-	public byte[]
+	byte[]
 	getPublicKey();
 	
-	public int
+	int
 	getVersion();
 
-	public long
+	long
 	getAddTime();
 	
-	public int
+	int
 	getAddType();
 	
-	public int
+	int
 	getHighestVersion();
 	
-	public void
+	void
 	resetHighestVersion();
 
-	public int
+	int
 	getAZVersion();
 	
-	public boolean
+	boolean
 	isMine();
 	
-	public boolean
+	boolean
 	isPublic();
 	
-	public void
+	void
 	setPublic(
-		boolean	is_public )
+            boolean is_public)
 	
 		throws SubscriptionException;
 	
-	public boolean
+	boolean
 	isAnonymous();
 	
-	public boolean
+	boolean
 	isUpdateable();
 	
-	public boolean
+	boolean
 	isShareable();
 	
-	public boolean
+	boolean
 	isSearchTemplate();
 	
-	public boolean
+	boolean
 	isSearchTemplateImportable();
 	
-	public VuzeFile
+	VuzeFile
 	getSearchTemplateVuzeFile();
 	
-	public String
+	String
 	getJSON()
 	
 		throws SubscriptionException;
 	
-	public boolean
+	boolean
 	setJSON(
-		String		json )
+            String json)
 	
 		throws SubscriptionException;
 	
-	public boolean
+	boolean
 	isSubscribed();
 	
-	public void
+	void
 	setSubscribed(
-		boolean		subscribed );
+            boolean subscribed);
 	
-	public void
+	void
 	getPopularity(
-		SubscriptionPopularityListener	listener )
+            SubscriptionPopularityListener listener)
 	
 		throws SubscriptionException;
 	
-	public boolean
+	boolean
 	setDetails(
-		String		name,
-		boolean		is_public,
-		String		json )
+            String name,
+            boolean is_public,
+            String json)
 	
 		throws SubscriptionException;
 	
-	public String
+	String
 	getReferer();
 	
-	public long
+	long
 	getCachedPopularity();
 	
-	public void
+	void
 	addAssociation(
-		byte[]		hash );
+            byte[] hash);
 	
-	public void
+	void
 	addPotentialAssociation(
-		String		result_id,
-		String		key );
+            String result_id,
+            String key);
 
-	public int
+	int
 	getAssociationCount();
 	
-	public boolean
+	boolean
 	hasAssociation(
-		byte[]		hash );
+            byte[] hash);
 	
-	public String
+	String
 	getCategory();
 	
-	public void
+	void
 	setCategory(
-		String	category );
+            String category);
 	
 	/**
 	 * Tag UID
 	 */
-	public long
+    long
 	getTagID();
 	
-	public void
+	void
 	setTagID(
-		long	tag_id );
+            long tag_id);
 	
-	public String
+	String
 	getParent();
 	
-	public void
+	void
 	setParent(
-		String		parent );
+            String parent);
 	
-	public Engine
+	Engine
 	getEngine()
 	
 		throws SubscriptionException;
 	
-	public Subscription
+	Subscription
 	cloneWithNewEngine(
-		Engine 	engine )
+            Engine engine)
 	
 		throws SubscriptionException;
 	
-	public boolean
+	boolean
 	isAutoDownloadSupported();
 	
-	public VuzeFile
+	VuzeFile
 	getVuzeFile()
 	
 		throws SubscriptionException;
 		
-	public void
+	void
 	setCreatorRef(
-		String	str );
+            String str);
 	
-	public String
+	String
 	getCreatorRef();
 	
-	public void
+	void
 	reset();
 	
-	public void
+	void
 	remove();
 	
-	public SubscriptionManager
+	SubscriptionManager
 	getManager();
 	
-	public SubscriptionHistory
+	SubscriptionHistory
 	getHistory();
 	
 		/**
 		 * shortcut to help plugin interface
 		 * @param l
 		 */
-	
-	public SubscriptionResult[]
+
+        SubscriptionResult[]
 	getResults(
-		boolean		include_deleted );
+                boolean include_deleted);
 	
-	public String
+	String
 	getURI();
 	
-	public SubscriptionResultFilter
+	SubscriptionResultFilter
 	getFilters()
 	
 		throws SubscriptionException;
 	
-	public void
+	void
 	requestAttention();
 	
-	public void
+	void
 	addListener(
-		SubscriptionListener		l );
+            SubscriptionListener l);
 	
-	public void
+	void
 	removeListener(
-		SubscriptionListener		l );
+            SubscriptionListener l);
 	
-	public void
+	void
 	setUserData(
-		Object		key,
-		Object		data );
+            Object key,
+            Object data);
 	
-	public Object
+	Object
 	getUserData(
-		Object		key );
+            Object key);
 	
-	public String
+	String
 	getString();
 	
 		// fil

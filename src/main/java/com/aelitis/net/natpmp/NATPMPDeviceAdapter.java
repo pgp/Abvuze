@@ -22,10 +22,10 @@ package com.aelitis.net.natpmp;
 public interface 
 NATPMPDeviceAdapter
 {
-	public String
+	String
 	getRouterAddress();
 	
-	public void
+	void
 	log(
-		String	str );
+            String str);
 }

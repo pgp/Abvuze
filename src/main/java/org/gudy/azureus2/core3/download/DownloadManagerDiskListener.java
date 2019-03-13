@@ -24,11 +24,11 @@ import org.gudy.azureus2.core3.disk.DiskManager;
 public interface 
 DownloadManagerDiskListener 
 {
-	public void
+	void
 	diskManagerAdded(
-		DiskManager	dm );
+            DiskManager dm);
 	
-	public void
+	void
 	diskManagerRemoved(
-		DiskManager	dm );
+            DiskManager dm);
 }

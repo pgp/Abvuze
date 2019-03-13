@@ -21,6 +21,7 @@
 package com.aelitis.azureus.core.download;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 
 import org.gudy.azureus2.core3.util.Debug;
 import org.gudy.azureus2.core3.util.SHA1Simple;
@@ -52,7 +53,7 @@ DiskManagerFileInfoFile
 		file		= _file;
 		
 		try{
-			hash		= new SHA1Simple().calculateHash( file.getAbsolutePath().getBytes( "UTF-8" ));
+			hash		= new SHA1Simple().calculateHash( file.getAbsolutePath().getBytes(StandardCharsets.UTF_8));
 			
 		}catch( Throwable e ){
 			
@@ -266,13 +267,13 @@ DiskManagerFileInfoFile
 			
 			private long		position;
 			
-			private int			max_read_chunk = 128*1024;;
+			private int			max_read_chunk = 128*1024;
 
-			private volatile boolean	cancelled;
+            private volatile boolean	cancelled;
 			
 			private String		user_agent;
 			
-			private CopyOnWriteList<DiskManagerListener>		listeners = new CopyOnWriteList<DiskManagerListener>();
+			private CopyOnWriteList<DiskManagerListener>		listeners = new CopyOnWriteList<>();
 			
 			public void
 			setType(

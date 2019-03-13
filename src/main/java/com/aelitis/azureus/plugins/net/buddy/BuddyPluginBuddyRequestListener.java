@@ -37,16 +37,16 @@ BuddyPluginBuddyRequestListener
 		 * @return
 		 * @throws BuddyPluginException
 		 */
-	
-	public Map
+
+        Map
 	requestReceived(
-		BuddyPluginBuddy	from_buddy,
-		int					subsystem,
-		Map					request )
+                BuddyPluginBuddy from_buddy,
+                int subsystem,
+                Map request)
 	
 		throws BuddyPluginException;
 	
-	public void
+	void
 	pendingMessages(
-		BuddyPluginBuddy[]	from_buddies );
+            BuddyPluginBuddy[] from_buddies);
 }

@@ -25,68 +25,68 @@ import com.aelitis.azureus.core.peermanager.messaging.Message;
  * A core AZ type peer message.
  */
 public interface AZMessage extends Message {
-	public static final String AZ_FEATURE_ID = "AZ1";
+	String AZ_FEATURE_ID = "AZ1";
 
-  public static final String ID_AZ_HANDSHAKE        	= "AZ_HANDSHAKE";
-  public static final byte[] ID_AZ_HANDSHAKE_BYTES      = ID_AZ_HANDSHAKE.getBytes();
-  public static final int SUBID_AZ_HANDSHAKE			= 0;
+  String ID_AZ_HANDSHAKE        	= "AZ_HANDSHAKE";
+  byte[] ID_AZ_HANDSHAKE_BYTES      = ID_AZ_HANDSHAKE.getBytes();
+  int SUBID_AZ_HANDSHAKE			= 0;
   
-  public static final String ID_AZ_PEER_EXCHANGE    	= "AZ_PEER_EXCHANGE";
-  public static final byte[] ID_AZ_PEER_EXCHANGE_BYTES  = ID_AZ_PEER_EXCHANGE.getBytes();
-  public static final int SUBID_AZ_PEER_EXCHANGE		= 1;
+  String ID_AZ_PEER_EXCHANGE    	= "AZ_PEER_EXCHANGE";
+  byte[] ID_AZ_PEER_EXCHANGE_BYTES  = ID_AZ_PEER_EXCHANGE.getBytes();
+  int SUBID_AZ_PEER_EXCHANGE		= 1;
   
-  public static final String ID_AZ_GENERIC_MAP    		= "AZ_GENERIC_MAP";
-  public static final byte[] ID_AZ_GENERIC_MAP_BYTES    = ID_AZ_GENERIC_MAP.getBytes();
-  public static final int SUBID_AZ_GENERIC_MAP			= 2;
+  String ID_AZ_GENERIC_MAP    		= "AZ_GENERIC_MAP";
+  byte[] ID_AZ_GENERIC_MAP_BYTES    = ID_AZ_GENERIC_MAP.getBytes();
+  int SUBID_AZ_GENERIC_MAP			= 2;
   
-  public static final String ID_AZ_REQUEST_HINT    		= "AZ_REQUEST_HINT";
-  public static final byte[] ID_AZ_REQUEST_HINT_BYTES  = ID_AZ_REQUEST_HINT.getBytes();
-  public static final int SUBID_ID_AZ_REQUEST_HINT		= 3;
+  String ID_AZ_REQUEST_HINT    		= "AZ_REQUEST_HINT";
+  byte[] ID_AZ_REQUEST_HINT_BYTES  = ID_AZ_REQUEST_HINT.getBytes();
+  int SUBID_ID_AZ_REQUEST_HINT		= 3;
 
-  public static final String ID_AZ_HAVE	    			= "AZ_HAVE";
-  public static final byte[] ID_AZ_HAVE_BYTES 			= ID_AZ_HAVE.getBytes();
-  public static final int SUBID_ID_AZ_HAVE				= 4;
+  String ID_AZ_HAVE	    			= "AZ_HAVE";
+  byte[] ID_AZ_HAVE_BYTES 			= ID_AZ_HAVE.getBytes();
+  int SUBID_ID_AZ_HAVE				= 4;
   
-  public static final String ID_AZ_BAD_PIECE	    	= "AZ_BAD_PIECE";
-  public static final byte[] ID_AZ_BAD_PIECE_BYTES 		= ID_AZ_BAD_PIECE.getBytes();
-  public static final int SUBID_ID_AZ_BAD_PIECE			= 5;
+  String ID_AZ_BAD_PIECE	    	= "AZ_BAD_PIECE";
+  byte[] ID_AZ_BAD_PIECE_BYTES 		= ID_AZ_BAD_PIECE.getBytes();
+  int SUBID_ID_AZ_BAD_PIECE			= 5;
   
-  public static final String ID_AZ_STAT_REQUEST	    	= "AZ_STAT_REQ";
-  public static final byte[] ID_AZ_STAT_REQUEST_BYTES 	= ID_AZ_STAT_REQUEST.getBytes();
-  public static final int SUBID_ID_AZ_STAT_REQUEST		= 6;
+  String ID_AZ_STAT_REQUEST	    	= "AZ_STAT_REQ";
+  byte[] ID_AZ_STAT_REQUEST_BYTES 	= ID_AZ_STAT_REQUEST.getBytes();
+  int SUBID_ID_AZ_STAT_REQUEST		= 6;
   
-  public static final String ID_AZ_STAT_REPLY	    	= "AZ_STAT_REP";
-  public static final byte[] ID_AZ_STAT_REPLY_BYTES 	= ID_AZ_STAT_REPLY.getBytes();
-  public static final int SUBID_ID_AZ_STAT_REPLY		= 7;
+  String ID_AZ_STAT_REPLY	    	= "AZ_STAT_REP";
+  byte[] ID_AZ_STAT_REPLY_BYTES 	= ID_AZ_STAT_REPLY.getBytes();
+  int SUBID_ID_AZ_STAT_REPLY		= 7;
   
-  public static final String ID_AZ_METADATA	    		= "AZ_METADATA";
-  public static final byte[] ID_AZ_METADATA_BYTES 		= ID_AZ_METADATA.getBytes();
-  public static final int SUBID_ID_AZ_METADATA			= 8;
+  String ID_AZ_METADATA	    		= "AZ_METADATA";
+  byte[] ID_AZ_METADATA_BYTES 		= ID_AZ_METADATA.getBytes();
+  int SUBID_ID_AZ_METADATA			= 8;
 
   
   //TODO
 
-  public static final String ID_AZ_SESSION_SYN      	= "AZ_SESSION_SYN";
-  public static final byte[] ID_AZ_SESSION_SYN_BYTES    = ID_AZ_SESSION_SYN.getBytes();
+  String ID_AZ_SESSION_SYN      	= "AZ_SESSION_SYN";
+  byte[] ID_AZ_SESSION_SYN_BYTES    = ID_AZ_SESSION_SYN.getBytes();
   
-  public static final String ID_AZ_SESSION_ACK      	= "AZ_SESSION_ACK";
-  public static final byte[] ID_AZ_SESSION_ACK_BYTES    = ID_AZ_SESSION_ACK.getBytes();
+  String ID_AZ_SESSION_ACK      	= "AZ_SESSION_ACK";
+  byte[] ID_AZ_SESSION_ACK_BYTES    = ID_AZ_SESSION_ACK.getBytes();
   
-  public static final String ID_AZ_SESSION_END      	= "AZ_SESSION_END";
-  public static final byte[] ID_AZ_SESSION_END_BYTES    = ID_AZ_SESSION_END.getBytes();
+  String ID_AZ_SESSION_END      	= "AZ_SESSION_END";
+  byte[] ID_AZ_SESSION_END_BYTES    = ID_AZ_SESSION_END.getBytes();
    
-  public static final String ID_AZ_SESSION_BITFIELD 		= "AZ_SESSION_BITFIELD";
-  public static final byte[] ID_AZ_SESSION_BITFIELD_BYTES 	= ID_AZ_SESSION_BITFIELD.getBytes();
+  String ID_AZ_SESSION_BITFIELD 		= "AZ_SESSION_BITFIELD";
+  byte[] ID_AZ_SESSION_BITFIELD_BYTES 	= ID_AZ_SESSION_BITFIELD.getBytes();
   
-  public static final String ID_AZ_SESSION_CANCEL   	= "AZ_SESSION_CANCEL";
-  public static final byte[] ID_AZ_SESSION_CANCEL_BYTES = ID_AZ_SESSION_CANCEL.getBytes();
+  String ID_AZ_SESSION_CANCEL   	= "AZ_SESSION_CANCEL";
+  byte[] ID_AZ_SESSION_CANCEL_BYTES = ID_AZ_SESSION_CANCEL.getBytes();
   
-  public static final String ID_AZ_SESSION_HAVE     	= "AZ_SESSION_HAVE";
-  public static final byte[] ID_AZ_SESSION_HAVE_BYTES   = ID_AZ_SESSION_HAVE.getBytes();
+  String ID_AZ_SESSION_HAVE     	= "AZ_SESSION_HAVE";
+  byte[] ID_AZ_SESSION_HAVE_BYTES   = ID_AZ_SESSION_HAVE.getBytes();
   
-  public static final String ID_AZ_SESSION_PIECE    	= "AZ_SESSION_PIECE";
-  public static final byte[] ID_AZ_SESSION_PIECE_BYTES  = ID_AZ_SESSION_PIECE.getBytes();
+  String ID_AZ_SESSION_PIECE    	= "AZ_SESSION_PIECE";
+  byte[] ID_AZ_SESSION_PIECE_BYTES  = ID_AZ_SESSION_PIECE.getBytes();
   
-  public static final String ID_AZ_SESSION_REQUEST  		= "AZ_SESSION_REQUEST";
-  public static final byte[] ID_AZ_SESSION_REQUEST_BYTES  	= ID_AZ_SESSION_REQUEST.getBytes();
+  String ID_AZ_SESSION_REQUEST  		= "AZ_SESSION_REQUEST";
+  byte[] ID_AZ_SESSION_REQUEST_BYTES  	= ID_AZ_SESSION_REQUEST.getBytes();
 }

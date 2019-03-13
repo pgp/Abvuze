@@ -28,8 +28,8 @@ DownloadWillBeAddedListener
 		 * file state to be set before allocation occurs (for example)
 		 * @param the file initialised
 		 */
-	
-	public void
+
+        void
 	initialised(
-		Download				download );
+                Download download);
 }

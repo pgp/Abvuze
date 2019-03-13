@@ -31,72 +31,72 @@ import org.gudy.azureus2.core3.util.*;
 public interface 
 TOTorrent
 {
-	public static final String	DEFAULT_IGNORE_FILES	= ".DS_Store;Thumbs.db;desktop.ini";
+	String	DEFAULT_IGNORE_FILES	= ".DS_Store;Thumbs.db;desktop.ini";
 	
 		/**
 		 * A Map additional property defined for holding AZ specific properties that are
 		 * deemed to be exportable to the world
 		 */
-	
-	public static final String	AZUREUS_PROPERTIES				= "azureus_properties";
+
+        String	AZUREUS_PROPERTIES				= "azureus_properties";
 	
 		/**
 		 * These ones are *not* exportable to the world
 		 */
-	
-	public static final String	AZUREUS_PRIVATE_PROPERTIES		= "azureus_private_properties";
 
-	public static final String ENCODING_ACTUALLY_UTF8_KEYS = "utf8 keys";
+        String	AZUREUS_PRIVATE_PROPERTIES		= "azureus_private_properties";
+
+	String ENCODING_ACTUALLY_UTF8_KEYS = "utf8 keys";
 
 	/**
 	 * Get the name of the torrent
 	 * @return
 	 */
-	
-	public byte[]
+
+    byte[]
 	getName();
 	
 	/**
 	 * A "simple torrent" is one that consists of a single file on its own (i.e. not in a
 	 * nested directory). 
 	 * @return
-	 */	
-	
-	public boolean
+	 */
+
+    boolean
 	isSimpleTorrent();
 	
 	/**
 	 * Comment is an optional torrent property
 	 * @return
 	 */
-	
-	public byte[]
+
+    byte[]
 	getComment();
 
-	public void
+	void
 	setComment(
-		String		comment );
+            String comment);
 	
 	/**
 	 * Gets the creation date of the torrent. Optional property, 0 returned if not set
 	 * @return
-	 */	
-	
-	public long
+	 */
+
+    long
 	getCreationDate();
 	
-	public void
+	void
 	setCreationDate(
-		long		date );
+            long date);
 	
-	public byte[]
+	byte[]
 	getCreatedBy();
 	
-	public void
+	void
 	setCreatedBy(
-		byte[]		cb );
+            byte[] cb);
 	
-	public boolean
+	boolean
 	isCreated();
 	
 	/**
@@ -104,8 +104,8 @@ TOTorrent
 	 * an extension to this exists to allow multiple trackers, and their backups, to be defined.
 	 * See below
 	 * @return
-	 */	
-	public URL
+	 */
+    URL
 	getAnnounceURL();
 
 	/**
@@ -113,16 +113,16 @@ TOTorrent
 	 * @param url
 	 * @return true-changed; false-not changed
 	 */
-	public boolean
+    boolean
 	setAnnounceURL(
-		URL		url );
+            URL url);
 		
 	/**
 	 * When a group of sets of trackers is defined their URLs are accessed via this method
 	 * @return the group, always present, which may have 0 members
 	 */
-	
-	public TOTorrentAnnounceURLGroup
+
+    TOTorrentAnnounceURLGroup
 	getAnnounceURLGroup();  
 	 
 	 /**
@@ -131,11 +131,11 @@ TOTorrent
 	  * @return
 	  * @exception	can fail if re-reading of piece hashes for space spacing fails 
 	  */
-	
-	public boolean
+
+     boolean
 	isDecentralised();
 	
-	public byte[][]
+	byte[][]
 	getPieces()
 	
 		throws TOTorrentException;
@@ -145,10 +145,10 @@ TOTorrent
 		 * memory. It should only be used with care! 
 		 * @param pieces
 		 */
-	
-	public void
+
+        void
 	setPieces(
-		byte[][]	pieces )
+                byte[][] pieces)
 	
 		throws TOTorrentException;
 	
@@ -156,23 +156,23 @@ TOTorrent
 	 * Returns the piece length used for the torrent
 	 * @return
 	 */
-	public long
+    long
 	getPieceLength();
 
-	public int
+	int
 	getNumberOfPieces();
 	
-	public long
+	long
 	getSize();
 	
-	public int
+	int
 	getFileCount();
 	
 	/**
 	 * A torrent consists of one or more files. These are accessed via this method.
 	 * @return
-	 */ 
-	public TOTorrentFile[]
+	 */
+    TOTorrentFile[]
 	getFiles();
 	
 	 /**
@@ -181,8 +181,8 @@ TOTorrent
 	  * @return
 	  * @throws TOTorrentException
 	  */
-	 
-	public byte[]
+
+     byte[]
 	getHash()
 				
 		throws TOTorrentException;
@@ -192,8 +192,8 @@ TOTorrent
 	 * @return
 	 * @throws TOTorrentException
 	 */
-	
-	public HashWrapper
+
+    HashWrapper
 	getHashWrapper()
 				
 		throws TOTorrentException;
@@ -204,10 +204,10 @@ TOTorrent
 		 * @param hash
 		 * @throws TOTorrentException
 		 */
-	
-	public void
+
+        void
 	setHashOverride(
-		byte[]		hash )
+                byte[] hash)
 	
 		throws TOTorrentException;
 	
@@ -216,22 +216,22 @@ TOTorrent
 	 * @param other
 	 * @return
 	 */
-	
-	public boolean
+
+    boolean
 	hasSameHashAs(
-		TOTorrent		other );
+            TOTorrent other);
 	
-	public boolean
+	boolean
 	getPrivate();
 	
 		/**
 		 * Note - changing the private attribute CHANGES THE TORRENT HASH 
 		 * @param _private
 		 */
-	
-	public void
+
+        void
 	setPrivate(
-		boolean	_private )
+                boolean _private)
 	
 		throws TOTorrentException;
 	
@@ -240,75 +240,75 @@ TOTorrent
 	 * @param name		name of the property (e.g. "encoding")
 	 * @param value		value. This will be encoded with default encoding
 	 */
-	
-	public void
+
+    void
 	setAdditionalStringProperty(
-		String		name,
-		String		value );
+            String name,
+            String value);
 		
-	public String
+	String
 	getAdditionalStringProperty(
-		String		name );
+            String name);
 		
-	public void
+	void
 	setAdditionalByteArrayProperty(
-		String		name,
-		byte[]		value );
+            String name,
+            byte[] value);
 	
-	public byte[]
+	byte[]
 	getAdditionalByteArrayProperty(
-		String		name );
+            String name);
 	
-	public void
+	void
 	setAdditionalLongProperty(
-		String		name,
-		Long		value );
+            String name,
+            Long value);
 		
-	public Long
+	Long
 	getAdditionalLongProperty(
-		String		name );
+            String name);
 		
 	
-	public void
+	void
 	setAdditionalListProperty(
-		String		name,
-		List		value );
+            String name,
+            List value);
 		
-	public List
+	List
 	getAdditionalListProperty(
-		String		name );
+            String name);
 		
-	public void
+	void
 	setAdditionalMapProperty(
-		String		name,
-		Map			value );
+            String name,
+            Map value);
 		
-	public Map
+	Map
 	getAdditionalMapProperty(
-		String		name );
+            String name);
 	
-	public Object
+	Object
 	getAdditionalProperty(
-		String		name );
+            String name);
 
 	/**
 	 * set an arbitrary property. Make sure its compatible with bencoding!
 	 */
 
-	public void
+    void
 	setAdditionalProperty(
-		String		name,
-		Object		value );
+            String name,
+            Object value);
 	
-	public void
+	void
 	removeAdditionalProperty(
-		String name );
+            String name);
 	
 	/**
 	 * remove all additional properties to clear out the torrent
-	 */	
-	
-	public void
+	 */
+
+    void
 	removeAdditionalProperties();
 	
 	 /**
@@ -316,9 +316,9 @@ TOTorrent
 	  * @param file
 	  * @throws TOTorrentException
 	  */
-	public void
+     void
 	serialiseToBEncodedFile(
-		File		file )
+             File file)
 		  
 		throws TOTorrentException;
 
@@ -328,7 +328,7 @@ TOTorrent
 	  * @return
 	  * @throws TOTorrentException
 	  */
-	public Map
+     Map
 	serialiseToMap()
 		  
 		throws TOTorrentException;
@@ -338,29 +338,29 @@ TOTorrent
 	 * @param file
 	 * @throws TOTorrentException
 	 */
-	
-   public void
+
+    void
    serialiseToXMLFile(
-	   File		file )
+            File file)
 		  
 	   throws TOTorrentException;
 
-   public void
+   void
    addListener(
-	  TOTorrentListener		l );
+           TOTorrentListener l);
    
-   public void
+   void
    removeListener(
-	  TOTorrentListener		l );
+           TOTorrentListener l);
    
-   public AEMonitor
+   AEMonitor
    getMonitor();
 
 	 /**
 	  * A diagnostic method for dumping the tracker contents to "stdout"
 	  *
 	  */
-	public void
+     void
 	print();
 
 	/**

@@ -25,7 +25,7 @@ package org.gudy.azureus2.core3.torrent.impl;
 public interface 
 TOTorrentFileHasherListener 
 {
-	public void
+	void
 	pieceHashed(
-		int		piece_number );
+            int piece_number);
 }

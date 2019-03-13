@@ -82,24 +82,12 @@ public class StringEncrypter
 			cipher = Cipher.getInstance( encryptionScheme );
 			
 		}
-		catch (InvalidKeyException e)
+		catch (InvalidKeyException | NoSuchPaddingException | NoSuchAlgorithmException | UnsupportedEncodingException e)
 		{
 			throw new EncryptionException( e );
 		}
-		catch (UnsupportedEncodingException e)
-		{
-			throw new EncryptionException( e );
-		}
-		catch (NoSuchAlgorithmException e)
-		{
-			throw new EncryptionException( e );
-		}
-		catch (NoSuchPaddingException e)
-		{
-			throw new EncryptionException( e );
-		}
-		
-	}
+
+    }
 	
 	public String encrypt( String unencryptedString ) throws EncryptionException
 	{
@@ -145,9 +133,8 @@ public class StringEncrypter
 	private static String bytes2String( byte[] bytes )
 	{
 		StringBuilder stringBuffer = new StringBuilder();
-		for (int i = 0; i < bytes.length; i++)
-		{
-			stringBuffer.append( (char) bytes[i] );
+		for (byte aByte : bytes) {
+			stringBuffer.append((char) aByte);
 		}
 		return stringBuffer.toString();
 	}

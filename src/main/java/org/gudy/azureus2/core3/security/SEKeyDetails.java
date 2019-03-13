@@ -30,9 +30,9 @@ import java.security.cert.*;
 public interface 
 SEKeyDetails 
 {
-	public Key
+	Key
 	getKey();
 	
-	public X509Certificate[]
+	X509Certificate[]
 	getCertificateChain();
 }

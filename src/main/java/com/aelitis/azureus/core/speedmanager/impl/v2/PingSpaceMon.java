@@ -45,10 +45,10 @@ public class PingSpaceMon
     public void addListener(PSMonitorListener listener){
 
         //don't register the same listener twice.
-        for(int i=0; i<listeners.size(); i++){
-            PSMonitorListener t = (PSMonitorListener) listeners.get(i);
-            if( t==listener ){
-                SpeedManagerLogger.trace("Not logging same listener twice. listener="+listener.toString());
+        for (Object listener1 : listeners) {
+            PSMonitorListener t = (PSMonitorListener) listener1;
+            if (t == listener) {
+                SpeedManagerLogger.trace("Not logging same listener twice. listener=" + listener.toString());
                 return;
             }
         }

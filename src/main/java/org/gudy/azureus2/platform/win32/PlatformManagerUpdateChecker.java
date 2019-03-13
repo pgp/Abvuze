@@ -200,13 +200,11 @@ PlatformManagerUpdateChecker
 					// get size here so it is cached
 				
 				rdf.getTimeoutDownloader(rdf.getRetryDownloader(alternate_rdl,RD_SIZE_RETRIES),RD_SIZE_TIMEOUT).getSize();
-				
-			
-				List	update_desc = new ArrayList();
-				
+
+
 				List	desc_lines = HTMLUtils.convertHTMLToText( "", sf_details.getDescription());
-								
-				update_desc.addAll( desc_lines );
+
+				List update_desc = new ArrayList(desc_lines);
 								
 				List	comment_lines = HTMLUtils.convertHTMLToText( "    ", sf_details.getComment());
 				

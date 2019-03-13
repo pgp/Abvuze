@@ -212,7 +212,7 @@ ResourceUploaderURLImpl
 												
 							if ((response != HttpURLConnection.HTTP_ACCEPTED) && (response != HttpURLConnection.HTTP_OK )){
 								
-								throw( new ResourceUploaderException("Error on connect for '" + url.toString() + "': " + Integer.toString(response) + " " + con.getResponseMessage()));    
+								throw( new ResourceUploaderException("Error on connect for '" + url.toString() + "': " + response + " " + con.getResponseMessage()));
 							}
 	
 							InputStream is = con.getInputStream();
@@ -306,30 +306,29 @@ ResourceUploaderURLImpl
 	setRequestProperties(
 		HttpURLConnection		con,
 		boolean					use_compression )
-	{		
-		Iterator	it = properties.entrySet().iterator();
-		
-		while( it.hasNext()){
-			
-			Map.Entry entry = (Map.Entry)it.next();
-			
-			String	key 	= (String)entry.getKey();
-			Object	value	= entry.getValue();
-			
-			if ( key.startsWith( "URL_" ) && value instanceof String ){
-			
-				key = key.substring(4);
-				
-				if ( key.equalsIgnoreCase( "Accept-Encoding" ) && !use_compression ){
-					
-					//skip
-					
-				}else{
-					
-					con.setRequestProperty(key,(String)value);
-				}
-			}
-		}
+	{
+
+        for (Object o : properties.entrySet()) {
+
+            Map.Entry entry = (Map.Entry) o;
+
+            String key = (String) entry.getKey();
+            Object value = entry.getValue();
+
+            if (key.startsWith("URL_") && value instanceof String) {
+
+                key = key.substring(4);
+
+                if (key.equalsIgnoreCase("Accept-Encoding") && !use_compression) {
+
+                    //skip
+
+                } else {
+
+                    con.setRequestProperty(key, (String) value);
+                }
+            }
+        }
 	}
 	
 	protected void
@@ -340,21 +339,19 @@ ResourceUploaderURLImpl
 			setProperty( ResourceDownloader.PR_STRING_CONTENT_TYPE, con.getContentType() );
 			
 			Map	headers = con.getHeaderFields();
-			
-			Iterator it = headers.entrySet().iterator();
-			
-			while( it.hasNext()){
-				
-				Map.Entry	entry = (Map.Entry)it.next();
-				
-				String	key = (String)entry.getKey();
-				Object	val	= entry.getValue();
-				
-				if ( key != null ){
-					
-					setProperty( "URL_" + key, val );
-				}
-			}
+
+            for (Object o : headers.entrySet()) {
+
+                Map.Entry entry = (Map.Entry) o;
+
+                String key = (String) entry.getKey();
+                Object val = entry.getValue();
+
+                if (key != null) {
+
+                    setProperty("URL_" + key, val);
+                }
+            }
 		}catch( Throwable e ){
 			
 			Debug.printStackTrace(e);

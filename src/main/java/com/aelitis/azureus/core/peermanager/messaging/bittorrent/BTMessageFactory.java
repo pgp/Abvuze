@@ -242,9 +242,9 @@ public class BTMessageFactory {
     DirectByteBuffer[] payload = base_message.getData();
     
     int payload_size = 0;
-    for( int i=0; i < payload.length; i++ ) {
-      payload_size += payload[i].remaining( DirectByteBuffer.SS_MSG );
-    }  
+      for (DirectByteBuffer directByteBuffer : payload) {
+          payload_size += directByteBuffer.remaining(DirectByteBuffer.SS_MSG);
+      }
         
     DirectByteBuffer header = DirectByteBufferPool.getBuffer( DirectByteBuffer.AL_MSG_BT_HEADER, 5 );
     header.putInt( DirectByteBuffer.SS_MSG, 1 + payload_size );

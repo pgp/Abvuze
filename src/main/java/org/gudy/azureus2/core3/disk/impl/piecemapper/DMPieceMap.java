@@ -23,7 +23,7 @@ package org.gudy.azureus2.core3.disk.impl.piecemapper;
 public interface 
 DMPieceMap 
 {
-	public DMPieceList
+	DMPieceList
 	getPieceList(
-		int	piece_number );
+            int piece_number);
 }

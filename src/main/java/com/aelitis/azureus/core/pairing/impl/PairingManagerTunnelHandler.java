@@ -25,6 +25,7 @@ import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.security.AlgorithmParameters;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -89,8 +90,8 @@ PairingManagerTunnelHandler
 	private boolean	started = false;
 	private boolean	active	= false;
 	
-	private final List<DHTNATPuncher>	nat_punchers_ipv4 = new ArrayList<DHTNATPuncher>();
-	private final List<DHTNATPuncher>	nat_punchers_ipv6 = new ArrayList<DHTNATPuncher>();
+	private final List<DHTNATPuncher>	nat_punchers_ipv4 = new ArrayList<>();
+	private final List<DHTNATPuncher>	nat_punchers_ipv6 = new ArrayList<>();
 	
 	private int	last_punchers_registered = 0;
 	
@@ -118,7 +119,7 @@ PairingManagerTunnelHandler
 	
 	private static final int MAX_TUNNELS	= 10;
 	
-	final Map<String,PairManagerTunnel>	tunnels = new HashMap<String,PairManagerTunnel>();
+	final Map<String,PairManagerTunnel>	tunnels = new HashMap<>();
 	
 	private String	init_fail;
 	
@@ -156,8 +157,8 @@ PairingManagerTunnelHandler
 			start();
 			
 			try{
-				byte[] I = DEFAULT_IDENTITY.getBytes( "UTF-8" );
-				byte[] P = new String(password).getBytes( "UTF-8" );
+				byte[] I = DEFAULT_IDENTITY.getBytes(StandardCharsets.UTF_8);
+				byte[] P = new String(password).getBytes(StandardCharsets.UTF_8);
 		
 				byte[] salt = new byte[16];
 		
@@ -232,7 +233,7 @@ PairingManagerTunnelHandler
 			
 			DHT[] dhts = dht_plugin.getDHTs();
 			
-			List<DHTNATPuncher> punchers = new ArrayList<DHTNATPuncher>();
+			List<DHTNATPuncher> punchers = new ArrayList<>();
 			
 			for ( DHT dht: dhts ){
 				
@@ -320,8 +321,8 @@ PairingManagerTunnelHandler
 													System.out.println( "    updating" );
 													
 													manager.updateNeeded();
-												};	
-											});
+												}
+                                            });
 								}
 							}
 						}
@@ -489,7 +490,7 @@ PairingManagerTunnelHandler
 									
 									byte[] dec = decipher.doFinal( (byte[])data.get( "enc_data" ));
 									
-									String json_str = new String( dec, "UTF-8" );
+									String json_str = new String( dec, StandardCharsets.UTF_8);
 									
 									if ( !json_str.startsWith( "{" )){
 										
@@ -502,7 +503,7 @@ PairingManagerTunnelHandler
 																	
 									String tunnel_url = (String)dec_json.get( "url" );
 									
-									String service_id = new String((byte[])data.get( "service"), "UTF-8" );
+									String service_id = new String((byte[])data.get( "service"), StandardCharsets.UTF_8);
 									
 									String endpoint_url = (String)dec_json.get( "endpoint");
 									
@@ -637,7 +638,7 @@ PairingManagerTunnelHandler
 			
 			synchronized( tunnels ){
 			
-				for ( PairManagerTunnel t: new ArrayList<PairManagerTunnel>( tunnels.values())){
+				for ( PairManagerTunnel t: new ArrayList<>(tunnels.values())){
 					
 					t.destroy();
 				}
@@ -650,7 +651,7 @@ PairingManagerTunnelHandler
 			}
 		}
 		
-		List<DHTNATPuncher> punchers = new ArrayList<DHTNATPuncher>();
+		List<DHTNATPuncher> punchers = new ArrayList<>();
 		
 		punchers.addAll( nat_punchers_ipv4 );
 		punchers.addAll( nat_punchers_ipv6 );
@@ -753,7 +754,7 @@ PairingManagerTunnelHandler
 					
 			int	q_pos = url.indexOf( '?' );
 			
-			Map<String,String> args = new HashMap<String,String>();
+			Map<String,String> args = new HashMap<>();
 			
 			if ( q_pos != -1 ){
 				
@@ -890,7 +891,7 @@ PairingManagerTunnelHandler
 			        result.put( "url", tunnel_url );
 				}
 				
-				response.getOutputStream().write( JSONUtils.encodeToJSON( json ).getBytes( "UTF-8" ));
+				response.getOutputStream().write( JSONUtils.encodeToJSON( json ).getBytes(StandardCharsets.UTF_8));
 				
 				response.setContentType( "application/json; charset=UTF-8" );
 				
@@ -969,7 +970,7 @@ PairingManagerTunnelHandler
 						
 						byte[] dec = decipher.doFinal( Base32.decode( enc_data ));
 						
-						JSONObject dec_json = (JSONObject)JSONUtils.decodeJSON( new String( dec, "UTF-8" ));
+						JSONObject dec_json = (JSONObject)JSONUtils.decodeJSON( new String( dec, StandardCharsets.UTF_8));
 														
 						String tunnel_url = (String)dec_json.get( "url" );
 						
@@ -985,7 +986,7 @@ PairingManagerTunnelHandler
 						
 						result.put( "state", "activated" );
 						
-						response.getOutputStream().write( JSONUtils.encodeToJSON( json ).getBytes( "UTF-8" ));
+						response.getOutputStream().write( JSONUtils.encodeToJSON( json ).getBytes(StandardCharsets.UTF_8));
 												
 						response.setContentType( "application/json; charset=UTF-8" );
 						

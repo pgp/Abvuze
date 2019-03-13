@@ -57,23 +57,21 @@ AETemporaryFileHandler
 				File[]	files = tmp_dir.listFiles();
 				
 				if ( files != null ){
-					
-					for (int i=0;i<files.length;i++){
-						
-						File	file = files[i];
-						
-						if ( file.getName().startsWith(PREFIX) && file.getName().endsWith(SUFFIX)){
-						
-							if ( file.isDirectory()){
-							
-								FileUtil.recursiveDelete( file );
-								
-							}else{
-							
-								file.delete();
-							}
-						}
-					}
+
+                    for (File file : files) {
+
+                        if (file.getName().startsWith(PREFIX) && file.getName().endsWith(SUFFIX)) {
+
+                            if (file.isDirectory()) {
+
+                                FileUtil.recursiveDelete(file);
+
+                            } else {
+
+                                file.delete();
+                            }
+                        }
+                    }
 				}
 			}else{
 				

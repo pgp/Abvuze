@@ -32,11 +32,11 @@ import org.gudy.azureus2.core3.peer.*;
 public interface 
 DownloadManagerPieceListener 
 {
-	public void
+	void
 	pieceAdded(
-		PEPiece 	piece );
+            PEPiece piece);
 		
-	public void
+	void
 	pieceRemoved(
-		PEPiece		piece );
+            PEPiece piece);
 }

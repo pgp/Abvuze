@@ -27,11 +27,11 @@ package org.gudy.azureus2.plugins.update;
 public interface 
 UpdateCheckInstanceListener 
 {
-	public void
+	void
 	cancelled(
-		UpdateCheckInstance		instance );
+            UpdateCheckInstance instance);
 	
-	public void
+	void
 	complete(
-		UpdateCheckInstance		instance );
+            UpdateCheckInstance instance);
 }

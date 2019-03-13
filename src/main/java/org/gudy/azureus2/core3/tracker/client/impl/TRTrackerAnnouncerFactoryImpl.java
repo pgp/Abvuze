@@ -37,8 +37,8 @@ import org.gudy.azureus2.core3.util.*;
 public class 
 TRTrackerAnnouncerFactoryImpl 
 {
-	protected static final List<TRTrackerAnnouncerFactoryListener>	listeners 	= new ArrayList<TRTrackerAnnouncerFactoryListener>();
-	protected static final List<TRTrackerAnnouncerImpl>				clients		= new ArrayList<TRTrackerAnnouncerImpl>();
+	protected static final List<TRTrackerAnnouncerFactoryListener>	listeners 	= new ArrayList<>();
+	protected static final List<TRTrackerAnnouncerImpl>				clients		= new ArrayList<>();
 	
 	protected static final AEMonitor 		class_mon 	= new AEMonitor( "TRTrackerClientFactory" );
 
@@ -61,23 +61,23 @@ TRTrackerAnnouncerFactoryImpl
 				
 				clients.add( client );
 			
-				listeners_copy = new ArrayList<TRTrackerAnnouncerFactoryListener>( listeners );
+				listeners_copy = new ArrayList<>(listeners);
 		
 			}finally{
 				
 				class_mon.exit();
 			}
-			
-			for (int i=0;i<listeners_copy.size();i++){
-				
-				try{
-					listeners_copy.get(i).clientCreated( client );
-					
-				}catch( Throwable e ){
-					
-					Debug.printStackTrace(e);
-				}
-			}
+
+            for (TRTrackerAnnouncerFactoryListener trTrackerAnnouncerFactoryListener : listeners_copy) {
+
+                try {
+                    trTrackerAnnouncerFactoryListener.clientCreated(client);
+
+                } catch (Throwable e) {
+
+                    Debug.printStackTrace(e);
+                }
+            }
 		}
 		
 		return( client );
@@ -98,23 +98,23 @@ TRTrackerAnnouncerFactoryImpl
 		
 			listeners.add(l);
 			
-			clients_copy = new ArrayList<TRTrackerAnnouncerImpl>( clients );
+			clients_copy = new ArrayList<>(clients);
 	
 		}finally{
 			
 			class_mon.exit();
 		}
-		
-		for (int i=0;i<clients_copy.size();i++){
-			
-			try{
-				l.clientCreated(clients_copy.get(i));
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace(e);
-			}
-		}
+
+        for (TRTrackerAnnouncerImpl trTrackerAnnouncer : clients_copy) {
+
+            try {
+                l.clientCreated(trTrackerAnnouncer);
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 	
 	public static void
@@ -145,23 +145,23 @@ TRTrackerAnnouncerFactoryImpl
 			
 				clients.remove( client );
 				
-				listeners_copy	= new ArrayList<TRTrackerAnnouncerFactoryListener>( listeners );
+				listeners_copy	= new ArrayList<>(listeners);
 	
 			}finally{
 				
 				class_mon.exit();
 			}
-			
-			for (int i=0;i<listeners_copy.size();i++){
-				
-				try{
-					listeners_copy.get(i).clientDestroyed( client );
-					
-				}catch( Throwable e ){
-					
-					Debug.printStackTrace(e);
-				}
-			}
+
+            for (TRTrackerAnnouncerFactoryListener trTrackerAnnouncerFactoryListener : listeners_copy) {
+
+                try {
+                    trTrackerAnnouncerFactoryListener.clientDestroyed(client);
+
+                } catch (Throwable e) {
+
+                    Debug.printStackTrace(e);
+                }
+            }
 		}
 	}
 }

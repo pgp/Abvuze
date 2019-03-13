@@ -39,7 +39,7 @@ public interface TableContextMenuItem
    	 * 
    	 * @param l listener to be notified when user has selected the menu item.
    	 */
-   	public void	addListener(MenuItemListener l);
+    void	addListener(MenuItemListener l);
    	
    	/**
    	 * Adds a selection listener for this menu item.
@@ -51,11 +51,11 @@ public interface TableContextMenuItem
    	 * @param l listener to be notified when user has selected the menu item.
    	 * @since 2.5.0.2
    	 */
-   	public void addMultiListener(MenuItemListener l);
+    void addMultiListener(MenuItemListener l);
 
   /**
    * Retrieve the Table ID that the menu item belongs to
    * @return {@link TableManager}.TABLE_ constant
    */
-  public String getTableID();
+  String getTableID();
 }

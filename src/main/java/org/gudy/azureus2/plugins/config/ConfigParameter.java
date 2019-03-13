@@ -27,11 +27,11 @@ package org.gudy.azureus2.plugins.config;
 public interface 
 ConfigParameter 
 {
-	public void
+	void
 	addConfigParameterListener(
-		ConfigParameterListener	l );	
+            ConfigParameterListener l);
 		
-	public void
+	void
 	removeConfigParameterListener(
-		ConfigParameterListener	l );
+            ConfigParameterListener l);
 }

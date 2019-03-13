@@ -32,57 +32,57 @@ public interface
 TRTrackerServerPeer 
 	extends TRTrackerServerPeerBase
 {
-	public static final byte	NAT_CHECK_UNKNOWN				= 0;
-	public static final byte	NAT_CHECK_DISABLED				= 1;
-	public static final byte	NAT_CHECK_INITIATED				= 2;
-	public static final byte	NAT_CHECK_OK					= 3;
-	public static final byte	NAT_CHECK_FAILED				= 4;
-	public static final byte	NAT_CHECK_FAILED_AND_REPORTED	= 5;
+	byte	NAT_CHECK_UNKNOWN				= 0;
+	byte	NAT_CHECK_DISABLED				= 1;
+	byte	NAT_CHECK_INITIATED				= 2;
+	byte	NAT_CHECK_OK					= 3;
+	byte	NAT_CHECK_FAILED				= 4;
+	byte	NAT_CHECK_FAILED_AND_REPORTED	= 5;
 	
-	public static final byte	CRYPTO_NONE				= 0;
-	public static final byte	CRYPTO_SUPPORTED		= 1;
-	public static final byte	CRYPTO_REQUIRED			= 2;
+	byte	CRYPTO_NONE				= 0;
+	byte	CRYPTO_SUPPORTED		= 1;
+	byte	CRYPTO_REQUIRED			= 2;
 	
 	
-	public long
+	long
 	getUploaded();
 	
-	public long
+	long
 	getDownloaded();
 	
-	public long
+	long
 	getAmountLeft();
 	
-	public String
+	String
 	getIPRaw();
 	
-	public byte[]
+	byte[]
 	getPeerID();
 	
 		/**
 		 * returns the current NAT status of the peer
 		 * @return
 		 */
-	
-	public byte
+
+        byte
 	getNATStatus();
 	
-	public boolean
+	boolean
 	isBiased();
 	
-	public void
+	void
 	setBiased(
-		boolean	bias );
+            boolean bias);
 	
-	public void
+	void
 	setUserData(
-		Object		key,
-		Object		data );
+            Object key,
+            Object data);
 	
-	public Object
+	Object
 	getUserData(
-		Object		key );
+            Object key);
 	
-	public Map
+	Map
 	export();
 }

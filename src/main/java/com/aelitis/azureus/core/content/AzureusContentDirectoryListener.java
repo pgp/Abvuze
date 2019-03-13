@@ -23,8 +23,8 @@ package com.aelitis.azureus.core.content;
 public interface 
 AzureusContentDirectoryListener 
 {
-	public void
+	void
 	contentChanged(
-		AzureusContentFile		file,
-		String					property );
+            AzureusContentFile file,
+            String property);
 }

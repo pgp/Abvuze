@@ -29,9 +29,9 @@ import com.aelitis.azureus.core.proxy.AEProxyException;
 public interface 
 AESocksProxyPlugableConnectionFactory 
 {
-	public AESocksProxyPlugableConnection
+	AESocksProxyPlugableConnection
 	create(
-		AESocksProxyConnection	connection )
+            AESocksProxyConnection connection)
 	
 		throws AEProxyException;
 }

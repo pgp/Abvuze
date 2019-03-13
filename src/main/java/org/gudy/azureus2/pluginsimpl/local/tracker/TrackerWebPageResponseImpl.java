@@ -60,7 +60,7 @@ TrackerWebPageResponseImpl
 
 	private int					reply_status	= 200;
 
-	private Map<String,Object>		header_map 	= new LinkedHashMap<String,Object>();
+	private Map<String,Object>		header_map 	= new LinkedHashMap<>();
 
 	private TrackerWebPageRequestImpl 	request;
 	private boolean						raw_output;
@@ -120,41 +120,37 @@ TrackerWebPageResponseImpl
 		String		value )
 	{
 		if ( name.equalsIgnoreCase( "set-cookie" )){
-			
-			Iterator<String>	it = header_map.keySet().iterator();
 
-			while( it.hasNext()){
+            for (String key : header_map.keySet()) {
 
-				String	key = it.next();
+                if (key.equalsIgnoreCase(name)) {
 
-				if ( key.equalsIgnoreCase( name )){
+                    Object existing = header_map.get(key);
 
-					Object existing = header_map.get( key );
-					
-					if ( existing instanceof String ){
-						
-						String old = (String)existing;
-						
-						List l = new ArrayList(3);
-						
-						l.add( old );
-						l.add( value );
-						
-						header_map.put( name, l );
-						
-					}else{
-						
-						List l = (List)existing;
-						
-						if ( !l.contains( value )){
-						
-							l.add( value );
-						}
-					}
-				
-					return;
-				}
-			}
+                    if (existing instanceof String) {
+
+                        String old = (String) existing;
+
+                        List l = new ArrayList(3);
+
+                        l.add(old);
+                        l.add(value);
+
+                        header_map.put(name, l);
+
+                    } else {
+
+                        List l = (List) existing;
+
+                        if (!l.contains(value)) {
+
+                            l.add(value);
+                        }
+                    }
+
+                    return;
+                }
+            }
 			
 			header_map.put( name, value );
 			
@@ -318,28 +314,25 @@ TrackerWebPageResponseImpl
 				header_map.put("Content-Encoding", "gzip");
 			}
 		}
-		
-		Iterator<String>	it = header_map.keySet().iterator();
 
-		while( it.hasNext()){
+        for (String name : header_map.keySet()) {
 
-			String	name 	= it.next();
-			Object	value 	= header_map.get(name);
+            Object value = header_map.get(name);
 
-			if ( value instanceof String ){
-			
-				reply_header += name + ": " + value + NL;
-				
-			}else{
-				
-				List<String>	l = (List<String>)value;
-				
-				for ( String v: l ){
-					
-					reply_header += name + ": " + v + NL;
-				}
-			}
-		}
+            if (value instanceof String) {
+
+                reply_header += name + ": " + value + NL;
+
+            } else {
+
+                List<String> l = (List<String>) value;
+
+                for (String v : l) {
+
+                    reply_header += name + ": " + v + NL;
+                }
+            }
+        }
 
 		if ( do_gzip ){
 
@@ -449,22 +442,13 @@ TrackerWebPageResponseImpl
 
 			String	file_type = str.substring(pos+1);
 
-			FileInputStream	fis = null;
+            try (FileInputStream fis = new FileInputStream(canonical_file)) {
 
-			try{
-				fis = new FileInputStream(canonical_file);
+                useStream(file_type, fis);
 
-				useStream( file_type, fis );
+                return (true);
 
-				return( true );
-
-			}finally{
-
-				if ( fis != null ){
-
-					fis.close();
-				}
-			}
+            }
 		}
 
 		return( false );
@@ -554,24 +538,22 @@ TrackerWebPageResponseImpl
 
 						String protocol = torrent_to_send.getAnnounceURL().getProtocol();
 
-						for (int i=0;i<url_sets.length;i++){
+                        for (URL[] urls : url_sets) {
 
-							URL[]	urls = url_sets[i];
+                            if (urls[0].getProtocol().equalsIgnoreCase(protocol)) {
 
-							if ( urls[0].getProtocol().equalsIgnoreCase( protocol )){
+                                torrent_to_send.setAnnounceURL(urls[0]);
 
-								torrent_to_send.setAnnounceURL( urls[0] );
+                                torrent_to_send.getAnnounceURLGroup().setAnnounceURLSets(new TOTorrentAnnounceURLSet[0]);
 
-								torrent_to_send.getAnnounceURLGroup().setAnnounceURLSets( new TOTorrentAnnounceURLSet[0]);
+                                for (int j = 1; j < urls.length; j++) {
 
-								for (int j=1;j<urls.length;j++){
+                                    TorrentUtils.announceGroupsInsertLast(torrent_to_send, new URL[]{urls[j]});
+                                }
 
-									TorrentUtils.announceGroupsInsertLast( torrent_to_send, new URL[]{ urls[j] });
-								}
-
-								break;
-							}
-						}
+                                break;
+                            }
+                        }
 					}
 				}
 			}

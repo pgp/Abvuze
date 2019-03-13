@@ -197,12 +197,12 @@ IncomingConnectionManager
 	    
 	      if( to_remove.maxSize() == max_match_buffer_size ) { //recalc longest buffer if necessary
 	        max_match_buffer_size = 0;
-	        for( Iterator i = new_match_buffers.keySet().iterator(); i.hasNext(); ) {
-	          NetworkManager.ByteMatcher bm = (NetworkManager.ByteMatcher)i.next();
-	          if( bm.maxSize() > max_match_buffer_size ) {
-	            max_match_buffer_size = bm.maxSize();
-	          }
-	        }
+              for (Object o : new_match_buffers.keySet()) {
+                  NetworkManager.ByteMatcher bm = (NetworkManager.ByteMatcher) o;
+                  if (bm.maxSize() > max_match_buffer_size) {
+                      max_match_buffer_size = bm.maxSize();
+                  }
+              }
 	      }
 	    
 	      match_buffers_cow = new_match_buffers;
@@ -331,47 +331,44 @@ IncomingConnectionManager
 		
 		long now = SystemTime.getCurrentTime();
 
-		for( int i=0; i < connections.size(); i++ ){
-			
-			IncomingConnection ic = (IncomingConnection)connections.get( i );
+            for (Object connection : connections) {
 
-			TransportHelper	transport_helper = ic.filter.getHelper();
-			
-			if( ic.last_read_time > 0 ) {  //at least one read op has occured
-				if( now < ic.last_read_time ) {  //time went backwards!
-					ic.last_read_time = now;
-				}
-				else if( now - ic.last_read_time > transport_helper.getReadTimeout()) {  
-					if (Logger.isEnabled())
-						Logger.log(new LogEvent(LOGID, "Incoming connection ["
-								+ transport_helper.getAddress()
-								+ "] forcibly timed out due to socket read inactivity ["
-								+ ic.buffer.position() + " bytes read: "
-								+ new String(ic.buffer.array()) + "]"));
-					if( to_close == null )  to_close = new ArrayList();
-					to_close.add( ic );
-				}
-			}
-			else { //no bytes have been read yet
-				if( now < ic.initial_connect_time ) {  //time went backwards!
-					ic.initial_connect_time = now;
-				}
-				else if( now - ic.initial_connect_time > transport_helper.getConnectTimeout()) {  
-					if (Logger.isEnabled())
-						Logger.log(new LogEvent(LOGID, "Incoming connection ["
-								+ transport_helper.getAddress()	+ "] forcibly timed out after "
-								+ "60sec due to socket inactivity"));
-					if( to_close == null )  to_close = new ArrayList();
-					to_close.add( ic );
-				}
-			}
-		}
+                IncomingConnection ic = (IncomingConnection) connection;
+
+                TransportHelper transport_helper = ic.filter.getHelper();
+
+                if (ic.last_read_time > 0) {  //at least one read op has occured
+                    if (now < ic.last_read_time) {  //time went backwards!
+                        ic.last_read_time = now;
+                    } else if (now - ic.last_read_time > transport_helper.getReadTimeout()) {
+                        if (Logger.isEnabled())
+                            Logger.log(new LogEvent(LOGID, "Incoming connection ["
+                                    + transport_helper.getAddress()
+                                    + "] forcibly timed out due to socket read inactivity ["
+                                    + ic.buffer.position() + " bytes read: "
+                                    + new String(ic.buffer.array()) + "]"));
+                        if (to_close == null) to_close = new ArrayList();
+                        to_close.add(ic);
+                    }
+                } else { //no bytes have been read yet
+                    if (now < ic.initial_connect_time) {  //time went backwards!
+                        ic.initial_connect_time = now;
+                    } else if (now - ic.initial_connect_time > transport_helper.getConnectTimeout()) {
+                        if (Logger.isEnabled())
+                            Logger.log(new LogEvent(LOGID, "Incoming connection ["
+                                    + transport_helper.getAddress() + "] forcibly timed out after "
+                                    + "60sec due to socket inactivity"));
+                        if (to_close == null) to_close = new ArrayList();
+                        to_close.add(ic);
+                    }
+                }
+            }
 
 		if( to_close != null ) {
-			for( int i=0; i < to_close.size(); i++ ) {
-				IncomingConnection ic = (IncomingConnection)to_close.get( i );
-				removeConnection( ic, true, "incoming connection routing timeout" );
-			}
+            for (Object o : to_close) {
+                IncomingConnection ic = (IncomingConnection) o;
+                removeConnection(ic, true, "incoming connection routing timeout");
+            }
 		}
 
 		} finally {  connections_mon.exit();  }
@@ -527,8 +524,8 @@ IncomingConnectionManager
 		 * This method allows auto-fallback for such transports
 		 * @return
 		 */
-		
-		public boolean
+
+        boolean
 		autoCryptoFallback();
 
 		/**
@@ -536,11 +533,11 @@ IncomingConnectionManager
 		 * @param channel matching accepted connection
 		 * @param read_so_far bytes already read
 		 */
-		
-		public void 
-		connectionMatched( 
-			Transport	transport,
-			Object		routing_data );
+
+        void
+		connectionMatched(
+                Transport transport,
+                Object routing_data);
 
 	}
 }

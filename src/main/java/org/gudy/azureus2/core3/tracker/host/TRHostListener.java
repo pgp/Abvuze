@@ -36,28 +36,28 @@ import org.gudy.azureus2.core3.util.AsyncController;
 public interface 
 TRHostListener 
 {
-	public void
+	void
 	torrentAdded(
-		TRHostTorrent		t );	
+            TRHostTorrent t);
 		
-	public void
+	void
 	torrentChanged(
-		TRHostTorrent		t );
+            TRHostTorrent t);
 	
-	public void
+	void
 	torrentRemoved(
-		TRHostTorrent		t );
+            TRHostTorrent t);
 	
-	public boolean
+	boolean
 	handleExternalRequest(
-		InetSocketAddress	client_address,
-		String				user,
-		String				url,
-		URL					absolute_url,
-		String				header,
-		InputStream			is,
-		OutputStream		os,
-		AsyncController		async )
+            InetSocketAddress client_address,
+            String user,
+            String url,
+            URL absolute_url,
+            String header,
+            InputStream is,
+            OutputStream os,
+            AsyncController async)
 	
 		throws IOException;
 }

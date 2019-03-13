@@ -23,6 +23,7 @@ import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.CharsetDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -59,7 +60,7 @@ public class BDecoder
 			
 			if ( root.length() > 0 ){
 				
-				portable = root.getBytes( "UTF-8" );
+				portable = root.getBytes(StandardCharsets.UTF_8);
 			}
 		}catch( Throwable e ){
 			
@@ -246,7 +247,7 @@ public class BDecoder
 					
 					// decode key strings manually so we can reuse the bytebuffer
 
-					int keyLength = (int)getPositiveNumberFromStream(dbis, ':');
+					int keyLength = getPositiveNumberFromStream(dbis, ':');
 
 					int skipBytes = 0;
 					
@@ -362,7 +363,7 @@ public class BDecoder
 
 						String msg = "dictionary key is too large - "
 								+ (keyLength + skipBytes) + ":, max=" + MAX_MAP_KEY_SIZE
-								+ ": skipping key starting with " + new String(key.substring(0, 128));
+								+ ": skipping key starting with " + key.substring(0, 128);
 						System.err.println( msg );
 
 					} else {
@@ -450,7 +451,7 @@ public class BDecoder
 			return null;
 
 		case 'i' :
-			return Long.valueOf(getNumberFromStream(dbis, 'e'));
+			return getNumberFromStream(dbis, 'e');
 
 		case '0' :
 		case '1' :
@@ -792,7 +793,7 @@ public class BDecoder
 		
 		throws IOException 
 	{
-		int length = (int) getPositiveNumberFromStream(dbis, ':');
+		int length = getPositiveNumberFromStream(dbis, ':');
 
 		if (length < 0) {
 			return null;
@@ -956,19 +957,17 @@ public class BDecoder
 
 			Map	m = (Map)obj;
 
-			Iterator	it = m.keySet().iterator();
+			for (Object o : m.keySet()) {
 
-			while( it.hasNext()){
+				String key = (String) o;
 
-				String	key = (String)it.next();
-
-				if ( key.length() > 256 ){
-					writer.print( indent + key.substring(0,256) + "... = " );
-				}else{
-					writer.print( indent + key + " = " );
+				if (key.length() > 256) {
+					writer.print(indent + key.substring(0, 256) + "... = ");
+				} else {
+					writer.print(indent + key + " = ");
 				}
 
-				print( writer, m.get(key), indent + "  ", true );
+				print(writer, m.get(key), indent + "  ", true);
 			}
 		}
 	}
@@ -990,29 +989,27 @@ public class BDecoder
 			return( null );
 		}
 
-		Iterator it = map.entrySet().iterator();
+		for (Object o : map.entrySet()) {
 
-		while( it.hasNext()){
+			Map.Entry entry = (Map.Entry) o;
 
-			Map.Entry	entry = (Map.Entry)it.next();
+			Object value = entry.getValue();
 
-			Object	value = entry.getValue();
+			if (value instanceof byte[]) {
 
-			if ( value instanceof byte[]){
+				try {
+					entry.setValue(new String((byte[]) value, StandardCharsets.UTF_8));
 
-				try{
-					entry.setValue( new String((byte[])value,"UTF-8" ));
-
-				}catch( Throwable e ){
+				} catch (Throwable e) {
 
 					System.err.println(e);
 				}
-			}else if ( value instanceof Map ){
+			} else if (value instanceof Map) {
 
-				decodeStrings((Map)value );
-			}else if ( value instanceof List ){
+				decodeStrings((Map) value);
+			} else if (value instanceof List) {
 
-				decodeStrings((List)value );
+				decodeStrings((List) value);
 			}
 		}
 
@@ -1042,7 +1039,7 @@ public class BDecoder
 			if ( value instanceof byte[]){
 
 				try{
-					String str = new String((byte[])value, "UTF-8" );
+					String str = new String((byte[])value, StandardCharsets.UTF_8);
 
 					list.set( i, str );
 
@@ -1127,7 +1124,7 @@ public class BDecoder
      				return( result );
      			}
      			
-     			return(s.getBytes( "UTF-8" ));
+     			return(s.getBytes(StandardCharsets.UTF_8));
      			
      		}catch( Throwable e ){
      			
@@ -1140,11 +1137,11 @@ public class BDecoder
       		
       	}else if ( obj instanceof Boolean ){
       		    		
-    		return( new Long(((Boolean)obj)?1:0 ));
+    		return((long) (((Boolean) obj) ? 1 : 0));
     		
     	}else if ( obj instanceof Double ){
     		
-    		return( String.valueOf((Double)obj));
+    		return( String.valueOf(obj));
     		
     	}else{
     		
@@ -1180,7 +1177,7 @@ public class BDecoder
     		Object	key = entry.getKey();
     		Object	val	= entry.getValue();
     		
-    		b_map.put((String)key, decodeFromJSONGeneric( val ));
+    		b_map.put(key, decodeFromJSONGeneric( val ));
     	}
     	
     	return( b_map );

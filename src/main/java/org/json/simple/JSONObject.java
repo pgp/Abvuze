@@ -32,12 +32,10 @@ public class JSONObject extends LightHashMap<String,Object>{
 
 	public String toString(){
 		ItemList list=new ItemList();
-		Iterator<Map.Entry<String, Object>> iter=entrySet().iterator();
-		
-		while(iter.hasNext()){
-			Map.Entry<String, Object> entry=iter.next();
-			list.add(toString(entry.getKey().toString(),entry.getValue()));
-		}
+
+        for (Entry<String, Object> entry : (Iterable<Entry<String, Object>>) entrySet()) {
+            list.add(toString(entry.getKey(), entry.getValue()));
+        }
 		return "{"+list.toString()+"}";
 	}
 	
@@ -101,7 +99,7 @@ public class JSONObject extends LightHashMap<String,Object>{
 		}else if ( value instanceof JSONArray ){
 			((JSONArray)value).toString( sb );
 		}else{
-			sb.append(String.valueOf( value ));
+			sb.append(value);
 		}
 	}
 	

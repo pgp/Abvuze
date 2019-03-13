@@ -75,7 +75,7 @@ AzureusPlatformContentDirectory
 		}
 	}
 	
-	private static CopyOnWriteList<AzureusContentDirectoryListener>	listeners = new CopyOnWriteList<AzureusContentDirectoryListener>();
+	private static CopyOnWriteList<AzureusContentDirectoryListener>	listeners = new CopyOnWriteList<>();
 	
 	public AzureusContent
 	lookupContent(
@@ -94,17 +94,12 @@ AzureusPlatformContentDirectory
 		
 		try{
 			ResourceDownloader rd = rdf.create( new URL( url_str ));
-		
-			InputStream	is = rd.download();
-			
-			try{		
-				TOTorrent	torrent = TOTorrentFactory.deserialiseFromBEncodedInputStream( is );
-			
-				return( new AzureusPlatformContent( new TorrentImpl( torrent )));
-				
-			}finally{
-				
-				is.close();
+
+			try (InputStream is = rd.download()) {
+				TOTorrent torrent = TOTorrentFactory.deserialiseFromBEncodedInputStream(is);
+
+				return (new AzureusPlatformContent(new TorrentImpl(torrent)));
+
 			}
 			
 		}catch( Throwable e ){
@@ -157,7 +152,7 @@ AzureusPlatformContentDirectory
 		Map 		attributes) 
 	{
 		byte[]	hash 	= (byte[])attributes.get( AT_BTIH );
-		int		index	= ((Integer)attributes.get( AT_FILE_INDEX )).intValue();
+		int		index	= (Integer) attributes.get(AT_FILE_INDEX);
 		
 		try{
 
@@ -204,79 +199,85 @@ AzureusPlatformContentDirectory
 							String		name )
 						{
 							try{
-								if ( name.equals( PT_DURATION )){
-									
-									long duration = PlatformTorrentUtils.getContentVideoRunningTime( torrent );
-									
-									if ( duration > 0 ){
-										
-											// secs -> millis
-										
-										return( new Long( duration*1000 ));
-									}
-								}else if ( name.equals( PT_VIDEO_WIDTH )){
-		
-									int[] res = PlatformTorrentUtils.getContentVideoResolution(torrent);
-									
-									if ( res != null ){
-										
-										return(new Long( res[0]));
-									}								
-								}else if ( name.equals( PT_VIDEO_HEIGHT )){
-		
-									int[] res = PlatformTorrentUtils.getContentVideoResolution(torrent);
-									
-									if ( res != null ){
-										
-										return(new Long( res[1] ));
-									}
-								}else if ( name.equals( PT_DATE )){
-		
-									return( new Long( file.getDownload().getCreationTime()));
-									
-								}else if ( name.equals( PT_CATEGORIES )){
+								switch (name) {
+									case PT_DURATION:
 
-									try{
-										String cat = file.getDownload().getCategoryName();
-										
-										if ( cat != null && cat.length() > 0 ){
-											
-											if ( !cat.equalsIgnoreCase( "Categories.uncategorized" )){
-											
-												return( new String[]{ cat });
+										long duration = PlatformTorrentUtils.getContentVideoRunningTime(torrent);
+
+										if (duration > 0) {
+
+											// secs -> millis
+
+											return (duration * 1000);
+										}
+										break;
+									case PT_VIDEO_WIDTH: {
+
+										int[] res = PlatformTorrentUtils.getContentVideoResolution(torrent);
+
+										if (res != null) {
+
+											return ((long) res[0]);
+										}
+										break;
+									}
+									case PT_VIDEO_HEIGHT: {
+
+										int[] res = PlatformTorrentUtils.getContentVideoResolution(torrent);
+
+										if (res != null) {
+
+											return ((long) res[1]);
+										}
+										break;
+									}
+									case PT_DATE:
+
+										return (file.getDownload().getCreationTime());
+
+									case PT_CATEGORIES:
+
+										try {
+											String cat = file.getDownload().getCategoryName();
+
+											if (cat != null && cat.length() > 0) {
+
+												if (!cat.equalsIgnoreCase("Categories.uncategorized")) {
+
+													return (new String[]{cat});
+												}
+											}
+										} catch (Throwable e) {
+
+										}
+
+										return (new String[0]);
+
+									case PT_TAGS:
+
+										List<Tag> tags = TagManagerFactory.getTagManager().getTagsForTaggable(PluginCoreUtils.unwrap(file.getDownload()));
+
+										List<String> tag_names = new ArrayList<>();
+
+										for (Tag tag : tags) {
+
+											if (tag.getTagType().getTagType() == TagType.TT_DOWNLOAD_MANUAL) {
+
+												tag_names.add(tag.getTagName(true));
 											}
 										}
-									}catch( Throwable e ){
-										
-									}
-									
-									return( new String[0] );
-									
-								}else if ( name.equals( PT_TAGS )){
 
-									List<Tag> tags = TagManagerFactory.getTagManager().getTagsForTaggable( PluginCoreUtils.unwrap( file.getDownload()));
-									
-									List<String>	tag_names = new ArrayList<String>();
-									
-									for ( Tag tag: tags ){
-										
-										if ( tag.getTagType().getTagType() == TagType.TT_DOWNLOAD_MANUAL ){
-											
-											tag_names.add( tag.getTagName( true ));
-										}
-									}
-									
-									return( tag_names.toArray( new String[ tag_names.size()]) );
-									
-								}else if ( name.equals( PT_PERCENT_DONE )){
-									
-									long	size = file.getLength();
-									
-									return( new Long( size==0?100:(1000*file.getDownloaded()/size )));
-									
-								}else if ( name.equals( PT_ETA )){							
-								
-									return( getETA( file ));
+										return (tag_names.toArray(new String[0]));
+
+									case PT_PERCENT_DONE:
+
+										long size = file.getLength();
+
+										return (size == 0 ? 100 : (1000 * file.getDownloaded() / size));
+
+									case PT_ETA:
+
+										return (getETA(file));
 								}
 							}catch( Throwable e ){							
 							}
@@ -299,54 +300,55 @@ AzureusPlatformContentDirectory
 								String		name )
 							{
 								try{
-									if ( name.equals( PT_DATE )){
-	
-										return( new Long( file.getDownload().getCreationTime()));
-										
-									}else if ( name.equals( PT_CATEGORIES )){
+									switch (name) {
+										case PT_DATE:
 
-										try{
-											String cat = file.getDownload().getCategoryName();
-											
-											if ( cat != null && cat.length() > 0 ){
-												
-												if ( !cat.equalsIgnoreCase( "Categories.uncategorized" )){
-												
-													return( new String[]{ cat });
+											return (file.getDownload().getCreationTime());
+
+										case PT_CATEGORIES:
+
+											try {
+												String cat = file.getDownload().getCategoryName();
+
+												if (cat != null && cat.length() > 0) {
+
+													if (!cat.equalsIgnoreCase("Categories.uncategorized")) {
+
+														return (new String[]{cat});
+													}
+												}
+											} catch (Throwable e) {
+
+											}
+
+											return (new String[0]);
+
+										case PT_TAGS:
+
+
+											List<Tag> tags = TagManagerFactory.getTagManager().getTagsForTaggable(PluginCoreUtils.unwrap(file.getDownload()));
+
+											List<String> tag_names = new ArrayList<>();
+
+											for (Tag tag : tags) {
+
+												if (tag.getTagType().getTagType() == TagType.TT_DOWNLOAD_MANUAL) {
+
+													tag_names.add(tag.getTagName(true));
 												}
 											}
-										}catch( Throwable e ){
-											
-										}
-										
-										return( new String[0] );
-										
-									}else if ( name.equals( PT_TAGS )){
 
+											return (tag_names.toArray(new String[0]));
 
-										List<Tag> tags = TagManagerFactory.getTagManager().getTagsForTaggable( PluginCoreUtils.unwrap( file.getDownload()));
-										
-										List<String>	tag_names = new ArrayList<String>();
-										
-										for ( Tag tag: tags ){
-											
-											if ( tag.getTagType().getTagType() == TagType.TT_DOWNLOAD_MANUAL ){
-												
-												tag_names.add( tag.getTagName( true ));
-											}
-										}
-										
-										return( tag_names.toArray( new String[ tag_names.size()]) );
-										
-									}else if ( name.equals( PT_PERCENT_DONE )){
-										
-										long	size = file.getLength();
-										
-										return( new Long( size==0?100:(1000*file.getDownloaded()/size )));
-	
-									}else if ( name.equals( PT_ETA )){							
-									
-										return( getETA( file ));
+										case PT_PERCENT_DONE:
+
+											long size = file.getLength();
+
+											return (size == 0 ? 100 : (1000 * file.getDownloaded() / size));
+
+										case PT_ETA:
+
+											return (getETA(file));
 									}
 								}catch( Throwable e ){							
 								}

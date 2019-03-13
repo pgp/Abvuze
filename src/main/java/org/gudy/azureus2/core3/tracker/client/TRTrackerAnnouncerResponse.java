@@ -30,30 +30,30 @@ import org.gudy.azureus2.core3.util.HashWrapper;
 public interface 
 TRTrackerAnnouncerResponse 
 {
-	public static final int	ST_OFFLINE			= 0;
-	public static final int ST_REPORTED_ERROR	= 1;
-	public static final int	ST_ONLINE			= 2;
+	int	ST_OFFLINE			= 0;
+	int ST_REPORTED_ERROR	= 1;
+	int	ST_ONLINE			= 2;
 	
 	/**
 	 * Returns the current status of the tracker
 	 * @return	see above ST_ set
 	 */
-	
-	public int
+
+    int
 	getStatus();
 	
-	public String
+	String
 	getStatusString();
 	
-	public HashWrapper
+	HashWrapper
 	getHash();
 	
 	/**
 	 * This value is always available
 	 * @return time to wait before requerying tracker
 	 */
-	
-	public long
+
+    long
 	getTimeToWait();
 	
 	/**
@@ -63,37 +63,37 @@ TRTrackerAnnouncerResponse
 	 * 
 	 * @return	Additional information
 	 */
-	
-	public String
+
+    String
 	getAdditionalInfo();
 	
 	/**
 	 * 
 	 * @return	peers reported by tracker. this will include the local peer as well
 	 */
-	
-	public TRTrackerAnnouncerResponsePeer[]
+
+    TRTrackerAnnouncerResponsePeer[]
 	getPeers();
 	
-	public void
+	void
 	setPeers(
-		TRTrackerAnnouncerResponsePeer[]	peers );
+            TRTrackerAnnouncerResponsePeer[] peers);
 	
-	public Map
+	Map
 	getExtensions();
 	
-	public URL
+	URL
 	getURL();
 	
-	public int
+	int
 	getScrapeCompleteCount();
 	
-	public int
+	int
 	getScrapeIncompleteCount();
 	
-	public int
+	int
 	getScrapeDownloadedCount();
 	
-	public void
+	void
 	print();
 }

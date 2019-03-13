@@ -105,7 +105,7 @@ implements PEPeerTransport
 
 	protected PEPeerStats peer_stats;
 
-	private final ArrayList<DiskManagerReadRequest> requested = new ArrayList<DiskManagerReadRequest>();
+	private final ArrayList<DiskManagerReadRequest> requested = new ArrayList<>();
 	private final AEMonitor	requested_mon = new AEMonitor( "PEPeerTransportProtocol:Req" );
 
 	private Map data;
@@ -546,7 +546,7 @@ implements PEPeerTransport
 			
 			Boolean pc = (Boolean)data.get( Peer.PR_PRIORITY_CONNECTION );
 			
-			if ( pc != null && pc.booleanValue()){
+			if ( pc != null && pc){
 				
 				setPriorityConnection( true );
 			}
@@ -680,21 +680,19 @@ implements PEPeerTransport
 
 			int	handshake_len = 0;
 
-			for (int i=0;i<ddbs.length;i++){
+            for (DirectByteBuffer ddb1 : ddbs) {
 
-				handshake_len += ddbs[i].remaining( DirectByteBuffer.SS_PEER );
-			}
+                handshake_len += ddb1.remaining(DirectByteBuffer.SS_PEER);
+            }
 
 			initial_outbound_data = ByteBuffer.allocate( handshake_len );
 
-			for (int i=0;i<ddbs.length;i++){
+            for (DirectByteBuffer ddb : ddbs) {
 
-				DirectByteBuffer	ddb = ddbs[i];
+                initial_outbound_data.put(ddb.getBuffer(DirectByteBuffer.SS_PEER));
 
-				initial_outbound_data.put( ddb.getBuffer( DirectByteBuffer.SS_PEER ));
-
-				ddb.returnToPool();
-			}
+                ddb.returnToPool();
+            }
 
 			initial_outbound_data.flip();
 
@@ -1075,11 +1073,10 @@ implements PEPeerTransport
 			final List peer_listeners_ref =peer_listeners_cow;
 			if (peer_listeners_ref !=null)
 			{
-				for (int i =0; i <peer_listeners_ref.size(); i++)
-				{
-					final PEPeerListener peerListener =(PEPeerListener) peer_listeners_ref.get(i);
-					peerListener.addAvailability(this, peerHavePieces);
-				}
+                for (Object o : peer_listeners_ref) {
+                    final PEPeerListener peerListener = (PEPeerListener) o;
+                    peerListener.addAvailability(this, peerHavePieces);
+                }
 				availabilityAdded =true;
 			}
 		}
@@ -1092,11 +1089,10 @@ implements PEPeerTransport
 			final List peer_listeners_ref =peer_listeners_cow;
 			if (peer_listeners_ref !=null)
 			{
-				for (int i =0; i <peer_listeners_ref.size(); i++)
-				{
-					final PEPeerListener peerListener =(PEPeerListener) peer_listeners_ref.get(i);
-					peerListener.removeAvailability(this, peerHavePieces);
-				}
+                for (Object o : peer_listeners_ref) {
+                    final PEPeerListener peerListener = (PEPeerListener) o;
+                    peerListener.removeAvailability(this, peerHavePieces);
+                }
 			}
 			availabilityAdded =false;
 		}
@@ -1145,8 +1141,8 @@ implements PEPeerTransport
 		Map data_dict = new HashMap();
 
 		data_dict.put("v", client_name);
-		data_dict.put("p", new Integer(localTcpPort));
-		data_dict.put("e", new Long(require_crypto ? 1L : 0L));
+		data_dict.put("p", localTcpPort);
+		data_dict.put("e", require_crypto ? 1L : 0L);
 		
 		boolean upload_only = 
 				manager.isSeeding() && 
@@ -1154,7 +1150,7 @@ implements PEPeerTransport
 		
 			// maintain this for any kinds of compatability 
 		
-		data_dict.put( "upload_only", new Long(upload_only? 1L : 0L));
+		data_dict.put( "upload_only", upload_only ? 1L : 0L);
 		
 		int metainfo_size;
 		
@@ -1169,7 +1165,7 @@ implements PEPeerTransport
 		
 		if ( metainfo_size > 0 ){
 			
-			data_dict.put("metadata_size", new Integer(metainfo_size));
+			data_dict.put("metadata_size", metainfo_size);
 		}
 		
 		NetworkAdmin na = NetworkAdmin.getSingleton();
@@ -2081,7 +2077,7 @@ implements PEPeerTransport
 						setSnubbed(true);
 				}
 				for (int i = requested.size() - 1; i >= 0; i--) {
-					final DiskManagerReadRequest request =(DiskManagerReadRequest) requested.remove(i);
+					final DiskManagerReadRequest request = requested.remove(i);
 					manager.requestCanceled(request);
 				}
 			}finally{
@@ -2118,7 +2114,7 @@ implements PEPeerTransport
 		try{
 			for (int i =requested.size() -1; i >=0; i--)
 			{
-				final DiskManagerReadRequest request = (DiskManagerReadRequest) requested.get(i);
+				final DiskManagerReadRequest request = requested.get(i);
 
 				if (request.isExpired()){
 
@@ -2198,12 +2194,10 @@ implements PEPeerTransport
 			requested_mon.enter();
 
 			final int requestedSize =requested.size();
-			for (int i =0; i <requestedSize; i++)
-			{
-				final DiskManagerReadRequest request =(DiskManagerReadRequest) requested.get(i);
-				if (request != null)
-					request.resetTime(now);
-			}
+            for (final DiskManagerReadRequest request : requested) {
+                if (request != null)
+                    request.resetTime(now);
+            }
 		}finally{
 
 			requested_mon.exit();
@@ -2806,7 +2800,7 @@ implements PEPeerTransport
 		  // Only use crypto if it was specifically requested. Not sure what the default
 		  // should be if they haven't indicated...
 		  Boolean crypto_requested = handshake.isCryptoRequested();
-		  byte handshake_type = (crypto_requested != null && crypto_requested.booleanValue()) ? PeerItemFactory.HANDSHAKE_TYPE_CRYPTO : PeerItemFactory.HANDSHAKE_TYPE_PLAIN;
+		  byte handshake_type = (crypto_requested != null && crypto_requested) ? PeerItemFactory.HANDSHAKE_TYPE_CRYPTO : PeerItemFactory.HANDSHAKE_TYPE_PLAIN;
 		  tcp_listen_port = handshake.getTCPListeningPort();
 		  peer_item_identity = PeerItemFactory.createPeerItem(
 			  ip, tcp_listen_port,
@@ -2997,7 +2991,7 @@ implements PEPeerTransport
 			}
 		}
 		
-		supported_messages = (Message[]) messages.toArray(new Message[messages.size()]);
+		supported_messages = (Message[]) messages.toArray(new Message[0]);
 		
 		if(outgoing_piece_message_handler != null){
 			outgoing_piece_message_handler.setPieceVersion(other_peer_piece_version);
@@ -3385,36 +3379,34 @@ implements PEPeerTransport
         
         boolean	send_interested = false;
         boolean	new_have		= false;
-               
-        for (int i=0;i<pieceNumbers.length;i++){
-        	
-        	int pieceNumber = pieceNumbers[i];
-        
-	        if ((pieceNumber >= nbPieces) ||(pieceNumber <0)) {
-	        	
-	            closeConnectionInternally("invalid pieceNumber: " +pieceNumber);
-	            
-	            return;
-	        }
 
-	        if ( !peerHavePieces.flags[pieceNumber]){
-        
-	        	new_have	= true;
-	        	
-	            if (	!( send_interested || interested_in_other_peer || is_download_disabled ) &&
-	            		diskManager.isInteresting(pieceNumber)){
+        for (int pieceNumber : pieceNumbers) {
 
-	            	send_interested = true;
-	            }
-	            
-	            peerHavePieces.set(pieceNumber);
-	
-	            final int pieceLength =manager.getPieceLength(pieceNumber);
-	            
-	            manager.havePiece(pieceNumber, pieceLength, this);
-	
-	            peer_stats.hasNewPiece(pieceLength);
-	        }
+            if ((pieceNumber >= nbPieces) || (pieceNumber < 0)) {
+
+                closeConnectionInternally("invalid pieceNumber: " + pieceNumber);
+
+                return;
+            }
+
+            if (!peerHavePieces.flags[pieceNumber]) {
+
+                new_have = true;
+
+                if (!(send_interested || interested_in_other_peer || is_download_disabled) &&
+                        diskManager.isInteresting(pieceNumber)) {
+
+                    send_interested = true;
+                }
+
+                peerHavePieces.set(pieceNumber);
+
+                final int pieceLength = manager.getPieceLength(pieceNumber);
+
+                manager.havePiece(pieceNumber, pieceLength, this);
+
+                peer_stats.hasNewPiece(pieceLength);
+            }
         }
 
         if ( new_have ){
@@ -3890,14 +3882,14 @@ implements PEPeerTransport
 			
 			if ( pieces == null ){
 			
-				pieces = new ArrayList<Integer>( ALLOWED_FAST_OTHER_PEER_PIECE_MAX );
+				pieces = new ArrayList<>(ALLOWED_FAST_OTHER_PEER_PIECE_MAX);
 				
 				setUserData( KEY_ALLOWED_FAST_RECEIVED, pieces );
 			}
 			
 			if ( pieces.size() < ALLOWED_FAST_OTHER_PEER_PIECE_MAX * 2 ){
 				
-				Integer i = new Integer( piece );
+				Integer i = piece;
 						
 				if ( !pieces.contains( i ) && i >=0 && i < nbPieces ){
 					
@@ -4035,16 +4027,16 @@ implements PEPeerTransport
 				
 				general_mon.exit();
 			}
-			
-			for ( int i=0;i<pieces.length;i++){
-				
-				int	piece_number = pieces[i][0];
-				
-				if ( !flags.flags[ piece_number ] ){
-				
-					sendAllowFast( piece_number );
-				}
-			}
+
+            for (int[] piece : pieces) {
+
+                int piece_number = piece[0];
+
+                if (!flags.flags[piece_number]) {
+
+                    sendAllowFast(piece_number);
+                }
+            }
 		}
 	}
 	
@@ -4326,28 +4318,33 @@ implements PEPeerTransport
 				}
 
 				String message_id = message.getID();
-				
-				if( message_id.equals( BTMessage.ID_BT_UNCHOKE ) ) { // is about to send piece data
-					
-					connection.enableEnhancedMessageProcessing( true, manager.getPartitionID() );  //so make sure we use a fast handler
-					
-				}else if( message_id.equals( BTMessage.ID_BT_CHOKE ) ) { // is done sending piece data
-					
-					if( effectively_choked_by_other_peer ) {
-						
-						connection.enableEnhancedMessageProcessing( false, manager.getPartitionID() );  //so downgrade back to normal handler
-					}
-				}else if( message_id.equals( BTMessage.ID_BT_REQUEST )){
-				
-					BTRequest request = (BTRequest)message;
-					
-					DiskManagerReadRequest dm_request = lookupRequest( request.getPieceNumber(), request.getPieceOffset(), request.getLength());
-					
-					if ( dm_request != null ){
-						
-						dm_request.setTimeSent( SystemTime.getMonotonousTime());
-					}
-				}
+
+                switch (message_id) {
+                    case BTMessage.ID_BT_UNCHOKE:  // is about to send piece data
+
+                        connection.enableEnhancedMessageProcessing(true, manager.getPartitionID());  //so make sure we use a fast handler
+
+
+                        break;
+                    case BTMessage.ID_BT_CHOKE:  // is done sending piece data
+
+                        if (effectively_choked_by_other_peer) {
+
+                            connection.enableEnhancedMessageProcessing(false, manager.getPartitionID());  //so downgrade back to normal handler
+                        }
+                        break;
+                    case BTMessage.ID_BT_REQUEST:
+
+                        BTRequest request = (BTRequest) message;
+
+                        DiskManagerReadRequest dm_request = lookupRequest(request.getPieceNumber(), request.getPieceOffset(), request.getLength());
+
+                        if (dm_request != null) {
+
+                            dm_request.setTimeSent(SystemTime.getMonotonousTime());
+                        }
+                        break;
+                }
 
 				if (Logger.isEnabled())
 					Logger.log(new LogEvent(PEPeerTransportProtocol.this, LogIDs.NET,
@@ -4409,7 +4406,7 @@ implements PEPeerTransport
 				
 				if ( disabled ){
 					
-					upload_disabled_set = new HashSet<Object>();
+					upload_disabled_set = new HashSet<>();
 					
 					upload_disabled_set.add( key );
 					
@@ -4459,7 +4456,7 @@ implements PEPeerTransport
 				
 				if ( disabled ){
 					
-					download_disabled_set = new HashSet<Object>();
+					download_disabled_set = new HashSet<>();
 					
 					download_disabled_set.add( key );
 					
@@ -4701,12 +4698,12 @@ implements PEPeerTransport
 
 		if ( peer_listeners_ref != null ){
 
-			for( int i=0; i < peer_listeners_ref.size(); i++ ) {
+            for (Object o : peer_listeners_ref) {
 
-				final PEPeerListener l = (PEPeerListener)peer_listeners_ref.get( i );
+                final PEPeerListener l = (PEPeerListener) o;
 
-				l.stateChanged(this, current_peer_state);
-			}
+                l.stateChanged(this, current_peer_state);
+            }
 		}
 	}
 
@@ -4801,9 +4798,9 @@ implements PEPeerTransport
 
 	private boolean peerSupportsMessageType( String message_id ) {
 		if( supported_messages != null ) {
-			for( int i=0; i < supported_messages.length; i++ ) {
-				if( supported_messages[i].getID().equals( message_id ) )  return true;        
-			}
+            for (Message supported_message : supported_messages) {
+                if (supported_message.getID().equals(message_id)) return true;
+            }
 		}
 		return false;
 	}
@@ -4886,17 +4883,16 @@ implements PEPeerTransport
     
 		if( peer_exchange_supported && pex_item != null && manager.isPeerExchangeEnabled()){
 			if( added != null ) {
-				for( int i=0; i < added.length; i++ ) {
-					PeerItem pi = added[i];
-					manager.peerDiscovered( this, pi );
-					pex_item.addConnectedPeer( pi );
-				}
+                for (PeerItem pi : added) {
+                    manager.peerDiscovered(this, pi);
+                    pex_item.addConnectedPeer(pi);
+                }
 			}
 
 			if( dropped != null ) {
-				for( int i=0; i < dropped.length; i++ ) {
-					pex_item.dropConnectedPeer( dropped[i] );
-				}
+                for (PeerItem peerItem : dropped) {
+                    pex_item.dropConnectedPeer(peerItem);
+                }
 			}
 		}
 		else {
@@ -5181,25 +5177,23 @@ implements PEPeerTransport
  				
  				int		pos 	= 0;
  				boolean	found 	= false;
- 				
- 				for (int i=0;i<existing.length;i++){
- 				
- 					int	pn = existing[i];
- 					
- 					if ( found || pn != piece_number ){
- 						
- 						if ( pos == updated.length ){
- 							
- 							return;
- 						}
- 						
- 						updated[pos++] = pn;
- 						
- 					}else{
- 						
- 						found = true;
- 					}
- 				}
+
+                for (int pn : existing) {
+
+                    if (found || pn != piece_number) {
+
+                        if (pos == updated.length) {
+
+                            return;
+                        }
+
+                        updated[pos++] = pn;
+
+                    } else {
+
+                        found = true;
+                    }
+                }
  				
  				reserved_pieces = updated;
  			}
@@ -5257,19 +5251,19 @@ implements PEPeerTransport
 			final int[] pieceNumbers = new int[requested.size()];
 			int pos = 0;
 
-			for (int i = 0; i < requested.size(); i++) {
-				DiskManagerReadRequest request = null;
-				try {
-					request = (DiskManagerReadRequest) requested.get(i);
-				} catch (Exception e) {
-					Debug.printStackTrace(e);
-				}
+            for (DiskManagerReadRequest diskManagerReadRequest : requested) {
+                DiskManagerReadRequest request = null;
+                try {
+                    request = diskManagerReadRequest;
+                } catch (Exception e) {
+                    Debug.printStackTrace(e);
+                }
 
-				if (request != null && iLastNumber != request.getPieceNumber()) {
-					iLastNumber = request.getPieceNumber();
-					pieceNumbers[pos++] = iLastNumber;
-				}
-			}
+                if (request != null && iLastNumber != request.getPieceNumber()) {
+                    iLastNumber = request.getPieceNumber();
+                    pieceNumbers[pos++] = iLastNumber;
+                }
+            }
 
 			final int[] trimmed = new int[pos];
 			System.arraycopy(pieceNumbers, 0, trimmed, 0, pos);
@@ -5482,7 +5476,7 @@ implements PEPeerTransport
 		int			num_pieces,
 		int			num_required )
 	{
-		List<Integer>	res = new ArrayList<Integer>();
+		List<Integer>	res = new ArrayList<>();
 							
 		try{
 			if ( network == AENetworkClassifier.AT_PUBLIC ){
@@ -5513,7 +5507,7 @@ implements PEPeerTransport
 											(bytes[pos++] << 8  )&0x0000ff00L | 
 											bytes[pos++]&0x000000ffL;
 			
-							Integer i = new Integer((int)( index%num_pieces ));
+							Integer i = (int) (index % num_pieces);
 							
 							if ( !res.contains(i)){
 							

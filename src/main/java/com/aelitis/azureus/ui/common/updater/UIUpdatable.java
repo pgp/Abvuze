@@ -28,7 +28,7 @@ public interface UIUpdatable
 	 *
 	 * @since 3.1.1.1
 	 */
-	public void updateUI();
+    void updateUI();
 
 	/**
 	 * A name for this UIUpdatable so we can track who's being bad
@@ -37,5 +37,5 @@ public interface UIUpdatable
 	 *
 	 * @since 3.1.1.1
 	 */
-	public String getUpdateUIName();
+    String getUpdateUIName();
 }

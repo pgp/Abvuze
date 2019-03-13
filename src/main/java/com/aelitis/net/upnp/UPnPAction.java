@@ -27,12 +27,12 @@ package com.aelitis.net.upnp;
 public interface 
 UPnPAction 
 {
-	public String
+	String
 	getName();
 	
-	public UPnPService
+	UPnPService
 	getService();
 	
-	public UPnPActionInvocation
+	UPnPActionInvocation
 	getInvocation();
 }

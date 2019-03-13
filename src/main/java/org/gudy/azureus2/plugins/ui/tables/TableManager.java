@@ -27,40 +27,40 @@ import org.gudy.azureus2.plugins.ui.menus.MenuManager;
 public interface TableManager
 {
   /** Visible for Completed Torrents table */
-  public static final String TABLE_MYTORRENTS_COMPLETE   = "MySeeders";
+  String TABLE_MYTORRENTS_COMPLETE   = "MySeeders";
   /** Visible for Incompleted Torrents table */
-  public static final String TABLE_MYTORRENTS_INCOMPLETE = "MyTorrents";
+  String TABLE_MYTORRENTS_INCOMPLETE = "MyTorrents";
   
-  public static final String TABLE_MYTORRENTS_UNOPENED = "Unopened";
+  String TABLE_MYTORRENTS_UNOPENED = "Unopened";
 
   /** Visible for Completed Torrents table (big version)*/
-  public static final String TABLE_MYTORRENTS_COMPLETE_BIG   = "MySeeders.big";
+  String TABLE_MYTORRENTS_COMPLETE_BIG   = "MySeeders.big";
   /** Visible for Incompleted Torrents table (big version)*/
-  public static final String TABLE_MYTORRENTS_INCOMPLETE_BIG = "MyTorrents.big";
+  String TABLE_MYTORRENTS_INCOMPLETE_BIG = "MyTorrents.big";
   
-  public static final String TABLE_MYTORRENTS_UNOPENED_BIG = "Unopened.big";
+  String TABLE_MYTORRENTS_UNOPENED_BIG = "Unopened.big";
 
-  public static final String TABLE_MYTORRENTS_ALL_BIG   = "MyLibrary.big";
+  String TABLE_MYTORRENTS_ALL_BIG   = "MyLibrary.big";
 
-  public static final String TABLE_ACTIVITY = "Activity";
+  String TABLE_ACTIVITY = "Activity";
   
-  public static final String TABLE_ACTIVITY_BIG = "Activity.big";
+  String TABLE_ACTIVITY_BIG = "Activity.big";
 
   /** Visible for Torrent Peers table */
-  public static final String TABLE_TORRENT_PEERS         = "Peers";
+  String TABLE_TORRENT_PEERS         = "Peers";
   /** Visible for Torrent Pieces table */
-  public static final String TABLE_TORRENT_PIECES        = "Pieces";
+  String TABLE_TORRENT_PIECES        = "Pieces";
   /** Visible for Torrent Files table */
-  public static final String TABLE_TORRENT_FILES         = "Files";
+  String TABLE_TORRENT_FILES         = "Files";
   
-  public static final String TABLE_TORRENT_TRACKERS      = "Trackers";
+  String TABLE_TORRENT_TRACKERS      = "Trackers";
 
   /** Visible for My Tracker table */
-  public static final String TABLE_MYTRACKER             = "MyTracker";
+  String TABLE_MYTRACKER             = "MyTracker";
   /** Visible for My Shares table */
-  public static final String TABLE_MYSHARES              = "MyShares";
+  String TABLE_MYSHARES              = "MyShares";
   /** Visible for All Peers table */
-  public static final String TABLE_ALL_PEERS             = "AllPeers";
+  String TABLE_ALL_PEERS             = "AllPeers";
 
   /** Creates a column for a UI table.
    * <p>
@@ -95,7 +95,7 @@ public interface TableManager
    *
    * @return an interface object allowing modification of the table column.
    */
-  public TableColumn createColumn(String tableID, String cellID);
+  TableColumn createColumn(String tableID, String cellID);
   
   /**
    * Register a column for a specific data source type.  When the column
@@ -119,8 +119,8 @@ public interface TableManager
    *
    * @since 3.1.1.1
    */
-  public void registerColumn(Class forDataSourceType, String cellID,
-			TableColumnCreationListener listener);
+  void registerColumn(Class forDataSourceType, String cellID,
+                      TableColumnCreationListener listener);
 
   /**
    * unregister a listener added by @link {@link #registerColumn(Class, String, TableColumnCreationListener)}
@@ -129,14 +129,14 @@ public interface TableManager
    * @param listener
    * @since 4005
    */
-  public void unregisterColumn(Class forDataSourceType, String cellID,
-			TableColumnCreationListener listener);
+  void unregisterColumn(Class forDataSourceType, String cellID,
+                        TableColumnCreationListener listener);
 
   /** Adds a column to an Azureus UI table.
    *
    * @param tableColumn a column previously created with {@link #createColumn}
    */
-  public void addColumn(TableColumn tableColumn);
+  void addColumn(TableColumn tableColumn);
   
   /** Adds a Context Menu item to the specified table or to all table context menus.
    *
@@ -147,7 +147,7 @@ public interface TableManager
    *
    * @return a newly created menu item for the table's context menu.
    */
-  public TableContextMenuItem addContextMenuItem(String tableID, String resourceKey);
+  TableContextMenuItem addContextMenuItem(String tableID, String resourceKey);
 
   /** Adds a Context Menu item as a sub-item of the given menu item. 
   *
@@ -158,7 +158,7 @@ public interface TableManager
   *
   * @return a newly created menu item existing inside the given menu item.
   */
-  public TableContextMenuItem addContextMenuItem(TableContextMenuItem parent, String resourceKey);
+  TableContextMenuItem addContextMenuItem(TableContextMenuItem parent, String resourceKey);
 
   /** Future Implementations:
   public TableContextMenuItem addContextMenuItem(String tableID, String resourceKey,

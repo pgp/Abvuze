@@ -43,6 +43,7 @@ import java.net.InetAddress;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class 
@@ -310,7 +311,7 @@ SimpleXMLParserDocumentImpl
 									pos += len;
 								}
 																
-								String str = new String( buffer, "UTF-8" ).trim().toLowerCase( Locale.US );
+								String str = new String( buffer, StandardCharsets.UTF_8).trim().toLowerCase( Locale.US );
 								
 								if ( !str.contains( "<?xml" )){
 									
@@ -333,7 +334,7 @@ SimpleXMLParserDocumentImpl
 										pos += len;
 									}
 									
-									str += new String( buffer, "UTF-8" ).trim().toLowerCase( Locale.US );
+									str += new String( buffer, StandardCharsets.UTF_8).trim().toLowerCase( Locale.US );
 									
 									if ( str.contains( "<html") && str.contains( "<head" )){
 									
@@ -378,18 +379,16 @@ SimpleXMLParserDocumentImpl
 			int	root_node_count	= 0;
 			
 				// remove any processing instructions such as <?xml-stylesheet
-			
-			for (int i=0;i<root_nodes.length;i++){
-				
-				SimpleXMLParserDocumentNodeImpl	node = root_nodes[i];
-				
-				if ( node.getNode().getNodeType() != Node.PROCESSING_INSTRUCTION_NODE ){
-					
-					root_node	= node;
-					
-					root_node_count++;
-				}
-			}
+
+            for (SimpleXMLParserDocumentNodeImpl node : root_nodes) {
+
+                if (node.getNode().getNodeType() != Node.PROCESSING_INSTRUCTION_NODE) {
+
+                    root_node = node;
+
+                    root_node_count++;
+                }
+            }
 			
 			if ( root_node_count != 1 ){
 								
@@ -488,11 +487,11 @@ SimpleXMLParserDocumentImpl
         for (Node child = node.getFirstChild(); child != null; child = child.getNextSibling()){
 			
 			SimpleXMLParserDocumentNodeImpl[] kids = parseNode( child, false );
-			
-			for (int i=0;i<kids.length;i++){
-				
-				v.addElement(kids[i]);
-			}
+
+            for (SimpleXMLParserDocumentNodeImpl kid : kids) {
+
+                v.addElement(kid);
+            }
         }
 		
 		SimpleXMLParserDocumentNodeImpl[]	res = new SimpleXMLParserDocumentNodeImpl[v.size()];

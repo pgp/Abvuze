@@ -27,18 +27,18 @@ package org.gudy.azureus2.plugins.ddb;
 public interface 
 DistributedDatabaseValue 
 {
-	public Object
+	Object
 	getValue(
-		Class		type )
+            Class type)
 	
 		throws DistributedDatabaseException;
 		
-	public long
+	long
 	getCreationTime();
 	
-	public long
+	long
 	getVersion();
 	
-	public DistributedDatabaseContact
+	DistributedDatabaseContact
 	getContact();
 }

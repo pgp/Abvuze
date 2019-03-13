@@ -242,7 +242,7 @@ UDPConnectionSet
 				throw( new IOException( "Connection set has failed" ));
 			}
 			
-			old_connection =  (UDPConnection)connections.put( new Integer( connection.getID()), connection );
+			old_connection =  (UDPConnection)connections.put(connection.getID(), connection );
 			
 			if ( connections.size() == 1 && lead_connection == null ){
 				
@@ -266,7 +266,7 @@ UDPConnectionSet
 	{
 		synchronized( connections ){
 	
-			connections.remove( new Integer( connection.getID()));
+			connections.remove(connection.getID());
 			
 			return( connections.size() == 0 );
 		}
@@ -277,12 +277,10 @@ UDPConnectionSet
 	{
 		synchronized( connections ){
 
-			Iterator	it = connections.values().iterator();
-			
-			while( it.hasNext()){
-				
-				((UDPConnection)it.next()).poll();
-			}
+            for (Object o : connections.values()) {
+
+                ((UDPConnection) o).poll();
+            }
 		}
 	}
 	
@@ -1051,7 +1049,7 @@ UDPConnectionSet
 			
 			initial_buffer.position( 4 );
 			
-			Integer	pseudo_seq = new Integer( initial_buffer.getInt());
+			Integer	pseudo_seq = initial_buffer.getInt();
 			
 			initial_buffer.position( 0 );
 			
@@ -1095,7 +1093,7 @@ UDPConnectionSet
 			try{
 				initial_buffer.getInt();	// seq1
 				
-				Integer	seq2 = new Integer( initial_buffer.getInt());
+				Integer	seq2 = initial_buffer.getInt();
 				
 				initial_buffer.getInt();	// seq3
 					
@@ -1153,48 +1151,48 @@ UDPConnectionSet
 				}
 
 				boolean	oop = false;
-				
-				for (int i=0;i<receive_out_of_order_packets.size();i++){
-					
-					Object[]	entry = (Object[])receive_out_of_order_packets.get(i);
-					
-					Integer	oop_seq = (Integer)entry[0];
-					
-					ByteBuffer	oop_buffer = (ByteBuffer)entry[2];
-					
-					if ( oop_seq.equals( seq2 )){
-						
-						synchronized( this ){
 
-							if ( oop_buffer != null ){
-						
-								stats_packets_duplicates++;
-								total_packets_duplicates++;
-								
-								if ( manager.trace() ){
-									trace( "Duplicate out-of-order packet: " + seq2 );
-								}
-								
-								return;
-							}
-							
-							stats_packets_unique_received++;
-							total_packets_unique_received++;
-							
-							if ( manager.trace() ){
-								trace( "Out-of-order packet entry data matched for seq " + seq2 );
-							}
-							
-								// got data matching out-of-order-entry, add it in!
-													
-							entry[2] = initial_buffer;
-							
-							oop = true;
-							
-							break;
-						}
-					}
-				}
+                for (Object receive_out_of_order_packet : receive_out_of_order_packets) {
+
+                    Object[] entry = (Object[]) receive_out_of_order_packet;
+
+                    Integer oop_seq = (Integer) entry[0];
+
+                    ByteBuffer oop_buffer = (ByteBuffer) entry[2];
+
+                    if (oop_seq.equals(seq2)) {
+
+                        synchronized (this) {
+
+                            if (oop_buffer != null) {
+
+                                stats_packets_duplicates++;
+                                total_packets_duplicates++;
+
+                                if (manager.trace()) {
+                                    trace("Duplicate out-of-order packet: " + seq2);
+                                }
+
+                                return;
+                            }
+
+                            stats_packets_unique_received++;
+                            total_packets_unique_received++;
+
+                            if (manager.trace()) {
+                                trace("Out-of-order packet entry data matched for seq " + seq2);
+                            }
+
+                            // got data matching out-of-order-entry, add it in!
+
+                            entry[2] = initial_buffer;
+
+                            oop = true;
+
+                            break;
+                        }
+                    }
+                }
 				
 				if ( !oop ){
 					
@@ -1207,7 +1205,7 @@ UDPConnectionSet
 									
 						int[]	seq_in = in_seq_generator.getNextSequenceNumber();
 								
-						if ( seq2.intValue() == seq_in[1] ){
+						if (seq2 == seq_in[1] ){
 								
 							synchronized( this ){
 								
@@ -1226,7 +1224,7 @@ UDPConnectionSet
 								}
 							}
 														
-							receive_out_of_order_packets.add( new Object[]{ seq2, new Integer( seq_in[3]), initial_buffer } );
+							receive_out_of_order_packets.add( new Object[]{ seq2, seq_in[3], initial_buffer } );
 							
 							added = true;
 							
@@ -1238,7 +1236,7 @@ UDPConnectionSet
 								trace( "Out-of-order packet: adding spacer for seq " + seq_in[1] );
 							}
 							
-							receive_out_of_order_packets.add( new Object[]{ new Integer( seq_in[1]), new Integer( seq_in[3]), null } );
+							receive_out_of_order_packets.add( new Object[]{seq_in[1], seq_in[3], null } );
 						}
 					}
 					
@@ -1287,8 +1285,8 @@ UDPConnectionSet
 					
 					Integer	seq = (Integer)entry[0];
 					
-					receive_last_inorder_sequence		= seq.intValue();
-					receive_last_inorder_alt_sequence	= ((Integer)entry[1]).intValue();
+					receive_last_inorder_sequence		= seq;
+					receive_last_inorder_alt_sequence	= (Integer) entry[1];
 					
 					if ( !receive_done_sequences.contains( seq )){
 						
@@ -1358,7 +1356,7 @@ UDPConnectionSet
 					
 					if ( command == UDPPacket.COMMAND_DATA ){				
 	
-						receiveDataCommand( seq.intValue(), buffer, header_len );
+						receiveDataCommand(seq, buffer, header_len );
 							
 					}else if ( command == UDPPacket.COMMAND_ACK ){
 						
@@ -1540,7 +1538,7 @@ UDPConnectionSet
 				
 				connection	= new UDPConnection( this, -1 );
 		
-				connections.put( new Integer( connection.getID()), connection );
+				connections.put(connection.getID(), connection );
 					
 				lead_connection	= connection;
 				
@@ -1685,17 +1683,17 @@ UDPConnectionSet
 				throw( new IOException( "Connection set has failed" ));
 			}
 			
-			connection = (UDPConnection)connections.get( new Integer( connection_id ));
+			connection = (UDPConnection)connections.get(connection_id);
 			
 			if ( connection == null ){
 								
-				connection = (UDPConnection)connections.remove( new Integer( -1 ));
+				connection = (UDPConnection)connections.remove(-1);
 
 				if ( connection != null ){
 						
 					connection.setID( connection_id );
 						
-					connections.put( new Integer( connection_id ), connection );
+					connections.put(connection_id, connection );
 				}
 			}
 			
@@ -1708,7 +1706,7 @@ UDPConnectionSet
 				
 				connection	= new UDPConnection( this, connection_id );
 				
-				connections.put( new Integer( connection.getID()), connection );
+				connections.put(connection.getID(), connection );
 												
 				new_connection	= true;
 			}
@@ -1741,33 +1739,31 @@ UDPConnectionSet
 		synchronized( this ){
 									
 				// if there's already an ACK packet outstanding then we just resend that one
-			
-			Iterator	it = transmit_unack_packets.iterator();
-			
-			while( it.hasNext()){
-				
-				UDPPacket	packet = (UDPPacket)it.next();
-				
-				if ( packet.getCommand() == UDPPacket.COMMAND_ACK ){
-					
-					if ( total_tick_count - packet.getSendTickCount() >= getExplicitAckTicks() ){
-					
-						if ( manager.trace() ){
-							trace( packet.getConnection(), "retransAck:" + packet.getString());
-						}
-						
-						packet_to_send	= packet;
-						
-						break;
-						
-					}else{
-					
-							// sent too recently, bail out
-						
-						return;
-					}
-				}
-			}
+
+            for (Object transmit_unack_packet : transmit_unack_packets) {
+
+                UDPPacket packet = (UDPPacket) transmit_unack_packet;
+
+                if (packet.getCommand() == UDPPacket.COMMAND_ACK) {
+
+                    if (total_tick_count - packet.getSendTickCount() >= getExplicitAckTicks()) {
+
+                        if (manager.trace()) {
+                            trace(packet.getConnection(), "retransAck:" + packet.getString());
+                        }
+
+                        packet_to_send = packet;
+
+                        break;
+
+                    } else {
+
+                        // sent too recently, bail out
+
+                        return;
+                    }
+                }
+            }
 			
 			if ( packet_to_send == null ){
 			
@@ -1783,8 +1779,8 @@ UDPConnectionSet
 				boolean	no_retrans = transmit_unack_packets.size() == 0 && timer_expired && receive_out_of_order_packets.size() == 0;
 				
 				int[]	sequences = writeHeaderStart( header, UDPPacket.COMMAND_ACK, no_retrans?UDPPacket.FLAG_LAZY_ACK:UDPPacket.FLAG_NONE );
-				
-				it = receive_out_of_order_packets.iterator();
+
+                Iterator	it = receive_out_of_order_packets.iterator();
 				
 				String	oos_str = "";
 				
@@ -1796,8 +1792,8 @@ UDPConnectionSet
 				
 					if ( entry[2] != null ){
 					
-						int	out_of_order_seq = ((Integer)entry[0]).intValue();
-						int	out_of_rep_seq = ((Integer)entry[1]).intValue();
+						int	out_of_order_seq = (Integer) entry[0];
+						int	out_of_rep_seq = (Integer) entry[1];
 									
 						oos_str += (oos_str.length()==0?"":",") + out_of_order_seq + "/" + out_of_rep_seq;
 						
@@ -1914,11 +1910,11 @@ UDPConnectionSet
 		if ( manager.trace() ){
 			trace( "receiveAck: in_seq=" + receive_their_last_inorder_sequence + ",out_of_seq=" + oos_str );
 		}
-		
-		for (int i=0;i<resend_list.size();i++){
-				
-			send((UDPPacket)resend_list.get(i));
-		}			
+
+        for (Object o : resend_list) {
+
+            send((UDPPacket) o);
+        }
 	}
 	
 	
@@ -1932,33 +1928,31 @@ UDPConnectionSet
 		synchronized( this ){
 									
 				// if there's already an stats request packet outstanding then we just resend that one
-			
-			Iterator	it = transmit_unack_packets.iterator();
-			
-			while( it.hasNext()){
-				
-				UDPPacket	packet = (UDPPacket)it.next();
-				
-				if ( packet.getCommand() == UDPPacket.COMMAND_STAT_REQUEST ){
-					
-					if ( total_tick_count - packet.getSendTickCount() >= MIN_RETRANSMIT_TICKS ){
-					
-						if ( manager.trace() ){
-							trace( packet.getConnection(), "retransStatsRequest:" + packet.getString());
-						}
-						
-						packet_to_send	= packet;
-						
-						break;
-						
-					}else{
-					
-							// sent too recently, bail out
-						
-						return;
-					}
-				}
-			}
+
+            for (Object transmit_unack_packet : transmit_unack_packets) {
+
+                UDPPacket packet = (UDPPacket) transmit_unack_packet;
+
+                if (packet.getCommand() == UDPPacket.COMMAND_STAT_REQUEST) {
+
+                    if (total_tick_count - packet.getSendTickCount() >= MIN_RETRANSMIT_TICKS) {
+
+                        if (manager.trace()) {
+                            trace(packet.getConnection(), "retransStatsRequest:" + packet.getString());
+                        }
+
+                        packet_to_send = packet;
+
+                        break;
+
+                    } else {
+
+                        // sent too recently, bail out
+
+                        return;
+                    }
+                }
+            }
 			
 			if ( packet_to_send == null ){
 							
@@ -2004,33 +1998,31 @@ UDPConnectionSet
 		synchronized( this ){
 									
 				// if there's already an stats reply packet outstanding then we just resend that one
-			
-			Iterator	it = transmit_unack_packets.iterator();
-			
-			while( it.hasNext()){
-				
-				UDPPacket	packet = (UDPPacket)it.next();
-				
-				if ( packet.getCommand() == UDPPacket.COMMAND_STAT_REPLY ){
-					
-					if ( total_tick_count - packet.getSendTickCount() >= MIN_RETRANSMIT_TICKS ){
-					
-						if ( manager.trace() ){
-							trace( packet.getConnection(), "retransStatsReply:" + packet.getString());
-						}
-						
-						packet_to_send	= packet;
-						
-						break;
-						
-					}else{
-					
-							// sent too recently, bail out
-						
-						return;
-					}
-				}
-			}
+
+            for (Object transmit_unack_packet : transmit_unack_packets) {
+
+                UDPPacket packet = (UDPPacket) transmit_unack_packet;
+
+                if (packet.getCommand() == UDPPacket.COMMAND_STAT_REPLY) {
+
+                    if (total_tick_count - packet.getSendTickCount() >= MIN_RETRANSMIT_TICKS) {
+
+                        if (manager.trace()) {
+                            trace(packet.getConnection(), "retransStatsReply:" + packet.getString());
+                        }
+
+                        packet_to_send = packet;
+
+                        break;
+
+                    } else {
+
+                        // sent too recently, bail out
+
+                        return;
+                    }
+                }
+            }
 			
 			if ( packet_to_send == null ){
 							
@@ -2146,7 +2138,7 @@ UDPConnectionSet
 				throw( new IOException( "Connection set has failed" ));
 			}
 			
-			connection = (UDPConnection)connections.get( new Integer( connection_id ));
+			connection = (UDPConnection)connections.get(connection_id);
 		}
 	
 		if ( manager.trace() ){
@@ -2204,10 +2196,10 @@ UDPConnectionSet
 				
 		buffer.putShort((short)0 );
 				
-		buffer.put((byte)UDPPacket.PROTOCOL_VERSION);
+		buffer.put(UDPPacket.PROTOCOL_VERSION);
 		buffer.put( flags );
 		buffer.putShort((short)(current_timer_base/10));
-		buffer.put((byte)command);
+		buffer.put(command);
 
 		return( sequence_numbers );
 	}
@@ -2412,17 +2404,17 @@ UDPConnectionSet
 		}
 		
 		if ( conns != null ){
-				
-			for (int i=0;i<conns.size();i++){
-				
-				try{
-					((UDPConnection)conns.get(i)).failed( e );
-					
-				}catch( Throwable f ){
-					
-					Debug.printStackTrace(f);
-				}
-			}
+
+            for (Object conn : conns) {
+
+                try {
+                    ((UDPConnection) conn).failed(e);
+
+                } catch (Throwable f) {
+
+                    Debug.printStackTrace(f);
+                }
+            }
 			
 			manager.failed( this );
 		}

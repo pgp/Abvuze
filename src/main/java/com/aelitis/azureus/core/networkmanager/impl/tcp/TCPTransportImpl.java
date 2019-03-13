@@ -219,7 +219,7 @@ public class TCPTransportImpl extends TransportImpl implements Transport {
 			
 			if ( AENetworkClassifier.categoriseAddress( host ) != AENetworkClassifier.AT_PUBLIC ){
 			
-				Map<String,Object>	opts = new HashMap<String,Object>();
+				Map<String,Object>	opts = new HashMap<>();
 				
 				Object peer_nets = listener.getConnectionProperty( AEProxyFactory.PO_PEER_NETWORKS );
 				

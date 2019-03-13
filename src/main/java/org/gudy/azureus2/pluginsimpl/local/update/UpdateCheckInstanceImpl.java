@@ -41,9 +41,9 @@ UpdateCheckInstanceImpl
 	private static UpdateCheckInstanceImpl	active_checker;
 	
 	
-	private List<UpdateCheckInstanceListener>	listeners			= new ArrayList<UpdateCheckInstanceListener>();
-	private List<UpdateImpl>					updates 			= new ArrayList<UpdateImpl>();
-	private List<UpdateManagerDecisionListener>	decision_listeners	= new ArrayList<UpdateManagerDecisionListener>();
+	private List<UpdateCheckInstanceListener>	listeners			= new ArrayList<>();
+	private List<UpdateImpl>					updates 			= new ArrayList<>();
+	private List<UpdateManagerDecisionListener>	decision_listeners	= new ArrayList<>();
 	
 
 	private AESemaphore	sem 	= new AESemaphore("UpdateCheckInstance");
@@ -63,7 +63,7 @@ UpdateCheckInstanceImpl
 	
 	protected AEMonitor this_mon 	= new AEMonitor( "UpdateCheckInstance" );
 	
-	private Map<Integer,Object>	properties = new HashMap<Integer, Object>();
+	private Map<Integer,Object>	properties = new HashMap<>();
 	
 	{
 		properties.put( PT_UI_STYLE, PT_UI_STYLE_DEFAULT );
@@ -347,7 +347,7 @@ UpdateCheckInstanceImpl
 							}
 						}
 						
-						List<UpdateImpl>	target_updates = new ArrayList<UpdateImpl>();
+						List<UpdateImpl>	target_updates = new ArrayList<>();
 						
 							// if any mandatory checks failed then we can't do any more
 						
@@ -361,35 +361,31 @@ UpdateCheckInstanceImpl
 								// If there are any manadatory updates then we just go ahead with them and drop the rest
 							
 							boolean	mandatory_only	= false;
-							
-							for (int i=0;i<updates.size();i++){
-								
-								UpdateImpl	update = (UpdateImpl)updates.get(i);
-								
-								if ( update.isMandatory()){
-									
-									mandatory_only	= true;
-									
-									break;
-								}
-							}
-							
-							for (int i=0;i<updates.size();i++){
-								
-								UpdateImpl	update = (UpdateImpl)updates.get(i);
-															
-								if ( update.isMandatory() || !mandatory_only ){
-									
-									target_updates.add( update );
-									
-								}else{
-									if (Logger.isEnabled())
-									  Logger.log(new LogEvent(LOGID, LogEvent.LT_ERROR,
-									                          "Dropping update '" + update.getName()
-	                                            + "' as non-mandatory and "
-	                                            + "mandatory updates found"));
-								}
-							}
+
+                            for (UpdateImpl update : updates) {
+
+                                if (update.isMandatory()) {
+
+                                    mandatory_only = true;
+
+                                    break;
+                                }
+                            }
+
+                            for (UpdateImpl update : updates) {
+
+                                if (update.isMandatory() || !mandatory_only) {
+
+                                    target_updates.add(update);
+
+                                } else {
+                                    if (Logger.isEnabled())
+                                        Logger.log(new LogEvent(LOGID, LogEvent.LT_ERROR,
+                                                "Dropping update '" + update.getName()
+                                                        + "' as non-mandatory and "
+                                                        + "mandatory updates found"));
+                                }
+                            }
 						}
 	
 							// maintain order here as we apply updates in the order we
@@ -449,17 +445,17 @@ UpdateCheckInstanceImpl
 						}
 						
 					}
-					
-					for (int i=0;i<listeners.size();i++){
-					
-						try{
-							((UpdateCheckInstanceListener)listeners.get(i)).complete( UpdateCheckInstanceImpl.this );
-							
-						}catch( Throwable e ){
-							
-							Debug.printStackTrace(e);
-						}
-					}
+
+                    for (UpdateCheckInstanceListener listener : listeners) {
+
+                        try {
+                            listener.complete(UpdateCheckInstanceImpl.this);
+
+                        } catch (Throwable e) {
+
+                            Debug.printStackTrace(e);
+                        }
+                    }
 				}
 			}.start();
 	}
@@ -560,33 +556,33 @@ UpdateCheckInstanceImpl
 			
 			this_mon.exit();
 		}
-			
-		
-		for (int i=0;i<updates.size();i++){
-			
-			((UpdateImpl)updates.get(i)).cancel();
-		}
+
+
+        for (UpdateImpl update : updates) {
+
+            update.cancel();
+        }
 
 		if ( !just_do_updates ){
-			
-			for (int i=0;i<checkers.length;i++){
-				
-				if ( checkers[i] != null ){
-					
-					checkers[i].cancel();
-				}
-			}
-			
-			for (int i=0;i<listeners.size();i++){
-					
-				try{
-					((UpdateCheckInstanceListener)listeners.get(i)).cancelled( this );
-					
-				}catch( Throwable e ){
-					
-					Debug.printStackTrace(e);
-				}
-			}
+
+            for (UpdateCheckerImpl checker : checkers) {
+
+                if (checker != null) {
+
+                    checker.cancel();
+                }
+            }
+
+            for (UpdateCheckInstanceListener listener : listeners) {
+
+                try {
+                    listener.cancelled(this);
+
+                } catch (Throwable e) {
+
+                    Debug.printStackTrace(e);
+                }
+            }
 		}
 	}
 	
@@ -610,17 +606,17 @@ UpdateCheckInstanceImpl
 		String		decision_description,
 		Object		decision_data )
 	{
-		for (int i=0;i<decision_listeners.size();i++){
-			
-			Object res = 
-				((UpdateManagerDecisionListener)decision_listeners.get(i)).decide(
-						update, decision_type, decision_name, decision_description, decision_data );
-			
-			if ( res != null ){
-				
-				return( res );
-			}
-		}
+        for (UpdateManagerDecisionListener decision_listener : decision_listeners) {
+
+            Object res =
+                    decision_listener.decide(
+                            update, decision_type, decision_name, decision_description, decision_data);
+
+            if (res != null) {
+
+                return (res);
+            }
+        }
 		
 		return( null );
 	}

@@ -37,7 +37,7 @@ PEPeerManagerListener
    * @param manager to which peer belongs
    * @param peer added
    */
-  public void peerAdded( PEPeerManager manager, PEPeer peer );
+  void peerAdded(PEPeerManager manager, PEPeer peer);
   
   
   /**
@@ -45,24 +45,24 @@ PEPeerManagerListener
    * @param manager to which peer belongs
    * @param peer removed
    */
-  public void peerRemoved( PEPeerManager manager, PEPeer peer );
+  void peerRemoved(PEPeerManager manager, PEPeer peer);
   
   /**
    * piece activated
    * @param peice
    * @param for_peer maybe null if not for a particular peer
    */
+
+  void pieceAdded(PEPeerManager manager, PEPiece piece, PEPeer for_peer);
   
-  public void pieceAdded( PEPeerManager manager, PEPiece piece, PEPeer for_peer );
-  
-  public void pieceRemoved( PEPeerManager manager, PEPiece piece );
+  void pieceRemoved(PEPeerManager manager, PEPiece piece);
   
   
-  public void peerDiscovered( PEPeerManager manager, PeerItem peer, PEPeer finder );
+  void peerDiscovered(PEPeerManager manager, PeerItem peer, PEPeer finder);
   
-  public void peerSentBadData( PEPeerManager manager, PEPeer peer, int piece_number );
+  void peerSentBadData(PEPeerManager manager, PEPeer peer, int piece_number);
   
-  public void pieceCorrupted( PEPeerManager manager, int piece_number );
+  void pieceCorrupted(PEPeerManager manager, int piece_number);
   
-  public void destroyed();
+  void destroyed();
 }

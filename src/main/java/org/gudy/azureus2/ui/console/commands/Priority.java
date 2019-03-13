@@ -148,30 +148,30 @@ public class Priority extends OptionsConsoleCommand {
 		fe = new LinkedList();
 		
 		int dash,start,end;
-		for (int i=0; i<sections.length; i++) {
-			try {
-				if ((dash = sections[i].indexOf('-')) != -1) {
-					start = Integer.parseInt(sections[i].substring(0,dash));
-					end = Integer.parseInt(sections[i].substring(dash+1));
-				} else
-					start = end = Integer.parseInt(sections[i]); 
-				if ((start == 0) || (end > files.length)) {
-					console.out.println("> Command 'prio': Invalid file range " + sections[i]);
-					return;
-				}
-				if (start > end) {
-					console.out.println("> Command 'prio': Invalid file range '"+sections[i]+"'");
-				}
-				
-				// -1 compensates for 0-based offsets
-				fs.add(new Integer(start - 1));
-				fe.add(new Integer(end - 1));
-			} catch (Exception e) {
-				console.out.println("> Command 'prio': File # '" + sections[i]
-						+ "' unknown.");
-				return;
-			}
-		}
+        for (String section : sections) {
+            try {
+                if ((dash = section.indexOf('-')) != -1) {
+                    start = Integer.parseInt(section.substring(0, dash));
+                    end = Integer.parseInt(section.substring(dash + 1));
+                } else
+                    start = end = Integer.parseInt(section);
+                if ((start == 0) || (end > files.length)) {
+                    console.out.println("> Command 'prio': Invalid file range " + section);
+                    return;
+                }
+                if (start > end) {
+                    console.out.println("> Command 'prio': Invalid file range '" + section + "'");
+                }
+
+                // -1 compensates for 0-based offsets
+                fs.add(new Integer(start - 1));
+                fe.add(new Integer(end - 1));
+            } catch (Exception e) {
+                console.out.println("> Command 'prio': File # '" + section
+                        + "' unknown.");
+                return;
+            }
+        }
 		
 //		console.out.println("DM was " + dm.getState());
 		if ((newprio == DELETE) && (dm.getState() != DownloadManager.STATE_STOPPED)) {
@@ -186,8 +186,8 @@ public class Priority extends OptionsConsoleCommand {
 //		console.out.println("DM is " + dm.getState());
 		int nummod = 0;
 		while (fs.size() > 0) {
-			start = ((Integer) fs.removeFirst()).intValue();
-			end = ((Integer) fe.removeFirst()).intValue();
+			start = (Integer) fs.removeFirst();
+			end = (Integer) fe.removeFirst();
 			for (int i = start; i <= end; i++) {
 				nummod++;
 				// DEBUG

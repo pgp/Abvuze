@@ -23,18 +23,18 @@ package org.gudy.azureus2.plugins.disk;
 public interface 
 DiskManagerRandomReadRequest 
 {
-	public DiskManagerFileInfo
+	DiskManagerFileInfo
 	getFile();
 	
-	public long
+	long
 	getOffset();
 	
-	public long
+	long
 	getLength();
 	
-	public boolean
+	boolean
 	isReverse();
 	
-	public void
+	void
 	cancel();
 }

@@ -165,75 +165,69 @@ public class PlatformManagerUnixPlugin
 			return;
 		}
 
-		InputStream stream = getClass().getResourceAsStream("startupScript");
-		try {
-			String startupScript = FileUtil.readInputStreamAsString(stream, 65535,
-					"utf8");
-			Matcher matcher = pat.matcher(startupScript);
-			if (matcher.find()) {
-				String sScriptVersion = matcher.group(1);
-				int latestVersion = 0;
-				try {
-					latestVersion = Integer.parseInt(sScriptVersion);
-				} catch (Throwable t) {
-				}
-				if (latestVersion > version) {
-					boolean bNotChanged = oldStartupScript.indexOf("SCRIPT_NOT_CHANGED=0") > 0
-							|| oldStartupScript.indexOf("AUTOUPDATE_SCRIPT=1") > 0;
-					boolean bInformUserManual = true;
+        try (InputStream stream = getClass().getResourceAsStream("startupScript")) {
+            String startupScript = FileUtil.readInputStreamAsString(stream, 65535,
+                    "utf8");
+            Matcher matcher = pat.matcher(startupScript);
+            if (matcher.find()) {
+                String sScriptVersion = matcher.group(1);
+                int latestVersion = 0;
+                try {
+                    latestVersion = Integer.parseInt(sScriptVersion);
+                } catch (Throwable t) {
+                }
+                if (latestVersion > version) {
+                    boolean bNotChanged = oldStartupScript.indexOf("SCRIPT_NOT_CHANGED=0") > 0
+                            || oldStartupScript.indexOf("AUTOUPDATE_SCRIPT=1") > 0;
+                    boolean bInformUserManual = true;
 
-					if (bNotChanged) {
-						if (version >= 1) {
-							// make the shutdown script copy it
-							final String newFilePath = new File(
-									SystemProperties.getApplicationPath(), "azureus.new").getAbsolutePath();
-							FileUtil.writeBytesAsFile(newFilePath, startupScript.getBytes());
+                    if (bNotChanged) {
+                        if (version >= 1) {
+                            // make the shutdown script copy it
+                            final String newFilePath = new File(
+                                    SystemProperties.getApplicationPath(), "azureus.new").getAbsolutePath();
+                            FileUtil.writeBytesAsFile(newFilePath, startupScript.getBytes());
 
-							String s = "cp \"" + newFilePath + "\" \"" + oldFilePathString
-									+ "\"; chmod +x \"" + oldFilePathString
-									+ "\"; echo \"Script Update successful\"";
+                            String s = "cp \"" + newFilePath + "\" \"" + oldFilePathString
+                                    + "\"; chmod +x \"" + oldFilePathString
+                                    + "\"; echo \"Script Update successful\"";
 
-							ScriptAfterShutdown.addExtraCommand(s);
-							ScriptAfterShutdown.setRequiresExit(true);
+                            ScriptAfterShutdown.addExtraCommand(s);
+                            ScriptAfterShutdown.setRequiresExit(true);
 
-							bInformUserManual = false;
-						} else {
-							// overwrite!
-							try {
-								FileUtil.writeBytesAsFile(oldFilePathString,
-										startupScript.getBytes());
-								Runtime.getRuntime().exec(new String[] {
-									findCommand( "chmod" ),
-									"+x",
-									oldStartupScript
-								});
+                            bInformUserManual = false;
+                        } else {
+                            // overwrite!
+                            try {
+                                FileUtil.writeBytesAsFile(oldFilePathString,
+                                        startupScript.getBytes());
+                                Runtime.getRuntime().exec(new String[]{
+                                        findCommand("chmod"),
+                                        "+x",
+                                        oldStartupScript
+                                });
 
-								bInformUserManual = false;
-							} catch (Throwable t) {
-							}
-						}
-					}
+                                bInformUserManual = false;
+                            } catch (Throwable t) {
+                            }
+                        }
+                    }
 
-					if (bInformUserManual) {
-						final String newFilePath = new File(
-								SystemProperties.getApplicationPath(), "azureus.new").getAbsolutePath();
-						FileUtil.writeBytesAsFile(newFilePath, startupScript.getBytes());
-						showScriptManualUpdateDialog(newFilePath, oldFilePathString,
-								latestVersion);
-					} else {
-						showScriptAutoUpdateDialog();
-					}
-				}
-			}
+                    if (bInformUserManual) {
+                        final String newFilePath = new File(
+                                SystemProperties.getApplicationPath(), "azureus.new").getAbsolutePath();
+                        FileUtil.writeBytesAsFile(newFilePath, startupScript.getBytes());
+                        showScriptManualUpdateDialog(newFilePath, oldFilePathString,
+                                latestVersion);
+                    } else {
+                        showScriptAutoUpdateDialog();
+                    }
+                }
+            }
 
-		} catch (Throwable t) {
-			t.printStackTrace();
-		}finally{
-			try{
-				stream.close();
-			}catch( Throwable e){
-			}
-		}
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
 	}
 	
 	  private String

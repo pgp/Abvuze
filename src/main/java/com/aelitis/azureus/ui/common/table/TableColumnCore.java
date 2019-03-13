@@ -41,7 +41,7 @@ public interface TableColumnCore
 	 *
 	 * @since 2.1.0.0
 	 */
-	public void setColumnAdded();
+    void setColumnAdded();
 
 	/** 
 	 * Retrieve whether the column has been added to the TableColumnManager
@@ -51,7 +51,7 @@ public interface TableColumnCore
 	 *               
 	 * @since 2.1.0.0
 	 */
-	public boolean getColumnAdded();
+    boolean getColumnAdded();
 
 	/** 
 	 * Changes what {@link TableCellCore.getDataSource()} and 
@@ -62,7 +62,7 @@ public interface TableColumnCore
 	 *               
 	 * @since 2.1.0.0
 	 */
-	public void setUseCoreDataSource(boolean bCoreDataSource);
+    void setUseCoreDataSource(boolean bCoreDataSource);
 
 	/** 
 	 * Retrieve whether a core or plugin object is sent via getDataSource()
@@ -72,7 +72,7 @@ public interface TableColumnCore
 	 *               
 	 * @since 2.1.0.0
 	 */
-	public boolean getUseCoreDataSource();
+    boolean getUseCoreDataSource();
 
 	/** 
 	 * Send a refresh trigger to all listeners stored in TableColumn
@@ -82,7 +82,7 @@ public interface TableColumnCore
 	 *               
 	 * @since 2.1.0.0
 	 */
-	public void invokeCellRefreshListeners(TableCell cell, boolean fastRefresh) throws Throwable;
+    void invokeCellRefreshListeners(TableCell cell, boolean fastRefresh) throws Throwable;
 
 	/**
 	 * Retrieve all the refresh listeners for the cell
@@ -91,7 +91,7 @@ public interface TableColumnCore
 	 *
 	 * @since 2.5.0.0
 	 */
-	public List getCellRefreshListeners();
+    List getCellRefreshListeners();
 
 	/** 
 	 * Send a cellAdded trigger to all listeners stored in TableColumn
@@ -100,7 +100,7 @@ public interface TableColumnCore
 	 *               
 	 * @since 2.1.0.0
 	 */
-	public void invokeCellAddedListeners(TableCell cell);
+    void invokeCellAddedListeners(TableCell cell);
 
 	/**
 	 * Retreive all the Cell Added listeners
@@ -109,7 +109,7 @@ public interface TableColumnCore
 	 *
 	 * @since 2.5.0.0
 	 */
-	public List getCellAddedListeners();
+    List getCellAddedListeners();
 
 	/** 
 	 * Send a dispose trigger to all listeners stored in TableColumn
@@ -118,7 +118,7 @@ public interface TableColumnCore
 	 *               
 	 * @since 2.1.0.0
 	 */
-	public void invokeCellDisposeListeners(TableCell cell);
+    void invokeCellDisposeListeners(TableCell cell);
 
 	/**
 	 * Send a tool tip event to the tool tip listeners
@@ -128,7 +128,7 @@ public interface TableColumnCore
 	 *
 	 * @since 2.1.0.2
 	 */
-	public void invokeCellToolTipListeners(TableCellCore cell, int type);
+    void invokeCellToolTipListeners(TableCellCore cell, int type);
 
 	/**
 	 * Send a mouse event to the cell mouse listeners
@@ -137,7 +137,7 @@ public interface TableColumnCore
 	 *
 	 * @since 2.4.0.0
 	 */
-	public void invokeCellMouseListeners(TableCellMouseEvent event);
+    void invokeCellMouseListeners(TableCellMouseEvent event);
 
 	/**
 	 * Send a visibility event to the cell's visibility listeners
@@ -146,7 +146,7 @@ public interface TableColumnCore
 	 *               
 	 * @since 2.5.0.2
 	 */
-	public void invokeCellVisibilityListeners(TableCellCore cell, int visibility);
+    void invokeCellVisibilityListeners(TableCellCore cell, int visibility);
 
 	/** 
 	 * Sets the position of the column without adjusting the other columns.
@@ -159,7 +159,7 @@ public interface TableColumnCore
 	 *               
 	 * @since 2.1.0.0
 	 */
-	public void setPositionNoShift(int position);
+    void setPositionNoShift(int position);
 
 	/** 
 	 * Load width and position settings from config.
@@ -167,7 +167,7 @@ public interface TableColumnCore
 	 *               
 	 * @since 2.1.0.0
 	 */
-	public void loadSettings(Map mapSettings);
+    void loadSettings(Map mapSettings);
 
 	/** 
 	 * Save width and position settings to config.
@@ -175,7 +175,7 @@ public interface TableColumnCore
 	 *               
 	 * @since 2.1.0.0
 	 */
-	public void saveSettings(Map mapSettings);
+    void saveSettings(Map mapSettings);
 
 	/** 
 	 * Returns the key in the properties bundle that has the title of the
@@ -183,30 +183,30 @@ public interface TableColumnCore
 	 *
 	 * @return Title's language key
 	 */
-	public String getTitleLanguageKey();
+    String getTitleLanguageKey();
 
-	public String getTitleLanguageKey( boolean with_renames );
+	String getTitleLanguageKey(boolean with_renames);
 
 	/**
 	 * @return # of consecutive errors
 	 *
 	 * @since 2.1.0.0
 	 */
-	public int getConsecutiveErrCount();
+    int getConsecutiveErrCount();
 
 	/**
 	 * @param iCount # of consecutive errors
 	 *
 	 * @since 2.1.0.0
 	 */
-	public void setConsecutiveErrCount(int iCount);
+    void setConsecutiveErrCount(int iCount);
 
 	/**
 	 * @param menuItem
 	 *
 	 * @since 2.1.0.0
 	 */
-	public void removeContextMenuItem(TableContextMenuItem menuItem);
+    void removeContextMenuItem(TableContextMenuItem menuItem);
 
 	/**
 	 * 
@@ -214,7 +214,7 @@ public interface TableColumnCore
 	 *
 	 * @since 2.1.0.0
 	 */
-	public TableContextMenuItem[] getContextMenuItems(int menuStyle);
+    TableContextMenuItem[] getContextMenuItems(int menuStyle);
 
 	/**
 	 * @return
@@ -242,21 +242,21 @@ public interface TableColumnCore
 	 *               
 	 * @since 2.5.0.0
 	 */
-	public void setSortValueLive(boolean live);
+    void setSortValueLive(boolean live);
 
 	/**
 	 * @return
 	 *               
 	 * @since 2.5.0.0
 	 */
-	public boolean isSortValueLive();
+    boolean isSortValueLive();
 
 	/**
 	 * @param ms
 	 *               
 	 * @since 2.5.0.0
 	 */
-	public void addRefreshTime(long ms);
+    void addRefreshTime(long ms);
 
 	/**
 	 * @param writer
@@ -315,8 +315,8 @@ public interface TableColumnCore
 	 */
 	void addCellOtherListener(String listenerID, Object listener);
 
-	public void removeCellOtherListener(String listenerID,
-			Object l);
+	void removeCellOtherListener(String listenerID,
+                                 Object l);
 
 	/**
 	 * @param listenerID
@@ -338,7 +338,7 @@ public interface TableColumnCore
 	 * @since 4005
 	 * @return
 	 */
-	public boolean
+    boolean
 	isRemoved();
 
 	/**
@@ -359,13 +359,13 @@ public interface TableColumnCore
 	 *
 	 * @since 4.6.0.1
 	 */
-	public void addDataSourceType(Class<?> forDataSourceType);
+    void addDataSourceType(Class<?> forDataSourceType);
 	
-	public boolean showOnlyImage();
+	boolean showOnlyImage();
 
-	public TableCellInplaceEditorListener getInplaceEditorListener();
+	TableCellInplaceEditorListener getInplaceEditorListener();
 
-	public boolean hasInplaceEditorListener();
+	boolean hasInplaceEditorListener();
 
 	void setInplaceEditorListener(TableCellInplaceEditorListener l);
 }

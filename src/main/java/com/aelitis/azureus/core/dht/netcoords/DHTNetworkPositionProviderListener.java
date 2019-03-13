@@ -23,11 +23,11 @@ package com.aelitis.azureus.core.dht.netcoords;
 public interface 
 DHTNetworkPositionProviderListener 
 {
-	public void
+	void
 	providerAdded(
-		DHTNetworkPositionProvider		provider );
+            DHTNetworkPositionProvider provider);
 	
-	public void
+	void
 	providerRemoved(
-		DHTNetworkPositionProvider		provider );
+            DHTNetworkPositionProvider provider);
 }

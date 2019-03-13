@@ -48,189 +48,189 @@ import com.aelitis.azureus.core.tracker.TrackerPeerSource;
 public interface 
 PEPeerManager 
 {
-	public DiskManager getDiskManager();
-	public PiecePicker getPiecePicker();
+	DiskManager getDiskManager();
+	PiecePicker getPiecePicker();
 	
-	public PEPeerManagerAdapter	getAdapter();
+	PEPeerManagerAdapter	getAdapter();
 	
-	public void
+	void
 	start();
 		
-	public void
+	void
 	stopAll();
 
-	public byte[]
+	byte[]
 	getHash();
 
-	public String
+	String
 	getDisplayName();
 	
-	public PeerIdentityDataID
+	PeerIdentityDataID
 	getPeerIdentityDataID();
 	
-	public byte[]
+	byte[]
 	getPeerId();
 
-	public int[] getAvailability();
+	int[] getAvailability();
 
-	public int getAvailability(int pieceNumber);
+	int getAvailability(int pieceNumber);
 	
-	public float getAvgAvail();
+	float getAvgAvail();
 
-	public float getMinAvailability();
+	float getMinAvailability();
 
-	public float getMinAvailability( int file_index );
+	float getMinAvailability(int file_index);
 
-	public long getAvailWentBadTime();
+	long getAvailWentBadTime();
 
-	public long getBytesUnavailable();
+	long getBytesUnavailable();
 	
-	public boolean hasDownloadablePiece();
+	boolean hasDownloadablePiece();
 	
-    public int	getBytesQueuedForUpload();
-    public int	getNbPeersWithUploadQueued();
-    public int	getNbPeersWithUploadBlocked();
-    public int	getNbPeersUnchoked();
+    int	getBytesQueuedForUpload();
+    int	getNbPeersWithUploadQueued();
+    int	getNbPeersWithUploadBlocked();
+    int	getNbPeersUnchoked();
     
     /** Often better to use getPiece(pieceNumber)
      */
-	public PEPiece[]	getPieces();
+    PEPiece[]	getPieces();
 
     /** @return PEPiece or null if piece not currently active
      */
-	public PEPiece		getPiece(int pieceNumber);
+    PEPiece		getPiece(int pieceNumber);
 
     
-	public PEPeerManagerStats
+	PEPeerManagerStats
 	getStats();
 
-	public void
+	void
 	processTrackerResponse(
-		TRTrackerAnnouncerResponse	response );
+            TRTrackerAnnouncerResponse response);
 		
-	public int getNbPeers();
+	int getNbPeers();
 
-	public int getNbSeeds();
+	int getNbSeeds();
 	
-	public int getPieceLength(int pieceNumber);
+	int getPieceLength(int pieceNumber);
 		
-	public long getRemaining();
+	long getRemaining();
 	
-	public long getHiddenBytes();
+	long getHiddenBytes();
 	
-	public long getETA( boolean smoothed );
+	long getETA(boolean smoothed);
 	
-	public String getElapsedTime();
+	String getElapsedTime();
 	
 	// Time Started in ms
-	public long getTimeStarted( boolean mono_time );
+    long getTimeStarted(boolean mono_time);
 
-	public long getTimeStartedSeeding( boolean mono_time );
+	long getTimeStartedSeeding(boolean mono_time);
 	
-	public void
+	void
 	addListener(
-		PEPeerManagerListener	l );
+            PEPeerManagerListener l);
 		
-	public void
+	void
 	removeListener(
-		PEPeerManagerListener	l );
+            PEPeerManagerListener l);
   
-	public void addPiece(PEPiece piece, int pieceNumber, PEPeer for_peer );
+	void addPiece(PEPiece piece, int pieceNumber, PEPeer for_peer);
   
-  public boolean needsMD5CheckOnCompletion(int pieceNumber);
+  boolean needsMD5CheckOnCompletion(int pieceNumber);
   
-  public boolean
+  boolean
   isSeeding();
   
-  public boolean
+  boolean
   isMetadataDownload();
 	
-  public int
+  int
   getTorrentInfoDictSize();
   
-  public void
+  void
   setTorrentInfoDictSize(
-	int	size );
+          int size);
   
-  public boolean
+  boolean
   isSuperSeedMode();
   
-  public boolean
+  boolean
   canToggleSuperSeedMode();
   
-  public void
-  setSuperSeedMode( boolean on );
+  void
+  setSuperSeedMode(boolean on);
   
-  public boolean
+  boolean
   seedPieceRecheck();
   
-  public int getNbRemoteTCPConnections();
-  public int getNbRemoteUDPConnections();
-  public int getNbRemoteUTPConnections();
+  int getNbRemoteTCPConnections();
+  int getNbRemoteUDPConnections();
+  int getNbRemoteUTPConnections();
   
-  public long getLastRemoteConnectionTime();
+  long getLastRemoteConnectionTime();
   
-  public int
-  getMaxNewConnectionsAllowed( String network );
+  int
+  getMaxNewConnectionsAllowed(String network);
   
-  public boolean
+  boolean
   hasPotentialConnections();
   
   /**
    * Data bytes received.
    * @param l
    */
-	public void	dataBytesReceived( PEPeer peer, int	l );	
+  void	dataBytesReceived(PEPeer peer, int l);
 	
   /**
    * Data bytes sent.
    * @param l
    */
-	public void	dataBytesSent( PEPeer peer, int	l );
+  void	dataBytesSent(PEPeer peer, int l);
 	
   /**
    * Protocol bytes sent.
    * @param length
    */
-  public void protocolBytesSent( PEPeer peer, int length );
+  void protocolBytesSent(PEPeer peer, int length);
   
   /**
    * Protocol bytes received.
    * @param length
    */
-  public void protocolBytesReceived( PEPeer peer, int length );
+  void protocolBytesReceived(PEPeer peer, int length);
   
   
   
-	public void
+	void
 	discarded(
-		PEPeer peer, 
-		int		l );		
+            PEPeer peer,
+            int l);
 	
-	public PEPeerStats
+	PEPeerStats
 	createPeerStats(
-		PEPeer	owner );
+            PEPeer owner);
 	
-	public List<PEPeer>
+	List<PEPeer>
 	getPeers();
 	
-	public List<PEPeer>
+	List<PEPeer>
 	getPeers(
-		String	address );
+            String address);
 	
-	public int
+	int
 	getPendingPeerCount();
 	
-	public PeerDescriptor[]
+	PeerDescriptor[]
    	getPendingPeers();
 	
-	public PeerDescriptor[]
+	PeerDescriptor[]
 	getPendingPeers(
-		String	address );
+            String address);
 	
-	public void
+	void
 	addPeer(
-		PEPeer	peer );
+            PEPeer peer);
   
   
   /**
@@ -242,85 +242,85 @@ PEPeerManager
    * @param udp_port of peer to inject (0 if unknown)
    * @param use_crypto use encrypted transport
    */
-	
-	public void 
-	addPeer( 
-		String 		ip_address, 
-		int 		tcp_port,
-		int			udp_port,
-		boolean 	use_crypto,
-		Map			user_data );
+
+  void
+	addPeer(
+          String ip_address,
+          int tcp_port,
+          int udp_port,
+          boolean use_crypto,
+          Map user_data);
   
-	public void
+	void
 	peerDiscovered(
-		String		peer_source,
-		String 		ip_address, 
-		int			tcp_port, 
-		int			udp_port,
-		boolean 	use_crypto );
+            String peer_source,
+            String ip_address,
+            int tcp_port,
+            int udp_port,
+            boolean use_crypto);
 	
-	public void
+	void
 	removePeer(
-		PEPeer	peer );
+            PEPeer peer);
 	
-	public void
+	void
 	removePeer(
-		PEPeer	peer,
-		String	reason );
+            PEPeer peer,
+            String reason);
 	
-	public void 
+	void
 	peerAdded(PEPeer pc);
 
-	public void 
+	void
 	peerRemoved(PEPeer pc);
 	
-	public DiskManagerReadRequest
+	DiskManagerReadRequest
 	createDiskManagerRequest(
-	   int pieceNumber,
-	   int offset,
-	   int length );
+            int pieceNumber,
+            int offset,
+            int length);
 	
-	public void
+	void
 	requestCanceled(
-		DiskManagerReadRequest	item );
+            DiskManagerReadRequest item);
 		
-	public boolean
+	boolean
 	requestExists(
-		String			peer_ip,
-		int				piece_number,
-		int				offset,
-		int				length );
+            String peer_ip,
+            int piece_number,
+            int offset,
+            int length);
 	
-	public boolean 
+	boolean
 	validatePieceReply(
-		PEPeerTransport		originator,
-		int 				pieceNumber, 
-		int 				offset, 
-		DirectByteBuffer 	data );
+            PEPeerTransport originator,
+            int pieceNumber,
+            int offset,
+            DirectByteBuffer data);
 	
-	public void 
+	void
 	writeBlock(
-		int 				pieceNumber, 
-		int 				offset, 
-		DirectByteBuffer 	data,
-		Object 				sender,			// either a PEPeer or a String
-        boolean     		cancel);		
+            int pieceNumber,
+            int offset,
+            DirectByteBuffer data,
+            Object sender,            // either a PEPeer or a String
+            boolean cancel);
   
 //  public void writeBlockAndCancelOutstanding(int pieceNumber, int offset, DirectByteBuffer data,PEPeer sender);
   
-  public boolean isWritten( int piece_number, int offset );
+  boolean isWritten(int piece_number, int offset);
 
   /**
    * Are we in end-game mode?
    * @return true if in end game mode, false if not
    */
-  public boolean isInEndGameMode();
+  boolean isInEndGameMode();
   
   /**
    * Notify the manager that the given peer connection has been closed.
    * @param peer closed
    */
-  public void peerConnectionClosed( PEPeerTransport peer, boolean connect_failed, boolean network_failed );
+  void peerConnectionClosed(PEPeerTransport peer, boolean connect_failed, boolean network_failed);
   
   
   
@@ -330,107 +330,107 @@ PEPeerManager
    * @param base_peer exchaning with
    * @return peer database connection item, or null if creation failed
    */
-  public PeerExchangerItem createPeerExchangeConnection( PEPeerTransport base_peer );
+  PeerExchangerItem createPeerExchangeConnection(PEPeerTransport base_peer);
   
   
   /**
    * Notify that the given peer connection represents our own client.
    * @param self peer
    */
-  public void peerVerifiedAsSelf( PEPeerTransport self );
+  void peerVerifiedAsSelf(PEPeerTransport self);
   
   
   /**
    * Get the limited rate group used for upload limiting.
    * @return upload limit group
    */
-  public LimitedRateGroup getUploadLimitedRateGroup();
+  LimitedRateGroup getUploadLimitedRateGroup();
   
   /**
    * Get the limited rate group used for download limiting.
    * @return download limit group
    */
-  public LimitedRateGroup getDownloadLimitedRateGroup();
+  LimitedRateGroup getDownloadLimitedRateGroup();
   
-  public int getUploadRateLimitBytesPerSecond();
+  int getUploadRateLimitBytesPerSecond();
   
-  public int getDownloadRateLimitBytesPerSecond();
+  int getDownloadRateLimitBytesPerSecond();
   
   /** To retreive arbitrary objects against this object. */
-  public Object getData (String key);
+  Object getData(String key);
   /** To store arbitrary objects against this object. */
-  public void setData (String key, Object value);
+  void setData(String key, Object value);
   
   
   /**
    * Get the average completion percentage of connected peers.
    * @return average percent complete in thousand notation
    */
-  public int getAverageCompletionInThousandNotation();
+  int getAverageCompletionInThousandNotation();
 
 	/**
 	 * Locate an existing transport via peer id byte identity.
 	 * @param peer_id to look for
 	 * @return transport with matching identity, or null if no match is found
 	 */
-	public PEPeerTransport getTransportFromIdentity( byte[] peer_id );
+    PEPeerTransport getTransportFromIdentity(byte[] peer_id);
 	
 	/**
 	 * Locate an existing transport via [IP] Address.
 	 * @param peer String to look for
 	 * @return PEPeerTransport with matching address String, or null if no match is found
 	 */
-	public PEPeerTransport getTransportFromAddress(String peer);
+    PEPeerTransport getTransportFromAddress(String peer);
 	
-	public boolean
+	boolean
 	getPreferUDP();
 	
-	public void
+	void
 	setPreferUDP(
-		boolean	prefer );
+            boolean prefer);
 	
-	public void
+	void
 	addRateLimiter(
-		LimitedRateGroup	group,
-		boolean				upload );
+            LimitedRateGroup group,
+            boolean upload);
 	
-	public void
+	void
 	removeRateLimiter(
-		LimitedRateGroup	group,
-		boolean				upload );
+            LimitedRateGroup group,
+            boolean upload);
 	
-	public TrackerPeerSource
+	TrackerPeerSource
 	getTrackerPeerSource();
 	
-	public boolean
+	boolean
 	isPeerSourceEnabled(
-		String	peer_source );
+            String peer_source);
 	
-	public boolean
+	boolean
 	isNetworkEnabled(
-		String	network );
+            String network);
 	
-	public int
+	int
 	getPartitionID();
 
-	public boolean
+	boolean
 	isDestroyed();
 	
-	public void
+	void
 	generateEvidence(
-		IndentWriter		writer );
+            IndentWriter writer);
 	
-	public void
+	void
 	setStatsReceiver(
-		StatsReceiver	receiver );
+            StatsReceiver receiver);
 	
-	public interface
+	interface
 	StatsReceiver
 	{
-		public void
+		void
 		receiveStats(
-			PEPeer		peer,
-			Map			stats );
+                PEPeer peer,
+                Map stats);
 	}
 
 }

@@ -23,11 +23,11 @@ package com.aelitis.azureus.core.subs;
 public interface 
 SubscriptionPopularityListener 
 {
-	public void
+	void
 	gotPopularity(
-		long						popularity );
+            long popularity);
 	
-	public void
+	void
 	failed(
-		SubscriptionException		error );
+            SubscriptionException error);
 }

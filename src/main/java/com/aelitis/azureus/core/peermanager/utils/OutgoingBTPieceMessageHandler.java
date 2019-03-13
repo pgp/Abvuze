@@ -44,9 +44,9 @@ public class OutgoingBTPieceMessageHandler {
   private final OutgoingMessageQueue 	outgoing_message_queue;
   private 		byte					piece_version;
   
-  private final LinkedList<DiskManagerReadRequest>			requests 			= new LinkedList<DiskManagerReadRequest>();
-  private final ArrayList<DiskManagerReadRequest>			loading_messages 	= new ArrayList<DiskManagerReadRequest>();
-  private final HashMap<BTPiece,DiskManagerReadRequest> 	queued_messages 	= new HashMap<BTPiece, DiskManagerReadRequest>();
+  private final LinkedList<DiskManagerReadRequest>			requests 			= new LinkedList<>();
+  private final ArrayList<DiskManagerReadRequest>			loading_messages 	= new ArrayList<>();
+  private final HashMap<BTPiece,DiskManagerReadRequest> 	queued_messages 	= new HashMap<>();
   
   private final AEMonitor	lock_mon	= new AEMonitor( "OutgoingBTPieceMessageHandler:lock");
   private boolean destroyed = false;
@@ -266,7 +266,7 @@ public class OutgoingBTPieceMessageHandler {
   public void removeAllPieceRequests() {
   	if( destroyed )  return;
   	
-  	List<DiskManagerReadRequest> removed = new ArrayList<DiskManagerReadRequest>();
+  	List<DiskManagerReadRequest> removed = new ArrayList<>();
   	
     try{
       lock_mon.enter();
@@ -292,14 +292,13 @@ public class OutgoingBTPieceMessageHandler {
         Debug.out( "num_removed[" +num_removed+ "] < num_queued[" +num_queued+ "]:\nBEFORE:\n" +before_trace+ "\nAFTER:\n" +outgoing_message_queue.getQueueTrace() );		
       }
       */
-      
-     
-      for( Iterator<BTPiece> i = queued_messages.keySet().iterator(); i.hasNext(); ) {
-          BTPiece msg = i.next();
-          if (outgoing_message_queue.removeMessage( msg, true )){
-        	  removed.add( queued_messages.get( msg ));
-          }
-      }
+
+
+        for (BTPiece msg : queued_messages.keySet()) {
+            if (outgoing_message_queue.removeMessage(msg, true)) {
+                removed.add(queued_messages.get(msg));
+            }
+        }
       
       queued_messages.clear();	// this replaces stuff above 
       
@@ -355,7 +354,7 @@ public class OutgoingBTPieceMessageHandler {
   		lock_mon.enter();
 		
   		while( loading_messages.size() + queued_messages.size() < request_read_ahead && !requests.isEmpty() && !destroyed ) {
-  			DiskManagerReadRequest dmr = (DiskManagerReadRequest)requests.removeFirst();
+  			DiskManagerReadRequest dmr = requests.removeFirst();
   			loading_messages.add( dmr );  			
   			if( to_submit == null )  to_submit = new ArrayList();
   			to_submit.add( dmr );
@@ -373,9 +372,9 @@ public class OutgoingBTPieceMessageHandler {
 	*/
     
     if ( to_submit != null ){
-    	for (int i=0;i<to_submit.size();i++){
-    		peer.getManager().getAdapter().enqueueReadRequest( peer, (DiskManagerReadRequest)to_submit.get(i), read_req_listener );
-    	}
+        for (Object o : to_submit) {
+            peer.getManager().getAdapter().enqueueReadRequest(peer, (DiskManagerReadRequest) o, read_req_listener);
+        }
     }
   }
 
@@ -398,29 +397,26 @@ public class OutgoingBTPieceMessageHandler {
 			// allocate max size needed (we'll shrink it later)
 			pieceNumbers = new int[queued_messages.size()	+ loading_messages.size() + requests.size()];
 
-			for (Iterator iter = queued_messages.keySet().iterator(); iter.hasNext();) {
-				BTPiece msg = (BTPiece) iter.next();
-				if (iLastNumber != msg.getPieceNumber()) {
-					iLastNumber = msg.getPieceNumber();
-					pieceNumbers[pos++] = iLastNumber;
-				}
-			}
+            for (BTPiece msg : queued_messages.keySet()) {
+                if (iLastNumber != msg.getPieceNumber()) {
+                    iLastNumber = msg.getPieceNumber();
+                    pieceNumbers[pos++] = iLastNumber;
+                }
+            }
 
-			for (Iterator iter = loading_messages.iterator(); iter.hasNext();) {
-				DiskManagerReadRequest dmr = (DiskManagerReadRequest) iter.next();
-				if (iLastNumber != dmr.getPieceNumber()) {
-					iLastNumber = dmr.getPieceNumber();
-					pieceNumbers[pos++] = iLastNumber;
-				}
-			}
+            for (DiskManagerReadRequest dmr : loading_messages) {
+                if (iLastNumber != dmr.getPieceNumber()) {
+                    iLastNumber = dmr.getPieceNumber();
+                    pieceNumbers[pos++] = iLastNumber;
+                }
+            }
 
-			for (Iterator iter = requests.iterator(); iter.hasNext();) {
-				DiskManagerReadRequest dmr = (DiskManagerReadRequest) iter.next();
-				if (iLastNumber != dmr.getPieceNumber()) {
-					iLastNumber = dmr.getPieceNumber();
-					pieceNumbers[pos++] = iLastNumber;
-				}
-			}
+            for (DiskManagerReadRequest dmr : requests) {
+                if (iLastNumber != dmr.getPieceNumber()) {
+                    iLastNumber = dmr.getPieceNumber();
+                    pieceNumbers[pos++] = iLastNumber;
+                }
+            }
 			
 		} finally {
 			lock_mon.exit();

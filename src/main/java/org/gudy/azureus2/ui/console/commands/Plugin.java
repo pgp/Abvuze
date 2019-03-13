@@ -94,11 +94,13 @@ public class Plugin extends IConsoleCommand {
 			ci.out.println("> -----");
 			PluginInterface[] plugins = plugin_manager.getPluginInterfaces();
 			TreeSet plugin_ids = new TreeSet(String.CASE_INSENSITIVE_ORDER);
-			for (int i=0; i<plugins.length; i++) {
-				if (!all_plugins && !plugins[i].getPluginState().isOperational()) {continue;}
-				String plugin_id = plugins[i].getPluginID();
-				plugin_ids.add(plugin_id);
-			}
+            for (PluginInterface plugin : plugins) {
+                if (!all_plugins && !plugin.getPluginState().isOperational()) {
+                    continue;
+                }
+                String plugin_id = plugin.getPluginID();
+                plugin_ids.add(plugin_id);
+            }
 			TextWrap.printList(plugin_ids.iterator(), ci.out, "   ");
 			ci.out.println("> -----");
 			return;
@@ -206,14 +208,14 @@ public class Plugin extends IConsoleCommand {
 							}
 							
 							boolean	restart_required = false;
-							
-							for (int i=0;i<updates.length;i++){
 
-								if ( updates[i].getRestartRequired() == Update.RESTART_REQUIRED_YES ){
-									
-									restart_required = true;
-								}
-							}
+                            for (Update update : updates) {
+
+                                if (update.getRestartRequired() == Update.RESTART_REQUIRED_YES) {
+
+                                    restart_required = true;
+                                }
+                            }
 							
 							if ( restart_required ){
 								
@@ -302,7 +304,7 @@ public class Plugin extends IConsoleCommand {
 			 			run()
 			 			{
 			 				try{
-								Map<Integer, Object> properties = new HashMap<Integer, Object>();
+								Map<Integer, Object> properties = new HashMap<>();
 						
 								properties.put( UpdateCheckInstance.PT_UI_STYLE, UpdateCheckInstance.PT_UI_STYLE_NONE );
 									
@@ -502,7 +504,7 @@ public class Plugin extends IConsoleCommand {
 		 		
 				final PluginInstaller uninstaller = plugin_manager.getPluginInstaller();
 				
-				Map<Integer, Object> properties = new HashMap<Integer, Object>();
+				Map<Integer, Object> properties = new HashMap<>();
 
 				final AESemaphore sem = new AESemaphore( "plugin-uninstall" );
 

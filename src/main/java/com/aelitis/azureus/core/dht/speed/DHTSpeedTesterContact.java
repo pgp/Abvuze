@@ -24,32 +24,32 @@ import java.net.InetSocketAddress;
 public interface 
 DHTSpeedTesterContact 
 {
-	public InetSocketAddress
+	InetSocketAddress
 	getAddress();
 	
-	public int
+	int
 	getPingPeriod();
 	
-	public void
+	void
 	setPingPeriod(
-		int		period_secs );
+            int period_secs);
 	
 		/**
 		 * If you don't like the ping times from this contact you can always kill it, a new one will be
 		 * created in its place
 		 */
-	
-	public void
+
+        void
 	destroy();
 	
-	public void
+	void
 	addListener(
-		DHTSpeedTesterContactListener	listener );
+            DHTSpeedTesterContactListener listener);
 	
-	public void
+	void
 	removeListener(
-		DHTSpeedTesterContactListener	listener );
+            DHTSpeedTesterContactListener listener);
 	
-	public String
+	String
 	getString();
 }

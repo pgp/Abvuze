@@ -31,36 +31,36 @@ import org.gudy.azureus2.core3.util.HashWrapper;
 public interface 
 TRTrackerScraperClientResolver 
 {
-	public static final Character FL_NONE					= new Character( 'n' );
-	public static final Character FL_INCOMPLETE_STOPPED		= new Character( 's' );
-	public static final Character FL_INCOMPLETE_QUEUED		= new Character( 'q' );
-	public static final Character FL_INCOMPLETE_RUNNING		= new Character( 'r' );
-	public static final Character FL_COMPLETE_STOPPED		= new Character( 'S' );
-	public static final Character FL_COMPLETE_QUEUED		= new Character( 'Q' );
-	public static final Character FL_COMPLETE_RUNNING		= new Character( 'R' );
+	Character FL_NONE					= 'n';
+	Character FL_INCOMPLETE_STOPPED		= 's';
+	Character FL_INCOMPLETE_QUEUED		= 'q';
+	Character FL_INCOMPLETE_RUNNING		= 'r';
+	Character FL_COMPLETE_STOPPED		= 'S';
+	Character FL_COMPLETE_QUEUED		= 'Q';
+	Character FL_COMPLETE_RUNNING		= 'R';
 		
-	public boolean
+	boolean
 	isScrapable(
-		HashWrapper	torrent_hash );
+            HashWrapper torrent_hash);
 	
 		/**
 		 * 
 		 * @param hash
 		 * @return
 		 */
-	
-	public int[]
-	getCachedScrape(
-		HashWrapper	hash );
 
-	public boolean
+        int[]
+	getCachedScrape(
+                HashWrapper hash);
+
+	boolean
 	isNetworkEnabled(
-		HashWrapper	hash,
-		URL			url );
+            HashWrapper hash,
+            URL url);
 	
-	public String[]
+	String[]
 	getEnabledNetworks(
-		HashWrapper	hash );
+            HashWrapper hash);
 	
 		/**
 		 * Two kinds of extensions: entry [0] = String (or null) that gets passed with the scrape verbotem after infohash
@@ -69,14 +69,14 @@ TRTrackerScraperClientResolver
 		 * @param hash
 		 * @return
 		 */
-	
-	public Object[]
+
+        Object[]
 	getExtensions(
-		HashWrapper	hash );
+                HashWrapper hash);
 	
-	public boolean
+	boolean
 	redirectTrackerUrl(
-		HashWrapper		hash,
-		URL				old_url,
-		URL				new_url );
+            HashWrapper hash,
+            URL old_url,
+            URL new_url);
 }

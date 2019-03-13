@@ -25,36 +25,36 @@ import java.util.Map;
 public interface 
 DHTTransportAlternativeContact 
 {
-	public int
+	int
 	getNetworkType();
 	
-	public int
+	int
 	getVersion();
 	
 		/** 
 		 * A good-enough ID to spot duplicates - must be equal to Arrays.hashCode( BEncode( getProperties()));
 		 * @return
 		 */
-	
-	public int
+
+        int
 	getID();
 	
 		/**
 		 * @deprecated
 		 * @return
 		 */
-	
-	public int
+
+        int
 	getLastAlive();
 	
 		/**
 		 * Gets the contact's age since last known to be alive in seconds
 		 * @return
 		 */
-	
-	public int
+
+        int
 	getAge();
 	
-	public Map<String,Object>
+	Map<String,Object>
 	getProperties();
 }

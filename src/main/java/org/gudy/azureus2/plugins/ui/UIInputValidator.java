@@ -35,6 +35,6 @@ public interface UIInputValidator {
 	 * Note - the returned string in the case of invalid input <b>must</b> be
 	 * localised - no translating of the string returned will take place.
 	 */
-	public String validate(String input);
+    String validate(String input);
 	
 }

@@ -109,7 +109,7 @@ TagTypeBase
 				}
 			});	
 		
-	private final Map<Taggable,List<TagListener>>	tag_listeners = new HashMap<Taggable,List<TagListener>>();
+	private final Map<Taggable,List<TagListener>>	tag_listeners = new HashMap<>();
 	
 	protected
 	TagTypeBase(
@@ -319,7 +319,7 @@ TagTypeBase
 	getTagsForTaggable(
 		Taggable	taggable )
 	{
-		List<Tag>	result = new ArrayList<Tag>();
+		List<Tag>	result = new ArrayList<>();
 		
 		int taggable_type = taggable.getTaggableType();
 		
@@ -424,11 +424,11 @@ TagTypeBase
 	taggableSync(
 		Tag			tag )
 	{
-		List<List<TagListener>> all_listeners = new ArrayList<List<TagListener>>();
+		List<List<TagListener>> all_listeners;
 		
 		synchronized( tag_listeners ){
 			
-			all_listeners.addAll( tag_listeners.values());
+			all_listeners = new ArrayList<>(tag_listeners.values());
 		}
 		
 		for ( List<TagListener> listeners: all_listeners ){
@@ -486,11 +486,11 @@ TagTypeBase
 			
 			if ( listeners == null ){
 				
-				listeners = new ArrayList<TagListener>();
+				listeners = new ArrayList<>();
 				
 			}else{
 				
-				listeners = new ArrayList<TagListener>( listeners );
+				listeners = new ArrayList<>(listeners);
 			}
 			
 			listeners.add( listener );
@@ -510,7 +510,7 @@ TagTypeBase
 			
 			if ( listeners != null ){
 				
-				listeners = new ArrayList<TagListener>( listeners );
+				listeners = new ArrayList<>(listeners);
 				
 				listeners.remove( listener );
 				

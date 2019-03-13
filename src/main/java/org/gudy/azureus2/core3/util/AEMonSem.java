@@ -217,34 +217,32 @@ AEMonSem
 		
 		int	total_pos	= 0;
 
-		for (int i=0;i<x.length;i++){
+        for (AEMonSem ms : x) {
 
-			AEMonSem	ms = x[i];
+            long diff = ms.entry_count - ms.last_entry_count;
 
-			long	diff = ms.entry_count - ms.last_entry_count;
+            if (current == null) {
 
-			if ( current == null ){
+                current = ms;
 
-				current	= ms;
+            } else {
 
-			}else{
+                if (current.name.equals(ms.name)) {
 
-				if( current.name.equals( ms.name )){
+                    current_total += diff;
 
-					current_total += diff;
+                } else {
+                    total_x[total_pos++] = new Object[]{current.name, current_total};
 
-				}else{
-					total_x[total_pos++] = new Object[]{ current.name, new Long( current_total )};
-
-					current 		= ms;
-					current_total	= diff;
-				}
-			}
-		}
+                    current = ms;
+                    current_total = diff;
+                }
+            }
+        }
 		
 		if (current != null ){
 			
-			total_x[total_pos++] = new Object[]{ current.name, new Long( current_total )};
+			total_x[total_pos++] = new Object[]{ current.name, current_total};
 		}
 		
 		Arrays.sort(
@@ -272,8 +270,8 @@ AEMonSem
 						return( -1 );
 					}
 					
-					long	a1_count = ((Long)a1[1]).longValue();
-					long	a2_count = ((Long)a2[1]).longValue();
+					long	a1_count = (Long) a1[1];
+					long	a2_count = (Long) a2[1];
 					
 					return((int)(a2_count - a1_count ));
 				}
@@ -298,51 +296,49 @@ AEMonSem
 		if ( waiting_monitors.size() > 0 ){
 			
 			diag_logger.log( "    waiting monitors" );
-			
-			for (int i=0;i<waiting_monitors.size();i++){
-				
-				AEMonSem	ms = (AEMonSem)waiting_monitors.get(i);
-				
-				Thread last_waiter = ((AEMonitor)ms).last_waiter;
 
-				diag_logger.log( "        [" + (last_waiter==null?"<waiter lost>":last_waiter.getName()) + "] " +  ms.name + " - " + ms.last_trace_key );
-			}
+            for (Object waiting_monitor : waiting_monitors) {
+
+                AEMonSem ms = (AEMonSem) waiting_monitor;
+
+                Thread last_waiter = ((AEMonitor) ms).last_waiter;
+
+                diag_logger.log("        [" + (last_waiter == null ? "<waiter lost>" : last_waiter.getName()) + "] " + ms.name + " - " + ms.last_trace_key);
+            }
 		}
 		
 		if ( busy_monitors.size() > 0 ){
 			
 			diag_logger.log( "    busy monitors" );
-			
-			for (int i=0;i<busy_monitors.size();i++){
-				
-				AEMonSem	ms = (AEMonSem)busy_monitors.get(i);
-				
-				Thread owner = ((AEMonitor)ms).owner;
-				
-				diag_logger.log( "        [" + (owner==null?"<owner lost>":owner.getName()) + "] " + ms.name + " - " + ms.last_trace_key );
-			}
+
+            for (Object busy_monitor : busy_monitors) {
+
+                AEMonSem ms = (AEMonSem) busy_monitor;
+
+                Thread owner = ((AEMonitor) ms).owner;
+
+                diag_logger.log("        [" + (owner == null ? "<owner lost>" : owner.getName()) + "] " + ms.name + " - " + ms.last_trace_key);
+            }
 		}
 		
 		if ( waiting_semaphores.size() > 0 ){
 			
 			diag_logger.log( "    waiting semaphores" );
-			
-			for (int i=0;i<waiting_semaphores.size();i++){
-				
-				AEMonSem	ms = (AEMonSem)waiting_semaphores.get(i);
-				
-				Thread last_waiter = ((AESemaphore)ms).latest_waiter;
 
-				diag_logger.log( "        [" + (last_waiter==null?"<waiter lost>":last_waiter.getName()) + "] " +  ms.name + " - " + ms.last_trace_key );
-			}
+            for (Object waiting_semaphore : waiting_semaphores) {
+
+                AEMonSem ms = (AEMonSem) waiting_semaphore;
+
+                Thread last_waiter = ((AESemaphore) ms).latest_waiter;
+
+                diag_logger.log("        [" + (last_waiter == null ? "<waiter lost>" : last_waiter.getName()) + "] " + ms.name + " - " + ms.last_trace_key);
+            }
 		}
-		
-		for (int i=0;i<x.length;i++){
-			
-			AEMonSem	ms = x[i];
-			
-			ms.last_entry_count = ms.entry_count;
-		}
+
+        for (AEMonSem ms : x) {
+
+            ms.last_entry_count = ms.entry_count;
+        }
 	}
 	
 	
@@ -437,13 +433,13 @@ AEMonSem
 			if ( stack.size() > 64 ){
 				
 				StringBuilder sb = new StringBuilder(1024);
-				
-				for (int i=0;i<stack.size();i++){
-					
-					AEMonSem	mon = (AEMonSem)stack.get(i);
 
-					sb.append("$").append(mon.name);
-				}
+                for (Object o : stack) {
+
+                    AEMonSem mon = (AEMonSem) o;
+
+                    sb.append("$").append(mon.name);
+                }
 				
 				Debug.out( "**** Whoaaaaaa, AEMonSem debug stack is getting too large!!!! **** " + sb );
 			}
@@ -474,33 +470,33 @@ AEMonSem
 				boolean	check_recursion = is_monitor && !debug_recursions.contains( name );
 				
 				String	prev_name	= null;
-				
-				for (int i=0;i<stack.size();i++){
-				
-					AEMonSem	mon = (AEMonSem)stack.get(i);
-					
-					if ( check_recursion ){
-						if ( 	mon.name.equals( name ) &&
-								mon != this ){
-							
-							recursion_trace += 
-								( recursion_trace.length()==0?"":"\r\n" ) +
-								"Recursive locks on different instances: " + name;
-							
-							debug_recursions.add( name );
-						}
-					}
-		
-						// remove consecutive duplicates
-					
-					if ( prev_name == null || !mon.name.equals( prev_name )){
-						
-						sb.append("$");
-						sb.append(mon.name);
-					}
-					
-					prev_name	= mon.name;
-				}
+
+                for (Object o1 : stack) {
+
+                    AEMonSem mon = (AEMonSem) o1;
+
+                    if (check_recursion) {
+                        if (mon.name.equals(name) &&
+                                mon != this) {
+
+                            recursion_trace +=
+                                    (recursion_trace.length() == 0 ? "" : "\r\n") +
+                                            "Recursive locks on different instances: " + name;
+
+                            debug_recursions.add(name);
+                        }
+                    }
+
+                    // remove consecutive duplicates
+
+                    if (prev_name == null || !mon.name.equals(prev_name)) {
+
+                        sb.append("$");
+                        sb.append(mon.name);
+                    }
+
+                    prev_name = mon.name;
+                }
 				
 				sb.append( "$" );
 				sb.append( name );
@@ -522,18 +518,18 @@ AEMonSem
 						// release it on another. This will grow the stack indefinitely
 					
 					boolean	match 	= false;
-					
-					for (int i=0;i<stack.size();i++){
-						
-						AEMonSem	ms = (AEMonSem)stack.get(i);
-						
-						if ( ms.name.equals( name )){
-							
-							match	= true;
-							
-							break;
-						}
-					}
+
+                    for (Object o : stack) {
+
+                        AEMonSem ms = (AEMonSem) o;
+
+                        if (ms.name.equals(name)) {
+
+                            match = true;
+
+                            break;
+                        }
+                    }
 					
 					if ( !match ){
 						
@@ -553,97 +549,95 @@ AEMonSem
 						String	thread_name	= thread.getName() + "[" + thread.hashCode() + "]";
 						
 						String	stack_trace	= Debug.getStackTrace(true, false);
-						
-						Iterator	it = debug_traces.keySet().iterator();
-					
-						while( it.hasNext()){
-							
-							String	old_key = (String)it.next();
-							
-							String[]	data = (String[])debug_traces.get(old_key);
-							
-							String	old_thread_name	= data[0];
-							String	old_trace		= data[1];
-							
-								// if identical thread then we can ignore this as
-								// it can't happen concurrently
-						
-							if ( thread_name.equals( old_thread_name )){
+
+						for (Object o : debug_traces.keySet()) {
+
+							String old_key = (String) o;
+
+							String[] data = (String[]) debug_traces.get(old_key);
+
+							String old_thread_name = data[0];
+							String old_trace = data[1];
+
+							// if identical thread then we can ignore this as
+							// it can't happen concurrently
+
+							if (thread_name.equals(old_thread_name)) {
 
 								continue;
 							}
-						
-								// find the earliest occurrence of a common monitor - no point in searching
-								// beyond it
-								//    e.g.  a -> b -> c -> g
-							    //          x -> y -> b -> z
-								// stop at b because beyond this things are "protected"
-							
-							
-							int	earliest_common = stack.size();
-							int	common_count	= 0;
-							
-							for (int i=0;i<stack.size();i++){
-					
-								String	n1 = ((AEMonSem)stack.get(i)).name;
-							
-								int	p1 = old_key.indexOf( "$" + n1 + "$");
-		
-								if ( p1 != -1 ){
-							
+
+							// find the earliest occurrence of a common monitor - no point in searching
+							// beyond it
+							//    e.g.  a -> b -> c -> g
+							//          x -> y -> b -> z
+							// stop at b because beyond this things are "protected"
+
+
+							int earliest_common = stack.size();
+							int common_count = 0;
+
+							for (int i = 0; i < stack.size(); i++) {
+
+								String n1 = ((AEMonSem) stack.get(i)).name;
+
+								int p1 = old_key.indexOf("$" + n1 + "$");
+
+								if (p1 != -1) {
+
 									common_count++;
-									
-									earliest_common = Math.min( earliest_common, i+1 );
+
+									earliest_common = Math.min(earliest_common, i + 1);
 								}
 							}
-							
-								// need at least 2 common monitors for chance of deadlock
-							
-							if ( common_count >= 2 ){
-								
-								for (int i=0;i<earliest_common;i++){
-									
-									AEMonSem	ms1 = (AEMonSem)stack.get(i);
-									
-									if ( !ms1.is_monitor ){
-										
+
+							// need at least 2 common monitors for chance of deadlock
+
+							if (common_count >= 2) {
+
+								for (int i = 0; i < earliest_common; i++) {
+
+									AEMonSem ms1 = (AEMonSem) stack.get(i);
+
+									if (!ms1.is_monitor) {
+
 										continue;
 									}
-									
-									String	n1 = ms1.name;
-		
-									for (int j=i+1;j<stack.size();j++){
-										
-										AEMonSem	ms2 = (AEMonSem)stack.get(j);
-										
-										if ( !ms2.is_monitor ){
-											
+
+									String n1 = ms1.name;
+
+									for (int j = i + 1; j < stack.size(); j++) {
+
+										AEMonSem ms2 = (AEMonSem) stack.get(j);
+
+										if (!ms2.is_monitor) {
+
 											continue;
 										}
-										
-										String	n2 = ms2.name;
-										
-											// same object recursion already tested above
-										
-										if ( !n1.equals( n2 )){
-										
-											int	p1 = old_key.indexOf( "$" + n1 + "$");
-											int p2 = old_key.indexOf( "$" + n2 + "$");
-											
-											if ( p1 != -1 && p2 != -1 && p1 > p2 ){
-												
-												String	reciprocal_log = trace_key + " / " + old_key;
-												
-												if ( !debug_reciprocals.contains( reciprocal_log )){
-													
-													debug_reciprocals.add( reciprocal_log );
-													
+
+										String n2 = ms2.name;
+
+										// same object recursion already tested above
+
+										if (!n1.equals(n2)) {
+
+											int p1 = old_key.indexOf("$" + n1 + "$");
+											int p2 = old_key.indexOf("$" + n2 + "$");
+
+											if (p1 != -1 && p2 != -1 && p1 > p2) {
+
+												String reciprocal_log = trace_key + " / " + old_key;
+
+												if (!debug_reciprocals.contains(reciprocal_log)) {
+
+													debug_reciprocals.add(reciprocal_log);
+
 													Debug.outNoStack(
 															"AEMonSem: Reciprocal usage:\r\n" +
-															"    " + trace_key + "\r\n" + 
-															"        [" + thread_name + "] " + stack_trace + "\r\n" +
-															"    " + old_key + "\r\n" +
-															"        [" + old_thread_name + "] " + old_trace );
+																	"    " + trace_key + "\r\n" +
+																	"        [" + thread_name + "] " + stack_trace + "\r\n" +
+																	"    " + old_key + "\r\n" +
+																	"        [" + old_thread_name + "] " + old_trace);
 												}
 											}
 										}

@@ -25,66 +25,66 @@ import org.gudy.azureus2.plugins.disk.DiskManagerFileInfo;
 public interface 
 TranscodeQueue 
 {
-	public TranscodeJob
+	TranscodeJob
 	add(
-		TranscodeTarget			target,
-		TranscodeProfile		profile,
-		DiskManagerFileInfo		file,
-		boolean					add_stopped )
+            TranscodeTarget target,
+            TranscodeProfile profile,
+            DiskManagerFileInfo file,
+            boolean add_stopped)
 	
 		throws TranscodeException;
 	
-	public TranscodeJob
+	TranscodeJob
 	add(
-		TranscodeTarget			target,
-		TranscodeProfile		profile,
-		DiskManagerFileInfo		file,
-		int						transcode_requirement,		// from target.TRANSCODE_<x>
-		boolean					add_stopped )
+            TranscodeTarget target,
+            TranscodeProfile profile,
+            DiskManagerFileInfo file,
+            int transcode_requirement,        // from target.TRANSCODE_<x>
+            boolean add_stopped)
 	
 		throws TranscodeException;
 	
-	public TranscodeJob[]
+	TranscodeJob[]
 	getJobs();
 	
-	public void
+	void
 	pause();
 	
-	public boolean
+	boolean
 	isPaused();
 	
-	public void
+	void
 	resume();
 	
-	public int
+	int
 	getJobCount();
 	
-	public TranscodeJob
+	TranscodeJob
 	getCurrentJob();
 	
-	public boolean
+	boolean
 	isTranscoding();
 	
-	public long
+	long
 	getMaxBytesPerSecond();
 	
-	public void
+	void
 	setMaxBytesPerSecond(
-		long		max );
+            long max);
 	
-	public void
+	void
 	addListener(
-		TranscodeQueueListener		listener );
+            TranscodeQueueListener listener);
 	
-	public void
+	void
 	removeListener(
-		TranscodeQueueListener		listener );
+            TranscodeQueueListener listener);
 	
-	public void
+	void
 	addActionListener(
-		TranscodeQueueActionListener		listener );
+            TranscodeQueueActionListener listener);
 	
-	public void
+	void
 	removeActionListener(
-		TranscodeQueueActionListener		listener );
+            TranscodeQueueActionListener listener);
 }

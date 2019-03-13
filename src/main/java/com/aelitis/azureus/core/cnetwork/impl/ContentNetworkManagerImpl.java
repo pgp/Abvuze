@@ -74,32 +74,28 @@ ContentNetworkManagerImpl
 					VuzeFile[]		files,
 					int				expected_types )
 				{
-					for (int i=0;i<files.length;i++){
-						
-						VuzeFile	vf = files[i];
-						
-						VuzeFileComponent[] comps = vf.getComponents();
-						
-						for (int j=0;j<comps.length;j++){
-							
-							VuzeFileComponent comp = comps[j];
-							
-							if ( comp.getType() == VuzeFileComponent.COMP_TYPE_CONTENT_NETWORK ){
-								
-								try{								
-									((ContentNetworkManagerImpl)getSingleton()).importNetwork( comp.getContent());
-								
-									comp.setProcessed();
-									
-								}catch( Throwable e ){
-									
-									log( "Failed to import from vuze file", e );
-							
-									Debug.out( e );
-								}
-							}
-						}
-					}
+                    for (VuzeFile vf : files) {
+
+                        VuzeFileComponent[] comps = vf.getComponents();
+
+                        for (VuzeFileComponent comp : comps) {
+
+                            if (comp.getType() == VuzeFileComponent.COMP_TYPE_CONTENT_NETWORK) {
+
+                                try {
+                                    ((ContentNetworkManagerImpl) getSingleton()).importNetwork(comp.getContent());
+
+                                    comp.setProcessed();
+
+                                } catch (Throwable e) {
+
+                                    log("Failed to import from vuze file", e);
+
+                                    Debug.out(e);
+                                }
+                            }
+                        }
+                    }
 				}
 			});		
 	}
@@ -110,9 +106,9 @@ ContentNetworkManagerImpl
 		return( singleton );
 	}
 	
-	private List<ContentNetworkImpl>	networks = new ArrayList<ContentNetworkImpl>();
+	private List<ContentNetworkImpl>	networks = new ArrayList<>();
 	
-	private CopyOnWriteList<ContentNetworkListener>	listeners = new CopyOnWriteList<ContentNetworkListener>();
+	private CopyOnWriteList<ContentNetworkListener>	listeners = new CopyOnWriteList<>();
 	
 	protected
 	ContentNetworkManagerImpl()
@@ -139,53 +135,45 @@ ContentNetworkManagerImpl
 				
 				try{
 					InputStream[] streams = cust.getResources( Customization.RT_CNETWORKS );
-					
-					for (int i=0;i<streams.length;i++){
-						
-						InputStream is = streams[i];
-						
-						try{
-							VuzeFile vf = VuzeFileHandler.getSingleton().loadVuzeFile(is);
-							
-							if ( vf != null ){
-								
-								VuzeFileComponent[] comps = vf.getComponents();
-								
-								for (int j=0;j<comps.length;j++){
-									
-									VuzeFileComponent comp = comps[j];
-									
-									int type = comp.getType();
-									
-									if ( type == VuzeFileComponent.COMP_TYPE_CONTENT_NETWORK ){
-										
-										try{
-												// change here as we always add all networks upfront so
-												// we always set the customisation flag regardless of
-												// whether existing or not
-											
-											ContentNetwork imported = importNetwork( comp.getContent());
-											
-											imported.setPersistentProperty( ContentNetwork.PP_IS_CUSTOMIZATION, true );
-											
-											comp.setProcessed();
-											
-										}catch( Throwable e ){
-											
-											log( "Failed to import customisation network", e );
-										}
-									}
-								}
-							}
-						}finally{
-							
-							try{
-								is.close();
-								
-							}catch( Throwable e ){
-							}
+
+                    for (InputStream is : streams) {
+
+                        try {
+                            VuzeFile vf = VuzeFileHandler.getSingleton().loadVuzeFile(is);
+
+                            if (vf != null) {
+
+                                VuzeFileComponent[] comps = vf.getComponents();
+
+                                for (VuzeFileComponent comp : comps) {
+
+                                    int type = comp.getType();
+
+                                    if (type == VuzeFileComponent.COMP_TYPE_CONTENT_NETWORK) {
+
+                                        try {
+                                            // change here as we always add all networks upfront so
+                                            // we always set the customisation flag regardless of
+                                            // whether existing or not
+
+                                            ContentNetwork imported = importNetwork(comp.getContent());
+
+                                            imported.setPersistentProperty(ContentNetwork.PP_IS_CUSTOMIZATION, true);
+
+                                            comp.setProcessed();
+
+                                        } catch (Throwable e) {
+
+                                            log("Failed to import customisation network", e);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        finally {
+                        	try{ is.close();} catch (IOException e) {}
 						}
-					}
+                    }
 				}finally{
 					
 					COConfigurationManager.setParameter( "cnetworks.custom.name", cust.getName());
@@ -291,7 +279,7 @@ ContentNetworkManagerImpl
 	{
 		synchronized( this ){
 			
-			return((ContentNetwork[])networks.toArray( new ContentNetworkImpl[ networks.size()] ));
+			return networks.toArray( new ContentNetworkImpl[ networks.size()] );
 		}
 	}
 	
@@ -300,16 +288,14 @@ ContentNetworkManagerImpl
 		long id ) 
 	{
 		synchronized( this ){
-			
-			for ( int i=0;i<networks.size();i++ ){
-					
-				ContentNetworkImpl network = networks.get(i);
-				
-				if ( network.getID() == id ){
-				
-					return( network );
-				}
-			}
+
+            for (ContentNetworkImpl network : networks) {
+
+                if (network.getID() == id) {
+
+                    return (network);
+                }
+            }
 			
 			return( null );
 		}
@@ -322,39 +308,35 @@ ContentNetworkManagerImpl
 		boolean	replace = false;
 		
 		synchronized( this ){
-		
-			Iterator<ContentNetworkImpl> it = networks.iterator();
-			
-			while( it.hasNext()){
-				
-				ContentNetworkImpl existing_network = it.next();
-				
-				if ( existing_network.getID() == network.getID()){
-					
-					if ( network.getVersion() > existing_network.getVersion()){
-						
-						try{
-							existing_network.updateFrom( network );
-						
-						}catch( Throwable e ){
-							
-							Debug.printStackTrace( e );
-						}
-						
-						network = existing_network;
-						
-						replace = true;
-						
-						break;
-						
-					}else{
-						
-						log( "Network " + existing_network.getString() + " already up to date" );
-						
-						return( existing_network );
-					}
-				}
-			}
+
+            for (ContentNetworkImpl existing_network : networks) {
+
+                if (existing_network.getID() == network.getID()) {
+
+                    if (network.getVersion() > existing_network.getVersion()) {
+
+                        try {
+                            existing_network.updateFrom(network);
+
+                        } catch (Throwable e) {
+
+                            Debug.printStackTrace(e);
+                        }
+
+                        network = existing_network;
+
+                        replace = true;
+
+                        break;
+
+                    } else {
+
+                        log("Network " + existing_network.getString() + " already up to date");
+
+                        return (existing_network);
+                    }
+                }
+            }
 
 			if ( replace ){
 			
@@ -375,7 +357,7 @@ ContentNetworkManagerImpl
 			}
 		}
 		
-		Iterator<ContentNetworkListener>	 it = (Iterator<ContentNetworkListener>)listeners.iterator();
+		Iterator<ContentNetworkListener>	 it = listeners.iterator();
 		
 		while( it.hasNext()){
 			
@@ -415,7 +397,7 @@ ContentNetworkManagerImpl
 		
 		log( "Removed network: " + network.getString());
 		
-		Iterator<ContentNetworkListener>	 it = (Iterator<ContentNetworkListener>)listeners.iterator();
+		Iterator<ContentNetworkListener>	 it = listeners.iterator();
 		
 		while( it.hasNext()){
 			
@@ -439,24 +421,24 @@ ContentNetworkManagerImpl
 			List list = (List)map.get( "networks" );
 			
 			if ( list != null ){
-				
-				for (int i=0;i<list.size();i++){
-					
-					Map	cnet_map = (Map)list.get(i);
-					
-					try{
-						
-						ContentNetworkImpl cn = ContentNetworkImpl.importFromBEncodedMapStatic( this, cnet_map );
-						
-						if ( cn.getID() != ContentNetwork.CONTENT_NETWORK_VUZE ){
-							
-							networks.add( cn );
-						}
-					}catch( Throwable e ){
-						
-						log( "Failed to load " + cnet_map, e );
-					}
-				}
+
+                for (Object o : list) {
+
+                    Map cnet_map = (Map) o;
+
+                    try {
+
+                        ContentNetworkImpl cn = ContentNetworkImpl.importFromBEncodedMapStatic(this, cnet_map);
+
+                        if (cn.getID() != ContentNetwork.CONTENT_NETWORK_VUZE) {
+
+                            networks.add(cn);
+                        }
+                    } catch (Throwable e) {
+
+                        log("Failed to load " + cnet_map, e);
+                    }
+                }
 			}
 		}
 	}
@@ -469,30 +451,26 @@ ContentNetworkManagerImpl
 		List list = new ArrayList();
 		
 		map.put( "networks", list );
-		
-		Iterator<ContentNetworkImpl> it = networks.iterator();
-		
-		while( it.hasNext()){
-			
-			ContentNetworkImpl network = it.next();
 
-			if ( network.getID() == ContentNetwork.CONTENT_NETWORK_VUZE ){
-				
-				continue;
-			}
-			
-			Map	cnet_map = new HashMap();
-			
-			try{
-				network.exportToBEncodedMap( cnet_map );
-			
-				list.add( cnet_map );
-				
-			}catch( Throwable e ){
-				
-				log( "Failed to save " + network.getName(), e );
-			}
-		}
+        for (ContentNetworkImpl network : networks) {
+
+            if (network.getID() == ContentNetwork.CONTENT_NETWORK_VUZE) {
+
+                continue;
+            }
+
+            Map cnet_map = new HashMap();
+
+            try {
+                network.exportToBEncodedMap(cnet_map);
+
+                list.add(cnet_map);
+
+            } catch (Throwable e) {
+
+                log("Failed to save " + network.getName(), e);
+            }
+        }
 		
 		if ( list.size() == 0 ){
 			
@@ -528,15 +506,11 @@ ContentNetworkManagerImpl
 			writer.indent();
 
 			synchronized( this ){
-				
-				Iterator<ContentNetworkImpl> it = networks.iterator();
-				
-				while( it.hasNext()){
-					
-					ContentNetworkImpl network = it.next();
-					
-					writer.println( network.getString());
-				}
+
+                for (ContentNetworkImpl network : networks) {
+
+                    writer.println(network.getString());
+                }
 			}			
 		}finally{
 			

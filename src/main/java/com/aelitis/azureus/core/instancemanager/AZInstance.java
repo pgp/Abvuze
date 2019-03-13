@@ -25,33 +25,33 @@ import java.net.InetAddress;
 public interface 
 AZInstance 
 {
-	public String
+	String
 	getID();
 	
-	public String
+	String
 	getApplicationID();
 	
-	public InetAddress
+	InetAddress
 	getInternalAddress();
 	
-	public List
+	List
 	getInternalAddresses();
 
-	public InetAddress
+	InetAddress
 	getExternalAddress();
 	
-	public int
+	int
 	getTCPListenPort();
 	
-	public int
+	int
 	getUDPListenPort();
 	
-	public int
+	int
 	getUDPNonDataListenPort();
 	
-	public Map<String,Object>
+	Map<String,Object>
 	getProperties();
 	
-	public String
+	String
 	getString();
 }

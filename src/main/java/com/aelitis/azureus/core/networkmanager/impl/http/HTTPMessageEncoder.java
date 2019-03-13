@@ -46,31 +46,37 @@ HTTPMessageEncoder
 		// System.out.println( "encodeMessage: " + message.getID());
 		
 		RawMessage	raw_message = null;
-		
-		if ( id.equals( BTMessage.ID_BT_HANDSHAKE )){
-		
-			raw_message = http_connection.encodeHandShake( message );
-			
-		}else if ( id.equals( BTMessage.ID_BT_CHOKE )){
-			
-			raw_message = http_connection.encodeChoke();
-		
-		}else if ( id.equals( BTMessage.ID_BT_UNCHOKE )){
-			
-			raw_message = http_connection.encodeUnchoke();
 
-		}else if ( id.equals( BTMessage.ID_BT_BITFIELD)){
-			
-			raw_message = http_connection.encodeBitField();
+        switch (id) {
+            case BTMessage.ID_BT_HANDSHAKE:
 
-		}else if ( id.equals( BTMessage.ID_BT_PIECE )){
-						
-			return( http_connection.encodePiece( message ));
-			
-		}else if ( id.equals( HTTPMessage.MSG_ID )){
+                raw_message = http_connection.encodeHandShake(message);
 
-			raw_message = ((HTTPMessage)message).encode( message );
-		}
+                break;
+            case BTMessage.ID_BT_CHOKE:
+
+                raw_message = http_connection.encodeChoke();
+
+                break;
+            case BTMessage.ID_BT_UNCHOKE:
+
+                raw_message = http_connection.encodeUnchoke();
+
+                break;
+            case BTMessage.ID_BT_BITFIELD:
+
+                raw_message = http_connection.encodeBitField();
+
+                break;
+            case BTMessage.ID_BT_PIECE:
+
+                return (http_connection.encodePiece(message));
+
+            case HTTPMessage.MSG_ID:
+
+                raw_message = ((HTTPMessage) message).encode(message);
+                break;
+        }
 			
 		if ( raw_message == null ){
 			

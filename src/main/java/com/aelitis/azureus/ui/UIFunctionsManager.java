@@ -45,7 +45,7 @@ public class UIFunctionsManager
 				
 				if ( callbacks == null ){
 					
-					callbacks = new ArrayList<UIFunctionsManager.UIFCallback>();
+					callbacks = new ArrayList<>();
 				}
 				
 				callbacks.add( cb );
@@ -77,7 +77,7 @@ public class UIFunctionsManager
 			
 			if ( callbacks != null ){
 				
-				pending = new ArrayList<UIFunctionsManager.UIFCallback>( callbacks );
+				pending = new ArrayList<>(callbacks);
 				
 				callbacks = null;
 			}
@@ -101,8 +101,8 @@ public class UIFunctionsManager
 	public interface
 	UIFCallback
 	{
-		public void
+		void
 		run(
-			UIFunctions		functions );
+                UIFunctions functions);
 	}
 }

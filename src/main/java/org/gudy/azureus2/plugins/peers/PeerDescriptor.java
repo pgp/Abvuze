@@ -22,23 +22,23 @@ package org.gudy.azureus2.plugins.peers;
 public interface 
 PeerDescriptor 
 {
-	public String 
+	String
 	getIP();
 	
-	public int 
+	int
 	getTCPPort();
 	  
-	public int 
+	int
 	getUDPPort();
 	
-	public boolean
+	boolean
 	useCrypto();
 	
 		/**
 		 * source as defined in DownloadAnnounceResultPeer
 		 * @return
 		 */
-	
-	public String
+
+        String
 	getPeerSource();
 }

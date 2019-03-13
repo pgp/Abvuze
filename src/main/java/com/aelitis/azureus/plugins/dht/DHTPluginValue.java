@@ -27,18 +27,18 @@ package com.aelitis.azureus.plugins.dht;
 public interface 
 DHTPluginValue 
 {
-	public byte[]
+	byte[]
 	getValue();
 
-	public long
+	long
 	getCreationTime();
 	
-	public long
+	long
 	getVersion();
 	
-	public boolean
+	boolean
 	isLocal();
 	
-	public int
+	int
 	getFlags();
 }

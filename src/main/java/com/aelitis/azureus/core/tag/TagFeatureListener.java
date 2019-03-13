@@ -23,8 +23,8 @@ package com.aelitis.azureus.core.tag;
 public interface 
 TagFeatureListener 
 {
-	public void
+	void
 	tagFeatureChanged(
-		Tag		tag,
-		int		feature );
+            Tag tag,
+            int feature);
 }

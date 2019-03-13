@@ -30,35 +30,35 @@ import org.gudy.azureus2.plugins.PluginInterface;
 public interface 
 InstallablePlugin 
 {
-	public String
+	String
 	getId();
 	
-	public String
+	String
 	getVersion();
 	
-	public String
+	String
 	getName();
 	
-	public String
+	String
 	getDescription();
 	
-	public String
+	String
 	getRelativeURLBase();
 	
 		/**
 		 * Returns the plugin's interface if already installed, null if it isn't
 		 * @return
 		 */
-	
-	public PluginInterface
+
+        PluginInterface
 	getAlreadyInstalledPlugin();
 	
-	public boolean
+	boolean
 	isAlreadyInstalled();
 	
-	public void
+	void
 	install(
-		boolean		shared )
+            boolean shared)
 	
 		throws PluginException;
 	
@@ -70,12 +70,12 @@ InstallablePlugin
 		 * @throws PluginException
 		 * @since 3.1.1.1
 		 */
-	
-	public void
+
+        void
 	install(
-		boolean		shared,
-		boolean		low_noise,
-		boolean		wait_until_done )
+                boolean shared,
+                boolean low_noise,
+                boolean wait_until_done)
 	
 		throws PluginException;
 	
@@ -84,11 +84,11 @@ InstallablePlugin
 		 * @throws PluginException
 		 */
 
-	public void
+        void
 	uninstall()
 	
 		throws PluginException;
 	
-	public PluginInstaller
+	PluginInstaller
 	getInstaller();
 }

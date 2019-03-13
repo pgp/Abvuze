@@ -46,94 +46,94 @@ AZ3Functions
 	public interface
 	provider
 	{
-		public static int SERVICE_SITE_RELATIVE = 27;
+		int SERVICE_SITE_RELATIVE = 27;
 
-		public void
+		void
 		subscribeToRSS(
-			String		name,
-			URL 		url,
-			int			interval,
-			boolean		is_public,
-			String		creator_ref )
+                String name,
+                URL url,
+                int interval,
+                boolean is_public,
+                String creator_ref)
 		
 			throws Exception;
 		
-		public void
+		void
 		subscribeToSubscription(
-			String		uri )
+                String uri)
 		
 			throws Exception;
 		
-		public void
+		void
 		openRemotePairingWindow();
 		
-		public boolean
+		boolean
 		canPlay(
-			DownloadManager		dm,
-			int					file_index );
+                DownloadManager dm,
+                int file_index);
 		
-		public void
+		void
 		play(
-			DownloadManager		dm,
-			int					file_index );
+                DownloadManager dm,
+                int file_index);
 
-		public boolean
+		boolean
 		openChat(
-			String				network,
-			String				key );
+                String network,
+                String key);
 		
-		public void
+		void
 		setOpened(
-			DownloadManager		dm,
-			boolean				opened );
+                DownloadManager dm,
+                boolean opened);
 		
-		public TranscodeTarget[]
+		TranscodeTarget[]
 		getTranscodeTargets();
 		
-		public interface
+		interface
 		TranscodeTarget
 		{
-			public String
+			String
 			getID();
 			
-			public String
+			String
 			getName();
 			
-			public TranscodeProfile[]
+			TranscodeProfile[]
 			getProfiles();
 		}
 		
-		public interface
+		interface
 		TranscodeProfile
 		{
-			public String
+			String
 			getUID();
 			
-			public String
+			String
 			getName();
 		}
 
-		public String
+		String
 		getDefaultContentNetworkURL(
-				int type, 
-				Object[] params);
+                int type,
+                Object[] params);
 		
-		public void
+		void
 		addLocalActivity(
-			String									uid,
-			String									icon_id,
-			String									name,
-			String[]								actions,
-			Class<? extends LocalActivityCallback>	callback,
-			Map<String,String>						callback_data );
+                String uid,
+                String icon_id,
+                String name,
+                String[] actions,
+                Class<? extends LocalActivityCallback> callback,
+                Map<String, String> callback_data);
 		
-		public interface
+		interface
 		LocalActivityCallback
 		{
-			public void
+			void
 			actionSelected(
-				String				action,
-				Map<String,String>	data );
+                    String action,
+                    Map<String, String> data);
 		}
 	}
 }

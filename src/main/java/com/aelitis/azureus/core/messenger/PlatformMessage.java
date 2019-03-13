@@ -82,7 +82,7 @@ public class PlatformMessage
 	}
 
 	public static Map<String, Object> parseParams(Object[] parameters) {
-		Map<String, Object> result = new HashMap<String, Object>();
+		Map<String, Object> result = new HashMap<>();
 		for (int i = 0; i < parameters.length - 1; i += 2) {
 			try {
 				if (parameters[i] instanceof String) {
@@ -93,7 +93,7 @@ public class PlatformMessage
 						result.put((String) parameters[i],
 								parseParams((Object[]) parameters[i + 1]));
 					} else if (parameters[i + 1] instanceof Map) {
-						result.put((String) parameters[i], (Map) parameters[i + 1]);
+						result.put((String) parameters[i], parameters[i + 1]);
 					} else {
 						result.put((String) parameters[i], parameters[i + 1]);
 					}

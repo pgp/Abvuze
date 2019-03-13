@@ -23,14 +23,14 @@ package com.aelitis.azureus.core.devices;
 public interface 
 TranscodeAnalysisListener 
 {
-	public void
+	void
 	analysisComplete(
-		TranscodeJob					file,
-		TranscodeProviderAnalysis		analysis );
+            TranscodeJob file,
+            TranscodeProviderAnalysis analysis);
 	
-	public void
+	void
 	analysisFailed(
-		TranscodeJob		file,
-		TranscodeException	error );
+            TranscodeJob file,
+            TranscodeException error);
 		
 }

@@ -139,80 +139,77 @@ public class UploadSlotManager {
 		
 		
 		//go through all currently expired slots and pick sessions for next round
-		for( int i=0; i < slots.length; i++ ) {
-			UploadSlot slot = slots[i];
-			
-			if( slot.getExpireRound() <= current_round ) {  //expired			
-				UploadSession session = slot.getSession();
-				
-				if( session != null ) {
-					to_stop.add( session );  //make sure it gets stopped
-					slot.setSession( null );  //clear slot					
-				}
-				
-				if( slot.getSlotType() == UploadSlot.TYPE_OPTIMISTIC ) {		//optimistic
-					//pick new session for optimistic upload
-					session = pickOptSession();
-					
-					if( session == null ) {
-						continue;
-					}
-					
-					if( session.getSessionType() == UploadSession.TYPE_SEED ) {  //place first seed session in a normal slot
-						best_sessions.addFirst( session );  //put at front of good list to ensure it gets picked						
-						//pick a new optimistic session, whatever type
-						session = pickOptSession();						
-						if( session == null )  continue;
-					}
-					
-					slot.setSession( session );  //place the new session in the slot
-					slot.setExpireRound( current_round + EXPIRE_OPTIMISTIC );  //set the new expire time
-				}
-				else {   //normal					
-					session = getNextBestSession( best_sessions );  //get the next "best" session
-					
-					if( session == null && best_size == slots.length ) {
-						Debug.out( "session == null && best_size == slots.length" );
-					}
-					
-					
-					if( session == null ) {  //no download mode peers, must be only seeding; or all best are already slotted						
-						session = pickOptSession();   //just pick the next optimistic
-						if( session == null )  continue;   //no optimistic either
-					}
-					
-					slot.setSession( session );  //place the session in the slot
-					slot.setExpireRound( current_round + ( session.getSessionType() == UploadSession.TYPE_SEED ? EXPIRE_SEED : EXPIRE_NORMAL ) );  //set the new expire time
-				}
-				
-			}
-		}
+        for (UploadSlot slot : slots) {
+            if (slot.getExpireRound() <= current_round) {  //expired
+                UploadSession session = slot.getSession();
+
+                if (session != null) {
+                    to_stop.add(session);  //make sure it gets stopped
+                    slot.setSession(null);  //clear slot
+                }
+
+                if (slot.getSlotType() == UploadSlot.TYPE_OPTIMISTIC) {        //optimistic
+                    //pick new session for optimistic upload
+                    session = pickOptSession();
+
+                    if (session == null) {
+                        continue;
+                    }
+
+                    if (session.getSessionType() == UploadSession.TYPE_SEED) {  //place first seed session in a normal slot
+                        best_sessions.addFirst(session);  //put at front of good list to ensure it gets picked
+                        //pick a new optimistic session, whatever type
+                        session = pickOptSession();
+                        if (session == null) continue;
+                    }
+
+                    slot.setSession(session);  //place the new session in the slot
+                    slot.setExpireRound(current_round + EXPIRE_OPTIMISTIC);  //set the new expire time
+                } else {   //normal
+                    session = getNextBestSession(best_sessions);  //get the next "best" session
+
+                    if (session == null && best_size == slots.length) {
+                        Debug.out("session == null && best_size == slots.length");
+                    }
+
+
+                    if (session == null) {  //no download mode peers, must be only seeding; or all best are already slotted
+                        session = pickOptSession();   //just pick the next optimistic
+                        if (session == null) continue;   //no optimistic either
+                    }
+
+                    slot.setSession(session);  //place the session in the slot
+                    slot.setExpireRound(current_round + (session.getSessionType() == UploadSession.TYPE_SEED ? EXPIRE_SEED : EXPIRE_NORMAL));  //set the new expire time
+                }
+
+            }
+        }
 				
 		//start and stop sessions for the round
 	
 		//filter out sessions allowed to continue another round, so we don't stop-start them
 		for( Iterator it = to_stop.iterator(); it.hasNext(); ) {
 			UploadSession stop_s = (UploadSession)it.next();
-			
-			for( int i=0; i < slots.length; i++ ) {
-				if( stop_s.isSameSession( slots[i].getSession() ) ) {  //need to do this because two session objects can represent the same peer
-					it.remove();
-					break;
-				}
-			}		
+
+            for (UploadSlot slot : slots) {
+                if (stop_s.isSameSession(slot.getSession())) {  //need to do this because two session objects can represent the same peer
+                    it.remove();
+                    break;
+                }
+            }
 		}
 		
 		//stop discontinued sessions
-		for( Iterator it = to_stop.iterator(); it.hasNext(); ) {  
-			UploadSession session = (UploadSession)it.next();
-			session.stop();
-		}
+        for (Object o : to_stop) {
+            UploadSession session = (UploadSession) o;
+            session.stop();
+        }
 
 		//ensure sessions are started
-		for( int i=0; i < slots.length; i++ ) {
-			UploadSession s = slots[i].getSession();
-			if( s != null )  s.start();
-		}
+        for (UploadSlot slot : slots) {
+            UploadSession s = slot.getSession();
+            if (s != null) s.start();
+        }
 		
 		printSlotStats();		
 	}
@@ -266,10 +263,10 @@ public class UploadSlotManager {
 	
 	
 	private boolean isAlreadySlotted( UploadSession session ) {
-		for( int i=0; i < slots.length; i++ ) {
-			UploadSession s = slots[i].getSession();
-			if( s != null && s.isSameSession( session ) )  return true;			
-		}
+        for (UploadSlot slot : slots) {
+            UploadSession s = slot.getSession();
+            if (s != null && s.isSameSession(session)) return true;
+        }
 		
 		return false;
 	}

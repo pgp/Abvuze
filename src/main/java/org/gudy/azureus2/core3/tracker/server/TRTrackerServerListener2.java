@@ -31,51 +31,51 @@ import org.gudy.azureus2.core3.util.AsyncController;
 public interface 
 TRTrackerServerListener2 
 {
-	public boolean
+	boolean
 	handleExternalRequest(
-		ExternalRequest		request )
+            ExternalRequest request)
 	
 		throws IOException;
 	
 	
-	public interface
+	interface
 	ExternalRequest
 	{
-		public InetSocketAddress
+		InetSocketAddress
 		getClientAddress();
 		
-		public InetSocketAddress
+		InetSocketAddress
 		getLocalAddress();
 
-		public String
+		String
 		getUser();
 		
-		public String
+		String
 		getURL();
 		
-		public URL
+		URL
 		getAbsoluteURL();
 		
-		public String
+		String
 		getHeader();
 		
-		public InputStream
+		InputStream
 		getInputStream();
 		
-		public OutputStream
+		OutputStream
 		getOutputStream();
 		
-		public boolean
+		boolean
 		isActive();
 		
-		public AsyncController
+		AsyncController
 		getAsyncController();
 		
-		public boolean
+		boolean
 		canKeepAlive();
 		
-		public void
+		void
 		setKeepAlive(
-			boolean		ka );
+                boolean ka);
 	}
 }

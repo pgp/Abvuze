@@ -22,6 +22,7 @@ package com.aelitis.azureus.core.subs.impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.security.Signature;
 import java.util.*;
 
@@ -219,13 +220,13 @@ SubscriptionBodyImpl
 		
 		sig_data_size	= l_size.intValue();
 		
-		name		= new String((byte[])details.get( "name" ), "UTF-8" );
+		name		= new String((byte[])details.get( "name" ), StandardCharsets.UTF_8);
 		public_key	= (byte[])details.get( "public_key" );
 		version		= ((Long)details.get( "version" )).intValue();
 		is_public	= ((Long)details.get( "is_public" )).intValue()==1; 
 		Long anon	= (Long)details.get( "is_anonymous");
 		is_anonymous = anon==null?null:anon==1;
-		json		= new String((byte[])details.get( "json"), "UTF-8" );
+		json		= new String((byte[])details.get( "json"), StandardCharsets.UTF_8);
 		
 		singleton_details = (Map)details.get( "sin_details" );
 		
@@ -305,15 +306,15 @@ SubscriptionBodyImpl
 			
 		map.put( "details", details );
 		
-		details.put( "name", name.getBytes( "UTF-8" ));
-		details.put( "is_public", new Long( is_public?1:0 ));
+		details.put( "name", name.getBytes(StandardCharsets.UTF_8));
+		details.put( "is_public", (long) (is_public ? 1 : 0));
 		if ( is_anonymous ){
-			details.put( "is_anonymous", new Long( 1 ));
+			details.put( "is_anonymous", 1L);
 		}
 		details.put( "public_key", public_key );
-		details.put( "version", new Long( version ));
-		details.put( "az_version", new Long( az_version ));
-		details.put( "json", _json_content.getBytes( "UTF-8" ));
+		details.put( "version", (long) version);
+		details.put( "az_version", (long) az_version);
+		details.put( "json", _json_content.getBytes(StandardCharsets.UTF_8));
 		
 		if ( singleton_details != null ){
 			
@@ -346,17 +347,17 @@ SubscriptionBodyImpl
 		az_version	= subs.getAZVersion();
 		name		= subs.getName(false);
 		
-		details.put( "name",name.getBytes( "UTF-8" ));
-		details.put( "is_public", new Long( is_public?1:0 ));
+		details.put( "name",name.getBytes(StandardCharsets.UTF_8));
+		details.put( "is_public", (long) (is_public ? 1 : 0));
 		if ( is_anonymous != null ){
-			details.put( "is_anonymous", new Long( is_anonymous?1:0 ));
+			details.put( "is_anonymous", (long) (is_anonymous ? 1 : 0));
 		}
-		details.put( "version", new Long( version ));
-		details.put( "az_version", new Long( az_version ));
+		details.put( "version", (long) version);
+		details.put( "az_version", (long) az_version);
 		
 		if ( json != null ){
 		
-			details.put( "json", json.getBytes( "UTF-8" ));
+			details.put( "json", json.getBytes(StandardCharsets.UTF_8));
 		}
 		
 		if ( singleton_details != null ){
@@ -487,7 +488,7 @@ SubscriptionBodyImpl
 					throw( new SubscriptionException( "Only the originator of a subscription can modify it" ));
 				}
 							
-				map.put( "size", new Long( contents.length ));
+				map.put( "size", (long) contents.length);
 				
 				try{				
 					map.put( "hash", new_hash );

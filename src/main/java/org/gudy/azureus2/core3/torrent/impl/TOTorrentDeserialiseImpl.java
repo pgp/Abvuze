@@ -294,246 +294,241 @@ TOTorrentDeserialiseImpl
 			boolean	bad_announce		= false;
 			
 				// decode the stuff
-			
-			Iterator root_it = meta_data.keySet().iterator();
-	
-			while( root_it.hasNext()){
-				
-				String	key = (String)root_it.next();
-				
-				if ( key.equalsIgnoreCase( TK_ANNOUNCE )){
-							
-					got_announce	= true;
-					
-					announce_url = readStringFromMetaData( meta_data, TK_ANNOUNCE );
-					
-					if ( announce_url == null || announce_url.trim().length() == 0 ){
-						
-						bad_announce = true;
-						
-					}else{
-						
-						announce_url = announce_url.replaceAll( " ", "" );
-						
-						try{
-						
-							setAnnounceURL( new URL(announce_url));
-							
-						}catch( MalformedURLException e ){
-							
-							if (!announce_url.contains("://")){
-								
-								announce_url = "http:/" + (announce_url.startsWith("/")?"":"/") + announce_url;
-								
-							}else if ( announce_url.startsWith( "utp:" )){
-								
-								// common typo for udp
-								
-								announce_url = "udp" + announce_url.substring( 3 );
-							}
-							
-							try{
-								
-								setAnnounceURL(new URL(announce_url));
-									
-							}catch( MalformedURLException f ){
-									
-								Debug.out( "Invalid announce url: " + announce_url );
-								
-								bad_announce	= true;
-							}
-						}
-					}
-					
-				}else if ( key.equalsIgnoreCase( TK_ANNOUNCE_LIST )){
-	
-					got_announce_list	= true;
-					
-					List	announce_list = null;
-					
-					Object	ann_list = meta_data.get( TK_ANNOUNCE_LIST );
-					
-					if ( ann_list instanceof List ){   //some malformed torrents have this key as a zero-sized string instead of a zero-sized list
-						
-						announce_list = (List)ann_list;
-					}
-					
-					if ( announce_list != null && announce_list.size() > 0 ){
-            
-			            announce_url = readStringFromMetaData( meta_data, TK_ANNOUNCE );
-			            
-			            if ( announce_url != null ){
-			            	
-				            announce_url = announce_url.replaceAll( " ", "" );
-			            }
-			            
-			            boolean announce_url_found = false;
-            
-						for (int i=0;i<announce_list.size();i++){
-							
-							Object temp = announce_list.get(i);
-							
-								// sometimes we just get a byte[]! turn into a list
-							
-							if ( temp instanceof byte[] ){
-							
-								List l = new ArrayList();
-								
-								l.add( temp );
-								
-								temp = l;
-							}
-							
-							if ( temp instanceof List ){
-								
-								Vector urls = new Vector();
 
-								List	set = (List)temp;
-																				
-								while( set.size() > 0 ){
-							
-									Object temp2 = set.remove(0);	// seen a case where this is a list with the announce url first and then some other junk
+            for (Object o1 : meta_data.keySet()) {
 
-									try{										
-										if ( temp2 instanceof List ){
-											
-											List junk = (List)temp2;
-											
-											if ( junk.size() > 0 ){
-												
-												set.add( junk.get(0));
-											}
-											
-											continue;
-										}
-										
-										String url_str = readStringFromMetaData((byte[])temp2);
-											
-										url_str = url_str.replaceAll( " ", "" );
-		                  
-							                	//check to see if the announce url is somewhere in the announce-list
-																				
-							            try{
-							            	urls.add( new URL( StringInterner.intern(url_str) ));		
-								    
-							            	if ( url_str.equalsIgnoreCase( announce_url )) {
-							                	
-							            		announce_url_found = true;
-							            	}
-								
-							            }catch( MalformedURLException e ){
-											
-							            	if (!url_str.contains("://")){
-													
-							            		url_str = "http:/" + (url_str.startsWith("/")?"":"/") + url_str;
-							            		
-											}else if ( url_str.startsWith( "utp:" )){
-											
-													// common typo
-												
-												url_str = "udp" + url_str.substring( 3 );
-											}
-									         
-											try{
-								           		urls.add( new URL( StringInterner.intern(url_str) ));		
-								          
-								           		if ( url_str.equalsIgnoreCase( announce_url )) {
-								                	
-								            		announce_url_found = true;
-								            	}
-								       
-											}catch( MalformedURLException f ){
-						
-												Debug.out( "Invalid url: " + url_str, f );
-											} 
-							            }
-									}catch( Throwable e ){
-									
-										Debug.out( "Torrent has invalid url-list entry (" + temp2 + ") - ignoring: meta=" + meta_data, e);
-									}
-								}
-								
-								if ( urls.size() > 0 ){
-								
-									URL[]	url_array = new URL[urls.size()];
-									
-									urls.copyInto( url_array );
-									
-									addTorrentAnnounceURLSet( url_array );
-								}								
-							}else{
-								
-								Debug.out( "Torrent has invalid url-list entry (" + temp + ") - ignoring: meta=" + meta_data );
-							}
-						}
-            
-			            	// if the original announce url isn't found, add it to the list
-							// watch out for those invalid torrents with announce url missing
-						
-			            if ( !announce_url_found && announce_url != null && announce_url.length() > 0) {
-			              try {
-			              	Vector urls = new Vector();
-			              	urls.add( new URL( StringInterner.intern(announce_url) ));
-			              	URL[] url_array = new URL[ urls.size() ];
-			              	urls.copyInto( url_array );
-			              	addTorrentAnnounceURLSet( url_array );
-			              }
-			              catch( Exception e ){ 
-			            	  Debug.out( "Invalid URL '" + announce_url + "' - meta=" + meta_data, e ); 
-			              }
-			            }
-					}
-				}else if ( key.equalsIgnoreCase( TK_COMMENT )){
-					
-					setComment((byte[])meta_data.get( TK_COMMENT ));
-						
-				}else if ( key.equalsIgnoreCase( TK_CREATED_BY )){
-			
-					setCreatedBy((byte[])meta_data.get( TK_CREATED_BY ));
+                String key = (String) o1;
 
-				}else if ( key.equalsIgnoreCase( TK_CREATION_DATE )){
-			
-					// non standard, don't fail if format wrong
-						
-					try{
-				
-						Long creation_date = (Long)meta_data.get( TK_CREATION_DATE );
-					
-						if ( creation_date != null ){
-						
-							setCreationDate( creation_date.longValue());
-						}
-					}catch( Exception e ){
-						
-						System.out.println( "creation_date extraction fails, ignoring");
-					}
-									
-				}else if ( key.equalsIgnoreCase( TK_INFO )){
-					
-					// processed later
-					
-				}else{
-					
-					Object	prop = meta_data.get( key );
-					
-					if ( prop instanceof byte[] ){
-						
-						setAdditionalByteArrayProperty( key, (byte[])prop );
-						
-					}else if ( prop instanceof Long ){
-						
-						setAdditionalLongProperty( key, (Long)prop );
-						
-					}else if ( prop instanceof List ){
-						
-						setAdditionalListProperty( key, (List)prop );
-						
-					}else{
-						
-						setAdditionalMapProperty( key, (Map)prop );
-					}
-				}
-			}
+                if (key.equalsIgnoreCase(TK_ANNOUNCE)) {
+
+                    got_announce = true;
+
+                    announce_url = readStringFromMetaData(meta_data, TK_ANNOUNCE);
+
+                    if (announce_url == null || announce_url.trim().length() == 0) {
+
+                        bad_announce = true;
+
+                    } else {
+
+                        announce_url = announce_url.replaceAll(" ", "");
+
+                        try {
+
+                            setAnnounceURL(new URL(announce_url));
+
+                        } catch (MalformedURLException e) {
+
+                            if (!announce_url.contains("://")) {
+
+                                announce_url = "http:/" + (announce_url.startsWith("/") ? "" : "/") + announce_url;
+
+                            } else if (announce_url.startsWith("utp:")) {
+
+                                // common typo for udp
+
+                                announce_url = "udp" + announce_url.substring(3);
+                            }
+
+                            try {
+
+                                setAnnounceURL(new URL(announce_url));
+
+                            } catch (MalformedURLException f) {
+
+                                Debug.out("Invalid announce url: " + announce_url);
+
+                                bad_announce = true;
+                            }
+                        }
+                    }
+
+                } else if (key.equalsIgnoreCase(TK_ANNOUNCE_LIST)) {
+
+                    got_announce_list = true;
+
+                    List announce_list = null;
+
+                    Object ann_list = meta_data.get(TK_ANNOUNCE_LIST);
+
+                    if (ann_list instanceof List) {   //some malformed torrents have this key as a zero-sized string instead of a zero-sized list
+
+                        announce_list = (List) ann_list;
+                    }
+
+                    if (announce_list != null && announce_list.size() > 0) {
+
+                        announce_url = readStringFromMetaData(meta_data, TK_ANNOUNCE);
+
+                        if (announce_url != null) {
+
+                            announce_url = announce_url.replaceAll(" ", "");
+                        }
+
+                        boolean announce_url_found = false;
+
+                        for (Object temp : announce_list) {
+
+                            // sometimes we just get a byte[]! turn into a list
+
+                            if (temp instanceof byte[]) {
+
+                                List l = new ArrayList();
+
+                                l.add(temp);
+
+                                temp = l;
+                            }
+
+                            if (temp instanceof List) {
+
+                                Vector urls = new Vector();
+
+                                List set = (List) temp;
+
+                                while (set.size() > 0) {
+
+                                    Object temp2 = set.remove(0);    // seen a case where this is a list with the announce url first and then some other junk
+
+                                    try {
+                                        if (temp2 instanceof List) {
+
+                                            List junk = (List) temp2;
+
+                                            if (junk.size() > 0) {
+
+                                                set.add(junk.get(0));
+                                            }
+
+                                            continue;
+                                        }
+
+                                        String url_str = readStringFromMetaData((byte[]) temp2);
+
+                                        url_str = url_str.replaceAll(" ", "");
+
+                                        //check to see if the announce url is somewhere in the announce-list
+
+                                        try {
+                                            urls.add(new URL(StringInterner.intern(url_str)));
+
+                                            if (url_str.equalsIgnoreCase(announce_url)) {
+
+                                                announce_url_found = true;
+                                            }
+
+                                        } catch (MalformedURLException e) {
+
+                                            if (!url_str.contains("://")) {
+
+                                                url_str = "http:/" + (url_str.startsWith("/") ? "" : "/") + url_str;
+
+                                            } else if (url_str.startsWith("utp:")) {
+
+                                                // common typo
+
+                                                url_str = "udp" + url_str.substring(3);
+                                            }
+
+                                            try {
+                                                urls.add(new URL(StringInterner.intern(url_str)));
+
+                                                if (url_str.equalsIgnoreCase(announce_url)) {
+
+                                                    announce_url_found = true;
+                                                }
+
+                                            } catch (MalformedURLException f) {
+
+                                                Debug.out("Invalid url: " + url_str, f);
+                                            }
+                                        }
+                                    } catch (Throwable e) {
+
+                                        Debug.out("Torrent has invalid url-list entry (" + temp2 + ") - ignoring: meta=" + meta_data, e);
+                                    }
+                                }
+
+                                if (urls.size() > 0) {
+
+                                    URL[] url_array = new URL[urls.size()];
+
+                                    urls.copyInto(url_array);
+
+                                    addTorrentAnnounceURLSet(url_array);
+                                }
+                            } else {
+
+                                Debug.out("Torrent has invalid url-list entry (" + temp + ") - ignoring: meta=" + meta_data);
+                            }
+                        }
+
+                        // if the original announce url isn't found, add it to the list
+                        // watch out for those invalid torrents with announce url missing
+
+                        if (!announce_url_found && announce_url != null && announce_url.length() > 0) {
+                            try {
+                                Vector urls = new Vector();
+                                urls.add(new URL(StringInterner.intern(announce_url)));
+                                URL[] url_array = new URL[urls.size()];
+                                urls.copyInto(url_array);
+                                addTorrentAnnounceURLSet(url_array);
+                            } catch (Exception e) {
+                                Debug.out("Invalid URL '" + announce_url + "' - meta=" + meta_data, e);
+                            }
+                        }
+                    }
+                } else if (key.equalsIgnoreCase(TK_COMMENT)) {
+
+                    setComment((byte[]) meta_data.get(TK_COMMENT));
+
+                } else if (key.equalsIgnoreCase(TK_CREATED_BY)) {
+
+                    setCreatedBy((byte[]) meta_data.get(TK_CREATED_BY));
+
+                } else if (key.equalsIgnoreCase(TK_CREATION_DATE)) {
+
+                    // non standard, don't fail if format wrong
+
+                    try {
+
+                        Long creation_date = (Long) meta_data.get(TK_CREATION_DATE);
+
+                        if (creation_date != null) {
+
+                            setCreationDate(creation_date);
+                        }
+                    } catch (Exception e) {
+
+                        System.out.println("creation_date extraction fails, ignoring");
+                    }
+
+                } else if (key.equalsIgnoreCase(TK_INFO)) {
+
+                    // processed later
+
+                } else {
+
+                    Object prop = meta_data.get(key);
+
+                    if (prop instanceof byte[]) {
+
+                        setAdditionalByteArrayProperty(key, (byte[]) prop);
+
+                    } else if (prop instanceof Long) {
+
+                        setAdditionalLongProperty(key, (Long) prop);
+
+                    } else if (prop instanceof List) {
+
+                        setAdditionalListProperty(key, (List) prop);
+
+                    } else {
+
+                        setAdditionalMapProperty(key, (Map) prop);
+                    }
+                }
+            }
 
 			if ( bad_announce ){
 				
@@ -599,7 +594,7 @@ TOTorrentDeserialiseImpl
 			
 			setName((byte[])info.get( TK_NAME ));
 				
-			long	piece_length = ((Long)info.get( TK_PIECE_LENGTH )).longValue();
+			long	piece_length = (Long) info.get(TK_PIECE_LENGTH);
 			
 			if ( piece_length <= 0 ){
 				
@@ -622,7 +617,7 @@ TOTorrentDeserialiseImpl
 			
 				setSimpleTorrent( true );
 				
-				total_length = simple_file_length.longValue();
+				total_length = simple_file_length;
 
 				if (hasUTF8Keys) {
 					setNameUTF8((byte[])info.get( TK_NAME_UTF8 ));
@@ -659,7 +654,7 @@ TOTorrentDeserialiseImpl
 					
 					Map	file_map = (Map)meta_files.get(i);
 					
-					long	len = ((Long)file_map.get( TK_LENGTH )).longValue();
+					long	len = (Long) file_map.get(TK_LENGTH);
 					
 					List	paths = (List)file_map.get( TK_PATH );
 					List	paths8 = (List)file_map.get( TK_PATH_UTF8 );
@@ -692,23 +687,21 @@ TOTorrentDeserialiseImpl
 					total_length += len;
 					
 						// preserve any non-standard attributes
-											
-					Iterator file_it = file_map.keySet().iterator();
 
-					while( file_it.hasNext()){
-						
-						String	key = (String)file_it.next();
-						
-						if ( 	key.equals( TK_LENGTH ) ||
-								key.equals( TK_PATH )){
-									
-							// standard
-							// we don't skip TK_PATH_UTF8 because some code might assume getAdditionalProperty can get it
-						}else{
-							
-							file.setAdditionalProperty( key, file_map.get( key ));
-						}
-					}
+                    for (Object o : file_map.keySet()) {
+
+                        String key = (String) o;
+
+                        if (key.equals(TK_LENGTH) ||
+                                key.equals(TK_PATH)) {
+
+                            // standard
+                            // we don't skip TK_PATH_UTF8 because some code might assume getAdditionalProperty can get it
+                        } else {
+
+                            file.setAdditionalProperty(key, file_map.get(key));
+                        }
+                    }
 				}
 				
 				setFiles( files );
@@ -743,26 +736,24 @@ TOTorrentDeserialiseImpl
 			setPieces( pieces );	
 			
 				// extract and additional info elements
-				
-			Iterator info_it = info.keySet().iterator();
 
-			while( info_it.hasNext()){
+            for (Object o : info.keySet()) {
 
-				String	key = (String)info_it.next();
-				
-				if ( 	key.equals( TK_NAME ) ||
-						key.equals( TK_LENGTH ) ||
-						key.equals( TK_FILES ) ||
-						key.equals( TK_PIECE_LENGTH ) ||
-						key.equals( TK_PIECES )){
-			
-					// standard attributes
-									
-				}else{
-					
-					addAdditionalInfoProperty( key, info.get( key ));
-				}
-			}
+                String key = (String) o;
+
+                if (key.equals(TK_NAME) ||
+                        key.equals(TK_LENGTH) ||
+                        key.equals(TK_FILES) ||
+                        key.equals(TK_PIECE_LENGTH) ||
+                        key.equals(TK_PIECES)) {
+
+                    // standard attributes
+
+                } else {
+
+                    addAdditionalInfoProperty(key, info.get(key));
+                }
+            }
 
 			try{
 				byte[] ho = (byte[])info.get( TK_HASH_OVERRIDE );
@@ -833,32 +824,30 @@ TOTorrentDeserialiseImpl
 		Map			map )
 	{
 		System.out.println( indent + name + "{map}" );
-				
-		Iterator it = map.keySet().iterator();
-		
-		while( it.hasNext()){
-			
-			String	key = (String)it.next();
-			
-			Object	value =  map.get( key );
-			
-			if ( value instanceof Map ){
-				
-				print( indent+"  ", key, (Map)value);
-				
-			}else if ( value instanceof List ){
-				
-				print( indent+"  ", key, (List)value );
-				
-			}else if ( value instanceof Long ){
-				
-				print( indent+"  ", key, (Long)value );
-				
-			}else{
-				
-				print( indent+"  ", key, (byte[])value);
-			}
-		}
+
+        for (Object o : map.keySet()) {
+
+            String key = (String) o;
+
+            Object value = map.get(key);
+
+            if (value instanceof Map) {
+
+                print(indent + "  ", key, (Map) value);
+
+            } else if (value instanceof List) {
+
+                print(indent + "  ", key, (List) value);
+
+            } else if (value instanceof Long) {
+
+                print(indent + "  ", key, (Long) value);
+
+            } else {
+
+                print(indent + "  ", key, (byte[]) value);
+            }
+        }
 	}
 	
 	protected void
@@ -903,7 +892,7 @@ TOTorrentDeserialiseImpl
 		String		name,
 		Long		value )
 	{
-		System.out.println( indent + name + "{long} = " + value.longValue());
+		System.out.println( indent + name + "{long} = " + value);
 	}
 	
 	protected void

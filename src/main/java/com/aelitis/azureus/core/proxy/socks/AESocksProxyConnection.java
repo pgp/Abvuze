@@ -31,41 +31,41 @@ import com.aelitis.azureus.core.proxy.AEProxyConnection;
 public interface 
 AESocksProxyConnection 
 {
-	public AESocksProxy
+	AESocksProxy
 	getProxy();
 	
-	public AEProxyConnection
+	AEProxyConnection
 	getConnection();
 	
-	public String
+	String
 	getUsername();
 	
-	public String
+	String
 	getPassword();
 	
-	public void
+	void
 	disableDNSLookups();
 	
-	public void
+	void
 	enableDNSLookups();
 	
-	public boolean
+	boolean
 	areDNSLookupsEnabled();
 	
-	public void
+	void
 	connected()
 	
 		throws IOException;
 	
-	public boolean
+	boolean
 	isClosed();
 	
-	public void
+	void
 	close()
 	
 		throws IOException;
 	
-	public void
+	void
 	setDelegate(
-		AESocksProxyPlugableConnection	target );	
+            AESocksProxyPlugableConnection target);
 }

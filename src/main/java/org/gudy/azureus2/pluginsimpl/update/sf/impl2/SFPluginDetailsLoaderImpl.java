@@ -244,56 +244,54 @@ SFPluginDetailsLoaderImpl
 						details.load( is );
 						
 						is.close();
-						
-						Iterator it = details.keySet().iterator();
-						
-						while( it.hasNext()){
-							
-							String	plugin_id 	= (String)it.next();
-							
-							String	data			= (String)details.get(plugin_id);
-			
-							int	pos = 0;
-							
-							List	bits = new ArrayList();
-							
-							while( pos < data.length()){
-								
-								int	p1 = data.indexOf(';',pos);
-								
-								if ( p1 == -1 ){
-									
-									bits.add( data.substring(pos).trim());
-								
-									break;
-								}else{
-									
-									bits.add( data.substring(pos,p1).trim());
-									
-									pos = p1+1;
-								}
-							}
-							
-							if (bits.size() < 3) {
-								Logger.log(new LogEvent(LOGID, LogEvent.LT_ERROR,
-										"SF loadPluginList failed for plugin '" + plugin_id
-												+ "'.  Details array is " + bits.size() + " (3 min)"));
-							} else {
-								String version = (String) bits.get(0);
-								String cvs_version = (String) bits.get(1);
-								String name = (String) bits.get(2);
-								String category = "";
-			
-								if (bits.size() > 3) {
-									category = (String) bits.get(3);
-								}
-			
-								plugin_ids.add(plugin_id);
-			
-								plugin_map.put(plugin_id.toLowerCase(MessageText.LOCALE_ENGLISH), new SFPluginDetailsImpl(this,
-										plugin_id, version, cvs_version, name, category));
-							}
-						}
+
+                        for (Object o : details.keySet()) {
+
+                            String plugin_id = (String) o;
+
+                            String data = (String) details.get(plugin_id);
+
+                            int pos = 0;
+
+                            List bits = new ArrayList();
+
+                            while (pos < data.length()) {
+
+                                int p1 = data.indexOf(';', pos);
+
+                                if (p1 == -1) {
+
+                                    bits.add(data.substring(pos).trim());
+
+                                    break;
+                                } else {
+
+                                    bits.add(data.substring(pos, p1).trim());
+
+                                    pos = p1 + 1;
+                                }
+                            }
+
+                            if (bits.size() < 3) {
+                                Logger.log(new LogEvent(LOGID, LogEvent.LT_ERROR,
+                                        "SF loadPluginList failed for plugin '" + plugin_id
+                                                + "'.  Details array is " + bits.size() + " (3 min)"));
+                            } else {
+                                String version = (String) bits.get(0);
+                                String cvs_version = (String) bits.get(1);
+                                String name = (String) bits.get(2);
+                                String category = "";
+
+                                if (bits.size() > 3) {
+                                    category = (String) bits.get(3);
+                                }
+
+                                plugin_ids.add(plugin_id);
+
+                                plugin_map.put(plugin_id.toLowerCase(MessageText.LOCALE_ENGLISH), new SFPluginDetailsImpl(this,
+                                        plugin_id, version, cvs_version, name, category));
+                            }
+                        }
 						
 						ok = true;
 						
@@ -451,23 +449,18 @@ SFPluginDetailsLoaderImpl
 						p_dl = rd_factory.getRetryDownloader( p_dl, 5 );
 					
 						p_dl.addListener( this );
-						
-						InputStream is = p_dl.download();
-			
-						try{							
-				  			if ( !processPluginStream( details, is )){
-				  							
-				  				throw( new SFPluginDetailsException( "Plugin details load fails for '" + details.getId() + "': data not found" ));
-				  			}
-				  			
-				  			ok = true;
-				  			
-				  			break;
-				  			
-						}finally{
-							
-							is.close();
-						}
+
+                        try (InputStream is = p_dl.download()) {
+                            if (!processPluginStream(details, is)) {
+
+                                throw (new SFPluginDetailsException("Plugin details load fails for '" + details.getId() + "': data not found"));
+                            }
+
+                            ok = true;
+
+                            break;
+
+                        }
 					}catch( Throwable e ){
 						
 						if ( !tried_proxy ){
@@ -651,10 +644,10 @@ SFPluginDetailsLoaderImpl
 	informListeners(
 		String		log )
 	{
-		for (int i=0;i<listeners.size();i++){
-			
-			((SFPluginDetailsLoaderListener)listeners.get(i)).log( log );
-		}
+        for (Object listener : listeners) {
+
+            ((SFPluginDetailsLoaderListener) listener).log(log);
+        }
 	}
 	
 	public void

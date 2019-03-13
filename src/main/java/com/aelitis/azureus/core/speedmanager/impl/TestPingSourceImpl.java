@@ -111,11 +111,11 @@ TestPingSourceImpl
 			
 			round_trip_times[i] = contacts[i].getRTT();
 		}
-		
-		for (int i=0;i<listeners.size();i++){
-			
-			((DHTSpeedTesterListener)listeners.get(i)).resultGroup( contacts, round_trip_times );
-		}
+
+        for (Object listener : listeners) {
+
+            ((DHTSpeedTesterListener) listener).resultGroup(contacts, round_trip_times);
+        }
 	}
 	
 	protected abstract void
@@ -143,11 +143,11 @@ TestPingSourceImpl
 			
 			sources.add( contact );
 		}
-		
-		for (int i=0;i<listeners.size();i++){
-			
-			((DHTSpeedTesterListener)listeners.get(i)).contactAdded(contact);
-		}
+
+        for (Object listener : listeners) {
+
+            ((DHTSpeedTesterListener) listener).contactAdded(contact);
+        }
 	}
 	
 	protected void
@@ -164,10 +164,10 @@ TestPingSourceImpl
 	public void 
 	destroy() 
 	{
-		for (int i=0;i<listeners.size();i++){
-		
-			((DHTSpeedTesterListener)listeners.get(i)).destroyed();
-		}
+        for (Object listener : listeners) {
+
+            ((DHTSpeedTesterListener) listener).destroyed();
+        }
 	}
 		
 	public void
@@ -235,10 +235,10 @@ TestPingSourceImpl
 		protected void
 		failed()
 		{
-			for (int i=0;i<listeners.size();i++){
-				
-				((DHTSpeedTesterContactListener)listeners.get(i)).contactDied( this );
-			}
+            for (Object listener : listeners) {
+
+                ((DHTSpeedTesterContactListener) listener).contactDied(this);
+            }
 		}
 		
 		public void

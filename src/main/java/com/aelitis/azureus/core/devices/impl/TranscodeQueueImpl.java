@@ -71,7 +71,7 @@ TranscodeQueueImpl
 	
 	private TranscodeManagerImpl		manager;
 	
-	private List<TranscodeJobImpl>		queue		= new ArrayList<TranscodeJobImpl>();
+	private List<TranscodeJobImpl>		queue		= new ArrayList<>();
 	private AESemaphore 				queue_sem 	= new AESemaphore( "XcodeQ" );
 	private AEThread2					queue_thread;
 	
@@ -79,8 +79,8 @@ TranscodeQueueImpl
 	
 	private AsyncDispatcher	anaylsis_dispatcher = new AsyncDispatcher();
 	
-	private CopyOnWriteList<TranscodeQueueListener>			listeners = new CopyOnWriteList<TranscodeQueueListener>();
-	private CopyOnWriteList<TranscodeQueueActionListener>	action_listeners = new CopyOnWriteList<TranscodeQueueActionListener>();
+	private CopyOnWriteList<TranscodeQueueListener>			listeners = new CopyOnWriteList<>();
+	private CopyOnWriteList<TranscodeQueueActionListener>	action_listeners = new CopyOnWriteList<>();
 	
 	private volatile boolean 	paused;
 	private volatile int		max_bytes_per_sec;
@@ -995,7 +995,7 @@ TranscodeQueueImpl
 	protected void
 	checkJobStatus()
 	{
-		Set<DeviceImpl> devices = new HashSet<DeviceImpl>( Arrays.asList(manager.getManager().getDevices()));
+		Set<DeviceImpl> devices = new HashSet<>(Arrays.asList(manager.getManager().getDevices()));
 		
 		synchronized( this ){
 			
@@ -1058,7 +1058,7 @@ TranscodeQueueImpl
 		
 		if ( existing_tf != null ){
 			
-			List<TranscodeJobImpl>	to_remove = new ArrayList<TranscodeJobImpl>();
+			List<TranscodeJobImpl>	to_remove = new ArrayList<>();
 			
 			synchronized( this ){
 	
@@ -1219,7 +1219,7 @@ TranscodeQueueImpl
 	{
 		synchronized( this ){
 
-			return( queue.toArray( new TranscodeJobImpl[queue.size()]));
+			return( queue.toArray(new TranscodeJobImpl[0]));
 		}
 	}
 	
@@ -1635,9 +1635,9 @@ TranscodeQueueImpl
 
 			}else{
 				
-				Map<String,Object>	map = new HashMap<String,Object>();
+				Map<String,Object>	map = new HashMap<>();
 				
-				List<Map<String,Object>>	l_jobs = new ArrayList<Map<String,Object>>();
+				List<Map<String,Object>>	l_jobs = new ArrayList<>();
 				
 				map.put( "jobs", l_jobs );
 				

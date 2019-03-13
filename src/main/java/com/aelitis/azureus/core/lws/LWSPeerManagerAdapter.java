@@ -55,7 +55,7 @@ LWSPeerManagerAdapter
 	
 	private int	md_info_dict_size;
 	
-	private WeakReference<byte[]>	md_info_dict_ref = new WeakReference<byte[]>( null );
+	private WeakReference<byte[]>	md_info_dict_ref = new WeakReference<>(null);
 
 	public
 	LWSPeerManagerAdapter(
@@ -280,7 +280,7 @@ LWSPeerManagerAdapter
 		
 				data = BEncoder.encode((Map)torrent.serialiseToMap().get( "info" ));
 			
-				md_info_dict_ref = new WeakReference<byte[]>( data );
+				md_info_dict_ref = new WeakReference<>(data);
 			}
 			
 			return( data );
@@ -430,14 +430,14 @@ LWSPeerManagerAdapter
 		List	interfaces = new ArrayList();
 		
 		Object[]	intf = lws.getQueryableInterfaces();
-		
-		for (int i=0;i<intf.length;i++){
-			
-			if( intf[i] != null ){
-				
-				interfaces.add( intf[i] );
-			}
-		}
+
+        for (Object o : intf) {
+
+            if (o != null) {
+
+                interfaces.add(o);
+            }
+        }
 		
 		interfaces.add( lws.getRelation());
 		

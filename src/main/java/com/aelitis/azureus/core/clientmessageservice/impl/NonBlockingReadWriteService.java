@@ -156,12 +156,12 @@ public class NonBlockingReadWriteService {
       	try{
       		Message[] messages = client.readMessages();
       	
-      		if( messages != null ) {    		
-      			for( int i=0; i < messages.length; i++ ) {
-      				AZGenericMapPayload msg = (AZGenericMapPayload)messages[i];
-      				ClientMessage client_msg = new ClientMessage( msg.getID(), client, msg.getMapPayload(), null );  //note no handler. we let the listener attach it		
-      				listener.messageReceived( client_msg );	
-      			}
+      		if( messages != null ) {
+                for (Message message : messages) {
+                    AZGenericMapPayload msg = (AZGenericMapPayload) message;
+                    ClientMessage client_msg = new ClientMessage(msg.getID(), client, msg.getMapPayload(), null);  //note no handler. we let the listener attach it
+                    listener.messageReceived(client_msg);
+                }
       		}	
       		
       		return( client.getLastReadMadeProgress());
@@ -229,30 +229,29 @@ public class NonBlockingReadWriteService {
       
       try {  connections_mon.enter();
         long current_time = System.currentTimeMillis();
-    
-        for( int i=0; i < connections.size(); i++ ) {
-          ClientConnection vconn = (ClientConnection)connections.get( i );
-        
-          if( current_time < vconn.getLastActivityTime() ) {  //time went backwards!
-            vconn.resetLastActivityTime();
+
+          for (Object connection : connections) {
+              ClientConnection vconn = (ClientConnection) connection;
+
+              if (current_time < vconn.getLastActivityTime()) {  //time went backwards!
+                  vconn.resetLastActivityTime();
+              } else {
+                  if (current_time - vconn.getLastActivityTime() > activity_timeout_period_ms ||
+                          (close_delay_period_ms > 0 &&
+                                  current_time - vconn.getLastActivityTime() > close_delay_period_ms)) {
+
+                      timed_out.add(vconn);   //do actual removal outside the check loop
+                  }
+              }
           }
-          else{
-        	  if( current_time - vconn.getLastActivityTime() > activity_timeout_period_ms ||
-        			 ( close_delay_period_ms > 0 && 
-        			   current_time - vconn.getLastActivityTime() > close_delay_period_ms )){
-        		  
-        		  timed_out.add( vconn );   //do actual removal outside the check loop
-        	  }
-          }
-        }
       }
       finally {  connections_mon.exit();  }
-      
-      for( int i=0; i < timed_out.size(); i++ ) {  
-        ClientConnection vconn = (ClientConnection)timed_out.get( i );
-        // don't change the exception text - it is used elsewhere
-        listener.connectionError( vconn, new Exception( "Timeout" ));
-      }
+
+        for (Object o : timed_out) {
+            ClientConnection vconn = (ClientConnection) o;
+            // don't change the exception text - it is used elsewhere
+            listener.connectionError(vconn, new Exception("Timeout"));
+        }
       
       last_timeout_check_time = System.currentTimeMillis();
     }
@@ -291,9 +290,9 @@ public class NonBlockingReadWriteService {
 
 	public interface ServiceListener {
 
-		public void messageReceived( ClientMessage message );
+		void messageReceived(ClientMessage message);
 		
-		public void connectionError( ClientConnection connection, Throwable error );
+		void connectionError(ClientConnection connection, Throwable error);
 		
 	}
 	

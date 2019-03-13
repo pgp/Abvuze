@@ -27,7 +27,7 @@ package org.gudy.azureus2.plugins.utils.resourcedownloader;
 public interface 
 ResourceDownloaderDelayedFactory 
 {
-	public ResourceDownloader
+	ResourceDownloader
 	create()
 	
 		throws ResourceDownloaderException;

@@ -36,7 +36,7 @@ public class ConfigSectionRepository {
   private Map<ConfigSection,ConfigSectionHolder> items;
 
   private ConfigSectionRepository() {
-   items = new LinkedHashMap<ConfigSection, ConfigSectionHolder>();
+   items = new LinkedHashMap<>();
   }
 
   public static ConfigSectionRepository getInstance() {
@@ -80,7 +80,7 @@ public class ConfigSectionRepository {
 	 	try{
 	  		class_mon.enter();
 	   
-	  		return (new ArrayList<ConfigSection>( items.keySet() ));
+	  		return (new ArrayList<>(items.keySet()));
 	  		
 	 	  }finally{
 	    	
@@ -92,7 +92,7 @@ public class ConfigSectionRepository {
  	try{
   		class_mon.enter();
    
-  		return (new ArrayList<ConfigSectionHolder>( items.values() ));
+  		return (new ArrayList<>(items.values()));
   		
  	  }finally{
     	

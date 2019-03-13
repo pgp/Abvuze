@@ -77,9 +77,9 @@ AZStatRequest
 		return( Message.TYPE_PROTOCOL_PAYLOAD );
 	}
 
-	public byte getVersion() { return version; };
+	public byte getVersion() { return version; }
 
-	public String 
+    public String
 	getDescription() 
 	{   
 		return( getID() + ": " + request );

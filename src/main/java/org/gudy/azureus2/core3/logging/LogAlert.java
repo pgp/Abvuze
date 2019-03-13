@@ -130,9 +130,9 @@ public class LogAlert implements org.gudy.azureus2.plugins.logging.LogAlert {
 	public Object[] getContext() {
 		if (this.relatedTo == null) {return null;}
 		ArrayList l = new ArrayList();
-		for (int i=0; i<this.relatedTo.length; i++) {
-			l.add(PluginCoreUtils.convert(this.relatedTo[i], false));
-		}
+        for (Object o : this.relatedTo) {
+            l.add(PluginCoreUtils.convert(o, false));
+        }
 		return l.toArray();
 	}
 	

@@ -23,13 +23,13 @@ package com.aelitis.azureus.core.crypto;
 public interface 
 VuzeCryptoListener 
 {
-	public char[]
+	char[]
 	getSessionPassword(
-		String		reason )
+            String reason)
 	
 		throws VuzeCryptoException;
 	
-	public void
+	void
 	sessionPasswordCorrect();
 	
 		/**
@@ -37,7 +37,7 @@ VuzeCryptoListener
 		 * affairs and the (probable) only solution is to generate a new public/private key
 		 * pair
 		 */
-	
-	public void
+
+        void
 	sessionPasswordIncorrect();
 }

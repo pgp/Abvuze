@@ -204,30 +204,28 @@ UpdateImpl
 	cancel()
 	{
 		cancelled = true;
-		
-		for (int i=0;i<downloaders.length;i++){
-			
-			try{
-				downloaders[i].cancel();
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace( e );
-			}
-		}
-		
-		Iterator it = listeners.iterator();
-		
-		while( it.hasNext()){
-			
-			try{
-				((UpdateListener)it.next()).cancelled( this );
-				
-			}catch( Throwable e ){
-				
-				Debug.printStackTrace(e);
-			}
-		}
+
+        for (ResourceDownloader downloader : downloaders) {
+
+            try {
+                downloader.cancel();
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
+
+        for (Object listener : listeners) {
+
+            try {
+                ((UpdateListener) listener).cancelled(this);
+
+            } catch (Throwable e) {
+
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 	
 	public void

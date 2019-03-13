@@ -137,11 +137,11 @@ UtilitiesImpl
 			}
 		};
 			
-	private static List<searchManager>		search_managers 	= new ArrayList<searchManager>();
-	private static List<Object[]>			search_providers	= new ArrayList<Object[]>();
+	private static List<searchManager>		search_managers 	= new ArrayList<>();
+	private static List<Object[]>			search_providers	= new ArrayList<>();
 	
-	private static CopyOnWriteList<Object[]>				feature_enablers 	= new CopyOnWriteList<Object[]>();
-	private static CopyOnWriteList<FeatureManagerListener>	feature_listeners	= new CopyOnWriteList<FeatureManagerListener>();
+	private static CopyOnWriteList<Object[]>				feature_enablers 	= new CopyOnWriteList<>();
+	private static CopyOnWriteList<FeatureManagerListener>	feature_listeners	= new CopyOnWriteList<>();
 
 	private static FeatureManagerListener 
 		feature_listener = new FeatureManagerListener()
@@ -203,14 +203,14 @@ UtilitiesImpl
 	
 			// need to use a consistent wrapped group as its object identity drives byte allocs...
 		
-	private static WeakHashMap<RateLimiter,PluginLimitedRateGroup>	limiter_map = new WeakHashMap<RateLimiter,PluginLimitedRateGroup>();
+	private static WeakHashMap<RateLimiter,PluginLimitedRateGroup>	limiter_map = new WeakHashMap<>();
 
 	
-	private static CopyOnWriteList<LocationProviderListener>	lp_listeners 		= new CopyOnWriteList<LocationProviderListener>();
-	private static CopyOnWriteList<LocationProvider>			location_providers 	= new CopyOnWriteList<LocationProvider>();
+	private static CopyOnWriteList<LocationProviderListener>	lp_listeners 		= new CopyOnWriteList<>();
+	private static CopyOnWriteList<LocationProvider>			location_providers 	= new CopyOnWriteList<>();
 	
-	private static CopyOnWriteList<ScriptProviderListener>	sp_listeners 		= new CopyOnWriteList<ScriptProviderListener>();
-	private static CopyOnWriteList<ScriptProvider>			script_providers 	= new CopyOnWriteList<ScriptProvider>();
+	private static CopyOnWriteList<ScriptProviderListener>	sp_listeners 		= new CopyOnWriteList<>();
+	private static CopyOnWriteList<ScriptProvider>			script_providers 	= new CopyOnWriteList<>();
 
 	
 	public static PluginLimitedRateGroup
@@ -249,7 +249,7 @@ UtilitiesImpl
 	private static void
 	checkFeatureCache()
 	{
-		Set<String> features = new TreeSet<String>();
+		Set<String> features = new TreeSet<>();
 		
 		List<FeatureEnabler>	enablers = getVerifiedEnablers();
 		
@@ -301,7 +301,7 @@ UtilitiesImpl
 	{
 		String str = COConfigurationManager.getStringParameter( "featman.cache.features.installed", "" );
 		
-		Set<String>	result = new TreeSet<String>();
+		Set<String>	result = new TreeSet<>();
 		
 		if ( str.length() > 0 ){
 		
@@ -611,7 +611,7 @@ UtilitiesImpl
 					throw( new ResourceDownloaderException( e ));
 				}
 				
-				Map<String,Object>	options = new HashMap<String,Object>();
+				Map<String,Object>	options = new HashMap<>();
 			
 				options.put( AEProxyFactory.PO_PEER_NETWORKS, new String[]{ AENetworkClassifier.AT_TOR });
 			
@@ -890,16 +890,16 @@ UtilitiesImpl
 							accept(
 								List		l )
 							{
-								for (int i=0;i<l.size();i++){
-									
-									try{
-										((Runnable)l.get(i)).run();
-										
-									}catch( Throwable e ){
-										
-										Debug.printStackTrace(e);
-									}
-								}
+                                for (Object o : l) {
+
+                                    try {
+                                        ((Runnable) o).run();
+
+                                    } catch (Throwable e) {
+
+                                        Debug.printStackTrace(e);
+                                    }
+                                }
 							}
 						},
 						idle_dispatch_time,
@@ -1171,7 +1171,7 @@ UtilitiesImpl
 	public static PluginInterface
 	getPluginThreadContext()
 	{
-		return((PluginInterface)tls.get());
+		return tls.get();
 	}
 	
 	public Map
@@ -1299,13 +1299,13 @@ UtilitiesImpl
 			
 			search_providers.add( new Object[]{ pi, provider  });
 			
-			managers = new ArrayList<searchManager>( search_managers );
+			managers = new ArrayList<>(search_managers);
 		}
-		
-		for (int i=0;i<managers.size();i++){
-				
-			((searchManager)managers.get(i)).addProvider( pi, provider );
-		}
+
+        for (searchManager manager : managers) {
+
+            manager.addProvider(pi, provider);
+        }
 	}
 	
 	public void 
@@ -1330,13 +1330,13 @@ UtilitiesImpl
 				}
 			}
 			
-			managers = new ArrayList<searchManager>( search_managers );
+			managers = new ArrayList<>(search_managers);
 		}
-		
-		for (int i=0;i<managers.size();i++){
-				
-			((searchManager)managers.get(i)).removeProvider( pi, provider );
-		}
+
+        for (searchManager manager : managers) {
+
+            manager.removeProvider(pi, provider);
+        }
 	}
 	
 	public SearchInitiator 
@@ -1348,7 +1348,7 @@ UtilitiesImpl
 		
 		synchronized( UtilitiesImpl.class ){
 						
-			managers = new ArrayList<searchManager>( search_managers );
+			managers = new ArrayList<>(search_managers);
 		}
 		
 		if ( managers.size() == 0 ){
@@ -1371,13 +1371,13 @@ UtilitiesImpl
 			
 			providers = new ArrayList( search_providers );
 		}
-				
-		for (int i=0;i<providers.size();i++){
-			
-			Object[]	entry = (Object[])providers.get(i);
-			
-			manager.addProvider((PluginInterface)entry[0],(SearchProvider)entry[1]);
-		}
+
+        for (Object provider : providers) {
+
+            Object[] entry = (Object[]) provider;
+
+            manager.addProvider((PluginInterface) entry[0], (SearchProvider) entry[1]);
+        }
 	}
 	
 	public FeatureManager 
@@ -1540,7 +1540,7 @@ UtilitiesImpl
 	public Licence[] 
 	getLicences() 
 	{
-		List<Licence> all_licences = new ArrayList<Licence>();
+		List<Licence> all_licences = new ArrayList<>();
 		
 		List<FeatureEnabler>	enablers = getVerifiedEnablers();
 		
@@ -1557,7 +1557,7 @@ UtilitiesImpl
 			}
 		}
 		
-		return( all_licences.toArray( new Licence[ all_licences.size()]));
+		return( all_licences.toArray(new Licence[0]));
 	}
 	
 	public void
@@ -1595,7 +1595,7 @@ UtilitiesImpl
 	getFeatureDetailsSupport(
 		String 					feature_id )
 	{
-		List<FeatureDetails>	result = new ArrayList<FeatureDetails>();
+		List<FeatureDetails>	result = new ArrayList<>();
 	
 		List<FeatureEnabler>	enablers = getVerifiedEnablers();
 			
@@ -1622,7 +1622,7 @@ UtilitiesImpl
 			}
 		}
 		
-		return( result.toArray( new FeatureDetails[ result.size() ]));
+		return( result.toArray(new FeatureDetails[0]));
 	}
 	
    	public void
@@ -1662,7 +1662,7 @@ UtilitiesImpl
 			return((List<FeatureEnabler>)cache[2]);
 		}
 		
-		List<FeatureEnabler>	enablers = new ArrayList<FeatureEnabler>();
+		List<FeatureEnabler>	enablers = new ArrayList<>();
 
 		for ( Object[] entry: feature_enablers ){
 			
@@ -1741,15 +1741,15 @@ UtilitiesImpl
 	searchManager
 		extends SearchInitiator
 	{
-		public void
-		addProvider( 
-			PluginInterface		pi,
-			SearchProvider		provider );
+		void
+		addProvider(
+                PluginInterface pi,
+                SearchProvider provider);
 		
-		public void
-		removeProvider( 
-			PluginInterface		pi,
-			SearchProvider		provider );
+		void
+		removeProvider(
+                PluginInterface pi,
+                SearchProvider provider);
 	}
 		
 	
@@ -1770,7 +1770,7 @@ UtilitiesImpl
 					requestSubscription(
 						URL		url )
 					{
-						sm.requestSubscription( url, new HashMap<String,Object>());
+						sm.requestSubscription( url, new HashMap<>());
 					}
 					
 					public void 
@@ -2064,65 +2064,65 @@ UtilitiesImpl
 	public interface
 	PluginSubscriptionManager
 	{
-		public void
+		void
 		requestSubscription(
-			URL					url,
-			Map<String,Object>	options );
+                URL url,
+                Map<String, Object> options);
 		
-		public void 
+		void
 		requestSubscription(
-			SearchProvider 			sp,
-			Map<String, Object> 	search_parameters ) 
+                SearchProvider sp,
+                Map<String, Object> search_parameters)
 			
 			throws SubscriptionException;
 		
-		public PluginSubscription[]
+		PluginSubscription[]
 		getSubscriptions(
-			boolean	subscribed_only );
+                boolean subscribed_only);
 	}
 	
 	public interface
 	PluginSubscription
 	{
-		public String
+		String
 		getID();
 		
-		public String
+		String
 		getName();
 		
-		public boolean 
+		boolean
 		isSearchTemplate();
 		
-		public PluginSubscriptionResult[]
+		PluginSubscriptionResult[]
 		getResults(
-			boolean		include_deleted );
+                boolean include_deleted);
 	}
 	
 	public interface
 	PluginSubscriptionResult
 	{
-		public Map<Integer,Object>
+		Map<Integer,Object>
 		toPropertyMap();
 		
-		public void
+		void
 		setRead(
-			boolean		read );
+                boolean read);
 		
-		public boolean
+		boolean
 		getRead();
 	}
 	
 	public interface
 	runnableWithReturn<T>
 	{
-		public T
+		T
 		run();
 	}
 	
 	public interface
 	runnableWithException<T extends Exception>
 	{
-		public void
+		void
 		run()
 		
 			throws T;
@@ -2131,7 +2131,7 @@ UtilitiesImpl
 	public interface
 	runnableWithReturnAndException<T,S extends Exception>
 	{
-		public T
+		T
 		run()
 		
 			throws S;
@@ -2140,21 +2140,21 @@ UtilitiesImpl
 	public interface
 	PluginLimitedRateGroupListener
 	{
-		public void
+		void
 		disabledChanged(
-			PluginLimitedRateGroup		group,
-			boolean						is_disabled );
+                PluginLimitedRateGroup group,
+                boolean is_disabled);
 		
 			/**
 			 * Periodically called to allow sanity checks - shouldn't really be required
 			 * @param group
 			 * @param is_disabled
 			 */
-		
-		public void
+
+            void
 		sync(
-			PluginLimitedRateGroup		group,
-			boolean						is_disabled );
+                    PluginLimitedRateGroup group,
+                    boolean is_disabled);
 	}
 	
 	public static class
@@ -2216,7 +2216,7 @@ UtilitiesImpl
 					
 					if ( listeners == null ){
 						
-						listeners = new CopyOnWriteList<UtilitiesImpl.PluginLimitedRateGroupListener>();
+						listeners = new CopyOnWriteList<>();
 					}
 					
 					listeners.add( listener );
@@ -2455,8 +2455,8 @@ UtilitiesImpl
 
 	}
 		
-	private static Map<String,JSONServer>	json_servers = new HashMap<String,JSONServer>();
-	private static  Map<String,JSONClient>	json_clients = new HashMap<String,JSONClient>();
+	private static Map<String,JSONServer>	json_servers = new HashMap<>();
+	private static  Map<String,JSONClient>	json_clients = new HashMap<>();
 	
 	public void
 	registerJSONRPCServer(
@@ -2552,7 +2552,7 @@ UtilitiesImpl
 		{
 			List<com.aelitis.azureus.core.tag.Tag> tags = TagManagerFactory.getTagManager().getTagType( TagType.TT_DOWNLOAD_MANUAL ).getTags();
 			
-			return( new ArrayList<Tag>( tags ));
+			return(new ArrayList<>(tags));
 		}
 		
 		public Tag 

@@ -27,6 +27,6 @@ package com.aelitis.azureus.ui.selectedcontent;
  */
 public interface SelectedContentListener
 {
-	public void currentlySelectedContentChanged(
-			ISelectedContent[] currentContent, String viewID);
+	void currentlySelectedContentChanged(
+            ISelectedContent[] currentContent, String viewID);
 }

@@ -30,32 +30,32 @@ import org.gudy.azureus2.core3.peer.PEPeer;
  */
 public interface UploadHelper {
 	
-	public static final int PRIORITY_DISABLED = 0;
-	public static final int PRIORITY_LOWEST   = 1;
-	public static final int PRIORITY_LOW      = 2;
-	public static final int PRIORITY_NORMAL   = 4;
-	public static final int PRIORITY_HIGH     = 8;
-	public static final int PRIORITY_HIGHEST  = 16;
+	int PRIORITY_DISABLED = 0;
+	int PRIORITY_LOWEST   = 1;
+	int PRIORITY_LOW      = 2;
+	int PRIORITY_NORMAL   = 4;
+	int PRIORITY_HIGH     = 8;
+	int PRIORITY_HIGHEST  = 16;
 	
 	
 	/**
 	 * Get download opt unchoke priority.
 	 * @return
 	 */
-	public int getPriority();
+    int getPriority();
 	
 	
 	/**
 	 * Get all (PEPeerTransport) peers for this download. 
 	 * @return non-mutable list of peers 
 	 */
-	public ArrayList<PEPeer> getAllPeers();
+    ArrayList<PEPeer> getAllPeers();
 	
 	
 	/**
 	 * Is this download in seeding mode.
 	 * @return true if seeding, false if downloading
 	 */
-	public boolean isSeeding();
+    boolean isSeeding();
 
 }

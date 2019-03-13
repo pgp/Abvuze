@@ -33,18 +33,18 @@ import org.gudy.azureus2.core3.tracker.server.TRTrackerServerTorrent;
 public interface 
 TRHostTorrent 
 {
-	public static final int	TS_FAILED		= 0;
-	public static final int	TS_STOPPED		= 1;
-	public static final int	TS_STARTED		= 2;
-	public static final int	TS_PUBLISHED	= 3;
+	int	TS_FAILED		= 0;
+	int	TS_STOPPED		= 1;
+	int	TS_STARTED		= 2;
+	int	TS_PUBLISHED	= 3;
 	
-	public void
+	void
 	start();
 	
-	public void
+	void
 	stop();
 	
-	public void
+	void
 	remove()
 	
 		throws TRHostTorrentRemovalVetoException;
@@ -54,116 +54,116 @@ TRHostTorrent
 	 * @return true if OK, exception thrown otherwise
 	 * @throws TRHostTorrentRemovalVetoException
 	 */
-	
-	public boolean
+
+    boolean
 	canBeRemoved()
 	
 		throws TRHostTorrentRemovalVetoException;
 	
-	public int
+	int
 	getStatus();
 	
-	public boolean
+	boolean
 	isPersistent();
 	
-	public boolean
+	boolean
 	isPassive();
 	
-	public void
+	void
 	setPassive(
-		boolean		passive );
+            boolean passive);
 	
-	public long
+	long
 	getDateAdded();
 	
-	public TOTorrent
+	TOTorrent
 	getTorrent();
 	
-	public void
+	void
 	setTorrent(
-		TOTorrent	torrent );
+            TOTorrent torrent);
 	
-	public TRTrackerServerTorrent
+	TRTrackerServerTorrent
 	getTrackerTorrent();
 	
-	public int
+	int
 	getPort();
 	
-	public TRHostPeer[]
+	TRHostPeer[]
 	getPeers();
 	
-	public int
+	int
 	getSeedCount();
 	
-	public int
+	int
 	getLeecherCount();
 	
-	public int
+	int
 	getBadNATCount();
 
-	public long
+	long
 	getAnnounceCount();
 	
-	public long
+	long
 	getAverageAnnounceCount();
 	
-	public long
+	long
 	getScrapeCount();
 	
-	public long
+	long
 	getAverageScrapeCount();
 	
-	public long
+	long
 	getCompletedCount();
 	
-	public long
+	long
 	getTotalUploaded();
 	
-	public long
+	long
 	getTotalDownloaded();
 		
-	public long
+	long
 	getTotalLeft();
 	
-	public long
+	long
 	getAverageUploaded();
 	
-	public long
+	long
 	getAverageDownloaded();
 	
-	public long
+	long
 	getTotalBytesIn();
 	
-	public long
+	long
 	getAverageBytesIn();
 	
-	public long
+	long
 	getTotalBytesOut();
 	
-	public long
+	long
 	getAverageBytesOut();
 	
-	public void
+	void
 	disableReplyCaching();
 	
-	public void
+	void
 	addListener(
-		TRHostTorrentListener	l );
+            TRHostTorrentListener l);
 	
-	public void
+	void
 	removeListener(
-		TRHostTorrentListener	l );
+            TRHostTorrentListener l);
 	
-	public void
+	void
 	addRemovalListener(
-		TRHostTorrentWillBeRemovedListener	l );
+            TRHostTorrentWillBeRemovedListener l);
 	
-	public void
+	void
 	removeRemovalListener(
-		TRHostTorrentWillBeRemovedListener	l );
+            TRHostTorrentWillBeRemovedListener l);
 
   /** To retreive arbitrary objects against this object. */
-  public Object getData (String key);
+  Object getData(String key);
   /** To store arbitrary objects against this object. */
-  public void setData (String key, Object value);
+  void setData(String key, Object value);
 }

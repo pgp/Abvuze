@@ -31,6 +31,6 @@ import org.gudy.azureus2.plugins.ui.tables.TableColumnCreationListener;
 public interface TableColumnCoreCreationListener
 	extends TableColumnCreationListener
 {
-	public TableColumnCore createTableColumnCore(Class<?> forDataSourceType,
-			String tableID, String columnID);
+	TableColumnCore createTableColumnCore(Class<?> forDataSourceType,
+                                          String tableID, String columnID);
 }

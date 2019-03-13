@@ -29,18 +29,18 @@ package org.gudy.azureus2.core3.ipfilter;
 public interface 
 BadIps 
 {  
-  public abstract int 
+  int
   addWarningForIp(String ip);
   
-  public abstract int 
+  int
   getNbWarningForIp(String ip);
 
-  public abstract int
+  int
   getNbBadIps();
   
-  public abstract BadIp[]
+  BadIp[]
   getBadIps();
   
-  public abstract void
+  void
   clearBadIps();
 }

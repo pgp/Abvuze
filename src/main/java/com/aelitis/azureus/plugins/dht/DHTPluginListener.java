@@ -22,7 +22,7 @@ package com.aelitis.azureus.plugins.dht;
 public interface 
 DHTPluginListener 
 {
-	public void
+	void
 	localAddressChanged(
-		DHTPluginContact	local_contact );
+            DHTPluginContact local_contact);
 }

@@ -23,9 +23,9 @@ package org.gudy.azureus2.plugins.download;
 public interface 
 DownloadStubListener 
 {
-	public void
+	void
 	downloadStubEventOccurred(
-		DownloadStubEvent		event )
+            DownloadStubEvent event)
 	
 		throws DownloadException;
 }

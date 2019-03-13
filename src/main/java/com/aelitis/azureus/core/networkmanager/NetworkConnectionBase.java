@@ -22,40 +22,40 @@ package com.aelitis.azureus.core.networkmanager;
 public interface 
 NetworkConnectionBase 
 {
-	public ConnectionEndpoint
+	ConnectionEndpoint
 	getEndpoint();
 
 	 /**
 	   * Inform connection of a thrown exception.
 	   * @param error exception
 	   */
-	 
-	public void notifyOfException( Throwable error );
+
+     void notifyOfException(Throwable error);
 	  
 	  /**
 	   * Get the connection's outgoing message queue.
 	   * @return outbound message queue
 	   */
-	public OutgoingMessageQueue getOutgoingMessageQueue();
+      OutgoingMessageQueue getOutgoingMessageQueue();
 	  
 	  
 	  /**
 	   * Get the connection's incoming message queue.
 	   * @return inbound message queue
 	   */
-	public IncomingMessageQueue getIncomingMessageQueue();
+      IncomingMessageQueue getIncomingMessageQueue();
 	 
 	 /**
 	   * Get the connection's data transport interface.
 	   * @return the transport - MAY BE NULL if not yet fully connected
 	   */
-	
-	public TransportBase getTransportBase();
+
+     TransportBase getTransportBase();
 	 
-	public int
+	int
 	getMssSize();
 		
-	public boolean
+	boolean
 	isIncoming();
 	
 	 /**
@@ -63,36 +63,36 @@ NetworkConnectionBase
 	   * @return true if within LAN, false of outside the LAN segment
 	   */
 
-	public boolean isLANLocal();
+     boolean isLANLocal();
 		
-	public void
+	void
 	setUploadLimit(
-		int		limit );
+            int limit);
 	
-	public int
+	int
 	getUploadLimit();
 	
-	public void
+	void
 	setDownloadLimit(
-		int		limit );
+            int limit);
 
-	public int
+	int
 	getDownloadLimit();
 	
-	public LimitedRateGroup[]
+	LimitedRateGroup[]
 	getRateLimiters(
-		boolean	upload );
+            boolean upload);
 	
-	public void 
+	void
 	addRateLimiter(
-		LimitedRateGroup	limiter,
-		boolean				upload );
+            LimitedRateGroup limiter,
+            boolean upload);
 	
-	public void 
+	void
 	removeRateLimiter(
-		LimitedRateGroup	limiter,
-		boolean				upload );
+            LimitedRateGroup limiter,
+            boolean upload);
 	
-	public String
+	String
 	getString();
 }

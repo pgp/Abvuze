@@ -30,26 +30,26 @@ DeviceManager
 {
 		// not the best place for these, but it'll do for the moment
 	
-	public static final String CONFIG_VIEW_HIDE_REND_GENERIC	= "device.sidebar.ui.rend.hidegeneric";
-	public static final String CONFIG_VIEW_SHOW_ONLY_TAGGED		= "device.sidebar.ui.rend.showonlytagged";
+	String CONFIG_VIEW_HIDE_REND_GENERIC	= "device.sidebar.ui.rend.hidegeneric";
+	String CONFIG_VIEW_SHOW_ONLY_TAGGED		= "device.sidebar.ui.rend.showonlytagged";
 	
-	public DeviceTemplate[]
+	DeviceTemplate[]
 	getDeviceTemplates(
-		int		device_type );
+            int device_type);
 	
-	public DeviceManufacturer[]
+	DeviceManufacturer[]
 	getDeviceManufacturers(
-		int		device_type );
+            int device_type);
 	
-	public Device[]
+	Device[]
 	getDevices();
 	
-	public Device
+	Device
 	addVirtualDevice(
-		int					type,
-		String				uid,
-		String				classification,
-		String				name )
+            int type,
+            String uid,
+            String classification,
+            String name)
 	
 		throws DeviceManagerException;
 	
@@ -62,105 +62,105 @@ DeviceManager
 
 		throws DeviceManagerException;
 
-	public void
+	void
 	search(
-		int						max_millis,
-		DeviceSearchListener	listener );
+            int max_millis,
+            DeviceSearchListener listener);
 	
-	public boolean
+	boolean
 	getAutoSearch();
 	
-	public void
+	void
 	setAutoSearch(
-		boolean	auto );
+            boolean auto);
 	
-	public int
+	int
 	getAutoHideOldDevicesDays();
 	
-	public void
+	void
 	setAutoHideOldDevicesDays(
-		int		days );
+            int days);
 	
-	public boolean
+	boolean
 	isRSSPublishEnabled();
 	
-	public void
+	void
 	setRSSPublishEnabled(
-		boolean		enabled );
+            boolean enabled);
 
-	public String
+	String
 	getRSSLink();
 	
-	public UnassociatedDevice[]
+	UnassociatedDevice[]
 	getUnassociatedDevices();
 	
-	public TranscodeManager
+	TranscodeManager
 	getTranscodeManager();
 	
-	public File
+	File
 	getDefaultWorkingDirectory();
 	
-	public void
+	void
 	setDefaultWorkingDirectory(
-		File		dir );
+            File dir);
 	
-	public boolean
+	boolean
 	isBusy(
-		int	device_type );
+            int device_type);
 	
-	public DeviceOfflineDownloaderManager
+	DeviceOfflineDownloaderManager
 	getOfflineDownlaoderManager();
 	
-	public boolean
+	boolean
 	isTiVoEnabled();
 	
-	public void
+	void
 	setTiVoEnabled(
-		boolean	enabled );
+            boolean enabled);
 	
-	public boolean
+	boolean
 	getDisableSleep();
 	
-	public void
+	void
 	setDisableSleep(
-		boolean		b );
+            boolean b);
 	
-	public String
+	String
 	getLocalServiceName();
 	
-	public void
+	void
 	addDiscoveryListener(
-		DeviceManagerDiscoveryListener	listener );
+            DeviceManagerDiscoveryListener listener);
 	
-	public void
+	void
 	removeDiscoveryListener(
-		DeviceManagerDiscoveryListener	listener );
+            DeviceManagerDiscoveryListener listener);
 	
-	public void
+	void
 	addListener(
-		DeviceManagerListener		listener );
+            DeviceManagerListener listener);
 	
-	public void
+	void
 	removeListener(
-		DeviceManagerListener		listener );
+            DeviceManagerListener listener);
 	
-	public interface 
+	interface
 	UnassociatedDevice
 	{
-		public InetAddress
+		InetAddress
 		getAddress();
 		
-		public String
+		String
 		getDescription();
 	}
 	
-	public interface
+	interface
 	DeviceManufacturer
 	{
-		public String
+		String
 		getName();
 		
-		public DeviceTemplate[]
+		DeviceTemplate[]
 		getDeviceTemplates();
 	}
 

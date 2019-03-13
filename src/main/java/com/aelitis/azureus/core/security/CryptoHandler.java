@@ -25,15 +25,15 @@ import java.security.PublicKey;
 public interface 
 CryptoHandler 
 {
-	public int
+	int
 	getType();
 	
 		/**
 		 * Explicit unlock request
 		 * @throws CryptoManagerException
 		 */
-	
-	public void
+
+        void
 	unlock()
 	
 		throws CryptoManagerException;
@@ -41,113 +41,113 @@ CryptoHandler
 		/**
 		 * Puts the handler back into a state where password will be required to access private stuff 
 		 */
-	
-	public void
+
+        void
 	lock();
 	
-	public boolean
+	boolean
 	isUnlocked();
 	
-	public int
+	int
 	getUnlockTimeoutSeconds();
 	
 		/**
 		 * 
 		 * @param secs		0-> infinite
 		 */
-	
-	public void
+
+        void
 	setUnlockTimeoutSeconds(
-		int		secs );
+                int secs);
 	
 	
-	public byte[]
+	byte[]
    	sign(
-   		byte[]		data,
-		String		reason )
+            byte[] data,
+            String reason)
 	
 		throws CryptoManagerException;
 	
-	public boolean
+	boolean
 	verify(
-		byte[]		public_key,
-		byte[]		data,
-		byte[]		signature )
+            byte[] public_key,
+            byte[] data,
+            byte[] signature)
 	
 		throws CryptoManagerException;
 
-	public byte[]
+	byte[]
 	encrypt(
-		byte[]		other_public_key,
-		byte[]		data,
-		String		reason )
+            byte[] other_public_key,
+            byte[] data,
+            String reason)
 		
 		throws CryptoManagerException;
 	
-	public byte[]
+	byte[]
 	decrypt(
-		byte[]		other_public_key,
-		byte[]		data,
-		String		reason )
+            byte[] other_public_key,
+            byte[] data,
+            String reason)
 		
 		throws CryptoManagerException;
 	
-	public CryptoSTSEngine
+	CryptoSTSEngine
 	getSTSEngine(
-		String		reason )
+            String reason)
 	
 		throws CryptoManagerException;
 
-	public CryptoSTSEngine
+	CryptoSTSEngine
 	getSTSEngine(
-		PublicKey		public_key,
-		PrivateKey		private_key )
+            PublicKey public_key,
+            PrivateKey private_key)
 	
 		throws CryptoManagerException;
 	
-	public byte[]
+	byte[]
 	peekPublicKey();
 	
-	public byte[]
+	byte[]
 	getPublicKey(
-		String		reason )
+            String reason)
 	
 		throws CryptoManagerException;
 
-	public byte[]
+	byte[]
 	getEncryptedPrivateKey(
-		String		reason )
+            String reason)
 	
 		throws CryptoManagerException;
 	
-	public boolean
+	boolean
 	verifyPublicKey(
-		byte[]	encoded );
+            byte[] encoded);
 	
-	public void
+	void
 	recoverKeys(
-		byte[]		public_key,
-		byte[]		encrypted_private_key )
+            byte[] public_key,
+            byte[] encrypted_private_key)
 	
 		throws CryptoManagerException;
 	
-	public void
+	void
 	resetKeys(
-		String		reason )
+            String reason)
 	
 		throws CryptoManagerException;
 	
-	public String
+	String
 	exportKeys()
 	
 		throws CryptoManagerException;
 		
-	public int
+	int
 	getDefaultPasswordHandlerType();
 	
-	public void
+	void
 	setDefaultPasswordHandlerType(
-		int		new_type )
+            int new_type)
 	
 		throws CryptoManagerException;
 	
@@ -157,10 +157,10 @@ CryptoHandler
 		 * @return true if an Azureus restart is required
 		 * @throws CryptoManagerException
 		 */
-	
-	public boolean
+
+        boolean
 	importKeys(
-		String	str )
+                String str)
 	
 		throws CryptoManagerException;
 }

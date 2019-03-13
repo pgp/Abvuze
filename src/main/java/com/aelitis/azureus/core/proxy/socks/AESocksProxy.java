@@ -27,16 +27,16 @@ package com.aelitis.azureus.core.proxy.socks;
 public interface 
 AESocksProxy 
 {
-	public static final String	PV_4		= "V4";
-	public static final String	PV_4a		= "V4a";
-	public static final String	PV_5		= "V5";
+	String	PV_4		= "V4";
+	String	PV_4a		= "V4a";
+	String	PV_5		= "V5";
 	
-	public int
+	int
 	getPort();
 	
-	public AESocksProxyPlugableConnection
+	AESocksProxyPlugableConnection
 	getDefaultPlugableConnection(
-		AESocksProxyConnection		basis );
+            AESocksProxyConnection basis);
 	
 		/**
 		 * Set the next SOCKS proxy in a chain - i.e. this socks proxy's default plugable connection
@@ -45,26 +45,26 @@ AESocksProxy
 		 * @param host
 		 * @param port
 		 */
-	
-	public void
+
+        void
 	setNextSOCKSProxy(
-		String		host,
-		int			port,
-		String		proxy_version );
+                String host,
+                int port,
+                String proxy_version);
 	
-	public String
+	String
 	getNextSOCKSProxyHost();
 	
-	public int
+	int
 	getNextSOCKSProxyPort();
 	
-	public String
+	String
 	getNextSOCKSProxyVersion();
 	
-	public void
+	void
 	setAllowExternalConnections(
-		boolean	permit );
+            boolean permit);
 	
-	public void
+	void
 	destroy();
 }

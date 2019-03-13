@@ -40,7 +40,7 @@ public class Timer
 	
 	private ThreadPool	thread_pool;
 		
-	private Set<TimerEvent>	events = new TreeSet<TimerEvent>();
+	private Set<TimerEvent>	events = new TreeSet<>();
 		
 	private long	unique_id_next	= 0;
 	
@@ -76,10 +76,10 @@ public class Timer
 			try {
 				timers_mon.enter();
 				if (timers == null) {
-					timers = new ArrayList<WeakReference<Timer>>();
+					timers = new ArrayList<>();
 					AEDiagnostics.addEvidenceGenerator(new evidenceGenerator());
 				}
-				timers.add(new WeakReference<Timer>(this));
+				timers.add(new WeakReference<>(this));
 			} finally {
 				timers_mon.exit();
 			}
@@ -107,7 +107,7 @@ public class Timer
 	public synchronized List<TimerEvent>
 	getEvents()
 	{
-		return( new ArrayList<TimerEvent>( events ));
+		return(new ArrayList<>(events));
 	}
 	public void
 	setLogging(
@@ -164,7 +164,7 @@ public class Timer
 						
 						long	now = SystemTime.getCurrentTime();
 						
-						TimerEvent	next_event = (TimerEvent)events.iterator().next();
+						TimerEvent	next_event = events.iterator().next();
 						
 						long	when = next_event.getWhen();
 						
@@ -252,11 +252,11 @@ public class Timer
 										
 				Iterator<TimerEvent>	it = events.iterator();
 				
-				List<TimerEvent>	updated_events = new ArrayList<TimerEvent>( events.size());
+				List<TimerEvent>	updated_events = new ArrayList<>(events.size());
 				
 				while (it.hasNext()){
 					
-					TimerEvent	event = (TimerEvent)it.next();
+					TimerEvent	event = it.next();
 					
 						// absolute events don't have their timings fiddled with
 					
@@ -306,7 +306,7 @@ public class Timer
 					// treeset in the constructor optimises things under the assumption that the original set
 					// was correctly sorted...
 				
-				events = new TreeSet<TimerEvent>( updated_events );
+				events = new TreeSet<>(updated_events);
 			}
 		}
 	}
@@ -331,7 +331,7 @@ public class Timer
 								
 				while ( it.hasNext()){
 					
-					TimerEvent	event = (TimerEvent)it.next();
+					TimerEvent	event = it.next();
 					
 						// absolute events don't have their timings fiddled with
 					
@@ -365,7 +365,7 @@ public class Timer
 														
 				if ( updated ){
 					
-					events = new TreeSet<TimerEvent>( new ArrayList<TimerEvent>( events ));
+					events = new TreeSet<>(new ArrayList<>(events));
 				}
 				
 				// must have this notify here as the scheduling code uses the current time to calculate
@@ -415,7 +415,7 @@ public class Timer
 			
 			if ( resort ){
 
-				events = new TreeSet<TimerEvent>( new ArrayList<TimerEvent>( events ));
+				events = new TreeSet<>(new ArrayList<>(events));
 			}
 						
 			notify();
@@ -612,14 +612,10 @@ public class Timer
 	{
 		System.out.println( "Timer '" + thread_pool.getName() + "': dump" );
 
-		Iterator	it = events.iterator();
-		
-		while(it.hasNext()){
-			
-			TimerEvent	ev = (TimerEvent)it.next();
-			
-			System.out.println( "\t" + ev.getString());
-		}
+        for (TimerEvent ev : events) {
+
+            System.out.println("\t" + ev.getString());
+        }
 	}
 
 	private static class
@@ -649,12 +645,11 @@ public class Timer
 							lines.add(timer.thread_pool.getName() + ", "
 									+ events.size() + " events:");
 
-							Iterator it = events.iterator();
-							while (it.hasNext()) {
-								TimerEvent ev = (TimerEvent) it.next();
+                            for (Object event : events) {
+                                TimerEvent ev = (TimerEvent) event;
 
-								lines.add("  " + ev.getString());
-							}
+                                lines.add("  " + ev.getString());
+                            }
 						}
 					}
 				} finally {
@@ -663,10 +658,10 @@ public class Timer
 
 				writer.println("Timers: " + count + " (time=" + SystemTime.getCurrentTime() + "/" + SystemTime.getMonotonousTime() + ")" );
 				writer.indent();
-				for (Iterator iter = lines.iterator(); iter.hasNext();) {
-					String line = (String) iter.next();
-					writer.println(line);
-				}
+                for (Object line1 : lines) {
+                    String line = (String) line1;
+                    writer.println(line);
+                }
 				writer.exdent();
 			} catch (Throwable e) {
 				writer.println(e.toString());

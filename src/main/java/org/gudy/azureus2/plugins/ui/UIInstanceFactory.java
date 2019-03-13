@@ -30,16 +30,16 @@ UIInstanceFactory
 		 * on it can take the appropriate actions
 		 */
 
-	public UIInstance
+        UIInstance
 	getInstance(
-		PluginInterface		plugin_interface );
+                PluginInterface plugin_interface);
 	
 		/**
 		 * This method will be called by the UI manager when detaching the UI to permit the action to be
 		 * vetoed/any detach logic to occur. It should not be directly called by the plugin code 
 		 */
 
-	public void
+        void
 	detach()
 	
 		throws UIException;

@@ -22,6 +22,6 @@ package org.gudy.azureus2.plugins.ui.config;
  *
  */
 public interface HyperlinkParameter extends LabelParameter {
-	public void setHyperlink(String url_location);
-	public String getHyperlink();
+	void setHyperlink(String url_location);
+	String getHyperlink();
 }

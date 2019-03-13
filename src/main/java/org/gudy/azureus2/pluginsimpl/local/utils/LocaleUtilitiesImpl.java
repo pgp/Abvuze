@@ -142,16 +142,16 @@ LocaleUtilitiesImpl
 					parameterChanged(
 						String parameterName )
 					{
-						for (int i=0;i<listeners.size();i++){
-							
-							try{
-								((LocaleListener)listeners.get(i)).localeChanged( MessageText.getCurrentLocale());
-								
-							}catch( Throwable e ){
-								
-								Debug.printStackTrace(e);
-							}
-						}
+                        for (Object listener : listeners) {
+
+                            try {
+                                ((LocaleListener) listener).localeChanged(MessageText.getCurrentLocale());
+
+                            } catch (Throwable e) {
+
+                                Debug.printStackTrace(e);
+                            }
+                        }
 					}
 				});
 		}

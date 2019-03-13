@@ -57,7 +57,7 @@ public class PlatformDevicesMessenger
 		PlatformMessage message = new PlatformMessage("AZMSG", LISTENER_ID,
 				OP_QOS_TURN_ON, new Object[] {
 					"itunes",
-					Boolean.valueOf(withITunes),
+                withITunes,
 					"os-name",
 					Constants.OSName + (bugFix ? ":BF" : "")
 				}, 5000);
@@ -88,16 +88,16 @@ public class PlatformDevicesMessenger
 			return;
 		}
 		
-		HashMap<String, Object> map = new HashMap<String, Object>();
+		HashMap<String, Object> map = new HashMap<>();
 
 		addPluginVersionsToMap(map);
 
 		map.put("device-name", getDeviceName(device));
-		map.put("device-type", new Integer(device.getType()));
+		map.put("device-type", device.getType());
 		if (device instanceof DeviceMediaRenderer) {
 			DeviceMediaRenderer renderer = (DeviceMediaRenderer) device;
 			map.put("renderer-species",
-					Integer.valueOf(renderer.getRendererSpecies()));
+                    renderer.getRendererSpecies());
 		}
 
 		PlatformMessage message = new PlatformMessage("AZMSG", LISTENER_ID,

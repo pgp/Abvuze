@@ -35,32 +35,32 @@ import com.aelitis.azureus.ui.mdi.MultipleDocumentInterface;
 public interface UIFunctions
 	extends AzureusCoreComponent
 {
-	public static final String	MAIN_WINDOW_NAME 		= System.getProperty( "azureus.window.title", Constants.APP_NAME 		+ " Bittorrent Client" );
-	public static final String	MAIN_WINDOW_NAME_PLUS 	= System.getProperty( "azureus.window.title", Constants.APP_PLUS_NAME 	+ " Bittorrent Client" );
+	String	MAIN_WINDOW_NAME 		= System.getProperty( "azureus.window.title", Constants.APP_NAME 		+ " Bittorrent Client" );
+	String	MAIN_WINDOW_NAME_PLUS 	= System.getProperty( "azureus.window.title", Constants.APP_PLUS_NAME 	+ " Bittorrent Client" );
 		
-	public static int STATUSICON_NONE = 0;
+	int STATUSICON_NONE = 0;
 
-	public static int STATUSICON_WARNING = 1;
+	int STATUSICON_WARNING = 1;
 
-	public static int STATUSICON_ERROR = 2;
+	int STATUSICON_ERROR = 2;
 
 	/** @deprecated Used by azburn */
-	public static final int VIEW_MYTORRENTS = 8;
+    int VIEW_MYTORRENTS = 8;
 	/** @deprecated Used by rcm */
-	public static final int VIEW_CONFIG = 4;
+    int VIEW_CONFIG = 4;
 	/** @deprecated Used by rcm */
-	public static final int VIEW_DM_DETAILS = 5;
+    int VIEW_DM_DETAILS = 5;
 
 	
-	public static final int ACTION_FULL_UPDATE				= 1;	// arg: String - url; response Boolean - ok
-	public static final int ACTION_UPDATE_RESTART_REQUEST	= 2;	// arg: Boolean - true->no auto-select response Boolean - ok
+	int ACTION_FULL_UPDATE				= 1;	// arg: String - url; response Boolean - ok
+	int ACTION_UPDATE_RESTART_REQUEST	= 2;	// arg: Boolean - true->no auto-select response Boolean - ok
 	
-	public static final int VS_TRAY_ONLY				= 1;		// low-resource minimized state
-	public static final int VS_MINIMIZED_TO_TRAY		= 2;		// minimized to tray only
-	public static final int VS_MINIMIZED				= 3;		// normal minimized
-	public static final int VS_ACTIVE					= 4;		// active
+	int VS_TRAY_ONLY				= 1;		// low-resource minimized state
+	int VS_MINIMIZED_TO_TRAY		= 2;		// minimized to tray only
+	int VS_MINIMIZED				= 3;		// normal minimized
+	int VS_ACTIVE					= 4;		// active
 
-	public int
+	int
 	getUIType();
 
 	/**
@@ -77,7 +77,7 @@ public interface UIFunctions
 	 */
 	void bringToFront(boolean tryTricks);
 	
-	public int getVisibilityState();
+	int getVisibilityState();
 	
 	/**
 	 * Change/Refresh the language of the UI
@@ -114,12 +114,12 @@ public interface UIFunctions
 	void viewURL(String url, String target, String sourceRef);
 
 
-	public UIFunctionsUserPrompter getUserPrompter(String title, String text,
-			String[] buttons, int defaultOption);
+	UIFunctionsUserPrompter getUserPrompter(String title, String text,
+                                            String[] buttons, int defaultOption);
 
-	public void promptUser(String title, String text, String[] buttons,
-			int defaultOption, String rememberID, String rememberText,
-			boolean bRememberByDefault, int autoCloseInMS, UserPrompterResultListener l);
+	void promptUser(String title, String text, String[] buttons,
+                    int defaultOption, String rememberID, String rememberText,
+                    boolean bRememberByDefault, int autoCloseInMS, UserPrompterResultListener l);
 	
 	/**
 	 * Retrieves the class that handles periodically updating the UI
@@ -128,7 +128,7 @@ public interface UIFunctions
 	 *
 	 * @since 3.1.1.1
 	 */
-	public UIUpdater getUIUpdater();
+    UIUpdater getUIUpdater();
 
 	/**
 	 * @deprecated Use {@link #getMDI()}
@@ -139,11 +139,11 @@ public interface UIFunctions
 	
 	void doSearch(String searchText, boolean toSubscribe );
 
-	public void
+	void
 	installPlugin(
-		String			plugin_id,
-		String			resource_prefix,
-		actionListener	listener );
+            String plugin_id,
+            String resource_prefix,
+            actionListener listener);
 	
 	/**
 	 * 
@@ -151,25 +151,25 @@ public interface UIFunctions
 	 * @param args
 	 * @param listener
 	 */
-	public void
+    void
 	performAction(
-		int				action_id,
-		Object			args,
-		actionListener	listener );
+            int action_id,
+            Object args,
+            actionListener listener);
 	
 	interface 
 	actionListener
 	{
-		public void
+		void
 		actionComplete(
-			Object		result );
+                Object result);
 	}
 
 	/**
 	 * Retrieve the MDI (Sidebar, TabbedMDI)
 	 * @return
 	 */
-	public MultipleDocumentInterface getMDI();		
+    MultipleDocumentInterface getMDI();
 
 	/**
 	 * Might launch the old-school Mr Slidey
@@ -177,37 +177,37 @@ public interface UIFunctions
 	void forceNotify(int iconID, String title, String text, String details,
 			Object[] relatedObjects, int timeoutSecs);	
 	
-	public void
+	void
 	runOnUIThread(
-		int			ui_type,
-		Runnable	runnable );
+            int ui_type,
+            Runnable runnable);
 	
-	public boolean
+	boolean
 	isProgramInstalled(
-		String		extension,
-		String		name );
+            String extension,
+            String name);
 	
-	public void
+	void
 	openRemotePairingWindow();
 	
-	public void
+	void
 	playOrStreamDataSource(
-		Object 		ds, 
-		String 		referal,
-		boolean 	launch_already_checked, 
-		boolean 	complete_only );
+            Object ds,
+            String referal,
+            boolean launch_already_checked,
+            boolean complete_only);
 
-	public static final String 	OTO_DEFAULT_TO_STOPPED			= "defaultStopped";		// Boolean
-	public static final boolean OTO_DEFAULT_TO_STOPPED_DEFAULT	= false;
+	String 	OTO_DEFAULT_TO_STOPPED			= "defaultStopped";		// Boolean
+	boolean OTO_DEFAULT_TO_STOPPED_DEFAULT	= false;
 	
-	public static final String 	OTO_FORCE_OPEN					= "forceOpen";			// Boolean
-	public static final boolean OTO_FORCE_OPEN_DEFAULT			= false;
+	String 	OTO_FORCE_OPEN					= "forceOpen";			// Boolean
+	boolean OTO_FORCE_OPEN_DEFAULT			= false;
 	
-	public static final String 	OTO_SILENT						= "silent";				// Boolean
-	public static final boolean OTO_SILENT_DEFAULT				= false;
+	String 	OTO_SILENT						= "silent";				// Boolean
+	boolean OTO_SILENT_DEFAULT				= false;
 	
-	public static final String 	OTO_HIDE_ERRORS					= "hideErrors";			// Boolean
-	public static final boolean OTO_HIDE_ERRORS_DEFAULT			= false;
+	String 	OTO_HIDE_ERRORS					= "hideErrors";			// Boolean
+	boolean OTO_HIDE_ERRORS_DEFAULT			= false;
 	
 	/**
 	 * Opens the Torrent Add Options Window, if configured to
@@ -215,19 +215,19 @@ public interface UIFunctions
 	 * @param force  Override configuration, show it!
 	 * @return true if torrent was added
 	 */
-	public boolean addTorrentWithOptions(boolean force, TorrentOpenOptions torrentOptions);
+    boolean addTorrentWithOptions(boolean force, TorrentOpenOptions torrentOptions);
 
-	public boolean addTorrentWithOptions(TorrentOpenOptions torrentOptions, Map<String,Object> addOptions );
+	boolean addTorrentWithOptions(TorrentOpenOptions torrentOptions, Map<String, Object> addOptions);
 
-	public void showErrorMessage(String keyPrefix, String details, String[] textParams); 
+	void showErrorMessage(String keyPrefix, String details, String[] textParams);
 	
-	public void showCreateTagDialog(TagReturner tagReturner);
+	void showCreateTagDialog(TagReturner tagReturner);
 	
-	public int adjustPXForDPI( int px );
+	int adjustPXForDPI(int px);
 	
-	public interface 
+	interface
 	TagReturner 
 	{
-		public void returnedTags(Tag[] tags);
+		void returnedTags(Tag[] tags);
 	}
 }

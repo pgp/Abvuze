@@ -23,15 +23,15 @@ package com.aelitis.azureus.core.custom;
 public interface 
 CustomizationManager 
 {
-	public boolean
+	boolean
 	preInitialize();
 	
-	public void
+	void
 	initialize();
 	
-	public Customization
+	Customization
 	getActiveCustomization();
 	
-	public Customization[]
+	Customization[]
 	getCustomizations();
 }

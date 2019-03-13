@@ -130,23 +130,23 @@ public class ScriptBeforeStartup
 		log("Auto-scanning for GRE/XULRunner.  You can skip this by appending the GRE path to LD_LIBRARY_PATH and setting MOZILLA_FIVE_HOME.");
 		try {
 			Pattern pat = Pattern.compile("GRE_PATH=(.*)", Pattern.CASE_INSENSITIVE);
-			for (int i = 0; i < confList.length; i++) {
-				File file = new File(confList[i]);
-				if (file.isFile() && file.canRead()) {
-					log("  checking " + file + " for GRE_PATH");
-					String fileText = FileUtil.readFileAsString(file, 16384);
-					if (fileText != null) {
-						Matcher matcher = pat.matcher(fileText);
-						if (matcher.find()) {
-							String possibleGrePath = matcher.group(1);
-							if (isValidGrePath(new File(possibleGrePath))) {
-								grePath = possibleGrePath;
-								break;
-							}
-						}
-					}
-				}
-			}
+            for (String s : confList) {
+                File file = new File(s);
+                if (file.isFile() && file.canRead()) {
+                    log("  checking " + file + " for GRE_PATH");
+                    String fileText = FileUtil.readFileAsString(file, 16384);
+                    if (fileText != null) {
+                        Matcher matcher = pat.matcher(fileText);
+                        if (matcher.find()) {
+                            String possibleGrePath = matcher.group(1);
+                            if (isValidGrePath(new File(possibleGrePath))) {
+                                grePath = possibleGrePath;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
 
 			if (grePath == null) {
 				final ArrayList possibleDirs = new ArrayList();
@@ -172,31 +172,31 @@ public class ScriptBeforeStartup
 				FileFilter ffIsPossibleDir = new FileFilter() {
 					public boolean accept(File pathname) {
 						String name = pathname.getName().toLowerCase();
-						for (int i = 0; i < possibleDirNames.length; i++) {
-							if (name.startsWith(possibleDirNames[i])) {
-								return true;
-							}
-						}
+                        for (String possibleDirName : possibleDirNames) {
+                            if (name.startsWith(possibleDirName)) {
+                                return true;
+                            }
+                        }
 						return false;
 					}
 				};
 
-				for (Iterator iter = possibleDirs.iterator(); iter.hasNext();) {
-					File dir = (File) iter.next();
+                for (Object possibleDir : possibleDirs) {
+                    File dir = (File) possibleDir;
 
-					File[] possibleFullDirs = dir.listFiles(ffIsPossibleDir);
+                    File[] possibleFullDirs = dir.listFiles(ffIsPossibleDir);
 
-					for (int i = 0; i < possibleFullDirs.length; i++) {
-						log("  checking " + possibleFullDirs[i] + " for GRE");
-						if (isValidGrePath(possibleFullDirs[i])) {
-							grePath = possibleFullDirs[i].getAbsolutePath();
-							break;
-						}
-					}
-					if (grePath != null) {
-						break;
-					}
-				}
+                    for (File possibleFullDir : possibleFullDirs) {
+                        log("  checking " + possibleFullDir + " for GRE");
+                        if (isValidGrePath(possibleFullDir)) {
+                            grePath = possibleFullDir.getAbsolutePath();
+                            break;
+                        }
+                    }
+                    if (grePath != null) {
+                        break;
+                    }
+                }
 			}
 
 			if (grePath != null) {
@@ -224,34 +224,24 @@ public class ScriptBeforeStartup
 				display = claDisplay.newInstance();
 			}
 			Class claShell = Class.forName("org.eclipse.swt.widgets.Shell");
-			Constructor shellConstruct = claShell.getConstructor(new Class[] {
-				claDisplay,
-			});
-			Object shell = shellConstruct.newInstance(new Object[] {
-				display
-			});
+			Constructor shellConstruct = claShell.getConstructor(claDisplay);
+			Object shell = shellConstruct.newInstance(display);
 
 			Class claBrowser = Class.forName("org.eclipse.swt.browser.Browser");
 			Constructor[] constructors = claBrowser.getConstructors();
-			for (int i = 0; i < constructors.length; i++) {
-				if (constructors[i].getParameterTypes().length == 2) {
-					Object browser = constructors[i].newInstance(new Object[] {
-						shell,
-						new Integer(0)
-					});
+            for (Constructor constructor : constructors) {
+                if (constructor.getParameterTypes().length == 2) {
+                    Object browser = constructor.newInstance(shell,
+                            new Integer(0));
 
-					Method methSetUrl = claBrowser.getMethod("setUrl", new Class[] {
-						String.class
-					});
-					methSetUrl.invoke(browser, new Object[] {
-						"about:blank"
-					});
+                    Method methSetUrl = claBrowser.getMethod("setUrl", String.class);
+                    methSetUrl.invoke(browser, "about:blank");
 
-					break;
-				}
-			}
-			Method methDisposeShell = claShell.getMethod("dispose", new Class[] {});
-			methDisposeShell.invoke(shell, new Object[] {});
+                    break;
+                }
+            }
+			Method methDisposeShell = claShell.getMethod("dispose");
+			methDisposeShell.invoke(shell);
 
 			return true;
 		} catch (Throwable e) {

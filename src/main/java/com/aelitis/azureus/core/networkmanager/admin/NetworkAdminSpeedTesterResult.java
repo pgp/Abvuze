@@ -21,11 +21,11 @@
 package com.aelitis.azureus.core.networkmanager.admin;
 
 public interface NetworkAdminSpeedTesterResult{
-	public NetworkAdminSpeedTester getTest();
-	public long getTestTime();
-	public int getDownloadSpeed();
-	public int getUploadSpeed();
-	public boolean hadError();
-	public String getLastError();
+	NetworkAdminSpeedTester getTest();
+	long getTestTime();
+	int getDownloadSpeed();
+	int getUploadSpeed();
+	boolean hadError();
+	String getLastError();
 
 }

@@ -31,11 +31,11 @@ PluginInstallerListener
 		 * @return	true if the request can be satisfied
 		 * @throws PluginException
 		 */
-	
-	public boolean
+
+        boolean
 	installRequest(
-		String				reason,
-		InstallablePlugin	plugin )
+                String reason,
+                InstallablePlugin plugin)
 	
 		throws PluginException;
 }

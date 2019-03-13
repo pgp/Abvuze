@@ -302,10 +302,19 @@ public class ClientIdentifier {
 		  String peer_id_client = BTPeerIDByteDecoder.decode(byte_peer_id);
 		  
 		  String decoded_client;
-		  if (type.equals("AZMP")) {decoded_client = identifyAZMP(peer_id_client, handshake_name, handshake_version, byte_peer_id);}
-		  else if (type.equals("LTEP")) {decoded_client = identifyLTEP(peer_id_client, handshake_name, byte_peer_id);}
-		  else if (type.equals("BT")) {decoded_client = identifyBTOnly(peer_id_client, handshake_reserved);}
-		  else {throw new RuntimeException("invalid extension type: " + type);}
+		  switch (type) {
+			  case "AZMP":
+				  decoded_client = identifyAZMP(peer_id_client, handshake_name, handshake_version, byte_peer_id);
+				  break;
+			  case "LTEP":
+				  decoded_client = identifyLTEP(peer_id_client, handshake_name, byte_peer_id);
+				  break;
+			  case "BT":
+				  decoded_client = identifyBTOnly(peer_id_client, handshake_reserved);
+				  break;
+			  default:
+				  throw new RuntimeException("invalid extension type: " + type);
+		  }
 		  
 		  boolean passed = client_name.equals(decoded_client);
 		  System.out.println("  Test " + test_count++ + ": \"" + client_name + "\" - " + (passed ? "PASSED" : "FAILED"));
@@ -350,7 +359,7 @@ public class ClientIdentifier {
 		  assertDecodeBT("BitThief* [FAKE: \"Mainline 4.4.0\"]", "M4-4-0--9aa757efd5be", "0000000000000000");
 		  assertDecodeBT("Mainline 4.4.0", "M4-4-0--9aa757efd5be", "0000000000000001");
 		  assertDecodeBT("Unknown [FAKE: \"Azureus 3.0.3.4\"]", "-AZ3034-6wfG2wk6wWLc", "0000000000000000");
-		  System.out.println("");
+		  System.out.println();
 		  
 		  System.out.println("Testing AZMP clients:");
 		  assertDecodeAZMP("Azureus 3.0.4.2", "-AZ3042-6ozMq5q6Q3NX", "Azureus", "3.0.4.2");
@@ -362,7 +371,7 @@ public class ClientIdentifier {
 		  //assertDecodeAZMP("", "-AG2083-s1hiF8vGAAg0", "Ares", "2.0.8.3029");
 		  //assertDecodeAZMP("", "-AG3003-lEl2Mm4NEO4n", "Ares Destiny", "3.0.0.3805");
 		  
-		  System.out.println("");
+		  System.out.println();
 		  
 		  System.out.println("Testing LTEP clients:");
 		  assertDecodeLTEP("\u00B5Torrent 1.7.6", "2D555431 3736302D B39EC7AD F6B94610 AA4ACD4A", "\u00B5Torrent 1.7.6");
@@ -377,12 +386,12 @@ public class ClientIdentifier {
 		  //assertDecodeLTEP("", "B5546F72 72656E74 2F333037 36202020 20202020", "\uFDFFTorrent/3.0.7.6");
 		  assertDecodeLTEP("Transmission 0.96", "-TR0960-6ep6svaa61r4", "Transmission 0.95");
 		  assertDecodeLTEP("Opera 9.50", "O100634008270e29150a", "Opera 9.50");
-		  System.out.println("");
+		  System.out.println();
 		  
 		  System.out.println("Testing common clients:");
 		  //assertDecodeExtProtocol("", "-XX1150-dv220cotgj4d", "Transmission", "0.72Z");
 		  assertDecodeExtProtocol("XTorrent [FAKE: \"Azureus 2.5.0.4\" / \"Transmission 0.7-svn\"]", "-AZ2504-192gwethivju", "Transmission", "0.7-svn");
-		  System.out.println("");
+		  System.out.println();
 		  
 		  System.out.println("Done.");
 	  }

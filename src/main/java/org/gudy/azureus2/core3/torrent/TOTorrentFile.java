@@ -27,29 +27,29 @@ import java.util.Map;
 public interface 
 TOTorrentFile 
 {
-	public TOTorrent
+	TOTorrent
 	getTorrent();
 	
-	public int
+	int
 	getIndex();
 	
-	public long
+	long
 	getLength();
 		
-	public byte[][]
+	byte[][]
 	getPathComponents();
 	
-	public String getRelativePath();
+	String getRelativePath();
 		
-	public int
+	int
 	getFirstPieceNumber();
 	
-	public int
+	int
 	getLastPieceNumber();
 	
-	public int
+	int
 	getNumberOfPieces();
 	
-	public Map
+	Map
 	getAdditionalProperties();
 }

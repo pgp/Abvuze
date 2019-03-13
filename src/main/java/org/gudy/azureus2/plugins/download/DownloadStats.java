@@ -30,14 +30,14 @@ package org.gudy.azureus2.plugins.download;
 public interface 
 DownloadStats 
 {
-	public static final int HEALTH_STOPPED    		= 1;
-	public static final int HEALTH_NO_TRACKER 		= 2;
-	public static final int HEALTH_NO_REMOTE  		= 3;
-	public static final int HEALTH_OK  				= 4;
+	int HEALTH_STOPPED    		= 1;
+	int HEALTH_NO_TRACKER 		= 2;
+	int HEALTH_NO_REMOTE  		= 3;
+	int HEALTH_OK  				= 4;
 	/** not connected to any peer and downloading */
-	public static final int HEALTH_KO 				= 5;
+    int HEALTH_KO 				= 5;
 	/** download in STATE_ERROR, see {@link #getStatus()} for error */
-	public static final int HEALTH_ERROR 				= 6;
+    int HEALTH_ERROR 				= 6;
 	
 	/**
 	 * Returns an overall string representing the state of the download
@@ -45,7 +45,7 @@ DownloadStats
    *
    * @since 2.0.7.0
 	 */
-	public String
+    String
 	getStatus();
 	
 	/**
@@ -55,8 +55,8 @@ DownloadStats
    *
    * @since 2.3.0.7
 	 */
-	public String
-	getStatus( boolean localised);
+    String
+	getStatus(boolean localised);
 	
 	/**
 	 * Gives access to the directory into which the download is being saved
@@ -64,7 +64,7 @@ DownloadStats
    *
    * @since 2.0.7.0
 	 */
-	public String
+    String
 	getDownloadDirectory();
 	
 	/**
@@ -73,7 +73,7 @@ DownloadStats
    *
    * @since 2.0.7.0
 	 */
-	public String
+    String
 	getTargetFileOrDir();
 	
 	/**
@@ -82,7 +82,7 @@ DownloadStats
    *
    * @since 2.0.7.0
 	 */
-	public String
+    String
 	getTrackerStatus();
 	
 	/**
@@ -92,7 +92,7 @@ DownloadStats
    *
    * @since 2.0.7.0
 	 */
-	public int
+    int
 	getCompleted();
 	
   /** Retrieve the level of download completion, *including* DND files. If
@@ -120,7 +120,7 @@ DownloadStats
    *
    * @since 2.0.8.0
 	 */
-	public int
+  int
 	getDownloadCompleted(boolean bLive);
 
 	/**
@@ -128,7 +128,7 @@ DownloadStats
 	 * @return
 	 */
 
-	public int
+    int
 	getCheckingDoneInThousandNotation();
 
 	/**
@@ -136,10 +136,10 @@ DownloadStats
 	 * @since 4511. Supply -1 to leave a value unchanged
 	 */
 
-	public void
+    void
 	resetUploadedDownloaded(
-		long		new_up,
-		long		new_down );
+            long new_up,
+            long new_down);
 	
 	/**
 	 * Gives the number of bytes downloaded
@@ -147,7 +147,7 @@ DownloadStats
    *
    * @since 2.0.7.0
 	 */
-	public long
+    long
 	getDownloaded();
 	
 	/**
@@ -155,21 +155,21 @@ DownloadStats
 	 * @param include_protocol
 	 * @return
 	 */
-	
-	public long
+
+    long
 	getDownloaded(
-		boolean	include_protocol );
+            boolean include_protocol);
 	
 	/**
 	 * Gives number of bytes remaining.  *Includes* DND files
 	 * 
 	 * @since 2.5.0.2
 	 */
-	
-	public long
+
+    long
 	getRemaining();
 
-	public long
+	long
 	getRemainingExcludingDND();
 
 	/**
@@ -178,7 +178,7 @@ DownloadStats
    *
    * @since 2.0.7.0
 	 */
-	public long
+    long
 	getUploaded();
 
 	/**
@@ -186,10 +186,10 @@ DownloadStats
 	 * @param include_protocol
 	 * @return
 	 */
-	
-	public long
+
+    long
 	getUploaded(
-		boolean	include_protocol );
+            boolean include_protocol);
 	
 	/**
 	 * Gives the number of bytes discarded.
@@ -199,7 +199,7 @@ DownloadStats
    *
    * @since 2.0.7.0
 	 */
-	public long
+    long
 	getDiscarded();
 	
 	/**
@@ -208,7 +208,7 @@ DownloadStats
    *
    * @since 2.0.7.0
 	 */
-	public long
+    long
 	getDownloadAverage();
 	
 	/**
@@ -216,9 +216,9 @@ DownloadStats
 	 * @param include_protocol
 	 * @return
 	 */
-	public long
+    long
 	getDownloadAverage(
-		boolean	include_protocol );
+            boolean include_protocol);
 
 	/**
 	 * Gives average number of bytes uploaded in last second 
@@ -226,7 +226,7 @@ DownloadStats
    *
    * @since 2.0.7.0
 	 */
-	public long
+    long
 	getUploadAverage();
 	
 	/**
@@ -234,10 +234,10 @@ DownloadStats
 	 * @param include_protocol
 	 * @return
 	 */
-	
-	public long
+
+    long
 	getUploadAverage(
-		boolean	include_protocol );
+            boolean include_protocol);
 	
 	/**
 	 * Gives average number of bytes computed for torrent in last second 
@@ -245,7 +245,7 @@ DownloadStats
    *
    * @since 2.0.7.0
 	 */
-	public long
+    long
 	getTotalAverage();
 	
 	/**
@@ -254,7 +254,7 @@ DownloadStats
    *
    * @since 2.0.7.0
 	 */
-	public String
+    String
 	getElapsedTime();
 	
 	/**
@@ -263,7 +263,7 @@ DownloadStats
    *
    * @since 2.0.7.0
 	 */
-	public String
+    String
 	getETA();
 
 	/**
@@ -277,8 +277,8 @@ DownloadStats
 	 * 
 	 * @since 4.2.0.3
 	 */
-	
-	public long
+
+    long
 	getETASecs();
 	
 	/**
@@ -287,7 +287,7 @@ DownloadStats
    *
    * @since 2.0.7.0
 	 */
-	public long
+    long
 	getHashFails();
 	
 	/**
@@ -296,14 +296,14 @@ DownloadStats
    *
    * @since 2.0.7.0
 	 */
-	public int
+    int
 	getShareRatio();
 
   /** in ms since epoch
    *
    * @since 2.0.8.0
 	 */
-	public long
+  long
 	getTimeStarted();
 	
   /**
@@ -315,7 +315,7 @@ DownloadStats
    *
    * @since 2.1.0.0
 	 */
-	public long
+  long
 	getTimeStartedSeeding();
 
 	/**
@@ -324,7 +324,7 @@ DownloadStats
    *
    * @since 2.0.8.2
 	 */
-	public float
+    float
 	getAvailability();
 
 
@@ -336,7 +336,7 @@ DownloadStats
    *
    * @since 2.1.0.0
 	 */
-	public long 
+  long
 	getSecondsDownloading();
 
   /**
@@ -348,7 +348,7 @@ DownloadStats
    *
    * @since 2.1.0.0
 	 */
-	public long 
+  long
 	getSecondsOnlySeeding();
 	
 	/**
@@ -356,8 +356,8 @@ DownloadStats
 	 * @since 2501
 	 * @return
 	 */
-	
-	public long
+
+    long
 	getSecondsSinceLastDownload();
 	
 	/**
@@ -365,16 +365,16 @@ DownloadStats
 	 * @since 2501
 	 * @return
 	 */
-	
-	public long
+
+    long
 	getSecondsSinceLastUpload();
 	
 	/**
 	 * returns an indication of the health of the torrent 
 	 * @return	see above HEALTH constants
 	 */
-	
-	public int
+
+    int
 	getHealth();
 
 	/**
@@ -387,6 +387,6 @@ DownloadStats
 	 * 
 	 * @since 4.8.0.1
 	 */
-	public long
+    long
 	getBytesUnavailable();
 }

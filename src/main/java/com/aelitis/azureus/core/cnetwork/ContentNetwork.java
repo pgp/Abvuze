@@ -25,103 +25,103 @@ import com.aelitis.azureus.core.vuzefile.VuzeFile;
 public interface 
 ContentNetwork 
 {
-	public static final long	CONTENT_NETWORK_UNKNOWN		= -1;
+	long	CONTENT_NETWORK_UNKNOWN		= -1;
 	
-	public static final long	CONTENT_NETWORK_VUZE		= 1;
+	long	CONTENT_NETWORK_VUZE		= 1;
 	
 		/**
 		 * You should normally NOT refer explicitly to this constant without consideration
 		 * as we don't want network-specific code proliferating
 		 */
+
+        long	CONTENT_NETWORK_RFN			= 2;
 	
-	public static final long	CONTENT_NETWORK_RFN			= 2;
-	
-	public static final long	CONTENT_NETWORK_VHDNL		= 3;
+	long	CONTENT_NETWORK_VHDNL		= 3;
 
 
-	public static final int		SERVICE_XSEARCH				= 2;	// String - query text; Boolean - toSubscribe
-	public static final int		SERVICE_RPC					= 3;
-	public static final int		SERVICE_RELAY_RPC			= 4;
-	public static final int		SERVICE_AUTH_RPC			= 5;
-	public static final int		SERVICE_BIG_BROWSE			= 6;
-	public static final int		SERVICE_PUBLISH				= 7;
-	public static final int		SERVICE_WELCOME				= 8;
-	public static final int		SERVICE_PUBLISH_NEW			= 9;
-	public static final int		SERVICE_PUBLISH_ABOUT		= 10;
-	public static final int		SERVICE_CONTENT_DETAILS		= 11;	// String - hash; String (can be null) - client ref
-	public static final int		SERVICE_COMMENT				= 12;	// String - hash
-	public static final int		SERVICE_PROFILE				= 13;	// String - login_id; String - client ref
-	public static final int		SERVICE_TORRENT_DOWNLOAD	= 14;	// String - hash; String (can be null) - client ref
-	public static final int		SERVICE_SITE				= 15;
-	public static final int		SERVICE_SUPPORT				= 16;
-	public static final int		SERVICE_FAQ					= 17;
-	public static final int		SERVICE_FAQ_TOPIC			= 18;	// String - topic entry
-	public static final int		SERVICE_BLOG				= 19;
-	public static final int		SERVICE_FORUMS				= 20;
-	public static final int		SERVICE_WIKI				= 21;
-	public static final int		SERVICE_LOGIN				= 22;	// String - message (can be null)
-	public static final int		SERVICE_LOGOUT				= 23;
-	public static final int		SERVICE_REGISTER			= 24;
-	public static final int		SERVICE_MY_PROFILE			= 25;
-	public static final int		SERVICE_MY_ACCOUNT			= 26;
-	public static final int		SERVICE_SITE_RELATIVE		= 27;	// String - relative URL
-	public static final int		SERVICE_ADD_FRIEND			= 28;	// String - bg colour
-	public static final int		SERVICE_SUBSCRIPTION		= 29;	// String - subscription ID
-	public static final int		SERVICE_GET_ICON			= 30;	
-	public static final int		SERVICE_AUTHORIZE			= 31;	
-	public static final int		SERVICE_PREPLAYBACK  		= 32;
-	public static final int		SERVICE_POSTPLAYBACK  		= 33;
-	public static final int		SERVICE_SIDEBAR_CLOSE  		= 34;
-	public static final int		SERVICE_ABOUT				= 35;
-	public static final int		SERVICE_IDENTIFY			= 36;	
-	public static final int		SERVICE_EXT_SITE_RELATIVE		= 37;	// String - relative URL
+	int		SERVICE_XSEARCH				= 2;	// String - query text; Boolean - toSubscribe
+	int		SERVICE_RPC					= 3;
+	int		SERVICE_RELAY_RPC			= 4;
+	int		SERVICE_AUTH_RPC			= 5;
+	int		SERVICE_BIG_BROWSE			= 6;
+	int		SERVICE_PUBLISH				= 7;
+	int		SERVICE_WELCOME				= 8;
+	int		SERVICE_PUBLISH_NEW			= 9;
+	int		SERVICE_PUBLISH_ABOUT		= 10;
+	int		SERVICE_CONTENT_DETAILS		= 11;	// String - hash; String (can be null) - client ref
+	int		SERVICE_COMMENT				= 12;	// String - hash
+	int		SERVICE_PROFILE				= 13;	// String - login_id; String - client ref
+	int		SERVICE_TORRENT_DOWNLOAD	= 14;	// String - hash; String (can be null) - client ref
+	int		SERVICE_SITE				= 15;
+	int		SERVICE_SUPPORT				= 16;
+	int		SERVICE_FAQ					= 17;
+	int		SERVICE_FAQ_TOPIC			= 18;	// String - topic entry
+	int		SERVICE_BLOG				= 19;
+	int		SERVICE_FORUMS				= 20;
+	int		SERVICE_WIKI				= 21;
+	int		SERVICE_LOGIN				= 22;	// String - message (can be null)
+	int		SERVICE_LOGOUT				= 23;
+	int		SERVICE_REGISTER			= 24;
+	int		SERVICE_MY_PROFILE			= 25;
+	int		SERVICE_MY_ACCOUNT			= 26;
+	int		SERVICE_SITE_RELATIVE		= 27;	// String - relative URL
+	int		SERVICE_ADD_FRIEND			= 28;	// String - bg colour
+	int		SERVICE_SUBSCRIPTION		= 29;	// String - subscription ID
+	int		SERVICE_GET_ICON			= 30;
+	int		SERVICE_AUTHORIZE			= 31;
+	int		SERVICE_PREPLAYBACK  		= 32;
+	int		SERVICE_POSTPLAYBACK  		= 33;
+	int		SERVICE_SIDEBAR_CLOSE  		= 34;
+	int		SERVICE_ABOUT				= 35;
+	int		SERVICE_IDENTIFY			= 36;
+	int		SERVICE_EXT_SITE_RELATIVE		= 37;	// String - relative URL
 
 		// content network properties
 	
-	public static final int		PROPERTY_SITE_HOST			= 1;	// String
-	public static final int		PROPERTY_REMOVEABLE			= 2;	// Boolean
-	public static final int		PROPERTY_ORDER				= 3;	// String (Tux prefers to Integer)
+	int		PROPERTY_SITE_HOST			= 1;	// String
+	int		PROPERTY_REMOVEABLE			= 2;	// Boolean
+	int		PROPERTY_ORDER				= 3;	// String (Tux prefers to Integer)
 
 		// persistent (and local) properties
 	
-	public static final String	PP_AUTH_PAGE_SHOWN			= "auth_shown";			// Boolean, default false
-	public static final String	PP_IS_CUSTOMIZATION			= "is_cust";			// Boolean, default false
-	public static final String	PP_ACTIVE			        = "active";				// Boolean
-	public static final String	PP_SHOW_IN_MENU       		= "in_menu";			// Boolean
-	public static final String	PP_SOURCE_REF				= "source_ref"; 		// String
+	String	PP_AUTH_PAGE_SHOWN			= "auth_shown";			// Boolean, default false
+	String	PP_IS_CUSTOMIZATION			= "is_cust";			// Boolean, default false
+	String	PP_ACTIVE			        = "active";				// Boolean
+	String	PP_SHOW_IN_MENU       		= "in_menu";			// Boolean
+	String	PP_SOURCE_REF				= "source_ref"; 		// String
 
 	
 		/**
 		 * Returns one of the above CONTENT_NETWORK constants
 		 * @return
 		 */
-	
-	public long
+
+        long
 	getID();
 	
-	public String
+	String
 	getName();
 	
-	public Object
+	Object
 	getProperty(
-		int			property );
+            int property);
 	
-	public boolean
+	boolean
 	isStartupNetwork();
 	
-	public void
+	void
 	setStartupNetwork(
-		boolean		is_startup );
+            boolean is_startup);
 	
 		/**
 		 * Test if the network supports a particular service
 		 * @param service_type
 		 * @return
 		 */
-	
-	public boolean
+
+        boolean
 	isServiceSupported(
-		int			service_type );
+                int service_type);
 	
 		/**
 		 * Returns the base URL of the service. If not parameterised then this is sufficient to
@@ -129,10 +129,10 @@ ContentNetwork
 		 * @param service_type
 		 * @return
 		 */
-	
-	public String
+
+        String
 	getServiceURL(
-		int			service_type );
+                int service_type);
 	
 		/**
 		 * Generic parameterised service method
@@ -140,65 +140,65 @@ ContentNetwork
 		 * @param params
 		 * @return
 		 */
-	
-	public String
+
+        String
 	getServiceURL(
-		int			service_type,
-		Object[]	params );
+                int service_type,
+                Object[] params);
 	
-	public String
+	String
 	getXSearchService(
-		String		query,
-		boolean		to_subscribe );
+            String query,
+            boolean to_subscribe);
 	
-	public String
+	String
 	getContentDetailsService(
-		String		hash,
-		String		client_ref );
+            String hash,
+            String client_ref);
 	
-	public String
+	String
 	getCommentService(
-		String		hash );
+            String hash);
 	
-	public String
+	String
 	getProfileService(
-		String		login_id,
-		String		client_ref );
+            String login_id,
+            String client_ref);
 	
-	public String
+	String
 	getTorrentDownloadService(
-		String		hash,
-		String		client_ref );
+            String hash,
+            String client_ref);
 	
 		/**
 		 * @param topic The topic number or a pre-defined topic constant found in <code>FAQTopics</code>
 		 */
 
-	public String
+        String
 	getFAQTopicService(
-		String		topic );
+                String topic);
 	
-	public String
+	String
 	getLoginService(
-		String		message );
+            String message);
 	
-	public String
+	String
 	getSiteRelativeURL(
-		String		relative_url,
-		boolean		append_suffix );
+            String relative_url,
+            boolean append_suffix);
 	
-	public String
+	String
 	getExternalSiteRelativeURL(
-		String		relative_url,
-		boolean		append_suffix );
+            String relative_url,
+            boolean append_suffix);
 	
-	public String
+	String
 	getAddFriendURL(
-		String		bg_colour );
+            String bg_colour);
 	
-	public String
+	String
 	getSubscriptionURL(
-		String		subs_id );
+            String subs_id);
 	
 		/**
 		 * I'd rather this function we embedded into the ContentNetwork service getting logic, but for
@@ -209,18 +209,18 @@ ContentNetwork
 		 * @param include_azid		whether or not we should include the azid in the suffix
 		 * @return
 		 */
-	public String
+        String
 	appendURLSuffix(
-		String		url_in,
-		boolean		for_post,
-		boolean		include_azid );
+                String url_in,
+                boolean for_post,
+                boolean include_azid);
 	
 		/**
 		 * export to vuze file
 		 * @return
 		 */
-	
-	public VuzeFile
+
+        VuzeFile
 	getVuzeFile();
 	
 		/**
@@ -230,39 +230,39 @@ ContentNetwork
 		 * @param name	PP_ constant
 		 * @param value	must be bencodable!
 		 */
-	
-	public void
+
+        void
 	setPersistentProperty(
-		String		name,
-		Object		value );
+                String name,
+                Object value);
 	
-	public Object
+	Object
 	getPersistentProperty(
-		String		name );
+            String name);
 	
-	public void
+	void
 	addPersistentPropertyChangeListener(
-		ContentNetworkPropertyChangeListener	listener );
+            ContentNetworkPropertyChangeListener listener);
 	
-	public void
+	void
 	removePersistentPropertyChangeListener(
-		ContentNetworkPropertyChangeListener	listener );
+            ContentNetworkPropertyChangeListener listener);
 	
 		/**
 		 * Set a non-persistent property of the content network
 		 * @param key
 		 * @param value
 		 */
-	
-	public void
+
+        void
 	setTransientProperty(
-		Object		key,
-		Object		value );
+                Object key,
+                Object value);
 	
-	public Object
+	Object
 	getTransientProperty(
-		Object		key );
+            Object key);
 	
-	public void
+	void
 	remove();
 }

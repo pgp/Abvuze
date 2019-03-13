@@ -73,19 +73,17 @@ NetworkAdminSpeedTesterImpl
 			
 			result_reported = true;
 		}
-		
-		Iterator	it = listeners.iterator();
 
-		while( it.hasNext()){
+        for (Object listener : listeners) {
 
-			try{
-				((NetworkAdminSpeedTesterListener)it.next()).complete( this, r );
+            try {
+                ((NetworkAdminSpeedTesterListener) listener).complete(this, r);
 
-			}catch( Throwable e ){
+            } catch (Throwable e) {
 
-				Debug.printStackTrace(e);
-			}
-		}
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 
 	protected void 
@@ -93,17 +91,15 @@ NetworkAdminSpeedTesterImpl
 		String status )
 	{
 
-		Iterator	it = listeners.iterator();
+        for (Object listener : listeners) {
 
-		while( it.hasNext()){
+            try {
+                ((NetworkAdminSpeedTesterListener) listener).stage(this, status);
 
-			try{
-				((NetworkAdminSpeedTesterListener)it.next()).stage( this, status );
+            } catch (Throwable e) {
 
-			}catch( Throwable e ){
-
-				Debug.printStackTrace(e);
-			}
-		}
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 }

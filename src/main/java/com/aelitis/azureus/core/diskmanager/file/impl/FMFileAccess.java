@@ -28,60 +28,60 @@ import com.aelitis.azureus.core.diskmanager.file.FMFileManagerException;
 public interface 
 FMFileAccess 
 {
-	public void
+	void
 	aboutToOpen()
 	
 		throws FMFileManagerException;
 		
-	public long
+	long
 	getLength(
-		RandomAccessFile		raf )
+            RandomAccessFile raf)
 	
 		throws FMFileManagerException;
 	
-	public void
+	void
 	setLength(
-		RandomAccessFile		raf,
-		long					length )
+            RandomAccessFile raf,
+            long length)
 	
 		throws FMFileManagerException;
 	
-	public void
+	void
 	read(
-		RandomAccessFile	raf,
-		DirectByteBuffer[]	buffers,
-		long				offset )
+            RandomAccessFile raf,
+            DirectByteBuffer[] buffers,
+            long offset)
 	
 		throws FMFileManagerException;
 	
-	public void
+	void
 	write(
-		RandomAccessFile		raf,
-		DirectByteBuffer[]		buffers,
-		long					position )
+            RandomAccessFile raf,
+            DirectByteBuffer[] buffers,
+            long position)
 	
 		throws FMFileManagerException;
 	
-	public void
+	void
 	flush()
 	
 		throws FMFileManagerException;
 	
-	public boolean
+	boolean
 	isPieceCompleteProcessingNeeded(
-		int					piece_number );
+            int piece_number);
 	
-	public void
+	void
 	setPieceComplete(
-		RandomAccessFile	raf,
-		int					piece_number,
-		DirectByteBuffer	piece_data )
+            RandomAccessFile raf,
+            int piece_number,
+            DirectByteBuffer piece_data)
 	
 		throws FMFileManagerException;
 	 
-	public FMFileImpl
+	FMFileImpl
 	getFile();
 	
-	public String
+	String
 	getString();
 }

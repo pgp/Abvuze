@@ -293,8 +293,8 @@ public class PingSpaceMapper
         public static final int INDEX_PING_BAD = 2;
 
         final int[] pingCount = new int[3];
-        int uploadBound[] = new int[2];
-        int downloadBound[] = new int[2];
+        int[] uploadBound = new int[2];
+        int[] downloadBound = new int[2];
 
         public void incrementMetricCount( int pingIndex){
             if(pingIndex>=0 && pingIndex<=3){

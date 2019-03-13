@@ -33,9 +33,9 @@ public interface
 Parameter
 	extends ConfigParameter
 {
-	public static final int MODE_BEGINNER		= 0;
-	public static final int MODE_INTERMEDIATE	= 1;
-	public static final int MODE_ADVANCED		= 2;
+	int MODE_BEGINNER		= 0;
+	int MODE_INTERMEDIATE	= 1;
+	int MODE_ADVANCED		= 2;
 	
 	/**
 	 * Sets whether the UI object for this parameter is enabled (changeable) or
@@ -45,9 +45,9 @@ Parameter
 	 * 
 	 * @since 2.3.0.0
 	 */
-	public void
+    void
 	setEnabled(
-		boolean	enabled );
+            boolean enabled);
 	
 	/**
 	 * Retrieves the enabled state for the UI object for this parameter
@@ -56,7 +56,7 @@ Parameter
 	 * 
 	 * @since 2.3.0.0
 	 */
-	public boolean
+    boolean
 	isEnabled();
 
 	/** 
@@ -65,7 +65,7 @@ Parameter
 	 * @return MODE_ constants above
 	 * @since 3.0.5.3
 	 */
-	public int
+    int
 	getMinimumRequiredUserMode();
 	
 	/**
@@ -74,10 +74,10 @@ Parameter
 	 * @param mode see MODE_ constants defined above 
 	 * @since 3.0.5.3
 	 */
-	
-	public void
+
+    void
 	setMinimumRequiredUserMode(
-		int		mode );
+            int mode);
 	
 	/**
 	 * Sets whether the UI object for this parameter is visible to the user
@@ -86,9 +86,9 @@ Parameter
 	 * 
 	 * @since 2.3.0.4
 	 */
-	public void
+    void
 	setVisible(
-		boolean	visible );
+            boolean visible);
 	
 	/**
 	 * Retrieves the visiblility state for the UI object for this parameter
@@ -97,7 +97,7 @@ Parameter
 	 * 
 	 * @since 2.3.0.4
 	 */
-	public boolean
+    boolean
 	isVisible();
 	
 	/**
@@ -106,10 +106,10 @@ Parameter
 	 * 
 	 * @since 3.0.5.1
 	 */
-	
-	public void
+
+    void
 	setGenerateIntermediateEvents(
-		boolean	b );
+            boolean b);
 	
 	/**
 	 * 
@@ -117,8 +117,8 @@ Parameter
 	 * 
 	 * @since 3.0.5.1
 	 */
-	
-	public boolean
+
+    boolean
 	getGenerateIntermediateEvents();
 	
 	/**
@@ -128,9 +128,9 @@ Parameter
 	 * 
 	 * @since 2.1.0.2
 	 */
-	public void
+    void
 	addListener(
-		ParameterListener	l );
+            ParameterListener l);
 	
 	/**
 	 * Removes a previously added listener
@@ -139,9 +139,9 @@ Parameter
 	 * 
 	 * @since 2.1.0.2
 	 */
-	public void
+    void
 	removeListener(
-		ParameterListener	l );
+            ParameterListener l);
 	
 	/**
 	 * Retrieve the actual text of the label associated with this parameter.
@@ -151,7 +151,7 @@ Parameter
 	 * 
 	 * @since 2.3.0.6
 	 */
-	public String getLabelText();
+    String getLabelText();
 	
 	/**
 	 * Set the text of the label associated to with this parameter to the literal
@@ -161,7 +161,7 @@ Parameter
 	 * 
 	 * @since 2.3.0.6
 	 */
-	public void setLabelText(String sText);
+    void setLabelText(String sText);
 	
 	/**
 	 * Retrieve the language bundle key for the label associated with this 
@@ -172,7 +172,7 @@ Parameter
 	 * 
 	 * @since 2.3.0.6
 	 */
-	public String getLabelKey();
+    String getLabelKey();
 	
 	/**
 	 * Set the label to use the supplied language bundle key for the label
@@ -182,10 +182,10 @@ Parameter
 	 * 
 	 * @since 2.3.0.6
 	 */
-	public void setLabelKey(String sLabelKey);
+    void setLabelKey(String sLabelKey);
 	
-	public String getConfigKeyName();
+	String getConfigKeyName();
 	
-	public boolean
+	boolean
 	hasBeenSet();
 }

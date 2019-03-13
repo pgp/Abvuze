@@ -39,7 +39,7 @@ public class TableStructureEventDispatcher implements
 		TableStructureModificationListener
 {
 
-	private static Map<String, TableStructureEventDispatcher> instances = new HashMap<String, TableStructureEventDispatcher>();
+	private static Map<String, TableStructureEventDispatcher> instances = new HashMap<>();
 
 	private static AEMonitor class_mon = new AEMonitor(
 			"TableStructureEventDispatcher:class");
@@ -99,52 +99,47 @@ public class TableStructureEventDispatcher implements
 
 	public void tableStructureChanged( boolean columnAddedOrRemoved, Class forPluginDataSourceType ) {
 
-			Iterator iter = listeners.iterator();
-			while (iter.hasNext()) {
-				TableStructureModificationListener listener = (TableStructureModificationListener) iter.next();
-				try{
-					listener.tableStructureChanged(columnAddedOrRemoved, forPluginDataSourceType);
-				}catch( Throwable e ){
-					Debug.printStackTrace(e);
-				}
-			}
+        for (Object listener1 : listeners) {
+            TableStructureModificationListener listener = (TableStructureModificationListener) listener1;
+            try {
+                listener.tableStructureChanged(columnAddedOrRemoved, forPluginDataSourceType);
+            } catch (Throwable e) {
+                Debug.printStackTrace(e);
+            }
+        }
 	}
 
 	public void columnSizeChanged(TableColumnCore tableColumn, int diff) {
-			Iterator iter = listeners.iterator();
-			while (iter.hasNext()) {
-				TableStructureModificationListener listener = (TableStructureModificationListener) iter.next();
-				listener.columnSizeChanged(tableColumn, diff);
-			}
+        for (Object listener1 : listeners) {
+            TableStructureModificationListener listener = (TableStructureModificationListener) listener1;
+            listener.columnSizeChanged(tableColumn, diff);
+        }
 	}
 
 	public void columnInvalidate(TableColumnCore tableColumn) {
 
-			Iterator iter = listeners.iterator();
-			while (iter.hasNext()) {
-				TableStructureModificationListener listener = (TableStructureModificationListener) iter.next();
-				listener.columnInvalidate(tableColumn);
-			}
+        for (Object listener1 : listeners) {
+            TableStructureModificationListener listener = (TableStructureModificationListener) listener1;
+            listener.columnInvalidate(tableColumn);
+        }
 
 	}
 
 	public void cellInvalidate(TableColumnCore tableColumn, Object data_source) {
 
-			Iterator iter = listeners.iterator();
-			while (iter.hasNext()) {
-				TableStructureModificationListener listener = (TableStructureModificationListener) iter.next();
-				listener.cellInvalidate(tableColumn, data_source);
-			}
+        for (Object listener1 : listeners) {
+            TableStructureModificationListener listener = (TableStructureModificationListener) listener1;
+            listener.cellInvalidate(tableColumn, data_source);
+        }
 
 	}
 
 	
 	public void columnOrderChanged(int[] iPositions) {
 
-			Iterator iter = listeners.iterator();
-			while (iter.hasNext()) {
-				TableStructureModificationListener listener = (TableStructureModificationListener) iter.next();
-				listener.columnOrderChanged(iPositions);
-			}
+        for (Object listener1 : listeners) {
+            TableStructureModificationListener listener = (TableStructureModificationListener) listener1;
+            listener.columnOrderChanged(iPositions);
+        }
 	}
 }

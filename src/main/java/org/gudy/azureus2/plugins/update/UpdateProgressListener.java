@@ -27,7 +27,7 @@ package org.gudy.azureus2.plugins.update;
 public interface 
 UpdateProgressListener 
 {
-	public void
+	void
 	reportProgress(
-		String	str );
+            String str);
 }

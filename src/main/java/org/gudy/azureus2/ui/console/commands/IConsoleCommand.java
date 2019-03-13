@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -200,19 +199,19 @@ public abstract class IConsoleCommand {
 				long to = 0;
 				long tot = 0;
 				if (dm.getDiskManager() != null) {
-					DiskManagerFileInfo files[] = dm.getDiskManager().getFiles();
+					DiskManagerFileInfo[] files = dm.getDiskManager().getFiles();
 					if (files != null) {
 						if (files.length>1) { 
 							int c=0;
-							for (int i = 0; i < files.length; i++) {
-								if (files[i] != null) {
-									if (!files[i].isSkipped()) {
-										c += 1;
-										tot += files[i].getLength();
-										to += files[i].getDownloaded();
-									}
-								}
-							}
+                            for (DiskManagerFileInfo file : files) {
+                                if (file != null) {
+                                    if (!file.isSkipped()) {
+                                        c += 1;
+                                        tot += file.getLength();
+                                        to += file.getDownloaded();
+                                    }
+                                }
+                            }
 							if (c == files.length)
 								tot = 0;
 						}

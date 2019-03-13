@@ -110,9 +110,9 @@ DHTNATPuncherImpl
 	private static final int	RENDEZVOUS_PING_FAIL_LIMIT		= 4;			// if you make this < 2 change code below!
 	
 	final Monitor						server_mon;
-	final Map<String,BindingData> 	rendezvous_bindings = new HashMap<String,BindingData>();
+	final Map<String,BindingData> 	rendezvous_bindings = new HashMap<>();
 	
-	final CopyOnWriteList<DHTNATPuncherImpl>		secondaries	 = new CopyOnWriteList<DHTNATPuncherImpl>();
+	final CopyOnWriteList<DHTNATPuncherImpl>		secondaries	 = new CopyOnWriteList<>();
 	
 	private boolean	force_active;
 	
@@ -162,7 +162,7 @@ DHTNATPuncherImpl
 	private volatile byte[]							last_publish_key;
 	private volatile List<DHTTransportContact>		last_write_set;
 	
-	private final CopyOnWriteList<DHTNATPuncherListener>		listeners = new CopyOnWriteList<DHTNATPuncherListener>();
+	private final CopyOnWriteList<DHTNATPuncherListener>		listeners = new CopyOnWriteList<>();
 	
 	private boolean	suspended;
 	
@@ -237,7 +237,7 @@ DHTNATPuncherImpl
 	public void
 	start()
 	{
-		List<DHTNATPuncherImpl>	to_start = new ArrayList<DHTNATPuncherImpl>();
+		List<DHTNATPuncherImpl>	to_start = new ArrayList<>();
 		
 		synchronized( secondaries ){
 			
@@ -383,7 +383,7 @@ DHTNATPuncherImpl
 							server_mon.exit();
 						}
 						
-						Set<InetAddress> rends = new HashSet<InetAddress>();
+						Set<InetAddress> rends = new HashSet<>();
 						
 						DHTTransportContact ct = DHTNATPuncherImpl.this.current_target;
 						
@@ -893,7 +893,7 @@ DHTNATPuncherImpl
   									DHT.FLAG_SINGLE_VALUE,
   									new DHTOperationListener()
   									{
-  										private final List<DHTTransportContact>	written_to = new ArrayList<DHTTransportContact>();
+  										private final List<DHTTransportContact>	written_to = new ArrayList<>();
   										
   										public void
   										searching(
@@ -965,7 +965,7 @@ DHTNATPuncherImpl
 							DHT.FLAG_SINGLE_VALUE,
 							new DHTOperationListener()
 							{
-								private final List<DHTTransportContact>	written_to = new ArrayList<DHTTransportContact>();
+								private final List<DHTTransportContact>	written_to = new ArrayList<>();
 
 								public void
 								searching(
@@ -1193,7 +1193,7 @@ DHTNATPuncherImpl
 		
 			case RT_BIND_REQUEST:
 			{
-				response.put( "type", new Long( RT_BIND_REPLY ));
+				response.put( "type", (long) RT_BIND_REPLY);
 				
 				receiveBind( originator, data, response );
 				
@@ -1201,7 +1201,7 @@ DHTNATPuncherImpl
 			}
 			case RT_CLOSE_REQUEST:
 			{
-				response.put( "type", new Long( RT_CLOSE_REPLY ));
+				response.put( "type", (long) RT_CLOSE_REPLY);
 				
 				receiveClose( originator, data, response );
 				
@@ -1209,7 +1209,7 @@ DHTNATPuncherImpl
 			}
 			case RT_QUERY_REQUEST:
 			{
-				response.put( "type", new Long( RT_QUERY_REPLY ));
+				response.put( "type", (long) RT_QUERY_REPLY);
 				
 				receiveQuery( originator, data, response );
 				
@@ -1217,7 +1217,7 @@ DHTNATPuncherImpl
 			}
 			case RT_PUNCH_REQUEST:
 			{
-				response.put( "type", new Long( RT_PUNCH_REPLY ));
+				response.put( "type", (long) RT_PUNCH_REPLY);
 				
 				receivePunch( originator, data, response );
 				
@@ -1225,7 +1225,7 @@ DHTNATPuncherImpl
 			}
 			case RT_CONNECT_REQUEST:
 			{
-				response.put( "type", new Long( RT_CONNECT_REPLY ));
+				response.put( "type", (long) RT_CONNECT_REPLY);
 				
 				receiveConnect( originator, data, response );
 				
@@ -1317,7 +1317,7 @@ DHTNATPuncherImpl
 		try{
 			Map	request = new HashMap();
 			
-			request.put("type", new Long( RT_BIND_REQUEST ));
+			request.put("type", (long) RT_BIND_REQUEST);
 			
 			Map response = sendRequest( target, request, TRANSFER_TIMEOUT );
 			
@@ -1409,7 +1409,7 @@ DHTNATPuncherImpl
 						entry.rebind();
 					}
 					
-					response.put( "port", new Long( originator.getAddress().getPort()));
+					response.put( "port", (long) originator.getAddress().getPort());
 				}
 			}finally{
 				
@@ -1422,7 +1422,7 @@ DHTNATPuncherImpl
 			}
 		}
 		
-		response.put( "ok", new Long(ok?1:0));
+		response.put( "ok", (long) (ok ? 1 : 0));
 	}
 		
 	public void
@@ -1430,24 +1430,18 @@ DHTNATPuncherImpl
 	{
 		try{
 			server_mon.enter();
-			
-			Iterator<BindingData>	it = rendezvous_bindings.values().iterator();
-			
-			while( it.hasNext()){
-				
-				BindingData	entry = it.next();
-				
-				final DHTTransportUDPContact	contact = entry.getContact();
-				
-				new AEThread2( "DHTNATPuncher:destroy", true )
-				{
-					public void
-					run()
-					{
-						sendClose( contact );
-					}
-				}.start();
-			}
+
+            for (BindingData entry : rendezvous_bindings.values()) {
+
+                final DHTTransportUDPContact contact = entry.getContact();
+
+                new AEThread2("DHTNATPuncher:destroy", true) {
+                    public void
+                    run() {
+                        sendClose(contact);
+                    }
+                }.start();
+            }
 			
 			byte[]						lpk	= last_publish_key;
 			List<DHTTransportContact>	lws = last_write_set;
@@ -1456,7 +1450,7 @@ DHTNATPuncherImpl
 				
 				log( "Removing publish on closedown");
 				
-				DHTTransportContact[]	contacts = lws.toArray( new DHTTransportContact[ lws.size()] );
+				DHTTransportContact[]	contacts = lws.toArray(new DHTTransportContact[0]);
 				
 				dht.remove( 
 					contacts, 
@@ -1482,7 +1476,7 @@ DHTNATPuncherImpl
 		try{
 			Map	request = new HashMap();
 			
-			request.put("type", new Long( RT_CLOSE_REQUEST ));
+			request.put("type", (long) RT_CLOSE_REQUEST);
 			
 			Map response = sendRequest( target, request, TRANSFER_TIMEOUT );
 			
@@ -1535,7 +1529,7 @@ DHTNATPuncherImpl
 			}.start();
 		}
 		
-		response.put( "ok", new Long(1));
+		response.put( "ok", 1L);
 	}
 	
 	
@@ -1550,7 +1544,7 @@ DHTNATPuncherImpl
 		try{
 			Map	request = new HashMap();
 			
-			request.put("type", new Long( RT_QUERY_REQUEST ));
+			request.put("type", (long) RT_QUERY_REQUEST);
 			
 			Map response = sendRequest( target, request, TRANSFER_TIMEOUT );
 			
@@ -1593,9 +1587,9 @@ DHTNATPuncherImpl
 		
 		response.put( "ip", address.getAddress().getHostAddress().getBytes());
 		
-		response.put( "port", new Long( address.getPort()));
+		response.put( "port", (long) address.getPort());
 		
-		response.put( "ok", new Long(1));
+		response.put( "ok", 1L);
 	}
 	
 	protected Map
@@ -1606,7 +1600,7 @@ DHTNATPuncherImpl
 		boolean							no_tunnel )
 	{		
 		AESemaphore	wait_sem 	= new AESemaphore( "DHTNatPuncher::sendPunch" );
-		Object[]	wait_data 	= new Object[]{ target, wait_sem, new Integer(0)};
+		Object[]	wait_data 	= new Object[]{ target, wait_sem, 0};
 		
 		try{
 
@@ -1622,7 +1616,7 @@ DHTNATPuncherImpl
 			
 			Map	request = new HashMap();
 			
-			request.put("type", new Long( RT_PUNCH_REQUEST ));
+			request.put("type", (long) RT_PUNCH_REQUEST);
 			
 			request.put("target", target.getAddress().toString().getBytes());
 			
@@ -1630,7 +1624,7 @@ DHTNATPuncherImpl
 				
 				if ( no_tunnel ){
 					
-					originator_client_data.put( "_notunnel", new Long(1));
+					originator_client_data.put( "_notunnel", 1L);
 				}
 				
 				request.put( "client_data", originator_client_data );
@@ -1729,7 +1723,7 @@ DHTNATPuncherImpl
 					try{
 						punch_mon.enter();
 					
-						transport_port = ((Integer)wait_data[2]).intValue();
+						transport_port = (Integer) wait_data[2];
 						
 					}finally{
 						
@@ -1818,7 +1812,7 @@ DHTNATPuncherImpl
 					
 					response.put( "client_data", target_client_data );
 																	
-					response.put( "port", new Long( target.getTransportAddress().getPort()));
+					response.put( "port", (long) target.getTransportAddress().getPort());
 					
 					ok	= true;
 					
@@ -1850,7 +1844,7 @@ DHTNATPuncherImpl
 			punch_recv_fail++;
 		}
 		
-		response.put( "ok", new Long(ok?1:0));
+		response.put( "ok", (long) (ok ? 1 : 0));
 	}
 	
 	protected Map
@@ -1862,11 +1856,11 @@ DHTNATPuncherImpl
 		try{
 			Map	request = new HashMap();
 			
-			request.put("type", new Long( RT_CONNECT_REQUEST ));
+			request.put("type", (long) RT_CONNECT_REQUEST);
 			
 			request.put("origin", encodeContact( originator ));
 							
-			request.put( "port", new Long( ((DHTTransportUDPContact)originator).getTransportAddress().getPort()));
+			request.put( "port", (long) originator.getTransportAddress().getPort());
 			
 			if ( originator_client_data != null ){
 				
@@ -2025,7 +2019,7 @@ DHTNATPuncherImpl
 			log( "Connect request from invalid rendezvous: " + rendezvous.getString());
 		}
 		
-		response.put( "ok", new Long(ok?1:0));
+		response.put( "ok", (long) (ok ? 1 : 0));
 	}
 	
 	protected boolean
@@ -2037,7 +2031,7 @@ DHTNATPuncherImpl
 		try{
 			Map	message = new HashMap();
 			
-			message.put( "type", new Long( RT_TUNNEL_INBOUND ));
+			message.put( "type", (long) RT_TUNNEL_INBOUND);
 			
 			return( sendTunnelMessage( target, message ));
 			
@@ -2058,20 +2052,20 @@ DHTNATPuncherImpl
 							
 		try{
 			punch_mon.enter();
-		
-			for (int i=0;i<oustanding_punches.size();i++){
-				
-				Object[]	wait_data = (Object[])oustanding_punches.get(i);
-				
-				DHTTransportContact	wait_contact = (DHTTransportContact)wait_data[0];
-				
-				if( originator.getAddress().getAddress().equals( wait_contact.getAddress().getAddress())){
-					
-					wait_data[2] = new Integer( originator.getTransportAddress().getPort());
-											
-					((AESemaphore)wait_data[1]).release();
-				}
-			}
+
+            for (Object oustanding_punch : oustanding_punches) {
+
+                Object[] wait_data = (Object[]) oustanding_punch;
+
+                DHTTransportContact wait_contact = (DHTTransportContact) wait_data[0];
+
+                if (originator.getAddress().getAddress().equals(wait_contact.getAddress().getAddress())) {
+
+                    wait_data[2] = originator.getTransportAddress().getPort();
+
+                    ((AESemaphore) wait_data[1]).release();
+                }
+            }
 			
 		}finally{
 			
@@ -2088,7 +2082,7 @@ DHTNATPuncherImpl
 		try{
 			Map	message = new HashMap();
 			
-			message.put( "type", new Long( RT_TUNNEL_OUTBOUND ));
+			message.put( "type", (long) RT_TUNNEL_OUTBOUND);
 			
 			return( sendTunnelMessage( target, message ));
 			
@@ -2227,7 +2221,7 @@ DHTNATPuncherImpl
 		}
 	}
 	
-	final Map<String,Object[]>	rendezvous_lookup_cache				= new HashMap<String, Object[]>();
+	final Map<String,Object[]>	rendezvous_lookup_cache				= new HashMap<>();
 	private long					rendezvous_lookup_cache_tidy_time	= -1;
 	
 	protected DHTTransportContact
@@ -2450,7 +2444,7 @@ DHTNATPuncherImpl
 					
 					for (int i=0;i<o_a.length;i++){
 						
-						o_a[i] = new String((byte[])a.get(i));
+						o_a[i] = new String(a.get(i));
 					}
 					
 					Class cla = m.getClass().forName( new String((byte[])m.get( "c" )));

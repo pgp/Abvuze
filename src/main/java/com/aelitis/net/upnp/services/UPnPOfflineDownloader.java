@@ -30,62 +30,62 @@ public interface
 UPnPOfflineDownloader
 	extends UPnPSpecificService
 {
-	public long
+	long
 	getFreeSpace(
-		String		client_id )
+            String client_id)
 	
 		throws UPnPException;
 	
-	public void
+	void
 	activate(
-		String		client_id )
+            String client_id)
 	
 		throws UPnPException;
 	
-	public String
+	String
 	addDownload(
-		String		client_id,
-		String		hash_list,
-		String		torrent )
+            String client_id,
+            String hash_list,
+            String torrent)
 	
 		throws UPnPException;
 	
-	public String
+	String
 	addDownloadChunked(
-		String		client_id,
-		String		hash_list,
-		String		torrent_chunk,
-		int			offset,
-		int			total_size )
+            String client_id,
+            String hash_list,
+            String torrent_chunk,
+            int offset,
+            int total_size)
 	
 		throws UPnPException;
 	
-	public String[]
+	String[]
 	updateDownload(
-		String		client_id,
-		String		hash_list,
-		String		required_map )
+            String client_id,
+            String hash_list,
+            String required_map)
 	
 		throws UPnPException;
 	
-	public String[]
+	String[]
 	setDownloads(
-		String		client_id,
-		String		hash_list )
+            String client_id,
+            String hash_list)
 	
 		throws UPnPException;
 
-	public String
+	String
 	removeDownload(
-		String		client_id,
-		String		hash )
+            String client_id,
+            String hash)
 	
 		throws UPnPException;
 	
-	public String[]
+	String[]
 	startDownload(
-		String		client_id,
-		String		hash )
+            String client_id,
+            String hash)
 	
 		throws UPnPException;
 }

@@ -25,14 +25,14 @@ import java.net.InetSocketAddress;
 public interface 
 NetworkGlue 
 {
-	public int
+	int
 	send(
-		int					local_port,
-		InetSocketAddress	target,
-		byte[]				data )
+            int local_port,
+            InetSocketAddress target,
+            byte[] data)
 	
 		throws IOException;
 	
-	public long[]
+	long[]
 	getStats();
 }

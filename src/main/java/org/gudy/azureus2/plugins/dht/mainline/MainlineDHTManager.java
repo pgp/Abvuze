@@ -32,11 +32,11 @@ public interface MainlineDHTManager {
 	 * only the last one will be used. If you pass <tt>null</tt> as an argument, it
 	 * will cause Azureus to disable support for mainline DHT.
 	 */
-	public void setProvider(MainlineDHTProvider provider);
+    void setProvider(MainlineDHTProvider provider);
 	
 	/**
 	 * Returns the current DHT provider, or <tt>null</tt> if there isn't one.
 	 */
-	public MainlineDHTProvider getProvider();
+    MainlineDHTProvider getProvider();
 	
 }

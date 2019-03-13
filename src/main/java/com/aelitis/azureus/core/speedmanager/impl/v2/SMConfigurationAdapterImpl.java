@@ -114,11 +114,9 @@ public class SMConfigurationAdapterImpl implements SMConfigurationAdapter
          * @return
          */
         public String getString() {
-            StringBuilder sb = new StringBuilder("estiamte: ");
-            sb.append(bytesPerSec);
-            sb.append(" (").append(limitEstimateType).append(") ");
 
-            return sb.toString();
+            return "estiamte: " + bytesPerSec +
+                    " (" + limitEstimateType + ") ";
         }
     }//class SMConfigLimitEstimate
 

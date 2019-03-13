@@ -29,40 +29,40 @@ public interface RateControlledEntity {
   /**
    * Uses fair round-robin scheduling of processing ops.
    */
-  public static final int PRIORITY_NORMAL = 0;
+  int PRIORITY_NORMAL = 0;
   
   /**
    * Guaranteed scheduling of processing ops, with preference over normal-priority entities.
    */
-  public static final int PRIORITY_HIGH   = 1;
+  int PRIORITY_HIGH   = 1;
     
   /**
    * Is ready for a processing op.
    * @return true if it can process >0 bytes, false if not ready
    */
-  public boolean canProcess(  EventWaiter waiter );
+  boolean canProcess(EventWaiter waiter);
   
   /**
    * Attempt to do a processing operation.
    * @return true if >0 bytes were processed (success), false if 0 bytes were processed (failure)
    */
-  public int doProcessing( EventWaiter waiter, int max_bytes_permitted );
+  int doProcessing(EventWaiter waiter, int max_bytes_permitted);
   
   /**
    * Get this entity's priority level.
    * @return priority
    */
-  public int getPriority();
+  int getPriority();
   
   	/**
   	 * stats functions
   	 * @return
   	 */
-  
-  public boolean
+
+    boolean
   getPriorityBoost();
   
-  public long
+  long
   getBytesReadyToWrite();
   
   /**
@@ -70,22 +70,22 @@ public interface RateControlledEntity {
    * @param waiter
    * @return
    */
-  
-  public int
-  getConnectionCount( EventWaiter waiter );
+
+  int
+  getConnectionCount(EventWaiter waiter);
   
   /**
    * The waiter is kicked if the ready condition changes
    * @param waiter
    * @return
    */
+
+  int
+  getReadyConnectionCount(EventWaiter waiter);
   
-  public int
-  getReadyConnectionCount( EventWaiter waiter );
-  
-  public RateHandler
+  RateHandler
   getRateHandler();
   
-  public String
+  String
   getString();
 }

@@ -23,12 +23,12 @@ package com.aelitis.azureus.core.pairing;
 public interface 
 PairedService 
 {
-	public String
+	String
 	getSID();
 	
-	public PairingConnectionData
+	PairingConnectionData
 	getConnectionData();
 	
-	public void
+	void
 	remove();
 }

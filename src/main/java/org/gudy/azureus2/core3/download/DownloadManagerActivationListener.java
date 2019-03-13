@@ -22,7 +22,7 @@ package org.gudy.azureus2.core3.download;
 public interface 
 DownloadManagerActivationListener 
 {
-	public boolean
+	boolean
 	activateRequest(
-		int		count );
+            int count);
 }

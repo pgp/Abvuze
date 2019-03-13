@@ -27,5 +27,5 @@ package org.gudy.azureus2.plugins.ddb;
 public interface 
 DistributedDatabaseTransferType 
 {
-	public static final int	ST_TORRENT	= 1;
+	int	ST_TORRENT	= 1;
 }

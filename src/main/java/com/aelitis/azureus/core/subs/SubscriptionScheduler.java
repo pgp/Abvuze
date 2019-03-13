@@ -23,30 +23,30 @@ package com.aelitis.azureus.core.subs;
 public interface 
 SubscriptionScheduler 
 {
-	public boolean
+	boolean
 	download(
-		Subscription		subs,
-		boolean				is_auto )
+            Subscription subs,
+            boolean is_auto)
 	
 		throws SubscriptionException;
 	
-	public void
+	void
 	downloadAsync(
-		Subscription		subs,
-		boolean				is_auto )
+            Subscription subs,
+            boolean is_auto)
 	
 		throws SubscriptionException;
 	
-	public void
+	void
 	download(
-		Subscription					subs,
-		boolean							is_auto,
-		SubscriptionDownloadListener	listener )
+            Subscription subs,
+            boolean is_auto,
+            SubscriptionDownloadListener listener)
 	
 		throws SubscriptionException;
 	
-	public void
+	void
 	download(
-		Subscription		subs,
-		SubscriptionResult	result );
+            Subscription subs,
+            SubscriptionResult result);
 }

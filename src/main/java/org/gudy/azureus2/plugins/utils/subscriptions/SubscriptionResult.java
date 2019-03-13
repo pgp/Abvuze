@@ -25,15 +25,15 @@ SubscriptionResult
 {
 		// this maps to the SearchResult properties (well, some subset ) 
 	
-	public Object
+	Object
 	getProperty(
-		int		property_name );
+            int property_name);
 	
-	public boolean
+	boolean
 	isRead();
 	
-	public void
+	void
 	setRead(
-		boolean	read );
+            boolean read);
 	
 }

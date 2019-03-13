@@ -28,7 +28,7 @@ package com.aelitis.azureus.core.versioncheck;
 public interface 
 VersionCheckClientListener
 {
-	public void 
+	void
 	versionCheckStarted(
-		String reason );
+            String reason);
 }

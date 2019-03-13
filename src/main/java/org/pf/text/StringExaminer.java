@@ -198,9 +198,9 @@ public class StringExaminer extends StringScanner
 	 */
 	protected String upToEnd( boolean peek )
 	{
-		char result			= '-' ;
-		int lastPosition = 0 ;
-		StringBuffer buffer = new StringBuffer( 100 ) ;
+		char result;
+		int lastPosition;
+		StringBuilder buffer = new StringBuilder( 100 ) ;
 		
 		lastPosition = this.getPosition() ;
 		result = this.nextChar() ;

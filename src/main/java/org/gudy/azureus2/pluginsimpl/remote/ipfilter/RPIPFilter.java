@@ -95,73 +95,74 @@ RPIPFilter
 		String	method = request.getMethod();	
 	
 		Object[]	params = request.getParams();
-		
-		if ( method.equals( "createAndAddRange[String,String,String,boolean]")){
-		
-			IPRange range = delegate.createAndAddRange(
-								(String)params[0],
-								(String)params[1],
-								(String)params[2],
-								((Boolean)params[3]).booleanValue());
-	
-			if ( range == null ){
-				
-				return( new RPReply(null));
-				
-			}else{
-				
-				RPIPRange rp_range = RPIPRange.create( range );
-			
-				return( new RPReply( rp_range ));
-			}
-		}else if ( method.equals( "getRanges")){
-				
-				IPRange[] ranges = delegate.getRanges();
-						
-				RPIPRange[] rp_ranges = new RPIPRange[ranges.length];
-				
-				for (int i=0;i<ranges.length;i++){
-					
-					rp_ranges[i] = RPIPRange.create( ranges[i] );
-				}
-				
-				return( new RPReply( rp_ranges ));
-				
-		}else if ( method.equals( "save" )){
-		
-			try{
-				delegate.save();
-					
-				return(null );
-				
-			}catch( IPFilterException e ){
-				
-				return( new RPReply( e ));
-			}
-		}else if ( method.equals( "getInRangeAddressesAreAllowed")){
-			
-			return( new RPReply(Boolean.valueOf(delegate.getInRangeAddressesAreAllowed())));
-			
-		}else if ( method.equals( "setInRangeAddressesAreAllowed[boolean]")){
-			
-			delegate.setInRangeAddressesAreAllowed(((Boolean)params[0]).booleanValue());
-			
-			return( null );
-			
-		}else if ( method.equals( "isEnabled")){
-			
-			return( new RPReply(Boolean.valueOf(delegate.isEnabled())));
-			
-		}else if ( method.equals( "setEnabled[boolean]")){
-			
-			delegate.setEnabled(((Boolean)params[0]).booleanValue());
-			
-			return( null );
-			
-		}else if ( method.equals( "isInRange[String]")){
-			
-			return( new RPReply(Boolean.valueOf(delegate.isInRange((String) params[0]))));
-		}
+
+        switch (method) {
+            case "createAndAddRange[String,String,String,boolean]":
+
+                IPRange range = delegate.createAndAddRange(
+                        (String) params[0],
+                        (String) params[1],
+                        (String) params[2],
+                        (Boolean) params[3]);
+
+                if (range == null) {
+
+                    return (new RPReply(null));
+
+                } else {
+
+                    RPIPRange rp_range = RPIPRange.create(range);
+
+                    return (new RPReply(rp_range));
+                }
+            case "getRanges":
+
+                IPRange[] ranges = delegate.getRanges();
+
+                RPIPRange[] rp_ranges = new RPIPRange[ranges.length];
+
+                for (int i = 0; i < ranges.length; i++) {
+
+                    rp_ranges[i] = RPIPRange.create(ranges[i]);
+                }
+
+                return (new RPReply(rp_ranges));
+
+            case "save":
+
+                try {
+                    delegate.save();
+
+                    return (null);
+
+                } catch (IPFilterException e) {
+
+                    return (new RPReply(e));
+                }
+            case "getInRangeAddressesAreAllowed":
+
+                return (new RPReply(delegate.getInRangeAddressesAreAllowed()));
+
+            case "setInRangeAddressesAreAllowed[boolean]":
+
+                delegate.setInRangeAddressesAreAllowed((Boolean) params[0]);
+
+                return (null);
+
+            case "isEnabled":
+
+                return (new RPReply(delegate.isEnabled()));
+
+            case "setEnabled[boolean]":
+
+                delegate.setEnabled((Boolean) params[0]);
+
+                return (null);
+
+            case "isInRange[String]":
+
+                return (new RPReply(delegate.isInRange((String) params[0])));
+        }
 				
 		throw( new RPException( "Unknown method: " + method ));
 	}
@@ -205,7 +206,7 @@ RPIPFilter
 							new RPRequest( 
 									this, 
 									"createAndAddRange[String,String,String,boolean]", 
-									new Object[]{description,start_ip,end_ip, Boolean.valueOf(this_session_only)})).getResponse();
+									new Object[]{description,start_ip,end_ip, this_session_only})).getResponse();
 		
 		resp._setRemote( _dispatcher );
 		
@@ -238,10 +239,10 @@ RPIPFilter
 						"getRanges", 
 						null)).getResponse();
 
-		for (int i=0;i<resp.length;i++){
-			
-			resp[i]._setRemote( _dispatcher );
-		}
+        for (RPIPRange rpipRange : resp) {
+
+            rpipRange._setRemote(_dispatcher);
+        }
 		
 		return( resp );
 	}
@@ -252,7 +253,7 @@ RPIPFilter
 	{
 		Boolean res = (Boolean)_dispatcher.dispatch( new RPRequest( this, "isInRange[String]", new Object[]{IPAddress})).getResponse();
 		
-		return( res.booleanValue());	
+		return(res);
 	}
 
 	public IPBlocked[]
@@ -299,14 +300,14 @@ RPIPFilter
 	{
 		Boolean res = (Boolean)_dispatcher.dispatch( new RPRequest( this, "getInRangeAddressesAreAllowed", null )).getResponse();
 				
-		return( res.booleanValue());		
+		return(res);
 	}
 	
 	public void
 	setInRangeAddressesAreAllowed(
 		boolean	value )
 	{
-		_dispatcher.dispatch( new RPRequest( this, "setInRangeAddressesAreAllowed[boolean]", new Object[]{Boolean.valueOf(value)} )).getResponse();
+		_dispatcher.dispatch( new RPRequest( this, "setInRangeAddressesAreAllowed[boolean]", new Object[]{value} )).getResponse();
 	}
 	
 	public boolean
@@ -314,14 +315,14 @@ RPIPFilter
 	{
 		Boolean res = (Boolean)_dispatcher.dispatch( new RPRequest( this, "isEnabled", null )).getResponse();
 		
-		return( res.booleanValue());	
+		return(res);
 	}
 	
 	public void
 	setEnabled(
 		boolean	value )
 	{
-		_dispatcher.dispatch( new RPRequest( this, "setEnabled[boolean]", new Object[]{Boolean.valueOf(value)} )).getResponse();
+		_dispatcher.dispatch( new RPRequest( this, "setEnabled[boolean]", new Object[]{value} )).getResponse();
 	}
 	
 	public void

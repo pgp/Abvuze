@@ -32,24 +32,24 @@ import java.util.Map;
 public interface 
 TRTrackerServerRequest
 {	
-	public static final int		RT_UNKNOWN		= -1;
-	public static final int		RT_ANNOUNCE		= 1;
-	public static final int		RT_SCRAPE		= 2;
-	public static final int		RT_FULL_SCRAPE	= 3;
-	public static final int		RT_QUERY		= 4;
+	int		RT_UNKNOWN		= -1;
+	int		RT_ANNOUNCE		= 1;
+	int		RT_SCRAPE		= 2;
+	int		RT_FULL_SCRAPE	= 3;
+	int		RT_QUERY		= 4;
 	
-	public int
+	int
 	getType();
 	
-	public TRTrackerServerPeer
+	TRTrackerServerPeer
 	getPeer();
 	
-	public TRTrackerServerTorrent
+	TRTrackerServerTorrent
 	getTorrent();
 	
-	public String
+	String
 	getRequest();
 	
-	public Map
+	Map
 	getResponse();
 }

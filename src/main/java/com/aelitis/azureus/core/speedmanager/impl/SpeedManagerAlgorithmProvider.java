@@ -25,21 +25,21 @@ import com.aelitis.azureus.core.speedmanager.SpeedManagerPingSource;
 public interface 
 SpeedManagerAlgorithmProvider 
 {
-	public static final int	UPDATE_PERIOD_MILLIS = 1000;
+	int	UPDATE_PERIOD_MILLIS = 1000;
 	
 		/**
 		 * Reset any state to start of day values
 		 */
-	
-	public void
+
+        void
 	reset();
 	
 		/**
 		 * Called periodically (see period above) to allow stats to be updated.
 		 * 
 		 */
-	
-	public void
+
+        void
 	updateStats();
 	
 		/**
@@ -47,65 +47,65 @@ SpeedManagerAlgorithmProvider
 		 * @param source
 		 * @param is_replacement	One of the initial sources or a replacement for a failed one
 		 */
-	
-	public void
+
+        void
 	pingSourceFound(
-		SpeedManagerPingSource		source,
-		boolean						is_replacement );
+                SpeedManagerPingSource source,
+                boolean is_replacement);
 	
 		/**
 		 * Ping source has failed
 		 * @param source
 		 */
-	
-	public void
+
+        void
 	pingSourceFailed(
-		SpeedManagerPingSource		source );
+                SpeedManagerPingSource source);
 	
 		/**
 		 * Called whenever a new set of ping values is available for processing
 		 * @param sources
 		 */
-	
-	public void
+
+        void
 	calculate(
-		SpeedManagerPingSource[]	sources );
+                SpeedManagerPingSource[] sources);
 	
 	
 		/**
 		 * Various getters for interesting info shown in stats view
 		 * @return
 		 */
-	
-	public int
+
+        int
 	getIdlePingMillis();
 	
-	public int
+	int
 	getCurrentPingMillis();
 	
-	public int
+	int
 	getMaxPingMillis();
 	
 		/**
 		 * Returns the current view of when choking occurs
 		 * @return speed in bytes/sec
 		 */
-	
-	public int
+
+        int
 	getCurrentChokeSpeed();
 	
-	public int
+	int
 	getMaxUploadSpeed();
 	
 		/**
 		 * Indicates whether or not the provider is adjusting download as well as upload limits
 		 * @return
 		 */
-	
-	public boolean
+
+        boolean
 	getAdjustsDownloadLimits();
 	
 	
-	public void
+	void
 	destroy();
 }

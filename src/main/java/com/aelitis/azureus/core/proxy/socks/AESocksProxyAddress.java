@@ -29,12 +29,12 @@ import java.net.InetAddress;
 public interface 
 AESocksProxyAddress 
 {
-	public String
+	String
 	getUnresolvedAddress();
 	
-	public InetAddress
+	InetAddress
 	getAddress();
 	
-	public int
+	int
 	getPort();
 }

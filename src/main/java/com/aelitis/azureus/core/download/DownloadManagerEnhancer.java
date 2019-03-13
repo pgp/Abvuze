@@ -75,9 +75,9 @@ DownloadManagerEnhancer
 	
 	private AzureusCore		core;
 	
-	private Map<DownloadManager,EnhancedDownloadManager>		download_map = new IdentityHashMap<DownloadManager,EnhancedDownloadManager>();
+	private Map<DownloadManager,EnhancedDownloadManager>		download_map = new IdentityHashMap<>();
 	
-	private Set<HashWrapper>		pause_set = new HashSet<HashWrapper>();
+	private Set<HashWrapper>		pause_set = new HashSet<>();
 	
 	private boolean			progressive_enabled;
 	
@@ -189,7 +189,7 @@ DownloadManagerEnhancer
 						
 						synchronized( download_map ){
 
-							edms_copy = new ArrayList<EnhancedDownloadManager>( download_map.values());
+							edms_copy = new ArrayList<>(download_map.values());
 						}
 						
 						for ( EnhancedDownloadManager edm: edms_copy ){
@@ -332,21 +332,21 @@ DownloadManagerEnhancer
 								List	downloads = core.getGlobalManager().getDownloadManagers();
 								
 								boolean	is_active = false;
-								
-								for ( int i=0;i<downloads.size();i++){
-									
-									DownloadManager download = (DownloadManager)downloads.get(i);
-																	
-									EnhancedDownloadManager edm = getEnhancedDownload( download );
-										
-									if ( edm != null ){
-																			
-										if ( edm.updateStats( tick_count )){
-												
-											is_active = true;
-										}
-									}
-								}
+
+                                for (Object download1 : downloads) {
+
+                                    DownloadManager download = (DownloadManager) download1;
+
+                                    EnhancedDownloadManager edm = getEnhancedDownload(download);
+
+                                    if (edm != null) {
+
+                                        if (edm.updateStats(tick_count)) {
+
+                                            is_active = true;
+                                        }
+                                    }
+                                }
 								
 								if ( !is_active ){
 									
@@ -433,7 +433,7 @@ DownloadManagerEnhancer
 		
 		synchronized( pause_set ){
 		
-			copy = new HashSet<HashWrapper>( pause_set );
+			copy = new HashSet<>(pause_set);
 			
 			pause_set.clear();
 		}
@@ -460,7 +460,7 @@ DownloadManagerEnhancer
 			
 			GlobalManager gm = core.getGlobalManager();
 
-			List<DownloadManager> dms = (List<DownloadManager>)gm.getDownloadManagers();
+			List<DownloadManager> dms = gm.getDownloadManagers();
 			
 			for ( DownloadManager this_dm: dms ){
 				
@@ -525,7 +525,7 @@ DownloadManagerEnhancer
 
 		synchronized( download_map ){
 			
-			EnhancedDownloadManager	res = (EnhancedDownloadManager)download_map.get( manager );
+			EnhancedDownloadManager	res = download_map.get( manager );
 			
 			if ( res == null ){
 				
@@ -565,17 +565,15 @@ DownloadManagerEnhancer
 	public DownloadManager findDownloadManager(String hash) {
 		synchronized (download_map) {
 
-			for (Iterator<DownloadManager> iter = download_map.keySet().iterator(); iter.hasNext();) {
-				DownloadManager dm = iter.next();
-
-				TOTorrent torrent = dm.getTorrent();
-				if (PlatformTorrentUtils.isContent(torrent, true)) {
-					String thisHash = PlatformTorrentUtils.getContentHash(torrent);
-					if (hash.equals(thisHash)) {
-						return dm;
-					}
-				}
-			}
+            for (DownloadManager dm : download_map.keySet()) {
+                TOTorrent torrent = dm.getTorrent();
+                if (PlatformTorrentUtils.isContent(torrent, true)) {
+                    String thisHash = PlatformTorrentUtils.getContentHash(torrent);
+                    if (hash.equals(thisHash)) {
+                        return dm;
+                    }
+                }
+            }
 		}
 		return null;
 	}

@@ -39,9 +39,9 @@ TestPingSourceRandom
 	updateSources(
 		testSource[] sources )
 	{
-		for (int i=0;i<sources.length;i++){
-			
-			sources[i].setRTT( random.nextInt( 500 ));
-		}
+        for (testSource source : sources) {
+
+            source.setRTT(random.nextInt(500));
+        }
 	}
 }

@@ -42,236 +42,236 @@ Engine
 	 *      ${1,replace,fromRegex,toText}
 	 *      ${1,lcase+urldecode}
 	 */
-	public static final int	AZ_VERSION		= 5;
+    int	AZ_VERSION		= 5;
 	
-	public static final Object	VUZE_FILE_COMPONENT_ENGINE_KEY = new Object();
+	Object	VUZE_FILE_COMPONENT_ENGINE_KEY = new Object();
 	
 		// Don't change these values as they get persisted
 	
-	public static final int FIELD_NAME 			= 1;
-	public static final int FIELD_DATE 			= 2;
-	public static final int FIELD_SIZE 			= 3;
-	public static final int FIELD_PEERS 		= 4;
-	public static final int FIELD_SEEDS 		= 5;
-	public static final int FIELD_CATEGORY 		= 6;
-	public static final int FIELD_COMMENTS 		= 7;
-	public static final int FIELD_CONTENT_TYPE 	= 8;
-	public static final int FIELD_DISCARD	 	= 9;
-	public static final int FIELD_VOTES		 	= 10;
-	public static final int FIELD_SUPERSEEDS 	= 11;
-	public static final int FIELD_PRIVATE	 	= 12;
-	public static final int FIELD_DRMKEY        = 13;
-	public static final int FIELD_VOTES_DOWN    = 14;
+	int FIELD_NAME 			= 1;
+	int FIELD_DATE 			= 2;
+	int FIELD_SIZE 			= 3;
+	int FIELD_PEERS 		= 4;
+	int FIELD_SEEDS 		= 5;
+	int FIELD_CATEGORY 		= 6;
+	int FIELD_COMMENTS 		= 7;
+	int FIELD_CONTENT_TYPE 	= 8;
+	int FIELD_DISCARD	 	= 9;
+	int FIELD_VOTES		 	= 10;
+	int FIELD_SUPERSEEDS 	= 11;
+	int FIELD_PRIVATE	 	= 12;
+	int FIELD_DRMKEY        = 13;
+	int FIELD_VOTES_DOWN    = 14;
 	
 	
-	public static final int FIELD_TORRENTLINK 	= 102;
-	public static final int FIELD_CDPLINK 		= 103;
-	public static final int FIELD_PLAYLINK 		= 104;
-	public static final int FIELD_DOWNLOADBTNLINK 		= 105;
+	int FIELD_TORRENTLINK 	= 102;
+	int FIELD_CDPLINK 		= 103;
+	int FIELD_PLAYLINK 		= 104;
+	int FIELD_DOWNLOADBTNLINK 		= 105;
 	
-	public static final int FIELD_HASH			= 200;
-	public static final int FIELD_RANK    = 201;
+	int FIELD_HASH			= 200;
+	int FIELD_RANK    = 201;
 	
-	public static final int[] FIELD_IDS = {
+	int[] FIELD_IDS = {
 		FIELD_NAME, FIELD_DATE, FIELD_SIZE, FIELD_PEERS, FIELD_SEEDS, FIELD_CATEGORY,
 		FIELD_COMMENTS, FIELD_CONTENT_TYPE, FIELD_DISCARD, 
 		FIELD_TORRENTLINK, FIELD_CDPLINK, FIELD_PLAYLINK,FIELD_DOWNLOADBTNLINK, FIELD_VOTES, FIELD_SUPERSEEDS,
 		FIELD_PRIVATE, FIELD_DRMKEY, FIELD_VOTES_DOWN, FIELD_HASH, FIELD_RANK
 	};
 		
-	public static final String[] FIELD_NAMES = {
+	String[] FIELD_NAMES = {
 		"TITLE", "DATE", "SIZE", "PEERS", "SEEDS", "CAT",
 		"COMMENTS", "CONTENT_TYPE", "DISCARD",
 		"TORRENT", "CDP", "PLAY","DLBTN", "VOTES", "XSEEDS",
 		"PRIVATE", "DRMKEY", "VOTESDOWN", "HASH", "RANK"
 	};
 	
-	public static final int ENGINE_TYPE_REGEX		= 1;
-	public static final int ENGINE_TYPE_JSON		= 2;
-	public static final int ENGINE_TYPE_PLUGIN		= 3;
-	public static final int ENGINE_TYPE_RSS			= 4;
+	int ENGINE_TYPE_REGEX		= 1;
+	int ENGINE_TYPE_JSON		= 2;
+	int ENGINE_TYPE_PLUGIN		= 3;
+	int ENGINE_TYPE_RSS			= 4;
 	
 	
-	public static final int	ENGINE_SOURCE_UNKNOWN				= 0;
-	public static final int	ENGINE_SOURCE_VUZE					= 1;
-	public static final int	ENGINE_SOURCE_LOCAL					= 2;
-	public static final int	ENGINE_SOURCE_RSS					= 3;
+	int	ENGINE_SOURCE_UNKNOWN				= 0;
+	int	ENGINE_SOURCE_VUZE					= 1;
+	int	ENGINE_SOURCE_LOCAL					= 2;
+	int	ENGINE_SOURCE_RSS					= 3;
 	
-	public static final int	SEL_STATE_DESELECTED			= 0;
-	public static final int	SEL_STATE_AUTO_SELECTED			= 1;
-	public static final int	SEL_STATE_MANUAL_SELECTED		= 2;
-	public static final int	SEL_STATE_FORCE_DESELECTED		= 3;
+	int	SEL_STATE_DESELECTED			= 0;
+	int	SEL_STATE_AUTO_SELECTED			= 1;
+	int	SEL_STATE_MANUAL_SELECTED		= 2;
+	int	SEL_STATE_FORCE_DESELECTED		= 3;
 
-	public static final int AUTO_DL_SUPPORTED_UNKNOWN		= 0;
-	public static final int AUTO_DL_SUPPORTED_YES			= 1;
-	public static final int AUTO_DL_SUPPORTED_NO			= 2;
+	int AUTO_DL_SUPPORTED_UNKNOWN		= 0;
+	int AUTO_DL_SUPPORTED_YES			= 1;
+	int AUTO_DL_SUPPORTED_NO			= 2;
 	
 		/**
 		 * don't change these as they are externalised
 		 */
-	public static final String[] ENGINE_SOURCE_STRS = { "unknown","vuze","local","rss","unused" };
-	public static final String[] SEL_STATE_STRINGS	= { "no", "auto", "manual", "force_no" };
-	public static final String[] ENGINE_TYPE_STRS 	= { "unknown","regexp","json", "plugin" };
+        String[] ENGINE_SOURCE_STRS = { "unknown","vuze","local","rss","unused" };
+	String[] SEL_STATE_STRINGS	= { "no", "auto", "manual", "force_no" };
+	String[] ENGINE_TYPE_STRS 	= { "unknown","regexp","json", "plugin" };
 	
-	public static final String	SC_SOURCE			= "azsrc";
-	public static final String	SC_AZID				= "azid";
-	public static final String	SC_FORCE_FULL		= "force_full";	// ignore if-modified stuff and force a full search
-	public static final String	SC_BATCH_PERIOD		= "batch_millis";
-	public static final String	SC_REMOVE_DUP_HASH	= "remove_dup_hash";
+	String	SC_SOURCE			= "azsrc";
+	String	SC_AZID				= "azid";
+	String	SC_FORCE_FULL		= "force_full";	// ignore if-modified stuff and force a full search
+	String	SC_BATCH_PERIOD		= "batch_millis";
+	String	SC_REMOVE_DUP_HASH	= "remove_dup_hash";
 
 	
-	public static final String	CT_VIDEO	= "video";
-	public static final String	CT_AUDIO	= "audio";
-	public static final String	CT_GAME		= "game";
+	String	CT_VIDEO	= "video";
+	String	CT_AUDIO	= "audio";
+	String	CT_GAME		= "game";
 	
-	public int getType();
+	int getType();
 		
-	public Result[]
+	Result[]
 	search(
-		SearchParameter[] 	searchParameters,
-		Map					context,
-		int					desired_max_matches,
-		int					absolute_max_matches,
-		String				headers,
-		ResultListener		listener )
+            SearchParameter[] searchParameters,
+            Map context,
+            int desired_max_matches,
+            int absolute_max_matches,
+            String headers,
+            ResultListener listener)
 	
 		throws SearchException;
 	
-	public String 
+	String
 	getName();
 	
-	public String
+	String
 	getNameEx();
 	
-	public long 
+	long
 	getId();
 	
-	public String
+	String
 	getUID();
 	
-	public int
+	int
 	getVersion();
 	            
-	public long 
+	long
 	getLastUpdated();
 	
-	public String 
+	String
 	getIcon();
 
-	public String
+	String
 	getDownloadLinkCSS();
 	
-	public boolean
+	boolean
 	isActive();
 	
-	public boolean
+	boolean
 	isMine();
 	
-	public boolean
+	boolean
 	isPublic();
 	
-	public void
+	void
 	setMine(
-		boolean		mine );
+            boolean mine);
 	
-	public int
+	int
 	getSelectionState();
 	
-	public void
+	void
 	setSelectionState(
-		int			state );
+            int state);
 	
-	public void
+	void
 	recordSelectionState();
 	
-	public void
+	void
 	checkSelectionStateRecorded();
 		
-	public int
+	int
 	getSource();
 	
-	public void
+	void
 	setSource(
-		int		source );
+            int source);
 	
-	public String
+	String
 	getReferer();
 	
-	public float
+	float
 	getRankBias();
 	
-	public void
+	void
 	setRankBias(
-		float		bias );
+            float bias);
 	
-	public void
+	void
 	setPreferredDelta(
-		float	delta  );
+            float delta);
 	
-	public float
+	float
 	getPreferredWeighting();
 	
-	public float
+	float
 	applyRankBias(
-		float	rank );
+            float rank);
 	
-	public boolean
+	boolean
 	supportsField(
-		int		field_id );
+            int field_id);
 	
-	public boolean
+	boolean
 	supportsContext(
-		String	context_key );
+            String context_key);
 	
-	public boolean
+	boolean
 	isShareable();
 	
-	public boolean
+	boolean
 	isAnonymous();
 	
-	public boolean
+	boolean
 	isAuthenticated();
 	
 		/**
 		 * @return one of AUTO_DL constants above
 		 */
-	
-	public int
+
+        int
 	getAutoDownloadSupported();
 	
-	public int
+	int
 	getAZVersion();
 	
-	public void
+	void
 	addPotentialAssociation(
-		String		key );
+            String key);
 	
-	public Subscription
+	Subscription
 	getSubscription();
 	
-	public Map<String,Object> 
+	Map<String,Object>
 	exportToBencodedMap() 
 	
 		throws IOException;
 	
-	public Map<String,Object> 
+	Map<String,Object>
 	exportToBencodedMap(
-		boolean		generic )
+            boolean generic)
 	
 		throws IOException;
 
-	public String
+	String
 	exportToJSONString()
 	
 		throws IOException;
 	
-	public void
+	void
 	exportToVuzeFile(
-		File	target )
+            File target)
 	
 		throws IOException;
 	
-	public VuzeFile
+	VuzeFile
 	exportToVuzeFile()
 	
 		throws IOException;
@@ -281,22 +281,22 @@ Engine
 		 * @param other
 		 * @return
 		 */
-	
-	public boolean
+
+        boolean
 	sameLogicAs(
-		Engine	other );
+                Engine other);
 	
 		/**
 		 * resets to initial state (e.g. if the engine has state pertaining to what has/hasn't been downloaded
 		 * such as etags then this will be cleared)
 		 */
-	
-	public void
+
+        void
 	reset();
 	
-	public void
+	void
 	delete();
 	
-	public String
+	String
 	getString();
 }

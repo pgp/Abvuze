@@ -27,12 +27,12 @@ package org.gudy.azureus2.core3.ipfilter;
 public interface 
 BannedIp 
 {
-	public String
+	String
 	getIp();
 	
-	public long 
+	long
 	getBanningTime();
 	
-	public String 
+	String
 	getTorrentName();
 }

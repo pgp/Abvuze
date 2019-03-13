@@ -35,18 +35,18 @@ import org.gudy.azureus2.plugins.ui.toolbar.UIToolBarManager;
 public interface 
 UIInstance 
 {
-	public static final int	UIT_SWT			= 1;
-	public static final int	UIT_CONSOLE		= 2;
+	int	UIT_SWT			= 1;
+	int	UIT_CONSOLE		= 2;
 	
 		/**
 		 * @since 4.8.1.3
 		 * @return
 		 */
-	
-	public int
+
+        int
 	getUIType();
 	
-	public boolean openView(BasicPluginViewModel model);
+	boolean openView(BasicPluginViewModel model);
 
 	/**
 	 * Prompts the user with a title, text, and a series of options.  The options
@@ -57,8 +57,8 @@ UIInstance
 	 * @param options
 	 * @return Index of option chosen, -1 if cancelled or error
 	 */
-	public int promptUser(String title, String text, String[] options,
-			int defaultOption);
+    int promptUser(String title, String text, String[] options,
+                   int defaultOption);
 	
 	/**
 	 * Creates a {@link UIInputReceiver} instance to allow a plugin to request
@@ -66,7 +66,7 @@ UIInstance
 	 * ability for a plugin to request text input from a user, in which case
 	 * they will return <code>null</code> for this method.
 	 */
-	public UIInputReceiver getInputReceiver();
+    UIInputReceiver getInputReceiver();
 	
 	/**
 	 * Creates a {@link UIMessage} instance to allow a plugin to inform or ask the
@@ -76,7 +76,7 @@ UIInstance
 	 * 
 	 * @since 3.0.5.3
 	 */
-	public UIMessage createMessage();
+    UIMessage createMessage();
 
-	public UIToolBarManager getToolBarManager();
+	UIToolBarManager getToolBarManager();
 }

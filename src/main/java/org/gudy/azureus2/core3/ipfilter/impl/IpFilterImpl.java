@@ -30,6 +30,7 @@ package org.gudy.azureus2.core3.ipfilter.impl;
 import java.io.*;
 import java.net.Inet6Address;
 import java.net.InetAddress;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
@@ -70,9 +71,9 @@ IpFilterImpl
 	private long	last_update_time;
     
   
-	final CopyOnWriteList<IPFilterListener>	listenerz = new CopyOnWriteList<IPFilterListener>( true );
+	final CopyOnWriteList<IPFilterListener>	listenerz = new CopyOnWriteList<>(true);
 	
-	private final CopyOnWriteList<IpFilterExternalHandler>	external_handlers = new CopyOnWriteList<IpFilterExternalHandler>();
+	private final CopyOnWriteList<IpFilterExternalHandler>	external_handlers = new CopyOnWriteList<>();
 	
 	final FrequencyLimitedDispatcher blockedListChangedDispatcher;
 
@@ -81,7 +82,7 @@ IpFilterImpl
 	private boolean	ip_filter_enabled;
 	private boolean	ip_filter_allow;
 	
-	private ByteArrayHashMap<String>	excluded_hashes = new ByteArrayHashMap<String>();
+	private ByteArrayHashMap<String>	excluded_hashes = new ByteArrayHashMap<>();
 	
 	{
 	
@@ -220,20 +221,19 @@ IpFilterImpl
 			List filters = new ArrayList();
 			map.put("ranges",filters);
 			List entries = range_manager.getEntries();
-			Iterator iter = entries.iterator();
-			while(iter.hasNext()) {
-			  IpRange range = (IpRange) iter.next();
-			  if(range.isValid() && ! range.isSessionOnly()) {
-				String description =  range.getDescription();
-				String startIp = range.getStartIp();
-				String endIp = range.getEndIp();
-				Map mapRange = new HashMap();
-				mapRange.put("description",description.getBytes( "UTF-8" ));
-				mapRange.put("start",startIp);
-				mapRange.put("end",endIp);
-				filters.add(mapRange);
-			  }
-			}
+            for (Object entry : entries) {
+                IpRange range = (IpRange) entry;
+                if (range.isValid() && !range.isSessionOnly()) {
+                    String description = range.getDescription();
+                    String startIp = range.getStartIp();
+                    String endIp = range.getEndIp();
+                    Map mapRange = new HashMap();
+                    mapRange.put("description", description.getBytes(StandardCharsets.UTF_8));
+                    mapRange.put("start", startIp);
+                    mapRange.put("end", endIp);
+                    filters.add(mapRange);
+                }
+            }
 		  
 		  	FileOutputStream fos  = null;
 	    
@@ -287,19 +287,18 @@ IpFilterImpl
 				bin = new BufferedInputStream(fin, 16384);
 				Map map = BDecoder.decode(bin);
 				List list = (List) map.get("ranges");
-				Iterator iter = list.listIterator();
-				while(iter.hasNext()) {
-				  Map range = (Map) iter.next();
-				  String description =  new String((byte[])range.get("description"), "UTF-8");
-				  String startIp =  new String((byte[])range.get("start"));
-				  String endIp = new String((byte[])range.get("end"));
-		        
-				  IpRangeImpl ipRange = new IpRangeImpl(description,startIp,endIp,false);
+                for (Object o : list) {
+                    Map range = (Map) o;
+                    String description = new String((byte[]) range.get("description"), StandardCharsets.UTF_8);
+                    String startIp = new String((byte[]) range.get("start"));
+                    String endIp = new String((byte[]) range.get("end"));
 
-				  ipRange.setAddedToRangeList(true);
-				  
-				  new_ipRanges.add( ipRange );
-				}
+                    IpRangeImpl ipRange = new IpRangeImpl(description, startIp, endIp, false);
+
+                    ipRange.setAddedToRangeList(true);
+
+                    new_ipRanges.add(ipRange);
+                }
 			}		
 		  }finally{
 		  
@@ -315,14 +314,12 @@ IpFilterImpl
 				}catch( Throwable e ){
 				}
 			}
-			
-		  	
-		  	Iterator	it = new_ipRanges.iterator();
-		  	
-		  	while( it.hasNext()){
-		  		  		
-		  		((IpRange)it.next()).checkValid();
-		  	}
+
+
+              for (Object new_ipRange : new_ipRanges) {
+
+                  ((IpRange) new_ipRange).checkValid();
+              }
 		  	
 		  	markAsUpToDate();
 		  }
@@ -352,44 +349,44 @@ IpFilterImpl
 			if ( ips != null ){
 				
 				long	now = SystemTime.getCurrentTime();
-				
-				for (int i=0;i<ips.size();i++){
-					
-					Map	entry = (Map)ips.get(i);
-					
-					String	ip 		= new String((byte[])entry.get("ip"));
-					String	desc 	= new String((byte[])entry.get("desc"), "UTF-8");
-					Long	ltime	= (Long)entry.get("time");
-					
-					long	time = ltime.longValue();
-					
-					boolean	drop	= false;
-					
-					if ( time > now ){
-						
-						time	= now;
-						
-					}else if ( now - time >= BAN_IP_PERSIST_TIME ){
-						
-						drop	= true;
-						
-					    if (Logger.isEnabled()){
-					    	
-								Logger.log(
-									new LogEvent(
-										LOGID, LogEvent.LT_INFORMATION, 
-										"Persistent ban dropped as too old : "
-											+ ip + ", " + desc));
-					      }
-					}
-					
-					if ( !drop ){
-						
-						int	int_ip = range_manager.addressToInt( ip );
-						
-						bannedIps.put( new Integer( int_ip ), new BannedIpImpl(ip, desc, time ));
-					}
-				}
+
+                for (Object ip1 : ips) {
+
+                    Map entry = (Map) ip1;
+
+                    String ip = new String((byte[]) entry.get("ip"));
+                    String desc = new String((byte[]) entry.get("desc"), StandardCharsets.UTF_8);
+                    Long ltime = (Long) entry.get("time");
+
+                    long time = ltime;
+
+                    boolean drop = false;
+
+                    if (time > now) {
+
+                        time = now;
+
+                    } else if (now - time >= BAN_IP_PERSIST_TIME) {
+
+                        drop = true;
+
+                        if (Logger.isEnabled()) {
+
+                            Logger.log(
+                                    new LogEvent(
+                                            LOGID, LogEvent.LT_INFORMATION,
+                                            "Persistent ban dropped as too old : "
+                                                    + ip + ", " + desc));
+                        }
+                    }
+
+                    if (!drop) {
+
+                        int int_ip = range_manager.addressToInt(ip);
+
+                        bannedIps.put(int_ip, new BannedIpImpl(ip, desc, time));
+                    }
+                }
 			}
 		}catch( Throwable e ){
 			
@@ -415,26 +412,22 @@ IpFilterImpl
 			Map	map = new HashMap();
 			
 			List	ips = new ArrayList();
-			
-			Iterator	it = bannedIps.values().iterator();
-			
-			while( it.hasNext()){
-				
-				BannedIpImpl	bip = (BannedIpImpl)it.next();
-				
-				if ( bip.isTemporary()){
-					
-					continue;
-				}
-								
-				Map	entry = new HashMap();
-				
-				entry.put( "ip", bip.getIp());
-				entry.put( "desc", bip.getTorrentName().getBytes( "UTF-8" ));
-				entry.put( "time", new Long( bip.getBanningTime()));
-				
-				ips.add( entry );
-			}
+
+            for (BannedIpImpl bip : bannedIps.values()) {
+
+                if (bip.isTemporary()) {
+
+                    continue;
+                }
+
+                Map entry = new HashMap();
+
+                entry.put("ip", bip.getIp());
+                entry.put("desc", bip.getTorrentName().getBytes(StandardCharsets.UTF_8));
+                entry.put("time", bip.getBanningTime());
+
+                ips.add(entry);
+            }
 			
 			map.put( "ips", ips );
 			
@@ -720,16 +713,14 @@ IpFilterImpl
 		String	address )
 	{
 		if ( external_handlers.size() > 0 ){
-					
-			Iterator it = external_handlers.iterator();
-			
-			while( it.hasNext()){
-				
-				if (((IpFilterExternalHandler)it.next()).isBlocked( torrent_hash, address )){
-					
-					return( new IpRangeImpl( "External handler", address, address, true ));
-				}
-			}
+
+            for (IpFilterExternalHandler external_handler : external_handlers) {
+
+                if ((external_handler).isBlocked(torrent_hash, address)) {
+
+                    return (new IpRangeImpl("External handler", address, address, true));
+                }
+            }
 		}
 		
 		return( null );
@@ -741,18 +732,16 @@ IpFilterImpl
 		InetAddress	address )
 	{
 		if ( external_handlers.size() > 0 ){
-					
-			Iterator it = external_handlers.iterator();
-			
-			while( it.hasNext()){
-				
-				if (((IpFilterExternalHandler)it.next()).isBlocked( torrent_hash, address )){
-					
-					String	ip = address.getHostAddress();
-					
-					return( new IpRangeImpl( "External handler", ip, ip, true ));
-				}
-			}
+
+            for (IpFilterExternalHandler external_handler : external_handlers) {
+
+                if ((external_handler).isBlocked(torrent_hash, address)) {
+
+                    String ip = address.getHostAddress();
+
+                    return (new IpRangeImpl("External handler", ip, ip, true));
+                }
+            }
 		}
 		
 		return( null );
@@ -816,7 +805,7 @@ IpFilterImpl
 	  
 		int	address = range_manager.addressToInt( ipAddress );
 		
-		Integer	i_address = new Integer( address );
+		Integer	i_address = address;
 		
 	    return( bannedIps.get(i_address) != null );
 	    
@@ -835,7 +824,7 @@ IpFilterImpl
 	  
 		int	address = range_manager.addressToInt( ipAddress );
 		
-		Integer	i_address = new Integer( address );
+		Integer	i_address = address;
 		
 	    return( bannedIps.get(i_address) != null );
 	    
@@ -1039,7 +1028,7 @@ IpFilterImpl
 			
 			int	address = range_manager.addressToInt( ipAddress );
 			
-			Integer	i_address = new Integer( address );
+			Integer	i_address = address;
 			
 			if ( bannedIps.get(i_address) == null ){
 				
@@ -1071,7 +1060,7 @@ IpFilterImpl
 					
 					for (long i=start;i<end;i++){
 						
-						Integer	a = new Integer((int)i);
+						Integer	a = (int) i;
 						
 						if ( bannedIps.get(a) != null ){
 							
@@ -1087,7 +1076,7 @@ IpFilterImpl
 						
 						for (long i=start;i<end;i++){
 							
-							Integer	a = new Integer((int)i);
+							Integer	a = (int) i;
 							
 							if ( bannedIps.get(a) == null ){
 								
@@ -1109,29 +1098,29 @@ IpFilterImpl
 			
 			class_mon.exit();
 		}
-			
-		for (int i=0;i<new_bans.size();i++){
-			
-			BannedIp entry	= (BannedIp)new_bans.get(i);
-			
-			for ( IPFilterListener listener: listenerz ){
-				
-				try{
-					listener.IPBanned( entry );
-					
-				}catch( Throwable e ){
-					
-					Debug.printStackTrace(e);
-				}
-			}
-		}
+
+        for (Object new_ban : new_bans) {
+
+            BannedIp entry = (BannedIp) new_ban;
+
+            for (IPFilterListener listener : listenerz) {
+
+                try {
+                    listener.IPBanned(entry);
+
+                } catch (Throwable e) {
+
+                    Debug.printStackTrace(e);
+                }
+            }
+        }
 		
 		return( block_ban );
 	}
 	
 	private TimerEventPeriodic		unban_timer;
-	final Map<Long,List<String>>	unban_map 			= new TreeMap<Long,List<String>>();
-	final Map<String,Long>		unban_map_reverse	= new HashMap<String, Long>();
+	final Map<Long,List<String>>	unban_map 			= new TreeMap<>();
+	final Map<String,Long>		unban_map_reverse	= new HashMap<>();
 	
 	
 	private void
@@ -1223,7 +1212,7 @@ IpFilterImpl
 		
 		if ( list == null ){
 			
-			list = new ArrayList<String>(1);
+			list = new ArrayList<>(1);
 			
 			unban_map.put( expiry, list );
 		}
@@ -1283,7 +1272,7 @@ IpFilterImpl
 		
 			int	address = range_manager.addressToInt( ipAddress );
 			
-			Integer	i_address = new Integer( address );
+			Integer	i_address = address;
 			
 			BannedIpImpl entry = bannedIps.remove(i_address);
 			
@@ -1325,7 +1314,7 @@ IpFilterImpl
 
 				for (long i=start;i<end;i++){
 					
-					Integer	a = new Integer((int)i);
+					Integer	a = (int) i;
 	
 					if ( bannedIps.remove(a) != null ){
 						
@@ -1349,7 +1338,7 @@ IpFilterImpl
 			
 				int	address = range_manager.addressToInt( ipAddress );
 				
-				Integer	i_address = new Integer( address );
+				Integer	i_address = address;
 				
 				if ( bannedIps.remove(i_address) != null ){
 				
@@ -1409,7 +1398,7 @@ IpFilterImpl
 				return;
 			}
 			
-			ByteArrayHashMap<String>	copy = new ByteArrayHashMap<String>();
+			ByteArrayHashMap<String>	copy = new ByteArrayHashMap<>();
 			
 			for ( byte[] k : excluded_hashes.keys()){
 				
@@ -1438,7 +1427,7 @@ IpFilterImpl
 				return;
 			}
 			
-			ByteArrayHashMap<String>	copy = new ByteArrayHashMap<String>();
+			ByteArrayHashMap<String>	copy = new ByteArrayHashMap<>();
 			
 			for ( byte[] k : excluded_hashes.keys()){
 				

@@ -25,17 +25,17 @@ import java.util.List;
 public interface 
 TaggableLifecycleListener 
 {
-	public void
+	void
 	initialised(
-		List<Taggable>	current_taggables );
+            List<Taggable> current_taggables);
 	
-	public void
+	void
 	taggableCreated(
-		Taggable		taggable );
+            Taggable taggable);
 	
-	public void
+	void
 	taggableDestroyed(
-		Taggable		taggable );
+            Taggable taggable);
 	
 	/**
 	 * Currently only implemented for manual_download tag changes
@@ -43,11 +43,11 @@ TaggableLifecycleListener
 	 * @param tag
 	 * @param taggable
 	 */
-	public void
+    void
 	taggableTagged(
-		TagType			tag_type,	
-		Tag				tag,
-		Taggable		taggable );
+            TagType tag_type,
+            Tag tag,
+            Taggable taggable);
 	
 	/**
 	 * Currently only implemented for manual_download tag changes
@@ -55,9 +55,9 @@ TaggableLifecycleListener
 	 * @param tag
 	 * @param taggable
 	 */
-	public void
+    void
 	taggableUntagged(
-		TagType			tag_type,	
-		Tag				tag,
-		Taggable		taggable );
+            TagType tag_type,
+            Tag tag,
+            Taggable taggable);
 }

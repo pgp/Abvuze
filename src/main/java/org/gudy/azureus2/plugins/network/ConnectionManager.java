@@ -32,41 +32,41 @@ import org.gudy.azureus2.plugins.messaging.*;
 public interface 
 ConnectionManager 
 {
-	public static final int	NAT_UNKNOWN			= 0;
-	public static final int	NAT_OK				= 1;
-	public static final int	NAT_PROBABLY_OK		= 2;
-	public static final int	NAT_BAD				= 3;
+	int	NAT_UNKNOWN			= 0;
+	int	NAT_OK				= 1;
+	int	NAT_PROBABLY_OK		= 2;
+	int	NAT_BAD				= 3;
 
   /**
    * Create a new unconnected remote connection (for outbound-initiated connections).
    * @param remote_address to connect to
    * @return not yet established connection
    */
-  public Connection createConnection( InetSocketAddress remote_address, MessageStreamEncoder encoder, MessageStreamDecoder decoder );
+  Connection createConnection(InetSocketAddress remote_address, MessageStreamEncoder encoder, MessageStreamDecoder decoder);
   
   	/** 
   	 * Returns the current view on whether or not we are inwardly connectable via our listener port
   	 * @return
   	 */
-  public int getNATStatus();
+    int getNATStatus();
   
   /**
    * @since 3.0.5.3
    */
-  public TransportCipher createTransportCipher(String algorithm, int mode, SecretKeySpec key_spec, AlgorithmParameterSpec params) throws TransportException;
+  TransportCipher createTransportCipher(String algorithm, int mode, SecretKeySpec key_spec, AlgorithmParameterSpec params) throws TransportException;
   
   /**
    * @since 3.0.5.3
    */
-  public TransportFilter createTransportFilter(Connection connection, TransportCipher read_cipher, TransportCipher write_cipher) throws TransportException;
+  TransportFilter createTransportFilter(Connection connection, TransportCipher read_cipher, TransportCipher write_cipher) throws TransportException;
   
   /**
    * @since 4.7.0.3
    */
-  
-  public RateLimiter
+
+  RateLimiter
   createRateLimiter(
-	 String		name,
-	 int		bytes_per_second );
+          String name,
+          int bytes_per_second);
   
 }

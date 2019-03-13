@@ -24,6 +24,7 @@ package com.aelitis.net.upnp.impl;
  *
  */
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.net.*;
 import java.io.*;
@@ -86,13 +87,13 @@ UPnPImpl
 	private UPnPAdapter				adapter;
 	private SSDPIGD					ssdp;
 	
-	private Map<String,UPnPRootDeviceImpl>			root_locations	= new HashMap<String, UPnPRootDeviceImpl>();
+	private Map<String,UPnPRootDeviceImpl>			root_locations	= new HashMap<>();
 	
 	private List		log_listeners		= new ArrayList();
 	private List		log_history			= new ArrayList();
 	private List		log_alert_history	= new ArrayList();
 	
-	private List<UPnPListener>	rd_listeners		= new ArrayList<UPnPListener>();
+	private List<UPnPListener>	rd_listeners		= new ArrayList<>();
 	private AEMonitor			rd_listeners_mon 	= new AEMonitor( "UPnP:L" );
 
 	private int		http_calls_ok	= 0;
@@ -105,7 +106,7 @@ UPnPImpl
 	private ThreadPool	device_dispatcher	 = new ThreadPool("UPnPDispatcher", 1, true );
 	private Set			device_dispatcher_pending	= new HashSet();
 	
-	private Map<String,long[]>	failed_urls = new HashMap<String,long[]>();
+	private Map<String,long[]>	failed_urls = new HashMap<>();
 	
 	protected AEMonitor	this_mon 	= new AEMonitor( "UPnP" );
 
@@ -136,10 +137,10 @@ UPnPImpl
 		Map 		cache )
 	{
 		try{
-			String	ni_s	= new String((byte[])cache.get( "ni" ), "UTF-8" );
-			String	la_s 	= new String((byte[])cache.get( "la" ), "UTF-8" );
-			String	usn 	= new String((byte[])cache.get( "usn" ), "UTF-8" );
-			String	loc_s 	= new String((byte[])cache.get( "loc" ), "UTF-8" );
+			String	ni_s	= new String((byte[])cache.get( "ni" ), StandardCharsets.UTF_8);
+			String	la_s 	= new String((byte[])cache.get( "la" ), StandardCharsets.UTF_8);
+			String	usn 	= new String((byte[])cache.get( "usn" ), StandardCharsets.UTF_8);
+			String	loc_s 	= new String((byte[])cache.get( "loc" ), StandardCharsets.UTF_8);
 			
 			NetworkInterface	network_interface = NetUtils.getByName( ni_s );
 			
@@ -204,7 +205,7 @@ UPnPImpl
 					try{
 						rd_listeners_mon.enter();
 
-						old_root_device = (UPnPRootDeviceImpl)root_locations.get( usn );
+						old_root_device = root_locations.get( usn );
 						
 						device_dispatcher_pending.remove( usn );
 						
@@ -267,20 +268,20 @@ UPnPImpl
 						
 						rd_listeners_mon.exit();
 					}
-					
-					for (int i=0;i<listeners.size();i++){
-						
-						try{
-							if ( !((UPnPListener)listeners.get(i)).deviceDiscovered( usn, location )){
-								
-								return;
-							}
-							
-						}catch( Throwable e ){
-							
-							Debug.printStackTrace(e);
-						}
-					}				
+
+                    for (Object listener1 : listeners) {
+
+                        try {
+                            if (!((UPnPListener) listener1).deviceDiscovered(usn, location)) {
+
+                                return;
+                            }
+
+                        } catch (Throwable e) {
+
+                            Debug.printStackTrace(e);
+                        }
+                    }
 
 					log( "UPnP: root discovered: usn=" + usn + ", location=" + location + ", ni=" + network_interface.getName() + ",local=" + local_address.toString() );
 					
@@ -298,17 +299,17 @@ UPnPImpl
 							
 							rd_listeners_mon.exit();
 						}
-			
-						for (int i=0;i<listeners.size();i++){
-							
-							try{
-								((UPnPListener)listeners.get(i)).rootDeviceFound( new_root_device );
-								
-							}catch( Throwable e ){
-								
-								Debug.printStackTrace(e);
-							}
-						}
+
+                        for (Object listener : listeners) {
+
+                            try {
+                                ((UPnPListener) listener).rootDeviceFound(new_root_device);
+
+                            } catch (Throwable e) {
+
+                                Debug.printStackTrace(e);
+                            }
+                        }
 					
 					}catch( UPnPException e ){
 						
@@ -327,7 +328,7 @@ UPnPImpl
 		String		usn,
 		URL			location )
 	{
-		UPnPRootDeviceImpl root_device = (UPnPRootDeviceImpl)root_locations.get( usn );
+		UPnPRootDeviceImpl root_device = root_locations.get( usn );
 			
 		if ( root_device == null ){
 			
@@ -353,7 +354,7 @@ UPnPImpl
 					try{
 						rd_listeners_mon.enter();
 			
-						root_device = (UPnPRootDeviceImpl)root_locations.remove( usn );
+						root_device = root_locations.remove( usn );
 				
 					}finally{
 						
@@ -410,11 +411,11 @@ UPnPImpl
 			
 			rd_listeners_mon.exit();
 		}
-		
-		for (int i=0;i<roots.size();i++){
-			
-			((UPnPRootDeviceImpl)roots.get(i)).destroy( true );
-		}
+
+        for (Object root : roots) {
+
+            ((UPnPRootDeviceImpl) root).destroy(true);
+        }
 		
 		ssdp.searchNow();
 	}
@@ -460,7 +461,7 @@ UPnPImpl
 		try{
 			StringBuilder data = new StringBuilder(1024);
 			
-			LineNumberReader	lnr = new LineNumberReader( new InputStreamReader( is, "UTF-8" ));
+			LineNumberReader	lnr = new LineNumberReader( new InputStreamReader( is, StandardCharsets.UTF_8));
 			
 			Set	ignore_map = null;
 			
@@ -489,7 +490,7 @@ UPnPImpl
 							ignore_map = new HashSet();
 						}
 						
-						Character	cha = new Character(c);
+						Character	cha = c;
 						
 						if ( !ignore_map.contains( cha )){
 						
@@ -531,15 +532,11 @@ UPnPImpl
 		}catch( Throwable e ){
 			
 			try{
-				FileOutputStream	trace = new FileOutputStream( getTraceFile());
-				
-				try{
-					trace.write( bytes_in );
-				
-				}finally{
-				
-					trace.close();
-				}
+
+                try (FileOutputStream trace = new FileOutputStream(getTraceFile())) {
+                    trace.write(bytes_in);
+
+                }
 			}catch( Throwable f ){
 				
 				adapter.log(f);
@@ -646,24 +643,19 @@ UPnPImpl
 			ResourceDownloader rd = rdf.getRetryDownloader( rdf.create( url, true ), retries );
 				
 			rd.addListener( this );
-				
-			InputStream	data = rd.download();
-						
-			try{
-				
-				SimpleXMLParserDocument res = parseXML( data );
-			
-				synchronized( failed_urls ){
-					
-					failed_urls.remove( url_str );
-				}
-				
-				return( res );
-				
-			}finally{
-					
-				data.close();
-			}	
+
+            try (InputStream data = rd.download()) {
+
+                SimpleXMLParserDocument res = parseXML(data);
+
+                synchronized (failed_urls) {
+
+                    failed_urls.remove(url_str);
+                }
+
+                return (res);
+
+            }
 		}catch( Throwable e ){
 				
 			if ( record_failure ){
@@ -806,7 +798,7 @@ UPnPImpl
 							
 						OutputStream	os = con1.getOutputStream();
 							
-						PrintWriter	pw = new PrintWriter( new OutputStreamWriter(os, "UTF-8" ));
+						PrintWriter	pw = new PrintWriter( new OutputStreamWriter(os, StandardCharsets.UTF_8));
 										
 						pw.println( request );
 							
@@ -834,7 +826,7 @@ UPnPImpl
 									
 								os = con2.getOutputStream();
 									
-								pw = new PrintWriter( new OutputStreamWriter(os, "UTF-8" ));
+								pw = new PrintWriter( new OutputStreamWriter(os, StandardCharsets.UTF_8));
 												
 								pw.println( request );
 									
@@ -888,7 +880,7 @@ UPnPImpl
 					socket.setSoTimeout( READ_TIMEOUT );
 						
 					try{
-						PrintWriter	pw = new PrintWriter(new OutputStreamWriter( socket.getOutputStream(), "UTF8" ));
+						PrintWriter	pw = new PrintWriter(new OutputStreamWriter( socket.getOutputStream(), StandardCharsets.UTF_8));
 		
 						String	url_target = control.toString();
 					
@@ -902,7 +894,7 @@ UPnPImpl
 						pw.print( "SOAPAction: \"" + soap_action + "\"" + NL );
 						pw.print( "User-Agent: Azureus (UPnP/1.0)" + NL );
 						pw.print( "Host: " + control.getHost() + NL );
-						pw.print( "Content-Length: " + request.getBytes( "UTF8" ).length + NL );
+						pw.print( "Content-Length: " + request.getBytes(StandardCharsets.UTF_8).length + NL );
 						pw.print( "Connection: Keep-Alive" + NL );
 						pw.print( "Pragma: no-cache" + NL + NL );
 			
@@ -1034,11 +1026,11 @@ UPnPImpl
 			
 			this_mon.exit();
 		}
-		
-		for (int i=0;i<old_listeners.size();i++){
-	
-			((UPnPLogListener)old_listeners.get(i)).log( str );
-		}
+
+        for (Object old_listener : old_listeners) {
+
+            ((UPnPLogListener) old_listener).log(str);
+        }
 	}
 	
 	public void
@@ -1054,7 +1046,7 @@ UPnPImpl
 
 			old_listeners = new ArrayList(log_listeners);
 
-			log_alert_history.add(new Object[]{ str, Boolean.valueOf(error), new Integer( type )});
+			log_alert_history.add(new Object[]{ str, error, type});
 			
 			if ( log_alert_history.size() > 32 ){
 				
@@ -1064,11 +1056,11 @@ UPnPImpl
 			
 			this_mon.exit();
 		}
-		
-		for (int i=0;i<old_listeners.size();i++){
-	
-			((UPnPLogListener)old_listeners.get(i)).logAlert( str, error, type );
-		}
+
+        for (Object old_listener : old_listeners) {
+
+            ((UPnPLogListener) old_listener).logAlert(str, error, type);
+        }
 	}
 	
 	public void
@@ -1089,18 +1081,18 @@ UPnPImpl
 			
 			this_mon.exit();
 		}
-		
-		for (int i=0;i<old_logs.size();i++){
-			
-			l.log((String)old_logs.get(i));
-		}
-		
-		for (int i=0;i<old_alerts.size();i++){
-			
-			Object[]	entry = (Object[])old_alerts.get(i);
-			
-			l.logAlert((String)entry[0], ((Boolean)entry[1]).booleanValue(), ((Integer)entry[2]).intValue());
-		}
+
+        for (Object old_log : old_logs) {
+
+            l.log((String) old_log);
+        }
+
+        for (Object old_alert : old_alerts) {
+
+            Object[] entry = (Object[]) old_alert;
+
+            l.logAlert((String) entry[0], (Boolean) entry[1], (Integer) entry[2]);
+        }
 	}
 		
 	public void
@@ -1116,7 +1108,7 @@ UPnPImpl
 		try{
 			this_mon.enter();
 
-			return( root_locations.values().toArray( new UPnPRootDevice[ root_locations.size()] ));
+			return( root_locations.values().toArray(new UPnPRootDevice[0]));
 			
 		}finally{
 			
@@ -1133,7 +1125,7 @@ UPnPImpl
 		try{
 			this_mon.enter();
 
-			old_locations = new ArrayList<UPnPRootDeviceImpl>(root_locations.values());
+			old_locations = new ArrayList<>(root_locations.values());
 
 			rd_listeners.add( l );
 			
@@ -1156,22 +1148,20 @@ UPnPImpl
 					public void 
 					runSupport()
 					{
-						for (int i=0;i<old_locations.size();i++){
-							
-							UPnPRootDevice	device = (UPnPRootDevice)old_locations.get(i);
-							
-							try{
-								
-								if ( l.deviceDiscovered( device.getUSN(), device.getLocation())){
-									
-									l.rootDeviceFound(device);
-								}
-								
-							}catch( Throwable e ){
-								
-								Debug.printStackTrace(e);
-							}
-						}
+                        for (UPnPRootDevice device : old_locations) {
+
+                            try {
+
+                                if (l.deviceDiscovered(device.getUSN(), device.getLocation())) {
+
+                                    l.rootDeviceFound(device);
+                                }
+
+                            } catch (Throwable e) {
+
+                                Debug.printStackTrace(e);
+                            }
+                        }
 					}
 				});
 		}

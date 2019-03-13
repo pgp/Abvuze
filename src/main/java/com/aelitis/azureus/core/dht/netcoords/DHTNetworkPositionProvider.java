@@ -26,38 +26,38 @@ import java.io.IOException;
 public interface 
 DHTNetworkPositionProvider 
 {
-	public byte
+	byte
 	getPositionType();
 	
-	public DHTNetworkPosition
+	DHTNetworkPosition
 	create(
-		byte[]		ID,
-		boolean		is_local );
+            byte[] ID,
+            boolean is_local);
 	
 		/**
 		 * Returns a local, hopefully stable, network position for us or null if none available
 		 */
-	
-	public DHTNetworkPosition
+
+        DHTNetworkPosition
 	getLocalPosition();
 	
-	public DHTNetworkPosition
+	DHTNetworkPosition
 	deserialisePosition(
-		DataInputStream		is )
+            DataInputStream is)
 	
 		throws IOException;	
 	
-	public void
+	void
 	serialiseStats(
-		DataOutputStream	os )
+            DataOutputStream os)
 	
 		throws IOException;
 	
-	public void
+	void
 	startUp(
-		DataInputStream		is );
+            DataInputStream is);
 	
-	public void
+	void
 	shutDown(
-		DataOutputStream	os );
+            DataOutputStream os);
 }

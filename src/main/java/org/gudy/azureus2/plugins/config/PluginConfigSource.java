@@ -64,7 +64,7 @@ public interface PluginConfigSource {
 	 *       being saved in the main Azureus config file).
 	 * </ul>
 	 */
-	public void initialize();
+    void initialize();
 	
 	/**
 	 * This method sets the filename for the configuration file that this
@@ -73,13 +73,13 @@ public interface PluginConfigSource {
 	 * 
 	 * @param filename The filename to use.
 	 */
-	public void setConfigFilename(String filename);
+    void setConfigFilename(String filename);
 	
 	/**
 	 * Returns a file object which represents the location of the configuration
 	 * file that this object interacts with.
 	 */
-	public File getConfigFile();
+    File getConfigFile();
 	
 	/**
 	 * Manually saves the configuration settings recorded by this object to
@@ -93,7 +93,7 @@ public interface PluginConfigSource {
 	 *    regardless of whether there are any changes, <tt>false</tt> if
 	 *    you only want to save the file if there are unsaved changes.
 	 */
-	public void save(boolean force);
+    void save(boolean force);
 	
 	/**
 	 * If your plugin previously used to store data in the main configuration file,
@@ -107,5 +107,5 @@ public interface PluginConfigSource {
 	 * to save any settings copied across - probably best to be done as the last thing
 	 * of the {@link Plugin#initialize(PluginInterface)} method. 
 	 */
-	public void forceSettingsMigration();
+    void forceSettingsMigration();
 }

@@ -29,56 +29,56 @@ import java.util.*;
 public interface 
 DHTTransportReplyHandler 
 {
-	public void
+	void
 	pingReply(
-		DHTTransportContact contact,
-		int					elapsed_time );
+            DHTTransportContact contact,
+            int elapsed_time);
 		
-	public void
+	void
 	statsReply(
-		DHTTransportContact 	contact,
-		DHTTransportFullStats	stats );
+            DHTTransportContact contact,
+            DHTTransportFullStats stats);
 
-	public void
+	void
 	storeReply(
-		DHTTransportContact contact,
-		byte[]				diversifications );
+            DHTTransportContact contact,
+            byte[] diversifications);
 	
-	public void
+	void
 	queryStoreReply(
-		DHTTransportContact contact,
-		List<byte[]>		response );
+            DHTTransportContact contact,
+            List<byte[]> response);
 	
-	public void
+	void
 	findNodeReply(
-		DHTTransportContact 	contact,
-		DHTTransportContact[]	contacts );
+            DHTTransportContact contact,
+            DHTTransportContact[] contacts);
 	
-	public void
+	void
 	findValueReply(
-		DHTTransportContact 	contact,
-		DHTTransportValue[]		values,
-		byte					diversification_type,
-		boolean					more_to_come );
+            DHTTransportContact contact,
+            DHTTransportValue[] values,
+            byte diversification_type,
+            boolean more_to_come);
 	
-	public void
+	void
 	findValueReply(
-		DHTTransportContact 	contact,
-		DHTTransportContact[]	contacts );
+            DHTTransportContact contact,
+            DHTTransportContact[] contacts);
 	
-	public void
+	void
 	keyBlockReply(
-		DHTTransportContact 	contact );
+            DHTTransportContact contact);
 	
-	public void
+	void
 	keyBlockRequest(
-		DHTTransportContact 	contact,
-		byte[]					key,
-		byte[]					key_signature );
+            DHTTransportContact contact,
+            byte[] key,
+            byte[] key_signature);
 	
-	public void
+	void
 	failed(
-		DHTTransportContact 	contact,
-		Throwable				error );
+            DHTTransportContact contact,
+            Throwable error);
 
 }

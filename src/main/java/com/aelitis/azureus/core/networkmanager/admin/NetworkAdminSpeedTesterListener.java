@@ -28,13 +28,13 @@ public interface NetworkAdminSpeedTesterListener
      * @param tester - test ran
      * @param result - String with the result
      */
-    public void complete(NetworkAdminSpeedTester tester, NetworkAdminSpeedTesterResult result);
+    void complete(NetworkAdminSpeedTester tester, NetworkAdminSpeedTesterResult result);
 
     /**
      * Informs listener when the test is at a new stage.
      * @param tester - test running.
      * @param step - String with stage.
      */
-    public void stage(NetworkAdminSpeedTester tester, String step);
+    void stage(NetworkAdminSpeedTester tester, String step);
 
 }

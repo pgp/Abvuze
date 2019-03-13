@@ -185,11 +185,11 @@ final class SocketServer implements Runnable
 			return false;
 		hostName = hostName.toLowerCase();
 //			System.out.println("checking host: " + hostName);
-		for (Iterator iter = allowedHosts.iterator(); iter.hasNext();) {
-			String allowedHost = (String) iter.next();
-			if( hostName.equals(allowedHost) )
-				return true;
-		}
+        for (Object allowedHost1 : allowedHosts) {
+            String allowedHost = (String) allowedHost1;
+            if (hostName.equals(allowedHost))
+                return true;
+        }
 		return false;
 	}
 }

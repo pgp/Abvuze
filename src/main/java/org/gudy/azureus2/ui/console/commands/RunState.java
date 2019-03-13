@@ -36,7 +36,7 @@ public class RunState extends IConsoleCommand {
 		
 		long mode = AERunStateHandler.getResourceMode();
 		
-		Map<String,Long>	mode_map = new HashMap<String,Long>();
+		Map<String,Long>	mode_map = new HashMap<>();
 		
 		mode_map.put( "all", AERunStateHandler.RS_ALL_LOW );
 		

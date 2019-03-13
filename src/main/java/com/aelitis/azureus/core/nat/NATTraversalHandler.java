@@ -25,14 +25,14 @@ import java.util.Map;
 public interface
 NATTraversalHandler 
 {
-	public int
+	int
 	getType();
 	
-	public String
+	String
 	getName();
 	
-	public Map
+	Map
 	process(
-		InetSocketAddress	originator,
-		Map					data );
+            InetSocketAddress originator,
+            Map data);
 }

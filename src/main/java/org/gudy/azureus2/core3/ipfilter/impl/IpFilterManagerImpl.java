@@ -94,7 +94,7 @@ IpFilterManagerImpl
 			
 			int info = start + ((end - start) << 25);
 			
-			return new Integer(info);
+			return info;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -114,7 +114,7 @@ IpFilterManagerImpl
 		}
 		
 		try {
-			int posInfo = ((Integer)info).intValue();
+			int posInfo = (Integer) info;
 			int pos = posInfo & 0x1FFFFFF;
 			int len = posInfo >> 25;
 			
@@ -137,25 +137,25 @@ IpFilterManagerImpl
 	
 	public void cacheAllDescriptions() {
 		IpRange[] ranges = getIPFilter().getRanges();
-		for (int i = 0; i < ranges.length; i++) {
-			Object info = ((IpRangeImpl)ranges[i]).getDescRef();
-			if (info instanceof Integer) {
-				byte[] desc = getDescription(info);
-				Object[] data = { desc, info }; 
-				((IpRangeImpl)ranges[i]).setDescRef(data);
-			}
-		}
+        for (IpRange range : ranges) {
+            Object info = ((IpRangeImpl) range).getDescRef();
+            if (info instanceof Integer) {
+                byte[] desc = getDescription(info);
+                Object[] data = {desc, info};
+                ((IpRangeImpl) range).setDescRef(data);
+            }
+        }
 	}
 	
 	public void clearDescriptionCache() {
 		IpRange[] ranges = getIPFilter().getRanges();
-		for (int i = 0; i < ranges.length; i++) {
-			Object info = ((IpRangeImpl)ranges[i]).getDescRef();
-			if (info instanceof Object[]) {
-				Integer data = (Integer)((Object[])info)[1]; 
-				((IpRangeImpl)ranges[i]).setDescRef(data);
-			}
-		}
+        for (IpRange range : ranges) {
+            Object info = ((IpRangeImpl) range).getDescRef();
+            if (info instanceof Object[]) {
+                Integer data = (Integer) ((Object[]) info)[1];
+                ((IpRangeImpl) range).setDescRef(data);
+            }
+        }
 	}
 	
 	public void deleteAllDescriptions() {

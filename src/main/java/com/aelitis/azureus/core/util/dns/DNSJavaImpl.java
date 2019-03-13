@@ -34,9 +34,9 @@ public class DNSJavaImpl implements DNSUtils.DNSUtilsIntf {
         try {
             Record[] recordsV6 = new Lookup(host, Type.AAAA).run();
             if(recordsV6!=null)
-                for (int i = 0; i < recordsV6.length; i++) {
-                    AAAARecord a = (AAAARecord) recordsV6[i];
-                    ret.add((Inet6Address)a.getAddress());
+                for (Record record : recordsV6) {
+                    AAAARecord a = (AAAARecord) record;
+                    ret.add((Inet6Address) a.getAddress());
                 }
         } catch (TextParseException e) {
             e.printStackTrace();
@@ -58,13 +58,13 @@ public class DNSJavaImpl implements DNSUtils.DNSUtilsIntf {
             Record[] records = new Lookup(host, Type.A).run();
             Record[] recordsV6 = new Lookup(host, Type.AAAA).run();
             if(records!=null)
-                for(int i = 0; i < records.length; i++) {
-                    ARecord a = (ARecord) records[i];
+                for (Record record : records) {
+                    ARecord a = (ARecord) record;
                     ret.add(a.getAddress());
                 }
             if(recordsV6!=null)
-                for(int i = 0; i < recordsV6.length; i++) {
-                    AAAARecord a = (AAAARecord) recordsV6[i];
+                for (Record record : recordsV6) {
+                    AAAARecord a = (AAAARecord) record;
                     ret.add(a.getAddress());
                 }
         } catch (TextParseException e) {
@@ -90,8 +90,8 @@ public class DNSJavaImpl implements DNSUtils.DNSUtilsIntf {
         try {
             Record[] records = new Lookup(query, Type.TXT).run();
             if(records!=null)
-                for(int i = 0; i < records.length; i++) {
-                    TXTRecord txt = (TXTRecord) records[i];
+                for (Record record : records) {
+                    TXTRecord txt = (TXTRecord) record;
                     ret.addAll(txt.getStrings());
                 }
         }

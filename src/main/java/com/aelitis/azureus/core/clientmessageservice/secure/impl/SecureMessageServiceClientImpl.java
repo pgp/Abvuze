@@ -210,7 +210,7 @@ SecureMessageServiceClientImpl
 						
 						content.put( "user", 		user );
 						content.put( "password", 	password );
-						content.put( "seq", 		new Long( sequence ));
+						content.put( "seq", sequence);
 						content.put( "request", 	message.getRequest());
 							
 						last_failed_user_pw = "";
@@ -223,13 +223,13 @@ SecureMessageServiceClientImpl
 						
 						got_reply	= true;
 							
-						long	status = ((Long)reply.get( "status" )).longValue();
+						long	status = (Long) reply.get("status");
 						
 						Long	new_retry = (Long)reply.get( "retry" );
 						
 						if ( new_retry != null ){
 							
-							retry_millis = new_retry.longValue();
+							retry_millis = new_retry;
 							
 							if ( retry_millis < MIN_RETRY_PERIOD ){
 								
@@ -252,17 +252,17 @@ SecureMessageServiceClientImpl
 							adapter.setMessageSequence( sequence + 1 );
 							
 							adapter.serverOK();
-	
-							for (Iterator l_it=listeners.iterator();l_it.hasNext();){
-								
-								try{
-									((SecureMessageServiceClientListener)l_it.next()).complete( message );
-									
-								}catch( Throwable e ){
-									
-									e.printStackTrace();
-								}
-							}
+
+                            for (Object listener : listeners) {
+
+                                try {
+                                    ((SecureMessageServiceClientListener) listener).complete(message);
+
+                                } catch (Throwable e) {
+
+                                    e.printStackTrace();
+                                }
+                            }
 							
 							complete_messages.add( message );
 							
@@ -291,7 +291,7 @@ SecureMessageServiceClientImpl
 								
 								retry	= true;
 								
-								long	expected_sequence = ((Long)reply.get( "seq" )).longValue();
+								long	expected_sequence = (Long) reply.get("seq");
 								
 								adapter.log( "Sequence resynchronise: local = " + sequence + ", remote = " + expected_sequence );
 								
@@ -311,18 +311,18 @@ SecureMessageServiceClientImpl
 							
 							adapter.serverFailed( new Exception( "Server requested abort" ));
 
-							for (Iterator l_it=listeners.iterator();l_it.hasNext();){
-								
-								try{
-									((SecureMessageServiceClientListener)l_it.next()).aborted( 
-											message,
-											new String( (byte[])reply.get( "error" )));
-									
-								}catch( Throwable e ){
-									
-									e.printStackTrace();
-								}
-							}
+                            for (Object listener : listeners) {
+
+                                try {
+                                    ((SecureMessageServiceClientListener) listener).aborted(
+                                            message,
+                                            new String((byte[]) reply.get("error")));
+
+                                } catch (Throwable e) {
+
+                                    e.printStackTrace();
+                                }
+                            }
 							
 							complete_messages.add( message );							
 						}
@@ -422,17 +422,17 @@ SecureMessageServiceClientImpl
 		}
 		
 		if ( inform ){
-			
-			for (Iterator it=listeners.iterator();it.hasNext();){
-				
-				try{
-					((SecureMessageServiceClientListener)it.next()).cancelled( message );
-					
-				}catch( Throwable e ){
-					
-					e.printStackTrace();
-				}
-			}
+
+            for (Object listener : listeners) {
+
+                try {
+                    ((SecureMessageServiceClientListener) listener).cancelled(message);
+
+                } catch (Throwable e) {
+
+                    e.printStackTrace();
+                }
+            }
 		}
 	}
 	
@@ -442,7 +442,7 @@ SecureMessageServiceClientImpl
 		try{
 			message_mon.enter();
 			
-			return((SecureMessageServiceClientMessage[])messages.toArray( new SecureMessageServiceClientMessage[ messages.size()]));
+			return((SecureMessageServiceClientMessage[])messages.toArray(new SecureMessageServiceClientMessage[0]));
 			
 		}finally{
 			

@@ -31,32 +31,32 @@ import java.util.Map;
 public interface 
 MagnetURIHandlerListener 
 {
-	public byte[]
+	byte[]
 	badge();
 	
-	public byte[]
+	byte[]
 	download(
-		MagnetURIHandlerProgressListener	progress,
-		byte[]								hash,
-		String								args,
-		InetSocketAddress[]					sources,
-		long								timeout )
+            MagnetURIHandlerProgressListener progress,
+            byte[] hash,
+            String args,
+            InetSocketAddress[] sources,
+            long timeout)
 	
 		throws MagnetURIHandlerException;
 	
-	public boolean
+	boolean
 	download(
-		URL			magnet_url )
+            URL magnet_url)
 	
 		throws MagnetURIHandlerException;
 	
-	public boolean
+	boolean
 	set(
-		String	name,
-		Map values );
+            String name,
+            Map values);
 	
-	public int
+	int
 	get(
-		String	name,
-		Map 	values );
+            String name,
+            Map values);
 }

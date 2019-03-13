@@ -31,26 +31,26 @@ UpdateCheckerListener
 		 * Called when the checking process has completed successfully
 		 * @param checker
 		 */
-	
-	public void
+
+        void
 	completed(
-		UpdateChecker	checker );
+                UpdateChecker checker);
 	
 		/**
 		 * Called when the checking process failed
 		 * @param checker
 		 */
-	
-	public void
+
+        void
 	failed(
-		UpdateChecker	checker );
+                UpdateChecker checker);
 	
 		/**
 		 * Called when the checking process has been cancelled
 		 * @param checker
 		 */
-	
-	public void
+
+        void
 	cancelled(
-		UpdateChecker	checker );
+                UpdateChecker checker);
 }

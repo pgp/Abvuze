@@ -23,12 +23,12 @@ package org.gudy.azureus2.plugins.disk;
 public interface 
 DiskManagerWriteRequestListener 
 {
-	public void
+	void
 	complete(
-		DiskManagerWriteRequest		request );
+            DiskManagerWriteRequest request);
 	
-	public void
+	void
 	failed(
-		DiskManagerWriteRequest		request,
-		DiskManagerException		error );
+            DiskManagerWriteRequest request,
+            DiskManagerException error);
 }

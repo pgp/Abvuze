@@ -97,38 +97,38 @@ SESTSConnectionImpl
 					List	to_close = new ArrayList();
 					
 					synchronized( connections ){
-						
-						for (int i=0;i<connections.size();i++){
-							
-							SESTSConnectionImpl connection = (SESTSConnectionImpl)connections.get(i);
-							
-							if ( connection.crypto_complete.isReleasedForever()){
-								
-								continue;
-							}
-							
-							long	now = SystemTime.getCurrentTime();
-							
-							if ( connection.create_time > now ){
-								
-								connection.create_time = now;
-								
-							}else{
-								
-								int time_allowed = connection.getConnectMethodCount() * CRYPTO_SETUP_TIMEOUT;
-								
-								if ( now - connection.create_time > time_allowed ){
-									
-									to_close.add( connection );
-								}
-							}
-						}
+
+                        for (Object connection1 : connections) {
+
+                            SESTSConnectionImpl connection = (SESTSConnectionImpl) connection1;
+
+                            if (connection.crypto_complete.isReleasedForever()) {
+
+                                continue;
+                            }
+
+                            long now = SystemTime.getCurrentTime();
+
+                            if (connection.create_time > now) {
+
+                                connection.create_time = now;
+
+                            } else {
+
+                                int time_allowed = connection.getConnectMethodCount() * CRYPTO_SETUP_TIMEOUT;
+
+                                if (now - connection.create_time > time_allowed) {
+
+                                    to_close.add(connection);
+                                }
+                            }
+                        }
 					}
-					
-					for (int i=0;i<to_close.size();i++){
-						
-						((SESTSConnectionImpl)to_close.get(i)).reportFailed( new Exception( "Timeout during crypto setup" ));
-					}
+
+                    for (Object o : to_close) {
+
+                        ((SESTSConnectionImpl) o).reportFailed(new Exception("Timeout during crypto setup"));
+                    }
 				}
 				
 			});
@@ -905,16 +905,16 @@ SESTSConnectionImpl
 			{
 				List listeners_ref = listeners.getList();
 
-				for (int i=0;i<listeners_ref.size();i++){
-					
-					try{
-						((GenericMessageConnectionListener)listeners_ref.get(i)).connected( SESTSConnectionImpl.this );
-						
-					}catch( Throwable e ){
-						
-						Debug.printStackTrace( e );
-					}
-				}
+                for (Object o : listeners_ref) {
+
+                    try {
+                        ((GenericMessageConnectionListener) o).connected(SESTSConnectionImpl.this);
+
+                    } catch (Throwable e) {
+
+                        Debug.printStackTrace(e);
+                    }
+                }
 			}
 		}.start();
 		
@@ -933,17 +933,17 @@ SESTSConnectionImpl
 			{
 				try{
 					List listeners_ref = listeners.getList();
-					
-					for (int i=0;i<listeners_ref.size();i++){
-						
-						try{
-							((GenericMessageConnectionListener)listeners_ref.get(i)).failed( SESTSConnectionImpl.this, error );
-							
-						}catch( Throwable e ){
-							
-							Debug.printStackTrace( e );
-						}
-					}				
+
+                    for (Object o : listeners_ref) {
+
+                        try {
+                            ((GenericMessageConnectionListener) o).failed(SESTSConnectionImpl.this, error);
+
+                        } catch (Throwable e) {
+
+                            Debug.printStackTrace(e);
+                        }
+                    }
 				}finally{
 					
 					try{

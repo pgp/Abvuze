@@ -25,24 +25,24 @@ package com.aelitis.azureus.core.subs;
 public interface 
 SubscriptionResultFilter 
 {
-	public long
+	long
 	getMinSze();
 	
-	public long
+	long
 	getMaxSize();
 	
-	public String[]
+	String[]
 	getWithWords();
 	
-	public String[]
+	String[]
 	getWithoutWords();
 	
-	public void
+	void
 	update(
-		String[]		with_words,
-		String[]		without_words,
-		long			min_size,
-		long			max_size )
+            String[] with_words,
+            String[] without_words,
+            long min_size,
+            long max_size)
 		
 		throws SubscriptionException;
 }

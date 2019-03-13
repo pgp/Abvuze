@@ -63,13 +63,13 @@ DisplayFormatters
 	final public static int UNIT_MB = 2;
 	final public static int UNIT_GB = 3;
 	final public static int UNIT_TB = 4;
-	
-	final private static int UNITS_PRECISION[] =	 {	 0, // B
-	                                                     1, //KB
-	                                                     2, //MB
-	                                                     2, //GB
-	                                                     3 //TB
-	                                                  };
+
+	final private static int[] UNITS_PRECISION = {0, // B
+			1, //KB
+			2, //MB
+			2, //GB
+			3 //TB
+	};
 	
 	final private static NumberFormat[]	cached_number_formats = new NumberFormat[20]; 
 	
@@ -97,7 +97,7 @@ DisplayFormatters
     private static boolean	data_stats_only;
 	private static char decimalSeparator;
     
-	private static volatile Map<String,Formatter>	format_map = new HashMap<String, Formatter>();
+	private static volatile Map<String,Formatter>	format_map = new HashMap<>();
 
 	static{
 		COConfigurationManager.addAndFireParameterListeners( 
@@ -357,13 +357,13 @@ DisplayFormatters
 	getRateUnit(
 		int		unit_size )
 	{
-		return( units_rate[unit_size].substring(1, units_rate[unit_size].length()) );
+		return( units_rate[unit_size].substring(1) );
 	}
 	public static String
 	getUnit(
 		int		unit_size )
 	{
-		return( units[unit_size].substring(1, units[unit_size].length()) );
+		return( units[unit_size].substring(1) );
 	}
 	
 	public static String 
@@ -740,7 +740,7 @@ DisplayFormatters
 	
 					// size can exceed int so ensure longs used in multiplication
 	
-			long count = bad / (long)torrent.getPieceLength();
+			long count = bad / torrent.getPieceLength();
 	
 			String result = count + " ( " + formatByteCountToKiBEtc(bad) + " )";
 	
@@ -952,17 +952,16 @@ DisplayFormatters
 		char[] 	chars 	= str.toCharArray();
 		String 	res 	= "";
 		int		digits 	= 0;
-		
-		for (int i=0;i<chars.length;i++){
-			char c = chars[i];
-			if ( Character.isDigit(c)){
+
+		for (char c : chars) {
+			if (Character.isDigit(c)) {
 				digits++;
-				if ( digits <= num_digits ){
+				if (digits <= num_digits) {
 					res += c;
 				}
-			}else if ( c == '.' && digits >= 3 ){
-									
-			}else{
+			} else if (c == '.' && digits >= 3) {
+
+			} else {
 				res += c;
 			}
 		}
@@ -1200,11 +1199,11 @@ DisplayFormatters
 	updateFormatOverrides(
 		String	formats )
 	{
-		Map<String,Formatter> map = new HashMap<String, Formatter>();
+		Map<String,Formatter> map = new HashMap<>();
 		
 		String[] lines = formats.split( "\n" );
 		
-		List<String>	errors = new ArrayList<String>(); 
+		List<String>	errors = new ArrayList<>();
 				
 		for ( String line: lines ){
 			
@@ -1454,48 +1453,58 @@ DisplayFormatters
 						}else{
 							
 							if ( main_arg.equals( "units" )){
-								
-								if ( arg_name.equals( "hide" )){
-									
-									hide_units = arg_value.toLowerCase( Locale.US ).startsWith( "y" );
-								
-								}else if ( arg_name.equals( "short" )){
-									
-									short_units = arg_value.toLowerCase( Locale.US ).startsWith( "y" );
-									
-								}else if ( arg_name.equals( "rate" )){
-									
-									rate_units = arg_value.toLowerCase( Locale.US ).startsWith( "y" );
 
-								}else{
-									
-									Debug.out( "TODO: " + arg_name );
+								switch (arg_name) {
+									case "hide":
+
+										hide_units = arg_value.toLowerCase(Locale.US).startsWith("y");
+
+										break;
+									case "short":
+
+										short_units = arg_value.toLowerCase(Locale.US).startsWith("y");
+
+										break;
+									case "rate":
+
+										rate_units = arg_value.toLowerCase(Locale.US).startsWith("y");
+
+										break;
+									default:
+
+										Debug.out("TODO: " + arg_name);
+										break;
 								}
 							}else if ( main_arg.equals( "format" )){
 								
 								if ( arg_name.equals( "round" )){
 									
 									String r = arg_value.toLowerCase( Locale.US );
-									
-									if ( r.equals( "up" )){
-										
-										rounding = BigDecimal.ROUND_UP;
-										
-									}else if ( r.equals( "down" )){
-										
-										rounding = BigDecimal.ROUND_DOWN;
-										
-									}else if ( r.equals( "halfup" )){
-										
-										rounding = BigDecimal.ROUND_HALF_UP;
-										
-									}else if ( r.equals( "halfdown" )){
-										
-										rounding = BigDecimal.ROUND_HALF_DOWN;
-										
-									}else{
-										
-										return( "Invald round mode: " + r );
+
+									switch (r) {
+										case "up":
+
+											rounding = BigDecimal.ROUND_UP;
+
+											break;
+										case "down":
+
+											rounding = BigDecimal.ROUND_DOWN;
+
+											break;
+										case "halfup":
+
+											rounding = BigDecimal.ROUND_HALF_UP;
+
+											break;
+										case "halfdown":
+
+											rounding = BigDecimal.ROUND_HALF_DOWN;
+
+											break;
+										default:
+
+											return ("Invald round mode: " + r);
 									}
 								}
 							}else{

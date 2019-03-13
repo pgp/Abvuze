@@ -72,7 +72,7 @@ ContentNetworkVuzeGeneric
 	private static final String RPC_ADDRESS = System.getProperty("platform_rpc",
 			"https://vrpc.vuze.com/vzrpc/rpc.php");
 
-	private Map<Integer, String>		service_map = new HashMap<Integer, String>();
+	private Map<Integer, String>		service_map = new HashMap<>();
 
 	private Set<Integer>				service_exclusions;
 	
@@ -163,7 +163,7 @@ ContentNetworkVuzeGeneric
 		
 		if ( sex != null ){
 			
-			service_exclusions = new HashSet<Integer>();
+			service_exclusions = new HashSet<>();
 			
 			for ( Long l: sex ){
 				
@@ -195,7 +195,7 @@ ContentNetworkVuzeGeneric
 		
 		if ( service_exclusions != null ){
 			
-			List<Long> sex = new ArrayList<Long>();
+			List<Long> sex = new ArrayList<>();
 			
 			for (Integer i: service_exclusions){
 			

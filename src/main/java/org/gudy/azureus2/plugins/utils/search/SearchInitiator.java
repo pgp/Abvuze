@@ -25,17 +25,17 @@ import java.util.Map;
 public interface 
 SearchInitiator 
 {
-	public static final String PR_SEARCH_TERM	= "search_term";	// search expression
-	public static final String PR_MATURE		= "mature";			// "true" or "false"
+	String PR_SEARCH_TERM	= "search_term";	// search expression
+	String PR_MATURE		= "mature";			// "true" or "false"
 	
-	public SearchProvider[]
+	SearchProvider[]
 	getProviders();
 	
-	public Search
+	Search
 	createSearch(
-		SearchProvider[]	providers,
-		Map<String,String>	properties,
-		SearchListener		listener )
+            SearchProvider[] providers,
+            Map<String, String> properties,
+            SearchListener listener)
 	
 		throws SearchException;
 	
@@ -46,11 +46,11 @@ SearchInitiator
 		 * @return
 		 * @throws SearchException
 		 */
-	
-	public Search
+
+        Search
 	createSearch(
-		String				provider_ids,	// comma separated list
-		String				properties )	// name=value, comma separated
+                String provider_ids,    // comma separated list
+                String properties)	// name=value, comma separated
 	
 		throws SearchException;
 }

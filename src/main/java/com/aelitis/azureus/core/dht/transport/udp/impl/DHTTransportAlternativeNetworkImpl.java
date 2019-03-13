@@ -46,24 +46,22 @@ DHTTransportAlternativeNetworkImpl
 	private final int	max_contacts;
 	
 	private final TreeSet<DHTTransportAlternativeContact> contacts =
-		new TreeSet<DHTTransportAlternativeContact>(
-			new Comparator<DHTTransportAlternativeContact>() 
-			{
-				public int 
-				compare(
-					DHTTransportAlternativeContact o1,
-					DHTTransportAlternativeContact o2 ) 
-				{
-					int res = o1.getAge() - o2.getAge();
-					
-					if ( res == 0 ){
-						
-						res = o1.getID() - o2.getID();
-					}
-					
-					return( res );
-				}
-			});
+            new TreeSet<>(
+                    new Comparator<DHTTransportAlternativeContact>() {
+                        public int
+                        compare(
+                                DHTTransportAlternativeContact o1,
+                                DHTTransportAlternativeContact o2) {
+                            int res = o1.getAge() - o2.getAge();
+
+                            if (res == 0) {
+
+                                res = o1.getID() - o2.getID();
+                            }
+
+                            return (res);
+                        }
+                    });
 	
 	
 	protected
@@ -98,40 +96,36 @@ DHTTransportAlternativeNetworkImpl
 			max = max_contacts;
 		}
 		
-		List<DHTTransportAlternativeContact> result = new ArrayList<DHTTransportAlternativeContact>( max );
+		List<DHTTransportAlternativeContact> result = new ArrayList<>(max);
 	
-		Set<Integer>	used_ids = new HashSet<Integer>();
+		Set<Integer>	used_ids = new HashSet<>();
 		
 		synchronized( contacts ){
-			
-			Iterator<DHTTransportAlternativeContact> it = contacts.iterator();
-			
-			while( it.hasNext()){
-								
-				DHTTransportAlternativeContact contact = it.next();
-				
-				if ( live_only && contact.getAge() > LIVEISH_AGE_SECS ){
-					
-					break;
-				}
-				
-				Integer id = contact.getID();
-				
-				if ( used_ids.contains( id )){
-					
-					continue;
-				}
-				
-				used_ids.add( id );
-				
-				result.add( contact );
-				
-				if ( result.size() == max ){
-					
-					break;
-				}
 
-			}
+            for (DHTTransportAlternativeContact contact : contacts) {
+
+                if (live_only && contact.getAge() > LIVEISH_AGE_SECS) {
+
+                    break;
+                }
+
+                Integer id = contact.getID();
+
+                if (used_ids.contains(id)) {
+
+                    continue;
+                }
+
+                used_ids.add(id);
+
+                result.add(contact);
+
+                if (result.size() == max) {
+
+                    break;
+                }
+
+            }
 		}
 		
 		if ( TRACE ){

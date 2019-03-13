@@ -24,36 +24,36 @@ import java.io.PrintWriter;
 public interface 
 SimpleXMLParserDocumentNode
 {
-	public String
+	String
 	getName();
 	
-	public String
+	String
 	getFullName();
 	
-	public String
+	String
 	getNameSpaceURI();
 	
-	public String
+	String
 	getValue();
 	
-	public SimpleXMLParserDocumentAttribute[]
+	SimpleXMLParserDocumentAttribute[]
 	getAttributes();
 	
-	public SimpleXMLParserDocumentAttribute
+	SimpleXMLParserDocumentAttribute
 	getAttribute(
-		String		name );
+            String name);
 	
-	public SimpleXMLParserDocumentNode[]
+	SimpleXMLParserDocumentNode[]
 	getChildren();
 	
-	public SimpleXMLParserDocumentNode
+	SimpleXMLParserDocumentNode
 	getChild(
-		String		name );
+            String name);
 	
-	public void
+	void
 	print();
 	
-	public void
+	void
 	print(
-		PrintWriter		pw );
+            PrintWriter pw);
 }

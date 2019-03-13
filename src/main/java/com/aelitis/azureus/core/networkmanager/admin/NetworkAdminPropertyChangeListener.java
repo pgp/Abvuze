@@ -23,7 +23,7 @@ package com.aelitis.azureus.core.networkmanager.admin;
 public interface 
 NetworkAdminPropertyChangeListener 
 {
-	public void
+	void
 	propertyChanged(
-		String		property );
+            String property);
 }

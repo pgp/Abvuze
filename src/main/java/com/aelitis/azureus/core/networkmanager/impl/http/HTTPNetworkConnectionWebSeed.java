@@ -21,6 +21,7 @@ package com.aelitis.azureus.core.networkmanager.impl.http;
 
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -88,7 +89,7 @@ HTTPNetworkConnectionWebSeed
 			StringTokenizer	tok = new StringTokenizer( url, "&" );
 			
 			int			piece 	= -1;
-			List<int[]>	ranges 	= new ArrayList<int[]>();
+			List<int[]>	ranges 	= new ArrayList<>();
 			
 			while( tok.hasMoreElements()){
 				
@@ -100,81 +101,83 @@ HTTPNetworkConnectionWebSeed
 					
 					String	lhs = token.substring(0,pos).toLowerCase( MessageText.LOCALE_ENGLISH );
 					String	rhs = token.substring(pos+1);
-					
-					if ( lhs.equals( "info_hash" )){
-						
-	    				final byte[]	old_hash = control.getHash();
-	    				
-	    				final byte[]	new_hash = URLDecoder.decode( rhs, "ISO-8859-1" ).getBytes( "ISO-8859-1" );
 
-						if ( !Arrays.equals( new_hash, old_hash )){
-															
-							switching		= true;
-							
-							decoder.pauseInternally();
-								
-							flushRequests(
-								new flushListener()
-								{
-									private boolean triggered;
-									
-									public void 
-									flushed() 
-									{
-										synchronized( this ){
-											
-											if ( triggered ){
-												
-												return;
-											}
-											
-											triggered = true;
-										}
-										
-										getManager().reRoute( 
-												HTTPNetworkConnectionWebSeed.this, 
-												old_hash, new_hash, header );
-									}
-								});
-								
-							return;
-						}
-					}else if ( lhs.equals( "piece" )){
-						
-						try{
-							piece = Integer.parseInt( rhs );
-							
-						}catch( Throwable e ){
-							
-							throw( new IOException( "Invalid piece number '" + rhs +"'" ));
-						}
-					}else if ( lhs.equals( "ranges" )){
-						
-						StringTokenizer	range_tok = new StringTokenizer( rhs, "," );
-						
-						while( range_tok.hasMoreTokens()){
-							
-							String	range = range_tok.nextToken();
-							
-							int	sep = range.indexOf( '-' );
-							
-							if ( sep == -1 ){
-								
-								throw( new IOException( "Invalid range specification '" + rhs + "'" ));
-							}
-							
-							try{
-								ranges.add( 
-										new int[]{ 
-											Integer.parseInt( range.substring(0,sep)), 
-											Integer.parseInt( range.substring( sep+1 ))});
-								
-							}catch( Throwable e ){
-								
-								throw( new IOException( "Invalid range specification '" + rhs + "'" ));
-							}
-						}
-					}
+                    switch (lhs) {
+                        case "info_hash":
+
+                            final byte[] old_hash = control.getHash();
+
+                            final byte[] new_hash = URLDecoder.decode(rhs, "ISO-8859-1").getBytes(StandardCharsets.ISO_8859_1);
+
+                            if (!Arrays.equals(new_hash, old_hash)) {
+
+                                switching = true;
+
+                                decoder.pauseInternally();
+
+                                flushRequests(
+                                        new flushListener() {
+                                            private boolean triggered;
+
+                                            public void
+                                            flushed() {
+                                                synchronized (this) {
+
+                                                    if (triggered) {
+
+                                                        return;
+                                                    }
+
+                                                    triggered = true;
+                                                }
+
+                                                getManager().reRoute(
+                                                        HTTPNetworkConnectionWebSeed.this,
+                                                        old_hash, new_hash, header);
+                                            }
+                                        });
+
+                                return;
+                            }
+                            break;
+                        case "piece":
+
+                            try {
+                                piece = Integer.parseInt(rhs);
+
+                            } catch (Throwable e) {
+
+                                throw (new IOException("Invalid piece number '" + rhs + "'"));
+                            }
+                            break;
+                        case "ranges":
+
+                            StringTokenizer range_tok = new StringTokenizer(rhs, ",");
+
+                            while (range_tok.hasMoreTokens()) {
+
+                                String range = range_tok.nextToken();
+
+                                int sep = range.indexOf('-');
+
+                                if (sep == -1) {
+
+                                    throw (new IOException("Invalid range specification '" + rhs + "'"));
+                                }
+
+                                try {
+                                    ranges.add(
+                                            new int[]{
+                                                    Integer.parseInt(range.substring(0, sep)),
+                                                    Integer.parseInt(range.substring(sep + 1))});
+
+                                } catch (Throwable e) {
+
+                                    throw (new IOException("Invalid range specification '" + rhs + "'"));
+                                }
+                            }
+                            break;
+                    }
 				}
 			}
 			

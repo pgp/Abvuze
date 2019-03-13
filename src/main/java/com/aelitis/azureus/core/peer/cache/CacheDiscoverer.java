@@ -27,14 +27,14 @@ import org.gudy.azureus2.core3.torrent.TOTorrent;
 public interface 
 CacheDiscoverer 
 {
-	public CachePeer[]
+	CachePeer[]
 	lookup(
-		TOTorrent	torent );
+            TOTorrent torent);
 	
 	
-	public CachePeer
+	CachePeer
 	lookup(
-		byte[]			peer_id,
-		InetAddress		ip,
-		int				port );
+            byte[] peer_id,
+            InetAddress ip,
+            int port);
 }

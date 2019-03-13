@@ -26,15 +26,15 @@ package org.gudy.azureus2.plugins.ui.components;
 public interface 
 UIPropertyChangeEvent 
 {
-	public UIComponent
+	UIComponent
 	getSource();
 	
-	public String
+	String
 	getPropertyType();
 	
-	public Object
+	Object
 	getNewPropertyValue();
 	
-	public Object
+	Object
 	getOldPropertyValue();
 }

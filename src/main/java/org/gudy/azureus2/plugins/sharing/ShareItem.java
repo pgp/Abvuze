@@ -34,10 +34,10 @@ import org.gudy.azureus2.plugins.torrent.Torrent;
 public interface 
 ShareItem 
 {
-	public File
+	File
 	getTorrentFile();
 	
-	public Torrent
+	Torrent
 	getTorrent()
 	
 		throws ShareException;

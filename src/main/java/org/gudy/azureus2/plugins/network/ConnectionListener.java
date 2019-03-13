@@ -27,26 +27,26 @@ public interface ConnectionListener {
    * The connection establishment process has started,
    * i.e. the connection is actively being attempted.
    */
-  public void connectStarted();    
+  void connectStarted();
   
   /**
    * The connection attempt succeeded.
    * The connection is now established.
    * NOTE: Called only during initial connect attempt.
    */
-  public void connectSuccess();
+  void connectSuccess();
   
   /**
    * The connection attempt failed.
    * NOTE: Called only during initial connect attempt.
    * @param failure_msg failure reason
    */
-  public void connectFailure( Throwable failure_msg );
+  void connectFailure(Throwable failure_msg);
   
   /**
    * Handle exception thrown by this connection.
    * NOTE: Can be called at any time during connection lifetime.
    * @param error exception
    */
-  public void exceptionThrown( Throwable error );
+  void exceptionThrown(Throwable error);
 }

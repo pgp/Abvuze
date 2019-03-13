@@ -83,7 +83,7 @@ NetworkAdminNATUDPCodecs
 					
 		Map	reply_decoders = new HashMap();
 		
-		reply_decoders.put( new Integer( ACT_NAT_REPLY ), reply_decoder );
+		reply_decoders.put(ACT_NAT_REPLY, reply_decoder );
 		
 		PRUDPPacketReply.registerDecoders( reply_decoders );
 		
@@ -115,7 +115,7 @@ NetworkAdminNATUDPCodecs
 
 		Map	request_decoders = new HashMap();
 		
-		request_decoders.put( new Integer( ACT_NAT_REQUEST ), request_decoder );
+		request_decoders.put(ACT_NAT_REQUEST, request_decoder );
 		
 		PRUDPPacketRequest.registerDecoders( request_decoders );
 	}

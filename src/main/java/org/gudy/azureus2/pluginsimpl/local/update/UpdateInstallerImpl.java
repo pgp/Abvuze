@@ -25,6 +25,7 @@ package org.gudy.azureus2.pluginsimpl.local.update;
  */
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 import org.gudy.azureus2.platform.PlatformManager;
 import org.gudy.azureus2.platform.PlatformManagerCapabilities;
@@ -67,30 +68,28 @@ UpdateInstallerImpl
 				boolean	found_failure = false;
 				
 				String	files = "";
-				
-				for (int i=0;i<dirs.length;i++){
-					
-					File	dir = dirs[i];
-					
-					if ( dir.isDirectory()){
-						
-							// if somethings here then the install failed
-						
-						found_failure	= true;
-						
-						File[] x = dir.listFiles();
-						
-						if ( x != null ){
-							
-							for (int j=0;j<x.length;j++){
-								
-								files += (files.length()==0?"":",") + x[j].getName();
-							}
-						}
-						
-						FileUtil.recursiveDelete( dir );
-					}
-				}
+
+                for (File dir : dirs) {
+
+                    if (dir.isDirectory()) {
+
+                        // if somethings here then the install failed
+
+                        found_failure = true;
+
+                        File[] x = dir.listFiles();
+
+                        if (x != null) {
+
+                            for (File x1 : x) {
+
+                                files += (files.length() == 0 ? "" : ",") + x1.getName();
+                            }
+                        }
+
+                        FileUtil.recursiveDelete(dir);
+                    }
+                }
 				
 				if ( found_failure ){
 					Logger.log(new LogAlert(LogAlert.UNREPEATABLE, LogAlert.AT_ERROR,
@@ -339,7 +338,7 @@ UpdateInstallerImpl
 		
 		try{		
 			
-			pw_utf8 = new PrintWriter( new OutputStreamWriter( new FileOutputStream( install_dir.toString() + File.separator + ACTIONS_UTF8, true ), "UTF-8" ));
+			pw_utf8 = new PrintWriter( new OutputStreamWriter( new FileOutputStream( install_dir.toString() + File.separator + ACTIONS_UTF8, true ), StandardCharsets.UTF_8));
 
 			pw_utf8.println( data );
 			

@@ -25,37 +25,37 @@ package com.aelitis.azureus.core.tag;
 public interface 
 TagFeatureLimits 
 {
-	public static final int RS_NONE						= 0;
-	public static final int RS_ARCHIVE					= 1;
-	public static final int RS_REMOVE_FROM_LIBRARY		= 2;
-	public static final int RS_DELETE_FROM_COMPUTER		= 3;
-	public static final int RS_MOVE_TO_OLD_TAG			= 4;
+	int RS_NONE						= 0;
+	int RS_ARCHIVE					= 1;
+	int RS_REMOVE_FROM_LIBRARY		= 2;
+	int RS_DELETE_FROM_COMPUTER		= 3;
+	int RS_MOVE_TO_OLD_TAG			= 4;
 	
-	public static final int RS_DEFAULT		= RS_NONE;
+	int RS_DEFAULT		= RS_NONE;
 	
-	public static final int OP_ADDED_TO_VUZE			= 0;
-	public static final int OP_ADED_TO_TAG				= 1;
+	int OP_ADDED_TO_VUZE			= 0;
+	int OP_ADED_TO_TAG				= 1;
 	
-	public static final int OP_DEFAULT					= OP_ADDED_TO_VUZE;
+	int OP_DEFAULT					= OP_ADDED_TO_VUZE;
 
-	public int
+	int
 	getMaximumTaggables();
 	
-	public void
+	void
 	setMaximumTaggables(
-		int		max );
+            int max);
 	
-	public int
+	int
 	getRemovalStrategy();
 	
-	public void
+	void
 	setRemovalStrategy(
-		int		id );
+            int id);
 	
-	public int
+	int
 	getOrdering();
 	
-	public void
+	void
 	setOrdering(
-		int		id );
+            int id);
 }

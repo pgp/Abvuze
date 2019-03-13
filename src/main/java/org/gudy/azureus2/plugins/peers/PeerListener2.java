@@ -22,7 +22,7 @@ package org.gudy.azureus2.plugins.peers;
 public interface 
 PeerListener2 
 {
-	public void
+	void
 	eventOccurred(
-		PeerEvent	event );
+            PeerEvent event);
 }

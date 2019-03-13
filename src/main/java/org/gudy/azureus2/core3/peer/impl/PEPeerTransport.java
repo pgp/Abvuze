@@ -40,43 +40,43 @@ PEPeerTransport
 	extends PEPeer
 {	
 
-  public static final int CONNECTION_PENDING                = 0;
-  public static final int CONNECTION_CONNECTING             = 1;
-  public static final int CONNECTION_WAITING_FOR_HANDSHAKE  = 2;
-  public static final int CONNECTION_FULLY_ESTABLISHED      = 4;
+  int CONNECTION_PENDING                = 0;
+  int CONNECTION_CONNECTING             = 1;
+  int CONNECTION_WAITING_FOR_HANDSHAKE  = 2;
+  int CONNECTION_FULLY_ESTABLISHED      = 4;
   
   		/**
   		 * Start message processing for the peer
   		 */
-  
-  	public void
+
+        void
   	start();
   	
-	public void
+	void
 	sendChoke();
 	
-	public void
+	void
 	sendUnChoke();
 	
-	public void
+	void
 	sendHave(
-		int		piece );
+            int piece);
 		
-	public void
+	void
 	sendCancel(
-		DiskManagerReadRequest	request );
+            DiskManagerReadRequest request);
 	
-	public void
+	void
 	sendBadPiece(
-		int		piece_number );
+            int piece_number);
 	
-	public void
+	void
 	sendStatsRequest(
-		Map		request );
+            Map request);
 	
-	public void
+	void
 	sendStatsReply(
-		Map		reply );
+            Map reply);
 			
 		/**
 		 * Two methods that allow a peer to aggregate the individual requests generated during an
@@ -84,12 +84,12 @@ PEPeerTransport
 		 * @return true if the peer is managing request priorities and doesn't want end-game random
 		 * allocation behaviour
 		 */
-	
-	public boolean
+
+        boolean
 	requestAllocationStarts(
-		int[]	base_priorities );
+                int[] base_priorities);
 	
-	public void
+	void
 	requestAllocationComplete();
 	
   /**
@@ -100,144 +100,144 @@ PEPeerTransport
    * @param return_duplicates - if true and request already exists it will be returned, if false -> null
    * @return request if actually requested, null otherwise
    */
-	
-	public DiskManagerReadRequest 
+
+  DiskManagerReadRequest
 	request(
-		int 		pieceNumber, 
-		int 		pieceOffset, 
-		int		 	pieceLength,
-		boolean		return_duplicates );
+          int pieceNumber,
+          int pieceOffset,
+          int pieceLength,
+          boolean return_duplicates);
 
 	/**
 	 * Returns the index of this request in the peer's queue or -1 if not found
 	 * @return
 	 */
-	
-	public int
+
+    int
 	getRequestIndex(
-		DiskManagerReadRequest request );
+            DiskManagerReadRequest request);
   
   /**
    * Close the peer connection
    * @param reason for closure
    */
-	public void closeConnection( String reason );
+  void closeConnection(String reason);
 			
 		
-	public boolean
+	boolean
 	transferAvailable();
 	
-	public long
+	long
 	getLastMessageSentTime();
 	
-	public List
+	List
 	getExpiredRequests();
   	
 		/**
 		 * peer-specific request max. return -1 to use the default piece-picker allocation method
 		 * @return
 		 */
-	
-	public int
+
+        int
 	getMaxNbRequests();
 	
-	public int
+	int
 	getNbRequests();
 	
-	public PEPeerControl
+	PEPeerControl
 	getControl();
   
 		/**
 		 * Any priority offsets this peer has, or null if none
 		 * @return
 		 */
-	
-	public int[]
+
+        int[]
 	getPriorityOffsets();
   
 	/**
 	 * Check if we need to send a keep-alive message.
 	 * A keep-alive is sent if no other message has been sent within the last 2min.
 	 */
-	public void doKeepAliveCheck();
+    void doKeepAliveCheck();
   
   /**
    * Check for possible connection timeouts.
    * @return true if the connection has been timed-out, false if not
    */
-  public boolean doTimeoutChecks();
+  boolean doTimeoutChecks();
 
   
   /**
    * Perform checks related to performance optimizations,
    * i.e. tune buffering related to send/receive speed.
    */
-  public void doPerformanceTuningCheck();
+  void doPerformanceTuningCheck();
   
   
   /**
    * Get the specific peer connection state.
    * @return connection state
    */
-  public int getConnectionState();
+  int getConnectionState();
   
   
   /**
    * Get the time since the last (most-recent) data (payload) message was received.
    * @return time count in ms, or -1 if we've never received a data message from them
    */
-  public long getTimeSinceLastDataMessageReceived();
+  long getTimeSinceLastDataMessageReceived();
   
   /**
    * Get the time since the most-recent data that was actually written to disk was received.
    * @return time count in ms, or -1 if we've never received usefull data from them
    */
-  public long getTimeSinceGoodDataReceived();
+  long getTimeSinceGoodDataReceived();
   
   /**
    * Get the time since the last (most-recent) data (payload) message was sent.
    * @return time count in ms, or -1 if we've never sent them a data message
    */
-  public long getTimeSinceLastDataMessageSent();
+  long getTimeSinceLastDataMessageSent();
   
   
-  public long getUnchokedForMillis();
+  long getUnchokedForMillis();
   
-  public long getLatency();
+  long getLatency();
   
   /**
    * Do any peer exchange processing/updating.
    */
-  public void updatePeerExchange();
+  void updatePeerExchange();
   
   
   /**
    * Get the peer's address + port identification item.
    * @return id
    */
-  public PeerItem getPeerItemIdentity();
+  PeerItem getPeerItemIdentity();
   
   /**
    * is peer waiting for a disk read with no network writes queued
    * @return
    */
-  
-  public boolean isStalledPendingLoad();
+
+  boolean isStalledPendingLoad();
   
   /**
    * Is the connection within the local LAN network.
    * @return true if within LAN, false of outside the LAN segment
    */
-  public boolean isLANLocal();
+  boolean isLANLocal();
   
-  public boolean
+  boolean
   isTCP();
   
 	/**
 	 * if it doesn't go as expected when trying to find a piece to ask a peer for,
 	 * need to double check if we're still interested in them, and get the BT protocol sycnhed
 	 */
-	public void checkInterested();
+    void checkInterested();
 	
 		/**
 		 * Attempts to reconnect to the same peer
@@ -245,8 +245,8 @@ PEPeerTransport
 		 * @param tryIPv6 TODO
 		 * @return null if reconnect not possible, reconnected peer otherwise
 		 */
-	
-	public PEPeerTransport
+
+        PEPeerTransport
 	reconnect(boolean tryUDP, boolean tryIPv6);
 	
 	/**
@@ -254,12 +254,12 @@ PEPeerTransport
 	 * exchanging data with a peer should work as it takes time to setup the connection and negotiate things before that happens
 	 * @return true if we exchanged payload data with the peer during the current connection
 	 */
-	public boolean isSafeForReconnect();
+    boolean isSafeForReconnect();
 	
-	public String
+	String
 	getNetwork();
 	
-	public void
+	void
 	generateEvidence(
-		IndentWriter	writer );
+            IndentWriter writer);
 }

@@ -84,7 +84,7 @@ ParameterImpl
 
 	public void addDisabledOnSelection(Parameter parameter) {
 		if (toDisable == null) {
-			toDisable = new ArrayList<Parameter>(1);
+			toDisable = new ArrayList<>(1);
 		}
 		if (parameter instanceof ParameterGroupImpl) {
 			ParameterImpl[] parameters = ((ParameterGroupImpl) parameter).getParameters();
@@ -96,7 +96,7 @@ ParameterImpl
 
 	public void addEnabledOnSelection(Parameter parameter) {
 		if (toEnable == null) {
-			toEnable = new ArrayList<Parameter>(1);
+			toEnable = new ArrayList<>(1);
 		}
 		if (parameter instanceof ParameterGroupImpl) {
 			ParameterImpl[] parameters = ((ParameterGroupImpl) parameter).getParameters();
@@ -129,22 +129,22 @@ ParameterImpl
 		}
 		// toArray() since listener trigger may remove listeners
 		Object[] listenerArray = listeners.toArray();
-		for (int i = 0; i < listenerArray.length; i++) {
-			try {
-				Object o = listenerArray[i];
-				if (o instanceof ParameterListener) {
+        for (Object o1 : listenerArray) {
+            try {
+                Object o = o1;
+                if (o instanceof ParameterListener) {
 
-					((ParameterListener) o).parameterChanged(this);
+                    ((ParameterListener) o).parameterChanged(this);
 
-				} else {
+                } else {
 
-					((ConfigParameterListener) o).configParameterChanged(this);
-				}
-			} catch (Throwable f) {
+                    ((ConfigParameterListener) o).configParameterChanged(this);
+                }
+            } catch (Throwable f) {
 
-				Debug.printStackTrace(f);
-			}
-		}
+                Debug.printStackTrace(f);
+            }
+        }
 	}
 	
 	public void
@@ -158,15 +158,15 @@ ParameterImpl
 		}
 		// toArray() since listener trigger may remove listeners
 		Object[] listenersArray = impl_listeners.toArray();
-		for (int i = 0; i < listenersArray.length; i++) {
-			try {
-				ParameterImplListener l = (ParameterImplListener) listenersArray[i];
-				l.enabledChanged(this);
-			} catch (Throwable f) {
+        for (Object o : listenersArray) {
+            try {
+                ParameterImplListener l = (ParameterImplListener) o;
+                l.enabledChanged(this);
+            } catch (Throwable f) {
 
-				Debug.printStackTrace(f);
-			}
-		}
+                Debug.printStackTrace(f);
+            }
+        }
 	}
 	
 	public boolean
@@ -262,7 +262,7 @@ ParameterImpl
 		ParameterImplListener	l )
 	{
 		if (impl_listeners == null) {
-			impl_listeners = new ArrayList<ParameterImplListener>(1);
+			impl_listeners = new ArrayList<>(1);
 		}
 		impl_listeners.add(l);
 	}
@@ -350,16 +350,16 @@ ParameterImpl
 		}
 		// toArray() since listener trigger may remove listeners
 		Object[] listenersArray = impl_listeners.toArray();
-		for (int i = 0; i < listenersArray.length; i++) {
-			try {
-				ParameterImplListener l = (ParameterImplListener) listenersArray[i];
-				l.labelChanged(this, text, isKey);
+        for (Object o : listenersArray) {
+            try {
+                ParameterImplListener l = (ParameterImplListener) o;
+                l.labelChanged(this, text, isKey);
 
-			} catch (Throwable f) {
+            } catch (Throwable f) {
 
-				Debug.printStackTrace(f);
-			}
-		}
+                Debug.printStackTrace(f);
+            }
+        }
 	}
 	
 	public void

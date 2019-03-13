@@ -25,9 +25,9 @@ import java.net.InetAddress;
 public interface 
 DHTNetworkPositionListener 
 {
-	public void
+	void
 	positionFound(
-		DHTNetworkPositionProvider		provider,
-		InetAddress						originator,
-		DHTNetworkPosition				position );
+            DHTNetworkPositionProvider provider,
+            InetAddress originator,
+            DHTNetworkPosition position);
 }

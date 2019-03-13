@@ -46,7 +46,7 @@ UPnPPluginService
 	private BooleanParameter 		alert_other_port_param;
 	private BooleanParameter		release_mappings;
 	
-	protected List<serviceMapping>	service_mappings = new ArrayList<serviceMapping>();
+	protected List<serviceMapping>	service_mappings = new ArrayList<>();
 	
 	protected AEMonitor	this_mon 	= new AEMonitor( "UPnPPluginService" );
 	   
@@ -66,11 +66,11 @@ UPnPPluginService
 		grab_ports				= _grab_ports;
 		alert_other_port_param	= _alert_other_port_param;
 		release_mappings		= _release_mappings;
-		
-		for (int i=0;i<_ports.length;i++){
 
-			service_mappings.add( new serviceMapping( _ports[i]));
-		}
+        for (UPnPWANConnectionPortMapping port : _ports) {
+
+            service_mappings.add(new serviceMapping(port));
+        }
 	}
 	
 	public String
@@ -152,82 +152,78 @@ UPnPPluginService
 			if ( mapping.isEnabled()){
 				
 					// check for change of port number and delete old value if so
-				
-				for (int i=0;i<service_mappings.size();i++){
-					
-					serviceMapping	sm = (serviceMapping)service_mappings.get(i);
-					
-					if ( sm.getMappings().contains( mapping )){
-				
-						if ( sm.getPort() != mapping.getPort()){
-							
-							removeMapping( log, mapping, sm, false );
-						}
-					}
-				}
+
+                for (serviceMapping sm : service_mappings) {
+
+                    if (sm.getMappings().contains(mapping)) {
+
+                        if (sm.getPort() != mapping.getPort()) {
+
+                            removeMapping(log, mapping, sm, false);
+                        }
+                    }
+                }
 			
 				serviceMapping	grab_in_progress	= null;
 				
 				String local_address = connection.getGenericService().getDevice().getRootDevice().getLocalAddress().getHostAddress();
-				
-				for (int i=0;i<service_mappings.size();i++){
-					
-					serviceMapping	sm = (serviceMapping)service_mappings.get(i);
-					
-					if ( 	sm.isTCP() 		== mapping.isTCP() &&
-							sm.getPort() 	== mapping.getPort()){				
-				
-						if ( sm.getInternalHost().equals( local_address )){
-							
-								// make sure we tie this to the mapping in case it
-								// was external to begin with
-							
-							sm.addMapping( mapping  );
-							
-							if ( !sm.getLogged(mapping)){
-								
-								sm.setLogged(mapping);
-								
-								log.log( "Mapping " + mapping.getString() + " already established" );
-							}
-							
-							return;
-							
-						}else{
-							
-							if ( !grab_ports.getValue() ){
-		
-								if ( !sm.getLogged(mapping)){
-									
-									sm.setLogged(mapping);
-								
-									String	text = 
-										MessageText.getString( 
-											"upnp.alert.differenthost", 
-											new String[]{ mapping.getString(), sm.getInternalHost()});
-																
-									if ( alert_other_port_param.getValue()){
-									
-										log.logAlertRepeatable( LoggerChannel.LT_WARNING, text );
-									}else{
-										
-										log.log( text);
-									}
-								}
-								
-								return;
-								
-							}else{
-								
-									// we're going to grab it
-								
-								sm.addMapping( mapping  );
-	
-								grab_in_progress	= sm;
-							}
-						}
-					}
-				}
+
+                for (serviceMapping sm : service_mappings) {
+
+                    if (sm.isTCP() == mapping.isTCP() &&
+                            sm.getPort() == mapping.getPort()) {
+
+                        if (sm.getInternalHost().equals(local_address)) {
+
+                            // make sure we tie this to the mapping in case it
+                            // was external to begin with
+
+                            sm.addMapping(mapping);
+
+                            if (!sm.getLogged(mapping)) {
+
+                                sm.setLogged(mapping);
+
+                                log.log("Mapping " + mapping.getString() + " already established");
+                            }
+
+                            return;
+
+                        } else {
+
+                            if (!grab_ports.getValue()) {
+
+                                if (!sm.getLogged(mapping)) {
+
+                                    sm.setLogged(mapping);
+
+                                    String text =
+                                            MessageText.getString(
+                                                    "upnp.alert.differenthost",
+                                                    new String[]{mapping.getString(), sm.getInternalHost()});
+
+                                    if (alert_other_port_param.getValue()) {
+
+                                        log.logAlertRepeatable(LoggerChannel.LT_WARNING, text);
+                                    } else {
+
+                                        log.log(text);
+                                    }
+                                }
+
+                                return;
+
+                            } else {
+
+                                // we're going to grab it
+
+                                sm.addMapping(mapping);
+
+                                grab_in_progress = sm;
+                            }
+                        }
+                    }
+                }
 				
 					// not found - try and establish it + add entry even if we fail so
 					// that we don't retry later
@@ -309,20 +305,18 @@ UPnPPluginService
 	{
 		try{
 			this_mon.enter();
-					
-			for (int i=0;i<service_mappings.size();i++){
-				
-				serviceMapping	sm = (serviceMapping)service_mappings.get(i);
-				
-				if ( 	sm.isTCP() == mapping.isTCP() &&
-						sm.getPort() == mapping.getPort() &&
-						sm.getMappings().contains( mapping )){
-					
-					removeMapping( log, mapping, sm, end_of_day );
-	
-					return;
-				}
-			}
+
+            for (serviceMapping sm : service_mappings) {
+
+                if (sm.isTCP() == mapping.isTCP() &&
+                        sm.getPort() == mapping.getPort() &&
+                        sm.getMappings().contains(mapping)) {
+
+                    removeMapping(log, mapping, sm, end_of_day);
+
+                    return;
+                }
+            }
 		}finally{
 			
 			this_mon.exit();
@@ -344,32 +338,32 @@ UPnPPluginService
 			int	persistent	=  UPnPMapping.PT_DEFAULT;
 			
 			List	mappings = service_mapping.getMappings();
-			
-			for (int i=0;i<mappings.size();i++){
-				
-				UPnPMapping	map = (UPnPMapping)mappings.get(i); 
-					
-				int	p = map.getPersistent(); 
-				
-				if ( p == UPnPMapping.PT_DEFAULT ){
-				
-						// default - leave as is
-					
-				}else if ( p == UPnPMapping.PT_TRANSIENT ){
-					
-						// transient overrides default
-					
-					if ( persistent == UPnPMapping.PT_DEFAULT ){
-						
-						persistent	= p;
-					}
-				}else{
-					
-						// persistent overrides all others
-					
-					persistent	= UPnPMapping.PT_PERSISTENT;
-				}
-			}
+
+            for (Object mapping : mappings) {
+
+                UPnPMapping map = (UPnPMapping) mapping;
+
+                int p = map.getPersistent();
+
+                if (p == UPnPMapping.PT_DEFAULT) {
+
+                    // default - leave as is
+
+                } else if (p == UPnPMapping.PT_TRANSIENT) {
+
+                    // transient overrides default
+
+                    if (persistent == UPnPMapping.PT_DEFAULT) {
+
+                        persistent = p;
+                    }
+                } else {
+
+                    // persistent overrides all others
+
+                    persistent = UPnPMapping.PT_PERSISTENT;
+                }
+            }
 			
 				// set effective persistency
 			
@@ -424,7 +418,7 @@ UPnPPluginService
 		try{
 			this_mon.enter();
 
-			return( service_mappings.toArray( new serviceMapping[service_mappings.size()]));
+			return( service_mappings.toArray(new serviceMapping[0]));
 			
 		}finally{
 			

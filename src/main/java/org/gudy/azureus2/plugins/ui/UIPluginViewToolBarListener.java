@@ -38,5 +38,5 @@ public interface UIPluginViewToolBarListener
 	 * @param list
 	 * @since 4.6.0.5
 	 */
-	public void refreshToolBarItems(Map<String, Long> list);
+    void refreshToolBarItems(Map<String, Long> list);
 }

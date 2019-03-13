@@ -55,14 +55,14 @@ public interface UIInputReceiver {
 	 * means that a window will be presented, and the title of the window
 	 * will be the value passed here.
 	 */
-	public void setTitle(String title);
+    void setTitle(String title);
 
 	/**
 	 * Sets the title for the text entry input. For some interfaces, this
 	 * means that a window will be presented, and the title of the window
 	 * will be the value passed here.
 	 */
-	public void setLocalisedTitle(String title);
+    void setLocalisedTitle(String title);
 
 	/**
 	 * Sets the message to display for the text entry input. This will
@@ -74,7 +74,7 @@ public interface UIInputReceiver {
 	 * 
 	 * For multiple lines, see {@link #setMessages}.
 	 */
-	public void setMessage(String message);
+    void setMessage(String message);
 
 	/**
 	 * Sets the message to display for the text entry input. This will
@@ -86,7 +86,7 @@ public interface UIInputReceiver {
 	 * 
 	 * For multiple lines, see {@link #setLocalisedMessages}.
 	 */
-	public void setLocalisedMessage(String message);
+    void setLocalisedMessage(String message);
 	
 	/**
 	 * Sets the message to display for the text entry input. This will
@@ -101,7 +101,7 @@ public interface UIInputReceiver {
 	 * the array will usually be the message displayed closest to the
 	 * users prompt.
 	 */
-	public void setMessages(String[] messages);
+    void setMessages(String[] messages);
 
 	/**
 	 * Sets the message to display for the text entry input. This will
@@ -116,7 +116,7 @@ public interface UIInputReceiver {
 	 * the array will usually be the message displayed closest to the
 	 * users prompt.
 	 */
-	public void setLocalisedMessages(String[] messages);
+    void setLocalisedMessages(String[] messages);
 	
 	/**
 	 * This sets a value to be displayed as pre-entered text for the
@@ -141,24 +141,24 @@ public interface UIInputReceiver {
 	 * @param as_suggested <tt>true</tt> if the value is a suggested
 	 *   input value, <tt>false</tt> if it is an old value.
 	 */
-	public void setPreenteredText(String text, boolean as_suggested);
+    void setPreenteredText(String text, boolean as_suggested);
 	
 	/**
 	 * Indicates whether to allow multi-line input.
 	 * Default behaviour is to not allow multiple lines.
 	 */
-	public void setMultiLine(boolean multiline);
+    void setMultiLine(boolean multiline);
 	
 	/**
 	 * Indicates whether to keep whitespace are kept when input is entered,
 	 * or whether to strip it out. Default behaviour is to strip whitespace.
 	 */
-	public void maintainWhitespace(boolean keep_whitespace);
+    void maintainWhitespace(boolean keep_whitespace);
 	
 	/**
 	 * Indicates whether blank input can be entered.
 	 */
-	public void allowEmptyInput(boolean empty_input);
+    void allowEmptyInput(boolean empty_input);
 	
 	/**
 	 * Sets the UIInputValidator for this object. This allows an external
@@ -171,7 +171,7 @@ public interface UIInputReceiver {
 	 * 
 	 * @see UIInputValidator
 	 */
-	public void setInputValidator(UIInputValidator validator);
+    void setInputValidator(UIInputValidator validator);
 	
 	/** 
 	 * This prompts the user for input. This method will not return until
@@ -181,7 +181,7 @@ public interface UIInputReceiver {
 	 * @deprecated Use {@link #prompt(UIInputReceiverListener)}
 	 */
 	@Deprecated
-	public void prompt();
+    void prompt();
 	
 	/**
 	 * This prompts the user for input and returns immediately.  When the user
@@ -191,23 +191,23 @@ public interface UIInputReceiver {
 	 * @param receiver_listener
 	 * @since 4.2.0.9
 	 */
-	public void prompt(UIInputReceiverListener receiver_listener);
+    void prompt(UIInputReceiverListener receiver_listener);
 	
 	/**
 	 * Returns <tt>true</tt> if the user submitted any data.
 	 */
-	public boolean hasSubmittedInput();
+    boolean hasSubmittedInput();
 	
 	/**
 	 * Returns the string if the user submitted any data - you should check
 	 * for this by calling {@link #hasSubmittedInput()} first.
 	 */
-	public String getSubmittedInput();
+    String getSubmittedInput();
 	
 	/**
 	 * set the maximum number of characters the user can type
 	 * 
 	 * @since 4.3.1.5
 	 */
-	public void setTextLimit(int limit);
+    void setTextLimit(int limit);
 }

@@ -25,36 +25,36 @@ import org.gudy.azureus2.core3.torrent.TOTorrentFile;
 public interface 
 PeerManagerRegistration 
 {
-	public TOTorrentFile
+	TOTorrentFile
 	getLink(
-		String			link );
+            String link);
 
     // Used by the CDN
 	
-    public void
+    void
 	removeLink(
-		String			link );
+            String link);
 
     // Used by the CDN
     
-    public void
+    void
 	addLink(
-		String			link,
-		TOTorrentFile	target )
+            String link,
+            TOTorrentFile target)
 	
 		throws Exception;
 	
-	public void
+	void
 	activate(
-		PEPeerControl	peer_control );
+            PEPeerControl peer_control);
 	
-	public void
+	void
 	deactivate();
 	
-	public void
+	void
 	unregister();
 
     // XXX: Doesn't appear to be used.
-    public String
+    String
 	getDescription();
 }

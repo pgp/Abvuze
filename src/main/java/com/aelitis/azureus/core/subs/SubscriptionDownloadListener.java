@@ -23,12 +23,12 @@ package com.aelitis.azureus.core.subs;
 public interface 
 SubscriptionDownloadListener 
 {
-	public void
+	void
 	complete(
-		Subscription		subs );
+            Subscription subs);
 	
-	public void
+	void
 	failed(
-		Subscription			subs,
-		SubscriptionException	error );
+            Subscription subs,
+            SubscriptionException error);
 }

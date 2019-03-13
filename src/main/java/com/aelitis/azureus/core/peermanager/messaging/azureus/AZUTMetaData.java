@@ -25,23 +25,23 @@ import org.gudy.azureus2.core3.util.DirectByteBuffer;
 public interface 
 AZUTMetaData 
 {
-	public static final int MSG_TYPE_REQUEST	= 0;
-	public static final int MSG_TYPE_DATA		= 1;
-	public static final int MSG_TYPE_REJECT		= 2;
+	int MSG_TYPE_REQUEST	= 0;
+	int MSG_TYPE_DATA		= 1;
+	int MSG_TYPE_REJECT		= 2;
 	
-	public int
+	int
 	getMessageType();
 	
-	public int
+	int
 	getPiece();
 	
-	public DirectByteBuffer
+	DirectByteBuffer
 	getMetadata();
 	
-	public void
+	void
 	setMetadata(
-		DirectByteBuffer		metadata );
+            DirectByteBuffer metadata);
 	
-	public void
+	void
 	destroy();
 }

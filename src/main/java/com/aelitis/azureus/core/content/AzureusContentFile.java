@@ -25,21 +25,21 @@ import org.gudy.azureus2.plugins.disk.DiskManagerFileInfo;
 public interface 
 AzureusContentFile 
 {
-	public static final String	PT_TITLE			= "title";			// String
-	public static final String	PT_CREATOR			= "creator";		// String
-	public static final String	PT_DATE				= "date";			// Long, millis
-	public static final String	PT_DURATION			= "duration";		// Long, millis
-	public static final String	PT_VIDEO_WIDTH		= "video_width";	// Long
-	public static final String	PT_VIDEO_HEIGHT		= "video_height";	// Long
-	public static final String	PT_CATEGORIES		= "cats";			// String[]
-	public static final String	PT_TAGS				= "tags";			// String[]
-	public static final String	PT_PERCENT_DONE		= "percent";		// Long, thousandths
-	public static final String	PT_ETA				= "eta";			// Long, seconds
+	String	PT_TITLE			= "title";			// String
+	String	PT_CREATOR			= "creator";		// String
+	String	PT_DATE				= "date";			// Long, millis
+	String	PT_DURATION			= "duration";		// Long, millis
+	String	PT_VIDEO_WIDTH		= "video_width";	// Long
+	String	PT_VIDEO_HEIGHT		= "video_height";	// Long
+	String	PT_CATEGORIES		= "cats";			// String[]
+	String	PT_TAGS				= "tags";			// String[]
+	String	PT_PERCENT_DONE		= "percent";		// Long, thousandths
+	String	PT_ETA				= "eta";			// Long, seconds
 	
-	public DiskManagerFileInfo
+	DiskManagerFileInfo
 	getFile();
 	
-	public Object
+	Object
 	getProperty(
-		String		name );
+            String name);
 }

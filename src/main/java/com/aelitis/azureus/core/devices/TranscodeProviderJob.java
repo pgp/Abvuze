@@ -23,16 +23,16 @@ package com.aelitis.azureus.core.devices;
 public interface 
 TranscodeProviderJob 
 {
-	public void
+	void
 	pause();
 	
-	public void
+	void
 	resume();
 	
-	public void
+	void
 	cancel();
 	
-	public void
+	void
 	setMaxBytesPerSecond(
-		int		max );
+            int max);
 }

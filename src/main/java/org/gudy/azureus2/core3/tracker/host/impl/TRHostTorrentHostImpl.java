@@ -227,10 +227,10 @@ TRHostTorrentHostImpl
 			
 			this_mon.exit();
 		}
-		
-		for (int i=0;i<listeners_copy.size();i++){
-			
-			((TRHostTorrentWillBeRemovedListener)listeners_copy.get(i)).torrentWillBeRemoved( this );
+
+		for (Object o : listeners_copy) {
+
+			((TRHostTorrentWillBeRemovedListener) o).torrentWillBeRemoved(this);
 		}
 		
 		return( true );
@@ -675,18 +675,18 @@ TRHostTorrentHostImpl
 		throws TRHostException
 	{
 		List	listeners_ref = listeners_cow;
-	
-		for (int i=0;i<listeners_ref.size();i++){
-		
-			try{
-				((TRHostTorrentListener)listeners_ref.get(i)).preProcess(req);
-				
-			}catch( TRHostException e ){
-				
-				throw( e );
-				
-			}catch( Throwable e ){
-				
+
+		for (Object o : listeners_ref) {
+
+			try {
+				((TRHostTorrentListener) o).preProcess(req);
+
+			} catch (TRHostException e) {
+
+				throw (e);
+
+			} catch (Throwable e) {
+
 				Debug.printStackTrace(e);
 			}
 		}
@@ -699,18 +699,18 @@ TRHostTorrentHostImpl
 		throws TRHostException
 	{
 		List	listeners_ref = listeners_cow;
-	
-		for (int i=0;i<listeners_ref.size();i++){
-		
-			try{
-				((TRHostTorrentListener)listeners_ref.get(i)).postProcess(req);
-				
-			}catch( TRHostException e ){
-				
-				throw( e );
-				
-			}catch( Throwable e ){
-				
+
+		for (Object o : listeners_ref) {
+
+			try {
+				((TRHostTorrentListener) o).postProcess(req);
+
+			} catch (TRHostException e) {
+
+				throw (e);
+
+			} catch (Throwable e) {
+
 				Debug.printStackTrace(e);
 			}
 		}
@@ -800,8 +800,7 @@ TRHostTorrentHostImpl
 	  	  data = new HashMap();
 	  	}
 	    if (value == null) {
-	      if (data.containsKey(key))
-	        data.remove(key);
+			data.remove(key);
 	    } else {
 	      data.put(key, value);
 	    }

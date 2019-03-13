@@ -26,27 +26,27 @@ package com.aelitis.net.udp.uc;
 public interface 
 PRUDPPacketHandlerStats 
 {
-	public long
+	long
 	getPacketsSent();
 	
-	public long
+	long
 	getPacketsReceived();
 	
-	public long
+	long
 	getRequestsTimedOut();
 	
-	public long
+	long
 	getBytesSent();
 	
-	public long
+	long
 	getBytesReceived();
 	
-	public long
+	long
 	getSendQueueLength();
 	
-	public long
+	long
 	getReceiveQueueLength();
 	
-	public PRUDPPacketHandlerStats
+	PRUDPPacketHandlerStats
 	snapshot();
 }

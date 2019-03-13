@@ -30,11 +30,11 @@ package org.gudy.azureus2.core3.tracker.server;
 public interface 
 TRTrackerServerFactoryListener 
 {
-	public void
+	void
 	serverCreated(
-		TRTrackerServer	server );
+            TRTrackerServer server);
 	
-	public void
+	void
 	serverDestroyed(
-		TRTrackerServer	server );
+            TRTrackerServer server);
 }

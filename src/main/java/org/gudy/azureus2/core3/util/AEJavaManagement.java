@@ -191,35 +191,35 @@ AEJavaManagement
 		
 		if ( val < 1024 ){
 			
-			return( String.valueOf( val ) + "k" );
+			return(val + "k" );
 		}
 		
 		val = val/1024;
 		
 		if ( val < 1024 ){
 			
-			return( String.valueOf( val ) + "m" );
+			return(val + "m" );
 		}
 		
 		val = val/1024;
 		
-		return( String.valueOf( val ) + "g" );
+		return(val + "g" );
 	}
 	
 	public interface
 	ThreadStuff
 	{
-		public long
+		long
 		getThreadCPUTime();
 	
-		public void
+		void
 		dumpThreads();
 	}
 	
 	public interface
 	MemoryStuff
 	{
-		public long
+		long
 		getMaxHeapMB();
 	}
 }

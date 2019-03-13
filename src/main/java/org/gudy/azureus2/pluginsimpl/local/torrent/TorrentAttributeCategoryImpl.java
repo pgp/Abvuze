@@ -117,16 +117,14 @@ public class TorrentAttributeCategoryImpl extends BaseTorrentAttributeImpl {
 		Category[] categories = CategoryManager.getCategories();
 		
 		List	v = new ArrayList();
-		
-		for (int i=0;i<categories.length;i++){
-			
-			Category cat = categories[i];
-			
-			if ( cat.getType() == Category.TYPE_USER ){
-			
-				v.add( cat.getName());
-			}
-		}
+
+        for (Category cat : categories) {
+
+            if (cat.getType() == Category.TYPE_USER) {
+
+                v.add(cat.getName());
+            }
+        }
 		
 		String[]	res = new String[v.size()];
 		

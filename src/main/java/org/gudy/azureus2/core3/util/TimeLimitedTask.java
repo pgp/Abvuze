@@ -111,7 +111,7 @@ TimeLimitedTask
 	public interface
 	task
 	{
-		public Object
+		Object
 		run()
 		
 			throws Exception;

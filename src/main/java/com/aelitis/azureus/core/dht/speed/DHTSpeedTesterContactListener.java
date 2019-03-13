@@ -22,16 +22,16 @@ package com.aelitis.azureus.core.dht.speed;
 public interface 
 DHTSpeedTesterContactListener 
 {
-	public void
+	void
 	ping(
-		DHTSpeedTesterContact	contact,
-		int						round_trip_time );
+            DHTSpeedTesterContact contact,
+            int round_trip_time);
 	
-	public void
+	void
 	pingFailed(
-		DHTSpeedTesterContact	contact );
+            DHTSpeedTesterContact contact);
 	
-	public void
+	void
 	contactDied(
-		DHTSpeedTesterContact	contact );
+            DHTSpeedTesterContact contact);
 }

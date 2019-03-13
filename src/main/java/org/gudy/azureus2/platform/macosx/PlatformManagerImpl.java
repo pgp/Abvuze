@@ -22,6 +22,7 @@ package org.gudy.azureus2.platform.macosx;
 import java.io.*;
 import java.lang.reflect.Method;
 import java.net.InetAddress;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
@@ -189,7 +190,7 @@ public class PlatformManagerImpl implements PlatformManager, AEDiagnosticsEviden
 											
 						InputStream is = p.getInputStream();
 						
-						LineNumberReader lnr = new LineNumberReader( new InputStreamReader( is, "UTF-8" ));
+						LineNumberReader lnr = new LineNumberReader( new InputStreamReader( is, StandardCharsets.UTF_8));
 						
 						while( true ){
 							
@@ -379,37 +380,32 @@ public class PlatformManagerImpl implements PlatformManager, AEDiagnosticsEviden
   
   	try{
   				
-  		List<String>	list = new ArrayList<String>();
+  		List<String>	list = new ArrayList<>();
   		
   		if ( local_options.exists()){
-  			
-  			LineNumberReader lnr = new LineNumberReader( new InputStreamReader( new FileInputStream( local_options ), "UTF-8" ));
-  				
-  			try{
-  				while( true ){
-  					
-  					String	line = lnr.readLine();
-  					
-  					if ( line == null ){
-  						
-  						break;
-  					}
-  					
-  					line = line.trim();
-  					
-  					if ( line.length() > 0 ){
-  						
-  						list.add( line );
-  					}
-  				}
-  				
-  			}finally{
-  				
-  				lnr.close();
-  			}
+
+            try (LineNumberReader lnr = new LineNumberReader(new InputStreamReader(new FileInputStream(local_options), StandardCharsets.UTF_8))) {
+                while (true) {
+
+                    String line = lnr.readLine();
+
+                    if (line == null) {
+
+                        break;
+                    }
+
+                    line = line.trim();
+
+                    if (line.length() > 0) {
+
+                        list.add(line);
+                    }
+                }
+
+            }
   		}
   		
-  		return( list.toArray( new String[list.size()]));
+  		return( list.toArray(new String[0]));
   				
   	}catch( Throwable e ){
   		
@@ -446,21 +442,16 @@ public class PlatformManagerImpl implements PlatformManager, AEDiagnosticsEviden
 				boolean	ok = false;
 				
 				try{
-					
-					PrintWriter pw = new PrintWriter( new OutputStreamWriter( new FileOutputStream( local_options ), "UTF-8" ));
-					
-					try{
-						for ( String option: options ){
-							
-							pw.println( option );
-						}
-					
-						ok = true;
-						
-					}finally{
-						
-						pw.close();
-					}
+
+                    try (PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(local_options), StandardCharsets.UTF_8))) {
+                        for (String option : options) {
+
+                            pw.println(option);
+                        }
+
+                        ok = true;
+
+                    }
 				}finally{
 					
 					if ( !ok ){
@@ -748,44 +739,37 @@ public class PlatformManagerImpl implements PlatformManager, AEDiagnosticsEviden
   		
   		try{
   			convertToXML( f );
-  			
-  			LineNumberReader lnr = new LineNumberReader( new InputStreamReader(new FileInputStream( f ), "UTF-8" ));
-  			
-  			int	state = 0;
-  			
-  			String	target = bundle_file.getAbsolutePath();
-  			
-  			try{
-  				while( true ){
-  					
-  					String line = lnr.readLine();
-  					
-  					if ( line == null ){
-  						
-  						break;
-  					}
-  				
-  					if ( state == 0 ){
-  					
-  						if ( containsTag( line, "AutoLaunchedApplicationDictionary" )){
-  						
-  							state = 1;
-  						}
-  					}else{
-  						
-  						if ( line.contains( target )){
-  							
-  							return( true );
-  						}
-  					}
-  				}
-  				
-  				return( false );
-  				
-  			}finally{
-  				
-  				lnr.close();
-  			}
+
+            try (LineNumberReader lnr = new LineNumberReader(new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8))) {
+                int state = 0;
+                String target = bundle_file.getAbsolutePath();
+                while (true) {
+
+                    String line = lnr.readLine();
+
+                    if (line == null) {
+
+                        break;
+                    }
+
+                    if (state == 0) {
+
+                        if (containsTag(line, "AutoLaunchedApplicationDictionary")) {
+
+                            state = 1;
+                        }
+                    } else {
+
+                        if (line.contains(target)) {
+
+                            return (true);
+                        }
+                    }
+                }
+
+                return (false);
+
+            }
   		}catch( Throwable e ){
   			
   			throw( new PlatformManagerException( "Failed to read input file", e ));
@@ -868,22 +852,18 @@ public class PlatformManagerImpl implements PlatformManager, AEDiagnosticsEviden
   		}else{
   			
   			try{
-  				PrintWriter pw = new PrintWriter( new OutputStreamWriter( new FileOutputStream( f ), "UTF-8" ));
-  				
-  				try{
-  				
-  					pw.println( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" );
-  					pw.println( "<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">" );
-  					pw.println( "<plist version=\"1.0\">" );
-  					pw.println( "<dict>" );
-  					
-  					pw.println( "</dict>" );
-  					pw.println( "</plist>" );
 
-  				}finally{
-  					
-  					pw.close();
-  				}
+                try (PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(f), StandardCharsets.UTF_8))) {
+
+                    pw.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+                    pw.println("<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">");
+                    pw.println("<plist version=\"1.0\">");
+                    pw.println("<dict>");
+
+                    pw.println("</dict>");
+                    pw.println("</plist>");
+
+                }
   			}catch( Throwable e ){
   				
   				throw( new PlatformManagerException( "Failed to write output file", e ));
@@ -892,60 +872,54 @@ public class PlatformManagerImpl implements PlatformManager, AEDiagnosticsEviden
   		
   
   		try{
-  			List<String>	lines = new ArrayList<String>();
-  			
-  			LineNumberReader lnr = new LineNumberReader( new InputStreamReader(new FileInputStream( f ), "UTF-8" ));
-  			
-  			int	dict_line 			= -1;
-  			int	auto_launch_line 	= -1;
-  			int	target_index		= -1;
-  			  			
-  			try{
-  				while( true ){
-  					
-  					String line = lnr.readLine();
-  					
-  					if ( line == null ){
-  						
-  						break;
-  					}
-  				
- 					lines.add( line );
- 					 
-  					if ( dict_line == -1 && containsTag( line, "<dict>" )){
-  						
-  						dict_line = lines.size();
-  					}
-  					
-  					if ( auto_launch_line == -1 && containsTag( line, "AutoLaunchedApplicationDictionary" )){
-  						
-  						auto_launch_line = lines.size();
-  					}
-  					
-  					if ( line.contains( abs_target )){
-  						
-  						target_index = lines.size();
-  					}
-  				}
-  					
-  				if ( dict_line == -1 ){
-  					
-  					throw( new PlatformManagerException( "Malformed plist - no 'dict' entry" ));
-  				}
-  				
-  				if ( auto_launch_line == -1 ){
-  					
-  					lines.add( dict_line, "\t<key>AutoLaunchedApplicationDictionary</key>" );
-  					
-  					auto_launch_line = dict_line+1;
-  					
-  					lines.add( auto_launch_line, "\t<array>" );
-  					lines.add( auto_launch_line+1, "\t</array>" );
-  				}
-  			}finally{
-  				
-  				lnr.close();
-  			}
+  			List<String>	lines = new ArrayList<>();
+
+            int dict_line = -1;
+            int auto_launch_line = -1;
+            int target_index = -1;
+            try (LineNumberReader lnr = new LineNumberReader(new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8))) {
+                while (true) {
+
+                    String line = lnr.readLine();
+
+                    if (line == null) {
+
+                        break;
+                    }
+
+                    lines.add(line);
+
+                    if (dict_line == -1 && containsTag(line, "<dict>")) {
+
+                        dict_line = lines.size();
+                    }
+
+                    if (auto_launch_line == -1 && containsTag(line, "AutoLaunchedApplicationDictionary")) {
+
+                        auto_launch_line = lines.size();
+                    }
+
+                    if (line.contains(abs_target)) {
+
+                        target_index = lines.size();
+                    }
+                }
+
+                if (dict_line == -1) {
+
+                    throw (new PlatformManagerException("Malformed plist - no 'dict' entry"));
+                }
+
+                if (auto_launch_line == -1) {
+
+                    lines.add(dict_line, "\t<key>AutoLaunchedApplicationDictionary</key>");
+
+                    auto_launch_line = dict_line + 1;
+
+                    lines.add(auto_launch_line, "\t<array>");
+                    lines.add(auto_launch_line + 1, "\t</array>");
+                }
+            }
   			
   			if ( run ){
   				
@@ -1002,7 +976,7 @@ public class PlatformManagerImpl implements PlatformManager, AEDiagnosticsEviden
 			boolean	ok = false;
 			
 			try{
-				PrintWriter pw = new PrintWriter( new OutputStreamWriter( new FileOutputStream( f ), "UTF-8" ));
+				PrintWriter pw = new PrintWriter( new OutputStreamWriter( new FileOutputStream( f ), StandardCharsets.UTF_8));
 				
 				try{
 				
@@ -1046,33 +1020,29 @@ public class PlatformManagerImpl implements PlatformManager, AEDiagnosticsEviden
   		throws PlatformManagerException
   	{
  		try{
-			LineNumberReader lnr = new LineNumberReader( new InputStreamReader(new FileInputStream( file ), "UTF-8" ));
-	
-			try{
-				String 	line = lnr.readLine();
-				
-				if ( line == null ){
-					
-					return;
-				}
-				
-				if ( line.trim().toLowerCase().startsWith( "<?xml" )){
-					
-					return;
-				}
-			
-	 			Runtime.getRuntime().exec(
-					new String[]{
-						findCommand( "plutil" ),
-						"-convert",
-						"xml1",
-						file.getAbsolutePath()
-					}).waitFor();
-				
-	  		}finally{
-	  			
-	  			lnr.close();
-	  		}
+
+            try (LineNumberReader lnr = new LineNumberReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
+                String line = lnr.readLine();
+
+                if (line == null) {
+
+                    return;
+                }
+
+                if (line.trim().toLowerCase().startsWith("<?xml")) {
+
+                    return;
+                }
+
+                Runtime.getRuntime().exec(
+                        new String[]{
+                                findCommand("plutil"),
+                                "-convert",
+                                "xml1",
+                                file.getAbsolutePath()
+                        }).waitFor();
+
+            }
   		}catch( Throwable e ){
   			
   			throw( new PlatformManagerException( "Failed to convert plist to xml" ));
@@ -1486,7 +1456,7 @@ public class PlatformManagerImpl implements PlatformManager, AEDiagnosticsEviden
 				// because refering to FileManager earlier will prevent our main menu from
 				// working
 				Class<?> claCocoaUIEnhancer = Class.forName("org.gudy.azureus2.ui.swt.osx.CocoaUIEnhancer");
-				if (((Boolean) claCocoaUIEnhancer.getMethod("isInitialized").invoke(null)).booleanValue()) {
+				if ((Boolean) claCocoaUIEnhancer.getMethod("isInitialized").invoke(null)) {
 					claFileManager = Class.forName("com.apple.eio.FileManager");
 				}
 			} catch (Exception e) {
@@ -1514,15 +1484,11 @@ public class PlatformManagerImpl implements PlatformManager, AEDiagnosticsEviden
 
 					if (claFileManager != null) {
   					Method methMoveToTrash = claFileManager.getMethod("moveToTrash",
-    						new Class[] {
-    							File.class
-    						});
+                            File.class);
     				if (methMoveToTrash != null) {
-  						Object result = methMoveToTrash.invoke(null, new Object[] {
-  							file
-  						});
+  						Object result = methMoveToTrash.invoke(null, file);
   						if (result instanceof Boolean) {
-  							if (((Boolean) result).booleanValue()) {
+  							if ((Boolean) result) {
   								return;
   							}
   						}
@@ -1641,15 +1607,11 @@ public class PlatformManagerImpl implements PlatformManager, AEDiagnosticsEviden
 				Class<?> claFileManager = getFileManagerClass();
 				if (claFileManager != null && getFileBrowserName().equals("Finder")) {
   				Method methRevealInFinder = claFileManager.getMethod("revealInFinder",
-  						new Class[] {
-  							File.class
-  						});
+                        File.class);
   				if (methRevealInFinder != null) {
-						Object result = methRevealInFinder.invoke(null, new Object[] {
-							path
-						});
+						Object result = methRevealInFinder.invoke(null, path);
 						if (result instanceof Boolean) {
-							if (((Boolean) result).booleanValue()) {
+							if ((Boolean) result) {
 								return;
 							}
 						}
@@ -1976,7 +1938,7 @@ public class PlatformManagerImpl implements PlatformManager, AEDiagnosticsEviden
           
 	        lnr = new LineNumberReader( new InputStreamReader( p.getInputStream()));
 	        		    	        
-	        Map<String,String>	map = new HashMap<String,String>();
+	        Map<String,String>	map = new HashMap<>();
 	        
 	        while( true ){
 	        	
@@ -2095,9 +2057,7 @@ public class PlatformManagerImpl implements PlatformManager, AEDiagnosticsEviden
 			Object app = methGetApplication.invoke(null);
 			
 			Method methRequestUserAttention = claNSApplication.getMethod(
-					"requestUserAttention", new Class[] {
-						Boolean.class
-					});
+					"requestUserAttention", Boolean.class);
 			if (type == USER_REQUEST_INFO) {
 				methRequestUserAttention.invoke(app, false);
 			} else if (type == USER_REQUEST_WARNING) {

@@ -27,10 +27,10 @@ package org.gudy.azureus2.pluginsimpl.remote;
 public interface 
 RPRequestAccessController 
 {
-	public void
+	void
 	checkAccess(
-		String		object_type,
-		RPRequest	request )
+            String object_type,
+            RPRequest request)
 	
 		throws RPException;
 }

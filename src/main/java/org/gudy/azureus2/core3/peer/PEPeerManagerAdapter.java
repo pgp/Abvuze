@@ -31,170 +31,170 @@ import com.aelitis.azureus.core.peermanager.PeerManagerRegistration;
 public interface 
 PEPeerManagerAdapter 
 {
-	public String
+	String
 	getDisplayName();
 	
-	public int
+	int
 	getUploadRateLimitBytesPerSecond();
 	
-	public int
+	int
 	getDownloadRateLimitBytesPerSecond();
 	
-	public int
+	int
 	getMaxUploads();
 	
-	public int[]
+	int[]
 	getMaxConnections();
 	
-	public int[]
+	int[]
 	getMaxSeedConnections();
 	
-	public int
+	int
 	getExtendedMessagingMode();
 	
-	public boolean
+	boolean
 	isPeerExchangeEnabled();
 	
-	public boolean
+	boolean
 	isMetadataDownload();
 	
-	public int
+	int
 	getUploadPriority();
 	
-	public int
+	int
 	getTorrentInfoDictSize();
 	
-	public byte[]
+	byte[]
 	getTorrentInfoDict(
-		PEPeer		peer );
+            PEPeer peer);
 		/**
 		 * See NetworkManager.CRYPTO_OVERRIDE constants
 		 * @return
 		 */
-	
-	public int
+
+        int
 	getCryptoLevel();
 	
-	public long
+	long
 	getRandomSeed();
 	
-	public boolean
+	boolean
 	isPeriodicRescanEnabled();
 	
-	public void
+	void
 	setStateFinishing();
 	
-	public void
+	void
 	setStateSeeding(
-		boolean	never_downloaded );
+            boolean never_downloaded);
 	
-	public void
+	void
 	restartDownload(boolean forceRecheck);
 	
-	public TRTrackerScraperResponse
+	TRTrackerScraperResponse
 	getTrackerScrapeResponse();
 	
-	public String
+	String
 	getTrackerClientExtensions();
 	
-	public void
+	void
 	setTrackerRefreshDelayOverrides(
-		int	percent );
+            int percent);
 	
-	public boolean
+	boolean
 	isNATHealthy();
 	
-	public void
+	void
 	addPeer(
-		PEPeer	peer );
+            PEPeer peer);
 	
-	public void
+	void
 	removePeer(
-		PEPeer	peer );
+            PEPeer peer);
 	
-	public void
+	void
 	addPiece(
-		PEPiece	piece );
+            PEPiece piece);
 	
-	public void
+	void
 	removePiece(
-		PEPiece	piece );
+            PEPiece piece);
 	
-	public void
+	void
 	discarded(
-		PEPeer		peer,
-		int			bytes );
+            PEPeer peer,
+            int bytes);
 	
-	public void
+	void
 	protocolBytesReceived(
-		PEPeer		peer,
-		int			bytes );
+            PEPeer peer,
+            int bytes);
 	
-	public void
+	void
 	dataBytesReceived(
-		PEPeer		peer,
-		int			bytes );
+            PEPeer peer,
+            int bytes);
 	
-	public void
+	void
 	protocolBytesSent(
-		PEPeer		peer,
-		int			bytes );
+            PEPeer peer,
+            int bytes);
 	
-	public void
+	void
 	dataBytesSent(
-		PEPeer		peer,
-		int			bytes );
+            PEPeer peer,
+            int bytes);
 	
-	public void 
+	void
 	statsRequest(
-		PEPeer			 	originator, 
-		Map 				request,
-		Map					reply );
+            PEPeer originator,
+            Map request,
+            Map reply);
 
-	public PeerManagerRegistration
+	PeerManagerRegistration
 	getPeerManagerRegistration();
 	
-	public void
+	void
 	addHTTPSeed(
-		String	address,
-		int		port );
+            String address,
+            int port);
 	
-	public byte[][]
+	byte[][]
 	getSecrets(
-		int	crypto_level );
+            int crypto_level);
 	
-	public void 
-	enqueueReadRequest( 
-		PEPeer							peer,
-		DiskManagerReadRequest 			request, 
-		DiskManagerReadRequestListener 	listener );
+	void
+	enqueueReadRequest(
+            PEPeer peer,
+            DiskManagerReadRequest request,
+            DiskManagerReadRequestListener listener);
 	
-	public LogRelation
+	LogRelation
 	getLogRelation();
 	
-	public int getPosition();
+	int getPosition();
 	
-	public boolean 
+	boolean
 	isPeerSourceEnabled(
-		String peer_source );
+            String peer_source);
 	
-	public boolean
+	boolean
 	isNetworkEnabled(
-		String	network );
+            String network);
 	
-	public String[]
+	String[]
 	getEnabledNetworks();
 	
-	public void
+	void
 	priorityConnectionChanged(
-		boolean	added );
+            boolean added);
 	
-	public boolean
+	boolean
 	hasPriorityConnection();
 	
-	public int getPermittedBytesToReceive();
-	public void permittedReceiveBytesUsed( int bytes );
+	int getPermittedBytesToReceive();
+	void permittedReceiveBytesUsed(int bytes);
 	
-	public int getPermittedBytesToSend();
-	public void	permittedSendBytesUsed(	int bytes );
+	int getPermittedBytesToSend();
+	void	permittedSendBytesUsed(int bytes);
 }

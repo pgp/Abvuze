@@ -27,124 +27,124 @@ import java.nio.ByteBuffer;
 public interface 
 TransportHelper 
 {
-	public InetSocketAddress
+	InetSocketAddress
 	getAddress();
 
-	public String
+	String
 	getName(boolean verbose);
 	
-	public boolean
+	boolean
 	minimiseOverheads();
 	
-	public int
+	int
 	getConnectTimeout();
 	
-	public int
+	int
 	getReadTimeout();
 	
-	public boolean
+	boolean
 	delayWrite(
-		ByteBuffer	buffer );
+            ByteBuffer buffer);
 	
-	public boolean
+	boolean
 	hasDelayedWrite();
 	
-	public int 
-	write( 
-		ByteBuffer 	buffer,
-		boolean		partial_write ) 
+	int
+	write(
+            ByteBuffer buffer,
+            boolean partial_write)
 	
 		throws IOException;  	
 
-    public long 
-    write( 
-    	ByteBuffer[] buffers, 
-    	int array_offset, 
-    	int length ) 
+    long
+    write(
+            ByteBuffer[] buffers,
+            int array_offset,
+            int length)
     
     	throws IOException;
 
-    public int 
-    read( 
-    	ByteBuffer buffer ) 
+    int
+    read(
+            ByteBuffer buffer)
     
     	throws IOException;  	
 
-    public long 
-    read( 
-    	ByteBuffer[] buffers, 
-    	int array_offset, 
-    	int length ) 
+    long
+    read(
+            ByteBuffer[] buffers,
+            int array_offset,
+            int length)
     
     	throws IOException;  	
 
-    public void
+    void
     pauseReadSelects();
     
-    public void
+    void
     pauseWriteSelects();
  
-    public void
+    void
     resumeReadSelects();
     
-    public void
+    void
     resumeWriteSelects();
     
-    public void
+    void
     registerForReadSelects(
-    	selectListener	listener,
-    	Object			attachment );
+            selectListener listener,
+            Object attachment);
     
-    public void
+    void
     registerForWriteSelects(
-    	selectListener	listener,
-    	Object			attachment );
+            selectListener listener,
+            Object attachment);
     
-    public void
+    void
     cancelReadSelects();
     
-    public void
+    void
     cancelWriteSelects();
     
-    public boolean
+    boolean
     isClosed();
     
-    public void
+    void
     close(
-    	String		reason );
+            String reason);
     
-    public void
+    void
     failed(
-    	Throwable	reason );
+            Throwable reason);
     
-    public interface
+    interface
     selectListener
     {
-    	public boolean 
+    	boolean
     	selectSuccess(
-    		TransportHelper	helper, 
-    		Object 			attachment );
+                TransportHelper helper,
+                Object attachment);
 
-        public void 
+        void
         selectFailure(
-        	TransportHelper	helper,
-        	Object 			attachment, 
-        	Throwable 		msg);
+                TransportHelper helper,
+                Object attachment,
+                Throwable msg);
     }
     
-    public void
+    void
     setUserData(
-    	Object	key,
-    	Object	data );
+            Object key,
+            Object data);
     
-    public Object
+    Object
     getUserData(
-    	Object	key );
+            Object key);
     
-	public void
+	void
 	setTrace(
-		boolean	on );
+            boolean on);
 	
-	public void
+	void
 	setScatteringMode(long forBytes);
 }

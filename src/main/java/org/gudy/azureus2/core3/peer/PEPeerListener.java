@@ -31,7 +31,7 @@ public interface PEPeerListener {
    * @param peer the peer the message is about
    * @param new_state of peer
    */
-  public void stateChanged(PEPeer peer, int new_state );
+  void stateChanged(PEPeer peer, int new_state);
   
   /**
    * The peer has sent us a bad piece data chunk.
@@ -39,7 +39,7 @@ public interface PEPeerListener {
    * @param piece_num piece that failed hash check
    * @param total_bad_chunks total number of bad chunks sent by this peer so far
    */
-  public void sentBadChunk(PEPeer peer, int piece_num, int total_bad_chunks );
+  void sentBadChunk(PEPeer peer, int piece_num, int total_bad_chunks);
 
   /** The peer asserts that their availability should be added to the torrent-global availability pool
    * The peer must send when, and only when, their availability is known
@@ -48,7 +48,7 @@ public interface PEPeerListener {
    * @param peer the message is about
    * @param peerHavePieces BitFlags of pieces availabile
    */
-  public void addAvailability(final PEPeer peer, final BitFlags peerHavePieces);
+  void addAvailability(final PEPeer peer, final BitFlags peerHavePieces);
 
   /** The peer asserts that their availability must now be taken from the torrent-global availability pool
    * The peer must send this only after having sent a corresponding addAvailability message,
@@ -57,6 +57,6 @@ public interface PEPeerListener {
    * @param peer the message is about
    * @param peerHavePieces BitFlags of pieces no longer available
    */
-  public void removeAvailability(final PEPeer peer, final BitFlags peerHavePieces);
+  void removeAvailability(final PEPeer peer, final BitFlags peerHavePieces);
 
 }

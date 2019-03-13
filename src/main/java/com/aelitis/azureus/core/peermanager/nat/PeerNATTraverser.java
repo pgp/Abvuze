@@ -165,11 +165,11 @@ PeerNATTraverser
 						}
 
 						int	used = 0;
-						
-						for (int i=0;i<active_requests.size();i++){
-							
-							used += ((PeerNATTraversal)active_requests.get(i)).getTimeUsed();
-						}
+
+                        for (Object active_request : active_requests) {
+
+                            used += ((PeerNATTraversal) active_request).getTimeUsed();
+                        }
 						
 						usage_average.addValue( used );
 						
@@ -208,33 +208,33 @@ PeerNATTraverser
 					}	
 					
 					if ( to_run != null ){
-						
-						for (int i=0;i<to_run.size();i++){
-							
-							PeerNATTraversal	traversal = (PeerNATTraversal)to_run.get(i);
-							
-							boolean	bad = false;
-							
-							synchronized( initiators ){
-							
-								if ( negative_result_bloom.contains( traversal.getTarget().toString().getBytes())){
-									
-									bad = true;
-									
-									failed_negative_bloom++;
-								}
-							}
-							
-							if ( bad ){
-								
-								removeRequest( traversal, OUTCOME_FAILED_OTHER );
-								
-								traversal.getAdapter().failed();
-							}else{
-								
-								traversal.run();
-							}
-						}
+
+                        for (Object o : to_run) {
+
+                            PeerNATTraversal traversal = (PeerNATTraversal) o;
+
+                            boolean bad = false;
+
+                            synchronized (initiators) {
+
+                                if (negative_result_bloom.contains(traversal.getTarget().toString().getBytes())) {
+
+                                    bad = true;
+
+                                    failed_negative_bloom++;
+                                }
+                            }
+
+                            if (bad) {
+
+                                removeRequest(traversal, OUTCOME_FAILED_OTHER);
+
+                                traversal.getAdapter().failed();
+                            } else {
+
+                                traversal.run();
+                            }
+                        }
 					}
 				}
 			});
@@ -286,15 +286,13 @@ PeerNATTraverser
 				to_cancel = requests;
 			}
 		}
-		
-		Iterator it = to_cancel.iterator();
-		
-		while( it.hasNext()){
-								
-			PeerNATTraversal	traversal = (PeerNATTraversal)it.next();
-			
-			traversal.cancel();
-		}
+
+        for (Object o : to_cancel) {
+
+            PeerNATTraversal traversal = (PeerNATTraversal) o;
+
+            traversal.cancel();
+        }
 	}
 	
 	public void
@@ -359,15 +357,13 @@ PeerNATTraverser
 			LinkedList	requests = (LinkedList)initiators.get( initiator );
 
 			if ( requests != null ){
-				
-				Iterator it = requests.iterator();
-				
-				while( it.hasNext()){
-					
-					PeerNATTraversal	x = (PeerNATTraversal)it.next();
-					
-					result.add( x.getTarget());
-				}
+
+                for (Object request : requests) {
+
+                    PeerNATTraversal x = (PeerNATTraversal) request;
+
+                    result.add(x.getTarget());
+                }
 			}
 		}
 		

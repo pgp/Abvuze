@@ -1194,7 +1194,7 @@ TagDownloadWithState
 		
 		Set<DownloadManager> dms = getTaggedDownloads();
 				
-		Set<DownloadManager>	to_action = new HashSet<DownloadManager>();
+		Set<DownloadManager>	to_action = new HashSet<>();
 		
 		for ( DownloadManager dm: dms ){
 					
@@ -1255,7 +1255,7 @@ TagDownloadWithState
 			
 			if ( aggregate_sr >= max_aggregate_share_ratio ){
 				
-				Set<DownloadManager> dms = new HashSet<DownloadManager>( getTaggedDownloads());
+				Set<DownloadManager> dms = new HashSet<>(getTaggedDownloads());
 
 				Iterator<DownloadManager> it = dms.iterator();
 				
@@ -1712,7 +1712,7 @@ TagDownloadWithState
 			
 			Set<DownloadManager> dms = getTaggedDownloads();
 			
-			List<DownloadManager>	sorted_dms = new ArrayList<DownloadManager>( dms );
+			List<DownloadManager>	sorted_dms = new ArrayList<>(dms);
 			
 			final int	order = getOrdering();
 			

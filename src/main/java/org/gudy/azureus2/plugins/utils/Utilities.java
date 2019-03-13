@@ -55,25 +55,25 @@ import org.gudy.azureus2.plugins.utils.xml.rss.*;
 public interface 
 Utilities 
 {
-	public String
+	String
 	getAzureusUserDir();
 	
-	public String
+	String
 	getAzureusProgramDir();
 	
-	public boolean
+	boolean
 	isCVSVersion();
 	
-	public boolean
+	boolean
 	isWindows();
 	
-	public boolean
+	boolean
 	isLinux();
 	
-	public boolean
+	boolean
 	isSolaris();
 	
-	public boolean
+	boolean
 	isOSX();
 	
 
@@ -95,47 +95,47 @@ Utilities
 	boolean isFreeBSD();
 	
 
-	public InputStream
+	InputStream
 	getImageAsStream(
-		String	image_name );
+            String image_name);
 	
-	public Semaphore
+	Semaphore
 	getSemaphore();
   
-    public Monitor getMonitor();
+    Monitor getMonitor();
 	
-	public ByteBuffer
+	ByteBuffer
 	allocateDirectByteBuffer(
-		int		size );
+            int size);
 	
-	public void
+	void
 	freeDirectByteBuffer(
-		ByteBuffer	buffer );
+            ByteBuffer buffer);
 	
-	public PooledByteBuffer
+	PooledByteBuffer
 	allocatePooledByteBuffer(
-		int		size );
+            int size);
 	
-	public PooledByteBuffer
+	PooledByteBuffer
 	allocatePooledByteBuffer(
-		byte[]	data  );
+            byte[] data);
 	
 		/**
 		 * 
 		 * @param data	must be b-encodable
 		 * @return
 		 */
-	
-	public PooledByteBuffer
+
+        PooledByteBuffer
 	allocatePooledByteBuffer(
-		Map		data  )
+                Map data)
 	
 		throws IOException;
 	
-	public Formatters
+	Formatters
 	getFormatters();
 	
-	public LocaleUtilities
+	LocaleUtilities
 	getLocaleUtilities();
 	
 	/**
@@ -145,9 +145,9 @@ Utilities
 	 * @param name Name for the UTTimer object.
 	 * @return A UTTimer instance.
 	 */
-	public UTTimer
+    UTTimer
 	createTimer(
-		String		name );
+            String name);
 
 	/**
 	 * Creates a <code>UTTimer</code> instance.
@@ -159,10 +159,10 @@ Utilities
 	 *   the appropriate amount of resources to manage this timer.
 	 * @return A UTTimer instance.
 	 */
-	public UTTimer
+    UTTimer
 	createTimer(
-		String		name,
-		boolean		lightweight );
+            String name,
+            boolean lightweight);
 
 	/**
 	 * Creates a <code>UTTimer</code> instance.
@@ -171,7 +171,7 @@ Utilities
 	 * @param priority The Thread.<i>XXX_</i>PRIORITY value to use.
 	 * @return A UTTimer instance.
 	 */
-	public UTTimer createTimer(String name, int priority);
+    UTTimer createTimer(String name, int priority);
 
 		/**
 		 * create and run a thread for the target. This will be a daemon thread so that
@@ -179,11 +179,11 @@ Utilities
 		 * @param name
 		 * @param target
 		 */
-	
-	public void
+
+        void
 	createThread(
-		String		name,
-		Runnable	target );
+                String name,
+                Runnable target);
 	
 		/**
 		 * create a child process and executes the supplied command line. The child process
@@ -192,23 +192,23 @@ Utilities
 		 * this will fall back to using Runtime.exec 
 		 * @param command_line
 		 */
-	
-	public void
+
+        void
 	createProcess(
-		String		command_line )
+                String command_line)
 	
 		throws PluginException;
 	
-	public ResourceDownloaderFactory
+	ResourceDownloaderFactory
 	getResourceDownloaderFactory();
 	
-	public ResourceUploaderFactory
+	ResourceUploaderFactory
 	getResourceUploaderFactory();
 
-	public SESecurityManager
+	SESecurityManager
 	getSecurityManager();
 	
-	public SimpleXMLParserDocumentFactory
+	SimpleXMLParserDocumentFactory
 	getSimpleXMLParserDocumentFactory();
 	
 	/**
@@ -217,23 +217,23 @@ Utilities
 	 * @return
 	 * @throws SimpleXMLParserDocumentException
 	 */
-	
-	public RSSFeed
+
+    RSSFeed
 	getRSSFeed(
-		InputStream		is )
+            InputStream is)
 	
 		throws SimpleXMLParserDocumentException;
 	
-	public RSSFeed
+	RSSFeed
 	getRSSFeed(
-		URL				source_url,
-		InputStream		is )
+            URL source_url,
+            InputStream is)
 	
 		throws SimpleXMLParserDocumentException;
 
-	public RSSFeed
+	RSSFeed
 	getRSSFeed(
-		URL		feed_location )
+            URL feed_location)
 	
 		throws ResourceDownloaderException, SimpleXMLParserDocumentException;
 	
@@ -244,40 +244,40 @@ Utilities
 	 * @throws ResourceDownloaderException
 	 * @throws SimpleXMLParserDocumentException
 	 */
-	
-	public RSSFeed
+
+    RSSFeed
 	getRSSFeed(
-		ResourceDownloader	feed_location )
+            ResourceDownloader feed_location)
 	
 		throws ResourceDownloaderException, SimpleXMLParserDocumentException;
 
-	public RSSFeed
+	RSSFeed
 	getRSSFeed(
-		URL					source_url,
-		ResourceDownloader	feed_location )
+            URL source_url,
+            ResourceDownloader feed_location)
 	
 		throws ResourceDownloaderException, SimpleXMLParserDocumentException;
 	
 		/**
 		 * Returns a public IP address of the machine or null if it can't be determined
 		 */
-	
-	public InetAddress
+
+        InetAddress
 	getPublicAddress();
 	
-	public InetAddress
+	InetAddress
 	getPublicAddress(
-		boolean		ipv6 );
+            boolean ipv6);
 	
 		/**
 		 * attempts a reverse DNS lookup of an address, null if it fails
 		 * @param address
 		 * @return
 		 */
-	
-	public String
+
+        String
 	reverseDNSLookup(
-		InetAddress		address );
+                InetAddress address);
   
   
   /**
@@ -285,11 +285,11 @@ Utilities
    * only the time lookup is cached for performance reasons.
    * @return current system time
    */
-	public long getCurrentSystemTime();
+  long getCurrentSystemTime();
   
-  	public ByteArrayWrapper
+  	ByteArrayWrapper
 	createWrapper(
-		byte[]		data );
+            byte[] data);
   	
   	
   	/**
@@ -299,40 +299,40 @@ Utilities
   	 * @param max_queue_size		0 -> infinite
   	 * @return
   	 */
-  	
-  	public AggregatedDispatcher
+
+    AggregatedDispatcher
 	createAggregatedDispatcher(
-		long	idle_dispatch_time,
-		long	max_queue_size );
+            long idle_dispatch_time,
+            long max_queue_size);
   	
- 	public AggregatedList
+ 	AggregatedList
 	createAggregatedList(
-		AggregatedListAcceptor	acceptor,
-		long					idle_dispatch_time,
-		long					max_queue_size );
+            AggregatedListAcceptor acceptor,
+            long idle_dispatch_time,
+            long max_queue_size);
  	
 	/**
 	 * 
  	 * @return Map read from config file, or empty HashMap if error
 	 */
- 	public Map
+    Map
  	readResilientBEncodedFile(
- 		File	parent_dir,
- 		String	file_name,
- 		boolean	use_backup );
+            File parent_dir,
+            String file_name,
+            boolean use_backup);
  	
-	public void
+	void
  	writeResilientBEncodedFile(
- 		File	parent_dir,
- 		String	file_name,
- 		Map		data,
- 		boolean	use_backup );	
+            File parent_dir,
+            String file_name,
+            Map data,
+            boolean use_backup);
 	
-	public void
+	void
  	deleteResilientBEncodedFile(
- 		File	parent_dir,
- 		String	file_name,
- 		boolean	use_backup );
+            File parent_dir,
+            String file_name,
+            boolean use_backup);
 	
 	/**
 	 * Compares two version strings for order. 
@@ -352,7 +352,7 @@ Utilities
 	 * 
 	 * @since 2.3.0.7
 	 */
-	public int compareVersions(String v1, String v2);
+    int compareVersions(String v1, String v2);
 	
 	/**
 	 * Converts a file name so that all characters in the file name are
@@ -366,7 +366,7 @@ Utilities
 	 * @param f_name File name to convert.
 	 * @return Converted file name.
 	 */
-	public String normaliseFileName(String f_name);
+    String normaliseFileName(String f_name);
 	
 	/**
 	 * Adds a low priority task that will be scheduled at some point after existing tasks have
@@ -377,144 +377,144 @@ Utilities
 	 * @since 3.0.5.3
 	 * @return
 	 */
+
+    DelayedTask createDelayedTask(Runnable r);
 	
-	public DelayedTask createDelayedTask(Runnable r);
-	
-	public void
+	void
 	registerSearchProvider(
-		SearchProvider		provider )
+            SearchProvider provider)
 	
 		throws SearchException;
 
-	public void
+	void
 	unregisterSearchProvider(
-		SearchProvider		provider )
+            SearchProvider provider)
 	
 		throws SearchException;
 	
-	public SearchInitiator
+	SearchInitiator
 	getSearchInitiator()
 	
 		throws SearchException;
 	
-	public SubscriptionManager
+	SubscriptionManager
 	getSubscriptionManager()
 	
 		throws SubscriptionException;
 	
-	public FeatureManager
+	FeatureManager
 	getFeatureManager();
 	
-	public boolean
+	boolean
 	supportsPowerStateControl(
-		int		state );
+            int state);
 	
-	public void
+	void
 	addPowerManagementListener(
-		PowerManagementListener	listener );
+            PowerManagementListener listener);
 		
-	public void
+	void
 	removePowerManagementListener(
-		PowerManagementListener	listener );
+            PowerManagementListener listener);
 	
-	public List<LocationProvider>	
+	List<LocationProvider>
 	getLocationProviders();
 	
-	public void
+	void
 	addLocationProvider(
-		LocationProvider	provider );
+            LocationProvider provider);
 	
-	public void
+	void
 	removeLocationProvider(
-		LocationProvider	provider );
+            LocationProvider provider);
 	
-	public void
+	void
 	addLocationProviderListener(
-		LocationProviderListener		listener );
+            LocationProviderListener listener);
 	
-	public void
+	void
 	removeLocationProviderListener(
-		LocationProviderListener		listener );
+            LocationProviderListener listener);
 	
 	
-	public void
+	void
 	registerJSONRPCServer(
-		JSONServer		server );		
+            JSONServer server);
 	
-	public void
+	void
 	unregisterJSONRPCServer(
-		JSONServer		server );		
+            JSONServer server);
 
-	public void
+	void
 	registerJSONRPCClient(
-		JSONClient		client );
+            JSONClient client);
 	
-	public void
+	void
 	unregisterJSONRPCClient(
-		JSONClient		client );
+            JSONClient client);
 
-	public List<DistributedDatabase>
+	List<DistributedDatabase>
 	getDistributedDatabases(
-		String[]		networks );	 
+            String[] networks);
 	
-	public List<DistributedDatabase>
+	List<DistributedDatabase>
 	getDistributedDatabases(
-		String[]			networks,
-		Map<String,Object>	options );
+            String[] networks,
+            Map<String, Object> options);
 	
-	public List<ScriptProvider>	
+	List<ScriptProvider>
 	getScriptProviders();
 	
-	public void
+	void
 	registerScriptProvider(
-		ScriptProvider	provider );
+            ScriptProvider provider);
 	
-	public void
+	void
 	unregisterScriptProvider(
-		ScriptProvider	provider );
+            ScriptProvider provider);
 	
-	public void
+	void
 	addScriptProviderListener(
-		ScriptProviderListener	provider );
+            ScriptProviderListener provider);
 	
-	public void
+	void
 	removeScriptProviderListener(
-		ScriptProviderListener	provider );
+            ScriptProviderListener provider);
 	
-	public TagManager
+	TagManager
 	getTagManager();
 	
-	public Tag
+	Tag
 	lookupTag(
-		String		name );
+            String name);
 	
-	public interface
+	interface
 	JSONServer
 	{
-		public String
+		String
 		getName();
 		
-		public List<String>
+		List<String>
 		getSupportedMethods();
 		
-		public Map
+		Map
 		call(
-			String			method,
-			Map		args )
+                String method,
+                Map args)
 		
 			throws PluginException;
 	}
 	
-	public interface
+	interface
 	JSONClient
 	{
-		public void
+		void
 		serverRegistered(
-			JSONServer	server );
+                JSONServer server);
 		
-		public void
+		void
 		serverUnregistered(
-			JSONServer	server );
+                JSONServer server);
 	}
 
 }

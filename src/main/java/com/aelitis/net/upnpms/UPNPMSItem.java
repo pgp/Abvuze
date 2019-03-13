@@ -26,17 +26,17 @@ public interface
 UPNPMSItem 
 	extends UPNPMSNode
 {
-	public static final String IC_AUDIO	= "audio";
-	public static final String IC_VIDEO	= "video";
-	public static final String IC_IMAGE	= "image";
-	public static final String IC_OTHER	= "other";
+	String IC_AUDIO	= "audio";
+	String IC_VIDEO	= "video";
+	String IC_IMAGE	= "image";
+	String IC_OTHER	= "other";
 
-	public String
+	String
 	getItemClass();
 	
-	public long
+	long
 	getSize();
 	
-	public URL
+	URL
 	getURL();
 }

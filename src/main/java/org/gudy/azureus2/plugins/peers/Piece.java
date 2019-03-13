@@ -22,19 +22,19 @@ package org.gudy.azureus2.plugins.peers;
 public interface 
 Piece 
 {
-	public int
+	int
 	getIndex();
 	
-	public int
+	int
 	getLength();
 	
-	public boolean
+	boolean
 	isDone();
 	
-	public boolean
+	boolean
 	isNeeded();
 	
-	public boolean
+	boolean
 	isDownloading();
 	
 		/**
@@ -42,32 +42,32 @@ Piece
 		 * not done, needed and not downloading
 		 * @return
 		 */
-	
-	public boolean
+
+        boolean
 	isFullyAllocatable();
 	
 		/**
 		 * number of requests that are available to be made
 		 * @return
 		 */
-	
-	public int
+
+        int
 	getAllocatableRequestCount();
 	
 		/**
 		 * Reserve this peice for a given peer - no other peer will be asked for the piece
 		 * @return
 		 */
-	
-	public Peer
+
+        Peer
 	getReservedFor();
 	
 		/**
 		 * Set the peer that will be responsible for downloading the piece
 		 * @param peer
 		 */
-	
-	public void
+
+        void
 	setReservedFor(
-		Peer	peer );
+                Peer peer);
 }

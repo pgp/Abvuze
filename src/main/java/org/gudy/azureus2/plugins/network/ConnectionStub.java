@@ -23,17 +23,17 @@ package org.gudy.azureus2.plugins.network;
 public interface 
 ConnectionStub 
 {
-	public void
+	void
 	addRateLimiter(
-		RateLimiter		limiter,
-		boolean			is_upload );
+            RateLimiter limiter,
+            boolean is_upload);
 
-	public void
+	void
 	removeRateLimiter(
-		RateLimiter		limiter,
-		boolean			is_upload );
+            RateLimiter limiter,
+            boolean is_upload);
 	  
-	public RateLimiter[]
+	RateLimiter[]
 	getRateLimiters(
-		boolean			is_upload );
+            boolean is_upload);
 }

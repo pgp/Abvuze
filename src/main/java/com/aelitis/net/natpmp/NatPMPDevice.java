@@ -25,36 +25,36 @@ import java.net.NetworkInterface;
 public interface 
 NatPMPDevice 
 {
-	public boolean
+	boolean
 	connect()
 	
 		throws Exception;
 	
-	public int
+	int
 	addPortMapping(
-		boolean	tcp,
-		int		internal_port,
-		int		external_port )
+            boolean tcp,
+            int internal_port,
+            int external_port)
 	
 		throws Exception;
 	
-	public void
+	void
 	deletePortMapping(
-		boolean	tcp,
-		int		internal_port,
-		int		external_port )
+            boolean tcp,
+            int internal_port,
+            int external_port)
 	
 		throws Exception;
 	
-	public InetAddress
+	InetAddress
 	getLocalAddress();
 	
-	public NetworkInterface
+	NetworkInterface
 	getNetworkInterface();
 	
-	public int
+	int
 	getEpoch();
 	
-	public String
+	String
 	getExternalIPAddress();
 }

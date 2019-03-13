@@ -22,15 +22,15 @@ package org.gudy.azureus2.plugins.logging;
 public interface 
 LoggerAlertListener 
 {
-	public void
+	void
 	alertLogged(
-		int			alert_type,
-		String		message,
-		boolean		repeatable );
+            int alert_type,
+            String message,
+            boolean repeatable);
 	
-	public void
+	void
 	alertLogged(
-		String		message,
-		Throwable 	e,
-		boolean		repeatable );
+            String message,
+            Throwable e,
+            boolean repeatable);
 }

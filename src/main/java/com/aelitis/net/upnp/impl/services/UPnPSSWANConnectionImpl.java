@@ -77,17 +77,17 @@ UPnPSSWANConnectionImpl
 								
 								class_mon.exit();
 							}
-							
-							for (int i=0;i<to_check.size();i++){
-		
-								try{
-									((UPnPSSWANConnectionImpl)to_check.get(i)).checkMappings();
-									
-								}catch( Throwable e ){
-									
-									//Debug.printStackTrace(e);
-								}
-							}
+
+                for (Object o : to_check) {
+
+                    try {
+                        ((UPnPSSWANConnectionImpl) o).checkMappings();
+
+                    } catch (Throwable e) {
+
+                        //Debug.printStackTrace(e);
+                    }
+                }
 						}catch( Throwable e ){
 							
 							Debug.printStackTrace(e);
@@ -168,26 +168,24 @@ UPnPSSWANConnectionImpl
 			String	connection_status	= null;
 			String	connection_error	= null;
 			String	uptime				= null;
-			
-			for (int i=0;i<args.length;i++){
-				
-				UPnPActionArgument	arg = args[i];
-			
-				String	name = arg.getName();
-				
-				if ( name.equalsIgnoreCase("NewConnectionStatus")){
-					
-					connection_status = arg.getValue();
-					
-				}else if ( name.equalsIgnoreCase("NewLastConnectionError")){
-					
-					connection_error = arg.getValue();
-					
-				}else if ( name.equalsIgnoreCase("NewUptime")){
-					
-					uptime = arg.getValue();
-				}
-			}
+
+            for (UPnPActionArgument arg : args) {
+
+                String name = arg.getName();
+
+                if (name.equalsIgnoreCase("NewConnectionStatus")) {
+
+                    connection_status = arg.getValue();
+
+                } else if (name.equalsIgnoreCase("NewLastConnectionError")) {
+
+                    connection_error = arg.getValue();
+
+                } else if (name.equalsIgnoreCase("NewUptime")) {
+
+                    uptime = arg.getValue();
+                }
+            }
 			
 			return( new String[]{ connection_status, connection_error, uptime });
 		}		
@@ -229,19 +227,17 @@ UPnPSSWANConnectionImpl
 		while( it.hasNext()){
 		
 			portMapping	mapping = (portMapping)it.next();
-			
-			for (int j=0;j<current.length;j++){
-				
-				UPnPWANConnectionPortMapping	c = current[j];
-				
-				if ( 	c.getExternalPort() == mapping.getExternalPort() &&
-						c.isTCP() 			== mapping.isTCP()){
-							
-					it.remove();
-					
-					break;
-				}
-			}
+
+            for (UPnPWANConnectionPortMapping c : current) {
+
+                if (c.getExternalPort() == mapping.getExternalPort() &&
+                        c.isTCP() == mapping.isTCP()) {
+
+                    it.remove();
+
+                    break;
+                }
+            }
 		}
 		
 		boolean	log	= false;
@@ -337,19 +333,19 @@ UPnPSSWANConnectionImpl
 			}finally{
 									
 				((UPnPRootDeviceImpl)service.getDevice().getRootDevice()).portMappingResult(ok);
-				
-				for (int i=0;i<listeners.size();i++){
-					
-					UPnPWANConnectionListener	listener = (UPnPWANConnectionListener)listeners.get(i);
-					
-					try{
-						listener.mappingResult( this, ok );
-					
-					}catch( Throwable e){
-						
-						Debug.printStackTrace(e);
-					}
-				}
+
+                for (Object listener1 : listeners) {
+
+                    UPnPWANConnectionListener listener = (UPnPWANConnectionListener) listener1;
+
+                    try {
+                        listener.mappingResult(this, ok);
+
+                    } catch (Throwable e) {
+
+                        Debug.printStackTrace(e);
+                    }
+                }
 			}
 			
 			try{
@@ -502,30 +498,28 @@ UPnPSSWANConnectionImpl
 						boolean	tcp				= false;
 						String	internal_host	= null;
 						String	description		= "";
-						
-						for (int j=0;j<outs.length;j++){
-							
-							UPnPActionArgument	out = outs[j];
-							
-							String	out_name = out.getName();
-							
-							if ( out_name.equalsIgnoreCase("NewExternalPort")){
-								
-								port	= Integer.parseInt( out.getValue());
-								
-							}else if ( out_name.equalsIgnoreCase( "NewProtocol" )){
-								
-								tcp = out.getValue().equalsIgnoreCase("TCP");
-					
-							}else if ( out_name.equalsIgnoreCase( "NewInternalClient" )){
-								
-								internal_host = out.getValue();
-								
-							}else if ( out_name.equalsIgnoreCase( "NewPortMappingDescription" )){
-								
-								description = out.getValue();
-							}
-						}
+
+                        for (UPnPActionArgument out : outs) {
+
+                            String out_name = out.getName();
+
+                            if (out_name.equalsIgnoreCase("NewExternalPort")) {
+
+                                port = Integer.parseInt(out.getValue());
+
+                            } else if (out_name.equalsIgnoreCase("NewProtocol")) {
+
+                                tcp = out.getValue().equalsIgnoreCase("TCP");
+
+                            } else if (out_name.equalsIgnoreCase("NewInternalClient")) {
+
+                                internal_host = out.getValue();
+
+                            } else if (out_name.equalsIgnoreCase("NewPortMappingDescription")) {
+
+                                description = out.getValue();
+                            }
+                        }
 				
 						if ( prev_mapping != null ){
 							
@@ -562,20 +556,20 @@ UPnPSSWANConnectionImpl
 				return( res2 );
 			}
 		}finally{
-			
-			for (int i=0;i<listeners.size();i++){
-				
-				UPnPWANConnectionListener	listener = (UPnPWANConnectionListener)listeners.get(i);
-				
-				try{
-					listener.mappingsReadResult( this, ok );
-				
-				}catch( Throwable e){
-					
-					Debug.printStackTrace(e);
-				}
-				
-			}
+
+            for (Object listener1 : listeners) {
+
+                UPnPWANConnectionListener listener = (UPnPWANConnectionListener) listener1;
+
+                try {
+                    listener.mappingsReadResult(this, ok);
+
+                } catch (Throwable e) {
+
+                    Debug.printStackTrace(e);
+                }
+
+            }
 		}
 	}
 	
@@ -599,18 +593,16 @@ UPnPSSWANConnectionImpl
 			UPnPActionArgument[]	args = inv.invoke();
 			
 			String	ip	= null;
-			
-			for (int i=0;i<args.length;i++){
-				
-				UPnPActionArgument	arg = args[i];
-			
-				String	name = arg.getName();
-				
-				if ( name.equalsIgnoreCase("NewExternalIPAddress")){
-					
-					ip = arg.getValue();
-				}
-			}
+
+            for (UPnPActionArgument arg : args) {
+
+                String name = arg.getName();
+
+                if (name.equalsIgnoreCase("NewExternalIPAddress")) {
+
+                    ip = arg.getValue();
+                }
+            }
 			
 			return( ip );
 		}	

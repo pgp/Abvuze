@@ -34,7 +34,7 @@ import org.gudy.azureus2.core3.util.Debug;
 public class 
 QTFastStartRAF 
 {	
-	private static final Set<String>	supported_extensions = new HashSet<String>();
+	private static final Set<String>	supported_extensions = new HashSet<>();
 	
 	static{
 		supported_extensions.add( "mov" );
@@ -42,7 +42,7 @@ QTFastStartRAF
 		supported_extensions.add( "mp4" );
 	}
 	
-	private static final Set<String>	tested = new HashSet<String>();
+	private static final Set<String>	tested = new HashSet<>();
 	
 	public static boolean
 	isSupportedExtension(
@@ -559,56 +559,56 @@ QTFastStartRAF
 	public interface
 	FileAccessor
 	{
-		public String
+		String
 		getName();
 		
-		public long
+		long
 		getFilePointer()
 		
 			throws IOException;
 		
-		public void
+		void
 		seek(
-			long		pos )
+                long pos)
 		
 			throws IOException;
 
-		public void
+		void
 		skipBytes(
-			int		num )
+                int num)
 		
 			throws IOException;
 		
-		public long
+		long
 		length()
 		
 			throws IOException;
 		
-		public int
+		int
 		read(
-			byte[]	buffer,
-			int		pos,
-			int		len )
+                byte[] buffer,
+                int pos,
+                int len)
 		
 			throws IOException;
 		
-		public int
+		int
 		readInt()
 		
 			throws IOException;
 		
-		public long
+		long
 		readLong()
 		
 			throws IOException;
 		
-		public void
+		void
 		readFully(
-			byte[]	buffer )
+                byte[] buffer)
 		
 			throws IOException;
 				
-		public void
+		void
 		close()
 		
 			throws IOException;

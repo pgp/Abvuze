@@ -24,124 +24,124 @@ public interface
 TagFeatureRateLimit 
 	extends TagFeature
 {
-	public static final int SR_ACTION_QUEUE	= 0;
-	public static final int SR_ACTION_PAUSE	= 1;
-	public static final int SR_ACTION_STOP	= 2;
+	int SR_ACTION_QUEUE	= 0;
+	int SR_ACTION_PAUSE	= 1;
+	int SR_ACTION_STOP	= 2;
 	
-	public static final int SR_INDIVIDUAL_ACTION_DEFAULT = SR_ACTION_QUEUE;
-	public static final int SR_AGGREGATE_ACTION_DEFAULT	 = SR_ACTION_PAUSE;
+	int SR_INDIVIDUAL_ACTION_DEFAULT = SR_ACTION_QUEUE;
+	int SR_AGGREGATE_ACTION_DEFAULT	 = SR_ACTION_PAUSE;
 	
-	public static final boolean AT_RATELIMIT_MAX_AGGREGATE_SR_PRIORITY_DEFAULT	= true;
+	boolean AT_RATELIMIT_MAX_AGGREGATE_SR_PRIORITY_DEFAULT	= true;
 	
-	public boolean
+	boolean
 	supportsTagRates();
 	
-	public boolean
+	boolean
 	supportsTagUploadLimit();
 	
-	public boolean
+	boolean
 	supportsTagDownloadLimit();
 	
-	public int
+	int
 	getTagUploadLimit();
 	
-	public void
+	void
 	setTagUploadLimit(
-		int		bps );
+            int bps);
 	
-	public int
+	int
 	getTagCurrentUploadRate();
 	
-	public int
+	int
 	getTagDownloadLimit();
 	
-	public void
+	void
 	setTagDownloadLimit(
-		int		bps );
+            int bps);
 	
-	public int
+	int
 	getTagCurrentDownloadRate();
 	
-	public long[]
+	long[]
 	getTagSessionUploadTotal();
 	
-	public void
+	void
 	resetTagSessionUploadTotal();
 	
-	public long[]
+	long[]
 	getTagSessionDownloadTotal();
 
-	public void
+	void
 	resetTagSessionDownloadTotal();
 	
-	public long[]
+	long[]
 	getTagUploadTotal();
 	
-	public long[]
+	long[]
 	getTagDownloadTotal();
 	
-	public void
+	void
 	setRecentHistoryRetention(
-		boolean	enable );
+            boolean enable);
 	
-	public int[][]
+	int[][]
 	getRecentHistory();
 	
-	public int
+	int
 	getTagUploadPriority();
 	
-	public void
+	void
 	setTagUploadPriority(
-		int		priority );
+            int priority);
 	
 		// min share ratio
 	
-	public int
+	int
 	getTagMinShareRatio();
 	
-	public void
+	void
 	setTagMinShareRatio(
-		int		ratio_in_thousandths );
+            int ratio_in_thousandths);
 	
 		// max share ratio
 	
-	public int
+	int
 	getTagMaxShareRatio();
 	
-	public void
+	void
 	setTagMaxShareRatio(
-		int		ratio_in_thousandths );
+            int ratio_in_thousandths);
 	
-	public int
+	int
 	getTagMaxShareRatioAction();
 	
-	public void
+	void
 	setTagMaxShareRatioAction(
-		int		action );
+            int action);
 	
 		// aggregate share ratio
 	
-	public int
+	int
 	getTagAggregateShareRatio();
 	
-	public int
+	int
 	getTagMaxAggregateShareRatio();
 	
-	public void
+	void
 	setTagMaxAggregateShareRatio(
-		int		ratio_in_thousandths );
+            int ratio_in_thousandths);
 	
-	public int
+	int
 	getTagMaxAggregateShareRatioAction();
 	
-	public void
+	void
 	setTagMaxAggregateShareRatioAction(
-		int		action );
+            int action);
 	
-	public boolean
+	boolean
 	getTagMaxAggregateShareRatioHasPriority();
 	
-	public void
+	void
 	setTagMaxAggregateShareRatioHasPriority(
-		boolean	has_priority );
+            boolean has_priority);
 }

@@ -321,7 +321,7 @@ public class TorrentDownloaderFactory {
   	  										
   	  										original_url = new URL( url.substring( 4 ));
   	  										
-  	  										Map<String,Object>	options = new HashMap<String,Object>();
+  	  										Map<String,Object>	options = new HashMap<>();
   	  								
   	  										options.put( AEProxyFactory.PO_PEER_NETWORKS, new String[]{ AENetworkClassifier.AT_TOR });
   	  							

@@ -30,6 +30,7 @@ import java.net.InetAddress;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Properties;
 
@@ -74,7 +75,7 @@ public class NatChecker {
 	int 			port,
 	boolean			http_test )
   {	
-    String check = "azureus_rand_" + String.valueOf( RandomUtils.nextInt( 100000 ));
+    String check = "azureus_rand_" + RandomUtils.nextInt(100000);
     
     if ( port < 0 || port > 65535 || port == Constants.INSTANCE_PORT ){
     	
@@ -150,7 +151,7 @@ public class NatChecker {
     try {
       server.start();
       
-      String urlStr = Constants.NAT_TEST_SERVER_HTTP + (http_test?"httptest":"nattest") + "?port=" + String.valueOf( port ) + "&check=" + check;
+      String urlStr = Constants.NAT_TEST_SERVER_HTTP + (http_test?"httptest":"nattest") + "?port=" + port + "&check=" + check;
            
       if ( upnp_str != null ){
     	
@@ -250,14 +251,14 @@ public class NatChecker {
 								"NAT CHECK FAILED: " + new String(reason)));
           }
           result = NAT_KO;
-          additional_info = reason==null?"Unknown":new String(reason, "UTF8");
+          additional_info = reason==null?"Unknown":new String(reason, StandardCharsets.UTF_8);
           break;
         }
         case 1 :{
           result = NAT_OK;
           byte[] reply = (byte[])map.get( "reply" );
           if( reply != null ) {
-        	  additional_info = new String(reply, "UTF8");
+        	  additional_info = new String(reply, StandardCharsets.UTF_8);
           }
           break;
         }

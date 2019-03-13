@@ -31,7 +31,7 @@ import com.aelitis.azureus.core.util.CopyOnWriteList;
  */
 public class ViewTitleInfoManager
 {
-	public static CopyOnWriteList<ViewTitleInfoListener> listeners = new CopyOnWriteList<ViewTitleInfoListener>();
+	public static CopyOnWriteList<ViewTitleInfoListener> listeners = new CopyOnWriteList<>();
 	
 	public static void addListener(ViewTitleInfoListener l) {
 		listeners.addIfNotPresent(l);

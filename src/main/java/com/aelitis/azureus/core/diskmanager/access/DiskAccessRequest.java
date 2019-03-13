@@ -26,21 +26,21 @@ import com.aelitis.azureus.core.diskmanager.cache.CacheFile;
 public interface 
 DiskAccessRequest 
 {
-	public CacheFile
+	CacheFile
 	getFile();
 	
-	public long
+	long
 	getOffset();
 	
-	public int
+	int
 	getSize();
 	
-	public DirectByteBuffer
+	DirectByteBuffer
 	getBuffer();
 	
-	public int
+	int
 	getPriority();
 	
-	public void
+	void
 	cancel();
 }

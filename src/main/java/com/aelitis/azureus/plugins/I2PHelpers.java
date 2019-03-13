@@ -72,7 +72,7 @@ I2PHelpers
 		return installI2PHelper(null, remember_id, install_outcome, callback);
 	}
 
-	private static Map<String,Long>	declines = new HashMap<String, Long>();
+	private static Map<String,Long>	declines = new HashMap<>();
 	
 	public static boolean
 	installI2PHelper(

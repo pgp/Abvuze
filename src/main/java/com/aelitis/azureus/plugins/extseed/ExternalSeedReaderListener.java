@@ -25,16 +25,16 @@ import org.gudy.azureus2.plugins.utils.PooledByteBuffer;
 public interface 
 ExternalSeedReaderListener 
 {
-	public void
+	void
 	requestComplete(
-		PeerReadRequest		request,
-		PooledByteBuffer	data );
+            PeerReadRequest request,
+            PooledByteBuffer data);
 	
-	public void
+	void
 	requestCancelled(
-		PeerReadRequest		request );
+            PeerReadRequest request);
 	
-	public void
+	void
 	requestFailed(
-		PeerReadRequest		request );
+            PeerReadRequest request);
 }

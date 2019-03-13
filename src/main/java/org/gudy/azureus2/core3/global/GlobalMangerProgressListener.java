@@ -22,11 +22,11 @@ package org.gudy.azureus2.core3.global;
 public interface 
 GlobalMangerProgressListener 
 {
-	public void 
+	void
 	reportCurrentTask(
-		String currentTask );
+            String currentTask);
 	  
-	public void 
+	void
 	reportPercent(
-		int percent );
+            int percent);
 }

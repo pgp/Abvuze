@@ -31,19 +31,19 @@ import org.gudy.azureus2.core3.torrent.TOTorrentFile;
 public interface 
 CacheFileOwner 
 {
-	public static final int	CACHE_MODE_NORMAL			= 1;
-	public static final int	CACHE_MODE_NO_CACHE			= 2;
-	public static final int	CACHE_MODE_EXPERIMENTAL		= 3;
+	int	CACHE_MODE_NORMAL			= 1;
+	int	CACHE_MODE_NO_CACHE			= 2;
+	int	CACHE_MODE_EXPERIMENTAL		= 3;
 	
-	public String
+	String
 	getCacheFileOwnerName();
 	
-	public TOTorrentFile
+	TOTorrentFile
 	getCacheFileTorrentFile();
 	
-	public File
-	getCacheFileControlFileDir( );
+	File
+	getCacheFileControlFileDir();
 	
-	public int
+	int
 	getCacheMode();
 }

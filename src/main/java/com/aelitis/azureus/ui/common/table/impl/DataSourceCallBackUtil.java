@@ -107,26 +107,26 @@ public class DataSourceCallBackUtil
 									
 									processDataSourcesOutstanding = new ArrayList();
 								}
-								
-								for (int i=0;i<to_do.size();i++){
-									
-									try{
-										
-										addDataSourceCallback this_callback = (addDataSourceCallback)to_do.get(i);
-														
-										if (TableViewImpl.DEBUGADDREMOVE ) {
-											this_callback.debug("processDataSourceQueue after "
-													+ (SystemTime.getCurrentTime() - event.getCreatedTime())
-													+ "ms");
-										}
-										
-										this_callback.process();
-										
-									}catch( Throwable e ){
-										
-										Debug.printStackTrace(e);
-									}
-								}
+
+                                for (Object o : to_do) {
+
+                                    try {
+
+                                        addDataSourceCallback this_callback = (addDataSourceCallback) o;
+
+                                        if (TableViewImpl.DEBUGADDREMOVE) {
+                                            this_callback.debug("processDataSourceQueue after "
+                                                    + (SystemTime.getCurrentTime() - event.getCreatedTime())
+                                                    + "ms");
+                                        }
+
+                                        this_callback.process();
+
+                                    } catch (Throwable e) {
+
+                                        Debug.printStackTrace(e);
+                                    }
+                                }
 							}
 						});
 			}
@@ -136,25 +136,25 @@ public class DataSourceCallBackUtil
 					// process outside the synchronized block, otherwise we'll end up with deadlocks
 
 				to_do_now.remove( callback );
-				
-				for (int i=0;i<to_do_now.size();i++){
-					
-					try{
-						
-						addDataSourceCallback this_callback = (addDataSourceCallback)to_do_now.get(i);
 
-						if ( TableViewImpl.DEBUGADDREMOVE ){
-							
-							this_callback.debug("Over immediate delay limit, processing queue now");
-						}
-						
-						this_callback.process();
-						
-					}catch( Throwable e ){
-						
-						Debug.printStackTrace(e);
-					}
-				}
+                for (Object o : to_do_now) {
+
+                    try {
+
+                        addDataSourceCallback this_callback = (addDataSourceCallback) o;
+
+                        if (TableViewImpl.DEBUGADDREMOVE) {
+
+                            this_callback.debug("Over immediate delay limit, processing queue now");
+                        }
+
+                        this_callback.process();
+
+                    } catch (Throwable e) {
+
+                        Debug.printStackTrace(e);
+                    }
+                }
 			}
 		}
 		
@@ -164,12 +164,12 @@ public class DataSourceCallBackUtil
 	public interface
 	addDataSourceCallback
 	{
-		public void
+		void
 		process();
 		
-		public void
+		void
 		debug(
-			String		str );
+                String str);
 	}
 	
 	

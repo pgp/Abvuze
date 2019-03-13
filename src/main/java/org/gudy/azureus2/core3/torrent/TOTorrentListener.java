@@ -23,10 +23,10 @@ package org.gudy.azureus2.core3.torrent;
 public interface 
 TOTorrentListener 
 {
-	public static final int CT_ANNOUNCE_URLS	= 1;
+	int CT_ANNOUNCE_URLS	= 1;
 	
-	public void
+	void
 	torrentChanged(
-		TOTorrent		torrent,
-		int				change_type );
+            TOTorrent torrent,
+            int change_type);
 }

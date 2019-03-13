@@ -27,10 +27,10 @@ public interface
 DirectoryParameter 
 	extends Parameter
 {
-	public void
+	void
 	setValue(
-		String		str );
+            String str);
 	
-	public String
+	String
 	getValue();
 }

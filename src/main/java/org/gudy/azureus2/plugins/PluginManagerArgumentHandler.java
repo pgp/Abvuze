@@ -22,7 +22,7 @@ package org.gudy.azureus2.plugins;
 public interface 
 PluginManagerArgumentHandler 
 {
-	public void
+	void
 	processArguments(
-		String[]		args );
+            String[] args);
 }

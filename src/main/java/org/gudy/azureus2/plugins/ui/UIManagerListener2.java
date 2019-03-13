@@ -31,7 +31,7 @@ UIManagerListener2 extends UIManagerListener
 	 * @param instance Check with <code>instanceof</code> to see what UI is being
 	 *                  attached
 	 */
-	public void
+    void
 	UIAttachedComplete(
-		UIInstance		instance );
+            UIInstance instance);
 }

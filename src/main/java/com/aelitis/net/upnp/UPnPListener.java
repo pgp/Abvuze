@@ -28,12 +28,12 @@ import java.net.URL;
 public interface 
 UPnPListener 
 {
-	public boolean
+	boolean
 	deviceDiscovered(
-		String		USN,
-		URL			location );
+            String USN,
+            URL location);
 	
-	public void
+	void
 	rootDeviceFound(
-		UPnPRootDevice		device );	
+            UPnPRootDevice device);
 }

@@ -123,17 +123,17 @@ TRTrackerUtils
 			  										
 			  									listener_thread = null;
 			  								}
-			  								
-			  								for (Iterator it=listeners.iterator();it.hasNext();){
-			  									
-			  									try{
-			  										((TRTrackerUtilsListener)it.next()).announceDetailsChanged();
-			  										
-			  									}catch( Throwable e ){
-			  										
-			  										Debug.printStackTrace( e );
-			  									}
-			  								}
+
+                                            for (Object listener : listeners) {
+
+                                                try {
+                                                    ((TRTrackerUtilsListener) listener).announceDetailsChanged();
+
+                                                } catch (Throwable e) {
+
+                                                    Debug.printStackTrace(e);
+                                                }
+                                            }
 			  							}
 			  						};
 			  					
@@ -326,7 +326,7 @@ TRTrackerUtils
 		
 		if ( aliases.length() > 0 ){
 			
-			tracker_ip_aliases = new HashSet<String>();
+			tracker_ip_aliases = new HashSet<>();
 			
 			String[] bits = aliases.split(",");
 			
@@ -428,11 +428,11 @@ TRTrackerUtils
 					l.add( new URL( "http://" + UrlUtils.convertIPV6Host( tracker_host ) + ":" + port + "/announce" ));
 					
 					List	ports = stringToPorts( COConfigurationManager.getStringParameter("Tracker Port Backups" ));
-					
-					for (int i=0;i<ports.size();i++){
-						
-						l.add( new URL( "http://" + UrlUtils.convertIPV6Host( tracker_host ) + ":" + ((Integer)ports.get(i)).intValue() + "/announce" ));
-					}
+
+                    for (Object port1 : ports) {
+
+                        l.add(new URL("http://" + UrlUtils.convertIPV6Host(tracker_host) + ":" + (Integer) port1 + "/announce"));
+                    }
 
 					urls.add( l );
 					
@@ -452,11 +452,11 @@ TRTrackerUtils
 					l.add( new URL( "https://" + UrlUtils.convertIPV6Host( tracker_host ) + ":" + port + "/announce" ));
 					
 					List	ports = stringToPorts( COConfigurationManager.getStringParameter("Tracker Port SSL Backups" ));
-					
-					for (int i=0;i<ports.size();i++){
-						
-						l.add( new URL( "https://" + UrlUtils.convertIPV6Host( tracker_host ) + ":" + ((Integer)ports.get(i)).intValue() + "/announce" ));
-					}
+
+                    for (Object port1 : ports) {
+
+                        l.add(new URL("https://" + UrlUtils.convertIPV6Host(tracker_host) + ":" + (Integer) port1 + "/announce"));
+                    }
 
 					urls.add( l );
 					
@@ -685,7 +685,7 @@ TRTrackerUtils
 			
 				if ( az_tracker ){
 					
-					az_trackers.put( key, new Long( SystemTime.getCurrentTime()));
+					az_trackers.put( key, SystemTime.getCurrentTime());
 					
 					changed	= true;
 				}
@@ -746,7 +746,7 @@ TRTrackerUtils
 						udp_probe_results.clear();
 					}
 					
-					udp_probe_results.put( key, new Long( SystemTime.getCurrentTime()));
+					udp_probe_results.put( key, SystemTime.getCurrentTime());
 					
 					changed	= true;
 				}

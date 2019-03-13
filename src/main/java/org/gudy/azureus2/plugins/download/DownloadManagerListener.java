@@ -31,11 +31,11 @@ package org.gudy.azureus2.plugins.download;
 public interface 
 DownloadManagerListener 
 {
-	public void
+	void
 	downloadAdded(
-		Download	download );
+            Download download);
 	
-	public void
+	void
 	downloadRemoved(
-		Download	download );
+            Download download);
 }

@@ -36,47 +36,47 @@ RSSChannel
 		 * Returns the mandatory title
 		 * @return
 		 */
-	
-	public String
+
+        String
 	getTitle();
 	
 		/**
 		 * Returns the mandatory description
 		 * @return
 		 */
-	
-	public String
+
+        String
 	getDescription();
 	
 		/**
 		 * Returns the mandatory link
 		 * @return
 		 */
-	
-	public URL
+
+        URL
 	getLink();
 	
 		/**
 		 * Returns the *optional* publication date
 		 * @return
 		 */
-	
-	public Date
+
+        Date
 	getPublicationDate();
 	
 		/**
 		 * returns the items in the channel
 		 * @return
 		 */
-	
-	public RSSItem[]
+
+        RSSItem[]
 	getItems();
 	
 		/**
 		 * returns the underlying XML node for extraction of extensions
 		 * @return
 		 */
-	
-	public SimpleXMLParserDocumentNode
+
+        SimpleXMLParserDocumentNode
 	getNode();
 }

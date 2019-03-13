@@ -29,7 +29,7 @@ import org.gudy.azureus2.core3.peer.PEPeer;
 public interface 
 Unchoker 
 {
-  public boolean
+  boolean
   isSeedingUnchoker();
   
   /**
@@ -38,7 +38,7 @@ Unchoker
    * @param all_peers list of peers to choose from
    * @return peers to unchoke
    */
-  public ArrayList<PEPeer> getImmediateUnchokes( int max_to_unchoke, ArrayList<PEPeer> all_peers );
+  ArrayList<PEPeer> getImmediateUnchokes(int max_to_unchoke, ArrayList<PEPeer> all_peers);
 
   /**
    * Perform peer choke, unchoke and optimistic calculations
@@ -46,17 +46,17 @@ Unchoker
    * @param all_peers list of peers to choose from
    * @param force_refresh force a refresh of optimistic unchokes
    */
-  public void calculateUnchokes( int max_to_unchoke, ArrayList<PEPeer> all_peers, boolean force_refresh, boolean check_priority_connections, boolean do_high_latency_peers );
+  void calculateUnchokes(int max_to_unchoke, ArrayList<PEPeer> all_peers, boolean force_refresh, boolean check_priority_connections, boolean do_high_latency_peers);
   
   /**
    * Get the list of peers calculated to be choked.
    * @return peers to choke
    */
-  public ArrayList<PEPeer> getChokes();
+  ArrayList<PEPeer> getChokes();
   
   /**
    * Get the list of peers calculated to be unchoked.
    * @return peers to unchoke
    */
-  public ArrayList<PEPeer> getUnchokes();
+  ArrayList<PEPeer> getUnchokes();
 }

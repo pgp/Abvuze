@@ -60,11 +60,11 @@ ExternalStimulusHandler
 			}
 			
 			if ( to_add != null ){
-				
-				for (int i=0;i<to_add.size();i++){
-					
-					addListener((ExternalStimulusListener)to_add.get(i));
-				}
+
+                for (Object o : to_add) {
+
+                    addListener((ExternalStimulusListener) o);
+                }
 			}
 		}else{
 						

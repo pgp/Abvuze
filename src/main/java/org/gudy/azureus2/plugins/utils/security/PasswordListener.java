@@ -25,14 +25,14 @@ import java.net.URL;
 public interface 
 PasswordListener 
 {
-	public PasswordAuthentication
+	PasswordAuthentication
 	getAuthentication(
-		String		realm,
-		URL			target );
+            String realm,
+            URL target);
 	
-	public void
+	void
 	setAuthenticationOutcome(
-		String		realm,
-		URL			target,
-		boolean		success );	
+            String realm,
+            URL target,
+            boolean success);
 }

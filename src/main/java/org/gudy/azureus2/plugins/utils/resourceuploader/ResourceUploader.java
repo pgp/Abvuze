@@ -26,21 +26,21 @@ import org.gudy.azureus2.plugins.utils.resourcedownloader.ResourceDownloaderExce
 public interface 
 ResourceUploader 
 {
-	public InputStream
+	InputStream
 	upload()
 	
 		throws ResourceUploaderException;
 	
-	public void
+	void
 	setProperty(
-		String		name,
-		Object		value )
+            String name,
+            Object value)
 	
 		throws ResourceDownloaderException;
 	
-	public Object
+	Object
 	getProperty(
-		String		name )
+            String name)
 	
 		throws ResourceDownloaderException;
 }

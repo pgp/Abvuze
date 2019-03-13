@@ -55,7 +55,7 @@ MCGroupImpl
 			
 
 	private static boolean							overall_suspended;
-	private static Map<String,MCGroupImpl>			singletons	= new HashMap<String, MCGroupImpl>();
+	private static Map<String,MCGroupImpl>			singletons	= new HashMap<>();
 	
 	private static AEMonitor	class_mon 	= new AEMonitor( "MCGroup:class" );
 
@@ -77,7 +77,7 @@ MCGroupImpl
 		
 			String	key = group_address + ":" + group_port + ":" + control_port;
 			
-			MCGroupImpl	singleton = (MCGroupImpl)singletons.get( key );
+			MCGroupImpl	singleton = singletons.get( key );
 			
 			if ( singleton == null ){
 				
@@ -163,12 +163,12 @@ MCGroupImpl
 			
 	protected AEMonitor		this_mon	= new AEMonitor( "MCGroup" );
 
-	private Map<String,Set<InetAddress>>		current_registrations = new HashMap<String, Set<InetAddress>>();
+	private Map<String,Set<InetAddress>>		current_registrations = new HashMap<>();
 		
 	private volatile boolean		instance_suspended;
-	private List<Object[]>			suspended_threads = new ArrayList<Object[]>();
+	private List<Object[]>			suspended_threads = new ArrayList<>();
 	
-	private Map<String,MulticastSocket>		socket_cache = new HashMap<String, MulticastSocket>();
+	private Map<String,MulticastSocket>		socket_cache = new HashMap<>();
 	
 	private
 	MCGroupImpl(
@@ -238,7 +238,7 @@ MCGroupImpl
 		
 			if ( !instance_suspended ){
 				
-				List<Object[]> states = new ArrayList<Object[]>( suspended_threads );
+				List<Object[]> states = new ArrayList<>(suspended_threads);
 				
 				suspended_threads.clear();
 				
@@ -285,9 +285,9 @@ MCGroupImpl
 	
 		throws SocketException
 	{
-		Map<String,Set<InetAddress>>			new_registrations	= new HashMap<String,Set<InetAddress>>();
+		Map<String,Set<InetAddress>>			new_registrations	= new HashMap<>();
 		
-		Map<String,NetworkInterface>			changed_interfaces	= new HashMap<String,NetworkInterface>();
+		Map<String,NetworkInterface>			changed_interfaces	= new HashMap<>();
 		
 		try{
 			this_mon.enter();
@@ -317,10 +317,10 @@ MCGroupImpl
 					
 				if ( old_address_set == null ){
 				
-					old_address_set	= new HashSet<InetAddress>();
+					old_address_set	= new HashSet<>();
 				}
 				
-				Set<InetAddress>	new_address_set = new HashSet<InetAddress>();
+				Set<InetAddress>	new_address_set = new HashSet<>();
 				
 				new_registrations.put( ni_name, new_address_set );
 				
@@ -507,16 +507,16 @@ MCGroupImpl
 		if ( selected_interfaces != null && selected_interfaces.length > 0 ){
 			
 			boolean	ok 	= false;
-			
-			for (int i=0;i<selected_interfaces.length;i++){
-			
-				if ( ni.getName().equalsIgnoreCase( selected_interfaces[i] )){
-					
-					ok	= true;
-					
-					break;
-				}
-			}
+
+            for (String selected_interface : selected_interfaces) {
+
+                if (ni.getName().equalsIgnoreCase(selected_interface)) {
+
+                    ok = true;
+
+                    break;
+                }
+            }
 			
 			return( ok );
 			
@@ -536,7 +536,7 @@ MCGroupImpl
 		try{
 			this_mon.enter();
 		
-			Set<InetAddress>	set = (Set<InetAddress>)current_registrations.get( ni_name );
+			Set<InetAddress>	set = current_registrations.get( ni_name );
 			
 			if ( set == null ){
 				
@@ -926,36 +926,23 @@ MCGroupImpl
 			
 			return;
 		}
-		
-		DatagramSocket	reply_socket	= null;
-			
-		// System.out.println( "sendToMember: add = " + address + ", data = " +new String( data ));
 
-		try{
-			reply_socket = new DatagramSocket( null );
-			
-			reply_socket.setReuseAddress(true);
+        // System.out.println( "sendToMember: add = " + address + ", data = " +new String( data ));
 
-			reply_socket.bind( new InetSocketAddress( group_port ));
-			
-			DatagramPacket reply_packet = new DatagramPacket(data,data.length,address);
-						
-			reply_socket.send( reply_packet );
-			
-		}catch( Throwable e ){
-			
-			throw( new MCGroupException( "sendToMember failed", e ));
-			
-		}finally{
-			
-			if ( reply_socket != null ){
-				
-				try{
-					reply_socket.close();
-					
-				}catch( Throwable e ){
-				}
-			}
-		}	
+        try (DatagramSocket reply_socket = new DatagramSocket(null)) {
+
+            reply_socket.setReuseAddress(true);
+
+            reply_socket.bind(new InetSocketAddress(group_port));
+
+            DatagramPacket reply_packet = new DatagramPacket(data, data.length, address);
+
+            reply_socket.send(reply_packet);
+
+        } catch (Throwable e) {
+
+            throw (new MCGroupException("sendToMember failed", e));
+
+        }
 	}
 }

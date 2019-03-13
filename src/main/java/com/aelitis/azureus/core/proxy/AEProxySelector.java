@@ -26,52 +26,52 @@ import java.net.Proxy;
 public interface 
 AEProxySelector 
 {
-	public Proxy
+	Proxy
 	getActiveProxy();
 	
-	public void
+	void
 	startNoProxy();
 	
-	public void
+	void
 	endNoProxy();
 	
-	public Proxy
+	Proxy
 	setProxy(
-		InetSocketAddress		address,
-		Proxy					proxy );
+            InetSocketAddress address,
+            Proxy proxy);
 	
-	public Proxy
+	Proxy
 	removeProxy(
-		InetSocketAddress		address );
+            InetSocketAddress address);
 	
-	public Proxy
+	Proxy
 	getSOCKSProxy(
-		InetSocketAddress	proxy_address,
-		InetSocketAddress	target );
+            InetSocketAddress proxy_address,
+            InetSocketAddress target);
 	
-	public Proxy
+	Proxy
 	getSOCKSProxy(
-		String				proxy_host,
-		int					proxy_port,
-		InetSocketAddress	target );
+            String proxy_host,
+            int proxy_port,
+            InetSocketAddress target);
 	
-	public void
+	void
 	connectFailed(
-		Proxy				proxy,
-		Throwable			error );
+            Proxy proxy,
+            Throwable error);
 	
-	public long
+	long
 	getLastConnectionTime();
 	
-	public int
+	int
 	getConnectionCount();
 	
-	public long
+	long
 	getLastFailTime();
 	
-	public int
+	int
 	getFailCount();
 	
-	public String
+	String
 	getInfo();
 }

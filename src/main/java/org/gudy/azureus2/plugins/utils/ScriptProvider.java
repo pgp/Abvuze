@@ -27,30 +27,30 @@ import java.util.Map;
 public interface 
 ScriptProvider 
 {
-	public static final String	ST_JAVASCRIPT	= "javascript";
+	String	ST_JAVASCRIPT	= "javascript";
 	
-	public String
+	String
 	getProviderName();
 	
-	public String
+	String
 	getScriptType();
 	
-	public Object
+	Object
 	eval(
-		String					script,
-		Map<String,Object>		bindings )
+            String script,
+            Map<String, Object> bindings)
 		
 		throws Exception;
 	
-	public interface
+	interface
 	ScriptProviderListener
 	{
-		public void
+		void
 		scriptProviderAdded(
-			ScriptProvider 	provider );
+                ScriptProvider provider);
 		
-		public void
+		void
 		scriptProviderRemoved(
-			ScriptProvider 	provider );
+                ScriptProvider provider);
 	}
 }

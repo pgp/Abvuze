@@ -24,14 +24,14 @@ import com.aelitis.azureus.core.dht.transport.udp.impl.DHTUDPPacketRequest;
 public interface 
 DHTUDPRequestHandler 
 {
-	public void
+	void
 	process(
-		DHTUDPPacketRequest		request,
-		boolean					alien );
+            DHTUDPPacketRequest request,
+            boolean alien);
 	
-	public void
+	void
 	process(
-		DHTUDPPacketHandlerStub		packet_handler,
-		DHTUDPPacketRequest			request,
-		boolean						alien );
+            DHTUDPPacketHandlerStub packet_handler,
+            DHTUDPPacketRequest request,
+            boolean alien);
 }

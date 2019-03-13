@@ -31,9 +31,9 @@ import java.net.URL;
 public interface 
 TRTrackerAnnouncerListener 
 {
-	public void
+	void
 	receivedTrackerResponse(
-		TRTrackerAnnouncerResponse	response	);
+            TRTrackerAnnouncerResponse response);
 
 	/**
 	 * This callback indicates if the tracker client has change URL. If "explicit" is true then
@@ -42,13 +42,13 @@ TRTrackerAnnouncerListener
 	 * 
 	 * @param explicit as above
 	 */
-	public void
+    void
 	urlChanged(
-		TRTrackerAnnouncer	announcer,
-		URL					old_url,
-		URL					new_url,
-		boolean				explicit );
+            TRTrackerAnnouncer announcer,
+            URL old_url,
+            URL new_url,
+            boolean explicit);
 		
-	public void
+	void
 	urlRefresh();
 }

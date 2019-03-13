@@ -40,7 +40,7 @@ PieceListImpl
 	convert(
 		List pieceList) 
 	{
-		return new PieceListImpl((PieceMapEntryImpl[])pieceList.toArray(new PieceMapEntryImpl[pieceList.size()]));	
+		return new PieceListImpl((PieceMapEntryImpl[])pieceList.toArray(new PieceMapEntryImpl[0]));
 	}
 	
 	protected

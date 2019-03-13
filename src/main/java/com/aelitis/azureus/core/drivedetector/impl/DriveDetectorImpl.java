@@ -35,9 +35,9 @@ public class DriveDetectorImpl
 {
 	final AEMonitor2 mon_driveDetector = new AEMonitor2("driveDetector");
 
-	final CopyOnWriteList<DriveDetectedListener> listListeners = new CopyOnWriteList<DriveDetectedListener>(1);
+	final CopyOnWriteList<DriveDetectedListener> listListeners = new CopyOnWriteList<>(1);
 	
-	final Map<File, Map> mapDrives = new HashMap<File, Map>(1);
+	final Map<File, Map> mapDrives = new HashMap<>(1);
 	
 	private final AsyncDispatcher	dispatcher = new AsyncDispatcher( "DriveDetector" );
 	
@@ -182,11 +182,10 @@ public class DriveDetectorImpl
 						writer.indent();
 
   					Map driveInfo = mapDrives.get(file);
-  					for (Iterator iter = driveInfo.keySet().iterator(); iter.hasNext();) {
-  						Object key = (Object) iter.next();
-  						Object val = driveInfo.get(key);
-  						writer.println(key + ": " + val);
-  					}
+                        for (Object key : driveInfo.keySet()) {
+                            Object val = driveInfo.get(key);
+                            writer.println(key + ": " + val);
+                        }
 					} finally {
 						writer.exdent();
 					}

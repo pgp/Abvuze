@@ -30,22 +30,22 @@ import com.aelitis.azureus.core.peermanager.messaging.Message;
  */
 public interface RawMessage extends Message {
   
-  public static final int PRIORITY_LOW    = 0;
-  public static final int PRIORITY_NORMAL = 1;
-  public static final int PRIORITY_HIGH   = 2;
+  int PRIORITY_LOW    = 0;
+  int PRIORITY_NORMAL = 1;
+  int PRIORITY_HIGH   = 2;
   
  
   /**
    * Get the message's raw data payload.
    * @return data payload buffers
    */
-  public DirectByteBuffer[] getRawData();
+  DirectByteBuffer[] getRawData();
      
   /**
    * Get the message's queue priority.
    * @return priority
    */
-  public int getPriority();
+  int getPriority();
   
   /**
    * Is this a no-delay message.
@@ -53,14 +53,14 @@ public interface RawMessage extends Message {
    * i.e. force-flushed out the transport.
    * @return true if a no-delay message
    */
-  public boolean isNoDelay();
+  boolean isNoDelay();
     
   /**
    * Set no-delay for this message
    * @param no_delay
    */
-  
-  public void
+
+  void
   setNoDelay();
   
   /**
@@ -68,12 +68,12 @@ public interface RawMessage extends Message {
    * before queueing this message for sending.
    * @return message types; null if no types
    */
-  public Message[] messagesToRemove();
+  Message[] messagesToRemove();
   
   
   /**
    * Get the message this raw message is based upon.
    * @return original message
    */
-  public Message getBaseMessage();
+  Message getBaseMessage();
 }

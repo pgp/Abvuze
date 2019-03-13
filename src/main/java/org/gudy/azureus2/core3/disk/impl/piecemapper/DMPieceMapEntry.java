@@ -25,12 +25,12 @@ import org.gudy.azureus2.core3.disk.impl.DiskManagerFileInfoImpl;
 public interface 
 DMPieceMapEntry 
 {	
-	public DiskManagerFileInfoImpl 
+	DiskManagerFileInfoImpl
 	getFile();
 
-	public long 
+	long
 	getOffset();
 
-	public int
+	int
 	getLength();
 }

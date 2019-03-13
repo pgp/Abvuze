@@ -47,7 +47,7 @@ TagPropertyTrackerHandler
 	private final AzureusCore		azureus_core;
 	final TagManagerImpl	tag_manager;
 	
-	private final Map<String,List<Tag>>	tracker_host_map = new HashMap<String,List<Tag>>();
+	private final Map<String,List<Tag>>	tracker_host_map = new HashMap<>();
 	
 	protected
 	TagPropertyTrackerHandler(
@@ -130,7 +130,7 @@ TagPropertyTrackerHandler
 	{
 		String[] trackers = property.getStringList();
 		
-		Set<String>	tag_hosts = new HashSet<String>( Arrays.asList( trackers ));
+		Set<String>	tag_hosts = new HashSet<>(Arrays.asList(trackers));
 		
 		Tag tag = property.getTag();
 		
@@ -155,7 +155,7 @@ TagPropertyTrackerHandler
 				
 				if ( tags == null ){
 					
-					tags = new ArrayList<Tag>();
+					tags = new ArrayList<>();
 					
 					tracker_host_map.put( host, tags );
 					
@@ -240,7 +240,7 @@ TagPropertyTrackerHandler
 	{
 		Set<String>	hosts = TorrentUtils.getUniqueTrackerHosts( dm.getTorrent());
 		
-		Set<String>	result = new HashSet<String>();
+		Set<String>	result = new HashSet<>();
 		
 			// we do suffix matching (i.e. x.domain matches 'domain') by generating the suffix set
 		
@@ -276,7 +276,7 @@ TagPropertyTrackerHandler
 	getTagsForDownload(
 		DownloadManager		dm )
 	{
-		List<Tag>	result = new ArrayList<Tag>();
+		List<Tag>	result = new ArrayList<>();
 		
 		if ( dm.isPersistent()){
 										

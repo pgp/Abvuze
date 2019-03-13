@@ -28,10 +28,10 @@ import java.net.*;
 public interface 
 TOTorrentAnnounceURLSet
 {
-	public URL[]
+	URL[]
 	getAnnounceURLs();
 	
-	public void
+	void
 	setAnnounceURLs(
-		URL[]		urls );
+            URL[] urls);
 }

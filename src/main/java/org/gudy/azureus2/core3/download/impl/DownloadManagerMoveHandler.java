@@ -138,7 +138,7 @@ public class DownloadManagerMoveHandler extends DownloadManagerMoveHandlerUtils 
 			addFile(result, CURRENT_HANDLER.onRemoval(d, false, false));
 			addFile(result, DownloadManagerDefaultPaths.DEFAULT_HANDLER.onRemoval(d, false, false));
 		}
-		return (File[])result.toArray(new File[result.size()]);
+		return (File[])result.toArray(new File[0]);
 	}
 	
 	private static void addFile(ArrayList l, SaveLocationChange slc) {
@@ -156,8 +156,8 @@ public class DownloadManagerMoveHandler extends DownloadManagerMoveHandlerUtils 
 	public interface
 	MoveCallback
 	{
-		public void
+		void
 		perform(
-			SaveLocationChange		details );
+                SaveLocationChange details);
 	}
 }

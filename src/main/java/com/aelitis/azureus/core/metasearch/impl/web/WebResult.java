@@ -273,25 +273,35 @@ public class WebResult extends Result {
 				long multiplier = 1;
 				long KB_UNIT = 1024;
 				long KIB_UNIT = 1024;
-				if("mb".equals(unit)) {
-					multiplier = KB_UNIT*KB_UNIT;
-				} else if("mib".equals(unit)) {
-					multiplier = KIB_UNIT*KIB_UNIT;
-				} else if("m".equals(unit)) {
-					multiplier = KIB_UNIT*KIB_UNIT;
-				} else if("gb".equals(unit)) {
-					multiplier = KB_UNIT*KB_UNIT*KB_UNIT;
-				} else if("gib".equals(unit)) {
-					multiplier = KIB_UNIT*KIB_UNIT*KIB_UNIT;
-				} else if("g".equals(unit)) {
-					multiplier = KIB_UNIT*KIB_UNIT*KIB_UNIT;
-				} else if("kb".equals(unit)) {
-					multiplier = KB_UNIT;
-				} else if("kib".equals(unit)) {
-					multiplier = KIB_UNIT;
-				} else if("k".equals(unit)) {
-					multiplier = KIB_UNIT;
-				}
+                switch (unit) {
+                    case "mb":
+                        multiplier = KB_UNIT * KB_UNIT;
+                        break;
+                    case "mib":
+                        multiplier = KIB_UNIT * KIB_UNIT;
+                        break;
+                    case "m":
+                        multiplier = KIB_UNIT * KIB_UNIT;
+                        break;
+                    case "gb":
+                        multiplier = KB_UNIT * KB_UNIT * KB_UNIT;
+                        break;
+                    case "gib":
+                        multiplier = KIB_UNIT * KIB_UNIT * KIB_UNIT;
+                        break;
+                    case "g":
+                        multiplier = KIB_UNIT * KIB_UNIT * KIB_UNIT;
+                        break;
+                    case "kb":
+                        multiplier = KB_UNIT;
+                        break;
+                    case "kib":
+                        multiplier = KIB_UNIT;
+                        break;
+                    case "k":
+                        multiplier = KIB_UNIT;
+                        break;
+                }
 				
 				this.size = (long) (base * multiplier);
 			} catch(Throwable e) {

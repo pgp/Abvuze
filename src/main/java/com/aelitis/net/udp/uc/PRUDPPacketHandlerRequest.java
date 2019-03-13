@@ -22,6 +22,6 @@ package com.aelitis.net.udp.uc;
 public interface 
 PRUDPPacketHandlerRequest 
 {
-	public long
+	long
 	getElapsedTime();
 }

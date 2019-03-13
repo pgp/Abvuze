@@ -25,14 +25,14 @@ package com.aelitis.azureus.core.tag;
 public interface 
 TagFeatureNotifications 
 {
-	public int NOTIFY_NONE			= 0x00000000;
-	public int NOTIFY_ON_ADD		= 0x00000001;
-	public int NOTIFY_ON_REMOVE		= 0x00000002;
+	int NOTIFY_NONE			= 0x00000000;
+	int NOTIFY_ON_ADD		= 0x00000001;
+	int NOTIFY_ON_REMOVE		= 0x00000002;
 	
-	public int
+	int
 	getPostingNotifications();
 	
-	public void
+	void
 	setPostingNotifications(
-		int		flags );
+            int flags);
 }

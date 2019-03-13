@@ -26,9 +26,9 @@ package org.gudy.azureus2.core3.config;
  */
 public interface StringIterator {
 
-	public boolean hasNext();
+	boolean hasNext();
 	
-	public String next();
+	String next();
 	
-	public void remove();
+	void remove();
 }

@@ -45,8 +45,8 @@ public class Average {
   //The time the average was last updated (divided by the refreshRate).
   private long lastUpdate;
 
-  //The values
-  private long values[];
+    //The values
+    private long[] values;
 
   /**
    * Private constructor for an Average
@@ -92,13 +92,13 @@ public class Average {
 	  Object[] details = other.getCloneDetails();
   		
   	  values		= (long[])details[0];
-  	  lastUpdate	= ((Long)details[1]).longValue();
+  	  lastUpdate	= (Long) details[1];
   }
   
   private synchronized Object[]
   getCloneDetails()
   {
-	  return( new Object[]{ values, new Long( lastUpdate )} );
+	  return( new Object[]{ values, lastUpdate} );
   }
   
   /**

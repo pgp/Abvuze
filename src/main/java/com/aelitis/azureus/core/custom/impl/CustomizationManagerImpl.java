@@ -21,6 +21,7 @@
 package com.aelitis.azureus.core.custom.impl;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
@@ -100,149 +101,155 @@ CustomizationManagerImpl
 			File[]	files = dir.listFiles();
 			
 			if ( files != null ){
-				
-				for (int i=0;i<files.length;i++){
-					
-					File	file = files[i];
-					
-					String	name = file.getName();
-					
-					if ( !name.endsWith( ".config" )){
-						
-						continue;
-					}
-					
-					FileInputStream	fis = null;
-					
-					boolean	ok = false;
-					
-					System.out.println( "Processing config presets: " + file );
-					
-					try{
-						fis = new FileInputStream( file );
-					
-						Properties props = new Properties();
-					
-						props.load( fis );
-						
-						List<String> errors = new ArrayList<String>();
-						
-						for ( Map.Entry<Object,Object> entry: props.entrySet()){
-						
-							String	config_name 	= (String)entry.getKey();
-							String	config_value 	= (String)entry.getValue();
-							
-							System.out.println( "\t" + config_name + " -> " + config_value );
-							
-							try{
-								int	pos = config_value.indexOf( ':' );
-								
-								if ( pos == -1 ){
-									
-									throw( new Exception( "Value is invalid - missing type specification" ));
-								}
-								
-								String	config_type = config_value.substring( 0, pos ).trim().toLowerCase();
-								
-								config_value = config_value.substring( pos+1 );
-								
-								if ( config_type.equals( "bool" )){
-									
-									config_value = config_value.trim().toLowerCase();
-									
-									boolean b;
-									
-									if ( config_value.equals( "true" )){
-										
-										b = true;
-										
-									}else if ( config_value.equals( "false" )){
-										
-										b = false;
-										
-									}else{
-										
-										throw( new Exception( "Invalid boolean value" ));
-									}
-	
-									COConfigurationManager.setParameter( config_name, b );
-									
-								}else if ( config_type.equals( "long" )){
-									
-									long	l = Long.parseLong( config_value.trim());
-									
-									COConfigurationManager.setParameter( config_name, l );
-									
-								}else if ( config_type.equals( "float" )){
-									
-									float	f = Float.parseFloat( config_value.trim());
-									
-									COConfigurationManager.setParameter( config_name, f );
-									
-								}else if ( config_type.equals( "string" )){
-									
-									COConfigurationManager.setParameter( config_name, config_value );
-									
-								}else if ( config_type.equals( "byte[]" )){
-									
-									COConfigurationManager.setParameter( config_name, ByteFormatter.decodeString( config_value ));
 
-								}else if ( config_type.equals( "list" )){
-									
-									COConfigurationManager.setParameter( config_name, (List)BDecoder.decode( ByteFormatter.decodeString( config_value )));
-									
-								}else if ( config_type.equals( "map" )){
-									
-									COConfigurationManager.setParameter( config_name, (Map)BDecoder.decode( ByteFormatter.decodeString( config_value )));
+                for (File file : files) {
 
-								}else{
-									
-									throw( new Exception( "Value is invalid - unknown type specifier" ));
-								}
-								
-								changed = true;
-								
-							}catch( Throwable e ){
-								
-								errors.add( e.getMessage() + ": " + config_name + "=" + entry.getValue());
-							}
-						}
-						
-						if ( errors.size() > 0 ){
-							
-							throw( new Exception( "Found " + errors.size() + " errors: " + errors.toString()));
-						}
-						
-						ok = true;
-						
-						System.out.println( "Presets applied" );
-						
-					}catch( Throwable e ){
-						
-						System.err.println( "Failed to process custom .config file " + file );
-						
-						e.printStackTrace();
-						
-					}finally{
-						
-						if ( fis != null ){
-							
-							try{
-								fis.close();
-								
-							}catch( Throwable e ){
-								
-								e.printStackTrace();
-							}
-						}
-						
-						File	rename_target = new File( file.getAbsolutePath() + (ok?".applied":".bad" ));
-							
-						rename_target.delete();
-						
-						file.renameTo( rename_target );
-					}
-				}
+                    String name = file.getName();
+
+                    if (!name.endsWith(".config")) {
+
+                        continue;
+                    }
+
+                    FileInputStream fis = null;
+
+                    boolean ok = false;
+
+                    System.out.println("Processing config presets: " + file);
+
+                    try {
+                        fis = new FileInputStream(file);
+
+                        Properties props = new Properties();
+
+                        props.load(fis);
+
+                        List<String> errors = new ArrayList<>();
+
+                        for (Map.Entry<Object, Object> entry : props.entrySet()) {
+
+                            String config_name = (String) entry.getKey();
+                            String config_value = (String) entry.getValue();
+
+                            System.out.println("\t" + config_name + " -> " + config_value);
+
+                            try {
+                                int pos = config_value.indexOf(':');
+
+                                if (pos == -1) {
+
+                                    throw (new Exception("Value is invalid - missing type specification"));
+                                }
+
+                                String config_type = config_value.substring(0, pos).trim().toLowerCase();
+
+                                config_value = config_value.substring(pos + 1);
+
+                                switch (config_type) {
+                                    case "bool":
+
+                                        config_value = config_value.trim().toLowerCase();
+
+                                        boolean b;
+
+                                        if (config_value.equals("true")) {
+
+                                            b = true;
+
+                                        } else if (config_value.equals("false")) {
+
+                                            b = false;
+
+                                        } else {
+
+                                            throw (new Exception("Invalid boolean value"));
+                                        }
+
+                                        COConfigurationManager.setParameter(config_name, b);
+
+                                        break;
+                                    case "long":
+
+                                        long l = Long.parseLong(config_value.trim());
+
+                                        COConfigurationManager.setParameter(config_name, l);
+
+                                        break;
+                                    case "float":
+
+                                        float f = Float.parseFloat(config_value.trim());
+
+                                        COConfigurationManager.setParameter(config_name, f);
+
+                                        break;
+                                    case "string":
+
+                                        COConfigurationManager.setParameter(config_name, config_value);
+
+                                        break;
+                                    case "byte[]":
+
+                                        COConfigurationManager.setParameter(config_name, ByteFormatter.decodeString(config_value));
+
+                                        break;
+                                    case "list":
+
+                                        COConfigurationManager.setParameter(config_name, (List) BDecoder.decode(ByteFormatter.decodeString(config_value)));
+
+                                        break;
+                                    case "map":
+
+                                        COConfigurationManager.setParameter(config_name, BDecoder.decode(ByteFormatter.decodeString(config_value)));
+
+                                        break;
+                                    default:
+
+                                        throw (new Exception("Value is invalid - unknown type specifier"));
+                                }
+
+                                changed = true;
+
+                            } catch (Throwable e) {
+
+                                errors.add(e.getMessage() + ": " + config_name + "=" + entry.getValue());
+                            }
+                        }
+
+                        if (errors.size() > 0) {
+
+                            throw (new Exception("Found " + errors.size() + " errors: " + errors.toString()));
+                        }
+
+                        ok = true;
+
+                        System.out.println("Presets applied");
+
+                    } catch (Throwable e) {
+
+                        System.err.println("Failed to process custom .config file " + file);
+
+                        e.printStackTrace();
+
+                    } finally {
+
+                        if (fis != null) {
+
+                            try {
+                                fis.close();
+
+                            } catch (Throwable e) {
+
+                                e.printStackTrace();
+                            }
+                        }
+
+                        File rename_target = new File(file.getAbsolutePath() + (ok ? ".applied" : ".bad"));
+
+                        rename_target.delete();
+
+                        file.renameTo(rename_target);
+                    }
+                }
 			}
 		}
 		
@@ -270,113 +277,109 @@ CustomizationManagerImpl
 						VuzeFile[]		files,
 						int				expected_types )
 					{
-						for (int i=0;i<files.length;i++){
-							
-							VuzeFile	vf = files[i];
-							
-							VuzeFileComponent[] comps = vf.getComponents();
-							
-							for (int j=0;j<comps.length;j++){
-								
-								VuzeFileComponent comp = comps[j];
-								
-								if ( comp.getType() == VuzeFileComponent.COMP_TYPE_CUSTOMIZATION ){
-									
-									try{
-										Map map = comp.getContent();
-										
-										((CustomizationManagerImpl)getSingleton()).importCustomization( map );
-										
-										comp.setProcessed();
-										
-									}catch( Throwable e ){
-										
-										Debug.printStackTrace(e);
-									}
-								}else if ( comp.getType() == VuzeFileComponent.COMP_TYPE_CONFIG_SETTINGS ){
-									
-									try{
-										Map map = comp.getContent();
-										
-										String	name = new String((byte[])map.get( "name" ));
+                        for (VuzeFile vf : files) {
 
-										UIManager ui_manager = StaticUtilities.getUIManager( 120*1000 );
-										
-										String details = MessageText.getString(
-												"custom.settings.import",
-												new String[]{ name });
-										
-										long res = ui_manager.showMessageBox(
-												"custom.settings.import.title",
-												"!" + details + "!",
-												UIManagerEvent.MT_YES | UIManagerEvent.MT_NO );
-										
-										if ( res == UIManagerEvent.MT_YES ){	
-											
-											Map<String,Object> config = (Map<String,Object>)map.get( "settings" );
-											
-											int	num_set = 0;
-											
-											for ( Map.Entry<String,Object> entry: config.entrySet()){
-												
-												String	key 	= entry.getKey();
-												Object	value 	= entry.getValue();
-												
-												if ( value instanceof Long ){
-													
-													COConfigurationManager.setParameter( key, (Long)value );
-													
-												}else if ( value instanceof byte[] ){
-													
-													COConfigurationManager.setParameter( key, (byte[])value );
-													
-												}else if ( value instanceof List ){
-													
-													COConfigurationManager.setParameter( key, (List)value );
-													
-												}else if ( value instanceof Map ){
-													
-													COConfigurationManager.setParameter( key, (Map)value );
-													
-												}else{
-													
-													Debug.out( "Unsupported entry: " + key + "=" + value );
-												}
-												
-												num_set++;
-												
-											}
-											
-											Long l_restart = (Long)map.get( "restart" );
-											
-											boolean restart = l_restart != null && l_restart != 0;
-														
-											String restart_text = "";
-											
-											if ( restart ){
-												
-												restart_text = "\r\n\r\n" + MessageText.getString( "ConfigView.section.security.restart.title" );
-											}
-											
-											String res_details = MessageText.getString(
-													"custom.settings.import.res",
-													new String[]{ String.valueOf( num_set ), restart_text });
-											
-											ui_manager.showMessageBox(
-													"custom.settings.import.res.title",
-													"!" + res_details + "!",
-													UIManagerEvent.MT_OK );
-										}
-										
-										comp.setProcessed();
-										
-									}catch( Throwable e ){
-										
-										Debug.printStackTrace(e);
-									}
-								}
-							}
-						}
+                            VuzeFileComponent[] comps = vf.getComponents();
+
+                            for (VuzeFileComponent comp : comps) {
+
+                                if (comp.getType() == VuzeFileComponent.COMP_TYPE_CUSTOMIZATION) {
+
+                                    try {
+                                        Map map = comp.getContent();
+
+                                        ((CustomizationManagerImpl) getSingleton()).importCustomization(map);
+
+                                        comp.setProcessed();
+
+                                    } catch (Throwable e) {
+
+                                        Debug.printStackTrace(e);
+                                    }
+                                } else if (comp.getType() == VuzeFileComponent.COMP_TYPE_CONFIG_SETTINGS) {
+
+                                    try {
+                                        Map map = comp.getContent();
+
+                                        String name = new String((byte[]) map.get("name"));
+
+                                        UIManager ui_manager = StaticUtilities.getUIManager(120 * 1000);
+
+                                        String details = MessageText.getString(
+                                                "custom.settings.import",
+                                                new String[]{name});
+
+                                        long res = ui_manager.showMessageBox(
+                                                "custom.settings.import.title",
+                                                "!" + details + "!",
+                                                UIManagerEvent.MT_YES | UIManagerEvent.MT_NO);
+
+                                        if (res == UIManagerEvent.MT_YES) {
+
+                                            Map<String, Object> config = (Map<String, Object>) map.get("settings");
+
+                                            int num_set = 0;
+
+                                            for (Map.Entry<String, Object> entry : config.entrySet()) {
+
+                                                String key = entry.getKey();
+                                                Object value = entry.getValue();
+
+                                                if (value instanceof Long) {
+
+                                                    COConfigurationManager.setParameter(key, (Long) value);
+
+                                                } else if (value instanceof byte[]) {
+
+                                                    COConfigurationManager.setParameter(key, (byte[]) value);
+
+                                                } else if (value instanceof List) {
+
+                                                    COConfigurationManager.setParameter(key, (List) value);
+
+                                                } else if (value instanceof Map) {
+
+                                                    COConfigurationManager.setParameter(key, (Map) value);
+
+                                                } else {
+
+                                                    Debug.out("Unsupported entry: " + key + "=" + value);
+                                                }
+
+                                                num_set++;
+
+                                            }
+
+                                            Long l_restart = (Long) map.get("restart");
+
+                                            boolean restart = l_restart != null && l_restart != 0;
+
+                                            String restart_text = "";
+
+                                            if (restart) {
+
+                                                restart_text = "\r\n\r\n" + MessageText.getString("ConfigView.section.security.restart.title");
+                                            }
+
+                                            String res_details = MessageText.getString(
+                                                    "custom.settings.import.res",
+                                                    new String[]{String.valueOf(num_set), restart_text});
+
+                                            ui_manager.showMessageBox(
+                                                    "custom.settings.import.res.title",
+                                                    "!" + res_details + "!",
+                                                    UIManagerEvent.MT_OK);
+                                        }
+
+                                        comp.setProcessed();
+
+                                    } catch (Throwable e) {
+
+                                        Debug.printStackTrace(e);
+                                    }
+                                }
+                            }
+                        }
 					}
 				});	
 		 
@@ -396,30 +399,28 @@ CustomizationManagerImpl
 	    if ( customization_file_map.get( active ) == null ){
 	    	
 	    		// hmm, its been deleted or not set yet. look for new ones
-	    	
-	    	Iterator it = customization_file_map.keySet().iterator();
-	    	
-	    	while( it.hasNext()){
-	    		
-	    		String	name = (String)it.next();
-	    		
-	    		final String version_key = "customization.name." + name + ".version";
-	    		
-	    		String existing_version = COConfigurationManager.getStringParameter( version_key, "0" );
-	    			
-	    		if ( existing_version.equals( "0" )){
-	    			
-	    			active = name;
-	    			
-	    			String version = ((String[])customization_file_map.get( name ))[0];
-	    			
-	    			COConfigurationManager.setParameter( "customization.active.name", active );
-	    			
-	    			COConfigurationManager.setParameter( version_key, version );
-	    			
-	    			break;
-	    		}
-	    	}
+
+            for (Object o : customization_file_map.keySet()) {
+
+                String name = (String) o;
+
+                final String version_key = "customization.name." + name + ".version";
+
+                String existing_version = COConfigurationManager.getStringParameter(version_key, "0");
+
+                if (existing_version.equals("0")) {
+
+                    active = name;
+
+                    String version = ((String[]) customization_file_map.get(name))[0];
+
+                    COConfigurationManager.setParameter("customization.active.name", active);
+
+                    COConfigurationManager.setParameter(version_key, version);
+
+                    break;
+                }
+            }
 	    }
 	    	
 	    synchronized( this ){
@@ -437,60 +438,58 @@ CustomizationManagerImpl
 			File[]	files = dir.listFiles();
 			
 			if ( files != null ){
-				
-				for (int i=0;i<files.length;i++){
-					
-					File	file = files[i];
-					
-					String	name = file.getName();
-					
-					if ( !name.endsWith( ".zip" )){
-						
-						if ( !name.contains( ".config" )){
-						
-							logInvalid( file );
-						}
-						
-						continue;
-					}
-					
-					String	base = name.substring( 0, name.length() - 4 );
-					
-					int	u_pos = base.lastIndexOf( '_' );
-				
-					if ( u_pos == -1 ){
-						
-						logInvalid( file );
-						
-						continue;
-					}
-					
-					String	lhs = base.substring(0,u_pos).trim();
-					String	rhs	= base.substring(u_pos+1).trim();
-					
-					if ( lhs.length() == 0 || !Constants.isValidVersionFormat( rhs )){
-						
-						logInvalid( file );
-						
-						continue;
-					}
-					
-					String[]	details = (String[])customization_file_map.get( lhs );
-					
-					if ( details == null ){
-						
-						customization_file_map.put( lhs, new String[]{ rhs, file.getAbsolutePath()});
-						
-					}else{
-						
-						String	old_version = details[0];
-						
-						if ( Constants.compareVersions( old_version, rhs ) < 0 ){
-							
-							customization_file_map.put( lhs, new String[]{ rhs, file.getAbsolutePath()});
-						}
-					}
-				}
+
+                for (File file : files) {
+
+                    String name = file.getName();
+
+                    if (!name.endsWith(".zip")) {
+
+                        if (!name.contains(".config")) {
+
+                            logInvalid(file);
+                        }
+
+                        continue;
+                    }
+
+                    String base = name.substring(0, name.length() - 4);
+
+                    int u_pos = base.lastIndexOf('_');
+
+                    if (u_pos == -1) {
+
+                        logInvalid(file);
+
+                        continue;
+                    }
+
+                    String lhs = base.substring(0, u_pos).trim();
+                    String rhs = base.substring(u_pos + 1).trim();
+
+                    if (lhs.length() == 0 || !Constants.isValidVersionFormat(rhs)) {
+
+                        logInvalid(file);
+
+                        continue;
+                    }
+
+                    String[] details = (String[]) customization_file_map.get(lhs);
+
+                    if (details == null) {
+
+                        customization_file_map.put(lhs, new String[]{rhs, file.getAbsolutePath()});
+
+                    } else {
+
+                        String old_version = details[0];
+
+                        if (Constants.compareVersions(old_version, rhs) < 0) {
+
+                            customization_file_map.put(lhs, new String[]{rhs, file.getAbsolutePath()});
+                        }
+                    }
+                }
 			}
 		}
 	}
@@ -509,9 +508,9 @@ CustomizationManagerImpl
 		throws CustomizationException
 	{
 		try{
-			String	name 	= new String((byte[])map.get( "name" ), "UTF-8" );
+			String	name 	= new String((byte[])map.get( "name" ), StandardCharsets.UTF_8);
 			
-			String	version = new String((byte[])map.get( "version" ), "UTF-8" );
+			String	version = new String((byte[])map.get( "version" ), StandardCharsets.UTF_8);
 			
 			if ( !Constants.isValidVersionFormat( version )){
 				
@@ -641,31 +640,29 @@ CustomizationManagerImpl
 		List	result = new ArrayList();
 		
 		synchronized( this ){
-			
-			Iterator	it = customization_file_map.entrySet().iterator();
-			
-			while( it.hasNext()){
-				
-				Map.Entry	entry = (Map.Entry)it.next();
-				
-				String		name = (String)entry.getKey();
-				String[]	bits = (String[])entry.getValue();
-				
-				String	version = (String)bits[0];
-				File	file	= new File(bits[1]);
-				
-				try{
-					
-					CustomizationImpl cust = new CustomizationImpl( this, name, version, file );
-					
-					result.add( cust );
-					
-				}catch( Throwable e ){
-				}
-			}
+
+            for (Object o : customization_file_map.entrySet()) {
+
+                Map.Entry entry = (Map.Entry) o;
+
+                String name = (String) entry.getKey();
+                String[] bits = (String[]) entry.getValue();
+
+                String version = bits[0];
+                File file = new File(bits[1]);
+
+                try {
+
+                    CustomizationImpl cust = new CustomizationImpl(this, name, version, file);
+
+                    result.add(cust);
+
+                } catch (Throwable e) {
+                }
+            }
 		}
 		
-		return((Customization[])result.toArray(new Customization[result.size()]));
+		return((Customization[])result.toArray(new Customization[0]));
 	}
 	
 	public static void
@@ -697,14 +694,14 @@ CustomizationManagerImpl
 			list.add( 45 );
 			
 			config.put( "test.a10", "Hello mum" );
-			config.put( "test.a11", new Long(100));
+			config.put( "test.a11", 100L);
 			config.put( "test.a13", list );
 			
 			Map	map = new HashMap();
 			
 			map.put( "name", "My Proxy Settings" );
 			map.put( "settings", config );
-			map.put( "restart", new Long( 1 ));
+			map.put( "restart", 1L);
 			
 			vf.addComponent( VuzeFileComponent.COMP_TYPE_CONFIG_SETTINGS, map );
 			

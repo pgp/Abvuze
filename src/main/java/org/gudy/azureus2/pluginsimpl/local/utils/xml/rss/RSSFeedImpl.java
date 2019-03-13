@@ -82,17 +82,15 @@ RSSFeedImpl
 				
 				SimpleXMLParserDocumentNode[]	xml_channels = doc.getChildren();
 
-				for (int i=0;i<xml_channels.length;i++){
-					
-					SimpleXMLParserDocumentNode	xml_channel = xml_channels[i];
-					
-					String	name = xml_channel.getName().toLowerCase();
-					
-					if ( name.equals("channel")){
-						
-						chans.add( new RSSChannelImpl( xml_channel, false ));	
-					}
-				}
+                for (SimpleXMLParserDocumentNode xml_channel : xml_channels) {
+
+                    String name = xml_channel.getName().toLowerCase();
+
+                    if (name.equals("channel")) {
+
+                        chans.add(new RSSChannelImpl(xml_channel, false));
+                    }
+                }
 			}
 			
 			channels	= new RSSChannel[ chans.size()];

@@ -62,13 +62,13 @@ UpdateManagerImpl
 
 	private AzureusCore	azureus_core;
 		
-	private List<UpdateCheckInstanceImpl>	checkers = new ArrayList<UpdateCheckInstanceImpl>();
+	private List<UpdateCheckInstanceImpl>	checkers = new ArrayList<>();
 	
-	private List<UpdatableComponentImpl>	components 				= new ArrayList<UpdatableComponentImpl>();
+	private List<UpdatableComponentImpl>	components 				= new ArrayList<>();
 	private List	listeners				= new ArrayList();
 	private List	verification_listeners	= new ArrayList();
 	
-	private List<UpdateInstaller>	installers	= new ArrayList<UpdateInstaller>();
+	private List<UpdateInstaller>	installers	= new ArrayList<>();
 	
 	protected AEMonitor	this_mon 	= new AEMonitor( "UpdateManager" );
 
@@ -117,7 +117,7 @@ UpdateManagerImpl
 		try{
 			this_mon.enter();
 
-			return( checkers.toArray( new UpdateCheckInstance[ checkers.size()]));
+			return( checkers.toArray(new UpdateCheckInstance[0]));
 			
 		}finally{
 			
@@ -148,11 +148,11 @@ UpdateManagerImpl
 			checkers.add( res );
 			
 			res.addListener( this );
-			
-			for (int i=0;i<listeners.size();i++){
-				
-				((UpdateManagerListener)listeners.get(i)).checkInstanceCreated( res );
-			}
+
+            for (Object listener : listeners) {
+
+                ((UpdateManagerListener) listener).checkInstanceCreated(res);
+            }
 			
 			return( res );
 			
@@ -188,11 +188,11 @@ UpdateManagerImpl
 			checkers.add( res );
 			
 			res.addListener( this );
-			
-			for (int i=0;i<listeners.size();i++){
-				
-				((UpdateManagerListener)listeners.get(i)).checkInstanceCreated( res );
-			}
+
+            for (Object listener : listeners) {
+
+                ((UpdateManagerListener) listener).checkInstanceCreated(res);
+            }
 			
 			return( res );
 			
@@ -338,24 +338,24 @@ UpdateManagerImpl
 			}catch( AEVerifierException e ){
 								
 				if ( (!force) && e.getFailureType() == AEVerifierException.FT_SIGNATURE_MISSING ){
-					
-					for (int i=0;i<verification_listeners.size();i++){
-						
-						try{
-							queried	= true;
-							
-							if ( ((UpdateManagerVerificationListener)verification_listeners.get(i)).acceptUnVerifiedUpdate(
-									update )){
-								
-								ok	= true;
-								
-								return( new FileInputStream( temp ));
-							}
-						}catch( Throwable f ){
-							
-							Debug.printStackTrace(f);
-						}
-					}
+
+                    for (Object verification_listener : verification_listeners) {
+
+                        try {
+                            queried = true;
+
+                            if (((UpdateManagerVerificationListener) verification_listener).acceptUnVerifiedUpdate(
+                                    update)) {
+
+                                ok = true;
+
+                                return (new FileInputStream(temp));
+                            }
+                        } catch (Throwable f) {
+
+                            Debug.printStackTrace(f);
+                        }
+                    }
 				}
 				
 				failure	= e;
@@ -382,17 +382,17 @@ UpdateManagerImpl
 					
 					failure = new UpdateException( "Verification failed" );
 				}
-				
-				for (int i=0;i<verification_listeners.size();i++){
-					
-					try{
-						((UpdateManagerVerificationListener)verification_listeners.get(i)).verificationFailed( update, failure );
-	
-					}catch( Throwable f ){
-						
-						Debug.printStackTrace(f);
-					}
-				}
+
+                for (Object verification_listener : verification_listeners) {
+
+                    try {
+                        ((UpdateManagerVerificationListener) verification_listener).verificationFailed(update, failure);
+
+                    } catch (Throwable f) {
+
+                        Debug.printStackTrace(f);
+                    }
+                }
 			}
 		}
 	}

@@ -258,7 +258,7 @@ public class InitialisationFunctions
 				public TranscodeTarget[]
            		getTranscodeTargets()
 				{
-					List<TranscodeTarget> result = new ArrayList<TranscodeTarget>();
+					List<TranscodeTarget> result = new ArrayList<>();
 					
 					if ( !COConfigurationManager.getStringParameter("ui").equals("az2")){
 
@@ -306,7 +306,7 @@ public class InitialisationFunctions
 											public TranscodeProfile[]
 											getProfiles()
 											{		
-												List<TranscodeProfile>	ps = new ArrayList<TranscodeProfile>(); 
+												List<TranscodeProfile>	ps = new ArrayList<>();
 	
 												com.aelitis.azureus.core.devices.TranscodeProfile[] profs = dmr.getTranscodeProfiles();	
 												
@@ -351,7 +351,7 @@ public class InitialisationFunctions
 													}
 												}
 												
-												return( ps.toArray( new TranscodeProfile[ ps.size()]));
+												return( ps.toArray(new TranscodeProfile[0]));
 											}
 										});					
 								}
@@ -376,7 +376,7 @@ public class InitialisationFunctions
 							}
 						});
 					
-					return( result.toArray( new TranscodeTarget[result.size()]));
+					return( result.toArray(new TranscodeTarget[0]));
 				}
 				  
 				

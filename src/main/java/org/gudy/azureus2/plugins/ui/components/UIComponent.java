@@ -27,40 +27,40 @@ package org.gudy.azureus2.plugins.ui.components;
 public interface 
 UIComponent 
 {
-	public static final String PT_ENABLED		= "enabled";		// Boolean
-	public static final String PT_VALUE			= "value";			// Depends on component type
-	public static final String PT_VISIBLE		= "visible";		// Boolean
-	public static final String PT_WIDTH_HINT	= "whint";			// Integer
-	public static final String PT_HEIGHT_HINT	= "hhint";			// Integer
+	String PT_ENABLED		= "enabled";		// Boolean
+	String PT_VALUE			= "value";			// Depends on component type
+	String PT_VISIBLE		= "visible";		// Boolean
+	String PT_WIDTH_HINT	= "whint";			// Integer
+	String PT_HEIGHT_HINT	= "hhint";			// Integer
 	
-	public void
+	void
 	setEnabled(
-		boolean		enabled );
+            boolean enabled);
 	
-	public boolean
+	boolean
 	getEnabled();
 	
-	public void
+	void
 	setVisible(
-		boolean		visible );
+            boolean visible);
 	
-	public boolean
+	boolean
 	getVisible();
 	
-	public void
+	void
 	setProperty(
-		String	property_type,
-		Object	property_value );
+            String property_type,
+            Object property_value);
 	
-	public Object
+	Object
 	getProperty(
-		String		property_type );
+            String property_type);
 	
-	public void
+	void
 	addPropertyChangeListener(
-		UIPropertyChangeListener	l );
+            UIPropertyChangeListener l);
 	
-	public void
+	void
 	removePropertyChangeListener(
-		UIPropertyChangeListener	l );
+            UIPropertyChangeListener l);
 }

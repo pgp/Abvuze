@@ -117,14 +117,14 @@ public class Alias extends OptionsConsoleCommand {
 	private void addAlias(ConsoleInput ci, String aliasName, List argList) {
 //		ci.out.println("adding alias: " + aliasName);
 		StringBuilder aliasText = new StringBuilder();
-		for (Iterator iter = argList.iterator(); iter.hasNext();) {
-			String arg = (String) iter.next();
-			if(arg.contains(" "))
-				aliasText.append("\"").append(arg).append("\"");
-			else
-				aliasText.append(arg);
-			aliasText.append(" ");
-		}
+        for (Object o : argList) {
+            String arg = (String) o;
+            if (arg.contains(" "))
+                aliasText.append("\"").append(arg).append("\"");
+            else
+                aliasText.append(arg);
+            aliasText.append(" ");
+        }
 		ci.aliases.put(aliasName, aliasText.toString());
 		ci.saveAliases();
 		printAlias(ci, aliasName);
@@ -135,10 +135,10 @@ public class Alias extends OptionsConsoleCommand {
 	 * @param out
 	 */
 	private void printAliases(ConsoleInput ci) {
-		for (Iterator iter = ci.aliases.keySet().iterator(); iter.hasNext();) {
-			String aliasName = (String)iter.next();
-			printAlias(ci, aliasName);
-		}
+        for (Object o : ci.aliases.keySet()) {
+            String aliasName = (String) o;
+            printAlias(ci, aliasName);
+        }
 	}
 
 }

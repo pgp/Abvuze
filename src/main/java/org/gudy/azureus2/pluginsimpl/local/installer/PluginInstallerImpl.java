@@ -27,6 +27,7 @@ package org.gudy.azureus2.pluginsimpl.local.installer;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.gudy.azureus2.core3.internat.MessageText;
@@ -81,7 +82,7 @@ PluginInstallerImpl
 	
 	private PluginManager	manager;
 	
-	private CopyOnWriteList<PluginInstallerListener>			listeners	 = new CopyOnWriteList<PluginInstallerListener>();
+	private CopyOnWriteList<PluginInstallerListener>			listeners	 = new CopyOnWriteList<>();
 	
 	private AsyncDispatcher		add_file_install_dispatcher;
 	
@@ -99,46 +100,42 @@ PluginInstallerImpl
 						VuzeFile[]		files,
 						int				expected_types )
 					{
-						for (int i=0;i<files.length;i++){
-							
-							VuzeFile	vf = files[i];
-							
-							VuzeFileComponent[] comps = vf.getComponents();
-							
-							for (int j=0;j<comps.length;j++){
-								
-								VuzeFileComponent comp = comps[j];
-								
-								if ( comp.getType() == VuzeFileComponent.COMP_TYPE_PLUGIN ){
-									
-									try{
-										Map	content = comp.getContent();
-										
-										String	id 		= new String((byte[])content.get( "id" ), "UTF-8" );
-										String	version = new String((byte[])content.get( "version" ), "UTF-8" );
-										String	suffix	= ((Long)content.get( "is_jar" )).longValue()==1?"jar":"zip";
-										
-										byte[]	plugin_file = (byte[])content.get( "file" );
-										
-										File temp_dir = AETemporaryFileHandler.createTempDir();
-										
-										File temp_file = new File( temp_dir, id + "_" + version + "." + suffix );
-										
-										FileUtil.copyFile( new ByteArrayInputStream( plugin_file ), temp_file );
+                        for (VuzeFile vf : files) {
 
-										FilePluginInstaller installer = installFromFile( temp_file );
+                            VuzeFileComponent[] comps = vf.getComponents();
 
-										addFileInstallOperation( installer );
-										
-										comp.setProcessed();
-										
-									}catch( Throwable e ){
-										
-										Debug.printStackTrace(e);
-									}
-								}
-							}
-						}
+                            for (VuzeFileComponent comp : comps) {
+
+                                if (comp.getType() == VuzeFileComponent.COMP_TYPE_PLUGIN) {
+
+                                    try {
+                                        Map content = comp.getContent();
+
+                                        String id = new String((byte[]) content.get("id"), StandardCharsets.UTF_8);
+                                        String version = new String((byte[]) content.get("version"), StandardCharsets.UTF_8);
+                                        String suffix = (Long) content.get("is_jar") == 1 ? "jar" : "zip";
+
+                                        byte[] plugin_file = (byte[]) content.get("file");
+
+                                        File temp_dir = AETemporaryFileHandler.createTempDir();
+
+                                        File temp_file = new File(temp_dir, id + "_" + version + "." + suffix);
+
+                                        FileUtil.copyFile(new ByteArrayInputStream(plugin_file), temp_file);
+
+                                        FilePluginInstaller installer = installFromFile(temp_file);
+
+                                        addFileInstallOperation(installer);
+
+                                        comp.setProcessed();
+
+                                    } catch (Throwable e) {
+
+                                        Debug.printStackTrace(e);
+                                    }
+                                }
+                            }
+                        }
 					}
 				});
 	}
@@ -281,55 +278,53 @@ PluginInstallerImpl
 			SFPluginDetails[]	details = loader.getPluginDetails();
 
 			List	res = new ArrayList();
-				
-			for (int i=0;i<details.length;i++){
-				
-				SFPluginDetails	detail = details[i];
-				
-				String	name 	= detail.getId();
-				
-				String	version = "";
-				
-				if ( Constants.isCVSVersion()){
-					
-					version = detail.getCVSVersion();
-				}
-				
-				if ( version == null || version.length() == 0 || !Character.isDigit(version.charAt(0))){
-					
-					version = detail.getVersion();
-					
-				}else{
-					
-						// if cvs version and non-cvs version are the same then show the
-						// non-cvs version
-					
-					String	non_cvs_version = detail.getVersion();
-					
-					if ( version.equals( non_cvs_version + "_CVS" )){
-						
-						version = non_cvs_version;
-					}
-				}
-				
-				if ( name.startsWith( "azplatform" ) || name.equals( "azupdater" )){
-					
-						// skip built in ones we don't want to let user install directly
-						// not the cleanest of fixes, but it'll do for the moment
-					
-				}else if ( version == null || version.length() == 0 || !Character.isDigit(version.charAt(0))){
-					
-						// dodgy version
-					
-				}else if ( detail.getCategory().equalsIgnoreCase("hidden")){
-					
-						// not public
-					
-				}else{
-					
-					res.add( new StandardPluginImpl( this, details[i], version ));
-				}
-			}
+
+            for (SFPluginDetails detail : details) {
+
+                String name = detail.getId();
+
+                String version = "";
+
+                if (Constants.isCVSVersion()) {
+
+                    version = detail.getCVSVersion();
+                }
+
+                if (version == null || version.length() == 0 || !Character.isDigit(version.charAt(0))) {
+
+                    version = detail.getVersion();
+
+                } else {
+
+                    // if cvs version and non-cvs version are the same then show the
+                    // non-cvs version
+
+                    String non_cvs_version = detail.getVersion();
+
+                    if (version.equals(non_cvs_version + "_CVS")) {
+
+                        version = non_cvs_version;
+                    }
+                }
+
+                if (name.startsWith("azplatform") || name.equals("azupdater")) {
+
+                    // skip built in ones we don't want to let user install directly
+                    // not the cleanest of fixes, but it'll do for the moment
+
+                } else if (version == null || version.length() == 0 || !Character.isDigit(version.charAt(0))) {
+
+                    // dodgy version
+
+                } else if (detail.getCategory().equalsIgnoreCase("hidden")) {
+
+                    // not public
+
+                } else {
+
+                    res.add(new StandardPluginImpl(this, detail, version));
+                }
+            }
 			
 			StandardPlugin[]	res_a = new StandardPlugin[res.size()];
 
@@ -354,54 +349,52 @@ PluginInstallerImpl
   		
   			SFPluginDetails[]	details = loader.getPluginDetails();
 
-				
-  			for (int i=0;i<details.length;i++){
-  				
-  				SFPluginDetails	detail = details[i];
-  				
-  				String	name 	= detail.getId();
-  				  				
-  				if ( name.equals( id )){
-  					
-	  				String	version = "";
-	  				
-	  				if ( Constants.isCVSVersion()){
-	  					
-	  					version = detail.getCVSVersion();
-	  				}
-	  				
-	  				if ( version == null || version.length() == 0 || !Character.isDigit(version.charAt(0))){
-	  					
-	  					version = detail.getVersion();
-	  					
-	  				}else{
-	  					
-	  						// if cvs version and non-cvs version are the same then show the
-	  						// non-cvs version
-	  					
-	  					String	non_cvs_version = detail.getVersion();
-	  					
-	  					if ( version.equals( non_cvs_version + "_CVS" )){
-	  						
-	  						version = non_cvs_version;
-	  					}
-	  				}
-	  				
-	  				if ( name.startsWith( "azplatform" ) || name.equals( "azupdater" )){
-	  					
-	  						// skip built in ones we don't want to let user install directly
-	  						// not the cleanest of fixes, but it'll do for the moment
-	  					
-	  				}else if ( version == null || version.length() == 0 || !Character.isDigit(version.charAt(0))){
-	  					
-	  						// dodgy version
-  					
-	  				}else{
-  					
-	  					return( new StandardPluginImpl( this, details[i], version ));
-	  				}
-  				}
-  			}	
+
+            for (SFPluginDetails detail : details) {
+
+                String name = detail.getId();
+
+                if (name.equals(id)) {
+
+                    String version = "";
+
+                    if (Constants.isCVSVersion()) {
+
+                        version = detail.getCVSVersion();
+                    }
+
+                    if (version == null || version.length() == 0 || !Character.isDigit(version.charAt(0))) {
+
+                        version = detail.getVersion();
+
+                    } else {
+
+                        // if cvs version and non-cvs version are the same then show the
+                        // non-cvs version
+
+                        String non_cvs_version = detail.getVersion();
+
+                        if (version.equals(non_cvs_version + "_CVS")) {
+
+                            version = non_cvs_version;
+                        }
+                    }
+
+                    if (name.startsWith("azplatform") || name.equals("azupdater")) {
+
+                        // skip built in ones we don't want to let user install directly
+                        // not the cleanest of fixes, but it'll do for the moment
+
+                    } else if (version == null || version.length() == 0 || !Character.isDigit(version.charAt(0))) {
+
+                        // dodgy version
+
+                    } else {
+
+                        return (new StandardPluginImpl(this, detail, version));
+                    }
+                }
+            }
   			
   			return( null );
   			
@@ -420,36 +413,34 @@ PluginInstallerImpl
 		VuzeFile vf = VuzeFileHandler.getSingleton().loadVuzeFile(file);
 	
 		VuzeFileComponent[] comps = vf.getComponents();
-		
-		for (int j=0;j<comps.length;j++){
-			
-			VuzeFileComponent comp = comps[j];
-			
-			if ( comp.getType() == VuzeFileComponent.COMP_TYPE_PLUGIN ){
-				
-				try{
-					Map	content = comp.getContent();
-					
-					String	id 		= new String((byte[])content.get( "id" ), "UTF-8" );
-					String	version = new String((byte[])content.get( "version" ), "UTF-8" );
-					String	suffix	= ((Long)content.get( "is_jar" )).longValue()==1?"jar":"zip";
-					
-					byte[]	plugin_file = (byte[])content.get( "file" );
-					
-					File temp_dir = AETemporaryFileHandler.createTempDir();
-					
-					File temp_file = new File( temp_dir, id + "_" + version + "." + suffix );
-					
-					FileUtil.copyFile( new ByteArrayInputStream( plugin_file ), temp_file );
-					
-					return( temp_file );
-					
-				}catch( Throwable e ){
-					
-					throw( new PluginException( "Not a valid Vuze file", e ));
-				}
-			}
-		}
+
+        for (VuzeFileComponent comp : comps) {
+
+            if (comp.getType() == VuzeFileComponent.COMP_TYPE_PLUGIN) {
+
+                try {
+                    Map content = comp.getContent();
+
+                    String id = new String((byte[]) content.get("id"), StandardCharsets.UTF_8);
+                    String version = new String((byte[]) content.get("version"), StandardCharsets.UTF_8);
+                    String suffix = (Long) content.get("is_jar") == 1 ? "jar" : "zip";
+
+                    byte[] plugin_file = (byte[]) content.get("file");
+
+                    File temp_dir = AETemporaryFileHandler.createTempDir();
+
+                    File temp_file = new File(temp_dir, id + "_" + version + "." + suffix);
+
+                    FileUtil.copyFile(new ByteArrayInputStream(plugin_file), temp_file);
+
+                    return (temp_file);
+
+                } catch (Throwable e) {
+
+                    throw (new PluginException("Not a valid Vuze file", e));
+                }
+            }
+        }
 	
 		return( file );
 	}
@@ -563,184 +554,175 @@ PluginInstallerImpl
 							listener.failed( new PluginException( "No updates were added during check process" ));
 							
 						}else{
-							
-							for (int i=0;i<updates.length;i++){
-								
-								updates[i].addListener(
-									new UpdateListener()
-									{
-										private boolean	cancelled;
-										
-										public void 
-										cancelled(
-											Update update) 
-										{
-											cancelled = true;
-											
-											check();
-										}
-										
-										public void 
-										complete(
-											Update update ) 
-										{
-											check();
-										}
-										
-										protected void
-										check()
-										{
-											Update failed_update = null;
-											
-											for ( Update update: updates ){
-												
-												if ( !update.isCancelled() && !update.isComplete()){
-													
-													return;
-												}
-												
-												if ( !update.wasSuccessful()){
-													
-													failed_update = update;
-												}
-											}
-											
-											if ( cancelled ){
-												
-												listener.cancelled();
-												
-											}else{
-												
-												if ( failed_update == null ){
-													
-														// flush plugin events through before reporting complete
-													
-													PluginInitializer.waitForPluginEvents();
-													
-													listener.completed();
-													
-												}else{
-												
-													listener.failed(
-														new PluginException(
-															"Install of " + failed_update.getName() + " failed" ));
-												}
-											}
-										}
-									});
-							}
+
+                            for (Update update : updates) {
+
+                                update.addListener(
+                                        new UpdateListener() {
+                                            private boolean cancelled;
+
+                                            public void
+                                            cancelled(
+                                                    Update update) {
+                                                cancelled = true;
+
+                                                check();
+                                            }
+
+                                            public void
+                                            complete(
+                                                    Update update) {
+                                                check();
+                                            }
+
+                                            protected void
+                                            check() {
+                                                Update failed_update = null;
+
+                                                for (Update update : updates) {
+
+                                                    if (!update.isCancelled() && !update.isComplete()) {
+
+                                                        return;
+                                                    }
+
+                                                    if (!update.wasSuccessful()) {
+
+                                                        failed_update = update;
+                                                    }
+                                                }
+
+                                                if (cancelled) {
+
+                                                    listener.cancelled();
+
+                                                } else {
+
+                                                    if (failed_update == null) {
+
+                                                        // flush plugin events through before reporting complete
+
+                                                        PluginInitializer.waitForPluginEvents();
+
+                                                        listener.completed();
+
+                                                    } else {
+
+                                                        listener.failed(
+                                                                new PluginException(
+                                                                        "Install of " + failed_update.getName() + " failed"));
+                                                    }
+                                                }
+                                            }
+                                        });
+                            }
 						}
 					}
 				});
 		}
 		
 		try{
-			
-			for (int i=0;i<plugins.length;i++){
-				
-				InstallablePlugin	plugin	= plugins[i];
-				
-				final String	plugin_id = plugin.getId();
-				
-				PluginInterface	existing_plugin_interface = manager.getPluginInterfaceByID( plugin_id, false );
-				
-				Plugin			existing_plugin	= null;
-				
-				if ( existing_plugin_interface != null ){
-					
-					existing_plugin	= existing_plugin_interface.getPlugin();
-					
-						// try to check that the new version is higher than the old one!
-					
-					String	old_version = existing_plugin_interface.getPluginVersion();
-					
-					if ( old_version != null ){
-						
-						int	res = Constants.compareVersions( plugin.getVersion(), old_version );
-						
-						if ( res < 0 ){
-							
-							throw( new PluginException( "A higher version (" + old_version + ") of Plugin '" + plugin_id + "' is already installed" ));
-							
-						}else if ( res == 0 ){
-							
-							throw( new PluginException( "Version (" + old_version + ") of Plugin '" + plugin_id + "' is already installed" ));
-						}
-					}
-				}
-				
-				String	target_dir;
-				
-				if ( shared ){
-				    	    
-					target_dir 	= FileUtil.getApplicationFile( "plugins" ).toString();
-					
-				}else{
-					
-					target_dir 	= FileUtil.getUserFile( "plugins" ).toString(); 
-				}
-				
-				target_dir += File.separator + plugin_id;
-		
-					// this may fail on Vista but it doesn't matter as we recover this later
-					// on. So *don't* check for success here
-				
-				new File( target_dir ).mkdir();
-				
-				if ( existing_plugin == null ){
-					
-						// create a dummy plugin at version 0.0 to trigger the "upgrade" to the new
-						// installed version
-					
-					FailedPlugin	dummy_plugin = new FailedPlugin( plugin_id, target_dir );
-					
-					PluginManager.registerPlugin( dummy_plugin, plugin_id );
-				
-					final PluginInterface dummy_plugin_interface = manager.getPluginInterfaceByID( plugin_id, false );
-					
-					((InstallablePluginImpl)plugin).addUpdate( inst, pup, dummy_plugin, dummy_plugin_interface );
-							
-					inst.addListener(
-						new UpdateCheckInstanceListener()
-						{
-							public void
-							cancelled(
-								UpdateCheckInstance		instance )
-							{
-								try{
-								
-									dummy_plugin_interface.getPluginState().unload();
-									
-								}catch( Throwable e ){
-									
-									Debug.out( "Failed to unload plugin", e );
-								}
-							}
-							
-							public void
-							complete(
-								UpdateCheckInstance		instance )
-							{
-								PluginInterface pi = manager.getPluginInterfaceByID( plugin_id, false );
-								
-								if ( pi != null && pi.getPlugin() instanceof FailedPlugin ){
-									
-									try{
-										pi.getPluginState().unload();
-										
-									}catch( Throwable e ){
-										
-										Debug.out( "Failed to unload plugin", e );
-									}
-								}
 
-							}
-						});
-				}else{
-					
-					((InstallablePluginImpl)plugin).addUpdate( inst, pup, existing_plugin, existing_plugin_interface );
-				}
-			}
+            for (InstallablePlugin plugin : plugins) {
+
+                final String plugin_id = plugin.getId();
+
+                PluginInterface existing_plugin_interface = manager.getPluginInterfaceByID(plugin_id, false);
+
+                Plugin existing_plugin = null;
+
+                if (existing_plugin_interface != null) {
+
+                    existing_plugin = existing_plugin_interface.getPlugin();
+
+                    // try to check that the new version is higher than the old one!
+
+                    String old_version = existing_plugin_interface.getPluginVersion();
+
+                    if (old_version != null) {
+
+                        int res = Constants.compareVersions(plugin.getVersion(), old_version);
+
+                        if (res < 0) {
+
+                            throw (new PluginException("A higher version (" + old_version + ") of Plugin '" + plugin_id + "' is already installed"));
+
+                        } else if (res == 0) {
+
+                            throw (new PluginException("Version (" + old_version + ") of Plugin '" + plugin_id + "' is already installed"));
+                        }
+                    }
+                }
+
+                String target_dir;
+
+                if (shared) {
+
+                    target_dir = FileUtil.getApplicationFile("plugins").toString();
+
+                } else {
+
+                    target_dir = FileUtil.getUserFile("plugins").toString();
+                }
+
+                target_dir += File.separator + plugin_id;
+
+                // this may fail on Vista but it doesn't matter as we recover this later
+                // on. So *don't* check for success here
+
+                new File(target_dir).mkdir();
+
+                if (existing_plugin == null) {
+
+                    // create a dummy plugin at version 0.0 to trigger the "upgrade" to the new
+                    // installed version
+
+                    FailedPlugin dummy_plugin = new FailedPlugin(plugin_id, target_dir);
+
+                    PluginManager.registerPlugin(dummy_plugin, plugin_id);
+
+                    final PluginInterface dummy_plugin_interface = manager.getPluginInterfaceByID(plugin_id, false);
+
+                    ((InstallablePluginImpl) plugin).addUpdate(inst, pup, dummy_plugin, dummy_plugin_interface);
+
+                    inst.addListener(
+                            new UpdateCheckInstanceListener() {
+                                public void
+                                cancelled(
+                                        UpdateCheckInstance instance) {
+                                    try {
+
+                                        dummy_plugin_interface.getPluginState().unload();
+
+                                    } catch (Throwable e) {
+
+                                        Debug.out("Failed to unload plugin", e);
+                                    }
+                                }
+
+                                public void
+                                complete(
+                                        UpdateCheckInstance instance) {
+                                    PluginInterface pi = manager.getPluginInterfaceByID(plugin_id, false);
+
+                                    if (pi != null && pi.getPlugin() instanceof FailedPlugin) {
+
+                                        try {
+                                            pi.getPluginState().unload();
+
+                                        } catch (Throwable e) {
+
+                                            Debug.out("Failed to unload plugin", e);
+                                        }
+                                    }
+
+                                }
+                            });
+                } else {
+
+                    ((InstallablePluginImpl) plugin).addUpdate(inst, pup, existing_plugin, existing_plugin_interface);
+                }
+            }
 		
 			inst.start();
 			
@@ -801,7 +783,7 @@ PluginInstallerImpl
 	
 		throws PluginException
 	{
-		uninstall( pis, listener_maybe_null, new HashMap<Integer,Object>());
+		uninstall( pis, listener_maybe_null, new HashMap<>());
 	}
 	
 	public UpdateCheckInstance
@@ -813,28 +795,26 @@ PluginInstallerImpl
 		throws PluginException
 	{
 		properties.put( UpdateCheckInstance.PT_UNINSTALL_RESTART_REQUIRED, false );
-		
-		for (int i=0;i<pis.length;i++){
-			
-			PluginInterface	pi = pis[i];
-			
-			if ( pi.getPluginState().isMandatory()){
-				
-				throw( new PluginException( "Plugin '" + pi.getPluginID() + "' is mandatory, can't uninstall" ));
-			}
-			
-			if ( pi.getPluginState().isBuiltIn()){
-				
-				throw( new PluginException( "Plugin '" + pi.getPluginID() + "' is built-in, can't uninstall" ));
-			}
-			
-			String	plugin_dir = pi.getPluginDirectoryName();
-			
-			if ( plugin_dir == null || !new File(plugin_dir).exists()){
-	
-				throw( new PluginException( "Plugin '" + pi.getPluginID() + "' is not loaded from the file system, can't uninstall" ));
-			}
-		}
+
+        for (PluginInterface pi : pis) {
+
+            if (pi.getPluginState().isMandatory()) {
+
+                throw (new PluginException("Plugin '" + pi.getPluginID() + "' is mandatory, can't uninstall"));
+            }
+
+            if (pi.getPluginState().isBuiltIn()) {
+
+                throw (new PluginException("Plugin '" + pi.getPluginID() + "' is built-in, can't uninstall"));
+            }
+
+            String plugin_dir = pi.getPluginDirectoryName();
+
+            if (plugin_dir == null || !new File(plugin_dir).exists()) {
+
+                throw (new PluginException("Plugin '" + pi.getPluginID() + "' is not loaded from the file system, can't uninstall"));
+            }
+        }
 		
 		try{
 			UpdateManager	uman = manager.getDefaultPluginInterface().getUpdateManager();
@@ -847,169 +827,158 @@ PluginInstallerImpl
 			final int[]	rds_added = { 0 };
 			
 			final AESemaphore rd_waiter_sem = new AESemaphore( "uninst:rd:wait" );
-			
-			for (int i=0;i<pis.length;i++){
-				
-				final PluginInterface	pi = pis[i];
-				
-				final String	plugin_dir = pi.getPluginDirectoryName();
 
-				inst.addUpdatableComponent(
-					new UpdatableComponent()
-					{
-						public String
-						getName()
-						{
-							return( pi.getPluginName());
-						}
-					
-						public int
-						getMaximumCheckTime()
-						{
-							return( 0 );
-						}
-						
-						public void
-						checkForUpdate(
-							final UpdateChecker	checker )
-						{
-							try{
-								ResourceDownloader rd = 
-									manager.getDefaultPluginInterface().getUtilities().getResourceDownloaderFactory().create( new File( plugin_dir ));
-	
-									// the plugin may have > 1 plugin interfaces, make the name up appropriately
-								
-								String	update_name = "";
-									
-								PluginInterface[]	ifs = manager.getPluginInterfaces();
-								
-							    Arrays.sort( 
-							    		ifs,
-									  	new Comparator()
-										{
-								      		public int 
-											compare(
-												Object o1, 
-												Object o2)
-								      		{
-								      			return(((PluginInterface)o1).getPluginName().compareTo(((PluginInterface)o2).getPluginName()));
-								      		}
-										});
-							    
-								for (int i=0;i<ifs.length;i++){
-									
-									if ( ifs[i].getPluginID().equals(pi.getPluginID())){
-									
-										update_name += (update_name.length()==0?"":",") + ifs[i].getPluginName();
-									}
-								}
-								
-								boolean unloadable = pi.getPluginState().isUnloadable();
-								
-								if ( !unloadable ){
-									
-									properties.put( UpdateCheckInstance.PT_UNINSTALL_RESTART_REQUIRED, true );
-								}
-								
-								final Update update = checker.addUpdate(
-									update_name,
-									new String[]{ "Uninstall: " + plugin_dir},
-									pi.getPluginVersion(),
-									pi.getPluginVersion(),
-									rd,
-									unloadable?Update.RESTART_REQUIRED_NO:Update.RESTART_REQUIRED_YES );
-								
-								synchronized( rds_added ){
-									
-									rds_added[0]++;
-								}
-								
-								rd.addListener(
-										new ResourceDownloaderAdapter()
-										{
-											public boolean
-											completed(
-												ResourceDownloader	downloader,
-												InputStream			data )
-											{
-												try{
-													try{
-														if ( pi.getPluginState().isUnloadable()){
-													
-															pi.getPluginState().unload();
-															
-															if ( !FileUtil.recursiveDelete( new File( plugin_dir ))){
-																
-																update.setRestartRequired( Update.RESTART_REQUIRED_YES );
-																
-																properties.put( UpdateCheckInstance.PT_UNINSTALL_RESTART_REQUIRED, true );
+            for (final PluginInterface pi : pis) {
 
-																checker.reportProgress( "Failed to remove plugin, restart will be required" );
-															}
-														}
-																		
-														UpdateInstaller installer = checker.createInstaller();
-															
-														installer.addRemoveAction( new File( plugin_dir ).getCanonicalPath());
-													
-														update.complete( true );
-														
-														try{
-															PluginInitializer.fireEvent(
-																PluginEvent.PEV_PLUGIN_UNINSTALLED,
-																pi.getPluginID());
-															
-														}catch( Throwable e ){
-															
-															Debug.out( e );
-														}
-													}catch( Throwable e ){
-														
-														update.complete( false );
-														
-														Debug.printStackTrace(e);
-														
-														Logger.log(new LogAlert(LogAlert.REPEATABLE,
-																"Plugin uninstall failed", e));
-													}
-																									
-														// don't close the stream as we process it later
-														
-													return( true );
-													
-												}finally{
-													
-													rd_waiter_sem.release();
-												}
-											}
-											
-											public void
-											failed(
-												ResourceDownloader			downloader,
-												ResourceDownloaderException e )
-											{
-												try{
-													update.complete( false );
-													
-													if ( !downloader.isCancelled()){
-														
-														Logger.log(new LogAlert(LogAlert.REPEATABLE,
-																"Plugin uninstall failed", e));
-													}
-												}finally{
-													
-													rd_waiter_sem.release();
-												}
-											}
-										});
-							}finally{
-								
-								checker.completed();
-							}
-								
-						}
-					}, false );
-			}
+                final String plugin_dir = pi.getPluginDirectoryName();
+
+                inst.addUpdatableComponent(
+                        new UpdatableComponent() {
+                            public String
+                            getName() {
+                                return (pi.getPluginName());
+                            }
+
+                            public int
+                            getMaximumCheckTime() {
+                                return (0);
+                            }
+
+                            public void
+                            checkForUpdate(
+                                    final UpdateChecker checker) {
+                                try {
+                                    ResourceDownloader rd =
+                                            manager.getDefaultPluginInterface().getUtilities().getResourceDownloaderFactory().create(new File(plugin_dir));
+
+                                    // the plugin may have > 1 plugin interfaces, make the name up appropriately
+
+                                    String update_name = "";
+
+                                    PluginInterface[] ifs = manager.getPluginInterfaces();
+
+                                    Arrays.sort(
+                                            ifs,
+                                            new Comparator() {
+                                                public int
+                                                compare(
+                                                        Object o1,
+                                                        Object o2) {
+                                                    return (((PluginInterface) o1).getPluginName().compareTo(((PluginInterface) o2).getPluginName()));
+                                                }
+                                            });
+
+                                    for (PluginInterface anIf : ifs) {
+
+                                        if (anIf.getPluginID().equals(pi.getPluginID())) {
+
+                                            update_name += (update_name.length() == 0 ? "" : ",") + anIf.getPluginName();
+                                        }
+                                    }
+
+                                    boolean unloadable = pi.getPluginState().isUnloadable();
+
+                                    if (!unloadable) {
+
+                                        properties.put(UpdateCheckInstance.PT_UNINSTALL_RESTART_REQUIRED, true);
+                                    }
+
+                                    final Update update = checker.addUpdate(
+                                            update_name,
+                                            new String[]{"Uninstall: " + plugin_dir},
+                                            pi.getPluginVersion(),
+                                            pi.getPluginVersion(),
+                                            rd,
+                                            unloadable ? Update.RESTART_REQUIRED_NO : Update.RESTART_REQUIRED_YES);
+
+                                    synchronized (rds_added) {
+
+                                        rds_added[0]++;
+                                    }
+
+                                    rd.addListener(
+                                            new ResourceDownloaderAdapter() {
+                                                public boolean
+                                                completed(
+                                                        ResourceDownloader downloader,
+                                                        InputStream data) {
+                                                    try {
+                                                        try {
+                                                            if (pi.getPluginState().isUnloadable()) {
+
+                                                                pi.getPluginState().unload();
+
+                                                                if (!FileUtil.recursiveDelete(new File(plugin_dir))) {
+
+                                                                    update.setRestartRequired(Update.RESTART_REQUIRED_YES);
+
+                                                                    properties.put(UpdateCheckInstance.PT_UNINSTALL_RESTART_REQUIRED, true);
+
+                                                                    checker.reportProgress("Failed to remove plugin, restart will be required");
+                                                                }
+                                                            }
+
+                                                            UpdateInstaller installer = checker.createInstaller();
+
+                                                            installer.addRemoveAction(new File(plugin_dir).getCanonicalPath());
+
+                                                            update.complete(true);
+
+                                                            try {
+                                                                PluginInitializer.fireEvent(
+                                                                        PluginEvent.PEV_PLUGIN_UNINSTALLED,
+                                                                        pi.getPluginID());
+
+                                                            } catch (Throwable e) {
+
+                                                                Debug.out(e);
+                                                            }
+                                                        } catch (Throwable e) {
+
+                                                            update.complete(false);
+
+                                                            Debug.printStackTrace(e);
+
+                                                            Logger.log(new LogAlert(LogAlert.REPEATABLE,
+                                                                    "Plugin uninstall failed", e));
+                                                        }
+
+                                                        // don't close the stream as we process it later
+
+                                                        return (true);
+
+                                                    } finally {
+
+                                                        rd_waiter_sem.release();
+                                                    }
+                                                }
+
+                                                public void
+                                                failed(
+                                                        ResourceDownloader downloader,
+                                                        ResourceDownloaderException e) {
+                                                    try {
+                                                        update.complete(false);
+
+                                                        if (!downloader.isCancelled()) {
+
+                                                            Logger.log(new LogAlert(LogAlert.REPEATABLE,
+                                                                    "Plugin uninstall failed", e));
+                                                        }
+                                                    } finally {
+
+                                                        rd_waiter_sem.release();
+                                                    }
+                                                }
+                                            });
+                                } finally {
+
+                                    checker.completed();
+                                }
+
+                            }
+                        }, false);
+            }
 
 			if ( listener_maybe_null != null ){
 				

@@ -52,7 +52,7 @@ public class AZMessageFactory {
   
   
   
-  private static final Map<String,LegacyData> legacy_data = new HashMap<String,LegacyData>();
+  private static final Map<String,LegacyData> legacy_data = new HashMap<>();
   static {
     legacy_data.put( BTMessage.ID_BT_CHOKE, new LegacyData( RawMessage.PRIORITY_HIGH, true, new Message[]{new BTUnchoke((byte)0)})); // with support for fast extension we don't cancel outstanding piece data, new BTPiece(-1, -1, null,(byte)0 )} ) );
     legacy_data.put( BTMessage.ID_BT_UNCHOKE, new LegacyData( RawMessage.PRIORITY_NORMAL, true, new Message[]{new BTChoke((byte)0)} ) );
@@ -175,9 +175,9 @@ public class AZMessageFactory {
     DirectByteBuffer[] payload = base_message.getData();
     
     int payload_size = 0;
-    for( int i=0; i < payload.length; i++ ) {
-      payload_size += payload[i].remaining( bss );
-    }
+      for (DirectByteBuffer directByteBuffer : payload) {
+          payload_size += directByteBuffer.remaining(bss);
+      }
        
     //create and fill header buffer
     
@@ -250,7 +250,7 @@ public class AZMessageFactory {
      
     String message_id = base_message.getID();
     
-    LegacyData ld = (LegacyData)legacy_data.get( message_id );  //determine if a legacy BT message
+    LegacyData ld = legacy_data.get( message_id );  //determine if a legacy BT message
     
     if( ld != null ) {  //legacy message, use pre-configured values
       return new RawMessageImpl( base_message, raw_buffs, ld.priority, ld.is_no_delay, ld.to_remove );

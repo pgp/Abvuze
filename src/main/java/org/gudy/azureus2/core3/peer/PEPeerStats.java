@@ -30,53 +30,53 @@
 public interface 
 PEPeerStats 
 {   
-  public PEPeer getPeer();
-  public void setPeer(PEPeer p);
+  PEPeer getPeer();
+  void setPeer(PEPeer p);
   
   ////// SET METHODS ///////
   /**
    * The given number of data (payload) bytes have been sent to the peer.
    * @param num_bytes
    */
-  public void dataBytesSent( int num_bytes );
+  void dataBytesSent(int num_bytes);
   
   /**
    * The given number of protocol (overhead) bytes have been sent to the peer.
    * @param num_bytes
    */
-  public void protocolBytesSent( int num_bytes );
+  void protocolBytesSent(int num_bytes);
   
   /**
    * The given number of data (payload) bytes have been received from the peer.
    * @param num_bytes
    */
-  public void dataBytesReceived( int num_bytes );
+  void dataBytesReceived(int num_bytes);
   
   /**
    * The given number of protocol (overhead) bytes have been received from the peer.
    * @param num_bytes
    */
-  public void protocolBytesReceived( int num_bytes );
+  void protocolBytesReceived(int num_bytes);
   
   
   /**
    * The given number of bytes received from the peer were discarded.
    * @param num_bytes
    */
-  public void bytesDiscarded( int num_bytes );
+  void bytesDiscarded(int num_bytes);
   
   /**
    * The peer has completed a piece of the given byte size.
    * @param piece_size
    */
-  public void hasNewPiece( int piece_size );
+  void hasNewPiece(int piece_size);
   
   
   /**
    * The peer has statistically sent a piecce of the given byte size.
    * @param piece_size
    */
-  public void statisticalSentPiece( int piece_size );
+  void statisticalSentPiece(int piece_size);
   
   
   
@@ -85,52 +85,52 @@ PEPeerStats
    * Get the the average bytes-per-second speed that we are receiving piece data from the peer.
    * @return average speed.
    */
-  public long getDataReceiveRate();
+  long getDataReceiveRate();
   
   /**
    * Get the the average bytes-per-second speed that we are receiving protocol messages from the peer.
    * @return average speed.
    */
-  public long getProtocolReceiveRate();
+  long getProtocolReceiveRate();
 
   
   /**
    * Get the total number of data (payload) bytes received from the peer.
    * @return total
    */
-  public long getTotalDataBytesReceived();
+  long getTotalDataBytesReceived();
   
   /**
    * Get the total number of protocol (overhead) bytes received from the peer.
    * @return total
    */
-  public long getTotalProtocolBytesReceived();
+  long getTotalProtocolBytesReceived();
   
   
   /**
    * Get the the average bytes-per-second speed that we are sending piece data to the peer.
    * @return average speed.
    */
-  public long getDataSendRate();
+  long getDataSendRate();
   
   /**
    * Get the the average bytes-per-second speed that we are sending protocol messages to the peer.
    * @return average speed.
    */
-  public long getProtocolSendRate();
+  long getProtocolSendRate();
   
 
   /**
    * Get the total number of data (payload) bytes sent to the peer.
    * @return total
    */
-  public long getTotalDataBytesSent();
+  long getTotalDataBytesSent();
   
   /**
    * Get the total number of protocol (overhead) bytes sent to the peer.
    * @return total
    */
-  public long getTotalProtocolBytesSent();
+  long getTotalProtocolBytesSent();
   
   
   
@@ -138,55 +138,55 @@ PEPeerStats
    * Get the the longer-average bytes-per-second speed at which the peer is uploading data to us.
    * @return average speed
    */
-  public long getSmoothDataReceiveRate();
+  long getSmoothDataReceiveRate();
   
   /**
    * Get the total number of discarded bytes received from the peer.
    * @return total discarded
    */
-  public long getTotalBytesDiscarded();
+  long getTotalBytesDiscarded();
   
   /**
    * Get the estimated total download rate of the peer.
    * @return estimated rate in bytes-per-second
    */
-  public long getEstimatedDownloadRateOfPeer();
+  long getEstimatedDownloadRateOfPeer();
   
   /**
    * Get the estimated total upload rate of the peer.
    * @return estimated rate in bytes-per-second
    */
-  public long getEstimatedUploadRateOfPeer();
+  long getEstimatedUploadRateOfPeer();
   
-  public long getEstimatedSecondsToCompletion();
+  long getEstimatedSecondsToCompletion();
   
   /**
    * Get the number of bytes downloaded in total by this peer
    * (includes data downloaded from all other peers).
    * @return total download bytes done
    */
-  public long getTotalBytesDownloadedByPeer();
+  long getTotalBytesDownloadedByPeer();
   
   /**
    * Disk access stats methods
    * @param bytes
    */
-  public void diskReadComplete( long bytes );
-  public int getTotalDiskReadCount();
-  public int getAggregatedDiskReadCount();
-  public long getTotalDiskReadBytes();
+  void diskReadComplete(long bytes);
+  int getTotalDiskReadCount();
+  int getAggregatedDiskReadCount();
+  long getTotalDiskReadBytes();
   
-  public void setUploadRateLimitBytesPerSecond( int bytes );
-  public void setDownloadRateLimitBytesPerSecond( int bytes );
-  public int getUploadRateLimitBytesPerSecond();
-  public int getDownloadRateLimitBytesPerSecond();
+  void setUploadRateLimitBytesPerSecond(int bytes);
+  void setDownloadRateLimitBytesPerSecond(int bytes);
+  int getUploadRateLimitBytesPerSecond();
+  int getDownloadRateLimitBytesPerSecond();
   
   	// external rate control
   
-  public int getPermittedBytesToSend();
-  public void permittedSendBytesUsed( int num );
+  int getPermittedBytesToSend();
+  void permittedSendBytesUsed(int num);
   
-  public int getPermittedBytesToReceive();
-  public void permittedReceiveBytesUsed( int num );
+  int getPermittedBytesToReceive();
+  void permittedReceiveBytesUsed(int num);
   
 }

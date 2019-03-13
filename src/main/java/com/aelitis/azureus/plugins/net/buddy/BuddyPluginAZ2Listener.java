@@ -24,11 +24,11 @@ package com.aelitis.azureus.plugins.net.buddy;
 public interface 
 BuddyPluginAZ2Listener 
 {
-	public void
+	void
 	chatCreated(
-		BuddyPluginAZ2.chatInstance		chat );
+            BuddyPluginAZ2.chatInstance chat);
 	
-	public void
+	void
 	chatDestroyed(
-		BuddyPluginAZ2.chatInstance		chat );
+            BuddyPluginAZ2.chatInstance chat);
 }

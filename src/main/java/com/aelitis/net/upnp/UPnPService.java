@@ -32,43 +32,43 @@ import com.aelitis.net.upnp.services.*;
 public interface 
 UPnPService 
 {
-	public UPnPDevice
+	UPnPDevice
 	getDevice();
 	
-	public String
+	String
 	getServiceType();
 
-	public List<URL>
+	List<URL>
 	getControlURLs()
 	
 		throws UPnPException;
 	
-	public void 
+	void
 	setPreferredControlURL(
-		URL		url );
+            URL url);
 	
-	public boolean
+	boolean
 	isConnectable();
 	
-	public UPnPAction[]
+	UPnPAction[]
 	getActions()
 	
 		throws UPnPException;
 	
-	public UPnPAction
+	UPnPAction
 	getAction(
-		String		name )
+            String name)
 	
 		throws UPnPException;
 	
-	public UPnPStateVariable[]
+	UPnPStateVariable[]
 	getStateVariables()
 	
 		throws UPnPException;
 	
-	public UPnPStateVariable
+	UPnPStateVariable
 	getStateVariable(
-		String		name )
+            String name)
 	
 		throws UPnPException;
 						
@@ -76,13 +76,13 @@ UPnPService
 		 * gets a specific service if such is supported
 		 * @return
 		 */
-	public UPnPSpecificService
+        UPnPSpecificService
 	getSpecificService();
 	
-	public boolean
+	boolean
 	getDirectInvocations();
 	
-	public void
+	void
 	setDirectInvocations(
-		boolean	force );
+            boolean force);
 }

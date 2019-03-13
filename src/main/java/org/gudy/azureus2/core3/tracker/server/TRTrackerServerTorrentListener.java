@@ -26,7 +26,7 @@ package org.gudy.azureus2.core3.tracker.server;
 public interface 
 TRTrackerServerTorrentListener 
 {
-	public void
+	void
 	deleted(
-		TRTrackerServerTorrent	torrent );
+            TRTrackerServerTorrent torrent);
 }

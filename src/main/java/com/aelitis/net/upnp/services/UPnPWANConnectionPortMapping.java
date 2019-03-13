@@ -27,15 +27,15 @@ package com.aelitis.net.upnp.services;
 public interface 
 UPnPWANConnectionPortMapping 
 {
-	public boolean
+	boolean
 	isTCP();
 	
-	public int
+	int
 	getExternalPort();
 	
-	public String
+	String
 	getInternalHost();
 	
-	public String
+	String
 	getDescription();
 }

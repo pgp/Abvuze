@@ -22,7 +22,7 @@ package com.aelitis.azureus.core.dht.router;
 public interface 
 DHTRouterFactoryObserver 
 {
-	public void
+	void
 	routerCreated(
-		DHTRouter	router );
+            DHTRouter router);
 }

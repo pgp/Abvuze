@@ -28,6 +28,6 @@ public interface
 ClientIDManager 
 {
 	
-	public ClientIDGenerator
+	ClientIDGenerator
 	getGenerator();
 }

@@ -196,7 +196,7 @@ public class TorrentDownloaderImpl extends AEThread implements TorrentDownloader
     		url = AddressUtils.adjustURL( new URL(url_str+(url_str.contains("?")?"&":"?") + "pause_on_error=true"));
     	}
 	  
-		Set<String>	redirect_urls = new HashSet<String>();
+		Set<String>	redirect_urls = new HashSet<>();
 
     	boolean follow_redirect = true;
     	
@@ -321,23 +321,21 @@ public class TorrentDownloaderImpl extends AEThread implements TorrentDownloader
 	    			}
 	
 	    			if ( request_properties != null ){
-	
-	    				Iterator it = request_properties.entrySet().iterator();
-	
-	    				while( it.hasNext()){
-	
-	    					Map.Entry	entry = (Map.Entry)it.next();
-	
-	    					String	key 	= (String)entry.getKey();
-	    					String	value	= (String)entry.getValue();
-	
-	    					// currently this code doesn't support gzip/deflate...
-	
-	    					if ( !key.equalsIgnoreCase( "Accept-Encoding" )){
-	
-	    						con.setRequestProperty( key, value );
-	    					}
-	    				}
+
+						for (Object o : request_properties.entrySet()) {
+
+							Map.Entry entry = (Map.Entry) o;
+
+							String key = (String) entry.getKey();
+							String value = (String) entry.getValue();
+
+							// currently this code doesn't support gzip/deflate...
+
+							if (!key.equalsIgnoreCase("Accept-Encoding")) {
+
+								con.setRequestProperty(key, value);
+							}
+						}
 	    			}
 	
 	    			this.con.connect();
@@ -407,17 +405,17 @@ public class TorrentDownloaderImpl extends AEThread implements TorrentDownloader
 									try{
 										List<String>	cookies_list = con.getHeaderFields().get( "Set-cookie" );
 										
-										List<String>	cookies_set = new ArrayList<String>();
+										List<String>	cookies_set = new ArrayList<>();
 										
 										if ( cookies_list != null ){
-											
-											for (int i=0;i<cookies_list.size();i++){
-												
-												String[] cookie_bits = ((String)cookies_list.get(i)).split(";");
-												
-												if ( cookie_bits.length > 0 ){
-												
-													cookies_set.add( cookie_bits[0] );
+
+											for (String s : cookies_list) {
+
+												String[] cookie_bits = s.split(";");
+
+												if (cookie_bits.length > 0) {
+
+													cookies_set.add(cookie_bits[0]);
 												}
 											}
 										}
@@ -538,7 +536,7 @@ public class TorrentDownloaderImpl extends AEThread implements TorrentDownloader
   		int response = con instanceof HttpURLConnection?((HttpURLConnection)con).getResponseCode():HttpURLConnection.HTTP_OK;
     	if (!ignoreReponseCode) {
         if ((response != HttpURLConnection.HTTP_ACCEPTED) && (response != HttpURLConnection.HTTP_OK)) {
-          this.error(response, Integer.toString(response) + ": " + ((HttpURLConnection)con).getResponseMessage());
+          this.error(response, response + ": " + ((HttpURLConnection)con).getResponseMessage());
           return;
         }
     	}
@@ -710,7 +708,7 @@ public class TorrentDownloaderImpl extends AEThread implements TorrentDownloader
     }
     
     try{
-		final boolean	status_reader_run[] = { true };
+		final boolean[] status_reader_run = {true};
     
     	this.state = STATE_START;
       
@@ -1058,7 +1056,7 @@ public class TorrentDownloaderImpl extends AEThread implements TorrentDownloader
 		}
       } catch( Throwable e){
     	  
-      	String url_log_string = this.url_str.toString().replaceAll( "\\Q&pause_on_error=true\\E", "" );
+      	String url_log_string = this.url_str.replaceAll( "\\Q&pause_on_error=true\\E", "" );
 
         String log_msg = MessageText.getString(
               	"torrentdownload.error.dl_fail",

@@ -24,22 +24,22 @@ import org.gudy.azureus2.plugins.utils.PooledByteBuffer;
 public interface 
 DiskManagerEvent 
 {
-	public static final int	EVENT_TYPE_SUCCESS	= 1;
-	public static final int	EVENT_TYPE_FAILED	= 2;
-	public static final int	EVENT_TYPE_BLOCKED	= 3;	// operation has blocked pending data
+	int	EVENT_TYPE_SUCCESS	= 1;
+	int	EVENT_TYPE_FAILED	= 2;
+	int	EVENT_TYPE_BLOCKED	= 3;	// operation has blocked pending data
 	
-	public int
+	int
 	getType();
 		
-	public long
+	long
 	getOffset();
 	
-	public int
+	int
 	getLength();
 	
-	public PooledByteBuffer
+	PooledByteBuffer
 	getBuffer();
 	
-	public Throwable
+	Throwable
 	getFailure();
 }

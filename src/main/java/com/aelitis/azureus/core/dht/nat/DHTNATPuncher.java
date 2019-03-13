@@ -27,51 +27,51 @@ import com.aelitis.azureus.core.dht.transport.DHTTransportContact;
 public interface 
 DHTNATPuncher 
 {
-	public void
+	void
 	start();
 	
-	public void
+	void
 	setSuspended(
-		boolean	susp );
+            boolean susp);
 	
-	public void
+	void
 	destroy();
 	
 		/**
 		 * We're trying to run a rendezvous
 		 * @return
 		 */
-	
-	public boolean
+
+        boolean
 	active();
 	
-	public void
+	void
 	forceActive(
-		boolean		force );
+            boolean force);
 
 		/**
 		 * Got a good running rendezvous
 		 * @return
 		 */
-	
-	public boolean
+
+        boolean
 	operational();
 	
-	public DHTTransportContact
+	DHTTransportContact
 	getLocalContact();
 	
-	public DHTTransportContact
+	DHTTransportContact
 	getRendezvous();
 	
-	public DHTNATPuncher
+	DHTNATPuncher
 	getSecondaryPuncher();
 	
-	public Map
+	Map
 	punch(
-		String					reason,
-		DHTTransportContact		target,
-		DHTTransportContact[]	rendezvous_used,
-		Map						client_data );
+            String reason,
+            DHTTransportContact target,
+            DHTTransportContact[] rendezvous_used,
+            Map client_data);
 	
 		/**
 		 * 
@@ -79,38 +79,38 @@ DHTNATPuncher
 		 * @param client_data
 		 * @return
 		 */
-	
-	public Map
+
+        Map
 	punch(
-		String					reason,
-		InetSocketAddress[]		target,
-		DHTTransportContact[]	rendezvous_used,
-		Map						client_data );
+                String reason,
+                InetSocketAddress[] target,
+                DHTTransportContact[] rendezvous_used,
+                Map client_data);
 	
 		/**
 		 * @param target
 		 * @param rendezvous
 		 */
-	
-	public void
+
+        void
 	setRendezvous(
-		DHTTransportContact		target,
-		DHTTransportContact		rendezvous );
+                DHTTransportContact target,
+                DHTTransportContact rendezvous);
 	
-	public Map
+	Map
 	sendMessage(
-		InetSocketAddress	rendezvous,
-		InetSocketAddress	target,
-		Map					message );
+            InetSocketAddress rendezvous,
+            InetSocketAddress target,
+            Map message);
 	
-	public String
+	String
 	getStats();
 	
-	public void
+	void
 	addListener(
-		DHTNATPuncherListener	listener );
+            DHTNATPuncherListener listener);
 	
-	public void
+	void
 	removeListener(
-		DHTNATPuncherListener	listener );
+            DHTNATPuncherListener listener);
 }

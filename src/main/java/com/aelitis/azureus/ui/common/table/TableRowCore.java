@@ -32,20 +32,20 @@ import org.gudy.azureus2.plugins.ui.tables.TableRowMouseEvent;
 public interface TableRowCore extends TableRow
 {
 	/** Invalidates Row */
-	public void invalidate();
+    void invalidate();
 
-	public void invalidate(boolean mustRefresh);
+	void invalidate(boolean mustRefresh);
 
 	/** 
 	 * Delete the row 
 	 */
-	public void delete();
+    void delete();
 
 	/** Refresh all the cells in the row 
 	 *
 	 * @param bDoGraphics Refresh graphic cells to
 	 */
-	public List refresh(boolean bDoGraphics);
+    List refresh(boolean bDoGraphics);
 
 	/** Location of a column has changed
 	 *
@@ -53,7 +53,7 @@ public interface TableRowCore extends TableRow
 	 *
 	 * XXX Rename to cellLocationChanged?
 	 */
-	public void locationChanged(int iStartColumn);
+    void locationChanged(int iStartColumn);
 
 	/** Retrieve the Data Source related to this row
 	 *
@@ -61,29 +61,29 @@ public interface TableRowCore extends TableRow
 	 *                    false - return a plugin object
 	 * @return the Data Source Object related to the row
 	 */
-	public Object getDataSource(boolean bCoreObject);
+    Object getDataSource(boolean bCoreObject);
 
-	public int getIndex();
+	int getIndex();
 
 	/** Adjust cell height.  Don't use if any other column/cell uses setImage()
 	 *
 	 * @param iHeight new Row Height.  Will not reduce row's height (SWT)
 	 * @return success level
 	 */
-	public boolean setHeight(int iHeight);
+    boolean setHeight(int iHeight);
 
 	/** Retrieve a cell based on the supplied value
 	 *
 	 * @param field Column name of the cell to be returned
 	 * @return TableCellCore object related to this row and the specified column 
 	 */
-	public TableCellCore getTableCellCore(String field);
+    TableCellCore getTableCellCore(String field);
 
 	/** Retreive whether the row is visible to the user. 
 	 * 
 	 * @return visibility state
 	 */
-	public boolean isVisible();
+    boolean isVisible();
 
 	/**
 	 * Link the row to a SWT TableItem
@@ -91,35 +91,35 @@ public interface TableRowCore extends TableRow
 	 * @param newIndex new position row should be
 	 * @return false - already linked to that item at that index
 	 */
-	public boolean setTableItem(int newIndex);
+    boolean setTableItem(int newIndex);
 	
-	public boolean setTableItem(int newIndex, boolean isVisible);
+	boolean setTableItem(int newIndex, boolean isVisible);
 	
 	
 
-	public void setSelected(boolean bSelected);
+	void setSelected(boolean bSelected);
 
-	public boolean isRowDisposed();
+	boolean isRowDisposed();
 
-	public void setUpToDate(boolean upToDate);
+	void setUpToDate(boolean upToDate);
 
 	/**
 	 * @param bDoGraphics
 	 * @param bVisible
 	 */
-	public List<TableCellCore> refresh(boolean bDoGraphics, boolean bVisible);
+    List<TableCellCore> refresh(boolean bDoGraphics, boolean bVisible);
 
 	/**
 	 * like refresh, except a different name to confuse us.
 	 */
-	public void redraw();
+    void redraw();
 
-	public void redraw(boolean doChildren);
+	void redraw(boolean doChildren);
 
 	/**
 	 * @return
 	 */
-	public TableView getView();
+    TableView getView();
 
 	/**
 	 * @param event
@@ -134,29 +134,29 @@ public interface TableRowCore extends TableRow
 	 *
 	 * @since 3.0.4.3
 	 */
-	public boolean isMouseOver();
+    boolean isMouseOver();
 
 	/**
 	 * @param length
 	 *
 	 * @since 4.4.0.5
 	 */
-	public void setSubItemCount(int length);
+    void setSubItemCount(int length);
 	
-	public int getSubItemCount();
+	int getSubItemCount();
 
-	public boolean isExpanded();
+	boolean isExpanded();
 
-	public void setExpanded(boolean b);
+	void setExpanded(boolean b);
 	
-	public TableRowCore getParentRowCore();
+	TableRowCore getParentRowCore();
 
 	/**
 	 * @return
 	 *
 	 * @since 4.4.0.5
 	 */
-	public boolean isInPaintItem();
+    boolean isInPaintItem();
 
 	/**
 	 * @param indexOf
@@ -177,11 +177,11 @@ public interface TableRowCore extends TableRow
 
 	void removeSubRow(Object datasource);
 
-	public int getHeight();
+	int getHeight();
 
-	public TableRowCore getSubRow(int i);
+	TableRowCore getSubRow(int i);
 
-	public void setSortColumn(String columnID);
+	void setSortColumn(String columnID);
 	
-	public TableCellCore getSortColumnCell(String hint);
+	TableCellCore getSortColumnCell(String hint);
 }

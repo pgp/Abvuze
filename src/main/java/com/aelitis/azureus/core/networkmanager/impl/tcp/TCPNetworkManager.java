@@ -149,11 +149,11 @@ TCPNetworkManager
 				{
 					if ( types.contains( AzureusCoreStats.ST_NET_TCP_SELECT_READ_COUNT )){
 						
-						values.put( AzureusCoreStats.ST_NET_TCP_SELECT_READ_COUNT, new Long( read_select_count ));
+						values.put( AzureusCoreStats.ST_NET_TCP_SELECT_READ_COUNT, read_select_count);
 					}	
 					if ( types.contains( AzureusCoreStats.ST_NET_TCP_SELECT_WRITE_COUNT )){
 						
-						values.put( AzureusCoreStats.ST_NET_TCP_SELECT_WRITE_COUNT, new Long( write_select_count ));
+						values.put( AzureusCoreStats.ST_NET_TCP_SELECT_WRITE_COUNT, write_select_count);
 					}					
 				}
 			});

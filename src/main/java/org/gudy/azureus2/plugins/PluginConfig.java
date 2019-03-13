@@ -69,22 +69,22 @@ import org.gudy.azureus2.plugins.config.*;
 public interface 
 PluginConfig 
 {  
-	public static final String CORE_PARAM_INT_MAX_UPLOAD_SPEED_KBYTES_PER_SEC			= "Max Upload Speed KBs";
-	public static final String CORE_PARAM_INT_MAX_UPLOAD_SPEED_SEEDING_KBYTES_PER_SEC 	= "Max Upload Speed When Only Seeding KBs";
- 	public static final String CORE_PARAM_INT_MAX_DOWNLOAD_SPEED_KBYTES_PER_SEC			= "Max Download Speed KBs";
- 	public static final String CORE_PARAM_INT_MAX_CONNECTIONS_PER_TORRENT				= "Max Connections Per Torrent";
- 	public static final String CORE_PARAM_INT_MAX_CONNECTIONS_GLOBAL					= "Max Connections Global";
- 	public static final String CORE_PARAM_INT_MAX_DOWNLOADS								= "Max Downloads";
- 	public static final String CORE_PARAM_INT_MAX_ACTIVE								= "Max Active Torrents";
- 	public static final String CORE_PARAM_INT_MAX_ACTIVE_SEEDING						= "Max Active Torrents When Only Seeding";
- 	public static final String CORE_PARAM_INT_MAX_UPLOADS								= "Max Uploads";
- 	public static final String CORE_PARAM_INT_MAX_UPLOADS_SEEDING						= "Max Uploads Seeding";
- 	public static final String CORE_PARAM_BOOLEAN_AUTO_SPEED_ON 						= "Auto Upload Speed Enabled";
- 	public static final String CORE_PARAM_BOOLEAN_AUTO_SPEED_SEEDING_ON 				= "Auto Upload Speed Seeding Enabled";
- 	public static final String CORE_PARAM_BOOLEAN_MAX_UPLOAD_SPEED_SEEDING 				= "Max Upload Speed When Only Seeding Enabled";
- 	public static final String CORE_PARAM_BOOLEAN_MAX_ACTIVE_SEEDING 					= "Max Active Torrents When Only Seeding Enabled";
-	public static final String CORE_PARAM_BOOLEAN_SOCKS_PROXY_NO_INWARD_CONNECTION		= "SOCKS Proxy No Inward Connection";
-	public static final String CORE_PARAM_BOOLEAN_NEW_SEEDS_START_AT_TOP				= "Newly Seeding Torrents Get First Priority";
+	String CORE_PARAM_INT_MAX_UPLOAD_SPEED_KBYTES_PER_SEC			= "Max Upload Speed KBs";
+	String CORE_PARAM_INT_MAX_UPLOAD_SPEED_SEEDING_KBYTES_PER_SEC 	= "Max Upload Speed When Only Seeding KBs";
+ 	String CORE_PARAM_INT_MAX_DOWNLOAD_SPEED_KBYTES_PER_SEC			= "Max Download Speed KBs";
+ 	String CORE_PARAM_INT_MAX_CONNECTIONS_PER_TORRENT				= "Max Connections Per Torrent";
+ 	String CORE_PARAM_INT_MAX_CONNECTIONS_GLOBAL					= "Max Connections Global";
+ 	String CORE_PARAM_INT_MAX_DOWNLOADS								= "Max Downloads";
+ 	String CORE_PARAM_INT_MAX_ACTIVE								= "Max Active Torrents";
+ 	String CORE_PARAM_INT_MAX_ACTIVE_SEEDING						= "Max Active Torrents When Only Seeding";
+ 	String CORE_PARAM_INT_MAX_UPLOADS								= "Max Uploads";
+ 	String CORE_PARAM_INT_MAX_UPLOADS_SEEDING						= "Max Uploads Seeding";
+ 	String CORE_PARAM_BOOLEAN_AUTO_SPEED_ON 						= "Auto Upload Speed Enabled";
+ 	String CORE_PARAM_BOOLEAN_AUTO_SPEED_SEEDING_ON 				= "Auto Upload Speed Seeding Enabled";
+ 	String CORE_PARAM_BOOLEAN_MAX_UPLOAD_SPEED_SEEDING 				= "Max Upload Speed When Only Seeding Enabled";
+ 	String CORE_PARAM_BOOLEAN_MAX_ACTIVE_SEEDING 					= "Max Active Torrents When Only Seeding Enabled";
+	String CORE_PARAM_BOOLEAN_SOCKS_PROXY_NO_INWARD_CONNECTION		= "SOCKS Proxy No Inward Connection";
+	String CORE_PARAM_BOOLEAN_NEW_SEEDS_START_AT_TOP				= "Newly Seeding Torrents Get First Priority";
 	
 	/**
 	 * Semicolon seperated list containing:
@@ -94,33 +94,33 @@ PluginConfig
 	 * 
 	 * @since 2.3.0.5
 	 */
-	public static final String CORE_PARAM_STRING_LOCAL_BIND_IP							= "CORE_PARAM_STRING_LOCAL_BIND_IP";
-	public static final String CORE_PARAM_BOOLEAN_FRIENDLY_HASH_CHECKING				= "CORE_PARAM_BOOLEAN_FRIENDLY_HASH_CHECKING";
+    String CORE_PARAM_STRING_LOCAL_BIND_IP							= "CORE_PARAM_STRING_LOCAL_BIND_IP";
+	String CORE_PARAM_BOOLEAN_FRIENDLY_HASH_CHECKING				= "CORE_PARAM_BOOLEAN_FRIENDLY_HASH_CHECKING";
 	
 	/**
 	 * @since 3.0.4.3
 	 */
-	public static final String GUI_PARAM_INT_SWT_REFRESH_IN_MS = "GUI_PARAM_INT_SWT_REFRESH_IN_MS";
+    String GUI_PARAM_INT_SWT_REFRESH_IN_MS = "GUI_PARAM_INT_SWT_REFRESH_IN_MS";
 	
 	/**
 	 * @since 3.0.4.3
 	 */
-	public static final String CORE_PARAM_BOOLEAN_NEW_TORRENTS_START_AS_STOPPED = "CORE_PARAM_BOOLEAN_NEW_TORRENTS_START_AS_STOPPED"; 
+    String CORE_PARAM_BOOLEAN_NEW_TORRENTS_START_AS_STOPPED = "CORE_PARAM_BOOLEAN_NEW_TORRENTS_START_AS_STOPPED";
 
 	/**
 	 * @since 3.0.5.3
 	 */
-	public static final String CORE_PARAM_INT_INCOMING_TCP_PORT = "Incoming TCP Port";
+    String CORE_PARAM_INT_INCOMING_TCP_PORT = "Incoming TCP Port";
 
 	/**
 	 * @since 3.0.5.3
 	 */
-	public static final String CORE_PARAM_INT_INCOMING_UDP_PORT = "Incoming UDP Port";
+    String CORE_PARAM_INT_INCOMING_UDP_PORT = "Incoming UDP Port";
 
 	/**
 	 * @since 3.1.1.1
 	 */
-	public static final String CORE_PARAM_STRING_DEFAULT_SAVE_PATH = "Default save path";
+    String CORE_PARAM_STRING_DEFAULT_SAVE_PATH = "Default save path";
 	
 
   /**
@@ -132,7 +132,7 @@ PluginConfig
    * @deprecated Use {@link #getUnsafeBooleanParameter(String)} for internal core parameters, or {@link #getCoreBooleanParameter(String)} for core parameters defined here.
    * @since 2.0.4.2
    */
-  public boolean getBooleanParameter(String key);
+  boolean getBooleanParameter(String key);
 	  
   /**
    * Returns the value of a core boolean parameter.
@@ -144,7 +144,7 @@ PluginConfig
    * @deprecated Use {@link #getUnsafeBooleanParameter(String, boolean)} for internal core parameters, or {@link #getCoreBooleanParameter(String, boolean)} for core parameters defined here.
    * @since 2.0.6.0
    */
-  public boolean getBooleanParameter(String key, boolean default_value);
+  boolean getBooleanParameter(String key, boolean default_value);
   
   /**
    * Returns the value of a core byte array parameter.
@@ -155,7 +155,7 @@ PluginConfig
    * @deprecated Use {@link #getUnsafeByteParameter(String)} for internal core parameters, or {@link #getCoreByteParameter(String)} for core parameters defined here.
    * @since 3.0.0.7
    */
-  public byte[] getByteParameter(String key);
+  byte[] getByteParameter(String key);
 	
   /**
    * Returns the value of a core byte array parameter.
@@ -167,7 +167,7 @@ PluginConfig
    * @deprecated Use {@link #getUnsafeByteParameter(String, byte[])} for internal core parameters, or {@link #getCoreByteParameter(String, byte[])} for core parameters defined here.
    * @since 2.1.0.2
    */
-  public byte[] getByteParameter(String key, byte[] default_value);
+  byte[] getByteParameter(String key, byte[] default_value);
 	
   /**
    * Returns the value of a core float parameter.
@@ -178,7 +178,7 @@ PluginConfig
    * @deprecated Use {@link #getUnsafeFloatParameter(String)} for internal core parameters, or {@link #getCoreFloatParameter(String)} for core parameters defined here.
    * @since 2.1.0.0
    */
-  public float getFloatParameter(String key);
+  float getFloatParameter(String key);
   
   /**
    * Returns the value of a core float parameter.
@@ -190,7 +190,7 @@ PluginConfig
    * @deprecated Use {@link #getUnsafeFloatParameter(String, float)} for internal core parameters, or {@link #getCoreFloatParameter(String, float)} for core parameters defined here.
    * @since 3.0.0.7
    */
-  public float getFloatParameter(String key, float default_value);
+  float getFloatParameter(String key, float default_value);
 
   /**
    * Returns the value of a core int parameter.
@@ -201,7 +201,7 @@ PluginConfig
    * @deprecated Use {@link #getUnsafeIntParameter(String)} for internal core parameters, or {@link #getCoreIntParameter(String)} for core parameters defined here.
    * @since 2.0.4.2
    */
-  public int getIntParameter(String key);
+  int getIntParameter(String key);
 	
   /**
    * Returns the value of a core int parameter.
@@ -213,7 +213,7 @@ PluginConfig
    * @deprecated Use {@link #getUnsafeIntParameter(String, int)} for internal core parameters, or {@link #getCoreIntParameter(String, int)} for core parameters defined here.
    * @since 2.0.7.0
    */
-  public int getIntParameter(String key, int default_value);
+  int getIntParameter(String key, int default_value);
   
   /**
    * Returns the value of a core long parameter.
@@ -224,7 +224,7 @@ PluginConfig
    * @deprecated Use {@link #getUnsafeLongParameter(String)} for internal core parameters, or {@link #getCoreLongParameter(String)} for core parameters defined here.
    * @since 3.0.0.7
    */
-  public long getLongParameter(String key);
+  long getLongParameter(String key);
 	
   /**
    * Returns the value of a core long parameter.
@@ -236,7 +236,7 @@ PluginConfig
    * @deprecated Use {@link #getUnsafeLongParameter(String, long)} for internal core parameters, or {@link #getCoreLongParameter(String, long)} for core parameters defined here.
    * @since 3.0.0.7
    */
-  public long getLongParameter(String key, long default_value);
+  long getLongParameter(String key, long default_value);
   
   /**
    * Returns the value of a core string parameter.
@@ -247,7 +247,7 @@ PluginConfig
    * @deprecated Use {@link #getUnsafeStringParameter(String)} for internal core parameters, or {@link #getCoreStringParameter(String)} for core parameters defined here.
    * @since 2.0.4.2
    */
-  public String getStringParameter(String key);
+  String getStringParameter(String key);
 	
   /**
    * Returns the value of a core string parameter.
@@ -259,7 +259,7 @@ PluginConfig
    * @deprecated Use {@link #getUnsafeStringParameter(String, String)} for internal core parameters, or {@link #getCoreStringParameter(String, String)} for core parameters defined here.
    * @since 2.1.0.0
    */
-  public String getStringParameter(String key, String default_value);
+  String getStringParameter(String key, String default_value);
 
   /**
    * Sets the value of a core boolean parameter.
@@ -269,7 +269,7 @@ PluginConfig
    * 
    * @deprecated Use {@link #setUnsafeBooleanParameter(String, boolean)} for internal core parameters, or {@link #setCoreBooleanParameter(String, boolean)} for core parameters defined here.
    */
-  public void setBooleanParameter(String key, boolean value);
+  void setBooleanParameter(String key, boolean value);
   
   /**
    * Sets the value of a core byte array parameter.
@@ -280,7 +280,7 @@ PluginConfig
    * @deprecated Use {@link #setUnsafeByteParameter(String, byte[])} for internal core parameters, or {@link #setCoreByteParameter(String, byte[])} for core parameters defined here.
    * @since 3.0.0.7
    */
-  public void setByteParameter(String key, byte[] value);
+  void setByteParameter(String key, byte[] value);
   
   
   /**
@@ -292,7 +292,7 @@ PluginConfig
    * @deprecated Use {@link #setUnsafeFloatParameter(String, float)} for internal core parameters, or {@link #setCoreFloatParameter(String, float)} for core parameters defined here.
    * @since 3.0.0.7
    */
-  public void setFloatParameter(String key, float value);
+  void setFloatParameter(String key, float value);
   
   /**
    * Sets the value of a core int parameter.
@@ -303,7 +303,7 @@ PluginConfig
    * @deprecated Use {@link #setUnsafeIntParameter(String, int)} for internal core parameters, or {@link #setCoreIntParameter(String, int)} for core parameters defined here.
    * @since 2.0.8.0
    */
-  public void setIntParameter(String key, int value);
+  void setIntParameter(String key, int value);
   
   /**
    * Sets the value of a core long parameter.
@@ -314,7 +314,7 @@ PluginConfig
    * @deprecated Use {@link #setUnsafeLongParameter(String, long)} for internal core parameters, or {@link #setCoreLongParameter(String, long)} for core parameters defined here.
    * @since 3.0.0.7
    */
-  public void setLongParameter(String key, long value);
+  void setLongParameter(String key, long value);
   
   /**
    * Sets the value of a core string parameter.
@@ -325,7 +325,7 @@ PluginConfig
    * @deprecated Use {@link #setUnsafeStringParameter(String, String)} for internal core parameters, or {@link #setCoreStringParameter(String, String)} for core parameters defined here.
    * @since 3.0.0.7
    */
-  public void setStringParameter(String key, String value);
+  void setStringParameter(String key, String value);
 
   /**
    * Returns the value of a core boolean parameter.
@@ -335,7 +335,7 @@ PluginConfig
    *
    * @since 3.0.4.3
    */
-  public boolean getCoreBooleanParameter(String key);
+  boolean getCoreBooleanParameter(String key);
 	  
   /**
    * Returns the value of a core boolean parameter.
@@ -346,7 +346,7 @@ PluginConfig
    *
    * @since 3.0.4.3
    */
-  public boolean getCoreBooleanParameter(String key, boolean default_value);
+  boolean getCoreBooleanParameter(String key, boolean default_value);
   
   /**
    * Returns the value of a core byte array parameter.
@@ -356,7 +356,7 @@ PluginConfig
    *
    * @since 3.0.4.3
    */
-  public byte[] getCoreByteParameter(String key);
+  byte[] getCoreByteParameter(String key);
 	
   /**
    * Returns the value of a core byte array parameter.
@@ -367,7 +367,7 @@ PluginConfig
    *
    * @since 3.0.5.3
    */
-  public byte[] getCoreByteParameter(String key, byte[] default_value);
+  byte[] getCoreByteParameter(String key, byte[] default_value);
 
   /**
    * Returns the value of a core color parameter.
@@ -388,7 +388,7 @@ PluginConfig
    *
    * @since 3.0.5.3
    */
-  public int[] getCoreColorParameter(String key);
+  int[] getCoreColorParameter(String key);
 	  
   /**
    * Returns the value of a core color parameter.
@@ -410,7 +410,7 @@ PluginConfig
    *
    * @since 3.0.5.3
    */
-  public int[] getCoreColorParameter(String key, int[] default_value);
+  int[] getCoreColorParameter(String key, int[] default_value);
   
   /**
    * Returns the value of a core float parameter.
@@ -420,7 +420,7 @@ PluginConfig
    *
    * @since 3.0.4.3
    */
-  public float getCoreFloatParameter(String key);
+  float getCoreFloatParameter(String key);
   
   /**
    * Returns the value of a core float parameter.
@@ -431,7 +431,7 @@ PluginConfig
    *
    * @since 3.0.4.3
    */
-  public float getCoreFloatParameter(String key, float default_value);
+  float getCoreFloatParameter(String key, float default_value);
 
   /**
    * Returns the value of a core int parameter.
@@ -441,7 +441,7 @@ PluginConfig
    *
    * @since 3.0.4.3
    */
-  public int getCoreIntParameter(String key);
+  int getCoreIntParameter(String key);
 	
   /**
    * Returns the value of a core int parameter.
@@ -452,7 +452,7 @@ PluginConfig
    *
    * @since 3.0.4.3
    */
-  public int getCoreIntParameter(String key, int default_value);
+  int getCoreIntParameter(String key, int default_value);
   
   /**
    * Returns the value of a core long parameter.
@@ -462,7 +462,7 @@ PluginConfig
    *
    * @since 3.0.4.3
    */
-  public long getCoreLongParameter(String key);
+  long getCoreLongParameter(String key);
 	
   /**
    * Returns the value of a core long parameter.
@@ -473,7 +473,7 @@ PluginConfig
    *
    * @since 3.0.4.3
    */
-  public long getCoreLongParameter(String key, long default_value);
+  long getCoreLongParameter(String key, long default_value);
   
   /**
    * Returns the value of a core string parameter.
@@ -483,7 +483,7 @@ PluginConfig
    *
    * @since 3.0.4.3
    */
-  public String getCoreStringParameter(String key);
+  String getCoreStringParameter(String key);
 	
   /**
    * Returns the value of a core string parameter.
@@ -494,7 +494,7 @@ PluginConfig
    *
    * @since 3.0.4.3
    */
-  public String getCoreStringParameter(String key, String default_value);
+  String getCoreStringParameter(String key, String default_value);
 
   /**
    * Sets the value of a core boolean parameter.
@@ -504,7 +504,7 @@ PluginConfig
    * 
    * @since 3.0.4.2
    */
-  public void setCoreBooleanParameter(String key, boolean value);
+  void setCoreBooleanParameter(String key, boolean value);
   
   /**
    * Sets the value of a core byte array parameter.
@@ -514,7 +514,7 @@ PluginConfig
    *
    * @since 3.0.4.2
    */
-  public void setCoreByteParameter(String key, byte[] value);
+  void setCoreByteParameter(String key, byte[] value);
 
   /**
    * Sets the value of a core byte array parameter.
@@ -529,7 +529,7 @@ PluginConfig
    *
    * @since 3.0.5.3
    */
-  public void setCoreColorParameter(String key, int[] value);
+  void setCoreColorParameter(String key, int[] value);
 
   /**
    * Sets the value of a core byte array parameter.
@@ -550,7 +550,7 @@ PluginConfig
    *
    * @since 3.0.5.3
    */
-  public void setCoreColorParameter(String key, int[] value, boolean override);
+  void setCoreColorParameter(String key, int[] value, boolean override);
 
   
   /**
@@ -561,7 +561,7 @@ PluginConfig
    *
    * @since 3.0.4.2
    */
-  public void setCoreFloatParameter(String key, float value);
+  void setCoreFloatParameter(String key, float value);
   
   /**
    * Sets the value of a core int parameter.
@@ -571,7 +571,7 @@ PluginConfig
    *
    * @since 3.0.4.2
    */
-  public void setCoreIntParameter(String key, int value);
+  void setCoreIntParameter(String key, int value);
   
   /**
    * Sets the value of a core long parameter.
@@ -581,7 +581,7 @@ PluginConfig
    *
    * @since 3.0.4.2
    */
-  public void setCoreLongParameter(String key, long value);
+  void setCoreLongParameter(String key, long value);
   
   /**
    * Sets the value of a core string parameter.
@@ -591,7 +591,7 @@ PluginConfig
    *
    * @since 3.0.4.2
    */
-  public void setCoreStringParameter(String key, String value);
+  void setCoreStringParameter(String key, String value);
 
   
   /**
@@ -602,7 +602,7 @@ PluginConfig
    *
    * @since 2.0.4.2
    */
-  public boolean getPluginBooleanParameter(String key);
+  boolean getPluginBooleanParameter(String key);
 	  
   /**
    * Returns the value of a plugin boolean parameter.
@@ -613,7 +613,7 @@ PluginConfig
    *
    * @since 2.0.4.2
    */
-  public boolean getPluginBooleanParameter(String key, boolean default_value);
+  boolean getPluginBooleanParameter(String key, boolean default_value);
   
   /**
    * Returns the value of a plugin byte array parameter.
@@ -623,7 +623,7 @@ PluginConfig
    *
    * @since 3.0.0.7
    */
-  public byte[] getPluginByteParameter(String key);
+  byte[] getPluginByteParameter(String key);
 	
   /**
    * Returns the value of a plugin byte array parameter.
@@ -634,7 +634,7 @@ PluginConfig
    *
    * @since 2.2.0.3
    */
-  public byte[] getPluginByteParameter(String key, byte[] default_value);
+  byte[] getPluginByteParameter(String key, byte[] default_value);
 
   /**
    * Returns the value of a plugin color parameter.
@@ -655,7 +655,7 @@ PluginConfig
    *
    * @since 3.0.5.3
    */
-  public int[] getPluginColorParameter(String key);
+  int[] getPluginColorParameter(String key);
 	  
   /**
    * Returns the value of a plugin color parameter.
@@ -677,7 +677,7 @@ PluginConfig
    *
    * @since 3.0.5.3
    */
-  public int[] getPluginColorParameter(String key, int[] default_value);
+  int[] getPluginColorParameter(String key, int[] default_value);
 
   
   /**
@@ -688,7 +688,7 @@ PluginConfig
    *
    * @since 3.0.0.7
    */
-  public float getPluginFloatParameter(String key);
+  float getPluginFloatParameter(String key);
   
   /**
    * Returns the value of a plugin float parameter.
@@ -699,7 +699,7 @@ PluginConfig
    *
    * @since 3.0.0.7
    */
-  public float getPluginFloatParameter(String key, float default_value);
+  float getPluginFloatParameter(String key, float default_value);
 
   /**
    * Returns the value of a plugin int parameter.
@@ -709,7 +709,7 @@ PluginConfig
    *
    * @since 2.0.4.2
    */
-  public int getPluginIntParameter(String key);
+  int getPluginIntParameter(String key);
 	
   /**
    * Returns the value of a plugin int parameter.
@@ -720,7 +720,7 @@ PluginConfig
    *
    * @since 2.0.4.2
    */
-  public int getPluginIntParameter(String key, int default_value);
+  int getPluginIntParameter(String key, int default_value);
   
   /**
    * Returns the value of a plugin list parameter. The contents of the list must conform
@@ -732,7 +732,7 @@ PluginConfig
    *
    * @since 2.3.0.1
    */
-  public List getPluginListParameter(String key, List default_value);
+  List getPluginListParameter(String key, List default_value);
   
   /**
    * Returns the value of a plugin long parameter.
@@ -742,7 +742,7 @@ PluginConfig
    *
    * @since 3.0.0.7
    */
-  public long getPluginLongParameter(String key);
+  long getPluginLongParameter(String key);
 	
   /**
    * Returns the value of a plugin long parameter.
@@ -753,7 +753,7 @@ PluginConfig
    *
    * @since 3.0.0.7
    */
-  public long getPluginLongParameter(String key, long default_value);
+  long getPluginLongParameter(String key, long default_value);
 
   /**
    * Returns the value of a plugin map parameter. The contents of the map must conform
@@ -765,7 +765,7 @@ PluginConfig
    *
    * @since 2.3.0.1
    */
-  public Map getPluginMapParameter(String key, Map default_value);
+  Map getPluginMapParameter(String key, Map default_value);
 
   
   /**
@@ -776,7 +776,7 @@ PluginConfig
    *
    * @since 2.0.4.2
    */
-  public String getPluginStringParameter(String key);
+  String getPluginStringParameter(String key);
 	
   /**
    * Returns the value of a plugin string parameter.
@@ -787,7 +787,7 @@ PluginConfig
    *
    * @since 2.0.4.2
    */
-  public String getPluginStringParameter(String key, String default_value);
+  String getPluginStringParameter(String key, String default_value);
   
   /**
    * Returns the value of a plugin string-list parameter. If no value is set,
@@ -797,7 +797,7 @@ PluginConfig
    * @return The value of the parameter.
    * @since 3.0.5.3
    */
-  public String[] getPluginStringListParameter(String key);
+  String[] getPluginStringListParameter(String key);
 
   /**
    * Sets the value of a plugin boolean parameter.
@@ -807,7 +807,7 @@ PluginConfig
    * 
    * @since 2.0.4.2
    */
-  public void setPluginParameter(String key, boolean value);
+  void setPluginParameter(String key, boolean value);
   
   /**
    * Sets the value of a plugin byte array parameter.
@@ -817,7 +817,7 @@ PluginConfig
    *
    * @since 2.1.0.2
    */
-  public void setPluginParameter(String key, byte[] value);
+  void setPluginParameter(String key, byte[] value);
   
   
   /**
@@ -828,7 +828,7 @@ PluginConfig
    *
    * @since 3.0.0.7
    */
-  public void setPluginParameter(String key, float value);
+  void setPluginParameter(String key, float value);
   
   /**
    * Sets the value of a plugin int parameter.
@@ -838,7 +838,7 @@ PluginConfig
    *
    * @since 2.0.4.2
    */
-  public void setPluginParameter(String key, int value);
+  void setPluginParameter(String key, int value);
  
   /**
    * Sets the value of a plugin int parameter.
@@ -849,7 +849,7 @@ PluginConfig
    *
    * @since 2.5.0.1
    */
-  public void setPluginParameter(String key, int value, boolean global);
+  void setPluginParameter(String key, int value, boolean global);
 
   
   /**
@@ -860,7 +860,7 @@ PluginConfig
    *
    * @since 3.0.0.7
    */
-  public void setPluginParameter(String key, long value);
+  void setPluginParameter(String key, long value);
   
   /**
    * Sets the value of a plugin string parameter.
@@ -870,7 +870,7 @@ PluginConfig
    *
    * @since 2.0.4.2
    */
-  public void setPluginParameter(String key, String value);
+  void setPluginParameter(String key, String value);
 
   /**
    * Sets the value of a plugin string-list parameter.
@@ -879,7 +879,7 @@ PluginConfig
    * @param value The new value of the parameter.
    * @since 3.0.5.3
    */
-  public void setPluginStringListParameter(String key, String[] value);
+  void setPluginStringListParameter(String key, String[] value);
   
   /**
    * Sets the value of a plugin color parameter.
@@ -895,7 +895,7 @@ PluginConfig
    *
    * @since 3.0.5.3
    */
-  public void setPluginColorParameter(String key, int[] value);
+  void setPluginColorParameter(String key, int[] value);
 
   /**
    * Sets the value of a plugin color parameter.
@@ -917,7 +917,7 @@ PluginConfig
    *
    * @since 3.0.5.3
    */
-  public void setPluginColorParameter(String key, int[] value, boolean override);
+  void setPluginColorParameter(String key, int[] value, boolean override);
 
 
   /**
@@ -929,7 +929,7 @@ PluginConfig
    *
    * @since 2.3.0.1
    */
-  public void setPluginListParameter(String key, List value);
+  void setPluginListParameter(String key, List value);
 
   /**
    * Sets the value of a plugin map parameter. The contents of the map must conform
@@ -940,7 +940,7 @@ PluginConfig
    *
    * @since 2.3.0.1
    */
-  public void setPluginMapParameter(String key, Map value);
+  void setPluginMapParameter(String key, Map value);
   
   /**
    * Returns the value of a core boolean parameter. Note: the semantics of this
@@ -954,7 +954,7 @@ PluginConfig
    *
    * @since 3.0.0.7
    */
-  public boolean getUnsafeBooleanParameter(String key);
+  boolean getUnsafeBooleanParameter(String key);
 	  
   /**
    * Returns the value of a core boolean parameter. Note: the semantics of this
@@ -968,7 +968,7 @@ PluginConfig
    *
    * @since 3.0.0.5
    */
-  public boolean getUnsafeBooleanParameter(String key, boolean default_value);
+  boolean getUnsafeBooleanParameter(String key, boolean default_value);
   
   /**
    * Returns the value of a core byte array parameter. Note: the semantics of this
@@ -981,7 +981,7 @@ PluginConfig
    *
    * @since 3.0.0.7
    */
-  public byte[] getUnsafeByteParameter(String key);
+  byte[] getUnsafeByteParameter(String key);
 	
   /**
    * Returns the value of a core byte array parameter. Note: the semantics of this
@@ -995,7 +995,7 @@ PluginConfig
    *
    * @since 3.0.0.7
    */
-  public byte[] getUnsafeByteParameter(String key, byte[] default_value);
+  byte[] getUnsafeByteParameter(String key, byte[] default_value);
 
   /**
    * Returns the value of a core color parameter. Note: the semantics of this
@@ -1019,7 +1019,7 @@ PluginConfig
    *
    * @since 3.0.5.3
    */
-  public int[] getUnsafeColorParameter(String key);
+  int[] getUnsafeColorParameter(String key);
   
   /**
    * Returns the value of a core color parameter. Note: the semantics of this
@@ -1044,7 +1044,7 @@ PluginConfig
    *
    * @since 3.0.5.3
    */
-  public int[] getUnsafeColorParameter(String key, int[] default_value);
+  int[] getUnsafeColorParameter(String key, int[] default_value);
   
   /**
    * Returns the value of a core float parameter. Note: the semantics of this
@@ -1057,7 +1057,7 @@ PluginConfig
    *
    * @since 3.0.0.7
    */
-  public float getUnsafeFloatParameter(String key);
+  float getUnsafeFloatParameter(String key);
   
   /**
    * Returns the value of a core float parameter. Note: the semantics of this
@@ -1071,7 +1071,7 @@ PluginConfig
    *
    * @since 3.0.0.5
    */
-  public float getUnsafeFloatParameter(String key, float default_value);
+  float getUnsafeFloatParameter(String key, float default_value);
 
   /**
    * Returns the value of a core int parameter. Note: the semantics of this
@@ -1084,7 +1084,7 @@ PluginConfig
    *
    * @since 3.0.0.7
    */
-  public int getUnsafeIntParameter(String key);
+  int getUnsafeIntParameter(String key);
 	
   /**
    * Returns the value of a core int parameter. Note: the semantics of this
@@ -1098,7 +1098,7 @@ PluginConfig
    *
    * @since 3.0.0.5
    */
-  public int getUnsafeIntParameter(String key, int default_value);
+  int getUnsafeIntParameter(String key, int default_value);
   
   /**
    * Returns the value of a core long parameter. Note: the semantics of this
@@ -1111,7 +1111,7 @@ PluginConfig
    *
    * @since 3.0.0.7
    */
-  public long getUnsafeLongParameter(String key);
+  long getUnsafeLongParameter(String key);
 	
   /**
    * Returns the value of a core long parameter. Note: the semantics of this
@@ -1125,7 +1125,7 @@ PluginConfig
    *
    * @since 3.0.0.5
    */
-  public long getUnsafeLongParameter(String key, long default_value);
+  long getUnsafeLongParameter(String key, long default_value);
   
   /**
    * Returns the value of a core string parameter. Note: the semantics of this
@@ -1138,7 +1138,7 @@ PluginConfig
    *
    * @since 3.0.0.7
    */
-  public String getUnsafeStringParameter(String key);
+  String getUnsafeStringParameter(String key);
 	
   /**
    * Returns the value of a core string parameter. Note: the semantics of this
@@ -1152,7 +1152,7 @@ PluginConfig
    *
    * @since 3.0.0.5
    */
-  public String getUnsafeStringParameter(String key, String default_value);
+  String getUnsafeStringParameter(String key, String default_value);
   
   /**
    * Sets the value of a core boolean parameter. Note: the semantics of this
@@ -1165,7 +1165,7 @@ PluginConfig
    * 
    * @since 3.0.0.5
    */
-  public void setUnsafeBooleanParameter(String key, boolean value);
+  void setUnsafeBooleanParameter(String key, boolean value);
   
   /**
    * Sets the value of a core byte array parameter. Note: the semantics of this
@@ -1178,7 +1178,7 @@ PluginConfig
    * 
    * @since 3.0.0.7
    */
-  public void setUnsafeByteParameter(String key, byte[] value);
+  void setUnsafeByteParameter(String key, byte[] value);
 
   /**
    * Returns the value of a core color parameter. Note: the semantics of this
@@ -1196,7 +1196,7 @@ PluginConfig
    *
    * @since 3.0.5.3
    */
-  public void setUnsafeColorParameter(String key, int[] value);
+  void setUnsafeColorParameter(String key, int[] value);
 
   /**
    * Returns the value of a core color parameter. Note: the semantics of this
@@ -1220,7 +1220,7 @@ PluginConfig
    *
    * @since 3.0.5.3
    */
-  public void setUnsafeColorParameter(String key, int[] value, boolean override);
+  void setUnsafeColorParameter(String key, int[] value, boolean override);
   
   /**
    * Sets the value of a core float parameter. Note: the semantics of this
@@ -1233,7 +1233,7 @@ PluginConfig
    * 
    * @since 3.0.0.5
    */
-  public void setUnsafeFloatParameter(String key, float value);
+  void setUnsafeFloatParameter(String key, float value);
   
   /**
    * Sets the value of a core int parameter. Note: the semantics of this
@@ -1246,7 +1246,7 @@ PluginConfig
    * 
    * @since 3.0.0.5
    */
-  public void setUnsafeIntParameter(String key, int value);
+  void setUnsafeIntParameter(String key, int value);
   
   /**
    * Sets the value of a core long parameter. Note: the semantics of this
@@ -1259,7 +1259,7 @@ PluginConfig
    * 
    * @since 3.0.0.5
    */
-  public void setUnsafeLongParameter(String key, long value);
+  void setUnsafeLongParameter(String key, long value);
   
   /**
    * Sets the value of a core string parameter. Note: the semantics of this
@@ -1272,7 +1272,7 @@ PluginConfig
    * 
    * @since 3.0.0.5
    */
-  public void setUnsafeStringParameter(String key, String value);
+  void setUnsafeStringParameter(String key, String value);
 
 	/**
 	 * Removes the plugin parameter with the given name.
@@ -1280,7 +1280,7 @@ PluginConfig
 	 * @param key Name of the parameter.
 	 * @return <tt>true</tt> if the parameter was found and removed.
 	 */
-	public boolean removePluginParameter(String key);
+    boolean removePluginParameter(String key);
 	
 	/**
 	 * Removes the plugin color parameter with the given name.
@@ -1290,7 +1290,7 @@ PluginConfig
 	 * 
 	 * @since 3.0.5.3
 	 */
-	public boolean removePluginColorParameter(String key);
+    boolean removePluginColorParameter(String key);
 
   /**
    * @return the prefix used when storing configuration values in the config file for
@@ -1298,19 +1298,19 @@ PluginConfig
    *
    * @since 2.1.0.0
    */
-  
-	public String
+
+  String
 	getPluginConfigKeyPrefix();
 
-	public ConfigParameter
+	ConfigParameter
 	getParameter(
-			String		key );
+            String key);
 
-	public ConfigParameter
+	ConfigParameter
 	getPluginParameter(
-			String		key );
+            String key);
 
-	public boolean
+	boolean
 	isNewInstall();
 
 	
@@ -1330,7 +1330,7 @@ PluginConfig
 	 * @since 2.5.0.3
 	 */
 
-	public Map
+    Map
 	getUnsafeParameterList();
 	
   /**
@@ -1338,7 +1338,7 @@ PluginConfig
    *
    * @since 2.0.8.0
    */
-	public void save() throws PluginException;
+  void save() throws PluginException;
 	
 		/**
 		 * Returns a file that can be used by the plugin to save user-specific state.
@@ -1348,35 +1348,35 @@ PluginConfig
 		 * @param name
 		 * @return
 		 */
-	
-	public File
+
+        File
 	getPluginUserFile(
-		String	name );
+                String name);
 	
 	  /**
 	   * Returns true if a core parameter with the given name exists.
 	   * @param key The name of the parameter to check.
 	   * @since 2.5.0.2  
 	   */
-	public boolean hasParameter(String param_name);
+      boolean hasParameter(String param_name);
 
 	  /**
 	   * Returns true if a plugin parameter with the given name exists.
 	   * @param key The name of the parameter to check.
 	   * @since 2.5.0.2  
 	   */
-	public boolean hasPluginParameter(String param_name);
+      boolean hasPluginParameter(String param_name);
 	
-	public void
+	void
 	addListener(
-		PluginConfigListener	l );
+            PluginConfigListener l);
 
 	/**
 	 * @param _key
 	 * 
 	 * @since 2.5.0.1
 	 */
-	public void setPluginConfigKeyPrefix(String _key);
+    void setPluginConfigKeyPrefix(String _key);
 	
 	/**
 	 * Enable the plugin to store configuration parameters into a separate
@@ -1415,7 +1415,7 @@ PluginConfig
 	 * @since 3.0.5.3
 	 * @return The <tt>PluginConfigSource</tt> object representing the external configuration file.
 	 */
-	public PluginConfigSource enableExternalConfigSource();
+    PluginConfigSource enableExternalConfigSource();
 	
 	/**
 	 * Returns the <tt>PluginConfigSource</tt> object used for this plugin configuration (or
@@ -1424,7 +1424,7 @@ PluginConfig
 	 * @since 3.0.5.3
 	 * @return The PluginConfigSource object.
 	 */
-	public PluginConfigSource getPluginConfigSource();
+    PluginConfigSource getPluginConfigSource();
 	
 	/**
 	 * Sets the plugin configuration source object to use for storing parameters for this
@@ -1441,5 +1441,5 @@ PluginConfig
 	 * @param source The PluginConfigSource object to use.
 	 * @since 3.0.5.3
 	 */
-	public void setPluginConfigSource(PluginConfigSource source);
+    void setPluginConfigSource(PluginConfigSource source);
 }

@@ -24,6 +24,7 @@ package org.gudy.azureus2.core3.history.impl;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
@@ -88,8 +89,8 @@ DownloadHistoryManagerImpl
 	
 	final Object	lock = new Object();
 	
-	private WeakReference<Map<Long,DownloadHistoryImpl>>		history_active	= new WeakReference<Map<Long,DownloadHistoryImpl>>( null );
-	private WeakReference<Map<Long,DownloadHistoryImpl>>		history_dead	= new WeakReference<Map<Long,DownloadHistoryImpl>>( null );
+	private WeakReference<Map<Long,DownloadHistoryImpl>>		history_active	= new WeakReference<>(null);
+	private WeakReference<Map<Long,DownloadHistoryImpl>>		history_dead	= new WeakReference<>(null);
 	
 	private volatile int	active_history_size	= COConfigurationManager.getIntParameter( CONFIG_ACTIVE_SIZE , 0 );
 	private volatile int	dead_history_size	= COConfigurationManager.getIntParameter( CONFIG_DEAD_SIZE , 0 );
@@ -104,7 +105,7 @@ DownloadHistoryManagerImpl
 	
 	private boolean	history_escaped = false;
 	
-	private final Map<Long,Long>	redownload_cache	= new HashMap<Long, Long>();
+	private final Map<Long,Long>	redownload_cache	= new HashMap<>();
 	
 	private boolean	enabled;
 	
@@ -390,11 +391,11 @@ DownloadHistoryManagerImpl
 			
 			if ( history.size() > 0 ){
 
-				List<DownloadHistory> existing = new ArrayList<DownloadHistory>( history.values());
+				List<DownloadHistory> existing = new ArrayList<>(history.values());
 				
 				history.clear();
 
-				historyUpdated( new ArrayList<DownloadHistory>( existing ), DownloadHistoryEvent.DHE_HISTORY_REMOVED, UPDATE_TYPE_ACTIVE );
+				historyUpdated(new ArrayList<>(existing), DownloadHistoryEvent.DHE_HISTORY_REMOVED, UPDATE_TYPE_ACTIVE );
 			}
 					
 			for ( DownloadManager dm: dms ){
@@ -407,7 +408,7 @@ DownloadHistoryManagerImpl
 				}
 			}
 			
-			historyUpdated( new ArrayList<DownloadHistory>( history.values()), DownloadHistoryEvent.DHE_HISTORY_ADDED, UPDATE_TYPE_ACTIVE );
+			historyUpdated(new ArrayList<>(history.values()), DownloadHistoryEvent.DHE_HISTORY_ADDED, UPDATE_TYPE_ACTIVE );
 		}
 	}
 	
@@ -419,7 +420,7 @@ DownloadHistoryManagerImpl
 			Map<Long,DownloadHistoryImpl>	active 	= getActiveHistory();
 			Map<Long,DownloadHistoryImpl>	dead	= getDeadHistory();
 			
-			List<DownloadHistory>	result = new ArrayList<DownloadHistory>(active.size() + dead.size());
+			List<DownloadHistory>	result = new ArrayList<>(active.size() + dead.size());
 			
 			result.addAll( active.values());
 			result.addAll( dead.values());
@@ -440,7 +441,7 @@ DownloadHistoryManagerImpl
 	{
 		synchronized( lock ){
 			
-			List<DownloadHistory> removed = new ArrayList<DownloadHistory>( to_remove.size());
+			List<DownloadHistory> removed = new ArrayList<>(to_remove.size());
 			
 			int	update_type = 0;
 			
@@ -630,7 +631,7 @@ DownloadHistoryManagerImpl
 			
 			active_load_time = SystemTime.getMonotonousTime();
 
-			history_active = new WeakReference<Map<Long,DownloadHistoryImpl>>( ref );
+			history_active = new WeakReference<>(ref);
 			
 			active_history_size = ref.size();
 		}
@@ -649,7 +650,7 @@ DownloadHistoryManagerImpl
 			
 			dead_load_time = SystemTime.getMonotonousTime();
 			
-			history_dead = new WeakReference<Map<Long,DownloadHistoryImpl>>( ref );
+			history_dead = new WeakReference<>(ref);
 			
 			dead_history_size = ref.size();
 		}
@@ -663,7 +664,7 @@ DownloadHistoryManagerImpl
 		int						action,
 		int						type )
 	{
-		List<DownloadHistory> list = new ArrayList<DownloadHistory>(1);
+		List<DownloadHistory> list = new ArrayList<>(1);
 		
 		list.add( dh );
 		
@@ -714,7 +715,7 @@ DownloadHistoryManagerImpl
 					});
 		}
 		
-		listeners.dispatch( 0, new DownloadHistoryEventImpl( action, new ArrayList<DownloadHistory>( list )));	
+		listeners.dispatch( 0, new DownloadHistoryEventImpl( action, new ArrayList<>(list)));
 	}
 	
 	private void
@@ -760,7 +761,7 @@ DownloadHistoryManagerImpl
 	loadHistory(
 		String		file )
 	{
-		Map<Long,DownloadHistoryImpl>	result = new HashMap<Long, DownloadHistoryImpl>();
+		Map<Long,DownloadHistoryImpl>	result = new HashMap<>();
 		
 		// System.out.println( "loading " + file );
 		
@@ -800,9 +801,9 @@ DownloadHistoryManagerImpl
 		// System.out.println( "saving " + file );
 		
 		try{
-			Map<String,Object>	map = new HashMap<String,Object>();
+			Map<String,Object>	map = new HashMap<>();
 	
-			List<Map<String,Object>>	list = new ArrayList<Map<String,Object>>( records.size());
+			List<Map<String,Object>>	list = new ArrayList<>(records.size());
 			
 			map.put( "records", list );
 			
@@ -921,8 +922,8 @@ DownloadHistoryManagerImpl
 				uid		= (Long)map.get( "u" );
 				hash	= (byte[])map.get("h");
 				
-				name 			= new String((byte[])map.get( "n"), "UTF-8" );
-				save_location 	= new String((byte[])map.get( "s"), "UTF-8" );
+				name 			= new String((byte[])map.get( "n"), StandardCharsets.UTF_8);
+				save_location 	= new String((byte[])map.get( "s"), StandardCharsets.UTF_8);
 				
 				Long l_size		= (Long)map.get( "z" );
 
@@ -932,11 +933,7 @@ DownloadHistoryManagerImpl
 				complete_time 	= (Long)map.get( "c" );
 				remove_time 	= (Long)map.get( "r" );
 				
-			}catch( IOException e ){
-				
-				throw( e );
-				
-			}catch( Throwable e ){
+			} catch( Throwable e ){
 				
 				throw( new IOException( "History decode failed: " + Debug.getNestedExceptionMessage( e )));
 			}
@@ -954,13 +951,13 @@ DownloadHistoryManagerImpl
 		
 			throws IOException
 		{
-			Map<String,Object> map = new LightHashMap<String,Object>();
+			Map<String,Object> map = new LightHashMap<>();
 			
 			map.put( "u", uid );
 			map.put( "h", hash );
-			map.put( "n", name.getBytes( "UTF-8" ));
+			map.put( "n", name.getBytes(StandardCharsets.UTF_8));
 			map.put( "z", size );
-			map.put( "s", save_location.getBytes( "UTF-8" ));
+			map.put( "s", save_location.getBytes(StandardCharsets.UTF_8));
 			map.put( "a", add_time );
 			map.put( "c", complete_time );
 			map.put( "r", remove_time );

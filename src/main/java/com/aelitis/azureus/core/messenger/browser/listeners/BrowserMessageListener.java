@@ -35,14 +35,14 @@ public interface BrowserMessageListener
 	 * 
 	 * @return listener's context
 	 */
-	public ClientMessageContext getContext();
+    ClientMessageContext getContext();
 
 	/**
 	 * Returns the unique ID for this listener.
 	 * 
 	 * @return listener's unique ID
 	 */
-	public String getId();
+    String getId();
 
 	/**
 	 * Handles the given message, usually by parsing the parameters 
@@ -50,12 +50,12 @@ public interface BrowserMessageListener
 	 * 
 	 * @param message holds all message information
 	 */
-	public void handleMessage(BrowserMessage message);
+    void handleMessage(BrowserMessage message);
 
 	/**
 	 * Sets the context for this listener. Called by its dispatcher when attached.
 	 * 
 	 * @param context the new context for this listener
 	 */
-	public void setContext(ClientMessageContext context);
+    void setContext(ClientMessageContext context);
 }

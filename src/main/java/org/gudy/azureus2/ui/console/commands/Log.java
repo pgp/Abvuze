@@ -160,15 +160,13 @@ public class Log extends OptionsConsoleCommand {
 			}else if ( subcommand.equalsIgnoreCase("list" )){
 				
 				Map	channel_map = getChannelMap( ci );
-				
-				Iterator it = channel_map.keySet().iterator();
-				
-				while( it.hasNext()){
-					
-					String	name = (String)it.next();
-					
-					ci.out.println( "  " + name + " [" + ( channel_listener_map.get( name ) == null?"off":"on") + "]" );
-				}
+
+                for (Object o : channel_map.keySet()) {
+
+                    String name = (String) o;
+
+                    ci.out.println("  " + name + " [" + (channel_listener_map.get(name) == null ? "off" : "on") + "]");
+                }
 			} else {
 				
 				ci.out.println("> Command 'log': Subcommand '" + subcommand + "' unknown.");
@@ -185,26 +183,26 @@ public class Log extends OptionsConsoleCommand {
 		Map channel_map = new HashMap();
 		
 		PluginInterface[]	pis = ci.azureus_core.getPluginManager().getPluginInterfaces();
-		
-		for (int i=0;i<pis.length;i++){
-		
-			LoggerChannel[]	logs = pis[i].getLogger().getChannels();
-		
-			if ( logs.length > 0 ){
-								
-				if ( logs.length == 1 ){
-					
-					channel_map.put( pis[i].getPluginName(),logs[0] );
 
-				}else{
-					
-					for (int j=0;j<logs.length;j++){
-					
-						channel_map.put( pis[i].getPluginName() + "." + logs[j].getName(), logs[j] );
-					}
-				}
-			}
-		}
+        for (PluginInterface pi : pis) {
+
+            LoggerChannel[] logs = pi.getLogger().getChannels();
+
+            if (logs.length > 0) {
+
+                if (logs.length == 1) {
+
+                    channel_map.put(pi.getPluginName(), logs[0]);
+
+                } else {
+
+                    for (LoggerChannel log : logs) {
+
+                        channel_map.put(pi.getPluginName() + "." + log.getName(), log);
+                    }
+                }
+            }
+        }
 		
 		return( channel_map );
 	}

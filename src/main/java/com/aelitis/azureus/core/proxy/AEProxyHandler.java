@@ -29,9 +29,9 @@ import java.io.IOException;
 public interface 
 AEProxyHandler 
 {
-	public AEProxyState
+	AEProxyState
 	getInitialState(
-		AEProxyConnection	connection )
+            AEProxyConnection connection)
 	
 		throws IOException;
 }

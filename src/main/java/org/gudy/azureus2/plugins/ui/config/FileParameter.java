@@ -26,6 +26,6 @@ public interface
 FileParameter 
 	extends Parameter
 {
-	public String
+	String
 	getValue();
 }

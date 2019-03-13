@@ -22,35 +22,35 @@ package com.aelitis.azureus.core.clientmessageservice.secure;
 public interface 
 SecureMessageServiceClientAdapter 
 {
-	public void
+	void
 	serverOK();
 	
-	public void
+	void
 	serverFailed(
-		Throwable	cause );
+            Throwable cause);
 	
-	public String
+	String
 	getUser();
 	
-	public byte[]
+	byte[]
 	getPassword();
 	
-	public void
+	void
 	authenticationFailed();
 	
-	public long
+	long
 	getMessageSequence();
 	
-	public void
+	void
 	setMessageSequence(
-		long		sequence );
+            long sequence);
 	
-	public void
+	void
 	log(
-		String		str );
+            String str);
 	
-	public void
+	void
 	log(
-		String		str,
-		Throwable	e );
+            String str,
+            Throwable e);
 }

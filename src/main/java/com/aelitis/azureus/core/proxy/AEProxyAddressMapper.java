@@ -32,8 +32,8 @@ import java.util.Map;
 public interface 
 AEProxyAddressMapper 
 {
-	public static final String	MAP_PROPERTY_DISABLE_AZ_MESSAGING	= "AEProxyAddressMapper.disable.az.msg";
-	public static final String	MAP_PROPERTY_PROTOCOL_QUALIFIER		= "AEProxyAddressMapper.prot.qual";
+	String	MAP_PROPERTY_DISABLE_AZ_MESSAGING	= "AEProxyAddressMapper.disable.az.msg";
+	String	MAP_PROPERTY_PROTOCOL_QUALIFIER		= "AEProxyAddressMapper.prot.qual";
 	
 	
 		/**
@@ -45,53 +45,53 @@ AEProxyAddressMapper
 		 * @param address
 		 * @return
 		 */
-	
-	public String
+
+        String
 	internalise(
-		String	address );
+                String address);
 	
-	public String
+	String
 	externalise(
-		String	address );
+            String address);
 	
-	public URL
+	URL
 	internalise(
-		URL		url );
+            URL url);
 	
-	public URL
+	URL
 	externalise(
-		URL		url );
+            URL url);
 	
-	public PortMapping
+	PortMapping
 	registerPortMapping(
-		int		local_port,
-		String	ip );
+            int local_port,
+            String ip);
 	
-	public PortMapping
+	PortMapping
 	registerPortMapping(
-		int						local_port,
-		String					ip,
-		Map<String,Object>		properties );
+            int local_port,
+            String ip,
+            Map<String, Object> properties);
 	
-	public AppliedPortMapping
+	AppliedPortMapping
 	applyPortMapping(
-		InetAddress		address,
-		int				port );
+            InetAddress address,
+            int port);
 	
-	public interface
+	interface
 	PortMapping
 	{
-		public void
+		void
 		unregister();
 	}
 	
-	public interface
+	interface
 	AppliedPortMapping
 	{
-		public InetSocketAddress
+		InetSocketAddress
 		getAddress();
 		
-		public Map<String,Object>
+		Map<String,Object>
 		getProperties();
 	}
 }

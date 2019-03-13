@@ -27,38 +27,38 @@ import java.util.List;
 public interface 
 DownloadHistoryManager 
 {
-	public boolean
+	boolean
 	isEnabled();
 	
-	public void
+	void
 	setEnabled(
-		boolean		enabled );
+            boolean enabled);
 		
-	public int
+	int
 	getHistoryCount();
 	
-	public void
+	void
 	removeHistory(
-		List<DownloadHistory>	history );
+            List<DownloadHistory> history);
 	
-	public void
+	void
 	resetHistory();
 	
 		/**
 		 * 
 		 *  @return [ added, completed, removed, redownloaded (transient)]
 		 */
-	
-	public long[]
+
+        long[]
 	getDates(
-		byte[]		hash );
+                byte[] hash);
 	
-	public void
+	void
 	addListener(
-		DownloadHistoryListener		listener,
-		boolean						fire_for_existing );
+            DownloadHistoryListener listener,
+            boolean fire_for_existing);
 	
-	public void
+	void
 	removeListener(
-		DownloadHistoryListener		listener );
+            DownloadHistoryListener listener);
 }

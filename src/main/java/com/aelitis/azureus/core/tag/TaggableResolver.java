@@ -25,21 +25,21 @@ import java.util.List;
 public interface 
 TaggableResolver 
 {
-	public long
+	long
 	getResolverTaggableType();
 	
-	public List<Taggable>
+	List<Taggable>
 	getResolvedTaggables();
 	
-	public Taggable
+	Taggable
 	resolveTaggable(
-		String		id );
+            String id);
 	
-	public String
+	String
 	getDisplayName(
-		Taggable	taggable );
+            Taggable taggable);
 	
-	public void
+	void
 	requestAttention(
-		String		id );
+            String id);
 }

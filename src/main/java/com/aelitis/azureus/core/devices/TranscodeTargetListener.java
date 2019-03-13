@@ -23,19 +23,19 @@ package com.aelitis.azureus.core.devices;
 public interface 
 TranscodeTargetListener 
 {
-	public static final int	CT_PROPERTY		= 1;		// data = String property
+	int	CT_PROPERTY		= 1;		// data = String property
 	
-	public void
+	void
 	fileAdded(
-		TranscodeFile		file );
+            TranscodeFile file);
 	
-	public void
+	void
 	fileChanged(
-		TranscodeFile		file,
-		int					type,
-		Object				data );
+            TranscodeFile file,
+            int type,
+            Object data);
 	
-	public void
+	void
 	fileRemoved(
-		TranscodeFile		file );
+            TranscodeFile file);
 }

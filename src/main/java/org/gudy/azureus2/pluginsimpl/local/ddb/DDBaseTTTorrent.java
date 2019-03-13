@@ -151,66 +151,64 @@ DDBaseTTTorrent
 				// gotta look for the sha1(hash)
 			
 			Download[]	downloads = pi.getDownloadManager().getDownloads();
-			
-			for (int i=0;i<downloads.length;i++){
-				
-				Download	dl = downloads[i];
-				
-				if ( dl.getTorrent() == null ){
-					
-					continue;
-				}
-				
-				String	sha1 = dl.getAttribute( ta_sha1 );
-				
-				if ( sha1 == null ){
-					
-					sha1 = pi.getUtilities().getFormatters().encodeBytesToString( 
-								new SHA1Simple().calculateHash( dl.getTorrent().getHash()));
-					
-					dl.setAttribute( ta_sha1, sha1 );
-				}
-				
-				if ( sha1.equals( search_sha1 )){
-					
-					download	= dl;
-										
-					break;
-				}
-			}
+
+            for (Download dl : downloads) {
+
+                if (dl.getTorrent() == null) {
+
+                    continue;
+                }
+
+                String sha1 = dl.getAttribute(ta_sha1);
+
+                if (sha1 == null) {
+
+                    sha1 = pi.getUtilities().getFormatters().encodeBytesToString(
+                            new SHA1Simple().calculateHash(dl.getTorrent().getHash()));
+
+                    dl.setAttribute(ta_sha1, sha1);
+                }
+
+                if (sha1.equals(search_sha1)) {
+
+                    download = dl;
+
+                    break;
+                }
+            }
 				
 			if ( download == null ){
 				
 				synchronized( this ){
 					
 					if ( external_downloads != null ){
-						
-						for (int i=0;i<external_downloads.size();i++){
-							
-							Download	dl = (Download)external_downloads.get(i);
-							
-							if ( dl.getTorrent() == null ){
-								
-								continue;
-							}
-							
-							String	sha1 = dl.getAttribute( ta_sha1 );
-							
-							if ( sha1 == null ){
-								
-								sha1 = pi.getUtilities().getFormatters().encodeBytesToString( 
-											new SHA1Simple().calculateHash( dl.getTorrent().getHash()));
-								
-								dl.setAttribute( ta_sha1, sha1 );
-							}
-							
-							if ( sha1.equals( search_sha1 )){
-								
-								download	= dl;
-													
-								break;
-							}
-						}
+
+                        for (Object external_download : external_downloads) {
+
+                            Download dl = (Download) external_download;
+
+                            if (dl.getTorrent() == null) {
+
+                                continue;
+                            }
+
+                            String sha1 = dl.getAttribute(ta_sha1);
+
+                            if (sha1 == null) {
+
+                                sha1 = pi.getUtilities().getFormatters().encodeBytesToString(
+                                        new SHA1Simple().calculateHash(dl.getTorrent().getHash()));
+
+                                dl.setAttribute(ta_sha1, sha1);
+                            }
+
+                            if (sha1.equals(search_sha1)) {
+
+                                download = dl;
+
+                                break;
+                            }
+                        }
 					}
 				}
 			}
@@ -283,9 +281,9 @@ DDBaseTTTorrent
 				
 				if ( data != null ){
 										
-					data[1] = new Long( SystemTime.getCurrentTime());
+					data[1] = SystemTime.getCurrentTime();
 					
-					return( ddb.createValue((byte[])data[0]));
+					return( ddb.createValue(data[0]));
 				}
 			}
 			
@@ -329,7 +327,7 @@ DDBaseTTTorrent
 									
 									while( it.hasNext()){
 										
-										long	time = ((Long)((Object[])it.next())[1]).longValue();
+										long	time = (Long) ((Object[]) it.next())[1];
 								
 										if ( now < time || now - time > 120*1000 ){
 											
@@ -346,7 +344,7 @@ DDBaseTTTorrent
 						});
 				}
 				
-				data_cache.put( hw, new Object[]{ data, new Long( SystemTime.getCurrentTime())});
+				data_cache.put( hw, new Object[]{ data, SystemTime.getCurrentTime()});
 			}
 				
 			return( ddb.createValue( data ));

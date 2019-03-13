@@ -54,7 +54,7 @@ ListenerManager<T>
 		String										name,
 		ListenerManagerDispatcher<T>				target )
 	{
-		return( new ListenerManager<T>( name, target, false ));
+		return(new ListenerManager<>(name, target, false));
 	}
 	
 	public static <T>ListenerManager<T>
@@ -62,7 +62,7 @@ ListenerManager<T>
 		String							name,
 		ListenerManagerDispatcher<T>	target )
 	{
-		return( new ListenerManager<T>( name, target, true ));
+		return(new ListenerManager<>(name, target, true));
 	}
 	
 	
@@ -74,7 +74,7 @@ ListenerManager<T>
 	private final boolean		async;
 	private AEThread2	async_thread;
 	
-	private List<T>			listeners		= new ArrayList<T>(0);
+	private List<T>			listeners		= new ArrayList<>(0);
 	
 	private List<Object[]>	dispatch_queue;
 	private AESemaphore		dispatch_sem;
@@ -99,7 +99,7 @@ ListenerManager<T>
 		if ( async ){
 			
 			dispatch_sem	= new AESemaphore("ListenerManager::"+name);
-			dispatch_queue 	= new LinkedList<Object[]>();
+			dispatch_queue 	= new LinkedList<>();
 			
 			if ( target_with_exception != null ){
 				
@@ -120,7 +120,7 @@ ListenerManager<T>
 
 		synchronized( this ){
 			
-			ArrayList<T>	new_listeners	= new ArrayList<T>( listeners );
+			ArrayList<T>	new_listeners	= new ArrayList<>(listeners);
 			
 			if (new_listeners.contains(listener)) {
 				if ( Constants.IS_CVS_VERSION ){
@@ -169,7 +169,7 @@ ListenerManager<T>
 	{
 		synchronized( this ){
 			
-			ArrayList<T>	new_listeners = new ArrayList<T>( listeners );
+			ArrayList<T>	new_listeners = new ArrayList<>(listeners);
 			
 			new_listeners.remove( listener );
 			
@@ -201,7 +201,7 @@ ListenerManager<T>
 	{
 		synchronized( this ){
 									
-			listeners	= new ArrayList<T>();
+			listeners	= new ArrayList<>();
 			
 			if ( async ){
 				
@@ -260,7 +260,7 @@ ListenerManager<T>
 					// listeners are "copy on write" updated, hence we grab a reference to the 
 					// current listeners here. Any subsequent change won't affect our listeners
 												
-				dispatch_queue.add(new Object[]{listeners, new Integer(type), value, sem });
+				dispatch_queue.add(new Object[]{listeners, type, value, sem });
 				
 				if ( async_thread == null ){
 					
@@ -353,7 +353,7 @@ ListenerManager<T>
 								
 					// 5 entries to denote single listener
 				
-				dispatch_queue.add(new Object[]{ listener, new Integer(type), value, sem, null });
+				dispatch_queue.add(new Object[]{ listener, type, value, sem, null });
 				
 				if ( async_thread == null ){
 					
@@ -396,7 +396,7 @@ ListenerManager<T>
 		String	res = listener_class.getName();
 		
 		try{
-			Method getString = listener_class.getMethod( "getString", new Class[0]);
+			Method getString = listener_class.getMethod( "getString");
 			
 			if ( getString != null ){
 				
@@ -477,24 +477,24 @@ ListenerManager<T>
 		Object		value )
 	
 		throws Throwable
-	{		
-		for (int i=0;i<listeners_ref.size();i++){
-		
-			
-			if ( target_with_exception != null ){
-					
-				// System.out.println( name + ":dispatchWithException" );
-				
-					// DON'T catch and handle exceptions here are they are permitted to
-					// occur!
-				
-				doDispatchWithException( listeners_ref.get(i), type, value );
-					
-			}else{
-			
-				doDispatch( listeners_ref.get(i), type, value );
-			}
-		}
+	{
+        for (T t : listeners_ref) {
+
+
+            if (target_with_exception != null) {
+
+                // System.out.println( name + ":dispatchWithException" );
+
+                // DON'T catch and handle exceptions here are they are permitted to
+                // occur!
+
+                doDispatchWithException(t, type, value);
+
+            } else {
+
+                doDispatch(t, type, value);
+            }
+        }
 	}
 	
 	protected void
@@ -546,7 +546,7 @@ ListenerManager<T>
 				
 				if ( dispatch_queue.size() > 0 ){
 					
-					data = (Object[])dispatch_queue.remove(0);
+					data = dispatch_queue.remove(0);
 				}
 			}
 			
@@ -555,11 +555,11 @@ ListenerManager<T>
 				try{						
 					if ( data.length == 4 ){
 					
-						dispatchInternal((List<T>)data[0], ((Integer)data[1]).intValue(), data[2] );
+						dispatchInternal((List<T>)data[0], (Integer) data[1], data[2] );
 						
 					}else{
 						
-						dispatchInternal((T)data[0], ((Integer)data[1]).intValue(), data[2] );
+						dispatchInternal((T)data[0], (Integer) data[1], data[2] );
 					}
 					
 				}catch( Throwable e ){
@@ -585,7 +585,7 @@ ListenerManager<T>
 		final ListenerManagerDispatcher<T>	_dispatcher,
 		long								_timeout )
 	{
-		final List<T>	listeners = new ArrayList<T>( _listeners );
+		final List<T>	listeners = new ArrayList<>(_listeners);
 		
 		final boolean[]	completed = new boolean[listeners.size()];
 		

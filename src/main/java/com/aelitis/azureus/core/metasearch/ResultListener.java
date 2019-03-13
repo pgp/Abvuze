@@ -22,16 +22,16 @@ package com.aelitis.azureus.core.metasearch;
 
 public interface ResultListener {
 	
-	public void contentReceived(Engine engine, String content );
+	void contentReceived(Engine engine, String content);
 	
-	public void matchFound( Engine engine, String[] fields );
+	void matchFound(Engine engine, String[] fields);
 	
-	public void resultsReceived(Engine engine,Result[] results);
+	void resultsReceived(Engine engine, Result[] results);
 	
-	public void resultsComplete(Engine engine);
+	void resultsComplete(Engine engine);
 	
-	public void engineFailed(Engine engine, Throwable cause );
+	void engineFailed(Engine engine, Throwable cause);
 	
-	public void engineRequiresLogin(Engine engine, Throwable cause );
+	void engineRequiresLogin(Engine engine, Throwable cause);
 
 }

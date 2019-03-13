@@ -241,23 +241,23 @@ DebugWeakList
 			}else{
 			
 					// has next has skipped on beyond last result, need to manually fix up...
-				
+
 				Iterator	temp_it = list.iterator();
-				
+
 				while( temp_it.hasNext()){
-					
+
 					Object[]	entry  = (Object[])temp_it.next();
-					
+
 					WeakReference	wr = (WeakReference)entry[1];
-					
+
 					Object	target = wr.get();
 
 					if ( target == lr ){
-						
+
 						it = temp_it;
-						
+
 						it.remove();
-						
+
 						return;
 					}
 				}

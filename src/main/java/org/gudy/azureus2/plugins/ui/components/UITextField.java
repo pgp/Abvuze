@@ -32,11 +32,11 @@ UITextField
 	 * Setting values results in a PT_VALUE property change with a String value
 	 * @param precentage
 	 */
-	
-	public void
+
+    void
 	setText(
-		String		text );
+            String text);
 	
-	public String
+	String
 	getText();
 }

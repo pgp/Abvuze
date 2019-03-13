@@ -19,6 +19,7 @@
 
 package com.aelitis.azureus.plugins.extseed.impl.getright;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -144,7 +145,7 @@ ExternalSeedReaderGetRight
 				}
 				
 				try{
-					base_url += "/" + URLEncoder.encode( new String( to_torrent.getName(), "ISO-8859-1" ), "ISO-8859-1" ).replaceAll("\\+", "%20");
+					base_url += "/" + URLEncoder.encode( new String( to_torrent.getName(), StandardCharsets.ISO_8859_1), "ISO-8859-1" ).replaceAll("\\+", "%20");
 					
 					for (int i=0;i<files.length;i++ ){
 						
@@ -155,11 +156,11 @@ ExternalSeedReaderGetRight
 						String	file_url_str = base_url;
 						
 						byte[][] bits = file.getPathComponents();
-						
-						for (int j=0;j<bits.length;j++){
-							
-							file_url_str += "/" + URLEncoder.encode( new String( bits[j], "ISO-8859-1" ), "ISO-8859-1" ).replaceAll("\\+", "%20");
-						}
+
+                        for (byte[] bit : bits) {
+
+                            file_url_str += "/" + URLEncoder.encode(new String(bit, StandardCharsets.ISO_8859_1), "ISO-8859-1").replaceAll("\\+", "%20");
+                        }
 						
 						http_downloaders[i] = linear_download?new ExternalSeedHTTPDownloaderLinear( new URL( file_url_str), ua ):new ExternalSeedHTTPDownloaderRange( new URL( file_url_str), ua );
 						

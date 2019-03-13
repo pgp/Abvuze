@@ -28,49 +28,49 @@ import com.aelitis.azureus.plugins.upnp.UPnPPlugin;
 public interface 
 AZInstanceManagerAdapter 
 {
-	public String
+	String
 	getID();
 	
-	public int[]
+	int[]
 	getPorts();
 	
-	public DHTPlugin
+	DHTPlugin
 	getDHTPlugin();
 	
-	public UPnPPlugin
+	UPnPPlugin
 	getUPnPPlugin();
 	
-	public InetAddress
+	InetAddress
 	getPublicAddress();
 	
-	public VCPublicAddress
+	VCPublicAddress
 	getVCPublicAddress();
 		
-	public AZInstanceTracked.TrackTarget
+	AZInstanceTracked.TrackTarget
 	track(
-		byte[]		hash );
+            byte[] hash);
 	
-	public void
+	void
 	addListener(
-		StateListener		listener );
+            StateListener listener);
 	
-	public interface
+	interface
 	StateListener
 	{
-		public void
+		void
 		started();
 		
-		public void
+		void
 		stopped();
 	}
 	
-	public interface
+	interface
 	VCPublicAddress
 	{
-		public String
+		String
 		getAddress();
 		
-		public long
+		long
 		getCacheTime();
 	}
 }

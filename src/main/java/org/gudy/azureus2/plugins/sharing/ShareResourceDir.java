@@ -33,9 +33,9 @@ public interface
 ShareResourceDir 
 	extends ShareResource
 {
-	public File
+	File
 	getDir();
 	
-	public ShareItem
+	ShareItem
 	getItem();
 }

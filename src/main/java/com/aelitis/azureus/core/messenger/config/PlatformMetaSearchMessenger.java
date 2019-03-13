@@ -163,8 +163,8 @@ PlatformMetaSearchMessenger
 		
 		parameters.put( "fud", fud );
 		
-   		parameters.put( "page-num", new Long( 1 ));
-   		parameters.put( "items-per-page", new Long( MAX_TEMPLATE_LIST ));
+   		parameters.put( "page-num", 1L);
+   		parameters.put( "items-per-page", (long) MAX_TEMPLATE_LIST);
 
    		Map reply = dispatcher.syncInvoke(	OP_LIST_POPULAR_TEMPLATES, parameters ); 
 
@@ -187,8 +187,8 @@ PlatformMetaSearchMessenger
 		
 		parameters.put( "fud", fud );
 		
-		parameters.put( "page-num", new Long( 1 ));
-		parameters.put( "items-per-page", new Long( MAX_TEMPLATE_LIST ));
+		parameters.put( "page-num", 1L);
+		parameters.put( "items-per-page", (long) MAX_TEMPLATE_LIST);
 
 		Map reply = dispatcher.syncInvoke(	OP_LIST_FEATURED_TEMPLATES, parameters ); 
 
@@ -202,18 +202,18 @@ PlatformMetaSearchMessenger
 		List	templates = (List)reply.get( "templates" );
 
 		List	res = new ArrayList();
-		
-		for (int i=0;i<templates.size();i++){
-			
-			Map m = (Map)templates.get(i);
-			
-			templateInfo info = getTemplateInfo( m );
-			
-			if ( info != null ){
-				
-				res.add( info );
-			}
-		}
+
+        for (Object template : templates) {
+
+            Map m = (Map) template;
+
+            templateInfo info = getTemplateInfo(m);
+
+            if (info != null) {
+
+                res.add(info);
+            }
+        }
 		
 		templateInfo[] res_a = new templateInfo[ res.size()];
 
@@ -255,7 +255,7 @@ PlatformMetaSearchMessenger
 
 		}else{
 
-			return( new templateInfo( id.longValue(), date.longValue(), show.booleanValue(), rank_bias ));
+			return( new templateInfo(id, date, show, rank_bias ));
 
 			/*
 			SimpleDateFormat format = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss.S");
@@ -295,7 +295,7 @@ PlatformMetaSearchMessenger
 		}
 		
 		parameters.put( "userId", user_id );
-		parameters.put( "selected", Boolean.valueOf(is_selected));
+		parameters.put( "selected", is_selected);
 		
 		dispatcher.syncInvoke(	OP_TEMPLATE_SELECTED, parameters ); 
 	}
@@ -306,7 +306,7 @@ PlatformMetaSearchMessenger
 	{
 		Map parameters = new HashMap();
 		
-		parameters.put( "templateId", new Long( template_id ));
+		parameters.put( "templateId", template_id);
 
 		return( parameters );
 	}

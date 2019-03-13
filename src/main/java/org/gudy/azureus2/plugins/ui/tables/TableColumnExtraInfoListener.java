@@ -35,5 +35,5 @@ public interface TableColumnExtraInfoListener
 	 *
 	 * @since 4.0.0.5
 	 */
-	public void fillTableColumnInfo(TableColumnInfo info);
+    void fillTableColumnInfo(TableColumnInfo info);
 }

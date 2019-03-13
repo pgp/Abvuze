@@ -50,7 +50,7 @@ BasicPluginConfigModelImpl
 	private String					parent_section;
 	private String					section;
 	private PluginInterface			pi;
-	private ArrayList<Parameter>	parameters = new ArrayList<Parameter>();
+	private ArrayList<Parameter>	parameters = new ArrayList<>();
 	
 	private String				key_prefix;
 	
@@ -342,11 +342,11 @@ BasicPluginConfigModelImpl
 	destroy()
 	{
 		ui_manager.destroy( this );
-		
-		for (int i=0;i<parameters.size();i++){
-			
-			((ParameterImpl)parameters.get(i)).destroy();
-		}
+
+        for (Parameter parameter : parameters) {
+
+            ((ParameterImpl) parameter).destroy();
+        }
 	}
 	
 	public void setLocalizedName(String name) {

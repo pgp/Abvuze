@@ -29,15 +29,15 @@ package org.gudy.azureus2.plugins.tracker;
 public interface 
 TrackerListener 
 {
-	public void
+	void
 	torrentAdded(
-		TrackerTorrent	torrent );
+            TrackerTorrent torrent);
 	
-	public void
+	void
 	torrentChanged(
-		TrackerTorrent	torrent );
+            TrackerTorrent torrent);
 	
-	public void
+	void
 	torrentRemoved(
-		TrackerTorrent	torrent );
+            TrackerTorrent torrent);
 }

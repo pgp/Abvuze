@@ -30,30 +30,30 @@ import org.gudy.azureus2.core3.util.DirectByteBuffer;
 public interface 
 DMWriter 
 {
-	public void
+	void
 	start();
 	
-	public void
+	void
 	stop();
 	
-	public boolean 
-	zeroFile( 
-		DiskManagerFileInfoImpl file, 
-		long 					length ) throws DiskManagerException;
+	boolean
+	zeroFile(
+            DiskManagerFileInfoImpl file,
+            long length) throws DiskManagerException;
 
-	public DiskManagerWriteRequest 
+	DiskManagerWriteRequest
 	createWriteRequest(
-		int 							pieceNumber, 
-		int 							offset, 
-		DirectByteBuffer 				data,
-		Object 							user_data );
+            int pieceNumber,
+            int offset,
+            DirectByteBuffer data,
+            Object user_data);
 	
-	public void
+	void
 	writeBlock(
-		DiskManagerWriteRequest			request,
-		DiskManagerWriteRequestListener	listener );
+            DiskManagerWriteRequest request,
+            DiskManagerWriteRequestListener listener);
 	
-	public boolean
+	boolean
 	hasOutstandingWriteRequestForPiece(
-		int		piece_number );
+            int piece_number);
 }

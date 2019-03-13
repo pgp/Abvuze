@@ -27,11 +27,11 @@ package org.gudy.azureus2.plugins.tracker;
 public interface 
 TrackerPeerEvent 
 {
-	public static final int	ET_PEER_ADDED		= 1;
-	public static final int	ET_PEER_CHANGED		= 2;
-	public static final int	ET_PEER_REMOVED		= 3;
+	int	ET_PEER_ADDED		= 1;
+	int	ET_PEER_CHANGED		= 2;
+	int	ET_PEER_REMOVED		= 3;
 	
-	public int
+	int
 	getEventType();
 	
 }

@@ -100,9 +100,9 @@ public class RawMessageImpl implements RawMessage {
     //      message data buffers plus some header data, so returning
     //      the raw buffers will therefore also take care of the data
     //      buffers return.
-    for( int i=0; i < payload.length; i++ ) {
-      payload[i].returnToPool();
-    }
+      for (DirectByteBuffer directByteBuffer : payload) {
+          directByteBuffer.returnToPool();
+      }
   }
   
   

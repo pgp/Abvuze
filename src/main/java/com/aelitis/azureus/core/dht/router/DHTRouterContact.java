@@ -27,10 +27,10 @@ package com.aelitis.azureus.core.dht.router;
 public interface 
 DHTRouterContact 
 {
-	public byte[]
+	byte[]
 	getID();
 	
-	public DHTRouterContactAttachment
+	DHTRouterContactAttachment
 	getAttachment();
 	
 		/**
@@ -38,24 +38,24 @@ DHTRouterContact
 		 * successfully been made to, the contact.
 		 * @return
 		 */
-	
-	public boolean
+
+        boolean
 	hasBeenAlive();
 	
 		/**
 		 * Whether or not the contact has failed once or more since last alive (if ever)
 		 * @return
 		 */
-	
-	public boolean
+
+        boolean
 	isFailing();
 	
 		/**
 		 * Whether or not the contact's last interaction was successful
 		 * @return
 		 */
-	
-	public boolean
+
+        boolean
 	isAlive();
 	
 		/**
@@ -63,11 +63,11 @@ DHTRouterContact
 		 * not failing. 0 -> failing
 		 * @return
 		 */
-	
-	public long
+
+        long
 	getTimeAlive();
 	
-	public String
+	String
 	getString();
 	
 	/**
@@ -76,7 +76,7 @@ DHTRouterContact
 	 * @return
 	 * <code>true</code> if in a bucket, <code>false</code> otherwise
 	 */
-	public boolean 
+    boolean
 	isBucketEntry();
 	
 	/**
@@ -85,6 +85,6 @@ DHTRouterContact
 	 * @return
 	 * <code>true</code> if a replacement, <code>false</code> otherwise
 	 */
-	public boolean 
+    boolean
 	isReplacement();
 }

@@ -77,12 +77,12 @@ public class LocaleTorrentUtil
 		LocaleUtilDecoder chosenDecoder = null;
 		LocaleUtilDecoder[] all_decoders = LocaleUtil.getSingleton().getDecoders();
 
-		for (int i = 0; i < all_decoders.length; i++) {
-			if (all_decoders[i].getName().equals(canonical_name)) {
-				chosenDecoder = all_decoders[i];
-				break;
-			}
-		}
+        for (LocaleUtilDecoder all_decoder : all_decoders) {
+            if (all_decoder.getName().equals(canonical_name)) {
+                chosenDecoder = all_decoder;
+                break;
+            }
+        }
 		
 		return chosenDecoder;
 	}
@@ -142,13 +142,13 @@ public class LocaleTorrentUtil
 				String canonical_name = encoding.equals(fallback_decoder.getName())
 						? encoding : Charset.forName(encoding).name();
 
-				for (int i = 0; i < all_decoders.length; i++) {
+                for (LocaleUtilDecoder all_decoder : all_decoders) {
 
-					if (all_decoders[i].getName().equals(canonical_name)) {
+                    if (all_decoder.getName().equals(canonical_name)) {
 
-						return (all_decoders[i]);
-					}
-				}
+                        return (all_decoder);
+                    }
+                }
 			} catch (Throwable e) {
 
 				Debug.printStackTrace(e);
@@ -164,31 +164,31 @@ public class LocaleTorrentUtil
 
 		LocaleUtil localeUtil = LocaleUtil.getSingleton();
 		LocaleUtilDecoder system_decoder = localeUtil.getSystemDecoder();
-		for (int i = 0; i < candidates.length; i++) {
-			if (candidates[i].getDecoder() == system_decoder) {
-				system_decoder_is_valid = true;
-				break;
-			}
-		}
+        for (LocaleUtilDecoderCandidate candidate1 : candidates) {
+            if (candidate1.getDecoder() == system_decoder) {
+                system_decoder_is_valid = true;
+                break;
+            }
+        }
 
 		LocaleUtilDecoder selected_decoder = null;
 
 			// ask listeners for an explicit decision
-			
-		for ( int i = 0; i < listeners.size(); i++ ){
 
-			try {
-				LocaleUtilDecoderCandidate candidate = ((LocaleUtilListener) listeners.get(i)).selectDecoder( 	localeUtil, torrent, candidates);
-				
-				if ( candidate != null ){
+        for (Object listener : listeners) {
 
-					selected_decoder = candidate.getDecoder();
+            try {
+                LocaleUtilDecoderCandidate candidate = ((LocaleUtilListener) listener).selectDecoder(localeUtil, torrent, candidates);
 
-					break;
-				}
-			}catch( Throwable e ){
-			}
-		}
+                if (candidate != null) {
+
+                    selected_decoder = candidate.getDecoder();
+
+                    break;
+                }
+            } catch (Throwable e) {
+            }
+        }
 
 		if ( selected_decoder == null ){
 
@@ -268,32 +268,29 @@ public class LocaleTorrentUtil
 		long lMinCandidates;
 		byte[] minCandidatesArray;
 
-		Set cand_set = new HashSet();
 		LocaleUtil localeUtil = LocaleUtil.getSingleton();
 
 		List candidateDecoders = localeUtil.getCandidateDecoders(torrent.getName());
 		lMinCandidates = candidateDecoders.size();
 		minCandidatesArray = torrent.getName();
 
-		cand_set.addAll(candidateDecoders);
+		Set cand_set = new HashSet(candidateDecoders);
 
 		TOTorrentFile[] files = torrent.getFiles();
 
-		for (int i = 0; i < files.length; i++) {
+        for (TOTorrentFile file : files) {
 
-			TOTorrentFile file = files[i];
+            byte[][] comps = file.getPathComponents();
 
-			byte[][] comps = file.getPathComponents();
-
-			for (int j = 0; j < comps.length; j++) {
-				candidateDecoders = localeUtil.getCandidateDecoders(comps[j]);
-				if (candidateDecoders.size() < lMinCandidates) {
-					lMinCandidates = candidateDecoders.size();
-					minCandidatesArray = comps[j];
-				}
-				cand_set.retainAll(candidateDecoders);
-			}
-		}
+            for (byte[] comp : comps) {
+                candidateDecoders = localeUtil.getCandidateDecoders(comp);
+                if (candidateDecoders.size() < lMinCandidates) {
+                    lMinCandidates = candidateDecoders.size();
+                    minCandidatesArray = comp;
+                }
+                cand_set.retainAll(candidateDecoders);
+            }
+        }
 
 		byte[] comment = torrent.getComment();
 
@@ -387,16 +384,16 @@ public class LocaleTorrentUtil
 
 			boolean ok = false;
 
-			for (int i = 0; i < candidates.length; i++) {
+            for (LocaleUtilDecoderCandidate candidate : candidates) {
 
-				if (candidates[i].getDecoder().getName().equals(
-						canonical_requested_name)) {
+                if (candidate.getDecoder().getName().equals(
+                        canonical_requested_name)) {
 
-					ok = true;
+                    ok = true;
 
-					break;
-				}
-			}
+                    break;
+                }
+            }
 
 			if (!ok) {
 

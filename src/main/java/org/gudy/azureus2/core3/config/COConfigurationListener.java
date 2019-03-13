@@ -31,6 +31,6 @@ package org.gudy.azureus2.core3.config;
 public interface 
 COConfigurationListener 
 {
-	public void
+	void
 	configurationSaved();
 }

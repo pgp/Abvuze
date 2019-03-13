@@ -33,19 +33,19 @@ UpdateManager
 		 * @param mandatory indicates that this component must successfully complete checking
 		 * for any overall update check to complete
 		 */
-	
-	public void
+
+        void
 	registerUpdatableComponent(
-		UpdatableComponent		component,
-		boolean					mandatory );
+                UpdatableComponent component,
+                boolean mandatory);
 	
 		/**
 		 * creates an update check instance with currently registered updatable components
 		 * Default check type is "UCI_UPDATE" 
 		 * @return
 		 */
-	
-	public UpdateCheckInstance
+
+        UpdateCheckInstance
 	createUpdateCheckInstance();
 	
 		/**
@@ -54,10 +54,10 @@ UpdateManager
 		 * @param name			name of the update instance
 		 */
 
-	public UpdateCheckInstance
+        UpdateCheckInstance
 	createUpdateCheckInstance(
-		int			check_type,
-		String		name );
+                int check_type,
+                String name);
 	
 		/**
 		 * creates an update check instance with no attached updateable components (as opposed
@@ -66,13 +66,13 @@ UpdateManager
 		 * @param name			name of the update instance
 		 * @return
 		 */
-	
-	public UpdateCheckInstance
-	createEmptyUpdateCheckInstance(
-		int			check_type,
-		String		name );
 
-	public UpdateCheckInstance[]
+        UpdateCheckInstance
+	createEmptyUpdateCheckInstance(
+                int check_type,
+                String name);
+
+	UpdateCheckInstance[]
 	getCheckInstances();
 	
 		/**
@@ -81,24 +81,24 @@ UpdateManager
 		 * @return
 		 * @throws UpdateException
 		 */
-	
-	public UpdateInstaller
+
+        UpdateInstaller
 	createInstaller()
 		
 		throws UpdateException;
 	
-	public String
+	String
 	getInstallDir();
 	
-	public String
+	String
 	getUserDir();
 	
 		/**
 		 * returns the currently declared installers, if any
 		 * @return
 		 */
-	
-	public UpdateInstaller[]
+
+        UpdateInstaller[]
 	getInstallers();
 	
 		/**
@@ -106,8 +106,8 @@ UpdateManager
 		 * @deprecated - use applyUpdates
 		 * @throws UpdateException
 		 */
-	
-	public void
+
+        void
 	restart()
 	
 		throws UpdateException;
@@ -116,28 +116,28 @@ UpdateManager
 		 * applies any updates and stops or restarts Azureus
 		 * @throws UpdateException
 		 */
-	
-	public void
+
+        void
 	applyUpdates(
-		boolean	restart_after )
+                boolean restart_after)
 	
 		throws UpdateException;
 	
 	
-	public void
+	void
 	addVerificationListener(
-		UpdateManagerVerificationListener	l );
+            UpdateManagerVerificationListener l);
 	
-	public void
+	void
 	removeVerificationListener(
-		UpdateManagerVerificationListener	l );
+            UpdateManagerVerificationListener l);
 	
-	public void
+	void
 	addListener(
-		UpdateManagerListener	l );
+            UpdateManagerListener l);
 	
-	public void
+	void
 	removeListener(
-		UpdateManagerListener	l );
+            UpdateManagerListener l);
 	
 }

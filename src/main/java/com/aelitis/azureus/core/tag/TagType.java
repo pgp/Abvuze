@@ -26,98 +26,98 @@ import java.util.List;
 public interface 
 TagType 
 {
-	public static final int TT_DOWNLOAD_CATEGORY	= 1;
-	public static final int TT_DOWNLOAD_STATE		= 2;
-	public static final int TT_DOWNLOAD_MANUAL		= 3;
-	public static final int TT_PEER_IPSET			= 4;
+	int TT_DOWNLOAD_CATEGORY	= 1;
+	int TT_DOWNLOAD_STATE		= 2;
+	int TT_DOWNLOAD_MANUAL		= 3;
+	int TT_PEER_IPSET			= 4;
 
 		/**
 		 * Unique type denoting this species of tag
 		 * @return
 		 */
-	
-	public int
+
+        int
 	getTagType();
 	
-	public String
+	String
 	getTagTypeName(
-		boolean		localize );
+            boolean localize);
 		
-	public boolean
+	boolean
 	isTagTypeAuto();
 	
-	public boolean
+	boolean
 	isTagTypePersistent();
 	
-	public long
+	long
 	getTagTypeFeatures();
 	
-	public boolean
+	boolean
 	hasTagTypeFeature(
-		long		feature );
+            long feature);
 	
-	public Tag
+	Tag
 	createTag(
-		String		name,
-		boolean		auto_add )
+            String name,
+            boolean auto_add)
 	
 		throws TagException;
 	
-	public void
+	void
 	addTag(
-		Tag	t );
+            Tag t);
 	
-	public void
+	void
 	removeTag(
-		Tag	t );
+            Tag t);
 	
-	public Tag
+	Tag
 	getTag(
-		int	tag_id );
+            int tag_id);
 	
-	public Tag
+	Tag
 	getTag(
-		String		tag_name,
-		boolean		is_localized );
+            String tag_name,
+            boolean is_localized);
 	
-	public List<Tag>
+	List<Tag>
 	getTags();
 	
-	public List<Tag>
+	List<Tag>
 	getTagsForTaggable(
-		Taggable	taggable );
+            Taggable taggable);
 	
-	public void
+	void
 	removeTagType();
 	
-	public TagManager
+	TagManager
 	getTagManager();
 	
-	public int[]
+	int[]
 	getColorDefault();
 	
-	public void
+	void
 	addTagTypeListener(
-		TagTypeListener		listener,
-		boolean				fire_for_existing );
+            TagTypeListener listener,
+            boolean fire_for_existing);
 	
-	public void
+	void
 	removeTagTypeListener(
-		TagTypeListener		listener );
+            TagTypeListener listener);
 	
 		/**
 		 * taggable-specific listneer for this tag-type
 		 * @param taggable
 		 * @param listener
 		 */
-	
-	public void
+
+        void
 	addTagListener(
-		Taggable		taggable,
-		TagListener		listener );
+                Taggable taggable,
+                TagListener listener);
 	
-	public void
+	void
 	removeTagListener(
-		Taggable		taggable,
-		TagListener		listener );
+            Taggable taggable,
+            TagListener listener);
 }

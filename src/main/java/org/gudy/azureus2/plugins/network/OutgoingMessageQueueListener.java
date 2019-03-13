@@ -32,18 +32,18 @@ public interface OutgoingMessageQueueListener {
    * @param message added for queuing
    * @return true if this message addition is allowed, false if it should be immediately removed without being queued or sent
    */
-  public boolean messageAdded( Message message );
+  boolean messageAdded(Message message);
   
   /**
    * The given message has just been completely sent.
    * @param message
    */
-  public void messageSent( Message message );
+  void messageSent(Message message);
   
   /**
    * The given number of bytes has been sent.
    * @param byte_count
    */
-  public void bytesSent( int byte_count );
+  void bytesSent(int byte_count);
   
 }

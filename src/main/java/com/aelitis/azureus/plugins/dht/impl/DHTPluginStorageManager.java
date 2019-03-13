@@ -211,17 +211,12 @@ DHTPluginStorageManager
 			}
 
 			if ( target.exists()){
-				
-				DataInputStream	dis =  new DataInputStream( new FileInputStream( target ));
-				
-				try{
-					
-					dht.importState( dis );
-					
-				}finally{
-											
-					dis.close();
-				}
+
+                try (DataInputStream dis = new DataInputStream(new FileInputStream(target))) {
+
+                    dht.importState(dis);
+
+                }
 			}
 		}catch( Throwable e ){
 			
@@ -323,7 +318,7 @@ DHTPluginStorageManager
 					
 					Long	time = (Long)recent_addresses.get(key);
 					
-					if ( SystemTime.getCurrentTime() - time.longValue() > ADDRESS_EXPIRY ){
+					if ( SystemTime.getCurrentTime() - time > ADDRESS_EXPIRY ){
 						
 						it.remove();
 					}
@@ -349,7 +344,7 @@ DHTPluginStorageManager
 		try{
 			address_mon.enter();
 			
-			recent_addresses.put( address, new Long( SystemTime.getCurrentTime()));
+			recent_addresses.put( address, SystemTime.getCurrentTime());
 		
 			recent_addresses.put( "most_recent", address.getBytes());
 			
@@ -417,16 +412,11 @@ DHTPluginStorageManager
 			}
 			
 			if ( target.exists()){
-				
-				BufferedInputStream	is = new BufferedInputStream( new FileInputStream( target ));
-				
-				try{
-					return( BDecoder.decode( is ));
-					
-				}finally{
-					
-					is.close();
-				}
+
+                try (BufferedInputStream is = new BufferedInputStream(new FileInputStream(target))) {
+                    return (BDecoder.decode(is));
+
+                }
 			}
 		}catch( Throwable e ){
 			
@@ -550,7 +540,7 @@ DHTPluginStorageManager
 				}
 			}
 			
-			version_map.put( "next", new Long( next+num ));
+			version_map.put( "next", (long) (next + num));
 			
 			writeVersionData();
 			
@@ -952,52 +942,50 @@ DHTPluginStorageManager
 				// for each entry, if there are no diversifications then we just return the value
 				// for those with divs we replace their entry with the diversified set (which can
 				// include the entry itself under some circumstances )
-			
-			for (int i=0;i<list_in.size();i++){
-				
-				HashWrapper	wrapper = (HashWrapper)list_in.get(i);
-			
-				diversification	div = lookupDiversification( wrapper );
-	
-				if ( div == null ){
-					
-					if ( !list_out.contains( wrapper )){
-						
-						list_out.add(wrapper);
-					}
-					
-				}else{
-					
-					if ( keys_done.contains( wrapper )){
-						
-							// we've recursed on the key, this means that a prior diversification wanted
-							// the key included, so include it now
-						
-						if ( !list_out.contains( wrapper )){
-							
-							list_out.add(wrapper);
-						}
-						
-						continue;
-					}
-					
-					keys_done.add( wrapper );
-					
-						// replace this entry with the diversified keys 
-					
-					List	new_list = followDivChainSupport( div.getKeys( put_operation, exhaustive ), put_operation, depth+1, exhaustive, keys_done, max_depth );
-					
-					for (int j=0;j<new_list.size();j++){
-						
-						Object	entry =  new_list.get(j);
-						
-						if ( !list_out.contains( entry )){
-							
-							list_out.add(entry);
-						}
-					}
-				}
-			}
+
+            for (Object o : list_in) {
+
+                HashWrapper wrapper = (HashWrapper) o;
+
+                diversification div = lookupDiversification(wrapper);
+
+                if (div == null) {
+
+                    if (!list_out.contains(wrapper)) {
+
+                        list_out.add(wrapper);
+                    }
+
+                } else {
+
+                    if (keys_done.contains(wrapper)) {
+
+                        // we've recursed on the key, this means that a prior diversification wanted
+                        // the key included, so include it now
+
+                        if (!list_out.contains(wrapper)) {
+
+                            list_out.add(wrapper);
+                        }
+
+                        continue;
+                    }
+
+                    keys_done.add(wrapper);
+
+                    // replace this entry with the diversified keys
+
+                    List new_list = followDivChainSupport(div.getKeys(put_operation, exhaustive), put_operation, depth + 1, exhaustive, keys_done, max_depth);
+
+                    for (Object entry : new_list) {
+
+                        if (!list_out.contains(entry)) {
+
+                            list_out.add(entry);
+                        }
+                    }
+                }
+            }
 			// System.out.println( indent + "<-" );
 		}else{
 			
@@ -1077,22 +1065,22 @@ DHTPluginStorageManager
 			if ( keys != null ){
 				
 				long	now = SystemTime.getCurrentTime();
-				
-				for (int i=0;i<keys.size();i++){
-					
-					storageKey d = storageKey.deserialise(this, (Map)keys.get(i));
-						
-					long	time_left = d.getExpiry() - now;
-					
-					if ( time_left > 0 ){
-					
-						local_storage_keys.put( d.getKey(), d );
-						
-					}else{
-						
-						log.log( "SM: serialised sk: " + DHTLog.getString2( d.getKey().getBytes()) + " expired" );
-					}
-				}
+
+                for (Object key : keys) {
+
+                    storageKey d = storageKey.deserialise(this, (Map) key);
+
+                    long time_left = d.getExpiry() - now;
+
+                    if (time_left > 0) {
+
+                        local_storage_keys.put(d.getKey(), d);
+
+                    } else {
+
+                        log.log("SM: serialised sk: " + DHTLog.getString2(d.getKey().getBytes()) + " expired");
+                    }
+                }
 			}
 			
 			List	divs = (List)map.get("remote");
@@ -1100,29 +1088,29 @@ DHTPluginStorageManager
 			if ( divs != null ){
 				
 				long	now = SystemTime.getCurrentTime();
-				
-				for (int i=0;i<divs.size();i++){
-					
-					diversification d = diversification.deserialise( this, (Map)divs.get(i));
-						
-					long	time_left = d.getExpiry() - now;
 
-					if ( time_left > 0 ){
-					
-						diversification existing = (diversification)remote_diversifications.put( d.getKey(), d );
-						
-						if ( existing != null ){
-							
-							divRemoved( existing );
-						}
-						
-						divAdded( d );
-						
-					}else{
-						
-						log.log( "SM: serialised div: " + DHTLog.getString2( d.getKey().getBytes()) + " expired" );
-					}
-				}
+                for (Object div : divs) {
+
+                    diversification d = diversification.deserialise(this, (Map) div);
+
+                    long time_left = d.getExpiry() - now;
+
+                    if (time_left > 0) {
+
+                        diversification existing = (diversification) remote_diversifications.put(d.getKey(), d);
+
+                        if (existing != null) {
+
+                            divRemoved(existing);
+                        }
+
+                        divAdded(d);
+
+                    } else {
+
+                        log.log("SM: serialised div: " + DHTLog.getString2(d.getKey().getBytes()) + " expired");
+                    }
+                }
 			}
 			
 		}finally{
@@ -1294,42 +1282,42 @@ DHTPluginStorageManager
 			ByteArrayHashMap	new_map = new ByteArrayHashMap();
 			
 			if ( entries != null ){
-			
-				for (int i=0;i<entries.size();i++){
-					
-					try{
-						Map	m = (Map)entries.get(i);
-						
-						byte[]	request = (byte[])m.get( "req" );
-						byte[]	cert	= (byte[])m.get( "cert" );
-						int		recv	= ((Long)m.get( "received" )).intValue();
-						boolean	direct	= ((Long)m.get( "direct" )).longValue()==1;
-						
-						if ( recv > now_secs ){
-							
-							recv	= now_secs;
-						}
 
-						keyBlock	kb = new keyBlock( request, cert, recv, direct );
+                for (Object entry : entries) {
 
-							// direct "add" values never timeout, however direct "removals" do, as do 
-							// indirect values
-						
-						if ( ( direct && kb.isAdd()) || now_secs - recv < KEY_BLOCK_TIMEOUT_SECS ){
-						
-							if ( verifyKeyBlock( request, cert )){
-								
-								log.log( "KB: deserialised " + DHTLog.getString2( kb.getKey()) + ",add=" + kb.isAdd() + ",dir=" + kb.isDirect());
-						
-								new_map.put( kb.getKey(), kb );
-							}
-						}
-						
-					}catch( Throwable e ){
-						
-						Debug.printStackTrace(e);
-					}
-				}
+                    try {
+                        Map m = (Map) entry;
+
+                        byte[] request = (byte[]) m.get("req");
+                        byte[] cert = (byte[]) m.get("cert");
+                        int recv = ((Long) m.get("received")).intValue();
+                        boolean direct = (Long) m.get("direct") == 1;
+
+                        if (recv > now_secs) {
+
+                            recv = now_secs;
+                        }
+
+                        keyBlock kb = new keyBlock(request, cert, recv, direct);
+
+                        // direct "add" values never timeout, however direct "removals" do, as do
+                        // indirect values
+
+                        if ((direct && kb.isAdd()) || now_secs - recv < KEY_BLOCK_TIMEOUT_SECS) {
+
+                            if (verifyKeyBlock(request, cert)) {
+
+                                log.log("KB: deserialised " + DHTLog.getString2(kb.getKey()) + ",add=" + kb.isAdd() + ",dir=" + kb.isDirect());
+
+                                new_map.put(kb.getKey(), kb);
+                            }
+                        }
+
+                    } catch (Throwable e) {
+
+                        Debug.printStackTrace(e);
+                    }
+                }
 			}
 			
 			key_block_map_cow		= new_map;
@@ -1379,20 +1367,20 @@ DHTPluginStorageManager
 			map.put( "entries", entries );
 			
 			List	kbs = key_block_map_cow.values();
-			
-			for (int i=0;i<kbs.size();i++){
-								
-				keyBlock	kb = (keyBlock)kbs.get(i);
-									
-				Map	m = new HashMap();
-				
-				m.put( "req", kb.getRequest());
-				m.put( "cert", kb.getCertificate());
-				m.put( "received", new Long(kb.getReceived()));
-				m.put( "direct", new Long(kb.isDirect()?1:0));
-				
-				entries.add( m );
-			}
+
+            for (Object kb1 : kbs) {
+
+                keyBlock kb = (keyBlock) kb1;
+
+                Map m = new HashMap();
+
+                m.put("req", kb.getRequest());
+                m.put("cert", kb.getCertificate());
+                m.put("received", (long) kb.getReceived());
+                m.put("direct", (long) (kb.isDirect() ? 1 : 0));
+
+                entries.add(m);
+            }
 			
 			writeMapToFile( map, "block" );
 			
@@ -1902,15 +1890,15 @@ DHTPluginStorageManager
 			Map	map = new HashMap();
 			
 			map.put( "key", key.getBytes());
-			map.put( "type", new Long(type));
-			map.put( "exp", new Long(expiry));
+			map.put( "type", (long) type);
+			map.put( "exp", expiry);
 			
 			List	offsets = new ArrayList();
-			
-			for (int i=0;i<fixed_put_offsets.length;i++){
-				
-				offsets.add( new Long( fixed_put_offsets[i]));
-			}
+
+            for (int fixed_put_offset : fixed_put_offsets) {
+
+                offsets.add((long) fixed_put_offset);
+            }
 			
 			map.put( "fpo", offsets );
 			
@@ -1929,7 +1917,7 @@ DHTPluginStorageManager
 		{
 			HashWrapper	key 	= new HashWrapper((byte[])_map.get("key"));
 			int			type 	= ((Long)_map.get("type")).intValue(); 
-			long		exp 	= ((Long)_map.get("exp")).longValue();
+			long		exp 	= (Long) _map.get("exp");
 			
 			List	offsets = (List)_map.get("fpo");
 			
@@ -1994,11 +1982,11 @@ DHTPluginStorageManager
 						// put to a fixed subset. has to be fixed else over time we'll put to
 						// all the fragmented locations and nullify the point of this. gets are
 						// randomised to we don't loose out by fixing the puts
-															
-					for (int i=0;i<fixed_put_offsets.length;i++){
-						
-						keys.add( diversifyKey( key, fixed_put_offsets[i]));
-					}	
+
+                    for (int fixed_put_offset : fixed_put_offsets) {
+
+                        keys.add(diversifyKey(key, fixed_put_offset));
+                    }
 					
 					if ( exhaustive ){
 						
@@ -2039,7 +2027,7 @@ DHTPluginStorageManager
 						
 						while( randoms.size() < DIV_FRAG_GET_SIZE ){
 							
-							Integer	i = new Integer(RandomUtils.nextInt(DIV_WIDTH));
+							Integer	i = RandomUtils.nextInt(DIV_WIDTH);
 							
 							if ( !randoms.contains(i)){
 								
@@ -2049,7 +2037,7 @@ DHTPluginStorageManager
 											
 						for (int i=0;i<DIV_FRAG_GET_SIZE;i++){
 							
-							keys.add( diversifyKey( key, ((Integer) randoms.get(i)).intValue()));
+							keys.add( diversifyKey( key, (Integer) randoms.get(i)));
 						}
 					}
 				}
@@ -2140,8 +2128,8 @@ DHTPluginStorageManager
 			Map	map = new HashMap();
 			
 			map.put( "key", key.getBytes());
-			map.put( "type", new Long(type));
-			map.put( "exp", new Long(expiry));
+			map.put( "type", (long) type);
+			map.put( "exp", expiry);
 			
 			manager.log.log( "SM: serialised sk: " + DHTLog.getString2( key.getBytes()) + ", " + DHT.DT_STRINGS[type] + ", " + formatExpiry(expiry) );
 			
@@ -2155,7 +2143,7 @@ DHTPluginStorageManager
 		{
 			HashWrapper	key 	= new HashWrapper((byte[])map.get("key"));
 			int			type 	= ((Long)map.get("type")).intValue(); 
-			long		exp 	= ((Long)map.get("exp")).longValue();
+			long		exp 	= (Long) map.get("exp");
 			
 			_manager.log.log( "SM: deserialised sk: " + DHTLog.getString2( key.getBytes()) + ", " + DHT.DT_STRINGS[type] + ", " + formatExpiry(exp));
 

@@ -59,15 +59,13 @@ ShareConfigImpl
 				
 				return;
 			}
-			
-			Iterator  iter = resources.iterator();
-			
-			while (iter.hasNext()) {
-				
-				Map r_map = (Map) iter.next();
-				
-				manager.deserialiseResource( r_map );
-			}
+
+            for (Object resource : resources) {
+
+                Map r_map = (Map) resource;
+
+                manager.deserialiseResource(r_map);
+            }
 			
 		}catch (Exception e) {
 			
@@ -97,15 +95,15 @@ ShareConfigImpl
 			map.put("resources", list);
 			
 			ShareResource[]	shares = manager.getShares();
-			
-			for (int i=0;i<shares.length;i++){
-				
-				Map	m = new HashMap();
-				
-				((ShareResourceImpl)shares[i]).serialiseResource( m );
-				
-				list.add( m );
-			}
+
+            for (ShareResource share : shares) {
+
+                Map m = new HashMap();
+
+                ((ShareResourceImpl) share).serialiseResource(m);
+
+                list.add(m);
+            }
 			
 			FileUtil.writeResilientConfigFile("sharing.config", map);
 			
