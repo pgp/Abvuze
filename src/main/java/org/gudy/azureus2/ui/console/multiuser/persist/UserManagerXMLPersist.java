@@ -25,6 +25,7 @@ package org.gudy.azureus2.ui.console.multiuser.persist;
 
 import com.google.gson.Gson;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -33,7 +34,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.IOUtils;
 import org.gudy.azureus2.ui.console.UserProfile;
 import org.gudy.azureus2.ui.console.multiuser.UserManagerPersister;
 import org.gudy.azureus2.ui.console.multiuser.UserManager.UserManagerConfig;
@@ -68,7 +68,15 @@ public class UserManagerXMLPersist implements UserManagerPersister {
 //		UserManagerConfig managerConfig = (UserManagerConfig)decoder.readObject();
 
         try {
-            UserManagerConfig managerConfig = new Gson().fromJson(new String(IOUtils.toByteArray(in)),UserManagerConfig.class);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            byte[] buf = new byte[4096];
+            for(;;) {
+                int readBytes = in.read(buf);
+                if (readBytes <= 0) break;
+                baos.write(buf,0,readBytes);
+            }
+
+            UserManagerConfig managerConfig = new Gson().fromJson(new String(baos.toByteArray()),UserManagerConfig.class);
             for (Object o : managerConfig.getUsers()) {
                 UserProfile user = (UserProfile) o;
                 usersMap.put(user.getUsername().toLowerCase(), user);
