@@ -489,7 +489,7 @@ AEMonSem
 
                     // remove consecutive duplicates
 
-                    if (prev_name == null || !mon.name.equals(prev_name)) {
+                    if (!mon.name.equals(prev_name)) {
 
                         sb.append("$");
                         sb.append(mon.name);

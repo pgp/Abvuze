@@ -2696,7 +2696,7 @@ AzureusCoreImpl
 		
 		File script_file	= null;
 		
-		if ( script_type == "" ){
+		if ("".equals(script_type)){
 			
 			script_file = new File( script.trim());
 		
@@ -2732,7 +2732,7 @@ AzureusCoreImpl
 				
 				for ( ScriptProvider p: providers ){
 					
-					if ( p.getScriptType() == script_type ){
+					if (Objects.equals(p.getScriptType(),script_type)){
 						
 						provider_found = true;
 						

@@ -3163,7 +3163,7 @@ DHTDBImpl
 
                     } else {
 
-                        data[0] = ((Integer) data[0]).intValue() + 1;
+                        data[0] = (Integer) data[0] + 1;
                     }
 
                     String s = (String) data[1];

@@ -11,11 +11,7 @@
 package org.gudy.azureus2.ui.console.commands;
 
 import java.io.PrintStream;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeSet;
+import java.util.*;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
 import org.gudy.azureus2.core3.util.SHA1Hasher;
@@ -242,14 +238,14 @@ public class Set extends IConsoleCommand {
 			int underscoreIndex = external_name.indexOf('_');
 			int nextchar = external_name.charAt(underscoreIndex + 1);
 			
-			if ( 	internal_name != external_name &&
+			if (!Objects.equals(internal_name,external_name) &&
 					"ibs".indexOf(nextchar) >= 0 ){
 				
 				try {
 					if( nextchar == 'i' )
 					{
 						int value = COConfigurationManager.getIntParameter(internal_name, Integer.MIN_VALUE);
-						return new Parameter(internal_name, external_name, value == Integer.MIN_VALUE ? null : new Integer(value) );
+						return new Parameter(internal_name, external_name, value == Integer.MIN_VALUE ? null : value);
 					}
 					else if( nextchar == 'b' )
 					{
@@ -281,7 +277,7 @@ public class Set extends IConsoleCommand {
 					
 					int value = COConfigurationManager.getIntParameter(internal_name, Integer.MIN_VALUE);
 				
-					return new Parameter(internal_name, external_name, value == Integer.MIN_VALUE ? null : new Integer(value) );
+					return new Parameter(internal_name, external_name, value == Integer.MIN_VALUE ? null : value);
 				
 				}else if ( v instanceof Boolean ){
 					

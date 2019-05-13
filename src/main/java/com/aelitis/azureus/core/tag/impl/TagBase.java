@@ -21,11 +21,7 @@
 package com.aelitis.azureus.core.tag.impl;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import org.gudy.azureus2.core3.download.DownloadManager;
 import org.gudy.azureus2.core3.internat.MessageText;
@@ -428,7 +424,7 @@ TagBase
 			return;
 		}
 		
-		if ( group == null || new_group == null || !group.equals(new_group)){
+		if (group == null || !group.equals(new_group)){
 			
 			group	= new_group;
 			
@@ -607,7 +603,7 @@ TagBase
 				
 				return;
 				
-			}else if ( existing == null || folder == null || !existing.equals( folder )){
+			}else if (existing == null || !existing.equals(folder)){
 				
 				writeStringAttribute( AT_FL_INIT_LOC, folder==null?null:folder.getAbsolutePath());
 				
@@ -684,7 +680,7 @@ TagBase
 				
 				return;
 				
-			}else if ( existing == null || folder == null || !existing.equals( folder )){
+			}else if (existing == null || !existing.equals(folder)){
 				
 				writeStringAttribute( AT_FL_MOVE_COMP, folder==null?null:folder.getAbsolutePath());
 				
@@ -761,7 +757,7 @@ TagBase
 				
 				return;
 				
-			}else if ( existing == null || folder == null || !existing.equals( folder )){
+			}else if (existing == null || !existing.equals(folder)){
 				
 				writeStringAttribute( AT_FL_COPY_COMP, folder==null?null:folder.getAbsolutePath());
 				
@@ -989,7 +985,7 @@ TagBase
 		
 		for ( TagProperty prop: props ){
 			
-			if ( prop.getName( false ) == name ){
+			if (Objects.equals(prop.getName(false),name)){
 				
 				return( prop );
 			}
@@ -1168,7 +1164,7 @@ TagBase
 	{
 		String existing = getDescription();
 		
-		if ( existing == str ){
+		if (Objects.equals(existing,str)){
 			
 			return;
 			

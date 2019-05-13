@@ -219,7 +219,7 @@ ExternalSeedHTTPDownloaderLinear
 				
 				Proxy	current_proxy = null;
 				
-				if ( AENetworkClassifier.categoriseAddress( original_url.getHost()) != AENetworkClassifier.AT_PUBLIC ){
+				if (!AENetworkClassifier.AT_PUBLIC.equals(AENetworkClassifier.categoriseAddress(original_url.getHost()))){
 					
 					plugin_proxy = AEProxyFactory.getPluginProxy( "webseed", original_url );
 					

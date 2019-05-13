@@ -726,7 +726,7 @@ AZInstanceManagerImpl
 		try{
 			this_mon.enter();
 
-			return other_instances.values().toArray( new AZInstance[other_instances.size()]);
+			return other_instances.values().toArray(new AZInstance[0]);
 			
 		}finally{
 			

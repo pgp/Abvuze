@@ -376,7 +376,7 @@ ContentNetworkImpl
 			
 			Map props = COConfigurationManager.getMapParameter( key , new HashMap());
 	
-			if ( name == PP_SOURCE_REF ) {
+			if (PP_SOURCE_REF.equals(name)) {
 
 				return MapUtils.getMapString(props, name, MapUtils.getMapString(
 						pprop_defaults, name, null));
@@ -384,11 +384,7 @@ ContentNetworkImpl
 
 			Object obj = props.get( name );
 			
-			if ( 	name == PP_AUTH_PAGE_SHOWN 	||
-					name == PP_IS_CUSTOMIZATION ||
-					name == PP_ACTIVE			||
-					name == PP_SHOW_IN_MENU		||
-					name == PP_STARTUP_NETWORK ){
+			if (PPSET.contains(name)){
 				
 				if ( obj == null && pprop_defaults != null ){
 					

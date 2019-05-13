@@ -722,7 +722,7 @@ MetaSearchImpl
 			result = l;
 		}
 		
-		return result.toArray( new Engine[ result.size() ]);
+		return result.toArray(new Engine[0]);
 	}
 	
 	public Engine
@@ -849,7 +849,7 @@ MetaSearchImpl
 		
 		String rem_dups_str = context.get( Engine.SC_REMOVE_DUP_HASH );
 		
-		final boolean rem_dups = rem_dups_str==null?false:rem_dups_str.equalsIgnoreCase( "true" );
+		final boolean rem_dups = rem_dups_str != null && rem_dups_str.equalsIgnoreCase("true");
 
 		ResultListener	listener = 
 			new ResultListener()

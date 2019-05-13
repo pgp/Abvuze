@@ -86,27 +86,26 @@ UPnPServiceImpl
 	{
 		try{
 			List<URL> urls = getControlURLs();
-			
-			for ( URL url: urls ){
 
-                try (Socket socket = new Socket()) {
-                    int port = url.getPort();
+			if(!urls.isEmpty()) {
+				try (Socket socket = new Socket()) {
+					URL url = urls.get(0);
+					int port = url.getPort();
 
-                    if (port <= 0) {
+					if (port <= 0) {
 
-                        port = url.getDefaultPort();
-                    }
+						port = url.getDefaultPort();
+					}
 
-                    socket.connect(new InetSocketAddress(url.getHost(), port), 5000);
+					socket.connect(new InetSocketAddress(url.getHost(), port), 5000);
 
-                    if (getPreferredControlURL() == null) {
+					if (getPreferredControlURL() == null) {
 
-                        setPreferredControlURL(url);
-                    }
+						setPreferredControlURL(url);
+					}
 
-                    return (true);
-
-                }
+					return true;
+				}
 			}
 		}catch( Throwable e ){
 		}

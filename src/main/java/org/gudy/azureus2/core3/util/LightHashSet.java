@@ -229,7 +229,7 @@ public class LightHashSet extends AbstractSet implements Cloneable {
 		return keysEqual(key, data[nonModifyingFindIndex(key)]);
 	}
 
-	private final boolean keysEqual(final Object o1, final Object o2) {
+	private boolean keysEqual(final Object o1, final Object o2) {
 		return o1 == o2 || (o1 != null && o2 != null && o1.hashCode() == o2.hashCode() && o1.equals(o2));
 	}
 

@@ -163,7 +163,7 @@ public class UrlUtils
 						
 			for ( String net: networks ){
 				
-				if ( net == AENetworkClassifier.AT_PUBLIC && networks.length == 1 ){
+				if (AENetworkClassifier.AT_PUBLIC.equals(net) && networks.length == 1 ){
 						
 					break;
 				}
@@ -590,7 +590,7 @@ public class UrlUtils
 		
 			String host = u.getHost();
 			
-			if ( host != null && AENetworkClassifier.categoriseAddress( host ) != AENetworkClassifier.AT_PUBLIC ){
+			if ( host != null && !AENetworkClassifier.AT_PUBLIC.equals(AENetworkClassifier.categoriseAddress(host))){
 				
 				return( u.toExternalForm());
 			}
@@ -1187,7 +1187,7 @@ public class UrlUtils
 				}
 			}else{
 			
-				if ( last_headers == null || !headers_to_use.equals( last_headers )){
+				if (!headers_to_use.equals(last_headers)){
 					
 					COConfigurationManager.setParameter( "metasearch.web.last.headers", headers_to_use );
 				}

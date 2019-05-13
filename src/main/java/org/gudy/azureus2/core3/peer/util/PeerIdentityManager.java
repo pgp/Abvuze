@@ -134,7 +134,7 @@ public class PeerIdentityManager {
     
     public boolean equals( Object obj ) {
       if (this == obj)  return true;
-      if (obj != null && obj instanceof PeerIdentity) {
+      if (obj instanceof PeerIdentity) {
         PeerIdentity other = (PeerIdentity)obj;
         if ( MUTLI_CONTROLLERS ){
         	if ( port != other.port ){
@@ -316,21 +316,21 @@ public class PeerIdentityManager {
   	{
   		private final Map<PeerIdentity,String>	_peerMap = new LightHashMap<>();
 	    		
-  		private final boolean
+  		private boolean
   		hasIP(
 			String	ip )
   		{
 		  return( _peerMap.containsValue( ip ));
 		}
   		
-  		private final boolean
+  		private boolean
   		hasPeer(
   			PeerIdentity	peer )
   		{
   			return( _peerMap.containsKey( peer ));
   		}
   		
-  		private final String
+  		private String
   		addPeer(
   			PeerIdentity	peer,
   			String			ip )
@@ -338,14 +338,14 @@ public class PeerIdentityManager {
    			return( _peerMap.put( peer, ip ));
   		}
   		
- 		private final String
+ 		private String
   		removePeer(
   			PeerIdentity	peer )
   		{
   			return( _peerMap.remove( peer ));
   		}
  		
- 		private final int
+ 		private int
  		getPeerCount()
  		{
  			return( _peerMap.size());

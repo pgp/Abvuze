@@ -254,7 +254,7 @@ SubscriptionResultFilterImpl
 		
 		for ( String value: values ){
 			
-			encoded += (encoded==""?"":" ") + value;
+			encoded += ("".equals(encoded) ?"":" ") + value;
 		}
 		
 		map.put( key, encoded );

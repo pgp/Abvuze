@@ -937,7 +937,7 @@ TorrentUtils
 
 					String url_str = set.get(j);
 
-					if (announce_url != null && url_str.equals(announce_url)) {
+					if (announce_url.equals(url_str)) {
 
 						announce_url = null;
 					}
@@ -3709,7 +3709,7 @@ TorrentUtils
 			PluginProxy	plugin_proxy = null;
 
 			try{
-				if ( AENetworkClassifier.categoriseAddress( url.getHost()) != AENetworkClassifier.AT_PUBLIC ){
+				if (!AENetworkClassifier.AT_PUBLIC.equals(AENetworkClassifier.categoriseAddress(url.getHost()))){
 					
 					plugin_proxy = AEProxyFactory.getPluginProxy( "torrent download", url );
 				}
@@ -3818,7 +3818,7 @@ TorrentUtils
 		
 		String	tracker_network	= AENetworkClassifier.categoriseAddress( host ); 
 
-		if ( tracker_network != AENetworkClassifier.AT_PUBLIC ){
+		if (!AENetworkClassifier.AT_PUBLIC.equals(tracker_network)){
 			
 			return( null );
 		}

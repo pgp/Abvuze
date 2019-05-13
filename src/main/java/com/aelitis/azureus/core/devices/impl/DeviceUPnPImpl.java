@@ -588,7 +588,7 @@ DeviceUPnPImpl
 	{
 		Torrent torrent = download.getTorrent();
 		
-		if ( torrent != null && PlatformTorrentUtils.isContent( torrent, false )){
+		if (PlatformTorrentUtils.isContent(torrent, false)){
 								
 			addDynamicXCode( download.getDiskManagerFileInfo()[0]);
 		}
@@ -600,7 +600,7 @@ DeviceUPnPImpl
 	{
 		Torrent torrent = download.getTorrent();
 		
-		if ( torrent != null && PlatformTorrentUtils.isContent( torrent, false )){
+		if (PlatformTorrentUtils.isContent(torrent, false)){
 								
 			removeDynamicXCode( download.getDiskManagerFileInfo()[0]);
 		}

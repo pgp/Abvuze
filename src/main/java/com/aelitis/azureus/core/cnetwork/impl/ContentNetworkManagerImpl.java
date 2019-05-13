@@ -279,7 +279,7 @@ ContentNetworkManagerImpl
 	{
 		synchronized( this ){
 			
-			return networks.toArray( new ContentNetworkImpl[ networks.size()] );
+			return networks.toArray(new ContentNetworkImpl[0]);
 		}
 	}
 	
@@ -396,17 +396,15 @@ ContentNetworkManagerImpl
 		}
 		
 		log( "Removed network: " + network.getString());
-		
-		Iterator<ContentNetworkListener>	 it = listeners.iterator();
-		
-		while( it.hasNext()){
-			
-			try{
-				it.next().networkRemoved( network );
-				
-			}catch( Throwable e ){
-				
-				Debug.out( e );
+
+		for (ContentNetworkListener listener : listeners) {
+
+			try {
+				listener.networkRemoved(network);
+
+			} catch (Throwable e) {
+
+				Debug.out(e);
 			}
 		}
 	}

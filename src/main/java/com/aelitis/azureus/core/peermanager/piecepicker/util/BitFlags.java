@@ -91,7 +91,7 @@ public class BitFlags
     
     public boolean equals(Object o)
     {
-        if (o ==null ||!(o instanceof BitFlags))
+        if (!(o instanceof BitFlags))
             return false;
         final BitFlags other =(BitFlags) o;
         if (this.start !=other.start)

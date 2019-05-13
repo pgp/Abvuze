@@ -542,7 +542,7 @@ WebEngine
 	isAnonymous() 
 	{
 		try{
-			return( AENetworkClassifier.categoriseAddress( new URL( searchURLFormat ).getHost()) != AENetworkClassifier.AT_PUBLIC );
+			return(!AENetworkClassifier.AT_PUBLIC.equals(AENetworkClassifier.categoriseAddress(new URL(searchURLFormat).getHost())));
 			
 		}catch( Throwable e ){
 			
@@ -671,7 +671,7 @@ WebEngine
 			try{
 				URL url = new URL( searchURL );
 			
-				if ( AENetworkClassifier.categoriseAddress( url.getHost()) != AENetworkClassifier.AT_PUBLIC ){
+				if (!AENetworkClassifier.AT_PUBLIC.equals(AENetworkClassifier.categoriseAddress(url.getHost()))){
 					
 					// strip out any stuff we probably don't want to send
 					

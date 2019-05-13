@@ -21,6 +21,7 @@ package org.gudy.azureus2.pluginsimpl.local.network;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.gudy.azureus2.plugins.messaging.*;
 import org.gudy.azureus2.plugins.messaging.bittorrent.BTMessageManager;
@@ -36,7 +37,7 @@ import com.aelitis.azureus.core.peermanager.messaging.bittorrent.BTMessage;
  */
 public class IncomingMessageQueueImpl implements IncomingMessageQueue {
   private final com.aelitis.azureus.core.networkmanager.IncomingMessageQueue core_queue;
-  private final HashMap registrations = new HashMap();
+  private final Map registrations = new HashMap();
   
   
   protected IncomingMessageQueueImpl( com.aelitis.azureus.core.networkmanager.IncomingMessageQueue core_queue ) {

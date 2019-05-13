@@ -91,7 +91,7 @@ IPToHostNameResolver
 										
 										String ip = req.getIP();
 										
-										if ( AENetworkClassifier.categoriseAddress( ip ) == AENetworkClassifier.AT_PUBLIC ){
+										if (AENetworkClassifier.AT_PUBLIC.equals(AENetworkClassifier.categoriseAddress(ip))){
 											
 											try{
 												InetAddress addr = InetAddress.getByName( ip );

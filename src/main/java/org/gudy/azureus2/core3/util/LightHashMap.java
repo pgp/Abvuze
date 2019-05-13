@@ -322,7 +322,7 @@ public class LightHashMap<S,T> extends AbstractMap<S,T> implements Cloneable {
 		return false;
 	}
 	
-	private final boolean keysEqual(final Object o1, final Object o2) {
+	private boolean keysEqual(final Object o1, final Object o2) {
 		return o1 == o2 || (o1 != null && o2 != null && o1.hashCode() == o2.hashCode() && o1.equals(o2));
 	}
 

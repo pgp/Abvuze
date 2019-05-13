@@ -1172,7 +1172,7 @@ DiskManagerCheckRequestListener, IPFilterListener
 
 		if ( max_reached ){
 
-			if ( 	peer_source != PEPeerSource.PS_PLUGIN ||
+			if (!PEPeerSource.PS_PLUGIN.equals(peer_source) ||
 					!doOptimisticDisconnect(
 							AddressUtils.isLANLocalAddress( address ) != AddressUtils.LAN_LOCAL_NO,
 							is_priority_connection,
@@ -3039,7 +3039,7 @@ DiskManagerCheckRequestListener, IPFilterListener
 
 					String	ip = peer.getIp();
 					boolean wasIPv6;
-					if ( peer.getNetwork() == AENetworkClassifier.AT_PUBLIC ){
+					if (AENetworkClassifier.AT_PUBLIC.equals(peer.getNetwork())){
 						try
 						{
 							
@@ -3515,14 +3515,11 @@ DiskManagerCheckRequestListener, IPFilterListener
 								//If it's found                       
 								if (correctHash !=null)
 								{
-									Iterator iterPerBlock = listPerBlock.iterator();
-									while (iterPerBlock.hasNext())
-									{
-										final PEPieceWriteImpl write =(PEPieceWriteImpl) iterPerBlock.next();
-										if (!Arrays.equals(write.getHash(), correctHash))
-										{
+									for (Object o : listPerBlock) {
+										final PEPieceWriteImpl write = (PEPieceWriteImpl) o;
+										if (!Arrays.equals(write.getHash(), correctHash)) {
 											//Bad peer found here
-											badPeerDetected(write.getSender(),pieceNumber);
+											badPeerDetected(write.getSender(), pieceNumber);
 										}
 									}
 								}              
@@ -4382,7 +4379,7 @@ DiskManagerCheckRequestListener, IPFilterListener
 						
 						for ( PEPeerTransport transport: peer_transports ){
 							
-							if ( transport.isSeed() && transport.getNetwork() != AENetworkClassifier.AT_PUBLIC ){
+							if ( transport.isSeed() && !AENetworkClassifier.AT_PUBLIC.equals(transport.getNetwork())){
 								
 								to_retain.add( transport );
 								
@@ -4752,7 +4749,7 @@ DiskManagerCheckRequestListener, IPFilterListener
 
 				String peer_ip = peer.getPeerItemIdentity().getAddressString();
 				
-				if ( AENetworkClassifier.categoriseAddress( peer_ip ) != AENetworkClassifier.AT_PUBLIC ){
+				if (!AENetworkClassifier.AT_PUBLIC.equals(AENetworkClassifier.categoriseAddress(peer_ip))){
 					
 					continue;
 				}
@@ -4837,7 +4834,7 @@ DiskManagerCheckRequestListener, IPFilterListener
 		
 		final int	non_pub_extra;
 		
-		if ( network != AENetworkClassifier.AT_I2P ){
+		if (!AENetworkClassifier.AT_I2P.equals(network)){
 			
 			int[] max_con = getMaxConnections();
 			
@@ -4910,7 +4907,7 @@ DiskManagerCheckRequestListener, IPFilterListener
 					peerTestTime = peerTestTime * 2;   //prefer to drop a local connection, to make room for more remotes
 				}
 
-				boolean count_pubs = non_pub_extra > 0 && peer.getNetwork() == AENetworkClassifier.AT_PUBLIC;
+				boolean count_pubs = non_pub_extra > 0 && AENetworkClassifier.AT_PUBLIC.equals(peer.getNetwork());
 
 				if (peer.isLANLocal()) {
 
@@ -5015,19 +5012,19 @@ DiskManagerCheckRequestListener, IPFilterListener
 				
 					// don't kick a non-pub peer
 				
-				if ( max_transport != null && max_transport.getNetwork() != AENetworkClassifier.AT_PUBLIC ){
+				if ( max_transport != null && !AENetworkClassifier.AT_PUBLIC.equals(max_transport.getNetwork())){
 					
 					max_time		= max_pub_time;
 					max_transport 	= max_pub_transport;
 				}
 				
-				if ( max_seed_transport != null && max_seed_transport.getNetwork() != AENetworkClassifier.AT_PUBLIC ){
+				if ( max_seed_transport != null && !AENetworkClassifier.AT_PUBLIC.equals(max_seed_transport.getNetwork())){
 					
 					max_seed_time		= max_pub_seed_time;
 					max_seed_transport	= max_pub_seed_transport;
 				}
 				
-				if ( max_non_lan_transport != null && max_non_lan_transport.getNetwork() != AENetworkClassifier.AT_PUBLIC ){
+				if ( max_non_lan_transport != null && !AENetworkClassifier.AT_PUBLIC.equals(max_non_lan_transport.getNetwork())){
 					
 					max_non_lan_time		= max_pub_non_lan_time;
 					max_non_lan_transport 	= max_pub_non_lan_transport;
@@ -5277,7 +5274,7 @@ DiskManagerCheckRequestListener, IPFilterListener
 		
 		if ( result > 0 ){
 			
-			if ( net != AENetworkClassifier.AT_PUBLIC ){
+			if (!AENetworkClassifier.AT_PUBLIC.equals(net)){
 				
 				result += data[1];
 			}
@@ -5304,7 +5301,7 @@ DiskManagerCheckRequestListener, IPFilterListener
 		
 		if ( result > 0 ){
 			
-			if ( net != AENetworkClassifier.AT_PUBLIC ){
+			if (!AENetworkClassifier.AT_PUBLIC.equals(net)){
 				
 				result += data[1];
 			}
@@ -5326,7 +5323,7 @@ DiskManagerCheckRequestListener, IPFilterListener
 
 		int	dl_max = max_con[0];
 		
-		if ( network != AENetworkClassifier.AT_PUBLIC ){
+		if (!AENetworkClassifier.AT_PUBLIC.equals(network)){
 			
 			dl_max += max_con[1];
 		}

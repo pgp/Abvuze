@@ -196,7 +196,7 @@ SpeedManagerImpl
 				propertyChanged(
 					String		property )
 				{
-					if ( property == NetworkAdmin.PR_AS ){
+					if (NetworkAdmin.PR_AS.equals(property)){
 						
 					    NetworkAdminASN net_asn = NetworkAdmin.getSingleton().getCurrentASN();
 

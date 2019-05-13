@@ -164,8 +164,8 @@ public class Priority extends OptionsConsoleCommand {
                 }
 
                 // -1 compensates for 0-based offsets
-                fs.add(new Integer(start - 1));
-                fe.add(new Integer(end - 1));
+                fs.add(start - 1);
+                fe.add(end - 1);
             } catch (Exception e) {
                 console.out.println("> Command 'prio': File # '" + section
                         + "' unknown.");

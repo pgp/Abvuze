@@ -135,7 +135,7 @@ ProtocolDecoderInitial
 										if (Logger.isEnabled()){
 											Logger.log(new LogEvent(LOGID, "Incoming connection ["+ isa + "] is not encrypted but has been accepted as lan-local" ));
 										}
-									}else if ( AENetworkClassifier.categoriseAddress( isa ) != AENetworkClassifier.AT_PUBLIC ){
+									}else if (!AENetworkClassifier.AT_PUBLIC.equals(AENetworkClassifier.categoriseAddress(isa))){
 										if (Logger.isEnabled()){ 
 											Logger.log(new LogEvent(LOGID, "Incoming connection ["+ isa + "] is not encrypted but has been accepted as not a public network" ));
 										}

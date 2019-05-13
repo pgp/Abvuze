@@ -115,7 +115,7 @@ ResourceDownloaderBaseImpl
 	{
 		Object obj = getProperty( key );
 	
-		if ( obj == null || !( obj instanceof Number )){
+		if (!(obj instanceof Number)){
 			
 			return( -1 );
 		}

@@ -458,7 +458,7 @@ AzureusCoreStats
 
                             long v = (Long) obj;
 
-                            result.put(key, v + old.longValue());
+                            result.put(key, v + old);
                         }
                     } else {
 

@@ -1193,7 +1193,7 @@ DHTTrackerPlugin
 				
 	  				String	cat = AENetworkClassifier.categoriseAddress( this_address );
 				
-	  				if ( cat == AENetworkClassifier.AT_PUBLIC ){
+	  				if (AENetworkClassifier.AT_PUBLIC.equals(cat)){
 					
 	  					override_ip	= this_address;
 	  					
@@ -1385,7 +1385,7 @@ DHTTrackerPlugin
 	  	    	
 	  	    	for ( String net: networks ){
 	  	    		
-	  	    		if ( net == AENetworkClassifier.AT_I2P ){
+	  	    		if (AENetworkClassifier.AT_I2P.equals(net)){
 	  	    			
 	  	    			if ( I2PHelpers.isI2PInstalled()){
 	  	    			
@@ -3483,7 +3483,7 @@ DHTTrackerPlugin
 					result.add( target );
 				}
 				
-				return result.toArray( new trackerTarget[result.size()]);
+				return result.toArray(new trackerTarget[0]);
 			}
 		}
 		

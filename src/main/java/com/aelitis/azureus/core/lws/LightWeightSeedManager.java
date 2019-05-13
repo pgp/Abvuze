@@ -341,7 +341,7 @@ LightWeightSeedManager
 	addDownload(
 		LWSDownload		download )
 	{
-		if ( download.getLWS().getNetwork() == AENetworkClassifier.AT_PUBLIC ){
+		if (AENetworkClassifier.AT_PUBLIC.equals(download.getLWS().getNetwork())){
 		
 			public_dht_tracker_plugin.addDownload( download );
 			
@@ -372,7 +372,7 @@ LightWeightSeedManager
 	removeDownload(
 		LWSDownload		download )
 	{
-		if ( download.getLWS().getNetwork() == AENetworkClassifier.AT_PUBLIC ){
+		if (AENetworkClassifier.AT_PUBLIC.equals(download.getLWS().getNetwork())){
 
 			public_dht_tracker_plugin.removeDownload( download );
 			

@@ -45,8 +45,8 @@ public class OutgoingBTPieceMessageHandler {
   private 		byte					piece_version;
   
   private final LinkedList<DiskManagerReadRequest>			requests 			= new LinkedList<>();
-  private final ArrayList<DiskManagerReadRequest>			loading_messages 	= new ArrayList<>();
-  private final HashMap<BTPiece,DiskManagerReadRequest> 	queued_messages 	= new HashMap<>();
+  private final List<DiskManagerReadRequest>			loading_messages 	= new ArrayList<>();
+  private final Map<BTPiece,DiskManagerReadRequest> 	queued_messages 	= new HashMap<>();
   
   private final AEMonitor	lock_mon	= new AEMonitor( "OutgoingBTPieceMessageHandler:lock");
   private boolean destroyed = false;
@@ -58,8 +58,6 @@ public class OutgoingBTPieceMessageHandler {
    * Create a new handler for outbound piece messages,
    * reading piece data from the given disk manager
    * and transmitting the messages out the given message queue.
-   * @param disk_manager
-   * @param outgoing_message_q
    */
   public 
   OutgoingBTPieceMessageHandler( 

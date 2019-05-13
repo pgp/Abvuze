@@ -198,7 +198,7 @@ class BTPeerIDByteDecoderUtils {
 		 * Specialness for Transmission - thanks to BentMyWookie for the information,
 		 * I'm sure he'll be reading this comment anyway... ;)
 		 */  
-		if (version_scheme == BTPeerIDByteDecoderDefinitions.VER_AZ_TRANSMISSION_STYLE) {
+		if (BTPeerIDByteDecoderDefinitions.VER_AZ_TRANSMISSION_STYLE.equals(version_scheme)) {
 			// Very old client style: -TR0006- is 0.6.
 			if (version_data.startsWith("000")) {
 				version_scheme = "3.4";
@@ -215,41 +215,41 @@ class BTPeerIDByteDecoderUtils {
 			}
 		}
 		
-		if (version_scheme == BTPeerIDByteDecoderDefinitions.VER_AZ_FOUR_DIGITS) {
+		if (BTPeerIDByteDecoderDefinitions.VER_AZ_FOUR_DIGITS.equals(version_scheme)) {
 			return decodeAlphaNumericChar(a) + "." + decodeAlphaNumericChar(b) + "."
 					+ decodeAlphaNumericChar(c) + "." + decodeAlphaNumericChar(d);
 		}
-		else if (version_scheme == BTPeerIDByteDecoderDefinitions.VER_AZ_THREE_DIGITS ||
-				version_scheme == BTPeerIDByteDecoderDefinitions.VER_AZ_THREE_DIGITS_PLUS_MNEMONIC ||
-				version_scheme == BTPeerIDByteDecoderDefinitions.VER_AZ_ONE_MAJ_TWO_MIN_PLUS_MNEMONIC) {
+		else if (BTPeerIDByteDecoderDefinitions.VER_AZ_THREE_DIGITS.equals(version_scheme) ||
+                BTPeerIDByteDecoderDefinitions.VER_AZ_THREE_DIGITS_PLUS_MNEMONIC.equals(version_scheme) ||
+                BTPeerIDByteDecoderDefinitions.VER_AZ_ONE_MAJ_TWO_MIN_PLUS_MNEMONIC.equals(version_scheme)) {
 			
 			String result;
-			if (version_scheme == BTPeerIDByteDecoderDefinitions.VER_AZ_ONE_MAJ_TWO_MIN_PLUS_MNEMONIC) {
+			if (BTPeerIDByteDecoderDefinitions.VER_AZ_ONE_MAJ_TWO_MIN_PLUS_MNEMONIC.equals(version_scheme)) {
 				result = intchar(a) + "." + intchar(b) + intchar(c);
 			}
 			else {
 				result = intchar(a) + "." + intchar(b) + "." + intchar(c);
 			}
-			if (version_scheme == BTPeerIDByteDecoderDefinitions.VER_AZ_THREE_DIGITS_PLUS_MNEMONIC ||
-					version_scheme == BTPeerIDByteDecoderDefinitions.VER_AZ_ONE_MAJ_TWO_MIN_PLUS_MNEMONIC) {
+			if (BTPeerIDByteDecoderDefinitions.VER_AZ_THREE_DIGITS_PLUS_MNEMONIC.equals(version_scheme) ||
+                    BTPeerIDByteDecoderDefinitions.VER_AZ_ONE_MAJ_TWO_MIN_PLUS_MNEMONIC.equals(version_scheme)) {
 				String mnemonic = decodeMnemonic(d);
 				if (mnemonic != null) {result += " " + mnemonic;}
 			}
 			return result;
 		}
-		else if (version_scheme == BTPeerIDByteDecoderDefinitions.VER_AZ_TWO_MAJ_TWO_MIN) {
+		else if (BTPeerIDByteDecoderDefinitions.VER_AZ_TWO_MAJ_TWO_MIN.equals(version_scheme)) {
 			return (a == '0' ? "" : intchar(a)) + intchar(b) + "." + intchar(c) + intchar(d);
 		}
-		else if (version_scheme == BTPeerIDByteDecoderDefinitions.VER_AZ_LAST_THREE_DIGITS) {
+		else if (BTPeerIDByteDecoderDefinitions.VER_AZ_LAST_THREE_DIGITS.equals(version_scheme)) {
 			return intchar(b) + "." + intchar(c) + "." + intchar(d);
 		}
-		else if (version_scheme == BTPeerIDByteDecoderDefinitions.VER_AZ_THREE_ALPHANUMERIC_DIGITS) {
+		else if (BTPeerIDByteDecoderDefinitions.VER_AZ_THREE_ALPHANUMERIC_DIGITS.equals(version_scheme)) {
 			return decodeAlphaNumericChar(a) + "." + decodeAlphaNumericChar(b) + "." + decodeAlphaNumericChar(c);
 		}
-		else if (version_scheme == BTPeerIDByteDecoderDefinitions.VER_AZ_SKIP_FIRST_ONE_MAJ_TWO_MIN) {
+		else if (BTPeerIDByteDecoderDefinitions.VER_AZ_SKIP_FIRST_ONE_MAJ_TWO_MIN.equals(version_scheme)) {
 			return intchar(b) + "." + intchar(c) + intchar(d);
 		}
-		else if (version_scheme == BTPeerIDByteDecoderDefinitions.VER_AZ_KTORRENT_STYLE) {
+		else if (BTPeerIDByteDecoderDefinitions.VER_AZ_KTORRENT_STYLE.equals(version_scheme)) {
 			// Either something like this:
 			//   1.2 RC 4 [where 3 == 'R')
 			//   1.2 Dev  [where 3 == 'D')
@@ -284,7 +284,7 @@ class BTPeerIDByteDecoderUtils {
 		else if (version_scheme.equals("12.3-4")) {
 			return decodeAlphaNumericChar(a) + decodeAlphaNumericChar(b) + "." + decodeAlphaNumericChar(c) + "-" + decodeAlphaNumericChar(d);
 		}
-		else if (version_scheme == BTPeerIDByteDecoderDefinitions.VER_AZ_V_FOUR_DIGITS) {
+		else if (BTPeerIDByteDecoderDefinitions.VER_AZ_V_FOUR_DIGITS.equals(version_scheme)) {
 			return "v" + decodeAzStyleVersionNumber(version_data, BTPeerIDByteDecoderDefinitions.VER_AZ_FOUR_DIGITS);
 		}
 		else {
@@ -317,19 +317,19 @@ class BTPeerIDByteDecoderUtils {
 	}
 	
 	public static String decodeCustomVersionNumber(String version_data, String version_scheme) {
-		if (version_scheme == BTPeerIDByteDecoderDefinitions.VER_BLOCK) {
+		if (BTPeerIDByteDecoderDefinitions.VER_BLOCK.equals(version_scheme)) {
 			return version_data;
 		}
-		else if (version_scheme == BTPeerIDByteDecoderDefinitions.VER_DOTTED_BLOCK ||
-				version_scheme == BTPeerIDByteDecoderDefinitions.VER_BYTE_BLOCK_DOTTED_CHAR) {
-			int inc_size = (version_scheme == BTPeerIDByteDecoderDefinitions.VER_DOTTED_BLOCK) ? 2 : 1;
+		else if (BTPeerIDByteDecoderDefinitions.VER_DOTTED_BLOCK.equals(version_scheme) ||
+                BTPeerIDByteDecoderDefinitions.VER_BYTE_BLOCK_DOTTED_CHAR.equals(version_scheme)) {
+			int inc_size = (BTPeerIDByteDecoderDefinitions.VER_DOTTED_BLOCK.equals(version_scheme)) ? 2 : 1;
 			String result = version_data.substring(0, 1);
 			for (int i=0+inc_size; i<version_data.length(); i+=inc_size) {
 				result = joinAsDotted(result, String.valueOf(version_data.charAt(i)));
 			}
 			return result;
 		}
-		else if ( version_scheme == BTPeerIDByteDecoderDefinitions.VER_TWOBYTE_BLOCK_DOTTED_CHAR) {
+		else if (BTPeerIDByteDecoderDefinitions.VER_TWOBYTE_BLOCK_DOTTED_CHAR.equals(version_scheme)) {
 			String result = "";
 			for (int i=0;i<version_data.length();i+=2 ){
 				String s = version_data.substring( i, i+2 );
@@ -344,17 +344,17 @@ class BTPeerIDByteDecoderUtils {
 			}
 			return result;
 		}
-		else if (version_scheme == BTPeerIDByteDecoderDefinitions.VER_BITS_ON_WHEELS) {
+		else if (BTPeerIDByteDecoderDefinitions.VER_BITS_ON_WHEELS.equals(version_scheme)) {
 			if (version_data.equals("A0C")) {return "1.0.6";}
 			else if (version_data.equals("A0B")) {return "1.0.5";}
 			throw new RuntimeException("Unknown BitsOnWheels version number - " + version_data);
 		}
-		else if ( version_scheme == BTPeerIDByteDecoderDefinitions.VER_BYTE_UM_STYLE ){
+		else if (BTPeerIDByteDecoderDefinitions.VER_BYTE_UM_STYLE.equals(version_scheme)){
 			
 			char[] chars = version_data.toCharArray();
 			
 			return( chars[0] + "." + chars[1] + "." + chars[2] + chars[3] );
-		}else if ( version_scheme == BTPeerIDByteDecoderDefinitions.VER_BITLORD ){
+		}else if (BTPeerIDByteDecoderDefinitions.VER_BITLORD.equals(version_scheme)){
 			
 			char[] chars = version_data.toCharArray();
 			

@@ -314,7 +314,7 @@ AEProxyAddressMapperImpl
 
 				String ip = mapping.getIP();
 				
-				if ( AENetworkClassifier.categoriseAddress( ip ) == AENetworkClassifier.AT_PUBLIC ){
+				if (AENetworkClassifier.AT_PUBLIC.equals(AENetworkClassifier.categoriseAddress(ip))){
 					
 					result = new InetSocketAddress( ip, port );
 					

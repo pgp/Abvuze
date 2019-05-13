@@ -883,7 +883,7 @@ TRTrackerBTAnnouncerImpl
 
                     for (String peer_network1 : peer_networks) {
 
-                        if (peer_network1 == peer_network) {
+                        if (Objects.equals(peer_network1,peer_network)) {
 
                             p.add(peer);
 
@@ -1173,7 +1173,7 @@ TRTrackerBTAnnouncerImpl
 							
 				  			String	tracker_network	= AENetworkClassifier.categoriseAddress( reqUrl.getHost()); 
 
-				  			if ( tracker_network == AENetworkClassifier.AT_PUBLIC ){
+				  			if (AENetworkClassifier.AT_PUBLIC.equals(tracker_network)){
 
 				  				udpAnnounceURL = new URL(reqUrl.toString().replaceFirst("^http", "udp"));
 							
@@ -1228,7 +1228,7 @@ TRTrackerBTAnnouncerImpl
 			  				
 			  				String	tracker_network	= AENetworkClassifier.categoriseAddress( reqUrl.getHost()); 
 
-				  			if ( tracker_network == AENetworkClassifier.AT_PUBLIC ){
+				  			if (AENetworkClassifier.AT_PUBLIC.equals(tracker_network)){
 				  				
 				  				failure_reason = "HTTP Tracker protocol disabled";
 				  				
@@ -1349,7 +1349,7 @@ TRTrackerBTAnnouncerImpl
 		}catch( Exception e ){
 							
 			if ( 	first_effort &&
-					AENetworkClassifier.categoriseAddress( original_reqUrl.getHost() ) != AENetworkClassifier.AT_PUBLIC ){
+					!AENetworkClassifier.AT_PUBLIC.equals(AENetworkClassifier.categoriseAddress(original_reqUrl.getHost()))){
 							
 				Map<String,Object>	opts = new HashMap<>();
 				
@@ -2164,12 +2164,12 @@ TRTrackerBTAnnouncerImpl
     }else{
         for (String peer_network : peer_networks) {
 
-            if (peer_network == AENetworkClassifier.AT_PUBLIC) {
+            if (AENetworkClassifier.AT_PUBLIC.equals(peer_network)) {
 
                 normal_network_ok = true;
             }
 
-            if (peer_network == tracker_network) {
+            if (Objects.equals(peer_network,tracker_network)) {
 
                 network_ok = true;
             }
@@ -2197,12 +2197,12 @@ TRTrackerBTAnnouncerImpl
 				
 				String	cat = AENetworkClassifier.categoriseAddress( this_address );
 				
-				if ( cat == AENetworkClassifier.AT_PUBLIC ){
+				if (AENetworkClassifier.AT_PUBLIC.equals(cat)){
 					
 					normal_explicit	= this_address;
 				}
 				
-				if ( tracker_network == cat ){
+				if (Objects.equals(tracker_network,cat)){
 					
 					ip = this_address;
 					
@@ -2231,7 +2231,7 @@ TRTrackerBTAnnouncerImpl
     
     if ( ip != null ){
      	   	
-    	if ( tracker_network == AENetworkClassifier.AT_PUBLIC ){
+    	if (AENetworkClassifier.AT_PUBLIC.equals(tracker_network)){
     	
     		try{
     			ip = PRHelpers.DNSToIPAddress( ip );
@@ -2305,7 +2305,7 @@ TRTrackerBTAnnouncerImpl
 	
 		// bah, issue with an i2p tracker regarding what is passed it seems: truncate to minimum required and order for the moment...
 	
-	if ( tracker_network == AENetworkClassifier.AT_I2P ){
+	if (AENetworkClassifier.AT_I2P.equals(tracker_network)){
 	
 		String	temp = request.toString();
 		
@@ -2622,8 +2622,7 @@ TRTrackerBTAnnouncerImpl
 								
 									String last_warning_message = (String)tracker_report_map.get( url.getHost());
 									
-									if ( 	last_warning_message == null ||
-											!warning_message.equals( last_warning_message )){
+									if (!warning_message.equals(last_warning_message)){
 		 							
 										log_it	= true;
 										
@@ -3225,7 +3224,7 @@ TRTrackerBTAnnouncerImpl
 				    	
 			  			String	tracker_network	= AENetworkClassifier.categoriseAddress( url.getHost()); 
 
-			  			if ( tracker_network == AENetworkClassifier.AT_I2P && ( meta_peers.length % 32 == 0 )){
+			  			if (AENetworkClassifier.AT_I2P.equals(tracker_network) && ( meta_peers.length % 32 == 0 )){
 			  				
 			  					// 32 byte SHA256 b32 addresses
 			  				
@@ -3448,7 +3447,7 @@ TRTrackerBTAnnouncerImpl
 			            
 						Object	override = extensions.get( "min interval override" );
 						
-						if ( override != null && override instanceof Long ){
+						if (override instanceof Long){
 							
 								// this is to allow specific torrents to be refreshed more quickly
 								// if the tracker permits. Parg
@@ -3688,7 +3687,7 @@ TRTrackerBTAnnouncerImpl
       failure_added_time += 120 + new Random().nextInt( 60 );
     }
 
-    boolean is_seed = (announce_data_provider == null) ? false : announce_data_provider.getRemaining() == 0;
+    boolean is_seed = (announce_data_provider != null) && announce_data_provider.getRemaining() == 0;
     
     if( is_seed ) failure_added_time = failure_added_time * 2; //no need to retry as often
     

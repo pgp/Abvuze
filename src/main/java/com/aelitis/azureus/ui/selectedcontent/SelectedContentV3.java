@@ -28,6 +28,8 @@ import com.aelitis.azureus.ui.selectedcontent.ISelectedContent;
 import com.aelitis.azureus.ui.selectedcontent.SelectedContent;
 import com.aelitis.azureus.util.PlayUtils;
 
+import java.util.Objects;
+
 /**
  * @author TuxPaper
  * @created Jun 9, 2008

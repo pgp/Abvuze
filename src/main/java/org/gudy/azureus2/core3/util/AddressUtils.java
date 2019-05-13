@@ -400,7 +400,7 @@ AddressUtils
 			
 			if ( address.isUnresolved()){
 		
-				return( AENetworkClassifier.categoriseAddress( address ) == AENetworkClassifier.AT_I2P );
+				return(AENetworkClassifier.AT_I2P.equals(AENetworkClassifier.categoriseAddress(address)));
 			}
 		}
 		
@@ -468,7 +468,7 @@ AddressUtils
 		
 		throws UnknownHostException
 	{
-		if ( AENetworkClassifier.categoriseAddress( host ) == AENetworkClassifier.AT_PUBLIC ){
+		if (AENetworkClassifier.AT_PUBLIC.equals(AENetworkClassifier.categoriseAddress(host))){
 		
 			return( InetAddress.getByName( host ));
 		}
@@ -482,7 +482,7 @@ AddressUtils
 		
 		throws UnknownHostException
 	{
-		if ( AENetworkClassifier.categoriseAddress( host ) == AENetworkClassifier.AT_PUBLIC ){
+		if (AENetworkClassifier.AT_PUBLIC.equals(AENetworkClassifier.categoriseAddress(host))){
 		
 			return( InetAddress.getAllByName( host ));
 		}

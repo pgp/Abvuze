@@ -223,7 +223,7 @@ public class LTHandshake implements LTMessage {
 		Long crypto = (Long)data_dict.get("e");
 		if(crypto == null)
 			return null;
-		return crypto.longValue() == 1;
+		return crypto == 1;
 	}
 	
 	public Map getExtensionMapping() {

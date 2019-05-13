@@ -1889,7 +1889,7 @@ TRTrackerServerTorrentImpl
 						rep_peer.put( "ip", ((String)explicit_peer[0]).getBytes());
 					}
 					
-					rep_peer.put( "port", (long) ((Integer) explicit_peer[2]).intValue());
+					rep_peer.put( "port", ((Number) explicit_peer[2]).longValue());
 					
 					if ( crypto_level != TRTrackerServerPeer.CRYPTO_NONE ){
 						

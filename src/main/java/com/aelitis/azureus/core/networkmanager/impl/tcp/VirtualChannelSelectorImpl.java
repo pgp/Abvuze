@@ -270,7 +270,7 @@ public class VirtualChannelSelectorImpl {
     private final LinkedList<Object> 	register_cancel_list 		= new LinkedList<>();
     private final AEMonitor 			register_cancel_list_mon	= new AEMonitor( "VirtualChannelSelector:RCL");
 
-    private final HashMap<AbstractSelectableChannel, Boolean> paused_states = new HashMap<>();
+    private final Map<AbstractSelectableChannel, Boolean> paused_states = new HashMap<>();
     
     private final int 		INTEREST_OP;
     private final boolean	pause_after_select;

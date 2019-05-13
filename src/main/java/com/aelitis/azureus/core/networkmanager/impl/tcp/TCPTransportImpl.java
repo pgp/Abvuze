@@ -217,7 +217,7 @@ public class TCPTransportImpl extends TransportImpl implements Transport {
 			
 			String host = address.getHostName();
 			
-			if ( AENetworkClassifier.categoriseAddress( host ) != AENetworkClassifier.AT_PUBLIC ){
+			if (!AENetworkClassifier.AT_PUBLIC.equals(AENetworkClassifier.categoriseAddress(host))){
 			
 				Map<String,Object>	opts = new HashMap<>();
 				
@@ -318,7 +318,7 @@ public class TCPTransportImpl extends TransportImpl implements Transport {
         	
         	InetSocketAddress ia_address;
         	
-        	if ( AENetworkClassifier.categoriseAddress( pp_host ) == AENetworkClassifier.AT_PUBLIC ){
+        	if (AENetworkClassifier.AT_PUBLIC.equals(AENetworkClassifier.categoriseAddress(pp_host))){
         	
         		ia_address = new InetSocketAddress( pp.getHost(), pp.getPort());
         	

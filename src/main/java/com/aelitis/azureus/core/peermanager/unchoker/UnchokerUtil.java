@@ -231,7 +231,7 @@ public class UnchokerUtil {
 		  
 		  PEPeer peer = choke_it.next();
 		  
-		  if ( AENetworkClassifier.categoriseAddress( peer.getIp()) != AENetworkClassifier.AT_PUBLIC ){
+		  if (!AENetworkClassifier.AT_PUBLIC.equals(AENetworkClassifier.categoriseAddress(peer.getIp()))){
 			  
 			  if ( isUnchokable( peer, allow_snubbed )){
 			
@@ -262,7 +262,7 @@ public class UnchokerUtil {
 			 
 			  PEPeer peer = unchoke_it.previous();
 			  
-			  if ( AENetworkClassifier.categoriseAddress( peer.getIp()) != AENetworkClassifier.AT_PUBLIC ){
+			  if (!AENetworkClassifier.AT_PUBLIC.equals(AENetworkClassifier.categoriseAddress(peer.getIp()))){
 				  
 				  //System.out.println( "   balanced with " + peer );
 				  

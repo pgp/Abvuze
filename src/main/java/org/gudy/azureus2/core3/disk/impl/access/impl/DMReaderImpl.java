@@ -21,7 +21,6 @@ package org.gudy.azureus2.core3.disk.impl.access.impl;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 

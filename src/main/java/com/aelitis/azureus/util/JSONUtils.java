@@ -17,7 +17,6 @@
 
 package com.aelitis.azureus.util;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 

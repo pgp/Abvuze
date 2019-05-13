@@ -574,7 +574,7 @@ implements PEPeerTransport
 
 		boolean	lan_local = isLANLocal();
 
-		boolean public_net = peer_item_identity.getNetwork() == AENetworkClassifier.AT_PUBLIC;
+		boolean public_net = AENetworkClassifier.AT_PUBLIC.equals(peer_item_identity.getNetwork());
 
 		if ( lan_local || !public_net ){
 			
@@ -726,7 +726,7 @@ implements PEPeerTransport
 		
 			// give plugin peers some priority as they're being injected for a good reason
 		
-		if ( peer_source == PEPeerSource.PS_PLUGIN ){
+		if (PEPeerSource.PS_PLUGIN.equals(peer_source)){
 			
 			if ( priority > ProtocolEndpoint.CONNECT_PRIORITY_HIGH ){
 				
@@ -807,7 +807,7 @@ implements PEPeerTransport
 					getConnectionProperty( 
 						String property_name )
 					{
-						if ( property_name == AEProxyFactory.PO_PEER_NETWORKS ){
+						if (AEProxyFactory.PO_PEER_NETWORKS.equals(property_name)){
 							
 							return( manager.getAdapter().getEnabledNetworks());
 						}
@@ -1170,7 +1170,7 @@ implements PEPeerTransport
 		
 		NetworkAdmin na = NetworkAdmin.getSingleton();
 		
-		if ( peer_item_identity.getNetwork() == AENetworkClassifier.AT_PUBLIC && !na.isSocksActive()){
+		if (AENetworkClassifier.AT_PUBLIC.equals(peer_item_identity.getNetwork()) && !na.isSocksActive()){
 				// don't send public address in handshake
 			InetAddress defaultV6 = na.hasIPV6Potential(true) ? na.getDefaultPublicAddressV6() : null;
 			
@@ -1222,7 +1222,7 @@ implements PEPeerTransport
 		
 		NetworkAdmin na = NetworkAdmin.getSingleton();
 		
-		if ( peer_item_identity.getNetwork() == AENetworkClassifier.AT_PUBLIC && !na.isSocksActive()){
+		if (AENetworkClassifier.AT_PUBLIC.equals(peer_item_identity.getNetwork()) && !na.isSocksActive()){
 				// don't send public address in handshake
 			defaultV6 = na.hasIPV6Potential(true) ? na.getDefaultPublicAddressV6() : null;
 		}
@@ -2922,61 +2922,87 @@ implements PEPeerTransport
 				
 				String id = msg.getID();
 				byte supported_version = supported_message_versions[i];
-				
+
+				if(id==null) id="_DEFAULT_";
 				// we can use == safely
-				if (id == BTMessage.ID_BT_BITFIELD)
-					other_peer_bitfield_version = supported_version;
-				else if (id == BTMessage.ID_BT_CANCEL)
-					other_peer_cancel_version = supported_version;
-				else if (id == BTMessage.ID_BT_CHOKE)
-					other_peer_choke_version = supported_version;
-				else if (id == BTMessage.ID_BT_HANDSHAKE)
-					other_peer_handshake_version = supported_version;
-				else if (id == BTMessage.ID_BT_HAVE)
-					other_peer_bt_have_version = supported_version;
-				else if (id == BTMessage.ID_BT_INTERESTED)
-					other_peer_interested_version = supported_version;
-				else if (id == BTMessage.ID_BT_KEEP_ALIVE)
-					other_peer_keep_alive_version = supported_version;
-				else if (id == BTMessage.ID_BT_PIECE)
-					other_peer_piece_version = supported_version;
-				else if (id == BTMessage.ID_BT_UNCHOKE)
-					other_peer_unchoke_version = supported_version;
-				else if (id == BTMessage.ID_BT_UNINTERESTED)
-					other_peer_uninterested_version = supported_version;
-				else if (id == BTMessage.ID_BT_REQUEST)
-					other_peer_request_version = supported_version;
-				else if (id == BTMessage.ID_BT_SUGGEST_PIECE)
-					other_peer_suggest_piece_version = supported_version;
-				else if (id == BTMessage.ID_BT_HAVE_ALL)
-					other_peer_have_all_version = supported_version;
-				else if (id == BTMessage.ID_BT_HAVE_NONE)
-					other_peer_have_none_version = supported_version;
-				else if (id == BTMessage.ID_BT_REJECT_REQUEST)
-					other_peer_reject_request_version = supported_version;
-				else if (id == BTMessage.ID_BT_ALLOWED_FAST)
-					other_peer_allowed_fast_version = supported_version;
-				else if (id == AZMessage.ID_AZ_PEER_EXCHANGE)
-					other_peer_pex_version = supported_version;
-				else if (id == AZMessage.ID_AZ_REQUEST_HINT)
-					other_peer_az_request_hint_version = supported_version;
-				else if (id == AZMessage.ID_AZ_HAVE)
-					other_peer_az_have_version = supported_version;
-				else if (id == AZMessage.ID_AZ_BAD_PIECE)
-					other_peer_az_bad_piece_version = supported_version;
-				else if (id == AZMessage.ID_AZ_STAT_REQUEST)
-					other_peer_az_stats_request_version = supported_version;
-				else if (id == AZMessage.ID_AZ_STAT_REPLY)
-					other_peer_az_stats_reply_version = supported_version;
-				else if (id == AZMessage.ID_AZ_METADATA)
-					other_peer_az_metadata_version = supported_version;
-				else if (id == BTMessage.ID_BT_DHT_PORT)
-					this.ml_dht_enabled = true;
-				else
-				{
-					// we expect unmatched ones here at the moment as we're not
-					// dealing with them yet or they don't make sense.
-					// for example AZVER
+				switch (id) {
+					case BTMessage.ID_BT_BITFIELD:
+						other_peer_bitfield_version = supported_version;
+						break;
+					case BTMessage.ID_BT_CANCEL:
+						other_peer_cancel_version = supported_version;
+						break;
+					case BTMessage.ID_BT_CHOKE:
+						other_peer_choke_version = supported_version;
+						break;
+					case BTMessage.ID_BT_HANDSHAKE:
+						other_peer_handshake_version = supported_version;
+						break;
+					case BTMessage.ID_BT_HAVE:
+						other_peer_bt_have_version = supported_version;
+						break;
+					case BTMessage.ID_BT_INTERESTED:
+						other_peer_interested_version = supported_version;
+						break;
+					case BTMessage.ID_BT_KEEP_ALIVE:
+						other_peer_keep_alive_version = supported_version;
+						break;
+					case BTMessage.ID_BT_PIECE:
+						other_peer_piece_version = supported_version;
+						break;
+					case BTMessage.ID_BT_UNCHOKE:
+						other_peer_unchoke_version = supported_version;
+						break;
+					case BTMessage.ID_BT_UNINTERESTED:
+						other_peer_uninterested_version = supported_version;
+						break;
+					case BTMessage.ID_BT_REQUEST:
+						other_peer_request_version = supported_version;
+						break;
+					case BTMessage.ID_BT_SUGGEST_PIECE:
+						other_peer_suggest_piece_version = supported_version;
+						break;
+					case BTMessage.ID_BT_HAVE_ALL:
+						other_peer_have_all_version = supported_version;
+						break;
+					case BTMessage.ID_BT_HAVE_NONE:
+						other_peer_have_none_version = supported_version;
+						break;
+					case BTMessage.ID_BT_REJECT_REQUEST:
+						other_peer_reject_request_version = supported_version;
+						break;
+					case BTMessage.ID_BT_ALLOWED_FAST:
+						other_peer_allowed_fast_version = supported_version;
+						break;
+					case AZMessage.ID_AZ_PEER_EXCHANGE:
+						other_peer_pex_version = supported_version;
+						break;
+					case AZMessage.ID_AZ_REQUEST_HINT:
+						other_peer_az_request_hint_version = supported_version;
+						break;
+					case AZMessage.ID_AZ_HAVE:
+						other_peer_az_have_version = supported_version;
+						break;
+					case AZMessage.ID_AZ_BAD_PIECE:
+						other_peer_az_bad_piece_version = supported_version;
+						break;
+					case AZMessage.ID_AZ_STAT_REQUEST:
+						other_peer_az_stats_request_version = supported_version;
+						break;
+					case AZMessage.ID_AZ_STAT_REPLY:
+						other_peer_az_stats_reply_version = supported_version;
+						break;
+					case AZMessage.ID_AZ_METADATA:
+						other_peer_az_metadata_version = supported_version;
+						break;
+					case BTMessage.ID_BT_DHT_PORT:
+						this.ml_dht_enabled = true;
+						break;
+					default:
+						// we expect unmatched ones here at the moment as we're not
+						// dealing with them yet or they don't make sense.
+						// for example AZVER
+						break;
 				}
 			}
 		}
@@ -3244,7 +3270,7 @@ implements PEPeerTransport
 		MainlineDHTProvider provider = getDHTProvider();
 		if (provider == null) {return;}
 		
-		if ( network == AENetworkClassifier.AT_PUBLIC ){
+		if (AENetworkClassifier.AT_PUBLIC.equals(network)){
 			try {provider.notifyOfIncomingPort(getIp(), i_port);}
 			catch (Throwable t) {Debug.printStackTrace(t);}	
 		}
@@ -4814,7 +4840,7 @@ implements PEPeerTransport
 
 		if( pex_item != null && manager.isPeerExchangeEnabled()) {
 			
-			if ( peer_item_identity.getNetwork() == AENetworkClassifier.AT_PUBLIC ){
+			if (AENetworkClassifier.AT_PUBLIC.equals(peer_item_identity.getNetwork())){
 		
 				final PeerItem[] adds = pex_item.getNewlyAddedPeerConnections( AENetworkClassifier.AT_PUBLIC );
 				final PeerItem[] drops = pex_item.getNewlyDroppedPeerConnections( AENetworkClassifier.AT_PUBLIC );  
@@ -5479,7 +5505,7 @@ implements PEPeerTransport
 		List<Integer>	res = new ArrayList<>();
 							
 		try{
-			if ( network == AENetworkClassifier.AT_PUBLIC ){
+			if (AENetworkClassifier.AT_PUBLIC.equals(network)){
 				
 				byte[]	address = InetAddress.getByName( ip ).getAddress();
 				

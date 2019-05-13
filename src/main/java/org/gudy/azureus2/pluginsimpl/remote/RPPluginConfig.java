@@ -139,7 +139,7 @@ RPPluginConfig
         switch (method) {
             case "getPluginIntParameter[String,int]":
 
-                return (new RPReply(delegate.getPluginIntParameter((String) params[0], ((Integer) params[1]).intValue())));
+                return (new RPReply(delegate.getPluginIntParameter((String) params[0], (Integer) params[1])));
 
             case "getPluginStringParameter[String,String]":
 
@@ -154,7 +154,7 @@ RPPluginConfig
             case "getIntParameter[String,int]":
             case "getParameter[String,int]":
 
-                return (new RPReply(delegate.getIntParameter((String) params[0], ((Integer) params[1]).intValue())));
+                return (new RPReply(delegate.getIntParameter((String) params[0], (Integer) params[1])));
 
             case "setParameter[String,int]":
 

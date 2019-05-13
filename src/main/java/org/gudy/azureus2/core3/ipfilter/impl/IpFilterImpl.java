@@ -531,7 +531,7 @@ IpFilterImpl
 	      	// don't bounce non-public addresses (we can ban them but not filter them as they have no sensible
 		  	// real filter address
 		  
-		  if ( AENetworkClassifier.categoriseAddress( ipAddress ) != AENetworkClassifier.AT_PUBLIC ){
+		  if (!AENetworkClassifier.AT_PUBLIC.equals(AENetworkClassifier.categoriseAddress(ipAddress))){
 			  
 			  return( false );
 		  }
@@ -560,7 +560,7 @@ IpFilterImpl
 	
 	  if( allow ){  
 		  
-		if ( AENetworkClassifier.categoriseAddress( ipAddress ) != AENetworkClassifier.AT_PUBLIC ){
+		if (!AENetworkClassifier.AT_PUBLIC.equals(AENetworkClassifier.categoriseAddress(ipAddress))){
 			  
 		  return( false );
 		}

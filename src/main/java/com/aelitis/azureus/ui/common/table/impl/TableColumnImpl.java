@@ -20,7 +20,6 @@
 
 package com.aelitis.azureus.ui.common.table.impl;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -1143,13 +1142,13 @@ public class TableColumnImpl
 			}
 		}
 		String sItemPrefix = "Column." + sName;
-		mapSettings.put(sItemPrefix, Arrays.asList(new Integer(bVisible ? 1 : 0),
-                new Integer(iPosition),
-                new Integer(iWidth),
-                new Integer(auto_tooltip ? 1 : 0),
-                new Integer(lLastSortValueChange == 0 ? -1 : (bSortAscending ? 1 : 0)),
+		mapSettings.put(sItemPrefix, Arrays.asList(bVisible ? 1 : 0,
+				iPosition,
+				iWidth,
+				auto_tooltip ? 1 : 0,
+				lLastSortValueChange == 0 ? -1 : (bSortAscending ? 1 : 0),
                 userData != null ? userData : Collections.EMPTY_MAP,
-                new Integer(iAlignment == iDefaultAlignment ? -1 : iAlignment)));
+				iAlignment == iDefaultAlignment ? -1 : iAlignment));
 		// cleanup old config
 		sItemPrefix = "Table." + sTableID + "." + sName; 
 		if (COConfigurationManager.hasParameter(sItemPrefix + ".width", true)) {

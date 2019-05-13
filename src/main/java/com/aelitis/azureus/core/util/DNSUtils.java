@@ -150,7 +150,7 @@ public class DNSUtils {
 				
 				for ( int i=hit;i<num_bits;i++){
 					
-					host += (host==""?"":".") + bits[i];
+					host += ("".equals(host) ?"":".") + bits[i];
 				}
 			}
 		}

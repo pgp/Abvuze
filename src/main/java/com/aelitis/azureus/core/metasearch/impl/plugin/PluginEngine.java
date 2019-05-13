@@ -390,7 +390,7 @@ PluginEngine
 				listener.resultsComplete( this );
 			}
 			
-			return results.toArray(new Result[results.size()]);
+			return results.toArray(new Result[0]);
 			
 		}catch( Throwable e ){
 			

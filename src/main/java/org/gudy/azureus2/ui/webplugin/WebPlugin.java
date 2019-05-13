@@ -1298,7 +1298,7 @@ WebPlugin
 											
 										}else{
 
-											if ( property == NetworkAdmin.PR_NETWORK_INTERFACES ){
+											if (NetworkAdmin.PR_NETWORK_INTERFACES.equals(property)){
 												
 												new AEThread2( "setupserver" )
 												{

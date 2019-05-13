@@ -34,7 +34,7 @@ import org.json.simple.JSONArray;
  */
 public final class ImportExportUtils {
 	
-	public final static void
+	public static void
 	exportString(
 		Map		map,
 		String	key,
@@ -47,7 +47,7 @@ public final class ImportExportUtils {
         }
 	}
 	
-	public final static void
+	public static void
 	exportJSONString(
 		Map		map,
 		String	key,
@@ -59,7 +59,7 @@ public final class ImportExportUtils {
 		}
 	}
 	
-	public final static String
+	public static String
 	importString(
 		Map		map,
 		String	key,
@@ -75,7 +75,7 @@ public final class ImportExportUtils {
 		return( res );
 	}
 	
-	public final static String
+	public static String
 	importString(
 		Map		map,
 		String	key )
@@ -101,7 +101,7 @@ public final class ImportExportUtils {
 		return( null );
 	}
 	
-	public final static long
+	public static long
 	importLong(
 		Map		map,
 		String	key )
@@ -109,7 +109,7 @@ public final class ImportExportUtils {
 		return( importLong( map, key, 0 ));
 	}
 	
-	public final static long
+	public static long
 	importLong(
 		Map		map,
 		String	key,
@@ -134,7 +134,7 @@ public final class ImportExportUtils {
 		return( def );
 	}
 
-	public final static void
+	public static void
 	exportLong(
 		Map		map,
 		String	key,
@@ -143,7 +143,7 @@ public final class ImportExportUtils {
 		map.put( key, value );
 	}
 	
-	public final static void
+	public static void
 	exportInt(
 		Map		map,
 		String	key,
@@ -152,7 +152,7 @@ public final class ImportExportUtils {
 		map.put( key, (long) value);
 	}
 	
-	public final static int
+	public static int
 	importInt(
 		Map		map,
 		String	key )
@@ -160,7 +160,7 @@ public final class ImportExportUtils {
 		return((int)importLong( map, key, 0 ));
 	}
 	
-	public final static int
+	public static int
 	importInt(
 		Map		map,
 		String	key,
@@ -170,7 +170,7 @@ public final class ImportExportUtils {
 		return((int)importLong( map, key, def ));
 	}
 	
-	public final static void
+	public static void
 	exportFloat(
 		Map		map,
 		String	key,
@@ -179,7 +179,7 @@ public final class ImportExportUtils {
 		exportString( map, key, String.valueOf( value ));
 	}
 	
-	public final static float
+	public static float
 	importFloat(
 		Map		map,
 		String	key,
@@ -195,7 +195,7 @@ public final class ImportExportUtils {
 		return( Float.parseFloat( str ));
 	}
 	
-	public final static void
+	public static void
 	exportBoolean(
 		Map		map,
 		String	key,
@@ -204,7 +204,7 @@ public final class ImportExportUtils {
 		map.put( key, (long) (value ? 1 : 0));
 	}
 	
-	public final static boolean
+	public static boolean
 	importBoolean(
 		Map		map,
 		String	key )
@@ -212,7 +212,7 @@ public final class ImportExportUtils {
 		return( importBoolean( map, key, false ));
 	}
 	
-	public final static boolean
+	public static boolean
 	importBoolean(
 		Map		map,
 		String	key,
@@ -237,7 +237,7 @@ public final class ImportExportUtils {
 		return( def );
 	}
 	
-	public final static void
+	public static void
 	exportJSONBoolean(
 		Map		map,
 		String	key,
@@ -246,7 +246,7 @@ public final class ImportExportUtils {
 		map.put( key, value);
 	}
 	
-	public static final String
+	public static String
 	importURL(
 		Map		map,
 		String	key )
@@ -276,7 +276,7 @@ public final class ImportExportUtils {
 		return( url );
 	}
 	
-	public final static void
+	public static void
 	exportURL(
 		Map		map,
 		String	key,
@@ -285,7 +285,7 @@ public final class ImportExportUtils {
 		exportString( map, key, value );
 	}
 	
-	public final static void
+	public static void
 	exportJSONURL(
 		Map		map,
 		String	key,
@@ -294,7 +294,7 @@ public final class ImportExportUtils {
 		exportJSONString( map, key, UrlUtils.encode( value ));
 	}
 	
-	public static final String[]
+	public static String[]
 	importStringArray(
 		Map		map,
 		String	key )
@@ -326,7 +326,7 @@ public final class ImportExportUtils {
 		return( res );
 	}
 	
-	public static final void
+	public static void
 	exportStringArray(
 		Map			map,
 		String		key,
@@ -343,7 +343,7 @@ public final class ImportExportUtils {
         }
 	}
 	
-	public static final void
+	public static void
 	exportJSONStringArray(
 		Map			map,
 		String		key,
@@ -356,7 +356,7 @@ public final class ImportExportUtils {
 		Collections.addAll(l, data);
 	}
 	
-	public static final void
+	public static void
 	exportIntArray(
 		Map			map,
 		String		key,
@@ -383,7 +383,7 @@ public final class ImportExportUtils {
 		map.put( key, bytes );
 	}
 	
-	public static final int[]
+	public static int[]
 	importIntArray(
 		Map			map,
 		String		key )

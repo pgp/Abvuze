@@ -481,7 +481,7 @@ BuddyPlugin
 					
 						List<BuddyPluginBuddy> buddies = getBuddies();
 						
-						boolean	incomplete = ((TableContextMenuItem)menu).getTableID() == TableManager.TABLE_MYTORRENTS_INCOMPLETE;
+						boolean	incomplete = ((TableContextMenuItem) menu).getTableID().equals(TableManager.TABLE_MYTORRENTS_INCOMPLETE);
 						
 						TableContextMenuItem parent = incomplete?menu_item_itorrents:menu_item_ctorrents;
 

@@ -182,7 +182,7 @@ RDResumeHandler
 
                 for (DiskManagerFileInfo file : files) {
                     try {
-                        Long len = new Long(((DiskManagerFileInfoImpl) file).getCacheFile().getLength());
+                        Long len = ((DiskManagerFileInfoImpl) file).getCacheFile().getLength();
                         file_sizes.put(file, len);
                     } catch (CacheFileManagerException e) {
                         Debug.printStackTrace(e);

@@ -29,7 +29,6 @@ package com.aelitis.net.udp.uc;
 
 import java.io.*;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.gudy.azureus2.core3.util.AEMonitor;

@@ -689,7 +689,7 @@ SubscriptionSchedulerImpl
 						", new_time=" + new SimpleDateFormat().format(new Date(next_ready_time)) +
 						", next_sub=" + next_ready_subs.getName();
 				
-				if ( last_sched_str == null || !sched_str.equals( last_sched_str )){
+				if (!sched_str.equals(last_sched_str)){
 					
 					last_sched_str = sched_str;
 					
@@ -910,7 +910,7 @@ SubscriptionSchedulerImpl
 			
 		}else{
 			
-			fail_count = fail_count.longValue() + 1;
+			fail_count = fail_count + 1;
 		}
 		
 		sub.setUserData( SCHEDULER_FAILED_SCAN_CONSEC_KEY, fail_count );

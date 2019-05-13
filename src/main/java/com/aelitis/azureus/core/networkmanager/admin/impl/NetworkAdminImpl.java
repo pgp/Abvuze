@@ -1785,7 +1785,7 @@ for (String token : tokens) {
 			Debug.printStackTrace( e );
 		}
 		
-		return devices.toArray(new NetworkAdminNATDevice[devices.size()]);
+		return devices.toArray(new NetworkAdminNATDevice[0]);
 	}
 	
 	public NetworkAdminASN 

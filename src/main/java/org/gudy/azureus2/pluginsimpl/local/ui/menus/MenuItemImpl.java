@@ -17,8 +17,6 @@
  */
 package org.gudy.azureus2.pluginsimpl.local.ui.menus;
 
-import java.util.Iterator;
-
 import org.gudy.azureus2.core3.internat.MessageText;
 import org.gudy.azureus2.core3.util.Debug;
 

@@ -125,7 +125,7 @@ public class TrackerStatus {
 	private String					scrapeURL						= null;
  
   /** key = Torrent hash.  values = TRTrackerScraperResponseImpl */
-  private final HashMap<HashWrapper,TRTrackerScraperResponseImpl> 					hashes;
+  private final Map<HashWrapper,TRTrackerScraperResponseImpl> 					hashes;
   /** only needed to notify listeners */ 
   private final TRTrackerScraperImpl		scraper;
   
@@ -544,7 +544,7 @@ public class TrackerStatus {
 		  			
 		  			String	tracker_network	= AENetworkClassifier.categoriseAddress( reqUrl.getHost()); 
 
-		  			if ( tracker_network == AENetworkClassifier.AT_PUBLIC ){ 
+		  			if (AENetworkClassifier.AT_PUBLIC.equals(tracker_network)){
 		  			
 		  				udpScrapeURL = new URL(reqUrl.toString().replaceFirst("^http", "udp"));
 		  			
@@ -558,7 +558,7 @@ public class TrackerStatus {
 		  					
 		  				String	tracker_network	= AENetworkClassifier.categoriseAddress( reqUrl.getHost()); 
 
-			  			if ( tracker_network == AENetworkClassifier.AT_PUBLIC ){
+			  			if (AENetworkClassifier.AT_PUBLIC.equals(tracker_network)){
 		  				
 			  				throw( new IOException( "HTTP Tracker protocol disabled" ));
 			  			}
@@ -1079,7 +1079,7 @@ public class TrackerStatus {
 			
 		}catch( Exception e ){
 			
-			if ( AENetworkClassifier.categoriseAddress( reqUrl.getHost() ) != AENetworkClassifier.AT_PUBLIC ){
+			if (!AENetworkClassifier.AT_PUBLIC.equals(AENetworkClassifier.categoriseAddress(reqUrl.getHost()))){
 			
 				Map<String,Object>	opts = new HashMap<>();
 				
@@ -1118,7 +1118,7 @@ public class TrackerStatus {
 									
 									for ( String net2: current_nets ){
 										
-										if ( net1 == net2 ){
+										if (Objects.equals(net1,net2)){
 											
 											match = true;
 											

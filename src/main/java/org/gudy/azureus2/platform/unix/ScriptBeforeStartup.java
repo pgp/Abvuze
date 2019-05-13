@@ -22,7 +22,6 @@ import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -232,7 +231,7 @@ public class ScriptBeforeStartup
             for (Constructor constructor : constructors) {
                 if (constructor.getParameterTypes().length == 2) {
                     Object browser = constructor.newInstance(shell,
-                            new Integer(0));
+							0);
 
                     Method methSetUrl = claBrowser.getMethod("setUrl", String.class);
                     methSetUrl.invoke(browser, "about:blank");

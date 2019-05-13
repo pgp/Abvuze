@@ -94,7 +94,7 @@ DDBaseImpl
 					
 		for ( String net: networks ){
 			
-			if ( net == AENetworkClassifier.AT_PUBLIC ){
+			if (AENetworkClassifier.AT_PUBLIC.equals(net)){
 				
 				DistributedDatabase ddb = getSingleton( AzureusCoreFactory.getSingleton());
 				
@@ -154,7 +154,7 @@ DDBaseImpl
 							
 		for ( String net: networks ){
 			
-			if ( net == AENetworkClassifier.AT_PUBLIC ){
+			if (AENetworkClassifier.AT_PUBLIC.equals(net)){
 				
 				DistributedDatabase ddb = getSingleton( AzureusCoreFactory.getSingleton());
 				

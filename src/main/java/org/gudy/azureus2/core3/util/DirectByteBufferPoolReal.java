@@ -379,7 +379,7 @@ DirectByteBufferPoolReal
 						
 					}else{
 						
-						size_counts.put(trim, count.longValue() + 1);
+						size_counts.put(trim, count + 1);
 					}
 				}
 				
@@ -552,7 +552,7 @@ DirectByteBufferPoolReal
   
   
   /*
-  private final HashMap in_use_counts = new HashMap();
+  private final Map in_use_counts = new HashMap();
   
   private void addInUse( int size ) {
     Integer key = new Integer( size );

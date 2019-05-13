@@ -1504,10 +1504,9 @@ DHTControlImpl
 
                         for (DHTTransportValue[] value_set : value_sets) {
 
-                            for (int k = 0; k < value_set.length; k++) {
-
-                                listener.wrote(contact, value_set[k]);
-                            }
+							for (DHTTransportValue dhtTransportValue : value_set) {
+								listener.wrote(contact, dhtTransportValue);
+							}
                         }
 
                         // each store is going to report its complete event

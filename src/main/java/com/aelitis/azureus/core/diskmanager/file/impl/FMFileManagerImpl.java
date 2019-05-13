@@ -66,11 +66,11 @@ FMFileManagerImpl
 		}
 	}
 	
-	protected final LinkedHashMap		map;
-	protected final AEMonitor			map_mon	= new AEMonitor( "FMFileManager:Map");
+	protected final Map map;
+	protected final AEMonitor map_mon = new AEMonitor( "FMFileManager:Map");
 
-	protected final HashMap<Object,LinkFileMap>			links		= new HashMap<>();
-	protected final AEMonitor			links_mon	= new AEMonitor( "FMFileManager:Links");
+	protected final Map<Object,LinkFileMap>	links = new HashMap<>();
+	protected final AEMonitor links_mon	= new AEMonitor( "FMFileManager:Links");
 
 	protected final boolean			limited;
 	protected final int				limit_size;

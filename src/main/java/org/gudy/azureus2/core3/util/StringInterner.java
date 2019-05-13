@@ -605,7 +605,7 @@ StringInterner
 			{
 				Object myObj = get();
 				Object otherObj = ((WeakEntry) obj).get();
-				return myObj == null ? false : myObj.equals(otherObj);
+				return myObj != null && myObj.equals(otherObj);
 			}
 			return false;
 		}
@@ -665,7 +665,7 @@ StringInterner
 			{
 				byte[] myArray = getArray();
 				byte[] otherArray = ((WeakByteArrayEntry) obj).getArray();
-				return myArray == null ? false : Arrays.equals(myArray, otherArray);
+				return myArray != null && Arrays.equals(myArray, otherArray);
 			}
 			return false;
 		}
@@ -696,7 +696,7 @@ StringInterner
 			{
 				char[] myArray = getCharArray();
 				char[] otherArray = ((WeakCharArrayEntry) obj).getCharArray();
-				return myArray == null ? false : Arrays.equals(myArray, otherArray);
+				return myArray != null && Arrays.equals(myArray, otherArray);
 			}
 			return false;
 		}

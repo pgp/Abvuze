@@ -44,14 +44,14 @@ HostNameToIPResolver
 	isDNSName(
 		String	host )
 	{
-		return( AENetworkClassifier.categoriseAddress( host ) == AENetworkClassifier.AT_PUBLIC );
+		return AENetworkClassifier.AT_PUBLIC.equals(AENetworkClassifier.categoriseAddress(host));
 	}
 	
 	public static boolean
 	isNonDNSName(
 		String	host )
 	{
-		return( AENetworkClassifier.categoriseAddress( host ) != AENetworkClassifier.AT_PUBLIC );
+		return !AENetworkClassifier.AT_PUBLIC.equals(AENetworkClassifier.categoriseAddress(host));
 	}
 	
 	public static InetAddress

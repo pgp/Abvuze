@@ -53,7 +53,7 @@ public class MessageManagerImpl implements MessageManager, NATTraversalHandler {
   
   private static MessageManagerImpl instance;
   
-  private final HashMap compat_checks = new HashMap();
+  private final Map compat_checks = new HashMap();
   
   private final DownloadManagerListener download_manager_listener = new DownloadManagerListener() {
     public void downloadAdded( Download dwnld ) {

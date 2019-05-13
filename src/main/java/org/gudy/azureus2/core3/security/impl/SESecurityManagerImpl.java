@@ -1122,14 +1122,10 @@ SESecurityManagerImpl
 								
 								throws CertificateException
 							{
-								try{									
-									for ( X509TrustManager tm: default_tms ){
-										
-										tm.checkServerTrusted(chain, authType);
-										
+								try{
+									if(!default_tms.isEmpty()) {
+										default_tms.get(0).checkServerTrusted(chain, authType);
 										trustedChains.add( chain );
-										
-										break;
 									}
 								}catch( Throwable e ){
 								}

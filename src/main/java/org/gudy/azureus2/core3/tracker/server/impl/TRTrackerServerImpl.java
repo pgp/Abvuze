@@ -418,7 +418,7 @@ TRTrackerServerImpl
 	setBiasedPeers(
 		Set		peers )
 	{
-		if ( biased_peers != null && peers.equals( biased_peers )){
+		if (biased_peers.equals(peers)){
 			
 			return;
 		}

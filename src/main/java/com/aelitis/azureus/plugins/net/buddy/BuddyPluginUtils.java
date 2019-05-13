@@ -185,7 +185,7 @@ BuddyPluginUtils
 		try{
 			if ( isBetaChatAvailable()){
 	
-				if ( net != AENetworkClassifier.AT_PUBLIC && !isBetaChatAnonAvailable()){
+				if (!AENetworkClassifier.AT_PUBLIC.equals(net) && !isBetaChatAnonAvailable()){
 					
 					return;
 				}

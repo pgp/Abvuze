@@ -199,9 +199,8 @@ VuzeFileImpl
 					return( "Condition Check" );
 				case COMP_TYPE_PLUGIN: 
 					return( "Plugin" );
-				case COMP_TYPE_SUBSCRIPTION: 
-					return( "Subscription" );
-				case COMP_TYPE_SUBSCRIPTION_SINGLETON: 
+				case COMP_TYPE_SUBSCRIPTION:
+				case COMP_TYPE_SUBSCRIPTION_SINGLETON:
 					return( "Subscription" );
 				case COMP_TYPE_CUSTOMIZATION: 
 					return( "Customization" );

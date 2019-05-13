@@ -32,7 +32,6 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Iterator;
 import java.util.Set;
 
 import org.gudy.azureus2.core3.util.AEThread2;

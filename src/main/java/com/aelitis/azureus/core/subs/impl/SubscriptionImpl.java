@@ -1979,7 +1979,7 @@ SubscriptionImpl
 			return;
 		}
 		
-		if ( _category != null && category != null && _category.equals( category )){
+		if (_category != null && _category.equals(category)){
 			
 			return;
 		}
@@ -2036,7 +2036,7 @@ SubscriptionImpl
 			return;
 		}
 		
-		if ( _parent != null && parent != null && _parent.equals( parent )){
+		if (_parent != null && _parent.equals(parent)){
 			
 			return;
 		}

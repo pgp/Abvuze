@@ -53,7 +53,7 @@ public final class SHA1 {
 		reset();
 	}
 
-	final private void transform(final byte[] ar, int offset) {
+	private void transform(final byte[] ar, int offset) {
 		int w0, w1, w2, w3, w4, w5, w6, w7, w8, w9, w10, w11, w12, w13, w14, w15;
 
 		int a,b,c,d,e;

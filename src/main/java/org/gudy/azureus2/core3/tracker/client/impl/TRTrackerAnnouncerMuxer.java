@@ -146,7 +146,7 @@ TRTrackerAnnouncerMuxer
 							
 							for ( String net2: networks ){
 								
-								if ( net1 == net2 ){
+								if (Objects.equals(net1,net2)){
 									
 									match = true;
 								}
@@ -198,7 +198,7 @@ TRTrackerAnnouncerMuxer
 
                         URL u = urls[j];
 
-                        if (u != null && TorrentUtils.isDecentralised(u)) {
+                        if (TorrentUtils.isDecentralised(u)) {
 
                             if (found_decentralised) {
 

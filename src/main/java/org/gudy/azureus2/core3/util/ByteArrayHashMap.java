@@ -326,7 +326,7 @@ ByteArrayHashMap<T>
         size++;
     }
     
-    private static final int 
+    private static int
     hash(byte[] x) 
     {	
     	int	hash = 0;
@@ -342,7 +342,7 @@ ByteArrayHashMap<T>
     }
 
   
-    private static final boolean eq(byte[] x, byte[] y) 
+    private static boolean eq(byte[] x, byte[] y)
     {
         if ( x == y ){
         	return( true );
@@ -364,7 +364,7 @@ ByteArrayHashMap<T>
     }
 
   
-    private static final int indexFor(int h, int length) 
+    private static int indexFor(int h, int length)
     {
         return h & (length-1);
     }

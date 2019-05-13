@@ -553,7 +553,7 @@ TagManagerImpl
 
                                             for (String dl_net : dl_nets) {
 
-                                                if (dl_net == net) {
+                                                if (Objects.equals(dl_net,net)) {
 
                                                     net_ok = true;
 
@@ -1192,7 +1192,7 @@ TagManagerImpl
 			}
 		}
 		
-		if ( script_type == "" ){
+		if ("".equals(script_type)){
 			
 			Debug.out( "Unrecognised script type: " + script );
 			
@@ -1205,7 +1205,7 @@ TagManagerImpl
 		
 		for ( ScriptProvider p: providers ){
 			
-			if ( p.getScriptType() == script_type ){
+			if (Objects.equals(p.getScriptType(),script_type)){
 				
 				provider_found = true;
 				
@@ -2226,7 +2226,7 @@ TagManagerImpl
 					
 					return;
 					
-				}else if ( old != null && value != null && old.equals( value )){
+				}else if ( old != null && old.equals( value )){
 					
 					return;
 				}

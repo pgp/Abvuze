@@ -261,13 +261,13 @@ public class AZMessageFactory {
     int 	priority;
     boolean	no_delay	= true;
     
-    if ( message_id == AZMessage.ID_AZ_HANDSHAKE ){
+    if (AZMessage.ID_AZ_HANDSHAKE.equals(message_id)){
     	
     		// handshake needs to go out first - if not high then bitfield can get in front of it...
     	
     	priority = RawMessage.PRIORITY_HIGH;
     	
-    }else if ( message_id == AZMessage.ID_AZ_HAVE ){
+    }else if (AZMessage.ID_AZ_HAVE.equals(message_id)){
     	
     	priority 	= RawMessage.PRIORITY_LOW;
     	no_delay	= false;

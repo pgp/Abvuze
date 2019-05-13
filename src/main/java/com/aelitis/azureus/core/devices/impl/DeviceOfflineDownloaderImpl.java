@@ -298,7 +298,7 @@ DeviceOfflineDownloaderImpl
 				force_status	= true;
 			}
 
-			Map<String,byte[]>	old_cache 	= getPersistentMapProperty( PP_OD_STATE_CACHE, new HashMap<String,byte[]>());
+			Map<String,byte[]>	old_cache 	= getPersistentMapProperty( PP_OD_STATE_CACHE, new HashMap<>());
 			
 			Map<String,byte[]>	new_cache 	= new HashMap<>();
 			

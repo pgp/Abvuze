@@ -173,7 +173,7 @@ public class PeerExchangerItem {
 	
 			  PeerItem	peer = it.next();
 	
-			  if ( peer.getNetwork() == network ){
+			  if (Objects.equals(peer.getNetwork(),network)){
 	
 				  peers.add( peer );
 			  }
@@ -241,7 +241,7 @@ public class PeerExchangerItem {
 	
 			  PeerItem	peer = it.next();
 	
-			  if ( peer.getNetwork() == network ){
+			  if (Objects.equals(peer.getNetwork(),network)){
 	
 				  peers.add( peer );
 			  }

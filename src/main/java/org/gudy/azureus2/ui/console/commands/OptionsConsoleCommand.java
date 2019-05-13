@@ -24,7 +24,6 @@ package org.gudy.azureus2.ui.console.commands;
 
 import java.io.PrintStream;
 import java.io.PrintWriter;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.cli.CommandLine;

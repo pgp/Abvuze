@@ -49,7 +49,7 @@ FMFileAccessLinear
 	private static final boolean	DEBUG			= true;
 	private static final boolean	DEBUG_VERBOSE	= false;
 	
-	private static final boolean USE_MMAP = System.getProperty("azureus.io.usemmap","false") == "true";
+	private static final boolean USE_MMAP = "true".equals(System.getProperty("azureus.io.usemmap", "false"));
 
 	private final FMFileImpl		owner;
 	

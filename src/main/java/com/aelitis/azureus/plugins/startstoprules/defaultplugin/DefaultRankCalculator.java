@@ -16,7 +16,6 @@
  */
 package com.aelitis.azureus.plugins.startstoprules.defaultplugin;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.gudy.azureus2.core3.config.COConfigurationListener;

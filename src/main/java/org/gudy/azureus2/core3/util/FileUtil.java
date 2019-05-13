@@ -2189,12 +2189,12 @@ public class FileUtil {
         }
    	}
 	
-	public final static boolean getUsableSpaceSupported()
+	public static boolean getUsableSpaceSupported()
 	{
 		return reflectOnUsableSpace != null;
 	}
 	
-	public final static long getUsableSpace(File f)
+	public static long getUsableSpace(File f)
 	{
 		try{
 			return (Long) reflectOnUsableSpace.invoke(f);

@@ -75,8 +75,8 @@ TransferProcessor
   private final ByteBucket main_bucket;
   private final EntityHandler main_controller;
   
-  private final HashMap<LimitedRateGroup,GroupData> 			group_buckets 	= new HashMap<>();
-  private final HashMap<NetworkConnectionBase,ConnectionData> 	connections 	= new HashMap<>();
+  private final Map<LimitedRateGroup,GroupData> 			group_buckets 	= new HashMap<>();
+  private final Map<NetworkConnectionBase,ConnectionData> 	connections 	= new HashMap<>();
   
   private final AEMonitor connections_mon;
 
@@ -84,7 +84,7 @@ TransferProcessor
   
   /**
    * Create new transfer processor for the given read/write type, limited to the given max rate.
-   * @param processor_type read or write processor
+   * @param _processor_type read or write processor
    * @param max_rate_limit to use
    */
   public TransferProcessor( final int _processor_type, LimitedRateGroup max_rate_limit, boolean multi_threaded ) {
@@ -166,7 +166,6 @@ TransferProcessor
    * Register peer connection for upload handling.
    * NOTE: The given max rate limit is ignored until the connection is upgraded.
    * @param connection to register
-   * @param group rate limit group
    */
   public void registerPeerConnection( NetworkConnectionBase connection, boolean upload ) {
     final ConnectionData conn_data = new ConnectionData();

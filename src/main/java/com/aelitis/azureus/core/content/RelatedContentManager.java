@@ -533,7 +533,7 @@ RelatedContentManager
 					
 					String[] nets = PluginCoreUtils.unwrap( download ).getDownloadState().getNetworks();
 					
-					if ( nets.length == 1 && nets[0] == AENetworkClassifier.AT_I2P ){
+					if ( nets.length == 1 && AENetworkClassifier.AT_I2P.equals(nets[0])){
 						
 						found = true;
 						
@@ -551,7 +551,7 @@ RelatedContentManager
 			
 			for ( DistributedDatabase ddb: ddbs ){
 				
-				if ( ddb.getNetwork() == AENetworkClassifier.AT_I2P ){
+				if (AENetworkClassifier.AT_I2P.equals(ddb.getNetwork())){
 					
 					DHTPluginInterface i2p_dht = ddb.getDHTPlugin();
 					
@@ -665,7 +665,7 @@ RelatedContentManager
 						
 						for ( DistributedDatabase ddb: ddbs ){
 							
-							if ( ddb.getNetwork() == AENetworkClassifier.AT_I2P ){
+							if (AENetworkClassifier.AT_I2P.equals(ddb.getNetwork())){
 								
 								result = ddb.getDHTPlugin();
 							}
@@ -3373,20 +3373,20 @@ RelatedContentManager
 			
 			for ( String net: networks ){
 				
-				if ( net == AENetworkClassifier.AT_PUBLIC ){
+				if (AENetworkClassifier.AT_PUBLIC.equals(net)){
 					
 					target_net = AENetworkClassifier.AT_PUBLIC;
 					
 					break;
 					
-				}else if ( net == AENetworkClassifier.AT_I2P ){
+				}else if (AENetworkClassifier.AT_I2P.equals(net)){
 
 					target_net = AENetworkClassifier.AT_I2P;
 				}
 			}
 		}
 		
-		if ( target_net == AENetworkClassifier.AT_I2P ){
+		if (AENetworkClassifier.AT_I2P.equals(target_net)){
 		
 			checkI2PSearcher( true );
 		}
@@ -3395,7 +3395,7 @@ RelatedContentManager
 		
 			String net = searcher.getDHTPlugin().getNetwork();
 			
-			if ( net == target_net ){
+			if (Objects.equals(net,target_net)){
 			
 				return( searcher.searchRCM( search_parameters, observer ));
 			}

@@ -93,7 +93,7 @@ ClientIDPlugin
 					byte[]	hash,
 					String	property_name )
 				{
-					if ( property_name == ClientIDGenerator.PR_CLIENT_NAME ){
+					if (ClientIDGenerator.PR_CLIENT_NAME.equals(property_name)){
 					
 						try{
 							GlobalManager gm = core.getGlobalManager();
@@ -109,7 +109,7 @@ ClientIDPlugin
 						
 						return( CLIENT_NAME );
 						
-					}else if ( property_name == ClientIDGenerator.PR_MESSAGING_MODE ){
+					}else if (ClientIDGenerator.PR_MESSAGING_MODE.equals(property_name)){
 						
 						return( BTHandshake.AZ_RESERVED_MODE );
 						

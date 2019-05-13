@@ -248,7 +248,7 @@ FeatureUtils
 
 	public static boolean isTrial(FeatureDetails fd) {
 		Long lIsTrial = (Long) fd.getProperty(FeatureDetails.PR_IS_TRIAL);
-		return lIsTrial == null ? false : lIsTrial != 0;
+		return lIsTrial != null && lIsTrial != 0;
 	}
 	
 	public static long getRemaining() {

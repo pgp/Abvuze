@@ -406,7 +406,7 @@ public abstract class Result {
 				try{
 					String host =  new URL( link ).getHost();
 					
-					if ( AENetworkClassifier.categoriseAddress( host ) != AENetworkClassifier.AT_PUBLIC ){
+					if (!AENetworkClassifier.AT_PUBLIC.equals(AENetworkClassifier.categoriseAddress(host))){
 						
 						return( link );
 					}
@@ -451,7 +451,7 @@ public abstract class Result {
 		}
 	}
 	
-	protected static final String removeHTMLTags(String input) {
+	protected static String removeHTMLTags(String input) {
 		if ( input == null ){
 			return( null );
 		}
@@ -459,7 +459,7 @@ public abstract class Result {
 		return result.replaceAll(DUPLICATE_SPACES, " ").trim();
 	}
 
-	protected static final String unescapeEntities( String input )
+	protected static String unescapeEntities(String input )
 	{
 		if ( input == null ){
 			return( null );

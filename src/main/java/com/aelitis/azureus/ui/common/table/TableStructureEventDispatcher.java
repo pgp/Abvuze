@@ -23,7 +23,6 @@
 package com.aelitis.azureus.ui.common.table;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.gudy.azureus2.core3.util.AEMonitor;

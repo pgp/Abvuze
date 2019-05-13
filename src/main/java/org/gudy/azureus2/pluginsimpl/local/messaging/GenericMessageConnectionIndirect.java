@@ -393,7 +393,7 @@ GenericMessageConnectionIndirect
 
                 } else {
 
-                    i = i.intValue() + 1;
+                    i = i + 1;
                 }
 
                 totals.put(originator, i);

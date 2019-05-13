@@ -111,7 +111,7 @@ public final class TransferSpeedValidator
             newValue = 0;
         }
 
-        if(configKey == UPLOAD_CONFIGKEY)
+        if(UPLOAD_CONFIGKEY.equals(configKey))
         {
             final int downValue = COConfigurationManager.getIntParameter(DOWNLOAD_CONFIGKEY);
 
@@ -125,7 +125,7 @@ public final class TransferSpeedValidator
                 //COConfigurationManager.setParameter(DOWNLOAD_CONFIGKEY, newValue * 2);
             }
         }
-        else if(configKey == DOWNLOAD_CONFIGKEY)
+        else if(DOWNLOAD_CONFIGKEY.equals(configKey))
         {
             final int upValue = COConfigurationManager.getIntParameter(UPLOAD_CONFIGKEY);
 
@@ -145,7 +145,7 @@ public final class TransferSpeedValidator
                     //COConfigurationManager.setParameter(UPLOAD_CONFIGKEY, 0);
                 }
             }
-        }else if ( configKey == UPLOAD_SEEDING_CONFIGKEY ){
+        }else if (UPLOAD_SEEDING_CONFIGKEY.equals(configKey)){
 
         		// nothing to do as this is active only when were not downloading
         		// so we don't really care
@@ -208,7 +208,7 @@ public final class TransferSpeedValidator
     		return( false );
     	}
     	SpeedManager speedManager = core.getSpeedManager();
-    	return speedManager == null ? false : speedManager.isAvailable();
+    	return speedManager != null && speedManager.isAvailable();
     }
     
     public static boolean

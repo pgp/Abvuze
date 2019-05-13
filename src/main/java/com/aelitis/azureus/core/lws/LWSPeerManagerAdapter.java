@@ -23,6 +23,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.gudy.azureus2.core3.disk.DiskManagerReadRequest;
 import org.gudy.azureus2.core3.disk.DiskManagerReadRequestListener;
@@ -168,7 +169,7 @@ LWSPeerManagerAdapter
 	{
 		for ( String net: enabled_networks ){
 			
-			if ( net == network ){
+			if (Objects.equals(net,network)){
 				
 				return( true );
 			}

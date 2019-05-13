@@ -238,7 +238,7 @@ AEDiagnosticsLogger
 		return( new String( chars ));
 	}
 	
-	private static final void
+	private static void
 	format(
 		int		num,
 		char[]	chars,

@@ -45,7 +45,7 @@ public class MultiPeerUploader implements RateControlledEntity {
   private final RateHandler rate_handler;
   private boolean destroyed = false;
   
-  private final HashMap waiting_connections = new HashMap();
+  private final Map waiting_connections = new HashMap();
   private final LinkedList ready_connections = new LinkedList();
   private final AEMonitor lists_lock = new AEMonitor( "PacketFillingMultiPeerUploader:lists_lock" );
   

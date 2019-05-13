@@ -573,7 +573,7 @@ public class PeerUtils {
 						
 						String cat =  AENetworkClassifier.categoriseAddress( ip );
 						
-						if ( cat != AENetworkClassifier.AT_PUBLIC ){
+						if (!AENetworkClassifier.AT_PUBLIC.equals(cat)){
 							
 							details = new String[]{ cat, cat };
 							

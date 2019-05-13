@@ -25,7 +25,7 @@ package com.aelitis.azureus.core.util;
  */
 public final class HashCodeUtils
 {
-    public static final int hashMore(final int hash, final int more)
+    public static int hashMore(final int hash, final int more)
     {
         int result =hash <<1;
         if (result <0)
@@ -33,13 +33,13 @@ public final class HashCodeUtils
         return result ^more;
     }
     
-    public static final int hashMore(final int hash, final long more)
+    public static int hashMore(final int hash, final long more)
     {
         int result =hashMore(hash, (int)(more >>>32));
         return hashMore(result, (int)(more &0xffff));
     }
     
-    public static final int hashMore(final int hash, final boolean[] more)
+    public static int hashMore(final int hash, final boolean[] more)
     {
         int result =hash <<1;
         if (result <0)
@@ -60,7 +60,7 @@ public final class HashCodeUtils
     /**
      * bob jenkin's hash function 
      */
-    public static final int hashCode(byte[] array)
+    public static int hashCode(byte[] array)
     {
     	int hash = 0;
         for (byte b : array) {
@@ -74,7 +74,7 @@ public final class HashCodeUtils
         return hash;
     }
  
-    public static final int hashCode(char[] array )
+    public static int hashCode(char[] array )
     {
          int h = 0;
          int len =array.length;

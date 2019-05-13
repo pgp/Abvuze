@@ -332,7 +332,7 @@ ClientIDManagerImpl
 			
 			if ( 	host.equals( "127.0.0.1" ) || 
 					protocol.equals( "ws" ) || protocol.equals( "wss" ) ||
-					AENetworkClassifier.categoriseAddress( host ) != AENetworkClassifier.AT_PUBLIC ){
+                    !AENetworkClassifier.AT_PUBLIC.equals(AENetworkClassifier.categoriseAddress(host))){
 				
 				filter_it = false;
 				

@@ -268,7 +268,7 @@ TRTrackerUtils
 					
 					String	cat = AENetworkClassifier.categoriseAddress( this_address );
 					
-					if ( cat == AENetworkClassifier.AT_PUBLIC ){
+					if (AENetworkClassifier.AT_PUBLIC.equals(cat)){
 						
 						return( this_address );
 					}
@@ -303,7 +303,7 @@ TRTrackerUtils
 		   		propertyChanged(
 		   			String		property )
 		   		{
-		   			if ( property == NetworkAdmin.PR_DEFAULT_BIND_ADDRESS ){
+		   			if (NetworkAdmin.PR_DEFAULT_BIND_ADDRESS.equals(property)){
 		   				
 		   				readConfig();
 		   			}
@@ -431,7 +431,7 @@ TRTrackerUtils
 
                     for (Object port1 : ports) {
 
-                        l.add(new URL("http://" + UrlUtils.convertIPV6Host(tracker_host) + ":" + (Integer) port1 + "/announce"));
+                        l.add(new URL("http://" + UrlUtils.convertIPV6Host(tracker_host) + ":" + port1 + "/announce"));
                     }
 
 					urls.add( l );
@@ -455,7 +455,7 @@ TRTrackerUtils
 
                     for (Object port1 : ports) {
 
-                        l.add(new URL("https://" + UrlUtils.convertIPV6Host(tracker_host) + ":" + (Integer) port1 + "/announce"));
+                        l.add(new URL("https://" + UrlUtils.convertIPV6Host(tracker_host) + ":" + port1 + "/announce"));
                     }
 
 					urls.add( l );

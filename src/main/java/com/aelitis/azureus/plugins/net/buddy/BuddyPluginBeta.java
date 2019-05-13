@@ -475,7 +475,7 @@ BuddyPluginBeta
 								
 								if ( !set.contains( net + ":" + key )){
 									
-									if ( 	net == AENetworkClassifier.AT_PUBLIC &&
+									if (AENetworkClassifier.AT_PUBLIC.equals(net) &&
 											key.equals(BETA_CHAT_KEY)){
 										
 										// leave
@@ -2009,7 +2009,7 @@ BuddyPluginBeta
 			
 			for ( String net: networks ){
 				
-				if ( net == AENetworkClassifier.AT_PUBLIC ){
+				if (AENetworkClassifier.AT_PUBLIC.equals(net)){
 					
 					try{
 						ChatInstance inst = getChat( net, key );
@@ -2019,7 +2019,7 @@ BuddyPluginBeta
 					}catch( Throwable e ){
 						
 					}
-				}else if ( net == AENetworkClassifier.AT_I2P ){
+				}else if (AENetworkClassifier.AT_I2P.equals(net)){
 					
 					has_i2p = true;
 				}
@@ -2210,7 +2210,7 @@ BuddyPluginBeta
 			
 			for ( String net: networks ){
 				
-				if ( net == AENetworkClassifier.AT_PUBLIC ){
+				if (AENetworkClassifier.AT_PUBLIC.equals(net)){
 					
 					try{
 						return( peekChatInstance( net, key ));
@@ -2218,7 +2218,7 @@ BuddyPluginBeta
 					}catch( Throwable e ){
 						
 					}
-				}else if ( net == AENetworkClassifier.AT_I2P ){
+				}else if (AENetworkClassifier.AT_I2P.equals(net)){
 					
 					has_i2p = true;
 				}
@@ -2357,7 +2357,7 @@ BuddyPluginBeta
 				
 				for ( String net: networks ){
 					
-					if ( net == AENetworkClassifier.AT_PUBLIC ){
+					if (AENetworkClassifier.AT_PUBLIC.equals(net)){
 						
 						try{
 							return( peekChat( net, key ));
@@ -2365,7 +2365,7 @@ BuddyPluginBeta
 						}catch( Throwable e ){
 							
 						}
-					}else if ( net == AENetworkClassifier.AT_I2P ){
+					}else if (AENetworkClassifier.AT_I2P.equals(net)){
 						
 						has_i2p = true;
 					}
@@ -2410,7 +2410,7 @@ BuddyPluginBeta
 
 				options.put( "timeout", 60*1000 );
 				
-				if ( network != AENetworkClassifier.AT_PUBLIC ){
+				if (!AENetworkClassifier.AT_PUBLIC.equals(network)){
 					
 					options.put( "server_id", getSharedAnonEndpoint()?"dchat_shared":"dchat" );
 				}
@@ -2726,14 +2726,14 @@ BuddyPluginBeta
 			if ( abbreviated ){
 				
 				return( MessageText.getString(
-						network==AENetworkClassifier.AT_PUBLIC?"label.public.medium":"label.anon.medium") + 
+                        AENetworkClassifier.AT_PUBLIC.equals(network) ?"label.public.medium":"label.anon.medium") +
 						" - '" + str + "'" );
 						
 			}else{
 				
 				return( 
 					MessageText.getString(
-						network==AENetworkClassifier.AT_PUBLIC?"label.public":"label.anon") + 
+                            AENetworkClassifier.AT_PUBLIC.equals(network) ?"label.public":"label.anon") +
 						" - '" + str + "'" );
 			}
 		}
@@ -2969,7 +2969,7 @@ BuddyPluginBeta
 			String		network,
 			String		key )
 		{
-			if ( getNetwork() != network ){
+			if (!Objects.equals(getNetwork(),network)){
 				
 				return( false );
 			}
@@ -2999,7 +2999,7 @@ BuddyPluginBeta
 			String		network,
 			String		key )
 		{
-			if ( getNetwork() != network ){
+			if (!Objects.equals(getNetwork(),network)){
 				
 				return( false );
 			}
@@ -3033,7 +3033,7 @@ BuddyPluginBeta
 		public String
 		getURL()
 		{
-			if ( network == AENetworkClassifier.AT_PUBLIC ){
+			if (AENetworkClassifier.AT_PUBLIC.equals(network)){
 				
 				return( "chat:?" + UrlUtils.encode( key ));
 				
@@ -3064,7 +3064,7 @@ BuddyPluginBeta
 		public boolean
 		isAnonymous()
 		{
-			return( network != AENetworkClassifier.AT_PUBLIC );
+			return(!AENetworkClassifier.AT_PUBLIC.equals(network));
 		}
 		
 		public String
@@ -3140,7 +3140,7 @@ BuddyPluginBeta
 			
 			if ( is_shared_nick ){
 				
-				nick = network == AENetworkClassifier.AT_PUBLIC?shared_public_nickname:shared_anon_nickname;
+				nick = AENetworkClassifier.AT_PUBLIC.equals(network) ?shared_public_nickname:shared_anon_nickname;
 				
 			}else{
 				
@@ -3222,7 +3222,7 @@ BuddyPluginBeta
 								options.put( "target_contact", private_target.getContact());
 							}
 							
-							if ( network != AENetworkClassifier.AT_PUBLIC ){
+							if (!AENetworkClassifier.AT_PUBLIC.equals(network)){
 								
 								options.put( "server_id", getSharedAnonEndpoint()?"dchat_shared":"dchat" );
 							}

@@ -631,56 +631,37 @@ DownloadImpl
 		  download_manager.getDownloadState().setLongAttribute(name, value);
 	  }
   }
-  
-  protected String
-  convertAttribute(
-  	TorrentAttribute		attribute )
-  {
- 	if ( attribute.getName() == TorrentAttribute.TA_CATEGORY ){
-  		
-  		return( DownloadManagerState.AT_CATEGORY );
-  		
- 	}else if ( attribute.getName() == TorrentAttribute.TA_NETWORKS ){
-  		
-		return( DownloadManagerState.AT_NETWORKS );
-		
- 	}else if ( attribute.getName() == TorrentAttribute.TA_TRACKER_CLIENT_EXTENSIONS ){
-  		
-		return( DownloadManagerState.AT_TRACKER_CLIENT_EXTENSIONS );
-	  		
-	}else if ( attribute.getName() == TorrentAttribute.TA_PEER_SOURCES ){
-  		
-		return( DownloadManagerState.AT_PEER_SOURCES );
 
-	}else if ( attribute.getName() == TorrentAttribute.TA_DISPLAY_NAME ){
-		
-		return( DownloadManagerState.AT_DISPLAY_NAME );
-		
-	}else if ( attribute.getName() == TorrentAttribute.TA_USER_COMMENT ){
-		
-		return( DownloadManagerState.AT_USER_COMMENT );	
+	protected String convertAttribute(TorrentAttribute attribute) {
+		String attrName = attribute.getName();
 
-	}else if ( attribute.getName() == TorrentAttribute.TA_RELATIVE_SAVE_PATH ){
-		
-		return( DownloadManagerState.AT_RELATIVE_SAVE_PATH );	
-		
-	}else if ( attribute.getName() == TorrentAttribute.TA_SHARE_PROPERTIES ){
-  		
-			// this is a share-level attribute only, not propagated to individual downloads
-		
-		return( null );
-  		
-	}else if ( attribute.getName().startsWith( "Plugin." )){
-  		
-		return( attribute.getName());
-  		
-  	}else{
-  		
-  		Debug.out( "Can't convert attribute '" + attribute.getName() + "'" );
-  		
-  		return( null );
-  	}
-  }
+		if(attrName==null) attrName = "_NULL_";
+		switch (attrName) {
+			case TorrentAttribute.TA_CATEGORY:
+				return (DownloadManagerState.AT_CATEGORY);
+			case TorrentAttribute.TA_NETWORKS:
+				return (DownloadManagerState.AT_NETWORKS);
+			case TorrentAttribute.TA_TRACKER_CLIENT_EXTENSIONS:
+				return (DownloadManagerState.AT_TRACKER_CLIENT_EXTENSIONS);
+			case TorrentAttribute.TA_PEER_SOURCES:
+				return (DownloadManagerState.AT_PEER_SOURCES);
+			case TorrentAttribute.TA_DISPLAY_NAME:
+				return (DownloadManagerState.AT_DISPLAY_NAME);
+			case TorrentAttribute.TA_USER_COMMENT:
+				return (DownloadManagerState.AT_USER_COMMENT);
+			case TorrentAttribute.TA_RELATIVE_SAVE_PATH:
+				return (DownloadManagerState.AT_RELATIVE_SAVE_PATH);
+			case TorrentAttribute.TA_SHARE_PROPERTIES:
+				// this is a share-level attribute only, not propagated to individual downloads
+				return null;
+			default:
+				if(attrName.startsWith("Plugin.")) return attrName;
+				else {
+					Debug.out( "Can't convert attribute '" + attrName + "'" );
+					return null;
+				}
+		}
+	}
   
   protected TorrentAttribute
   convertAttribute(

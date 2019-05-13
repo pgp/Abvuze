@@ -199,7 +199,7 @@ AEPluginProxyHandler
 
 			String pid = pi.getPluginID();
 			
-			if ( pid.equals( "aznettor" ) && network == AENetworkClassifier.AT_TOR ){
+			if ( pid.equals( "aznettor" ) && AENetworkClassifier.AT_TOR.equals(network)){
 				
 				if ( !supports_data ){
 				
@@ -207,7 +207,7 @@ AEPluginProxyHandler
 				}
 			}
 			
-			if ( pid.equals( "azneti2phelper" ) && network == AENetworkClassifier.AT_I2P ){
+			if ( pid.equals( "azneti2phelper" ) && AENetworkClassifier.AT_I2P.equals(network)){
 				
 				return( pi );
 			}

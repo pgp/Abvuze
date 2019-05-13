@@ -1668,7 +1668,7 @@ TagPropertyConstraintHandler
 								
 								for ( String net: nets ){
 									
-									if ( net == net_name ){
+									if (Objects.equals(net,net_name)){
 										
 										return( true );
 									}

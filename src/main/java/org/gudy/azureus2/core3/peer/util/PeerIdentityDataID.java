@@ -62,7 +62,7 @@ PeerIdentityDataID
     
     public boolean equals( Object obj ) {
       if (this == obj)  return true;
-      if (obj != null && obj instanceof PeerIdentityDataID) {
+      if (obj instanceof PeerIdentityDataID) {
         PeerIdentityDataID other = (PeerIdentityDataID)obj;
         return Arrays.equals(this.dataId, other.dataId);
       }

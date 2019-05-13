@@ -179,7 +179,7 @@ ShareResourceImpl
 				return;
 			}
 			
-			if ( old_value != null && value != null && old_value.equals( value )){
+			if (old_value != null && old_value.equals(value)){
 				
 				return;
 			}

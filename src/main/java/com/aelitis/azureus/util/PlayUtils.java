@@ -728,7 +728,7 @@ public class PlayUtils
 		return false;
 	}
 	
-	private static final boolean canPlayViaExternalEMP(TOTorrent torrent, int file_index, boolean complete_only ) {
+	private static boolean canPlayViaExternalEMP(TOTorrent torrent, int file_index, boolean complete_only ) {
 		if (torrent == null) {
 			return false;
 		}

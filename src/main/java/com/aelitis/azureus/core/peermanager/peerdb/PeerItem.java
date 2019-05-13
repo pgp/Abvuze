@@ -52,7 +52,7 @@ public class PeerItem implements PeerDescriptor {
     byte[] raw;
     network = AENetworkClassifier.categoriseAddress( _address );
     try{
-	    if ( network == AENetworkClassifier.AT_PUBLIC ){
+	    if (AENetworkClassifier.AT_PUBLIC.equals(network)){
 		    try{
 		      //see if we can resolve the address into a compact raw IPv4/6 byte array (4 or 16 bytes)
 		      InetAddress ip = InetAddress.getByName( _address );
@@ -120,7 +120,7 @@ public class PeerItem implements PeerDescriptor {
   
   public String getAddressString() {
 	try{
-		if ( network == AENetworkClassifier.AT_PUBLIC ){
+		if (AENetworkClassifier.AT_PUBLIC.equals(network)){
 		    try{
 		      //see if it's an IPv4/6 address (4 or 16 bytes)
 		      return InetAddress.getByAddress( address ).getHostAddress();
@@ -157,7 +157,7 @@ public class PeerItem implements PeerDescriptor {
   
   public boolean equals( Object obj ) {
     if( this == obj )  return true;
-    if( obj != null && obj instanceof PeerItem ) {
+    if(obj instanceof PeerItem) {
       PeerItem other = (PeerItem)obj;
       if( 	this.tcp_port == other.tcp_port &&
     		this.udp_port == other.udp_port &&

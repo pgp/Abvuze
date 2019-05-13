@@ -136,7 +136,7 @@ TransportImpl
 	public boolean 
 	isEncrypted()
 	{ 
-		return( filter==null?false:filter.isEncrypted());
+		return(filter != null && filter.isEncrypted());
 	}
 	 
 	public boolean 

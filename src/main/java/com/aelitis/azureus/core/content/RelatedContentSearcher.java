@@ -22,7 +22,6 @@
 
 package com.aelitis.azureus.core.content;
 
-import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
@@ -423,7 +422,7 @@ RelatedContentSearcher
 								
 								DHTInterface[]	dhts = dht_plugin.getDHTInterfaces();
 									
-								boolean public_dht = dht_plugin.getNetwork() == AENetworkClassifier.AT_PUBLIC;
+								boolean public_dht = AENetworkClassifier.AT_PUBLIC.equals(dht_plugin.getNetwork());
 								
 								for ( DHTInterface dht: dhts ){
 													
@@ -2319,7 +2318,7 @@ outer:
 
                     String[]	parts = bit.split( "\\|" );
 
-                    List<String>	p = new ArrayList<String>();
+                    List<String>	p = new ArrayList<>();
 
                     for ( String part: parts ){
 

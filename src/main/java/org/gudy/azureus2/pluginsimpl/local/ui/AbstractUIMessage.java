@@ -59,7 +59,7 @@ public abstract class AbstractUIMessage implements UIMessage {
 		this.setLocalisedMessages(new_messages);
 	}
 	
-	private final String localise(String key) {
+	private String localise(String key) {
 		return MessageText.getString(key); 
 	}
 

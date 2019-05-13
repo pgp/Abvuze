@@ -23,7 +23,6 @@
 package org.gudy.azureus2.core3.config.impl;
 
 
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 import java.io.*;
@@ -273,7 +272,7 @@ ConfigurationChecker
 
 				  for (Map.Entry<Object, Object> objectObjectEntry : props.entrySet()) {
 
-					  Map.Entry entry = (Map.Entry) objectObjectEntry;
+					  Map.Entry entry = objectObjectEntry;
 
 					  String key = (String) entry.getKey();
 					  String value = (String) entry.getValue();
@@ -973,13 +972,13 @@ ConfigurationChecker
 	  }
   }
   
-	public static final boolean
+	public static boolean
 	isNewInstall()
 	{
 		return( new_install );
 	}
 	
-	public static final boolean
+	public static boolean
 	isNewVersion()
 	{
 		return( new_version );

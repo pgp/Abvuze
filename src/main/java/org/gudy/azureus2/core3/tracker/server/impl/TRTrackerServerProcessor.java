@@ -139,7 +139,7 @@ TRTrackerServerProcessor
 
             for (String permitted_network : permitted_networks) {
 
-                if (network == permitted_network) {
+                if (Objects.equals(network,permitted_network)) {
 
                     ok = true;
 

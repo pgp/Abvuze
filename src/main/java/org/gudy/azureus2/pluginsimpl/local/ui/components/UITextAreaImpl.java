@@ -29,7 +29,6 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.Iterator;
 import java.util.LinkedList;
 
 import org.gudy.azureus2.core3.util.*;

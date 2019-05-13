@@ -35,7 +35,6 @@ import org.spongycastle.jce.interfaces.ECPrivateKey;
 import org.spongycastle.jce.interfaces.ECPublicKey;
 import org.spongycastle.jce.provider.BouncyCastleProvider;
 import org.spongycastle.jce.spec.ECNamedCurveParameterSpec;
-import org.spongycastle.jce.spec.ECParameterSpec;
 import org.spongycastle.jce.spec.ECPrivateKeySpec;
 import org.spongycastle.jce.spec.ECPublicKeySpec;
 import org.spongycastle.math.ec.ECPoint;

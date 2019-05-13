@@ -11,7 +11,6 @@
 package org.gudy.azureus2.ui.console;
 
 
-import java.io.File;
 import java.io.PrintStream;
 import java.net.URL;
 import java.util.Locale;

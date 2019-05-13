@@ -64,7 +64,7 @@ public class ImageBytesDownloader
 			
 			ResourceDownloader rd;
 			
-			if ( AENetworkClassifier.categoriseAddress( u.getHost()) == AENetworkClassifier.AT_PUBLIC ){
+			if (AENetworkClassifier.AT_PUBLIC.equals(AENetworkClassifier.categoriseAddress(u.getHost()))){
 			
 				rd = ResourceDownloaderFactoryImpl.getSingleton().create( u );
 				

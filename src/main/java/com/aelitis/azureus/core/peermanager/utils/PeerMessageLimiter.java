@@ -30,7 +30,7 @@ import org.gudy.azureus2.core3.util.SystemTime;
  */
 public class PeerMessageLimiter {
 
-  private final HashMap message_counts = new HashMap();
+  private final Map message_counts = new HashMap();
   
   
   public PeerMessageLimiter() {

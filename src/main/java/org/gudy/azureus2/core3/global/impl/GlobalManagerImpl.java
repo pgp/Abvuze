@@ -614,7 +614,7 @@ public class GlobalManagerImpl
 
 				for (String network : networks) {
 
-					if (network == nw) {
+					if (Objects.equals(network,nw)) {
 
 						return (true);
 					}

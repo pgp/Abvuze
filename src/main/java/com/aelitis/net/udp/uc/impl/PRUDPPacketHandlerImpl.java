@@ -457,7 +457,7 @@ PRUDPPacketHandlerImpl
 	    		propertyChanged(
 	    			String		property )
 	    		{
-	    			if ( property == NetworkAdmin.PR_DEFAULT_BIND_ADDRESS ){
+	    			if (NetworkAdmin.PR_DEFAULT_BIND_ADDRESS.equals(property)){
 	    				
 	    				setDefaultBindAddress( NetworkAdmin.getSingleton().getSingleHomedServiceBindAddress());
 	    			}

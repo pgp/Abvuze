@@ -797,7 +797,7 @@ DisplayFormatters
 					}
 				}
 				
-				if ( tmp == "" ){
+				if ("".equals(tmp)){
 					
 					if (manager.getPeerManager() != null && manager.getPeerManager().isSuperSeedMode()) {
 					
@@ -824,9 +824,6 @@ DisplayFormatters
 				break;
 
 			case DownloadManager.STATE_INITIALIZING:
-				tmp = ManagerItem_initializing;
-				break;
-
 			case DownloadManager.STATE_INITIALIZED:
 				tmp = ManagerItem_initializing;
 				break;
@@ -882,12 +879,10 @@ DisplayFormatters
 			tmp = MessageText.getDefaultLocaleString("ManagerItem.waiting");
 			break;
 		  case DownloadManager.STATE_INITIALIZING :
-			  tmp = MessageText.getDefaultLocaleString("ManagerItem.initializing");
-			  break;
 		  case DownloadManager.STATE_INITIALIZED :
-			  tmp = MessageText.getDefaultLocaleString("ManagerItem.initializing");
+				tmp = MessageText.getDefaultLocaleString("ManagerItem.initializing");
 			  break;
-		  case DownloadManager.STATE_ALLOCATING :
+			case DownloadManager.STATE_ALLOCATING :
 			tmp = MessageText.getDefaultLocaleString("ManagerItem.allocating");
 			break;
 		  case DownloadManager.STATE_CHECKING :

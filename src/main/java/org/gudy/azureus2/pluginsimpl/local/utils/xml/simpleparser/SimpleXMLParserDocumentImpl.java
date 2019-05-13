@@ -270,9 +270,9 @@ SimpleXMLParserDocumentImpl
 								
 								String net = AENetworkClassifier.categoriseAddress( source_url.getHost());
 								
-								if ( net != AENetworkClassifier.AT_PUBLIC ){
+								if (!AENetworkClassifier.AT_PUBLIC.equals(net)){
 									
-									if ( AENetworkClassifier.categoriseAddress( url.getHost()) != net ){
+									if (!Objects.equals(AENetworkClassifier.categoriseAddress(url.getHost()),net)){
 				
 										return new InputSource(	new ByteArrayInputStream("<?xml version='1.0' encoding='UTF-8'?>".getBytes()));
 									}

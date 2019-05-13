@@ -963,7 +963,7 @@ UPnPPlugin
 			
 		}else{
 			
-			count = count.longValue() + 1;
+			count = count + 1;
 		}
 		
 		counts.put( USN, count );
@@ -1383,7 +1383,7 @@ UPnPPlugin
 		try{
 			this_mon.enter();
 						
-			return services.toArray( new UPnPPluginService[services.size()] );
+			return services.toArray(new UPnPPluginService[0]);
 			
 		}finally{
 			

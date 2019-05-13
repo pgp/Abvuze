@@ -20,6 +20,7 @@
 package com.aelitis.azureus.core.peermanager.messaging.bittorrent;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.gudy.azureus2.core3.logging.*;
 import org.gudy.azureus2.core3.util.Debug;
@@ -71,7 +72,7 @@ public class BTMessageFactory {
   
   
   private static final String[] id_to_name = new String[21];  
-  private static final HashMap legacy_data = new HashMap();
+  private static final Map legacy_data = new HashMap();
   static {
     legacy_data.put( BTMessage.ID_BT_CHOKE, new LegacyData( RawMessage.PRIORITY_HIGH, true, new Message[]{new BTUnchoke((byte)0), new BTPiece( -1, -1, null,(byte)0 )}, (byte)0 ) );
     id_to_name[0] = BTMessage.ID_BT_CHOKE;

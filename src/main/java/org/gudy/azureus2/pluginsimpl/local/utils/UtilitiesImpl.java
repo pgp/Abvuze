@@ -634,7 +634,7 @@ UtilitiesImpl
 	
 			}else{
 				
-				if ( AENetworkClassifier.categoriseAddress( feed_location.getHost()) != AENetworkClassifier.AT_PUBLIC ){
+				if (!AENetworkClassifier.AT_PUBLIC.equals(AENetworkClassifier.categoriseAddress(feed_location.getHost()))){
 					
 					plugin_proxy = 
 							AEProxyFactory.getPluginProxy( 
@@ -1092,7 +1092,7 @@ UtilitiesImpl
 			});
 	}
 	
-	public static final void
+	public static void
 	callWithPluginThreadContext(
 		PluginInterface				pi,
 		Runnable					target )
@@ -1110,7 +1110,7 @@ UtilitiesImpl
 		}
 	}
 	
-	public static final <T extends Exception> void
+	public static <T extends Exception> void
 	callWithPluginThreadContext(
 		PluginInterface					pi,
 		runnableWithException<T>		target )
@@ -1130,7 +1130,7 @@ UtilitiesImpl
 		}
 	}
 	
-	public static final <T> T
+	public static <T> T
 	callWithPluginThreadContext(
 		PluginInterface				pi,
 		runnableWithReturn<T>			target )
@@ -1148,7 +1148,7 @@ UtilitiesImpl
 		}
 	}
 	
-	public static final <T,S extends Exception> T
+	public static <T,S extends Exception> T
 	callWithPluginThreadContext(
 		PluginInterface							pi,
 		runnableWithReturnAndException<T,S>		target )
@@ -1645,7 +1645,7 @@ UtilitiesImpl
    		}
 	}
 	
-	private static final List<FeatureEnabler>
+	private static List<FeatureEnabler>
 	getVerifiedEnablers()
 	{		
 		long	now = SystemTime.getMonotonousTime();

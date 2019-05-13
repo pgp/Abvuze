@@ -19,7 +19,6 @@ package org.gudy.azureus2.core3.tracker.client.impl.bt;
 
 import java.net.URL;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
@@ -45,8 +44,8 @@ public class TrackerChecker implements AEDiagnosticsEvidenceGenerator, SystemTim
    * key = Tracker URL string
    * value = TrackerStatus object
    */
-  private final HashMap       trackers;
-  private final AEMonitor 	trackers_mon 	= new AEMonitor( "TrackerChecker:trackers" );
+  private final Map trackers;
+  private final AEMonitor trackers_mon = new AEMonitor( "TrackerChecker:trackers" );
 
   /** TRTrackerScraperImpl object associated with this object.
    */
@@ -67,10 +66,8 @@ public class TrackerChecker implements AEDiagnosticsEvidenceGenerator, SystemTim
     trackers  = new HashMap();
     
     if ( !COConfigurationManager.getBooleanParameter("Tracker Client Scrape Total Disable")){
-    	
-	     runScrapes();
-	    
 
+	     runScrapes();
     }
   
     AEDiagnostics.addEvidenceGenerator( this );
@@ -463,8 +460,7 @@ public class TrackerChecker implements AEDiagnosticsEvidenceGenerator, SystemTim
 			trackers_mon.exit();
 		}
 
-		boolean hasEarlierBlockedScrape = earliestBlocked != Long.MAX_VALUE
-				&& earliestBlocked < earliestNonBlocked;
+		boolean hasEarlierBlockedScrape = earliestBlocked < earliestNonBlocked;
 		// If the earlist non-blocked scrape is still 2 seconds away,
 		// return the blocked scrape with in hopes that it gets unblocked soon
 		if (hasEarlierBlockedScrape

@@ -437,7 +437,7 @@ DownloadManagerStateImpl
 
 			for (DownloadManagerStateImpl downloadManagerState : state_map.values()) {
 
-				DownloadManagerState dms = (DownloadManagerState) downloadManagerState;
+				DownloadManagerState dms = downloadManagerState;
 
 				DownloadManager dm = dms.getDownloadManager();
 
@@ -1117,49 +1117,49 @@ DownloadManagerStateImpl
 						// **** note - if you add to these make sure you extend the parameter listeners
 						// registered as well (see static initialiser at top)
 					
-					if ( name == PARAM_MAX_UPLOADS_WHEN_SEEDING_ENABLED ){
+					if (PARAM_MAX_UPLOADS_WHEN_SEEDING_ENABLED.equals(name)){
 						
 						if ( COConfigurationManager.getBooleanParameter( "enable.seedingonly.maxuploads" )){
 							
 							value = Boolean.TRUE;
 						}
 						
-					}else if ( name == PARAM_MAX_UPLOADS_WHEN_SEEDING ){
+					}else if (PARAM_MAX_UPLOADS_WHEN_SEEDING.equals(name)){
 						
 						int	def = COConfigurationManager.getIntParameter( "Max Uploads Seeding" );
 						
 						value = def;
 											
-					}else if ( name == PARAM_MAX_UPLOADS ){
+					}else if (PARAM_MAX_UPLOADS.equals(name)){
 						
 						int	def = COConfigurationManager.getIntParameter("Max Uploads" );
 						
 						value = def;
 						
-					}else if ( name == PARAM_MAX_PEERS ){
+					}else if (PARAM_MAX_PEERS.equals(name)){
 						
 						int	def = COConfigurationManager.getIntParameter( "Max.Peer.Connections.Per.Torrent" );
 						
 						value = def;
 						
-					}else if ( name == PARAM_MAX_PEERS_WHEN_SEEDING_ENABLED ){
+					}else if (PARAM_MAX_PEERS_WHEN_SEEDING_ENABLED.equals(name)){
 						
 						if ( COConfigurationManager.getBooleanParameter( "Max.Peer.Connections.Per.Torrent.When.Seeding.Enable" )){
 								
 							value = Boolean.TRUE;
 						}
 
-					}else if ( name == PARAM_MAX_PEERS_WHEN_SEEDING ){
+					}else if (PARAM_MAX_PEERS_WHEN_SEEDING.equals(name)){
 						
 						int	def = COConfigurationManager.getIntParameter( "Max.Peer.Connections.Per.Torrent.When.Seeding" );
 						
 						value = def;
 						
-					}else if ( name == PARAM_MAX_SEEDS ){
+					}else if (PARAM_MAX_SEEDS.equals(name)){
 					
 						value = COConfigurationManager.getIntParameter("Max Seeds Per Torrent");
 						
-					}else if ( name == PARAM_RANDOM_SEED ){
+					}else if (PARAM_RANDOM_SEED.equals(name)){
 						
 						long	rand = random.nextLong();
 						
@@ -2108,7 +2108,7 @@ DownloadManagerStateImpl
 						
 						Debug.out( "unknown default type " + def );
 					}
-				}else if ( attribute_name == AT_FILES_EXPANDED ){
+				}else if (AT_FILES_EXPANDED.equals(attribute_name)){
 					
 					boolean featured = TorrentUtils.isFeaturedContent( torrent );
 					
@@ -2217,11 +2217,11 @@ DownloadManagerStateImpl
 	getListAttribute(
 		String	attribute_name )
 	{
-		if ( attribute_name == AT_NETWORKS ){
+		if (AT_NETWORKS.equals(attribute_name)){
 			
 			return( getNetworks());
 			
-		}else if ( attribute_name == AT_PEER_SOURCES ){
+		}else if (AT_PEER_SOURCES.equals(attribute_name)){
 		
 			return( getPeerSources());
 			
@@ -3185,7 +3185,7 @@ DownloadManagerStateImpl
 			
 			if ( st != null ){
 				
-				simple_torrent = st.longValue() == 1;
+				simple_torrent = st == 1;
 			}
 			
 			Long	fc = (Long)cache.get( "fc" );
@@ -3278,7 +3278,7 @@ DownloadManagerStateImpl
 				
 				if ( simple_torrent != null ){
 					
-					cache.put( "simple", (long) (simple_torrent.booleanValue() ? 1 : 0));
+					cache.put( "simple", (long) (simple_torrent ? 1 : 0));
 					
 				}else{
 					

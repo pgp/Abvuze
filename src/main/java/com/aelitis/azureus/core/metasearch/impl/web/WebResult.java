@@ -278,30 +278,24 @@ public class WebResult extends Result {
                         multiplier = KB_UNIT * KB_UNIT;
                         break;
                     case "mib":
-                        multiplier = KIB_UNIT * KIB_UNIT;
+					case "m":
+						multiplier = KIB_UNIT * KIB_UNIT;
                         break;
-                    case "m":
-                        multiplier = KIB_UNIT * KIB_UNIT;
-                        break;
-                    case "gb":
+					case "gb":
                         multiplier = KB_UNIT * KB_UNIT * KB_UNIT;
                         break;
                     case "gib":
-                        multiplier = KIB_UNIT * KIB_UNIT * KIB_UNIT;
+					case "g":
+						multiplier = KIB_UNIT * KIB_UNIT * KIB_UNIT;
                         break;
-                    case "g":
-                        multiplier = KIB_UNIT * KIB_UNIT * KIB_UNIT;
-                        break;
-                    case "kb":
+					case "kb":
                         multiplier = KB_UNIT;
                         break;
                     case "kib":
-                        multiplier = KIB_UNIT;
+					case "k":
+						multiplier = KIB_UNIT;
                         break;
-                    case "k":
-                        multiplier = KIB_UNIT;
-                        break;
-                }
+				}
 				
 				this.size = (long) (base * multiplier);
 			} catch(Throwable e) {

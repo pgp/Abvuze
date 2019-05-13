@@ -707,7 +707,7 @@ SpeedLimitHandler
 				
 				String	p_name = importString( m, "n" );
 				
-				if ( p_name != null && name.equals( p_name )){
+				if (p_name.equals(name)){
 					
 					Map profile = (Map)m.get( "p" );
 					
@@ -741,7 +741,7 @@ SpeedLimitHandler
 				
 				String	p_name = importString( m, "n" );
 				
-				if ( p_name != null && name.equals( p_name )){
+				if (p_name.equals(name)){
 					
 					return( true );
 				}
@@ -773,7 +773,7 @@ SpeedLimitHandler
 				
 				String	p_name = importString( m, "n" );
 				
-				if ( p_name != null && name.equals( p_name )){
+				if (p_name.equals(name)){
 					
 					Map profile = (Map)m.get( "p" );
 					
@@ -849,7 +849,7 @@ SpeedLimitHandler
 				
 				String	p_name = importString( m, "n" );
 				
-				if ( p_name != null && name.equals( p_name )){
+				if (p_name.equals(name)){
 					
 					Map profile = (Map)m.get( "p" );
 					
@@ -897,7 +897,7 @@ SpeedLimitHandler
 				
 				String	p_name = importString( m, "n" );
 				
-				if ( p_name != null && name.equals( p_name )){
+				if (p_name.equals(name)){
 					
 					list.remove( m );
 					
@@ -932,7 +932,7 @@ SpeedLimitHandler
 			
 			String	p_name = importString( m, "n" );
 			
-			if ( p_name != null && name.equals( p_name )){
+			if (p_name.equals(name)){
 				
 				list.remove( m );
 				
@@ -2721,7 +2721,7 @@ SpeedLimitHandler
 					String	pub_peer_net 	= null;
 					String	pub_lan			= null;
 					
-					if ( peer_net == AENetworkClassifier.AT_PUBLIC ){
+					if (AENetworkClassifier.AT_PUBLIC.equals(peer_net)){
 					
 						try{
 							byte[]	address = InetAddress.getByName( peer.getIp() ).getAddress();

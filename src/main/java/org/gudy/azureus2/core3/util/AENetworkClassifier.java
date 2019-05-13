@@ -167,7 +167,7 @@ AENetworkClassifier
 			}
 		}
 		
-		if ( available_networks.size() == 1 && available_networks.get(0) == AT_PUBLIC ){
+		if ( available_networks.size() == 1 && AT_PUBLIC.equals(available_networks.get(0))){
 			
 			return( new String[]{ AT_PUBLIC });
 		}

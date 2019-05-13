@@ -397,7 +397,7 @@ MagnetPluginMDDownloader
 					
 					for ( String n: enabled_nets ){
 						
-						if ( n == net ){
+						if (Objects.equals(n,net)){
 							
 							peers_to_inject.add( address );
 							

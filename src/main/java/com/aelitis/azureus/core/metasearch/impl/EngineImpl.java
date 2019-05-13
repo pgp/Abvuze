@@ -1414,7 +1414,7 @@ EngineImpl
 	
 			String	existing = getLocalString( key );
 			
-			if ( existing != null && value != null && existing.equals( value )){
+			if (existing != null && existing.equals(value)){
 				
 				return;
 			}

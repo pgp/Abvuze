@@ -557,7 +557,7 @@ for (Download download : downloads) {
 
                 String ip = p.getIp();
 
-                if (AENetworkClassifier.categoriseAddress(ip) == AENetworkClassifier.AT_PUBLIC) {
+                if (AENetworkClassifier.AT_PUBLIC.equals(AENetworkClassifier.categoriseAddress(ip))) {
 
                     if (importSeed(ip, peer_udp_port) != null) {
 

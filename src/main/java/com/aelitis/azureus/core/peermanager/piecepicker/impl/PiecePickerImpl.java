@@ -469,7 +469,7 @@ implements PiecePicker
 		/(1 +peerControl.getNbSeeds() +peerControl.getNbPeers());
 	}
 
-	private final int[] recomputeAvailability()
+	private int[] recomputeAvailability()
 	{
 		if (availabilityDrift >0 &&availabilityDrift !=nbPieces &&Logger.isEnabled())
 			Logger.log(new LogEvent(diskManager.getTorrent(), LOGID, LogEvent.LT_INFORMATION,
@@ -1015,7 +1015,7 @@ implements PiecePicker
                         }
                     } else {
 
-                        maxRequests = pt.getNetwork() == AENetworkClassifier.AT_PUBLIC ? 1 : 2;
+                        maxRequests = AENetworkClassifier.AT_PUBLIC.equals(pt.getNetwork()) ? 1 : 2;
                     }
                 }
 
@@ -1176,7 +1176,7 @@ implements PiecePicker
 	 * call, which will be most of the time since availability changes so dynamicaly
 	 * It will change startPriorities[] (unless there was nothing to do)
 	 */
-	private final void 
+	private void
 	computeBasePriorities()
 	{
 		final long now =SystemTime.getCurrentTime();
@@ -1386,7 +1386,7 @@ implements PiecePicker
 	}
 
 
-	private final boolean isRarestOverride()
+	private boolean isRarestOverride()
 	{
 		final int nbSeeds =peerControl.getNbSeeds();
 		final int nbPeers =peerControl.getNbPeers();
@@ -1864,7 +1864,7 @@ implements PiecePicker
 	 * 
 	 * @return int with pieceNumberto be requested or -1 if no request could be found
 	 */
-	private final int getRequestCandidate(final PEPeerTransport pt )
+	private int getRequestCandidate(final PEPeerTransport pt )
 	{
 		if (pt ==null ||pt.getPeerState() !=PEPeer.TRANSFERING)
 			return -1;
@@ -2024,7 +2024,7 @@ implements PiecePicker
         			if ( pePiece == null || pePiece.isRequestable())
         			{
         				// if this priority exceeds the priority-override threshold then  we override rarity
-        				boolean	pieceRarestOverride = priority>=PRIORITY_OVERRIDES_RAREST?true:rarestAllowed;
+        				boolean	pieceRarestOverride = priority >= PRIORITY_OVERRIDES_RAREST || rarestAllowed;
 
         				// piece is: Needed, not fully: Requested, Downloaded, Written, hash-Checking or Done
 
@@ -2271,7 +2271,7 @@ implements PiecePicker
 	}
 
 
-	private final void checkEndGameMode()
+	private void checkEndGameMode()
 	{
 		if (peerControl.getNbSeeds() +peerControl.getNbPeers() <3){
 			return;
@@ -2384,7 +2384,7 @@ implements PiecePicker
 		}
 	}
 
-	private final void computeEndGameModeChunks()
+	private void computeEndGameModeChunks()
 	{
 		try{
 			endGameModeChunks_mon.enter();

@@ -134,7 +134,7 @@ public class IncomingSocketChannelManager
     		propertyChanged(
     			String		property )
     		{
-    			if ( property == NetworkAdmin.PR_DEFAULT_BIND_ADDRESS ){
+    			if (NetworkAdmin.PR_DEFAULT_BIND_ADDRESS.equals(property)){
     			
 			        InetAddress[] addresses = NetworkAdmin.getSingleton().getMultiHomedServiceBindAddresses(true);
 			        

@@ -42,7 +42,7 @@ public class PeerDatabase {
   
   private final long start_time = SystemTime.getMonotonousTime();
   
-  private final HashMap peer_connections = new HashMap();
+  private final Map peer_connections = new HashMap();
   
   private final TreeSet<PeerItem> discovered_peers =
           new TreeSet<>(
@@ -207,7 +207,7 @@ public class PeerDatabase {
         	it.remove();
         }
         
-        if ( peer.getNetwork() != AENetworkClassifier.AT_PUBLIC ){
+        if (!AENetworkClassifier.AT_PUBLIC.equals(peer.getNetwork())){
         	
         	 discovered_peers_non_pub.add( peer );
         	
@@ -255,7 +255,7 @@ public class PeerDatabase {
 	  try{  
 		  map_mon.enter();
 	  
-		  return discovered_peers.toArray( new PeerItem[discovered_peers.size()] );
+		  return discovered_peers.toArray(new PeerItem[0]);
 		  
 	  }finally{  
 		
@@ -383,7 +383,7 @@ public class PeerDatabase {
 		        
 		    		discovered_peer	= true;
 		    		
-		    		if ( peer.getNetwork() != AENetworkClassifier.AT_PUBLIC ){
+		    		if (!AENetworkClassifier.AT_PUBLIC.equals(peer.getNetwork())){
 		    			
 		    			discovered_peers_non_pub.remove( peer );
 		    		}
@@ -436,7 +436,7 @@ public class PeerDatabase {
   
     		    	discovered_peers.add( peer );
     		    	
-    		    	if ( peer.getNetwork() != AENetworkClassifier.AT_PUBLIC ){
+    		    	if (!AENetworkClassifier.AT_PUBLIC.equals(peer.getNetwork())){
     		    		
     		    		discovered_peers_non_pub.add( peer );
     		    	}
@@ -505,7 +505,7 @@ public class PeerDatabase {
 				  
 				  popularity_pos_non_pub++;
 
-				  if ( temp.getNetwork() != AENetworkClassifier.AT_PUBLIC ){
+				  if (!AENetworkClassifier.AT_PUBLIC.equals(temp.getNetwork())){
 					  
 					  peer = temp;
 					 
@@ -518,7 +518,7 @@ public class PeerDatabase {
 
 			  popularity_pos++;
 
-			  if ( peer.getNetwork() != AENetworkClassifier.AT_PUBLIC ){
+			  if (!AENetworkClassifier.AT_PUBLIC.equals(peer.getNetwork())){
 				  
 				  popularity_pos_non_pub = popularity_pos;
 			  }
@@ -571,7 +571,7 @@ public class PeerDatabase {
                 if (count == null) {
                     count = 1;
                 } else {
-                    count = count.intValue() + 1;
+                    count = count + 1;
                 }
 
                 popularity_counts.put(peer, count);

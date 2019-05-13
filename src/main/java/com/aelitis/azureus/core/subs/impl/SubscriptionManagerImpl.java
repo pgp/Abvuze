@@ -585,7 +585,7 @@ SubscriptionManagerImpl
 						String 		attribute, 
 						Object 		value )
 					{
-						if ( attribute == TorrentUtils.TORRENT_AZ_PROP_OBTAINED_FROM ){
+						if (TorrentUtils.TORRENT_AZ_PROP_OBTAINED_FROM.equals(attribute)){
 							
 							try{
 								checkPotentialAssociations( torrent.getHash(), (String)value );
@@ -2233,7 +2233,7 @@ SubscriptionManagerImpl
 								
 								subs.setUserData( SP_LAST_ATTEMPTED, SystemTime.getMonotonousTime());
 								
-								subs.setUserData( SP_CONSEC_FAIL, l_consec_fail == null ? 1 : (l_consec_fail.longValue() + 1));
+								subs.setUserData( SP_CONSEC_FAIL, l_consec_fail == null ? 1 : (l_consec_fail + 1));
 				
 								subs.setServerPublicationOutstanding();
 							}
@@ -2477,11 +2477,11 @@ SubscriptionManagerImpl
 					
 					Long	l_public = (Long)map.get( "public" );
 					
-					boolean is_public = l_public==null?true: l_public ==1;
+					boolean is_public = l_public == null || l_public == 1;
 					
 					Long	l_anon = (Long)map.get( "anon" );
 					
-					boolean is_anon = l_anon==null?false: l_anon ==1;
+					boolean is_anon = l_anon != null && l_anon == 1;
 					
 					SubscriptionImpl existing = lookupSingletonRSS(name, url, is_public, check_interval_mins, is_anon );
 					
@@ -2695,7 +2695,7 @@ SubscriptionManagerImpl
 	{
 		synchronized( this ){
 			
-			return subscriptions.toArray( new SubscriptionImpl[subscriptions.size()]);
+			return subscriptions.toArray(new SubscriptionImpl[0]);
 		}
 	}
 	
@@ -5232,7 +5232,7 @@ SubscriptionManagerImpl
 						
 						String target_net = dht.getNetwork();
 						
-						if ( target_net != AENetworkClassifier.AT_PUBLIC ){
+						if (!AENetworkClassifier.AT_PUBLIC.equals(target_net)){
 							
 							if ( !BuddyPluginUtils.isBetaChatAnonAvailable()){
 								
@@ -5340,7 +5340,7 @@ SubscriptionManagerImpl
 									
 									String net = chat.getNetwork();
 									
-									if ( net == AENetworkClassifier.AT_PUBLIC || subs.isAnonymous()){
+									if (AENetworkClassifier.AT_PUBLIC.equals(net) || subs.isAnonymous()){
 																			
 										synchronized( chat_assoc_done ){
 											
@@ -7562,7 +7562,7 @@ SubscriptionManagerImpl
 			
 			for ( String net: networks ){
 				
-				if ( net == AENetworkClassifier.AT_PUBLIC ){
+				if (AENetworkClassifier.AT_PUBLIC.equals(net)){
 					
 					return( dht_plugin_public );
 				}

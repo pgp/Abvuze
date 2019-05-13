@@ -20,6 +20,7 @@
 package org.gudy.azureus2.pluginsimpl.local.network;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.gudy.azureus2.plugins.messaging.*;
 import org.gudy.azureus2.plugins.network.*;
@@ -34,7 +35,7 @@ import org.gudy.azureus2.pluginsimpl.local.messaging.MessageStreamEncoderAdapter
  */
 public class OutgoingMessageQueueImpl implements OutgoingMessageQueue {
   private final com.aelitis.azureus.core.networkmanager.OutgoingMessageQueue core_queue;
-  private final HashMap registrations = new HashMap();
+  private final Map registrations = new HashMap();
   
   
   protected OutgoingMessageQueueImpl( com.aelitis.azureus.core.networkmanager.OutgoingMessageQueue core_queue ) {

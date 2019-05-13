@@ -1081,10 +1081,10 @@ SubscriptionHistoryImpl
 		Map	map = subs.getHistoryConfig();
 		
 		Long	l_enabled	= (Long)map.get( "enabled" );		
-		enabled				= l_enabled==null?true: l_enabled ==1;
+		enabled				= l_enabled == null || l_enabled == 1;
 		
 		Long	l_auto_dl	= (Long)map.get( "auto_dl" );		
-		auto_dl				= l_auto_dl==null?false: l_auto_dl ==1;
+		auto_dl				= l_auto_dl != null && l_auto_dl == 1;
 		
 		Long	l_last_scan = (Long)map.get( "last_scan" );		
 		last_scan			= l_last_scan==null?0: l_last_scan;
@@ -1105,7 +1105,7 @@ SubscriptionHistoryImpl
 		auto_dl_supported	= l_auto_dl_s==null?(last_scan>0): l_auto_dl_s ==1;
 
 		Long	l_dl_with_ref	= (Long)map.get( "dl_with_ref" );		
-		dl_with_ref	= l_dl_with_ref==null?true: l_dl_with_ref ==1;
+		dl_with_ref	= l_dl_with_ref == null || l_dl_with_ref == 1;
 		
 		Long	l_interval_override	= (Long)map.get( "interval_override" );		
 		interval_override	= l_interval_override==null?0:l_interval_override.intValue();
@@ -1123,7 +1123,7 @@ SubscriptionHistoryImpl
 		}
 		
 		Long	l_post_noto	= (Long)map.get( "post_noti" );		
-		post_notifications	= l_post_noto==null?false: l_post_noto ==1;
+		post_notifications	= l_post_noto != null && l_post_noto == 1;
 
 	}
 	

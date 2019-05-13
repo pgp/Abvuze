@@ -22,6 +22,10 @@ package com.aelitis.azureus.core.cnetwork;
 
 import com.aelitis.azureus.core.vuzefile.VuzeFile;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 public interface 
 ContentNetwork 
 {
@@ -83,12 +87,14 @@ ContentNetwork
 	int		PROPERTY_ORDER				= 3;	// String (Tux prefers to Integer)
 
 		// persistent (and local) properties
-	
+
 	String	PP_AUTH_PAGE_SHOWN			= "auth_shown";			// Boolean, default false
 	String	PP_IS_CUSTOMIZATION			= "is_cust";			// Boolean, default false
 	String	PP_ACTIVE			        = "active";				// Boolean
 	String	PP_SHOW_IN_MENU       		= "in_menu";			// Boolean
 	String	PP_SOURCE_REF				= "source_ref"; 		// String
+
+	Set<String> PPSET = new HashSet<>(Arrays.asList(PP_AUTH_PAGE_SHOWN, PP_IS_CUSTOMIZATION, PP_ACTIVE, PP_SHOW_IN_MENU, PP_SOURCE_REF));
 
 	
 		/**

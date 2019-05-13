@@ -24,7 +24,6 @@ import com.aelitis.azureus.core.peermanager.messaging.bittorrent.BTLTMessage;
 import com.aelitis.azureus.core.peermanager.messaging.bittorrent.BTMessageFactory;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.gudy.azureus2.core3.logging.LogEvent;

@@ -145,7 +145,7 @@ public class UserProfile
 	 * check for equality with another user profile object
 	 */
 	public boolean equals(Object obj) {
-		if( obj == null || ! (obj instanceof UserProfile) )
+		if(!(obj instanceof UserProfile))
 			return false;
 		UserProfile other = (UserProfile)obj;
 		if( getUsername() != null )

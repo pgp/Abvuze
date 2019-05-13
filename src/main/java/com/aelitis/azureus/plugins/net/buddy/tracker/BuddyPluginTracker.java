@@ -1534,7 +1534,7 @@ for (Object ip1 : ips) {
 		
 		for ( String net: networks ){
 			
-			if ( net == AENetworkClassifier.AT_PUBLIC ){
+			if (AENetworkClassifier.AT_PUBLIC.equals(net)){
 				
 				ok = true;
 			}

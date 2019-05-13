@@ -25,7 +25,6 @@ package org.gudy.azureus2.ui.console.multiuser;
 import java.io.PrintStream;
 import java.io.Reader;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 

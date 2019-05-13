@@ -61,11 +61,11 @@ AEProxyImpl
 	
 	private final List<AEProxyConnectionImpl>				processors = new ArrayList<>();
 	
-	private final HashMap 		write_select_regs = new HashMap();
+	private final Map write_select_regs = new HashMap();
 	
-	private boolean				allow_external_access;
+	private boolean allow_external_access;
 	
-	private final AEMonitor			this_mon	= new AEMonitor( "AEProxyImpl" );
+	private final AEMonitor this_mon = new AEMonitor( "AEProxyImpl" );
 	
 	private volatile boolean	destroyed;
 	

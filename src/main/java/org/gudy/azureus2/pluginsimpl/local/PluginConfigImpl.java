@@ -1008,7 +1008,7 @@ PluginConfigImpl
 					  
 				  }else if ( val instanceof Integer ){
 					  
-					  val = (long) ((Integer) val).intValue();
+					  val = ((Integer) val).longValue();
 	
 				  }else if ( val instanceof List ){
 					  

@@ -35,7 +35,7 @@ import com.aelitis.azureus.core.networkmanager.*;
  * has its own specialized entity for performance purposes.
  */
 public class EntityHandler {
-  private final HashMap upgraded_connections = new HashMap();
+  private final Map upgraded_connections = new HashMap();
   private final AEMonitor lock = new AEMonitor( "EntityHandler" );
   private final MultiPeerUploader global_uploader;
   private final MultiPeerDownloader2 global_downloader;

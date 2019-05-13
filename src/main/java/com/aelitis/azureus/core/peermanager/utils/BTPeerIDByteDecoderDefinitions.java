@@ -19,21 +19,23 @@ package com.aelitis.azureus.core.peermanager.utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+
 import org.gudy.azureus2.core3.internat.MessageText;
 import org.gudy.azureus2.core3.util.Constants;
 
 public class BTPeerIDByteDecoderDefinitions {
 
 	// Az style two byte code identifiers to real client name. 
-	private static final HashMap az_style_code_map = new HashMap();
-	private static final HashMap az_client_version_map = new HashMap();
+	private static final Map az_style_code_map = new HashMap();
+	private static final Map az_client_version_map = new HashMap();
 	
 	// Shadow's style one byte code identifiers to real client name.
-	private static final HashMap shadow_style_code_map = new HashMap();
-	private static final HashMap shadow_client_version_map = new HashMap();
+	private static final Map shadow_style_code_map = new HashMap();
+	private static final Map shadow_client_version_map = new HashMap();
 	
 	// Mainline's new style uses one byte code identifiers too.
-	private static final HashMap mainline_style_code_map = new HashMap();
+	private static final Map mainline_style_code_map = new HashMap();
 	
 	/**
 	 * List of objects which describes clients with their own custom
@@ -130,7 +132,7 @@ public class BTPeerIDByteDecoderDefinitions {
 	
 	public static String getAzStyleClientVersion(String client_name, String peer_id) {
 		String version_scheme = (String)az_client_version_map.get(client_name);
-		if (version_scheme == NO_VERSION) {return null;}
+		if (NO_VERSION.equals(version_scheme)) {return null;}
 		try {
 			return client_name + " " + BTPeerIDByteDecoderUtils.decodeAzStyleVersionNumber(
 				peer_id.substring(3, 7), version_scheme
@@ -160,11 +162,11 @@ public class BTPeerIDByteDecoderDefinitions {
 		String version_scheme = verdata.type;
 		String version_string = null;
 		try {
-			if (version_scheme == VER_TWO_BYTE_THREE_PART) {
+			if (VER_TWO_BYTE_THREE_PART.equals(version_scheme)) {
 				int start_byte_index = verdata.pos;
 				version_string = BTPeerIDByteDecoderUtils.getTwoByteThreePartVersion(peer_id_bytes[start_byte_index], peer_id_bytes[start_byte_index+1]);
 			}
-			else if (version_scheme == VER_BLOCK && verdata.length == -1) {
+			else if (VER_BLOCK.equals(version_scheme) && verdata.length == -1) {
 				version_string = BTPeerIDByteDecoderUtils.extractReadableVersionSubstringFromPeerID(peer_id.substring(verdata.pos));
 			}
 			else {

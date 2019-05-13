@@ -129,7 +129,7 @@ public class BTRequest implements BTMessage {
   //used for removing individual requests from the message queue
   public boolean equals( Object obj ) {
     if( this == obj )  return true;
-    if( obj != null && obj instanceof BTRequest ) {
+    if(obj instanceof BTRequest) {
       BTRequest other = (BTRequest)obj;
       if( other.piece_number == this.piece_number &&
           other.piece_offset == this.piece_offset &&

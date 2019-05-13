@@ -2020,7 +2020,7 @@ public abstract class TableViewImpl<DATASOURCETYPE>
 	protected boolean isLastRow(TableRowCore row) {
 		synchronized (rows_sync) {
 			int size = sortedRows.size();
-			return size == 0 ? false : sortedRows.get(size - 1) == row;
+			return size != 0 && sortedRows.get(size - 1) == row;
 		}
 	}
 

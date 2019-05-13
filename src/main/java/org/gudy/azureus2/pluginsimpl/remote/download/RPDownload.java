@@ -241,15 +241,10 @@ RPDownload
 
                 return (null);
 
-            case "setPosition[int]": {
-
-                int p = (Integer) request.getParams()[0];
-
-                delegate.setPosition(p);
-
-                return (null);
-
-            }
+            case "setPosition[int]":
+			case "moveTo[int]":
+                delegate.setPosition((Integer) request.getParams()[0]);
+                return null;
             case "moveUp":
 
                 delegate.moveUp();
@@ -261,17 +256,7 @@ RPDownload
                 delegate.moveDown();
 
                 return (null);
-
-            case "moveTo[int]": {
-
-                int p = (Integer) request.getParams()[0];
-
-                delegate.setPosition(p);
-
-                return (null);
-
-            }
-            case "setPriority[int]":
+			case "setPriority[int]":
 
                 delegate.setPriority((Integer) request.getParams()[0]);
 

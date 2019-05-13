@@ -78,7 +78,7 @@ public class TransportStats {
       io_sizes.put( size_key, 1L);
     }
     else {
-      io_sizes.put( size_key, count.longValue() + 1);
+      io_sizes.put( size_key, count + 1);
     }
   }
   

@@ -11,7 +11,6 @@
 package org.gudy.azureus2.ui.console.commands;
 
 import java.io.PrintStream;
-import java.util.Iterator;
 import java.util.List;
 
 import org.gudy.azureus2.core3.download.DownloadManager;

@@ -19,7 +19,6 @@
 
 package com.aelitis.azureus.core.networkmanager.impl.http;
 
-import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.URLDecoder;

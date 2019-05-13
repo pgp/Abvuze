@@ -38,7 +38,7 @@ public abstract class NativeInvocationBridge
    * Gets the singleton
    * @return The NativeInvocationBridge singleton
    */
-	protected static final NativeInvocationBridge sharedInstance() {
+	protected static NativeInvocationBridge sharedInstance() {
 		if (instance == null) {
 			try {
 				Object newInstance = Class.forName(
@@ -52,7 +52,7 @@ public abstract class NativeInvocationBridge
 		return instance;
 	}
 	
-	protected final static boolean hasSharedInstance() {
+	protected static boolean hasSharedInstance() {
 		return instance != null;
 	}
 

@@ -262,7 +262,7 @@ public final class CocoaJavaBridge extends NativeInvocationBridge
             Object /*NSAppleScript*/ scp = new_NSAppleScript(src);
             Object /*NSAppleEventDescriptor*/ result =  NSAppleScript_execute(scp, new_NSMutableDictionary());
 
-            Debug.outNoStack(MessageFormat.format("Elapsed time: {0}ms\n", new Long(System.currentTimeMillis() - start)));
+            Debug.outNoStack(MessageFormat.format("Elapsed time: {0}ms\n", System.currentTimeMillis() - start));
             NSAutoreleasePool_pop(pool);
             return result;
         }
@@ -312,7 +312,7 @@ public final class CocoaJavaBridge extends NativeInvocationBridge
 					}
 
 					Debug.outNoStack(MessageFormat.format("Elapsed time: {0}ms\n",
-                            new Long(System.currentTimeMillis() - start)));
+                            System.currentTimeMillis() - start));
 					NSAutoreleasePool_pop(pool);
 				} catch (Throwable e) {
 					Debug.out(e);
@@ -367,7 +367,7 @@ public final class CocoaJavaBridge extends NativeInvocationBridge
 					}
 
 					Debug.outNoStack(MessageFormat.format("Elapsed time: {0}ms\n",
-                            new Long(System.currentTimeMillis() - start)));
+                            System.currentTimeMillis() - start));
 					NSAutoreleasePool_pop(pool);
 				} catch (Throwable t) {
 					Debug.out(t);

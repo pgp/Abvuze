@@ -256,7 +256,7 @@ TagPropertyTrackerHandler
 				
 				String bit = bits[i];
 				
-				if ( suffix == "" ){
+				if ("".equals(suffix)){
 					
 					suffix = bit;
 					

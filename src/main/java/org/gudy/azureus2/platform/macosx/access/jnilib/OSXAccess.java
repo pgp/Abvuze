@@ -141,39 +141,39 @@ public class OSXAccess
 		}
 	}
 
-	public static final native int AEGetParamDesc(int theAppleEvent,
-			int theAEKeyword, int desiredType, Object result); //AEDesc result
+	public static native int AEGetParamDesc(int theAppleEvent,
+                                            int theAEKeyword, int desiredType, Object result); //AEDesc result
 
-	public static final native String getVersion();
+	public static native String getVersion();
 
 	// 1.02
-	public static final native String getDocDir();
+	public static native String getDocDir();
 
 	// 1.03
-	public static final native void memmove(byte[] dest, int src, int size);
+	public static native void memmove(byte[] dest, int src, int size);
 
 	// 1.04
-	public static final native void initializeDriveDetection(
+	public static native void initializeDriveDetection(
 			OSXDriveDetectListener d);
 
 	// 1.11
-	public static final native void initializeLight();
+	public static native void initializeLight();
 
 	// 1.11
-	public static final native boolean setDefaultAppForExt(String bundleID, String ext);
+	public static native boolean setDefaultAppForExt(String bundleID, String ext);
 	// 1.11
-	public static final native boolean setDefaultAppForMime(String bundleID, String mime);
+	public static native boolean setDefaultAppForMime(String bundleID, String mime);
 	// 1.11
-	public static final native boolean setDefaultAppForScheme(String bundleID, String scheme);
+	public static native boolean setDefaultAppForScheme(String bundleID, String scheme);
 
 	// 1.11
-	public static final native String getDefaultAppForExt(String ext);
+	public static native String getDefaultAppForExt(String ext);
 	// 1.11
-	public static final native String getDefaultAppForMime(String mime);
+	public static native String getDefaultAppForMime(String mime);
 	// 1.11
-	public static final native String getDefaultAppForScheme(String scheme);
+	public static native String getDefaultAppForScheme(String scheme);
 	// 1.11
-	public static final native boolean canSetDefaultApp();
+	public static native boolean canSetDefaultApp();
 
 
 	public static boolean isLoaded() {

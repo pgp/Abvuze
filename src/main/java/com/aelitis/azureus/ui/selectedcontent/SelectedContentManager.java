@@ -108,9 +108,9 @@ public class SelectedContentManager
 			
 			if ( same ){
 				
-				same = 
+				same =
 					SelectedContentManager.viewID == viewID ||
-					( 	SelectedContentManager.viewID != null && 
+					( 	SelectedContentManager.viewID != null &&
 						viewID != null &&
 						SelectedContentManager.viewID.equals( viewID ));
 				

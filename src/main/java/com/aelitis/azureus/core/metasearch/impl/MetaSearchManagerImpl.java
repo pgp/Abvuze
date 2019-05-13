@@ -142,7 +142,7 @@ MetaSearchManagerImpl
 						String 		attribute, 
 						Object 		value )
 					{
-						if ( 	attribute == TorrentUtils.TORRENT_AZ_PROP_OBTAINED_FROM && 
+						if (TorrentUtils.TORRENT_AZ_PROP_OBTAINED_FROM.equals(attribute) &&
 								!TorrentUtils.isReallyPrivate( torrent )){
 							
 							try{
@@ -963,7 +963,7 @@ MetaSearchManagerImpl
 
             for (Engine engine : engines) {
 
-                engine_map.put(new Long(engine.getId()), engine);
+                engine_map.put(engine.getId(), engine);
             }
 				
 			Set<Engine> selected_engine_set = new HashSet<>();
@@ -1551,9 +1551,9 @@ MetaSearchManagerImpl
 			}
 		}
 
-		if ( existing_ext != latest_ext ){
+		if (!Objects.equals(existing_ext,latest_ext)){
 			
-			if ( existing_ext == null || latest_ext == null || !existing_ext.equals( latest_ext )){
+			if (existing_ext == null || !existing_ext.equals(latest_ext)){
 				
 				extension_key	= latest_ext;
 				

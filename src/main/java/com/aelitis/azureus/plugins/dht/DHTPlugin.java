@@ -1644,7 +1644,7 @@ DHTPlugin
 									// if we have reported any results then we can't report 
 									// timeout!
 								
-								main_listener.complete( original_key, result_count>0?false:timeout_occurred );
+								main_listener.complete( original_key, result_count <= 0 && timeout_occurred);
 								
 								return;
 								

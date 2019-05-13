@@ -840,11 +840,8 @@ UDPConnectionSet
 				if ( packet.getAlternativeSequence() == alt_sequence ){
 							
 					receive_their_last_inorder_sequence	= packet.getSequence();
-					
-					for (int j=0;j<=i;j++){
-						
-						transmit_unack_packets.remove(0);
-					}
+
+					transmit_unack_packets.subList(0, i + 1).clear();
 
 					return( true );
 				}

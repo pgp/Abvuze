@@ -272,7 +272,7 @@ COConfigurationManager
 		return ConfigurationManager.getInstance(data);
 	}
 
-	public static final boolean
+	public static boolean
 	isNewInstall()
 	{
 		return( ConfigurationManager.getInstance().isNewInstall());
