@@ -137,7 +137,7 @@ TagBase
 	private TagFeatureFileLocation	tag_fl;
 	private TagFeatureLimits		tag_limits;
 	
-	private HashMap<String,Object>		transient_properties;
+	private Map<String,Object>		transient_properties;
 	
 	protected
 	TagBase(

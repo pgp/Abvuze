@@ -78,7 +78,7 @@ TRHostTorrentHostImpl
 	
 	private boolean			disable_reply_caching;
 	
-	private HashMap data;
+	private Map data;
 	
 	protected final AEMonitor this_mon 	= new AEMonitor( "TRHostTorrentHost" );
 

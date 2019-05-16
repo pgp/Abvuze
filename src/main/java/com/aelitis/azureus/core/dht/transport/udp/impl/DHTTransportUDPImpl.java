@@ -1466,7 +1466,7 @@ DHTTransportUDPImpl
 		return( stats );
 	}
 	
-	//protected HashMap	port_map = new HashMap();
+	//protected Map	port_map = new HashMap();
 	//protected long		last_portmap_dump	= SystemTime.getCurrentTime();
 	
 	protected void

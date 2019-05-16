@@ -53,7 +53,7 @@ PeerImpl
 	protected PeerManagerImpl	manager;
 	protected PEPeer			delegate;
   	
-	private HashMap<Object,PEPeerListener> peer_listeners;
+	private Map<Object,PEPeerListener> peer_listeners;
   	
 	private UtilitiesImpl.PluginLimitedRateGroupListener	up_rg_listener;
 	private UtilitiesImpl.PluginLimitedRateGroupListener	down_rg_listener;

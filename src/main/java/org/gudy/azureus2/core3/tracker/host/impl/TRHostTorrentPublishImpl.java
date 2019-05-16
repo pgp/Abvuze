@@ -55,7 +55,7 @@ TRHostTorrentPublishImpl
 	private List				listeners_cow		= new ArrayList();
 	private final List				removal_listeners	= new ArrayList();
 	
-	private HashMap data;
+	private Map data;
 
 	protected final AEMonitor this_mon 	= new AEMonitor( "TRHostTorrentPublish" );
 

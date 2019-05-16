@@ -39,7 +39,7 @@ public class LTMessageEncoder implements MessageStreamEncoder {
 	
 	protected final static LogIDs LOGID = LogIDs.PEER;
 	private final Object log_object;
-	private HashMap extension_map;
+	private Map extension_map;
 	
 	public LTMessageEncoder(Object log_object) {
 		this.log_object = log_object;

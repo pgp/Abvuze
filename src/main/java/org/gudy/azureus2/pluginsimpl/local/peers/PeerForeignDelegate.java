@@ -85,7 +85,7 @@ PeerForeignDelegate
 	
 	private Map			data;
 
-	private HashMap		peer_listeners;
+	private Map		peer_listeners;
 
 	protected AEMonitor	this_mon	= new AEMonitor( "PeerForeignDelegate" );
 

@@ -22,6 +22,7 @@
  
 package org.gudy.azureus2.pluginsimpl.local.ui.config;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import org.gudy.azureus2.plugins.ui.config.*;
@@ -37,7 +38,7 @@ public class ParameterRepository
 	private static ParameterRepository 	instance;
 	private static AEMonitor			class_mon	= new AEMonitor( "ParameterRepository:class" );
 
-	private HashMap params;
+	private Map params;
 	
 	private ParameterRepository()
 	{

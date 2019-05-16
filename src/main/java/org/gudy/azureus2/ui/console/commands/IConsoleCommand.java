@@ -40,7 +40,7 @@ public abstract class IConsoleCommand {
 		}
 	private String main_name;
 	private String short_name;
-	private HashSet commands;
+	private Set commands;
 
 	public IConsoleCommand(String main_name) {
 		this(main_name, null);

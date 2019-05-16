@@ -56,8 +56,8 @@ public class DownloadEventNotifierImpl implements DownloadEventNotifier {
 	private DownloadCompletionNotifier download_completion_notifier;
 	private DownloadManager dm;
 	
-	private HashMap read_attribute_listeners;
-	private HashMap write_attribute_listeners;
+	private Map read_attribute_listeners;
+	private Map write_attribute_listeners;
 	
 	public DownloadEventNotifierImpl(DownloadManager dm) {
 		this.dm = dm;

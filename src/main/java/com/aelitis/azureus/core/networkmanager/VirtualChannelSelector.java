@@ -54,8 +54,8 @@ public class VirtualChannelSelector {
   private volatile boolean	destroyed;
   
   //ONLY USED IN FAULTY MODE
-  private HashMap<VirtualChannelSelectorImpl,ArrayList<AbstractSelectableChannel>> selectors;
-  private HashSet<VirtualChannelSelectorImpl> selectors_keyset_cow;
+  private Map<VirtualChannelSelectorImpl,ArrayList<AbstractSelectableChannel>> selectors;
+  private Set<VirtualChannelSelectorImpl> selectors_keyset_cow;
   private AEMonitor selectors_mon;
   private final int op;
   private final boolean pause;

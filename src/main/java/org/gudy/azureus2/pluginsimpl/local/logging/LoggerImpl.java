@@ -152,7 +152,7 @@ LoggerImpl
 	
 	public void addAlertListener(final LogAlertListener listener) {
 		ILogAlertListener lg_listener = new ILogAlertListener() {
-			private HashSet set = new HashSet();
+			private Set set = new HashSet();
 			public void alertRaised(LogAlert alert) {
 				if (!alert.repeatable) {
 					if (set.contains(alert.text)) {return;}
