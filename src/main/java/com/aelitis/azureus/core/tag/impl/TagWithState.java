@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import it.pgp.misc.Utils;
 import org.gudy.azureus2.core3.internat.MessageText;
 import org.gudy.azureus2.core3.util.Debug;
 import org.gudy.azureus2.core3.util.SimpleTimer;
@@ -339,12 +340,12 @@ TagWithState
 									getTagName( true ),
 								});
 					
-					Map<String,String>	cb_data = new HashMap<>();
-					
-					cb_data.put( "allowReAdd", "true" );
-					cb_data.put( "taguid", String.valueOf( getTagUID() ));
-					cb_data.put( "id", String.valueOf( taggable.getTaggableID()));
-					
+					Map<String,String>	cb_data = Utils.typedMapOf(
+							"allowReAdd", "true",
+							"taguid", String.valueOf( getTagUID() ),
+							"id", String.valueOf( taggable.getTaggableID())
+					);
+
 					String icon_id = "image.sidebar.tag-green";
 					
 					int[] color = getColor();
@@ -356,7 +357,7 @@ TagWithState
 						String hex = Long.toHexString( rgb );
 						
 						while( hex.length() < 6 ){
-							
+
 							hex = "0"+ hex;
 						}
 						

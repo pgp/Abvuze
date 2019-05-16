@@ -38,6 +38,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import it.pgp.misc.Utils;
 import org.gudy.azureus2.core3.config.COConfigurationManager;
 import org.gudy.azureus2.core3.internat.MessageText;
 import org.gudy.azureus2.core3.util.AEDiagnostics;
@@ -2471,12 +2472,12 @@ BuddyPluginBeta
 				}
 				
 				str = chan_name + ": " + str;
-				
-				Map<String,String>	cb_data = new HashMap<>();
-				
-				cb_data.put( "allowReAdd", "true" );
-				cb_data.put( "net", inst.getNetwork());
-				cb_data.put( "key", inst.getKey());
+
+				Map<String,String>	cb_data = Utils.typedMapOf(
+						"allowReAdd", "true",
+						"net", inst.getNetwork(),
+						"key", inst.getKey()
+				);
 				
 				provider.addLocalActivity(
 					inst.getNetAndKey(),
@@ -4380,30 +4381,23 @@ BuddyPluginBeta
 			}
 			
 			dispatcher.dispatch(
-				new AERunnable()
-				{
+				new AERunnable() {
 					
 					@Override
 					public void 
-					runSupport() 
-					{
-						Map<String,Object>		options = new HashMap<>();
-						
-						String raw_message;
-						
-						if ( message.startsWith( "!") && message.endsWith( "!" )){
+					runSupport() {
 
+						String raw_message;
+
+						if ( message.startsWith( "!") && message.endsWith( "!" ))
 							raw_message = message.substring( 1, message.length() - 1 );
-			
-						}else{
-							
+						else
 							raw_message = MessageText.getString( message, args );
-						}
-						options.put( "is_local", true );
-						options.put( "message", raw_message );
-						options.put( "message_type", message_type );
-						
-						sendMessageSupport( "", null, options );
+
+						sendMessageSupport( "", null, Utils.typedMapOf(
+								"is_local", true,
+								"message", raw_message,
+								"message_type", message_type));
 					}
 				});
 		}

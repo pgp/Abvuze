@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import it.pgp.misc.Utils;
 import org.gudy.azureus2.core3.download.DownloadManager;
 import org.gudy.azureus2.core3.global.GlobalManager;
 import org.gudy.azureus2.core3.torrent.TOTorrent;
@@ -313,24 +314,20 @@ public class VuzeActivitiesEntry
 		"rawtypes"
 	})
 	public Map<String, Object> toMap() {
-		Map<String, Object> map = new HashMap<>();
-		map.put("timestamp", timestamp);
-		if (assetHash != null) {
-			map.put("assetHash", assetHash);
-		}
-		map.put("icon", getIconID());
-		map.put("id", id);
-		map.put("text", getText());
-		map.put("typeID", getTypeID());
-		map.put("assetImageURL", assetImageURL);
-		map.put("showThumb", (long) (getShowThumb() ? 1 : 0));
-		if (imageBytes != null) {
-			map.put("imageBytes", imageBytes);
-		} else if (dm != null) {
+		Map<String, Object> map = Utils.typedMapOf(
+				"timestamp", timestamp,
+				"icon", getIconID(),
+				"id", id,
+				"text", getText(),
+				"typeID", getTypeID(),
+				"assetImageURL", assetImageURL,
+				"showThumb", (long) (getShowThumb() ? 1 : 0)
+		);
+		if (assetHash != null) map.put("assetHash", assetHash);
+		if (imageBytes != null) map.put("imageBytes", imageBytes);
+		else if (dm != null) {
 			byte[] thumbnail = PlatformTorrentUtils.getContentThumbnail(dm.getTorrent());
-			if (thumbnail != null) {
-				map.put("imageBytes", thumbnail);
-			}
+			if (thumbnail != null) map.put("imageBytes", thumbnail);
 		}
 
 		if (torrent != null && (dm == null || assetHash == null)) {

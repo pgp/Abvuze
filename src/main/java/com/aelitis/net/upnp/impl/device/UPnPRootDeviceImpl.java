@@ -29,6 +29,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.net.*;
 
+import it.pgp.misc.Utils;
 import org.gudy.azureus2.core3.util.Debug;
 import org.gudy.azureus2.plugins.utils.xml.simpleparser.SimpleXMLParserDocument;
 import org.gudy.azureus2.plugins.utils.xml.simpleparser.SimpleXMLParserDocumentNode;
@@ -146,20 +147,17 @@ UPnPRootDeviceImpl
 	getDiscoveryCache() 
 	{		
 		try{
-			Map	cache = new HashMap();
-
-			cache.put( "ni", network_interface.getName().getBytes(StandardCharsets.UTF_8));
-			cache.put( "la", local_address.getHostAddress().getBytes(StandardCharsets.UTF_8));
-			cache.put( "usn", usn.getBytes(StandardCharsets.UTF_8));
-			cache.put( "loc", location.toExternalForm().getBytes(StandardCharsets.UTF_8));
-			
-			return( cache );
+			return Utils.mapOf(
+					"ni", network_interface.getName().getBytes(StandardCharsets.UTF_8),
+					"la", local_address.getHostAddress().getBytes(StandardCharsets.UTF_8),
+					"usn", usn.getBytes(StandardCharsets.UTF_8),
+					"loc", location.toExternalForm().getBytes(StandardCharsets.UTF_8));
 		
 		}catch( Throwable e ){
 			
 			Debug.printStackTrace(e);
 			
-			return( null );
+			return null;
 		}
 	}
 	

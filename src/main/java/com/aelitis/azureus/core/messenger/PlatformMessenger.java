@@ -25,6 +25,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
+import it.pgp.misc.Utils;
 import org.gudy.azureus2.core3.util.*;
 import org.gudy.azureus2.core3.util.Timer;
 import org.gudy.azureus2.plugins.utils.StaticUtilities;
@@ -238,10 +239,7 @@ public class PlatformMessenger
 		processQueue(null, map);
 	}
 
-	/**
-	 * @param requiresAuthorization 
-	 * 
-	 */
+
 	protected static void processQueue(String queueID, Map mapQueue) {
 		if (!initialized) {
 			init();
@@ -257,11 +255,12 @@ public class PlatformMessenger
 		StringBuilder urlStem = new StringBuilder();
 		long sequenceNo = 0;
 
-		Map<String, Object> mapPayload = new HashMap<>();
-		mapPayload.put("azid", ConstantsVuze.AZID);
-		mapPayload.put("azv", Constants.AZUREUS_VERSION);
-		mapPayload.put("mode", FeatureUtils.getPlusMode());
-		mapPayload.put("noadmode", FeatureUtils.getNoAdsMode());
+		Map<String, Object> mapPayload = Utils.typedMapOf(
+				"azid", ConstantsVuze.AZID,
+				"azv", Constants.AZUREUS_VERSION,
+				"mode", FeatureUtils.getPlusMode(),
+				"noadmode", FeatureUtils.getNoAdsMode()
+		);
 		mapPayload.putAll(mapExtra);
 		List<Map> listCommands = new ArrayList<>();
 		mapPayload.put("commands", listCommands);

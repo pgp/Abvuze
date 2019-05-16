@@ -23,6 +23,7 @@ import java.util.*;
 import java.io.*;
 import java.nio.ByteBuffer;
 
+import it.pgp.misc.Utils;
 import org.gudy.azureus2.core3.torrent.TOTorrent;
 import org.gudy.azureus2.core3.torrent.TOTorrentFile;
 import org.gudy.azureus2.core3.util.Debug;
@@ -973,11 +974,10 @@ FMFileAccessPieceReorderer
 		long		next_piece_index,
 		int[]		piece_map )
 	{
-		Map	map = new HashMap();
-		
-		map.put( "st", (long) storage_type);
-		map.put( "len", current_length);
-		map.put( "next", next_piece_index);
+		Map	map = Utils.mapOf(
+				"st", (long) storage_type,
+				"len", current_length,
+				"next", next_piece_index);
 		
 		byte[]	pieces_bytes = new byte[ piece_map.length * 4 ];
 		
@@ -1000,7 +1000,7 @@ FMFileAccessPieceReorderer
 		
 		map.put( "pieces", 	pieces_bytes );
 		
-		return( map );
+		return map;
 	}
 	
 	protected static void

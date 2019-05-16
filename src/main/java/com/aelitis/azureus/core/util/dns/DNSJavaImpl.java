@@ -1,6 +1,7 @@
 package com.aelitis.azureus.core.util.dns;
 
 import com.aelitis.azureus.core.util.DNSUtils;
+import it.pgp.misc.Utils;
 import org.xbill.DNS.*;
 
 import java.net.Inet6Address;
@@ -11,13 +12,12 @@ import java.util.*;
 // TODO check special characters against DNSUtilsImpl, find domain with suitable TXT records
 public class DNSJavaImpl implements DNSUtils.DNSUtilsIntf {
 
-    private static final Map<String, String> test_records = new HashMap<String, String>(){{
-        put("test1.test.null", "BITTORRENT DENY ALL");
-        put("test2.test.null", "BITTORRENT");
-        put("test3.test.null", "BITTORRENT TCP:1 TCP:2 UDP:1 UDP:2");
-        put("test4.test.null", "BITTORRENT TCP:3");
-        put("test5.test.null", "BITTORRENT UDP:4");
-    }};
+    private static final Map<String, String> test_records = Utils.typedMapOf(
+            "test1.test.null", "BITTORRENT DENY ALL",
+            "test2.test.null", "BITTORRENT",
+            "test3.test.null", "BITTORRENT TCP:1 TCP:2 UDP:1 UDP:2",
+            "test4.test.null", "BITTORRENT TCP:3",
+            "test5.test.null", "BITTORRENT UDP:4");
 
     @Override
     public DNSUtils.DNSDirContext getInitialDirContext() throws Exception {

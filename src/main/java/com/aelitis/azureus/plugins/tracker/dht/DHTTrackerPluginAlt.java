@@ -28,6 +28,7 @@ import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.util.*;
 
+import it.pgp.misc.Utils;
 import org.gudy.azureus2.core3.util.AERunnable;
 import org.gudy.azureus2.core3.util.AEThread2;
 import org.gudy.azureus2.core3.util.AsyncDispatcher;
@@ -561,21 +562,16 @@ DHTTrackerPluginAlt
 			}
 				
 			queried_nodes.add( address );
-			
-			Map<String,Object> map = new HashMap<>();
-						
-			map.put( "q", "get_peers" );
-			map.put( "y", "q" );
-			
-			Map<String,Object> args = new HashMap<>();
-			
-			map.put( "a", args );
-			
-			args.put( "id", NID );
-			
-			args.put( "info_hash", torrent_hash );
-			
-			args.put( "noseed", (long) (no_seeds ? 1 : 0));
+
+			Map<String,Object> map = Utils.typedMapOf(
+					"q", "get_peers",
+					"y", "q",
+					"a", Utils.typedMapOf(
+							"id", NID,
+							"info_hash", torrent_hash,
+							"noseed", (long) (no_seeds ? 1 : 0)
+					)
+			);
 					
 			byte[]	tid = send( this, server, address, map );
 				
