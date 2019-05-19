@@ -24,7 +24,7 @@ import java.nio.ByteBuffer;
 import java.util.*;
 
 import org.gudy.azureus2.core3.util.Debug;
-import org.gudy.azureus2.core3.util.SHA1Simple;
+import org.gudy.azureus2.core3.util.SHA1Hasher;
 import org.gudy.azureus2.plugins.PluginInterface;
 import org.gudy.azureus2.plugins.download.*;
 import org.gudy.azureus2.plugins.messaging.*;
@@ -186,7 +186,7 @@ public class MessageManagerImpl implements MessageManager, NATTraversalHandler {
 	final String	type 		= "AEGEN:" + _type;
 	final byte[]	type_bytes 	= type.getBytes();
 	
-	final byte[][]	shared_secrets = new byte[][]{ new SHA1Simple().calculateHash( type_bytes ) };
+	final byte[][]	shared_secrets = new byte[][]{ new SHA1Hasher().calculateHash( type_bytes ) };
 		
 	synchronized( message_handlers ){
 		

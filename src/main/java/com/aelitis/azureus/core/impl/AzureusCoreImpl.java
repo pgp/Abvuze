@@ -384,7 +384,7 @@ AzureusCoreImpl
 								
 								if ( sha1_hash == null ){			
 
-									sha1_hash	= new SHA1Simple().calculateHash( torrent.getHash());
+									sha1_hash	= new SHA1Hasher().calculateHash( torrent.getHash());
 									
 									dm.setData( "AZInstanceManager::sha1_hash", sha1_hash );
 								}

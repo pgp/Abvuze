@@ -135,7 +135,7 @@ ConcurrentHasherRequest
 				
 			}else{
 				
-				result = hasher.calculateHash( buffer );
+				result = hasher.calculateHash(buffer);
 			}
 			
 			sem.releaseForever();

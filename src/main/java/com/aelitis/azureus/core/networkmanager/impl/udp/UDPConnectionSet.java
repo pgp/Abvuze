@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 
+import javax.crypto.Cipher;
+import javax.crypto.ShortBufferException;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.gudy.azureus2.core3.logging.LogEvent;
@@ -33,9 +35,6 @@ import org.gudy.azureus2.core3.util.Debug;
 import org.gudy.azureus2.core3.util.RandomUtils;
 import org.gudy.azureus2.core3.util.SHA1Hasher;
 import org.gudy.azureus2.core3.util.SystemTime;
-import org.spongycastle.crypto.CipherParameters;
-import org.spongycastle.crypto.engines.RC4Engine;
-import org.spongycastle.crypto.params.KeyParameter;
 
 import com.aelitis.net.udp.uc.PRUDPPacketReply;
 
@@ -75,8 +74,8 @@ UDPConnectionSet
 	
 	private UDPConnection	lead_connection;
 		
-	private RC4Engine		header_cipher_out;
-	private RC4Engine		header_cipher_in;
+	private Cipher		header_cipher_out;
+	private Cipher		header_cipher_in;
 	
 	private SequenceGenerator	in_seq_generator;
 	private SequenceGenerator	out_seq_generator;
@@ -326,10 +325,10 @@ UDPConnectionSet
 				    
 			    	// for RC4 enc/dec is irrelevant
 			    
-			    RC4Engine rc4_engine_a	= getCipher( a_key );	
-	    		RC4Engine rc4_engine_b	= getCipher( b_key );
-	    		RC4Engine rc4_engine_c	= getCipher( c_key );	
-	    		RC4Engine rc4_engine_d	= getCipher( d_key );	
+			    Cipher rc4_engine_a	= getCipher( a_key );
+				Cipher rc4_engine_b	= getCipher( b_key );
+				Cipher rc4_engine_c	= getCipher( c_key );
+				Cipher rc4_engine_d	= getCipher( d_key );
 	    		
 	    		
 		    	if ( lead_connection.isIncoming()){
@@ -377,27 +376,19 @@ UDPConnectionSet
 		}
 	}
 	
-	private RC4Engine
-	getCipher(
-		byte[]			key )
-	{
-	    SecretKeySpec	secret_key_spec = new SecretKeySpec( key, "RC4" );
-	    
-	    RC4Engine rc4_engine	= new RC4Engine();
-		
-		CipherParameters	params_a = new KeyParameter( secret_key_spec.getEncoded());
-		
-			// for RC4 enc/dec is irrelevant
-		
-		rc4_engine.init( true, params_a ); 
-		
-			// skip first 1024 bytes of stream to protected against a Fluhrer, Mantin and Shamir attack
-    	
-    	byte[]	temp = new byte[1024];
-	
-    	rc4_engine.processBytes( temp, 0, temp.length, temp, 0 );
-    	
-    	return( rc4_engine );
+	private Cipher getCipher(byte[] key) {
+		Cipher engine;
+		try {
+			engine = Cipher.getInstance("RC4");
+			SecretKeySpec rc4Key = new SecretKeySpec(key, "RC4");
+			engine.init(Cipher.ENCRYPT_MODE, rc4Key);
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		engine.update(new byte[1024]); // discard first 1024 bytes by supplying empty vector as input
+
+    	return engine;
 	}
 	
 	private void
@@ -1294,10 +1285,14 @@ UDPConnectionSet
 							receive_done_sequences.removeLast();
 						}
 					}
-					
-					header_cipher_in.processBytes( data, 12, 2, data, 12 );
-		
-					int	header_len = buffer.getShort()&0xffff;
+
+                    try {
+                        header_cipher_in.update( data, 12, 2, data, 12 );
+                    } catch (ShortBufferException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    int	header_len = buffer.getShort()&0xffff;
 					
 					if ( header_len > data.length ){
 						
@@ -1307,10 +1302,14 @@ UDPConnectionSet
 						
 						return;
 					}
-					
-					header_cipher_in.processBytes( data, 14, header_len-14, data, 14 );
-					
-					SHA1Hasher	hasher = new SHA1Hasher();
+
+                    try {
+                        header_cipher_in.update( data, 14, header_len-14, data, 14 );
+                    } catch (ShortBufferException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    SHA1Hasher	hasher = new SHA1Hasher();
 					
 					hasher.update( data, 4, 4 );
 					hasher.update( data, 12, header_len - 4 - 12 );
@@ -2241,11 +2240,14 @@ UDPConnectionSet
 		
 		total_length += 4;
 		
-			// don't encrypt the sequence numbers
-		
-		header_cipher_out.processBytes( buffer_bytes, 12, total_length-12, buffer_bytes, 12 );
-		
-		if ( total_length > MAX_HEADER ){
+		// don't encrypt the sequence numbers
+        try {
+            header_cipher_out.update(buffer_bytes, 12, total_length-12, buffer_bytes, 12);
+        } catch (ShortBufferException e) {
+            throw new RuntimeException(e);
+        }
+
+        if ( total_length > MAX_HEADER ){
 			
 			Debug.out( "MAX_HEADER exceeded!!!!" );
 			
@@ -2439,16 +2441,16 @@ UDPConnectionSet
 	
 
 	
-	protected int
-	cipherInt(
-		RC4Engine	cipher,
-		int			i )
-	{
-		byte[]	bytes = intToBytes( i );
-		
-		cipher.processBytes( bytes, 0, bytes.length, bytes, 0 );
-		
-		return( bytesToInt( bytes, 0 ));
+	protected int cipherInt(Cipher cipher, int i) {
+		byte[]	bytes = intToBytes(i);
+        try {
+            cipher.update( bytes, 0, bytes.length, bytes, 0 );
+        }
+        catch(ShortBufferException e) {
+            throw new RuntimeException(e);
+        }
+
+        return bytesToInt(bytes,0);
 	}
 	
 	protected int
@@ -2552,7 +2554,7 @@ UDPConnectionSet
 	SequenceGenerator
 	{
 		private final Random		generator;
-		private final RC4Engine	cipher;
+		private final Cipher	cipher;
 		private final boolean		in;
 		
 		private final int[]	seq_memory;
@@ -2565,7 +2567,7 @@ UDPConnectionSet
 		protected
 		SequenceGenerator(
 			Random		_generator,
-			RC4Engine	_cipher,
+			Cipher	_cipher,
 			boolean		_in )
 		{
 			generator	= _generator;

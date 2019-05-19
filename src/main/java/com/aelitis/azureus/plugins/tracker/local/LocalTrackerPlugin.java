@@ -28,7 +28,7 @@ import java.util.*;
 import org.gudy.azureus2.core3.internat.MessageText;
 import org.gudy.azureus2.core3.util.AERunnable;
 import org.gudy.azureus2.core3.util.AsyncDispatcher;
-import org.gudy.azureus2.core3.util.SHA1Simple;
+import org.gudy.azureus2.core3.util.SHA1Hasher;
 import org.gudy.azureus2.core3.util.SystemTime;
 import org.gudy.azureus2.core3.util.TorrentUtils;
 import org.gudy.azureus2.plugins.*;
@@ -460,7 +460,7 @@ LocalTrackerPlugin
 			return;
 		}
 		
-		byte[] hash = new SHA1Simple().calculateHash(download.getTorrent().getHash());
+		byte[] hash = new SHA1Hasher().calculateHash(download.getTorrent().getHash());
 
 		
 		AZInstanceTracked[]	peers = 

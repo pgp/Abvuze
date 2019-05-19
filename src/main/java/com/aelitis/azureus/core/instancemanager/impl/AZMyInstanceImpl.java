@@ -76,7 +76,7 @@ AZMyInstanceImpl
 			id	= "" + SystemTime.getCurrentTime();
 		}
 		
-		id = ByteFormatter.encodeString( new SHA1Simple().calculateHash( id.getBytes()));
+		id = ByteFormatter.encodeString( new SHA1Hasher().calculateHash( id.getBytes()));
 		
 		COConfigurationManager.addListener( 
 			new COConfigurationListener()

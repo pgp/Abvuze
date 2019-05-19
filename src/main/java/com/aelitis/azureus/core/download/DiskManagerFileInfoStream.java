@@ -27,7 +27,7 @@ import java.util.*;
 import org.gudy.azureus2.core3.util.AESemaphore;
 import org.gudy.azureus2.core3.util.AEThread2;
 import org.gudy.azureus2.core3.util.Debug;
-import org.gudy.azureus2.core3.util.SHA1Simple;
+import org.gudy.azureus2.core3.util.SHA1Hasher;
 import org.gudy.azureus2.plugins.disk.DiskManagerChannel;
 import org.gudy.azureus2.plugins.disk.DiskManagerEvent;
 import org.gudy.azureus2.plugins.disk.DiskManagerFileInfo;
@@ -62,7 +62,7 @@ DiskManagerFileInfoStream
 		save_to				= _save_to;
 		
 		try{
-			hash		= new SHA1Simple().calculateHash( _save_to.getAbsolutePath().getBytes(StandardCharsets.UTF_8));
+			hash		= new SHA1Hasher().calculateHash( _save_to.getAbsolutePath().getBytes(StandardCharsets.UTF_8));
 			
 		}catch( Throwable e ){
 			

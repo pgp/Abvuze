@@ -1,39 +1,19 @@
- /*
- * Created on Apr 13, 2004
- * Created by Alon Rohter
- * Copyright (C) Azureus Software, Inc, All Rights Reserved.
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- * 
- */
-
 package org.gudy.azureus2.core3.util;
 
 import java.nio.ByteBuffer;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 
-/**
- * SHA-1 hasher utility frontend.
- */
 public final class SHA1Hasher {
-  private final SHA1 sha1;
+  private final MessageDigest sha1;
 
-
-  /**
-   * Create a new SHA1Hasher instance
-   */
   public SHA1Hasher() {
-    sha1 = new SHA1();
+    try {
+      sha1 = MessageDigest.getInstance("SHA-1");
+    } catch (NoSuchAlgorithmException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   
@@ -43,19 +23,15 @@ public final class SHA1Hasher {
    * @return 20-byte hash
    */
   public byte[] calculateHash( byte[] bytes ) {
-    ByteBuffer buff = ByteBuffer.wrap( bytes );
-    return calculateHash( buff );
+    sha1.reset();
+    sha1.update(bytes);
+    return sha1.digest();
   }
 
-  
-  /**
-   * Calculate the SHA-1 hash for the given buffer.
-   * @param buffer data to hash
-   * @return 20-byte hash
-   */
-  public byte[] calculateHash( ByteBuffer buffer ) {
+  public byte[] calculateHash( ByteBuffer bb ) {
     sha1.reset();
-    return sha1.digest( buffer );
+    sha1.update(bb);
+    return sha1.digest();
   }
   
   
@@ -64,7 +40,7 @@ public final class SHA1Hasher {
    * @param data input
    */
   public void update( byte[] data ) {
-  	update( ByteBuffer.wrap( data ));
+  	sha1.update(data);
   }
   
   
@@ -76,16 +52,7 @@ public final class SHA1Hasher {
    * @param len length
    */
   public void update( byte[] data, int pos, int len ) {
-  	update( ByteBuffer.wrap( data, pos, len ));
-  }
-  
-  
-  /**
-   * Start or continue a hash calculation with the given data.
-   * @param buffer data input
-   */
-  public void update( ByteBuffer buffer ) {
-    sha1.update( buffer );
+  	sha1.update(data, pos, len);
   }
   
 
@@ -106,22 +73,6 @@ public final class SHA1Hasher {
    */
   public void reset() {
     sha1.reset();
-  }
-  
-
-  /**
-   * Save the current hasher state for later resuming.
-   */
-  public void saveHashState() {
-    sha1.saveState();
-  }
-  
-  
-  /**
-   * Restore the hasher state from previous save.
-   */
-  public void restoreHashState() {
-    sha1.restoreState();
   }
   
 }

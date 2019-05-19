@@ -38,7 +38,7 @@ import org.gudy.azureus2.core3.util.AETemporaryFileHandler;
 import org.gudy.azureus2.core3.util.Base32;
 import org.gudy.azureus2.core3.util.Debug;
 import org.gudy.azureus2.core3.util.FileUtil;
-import org.gudy.azureus2.core3.util.SHA1Simple;
+import org.gudy.azureus2.core3.util.SHA1Hasher;
 import org.gudy.azureus2.core3.util.UrlUtils;
 import org.gudy.azureus2.plugins.disk.DiskManagerChannel;
 import org.gudy.azureus2.plugins.disk.DiskManagerEvent;
@@ -105,7 +105,7 @@ DiskManagerFileInfoURL
 		}
 		
 		try{
-			hash		= new SHA1Simple().calculateHash( ( "DiskManagerFileInfoURL" +  url.toExternalForm()).getBytes(StandardCharsets.UTF_8));
+			hash		= new SHA1Hasher().calculateHash( ( "DiskManagerFileInfoURL" +  url.toExternalForm()).getBytes(StandardCharsets.UTF_8));
 			
 		}catch( Throwable e ){
 			

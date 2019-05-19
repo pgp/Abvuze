@@ -34,7 +34,7 @@ import org.gudy.azureus2.core3.util.BEncoder;
 import org.gudy.azureus2.core3.util.Constants;
 import org.gudy.azureus2.core3.util.Debug;
 import org.gudy.azureus2.core3.util.RandomUtils;
-import org.gudy.azureus2.core3.util.SHA1Simple;
+import org.gudy.azureus2.core3.util.SHA1Hasher;
 import org.gudy.azureus2.core3.util.SystemTime;
 
 import com.aelitis.azureus.core.dht.DHT;
@@ -73,7 +73,7 @@ DHTUDPUtils
 			}
 		};
 		
-	private static final SHA1Simple	hasher = new SHA1Simple();
+	private static final SHA1Hasher	hasher = new SHA1Hasher();
 	
 	protected static byte[]
 	getNodeID(

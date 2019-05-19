@@ -28,9 +28,9 @@ import java.security.MessageDigest;
 import java.util.*;
 import java.util.Map.Entry;
 
+import com.aelitis.azureus.core.security.impl.CryptoManagerImpl;
 import org.gudy.azureus2.core3.util.*;
 import org.spongycastle.crypto.CipherParameters;
-import org.spongycastle.crypto.engines.RC4Engine;
 import org.spongycastle.crypto.params.KeyParameter;
 
 import com.aelitis.azureus.core.dht.*;
@@ -50,6 +50,9 @@ import com.aelitis.azureus.core.dht.router.DHTRouterFactory;
 import com.aelitis.azureus.core.dht.router.DHTRouterStats;
 import com.aelitis.azureus.core.dht.transport.*;
 import com.aelitis.azureus.core.dht.transport.udp.DHTTransportUDP;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
 
 /**
  * @author parg
@@ -1260,26 +1263,9 @@ DHTControlImpl
 		
 		return( obs_key );
 	}
-	
-	protected byte[]
-	getObfuscatedValue(
-		byte[]		plain_key )
-	{
-        RC4Engine	engine = new RC4Engine();
-        
-		CipherParameters	params = new KeyParameter( new SHA1Simple().calculateHash( plain_key ));
-		
-		engine.init( true, params ); 
 
-		byte[]	temp = new byte[1024];
-		
-		engine.processBytes( temp, 0, 1024, temp, 0 );
-		
-		final byte[] obs_value = new byte[ plain_key.length ];
-		
-		engine.processBytes( plain_key, 0, plain_key.length, obs_value, 0 );
-		
-		return( obs_value );
+	protected byte[] getObfuscatedValue(byte[] plain_key) {
+		return CryptoManagerImpl.obfuscateGeneric(plain_key,plain_key);
 	}
 	
 	protected DHTTransportValue
@@ -3979,7 +3965,7 @@ DHTControlImpl
 	{
 		if ( encode_keys ){
 			
-			byte[]	temp = new SHA1Simple().calculateHash( key );
+			byte[]	temp = new SHA1Hasher().calculateHash( key );
 			
 			byte[]	result =  new byte[node_id_byte_count];
 			

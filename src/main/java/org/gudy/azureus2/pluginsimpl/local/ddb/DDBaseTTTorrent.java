@@ -164,7 +164,7 @@ DDBaseTTTorrent
                 if (sha1 == null) {
 
                     sha1 = pi.getUtilities().getFormatters().encodeBytesToString(
-                            new SHA1Simple().calculateHash(dl.getTorrent().getHash()));
+                            new SHA1Hasher().calculateHash(dl.getTorrent().getHash()));
 
                     dl.setAttribute(ta_sha1, sha1);
                 }
@@ -197,7 +197,7 @@ DDBaseTTTorrent
                             if (sha1 == null) {
 
                                 sha1 = pi.getUtilities().getFormatters().encodeBytesToString(
-                                        new SHA1Simple().calculateHash(dl.getTorrent().getHash()));
+                                        new SHA1Hasher().calculateHash(dl.getTorrent().getHash()));
 
                                 dl.setAttribute(ta_sha1, sha1);
                             }
@@ -383,7 +383,7 @@ DDBaseTTTorrent
 	{
 		byte[]	torrent_hash	= ((DDBaseKeyImpl)key).getBytes();
 		
-		byte[]	lookup_key	= new SHA1Simple().calculateHash( torrent_hash );
+		byte[]	lookup_key	= new SHA1Hasher().calculateHash( torrent_hash );
 					
 		if ( TRACE ){
 			System.out.println( "TorrentXfer: sending via sha1(hash)" );

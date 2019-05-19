@@ -203,7 +203,6 @@ ConcurrentHasher
 		/**
 		 * Add an asynchronous request if listener supplied, sync otherwise 
 		 * @param buffer
-		 * @param priority
 		 * @param listener
 		 * @param low_priorty low priority checks will cause the "friendly hashing" setting to be
 		 * taken into account

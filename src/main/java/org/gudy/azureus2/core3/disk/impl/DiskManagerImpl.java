@@ -924,7 +924,7 @@ DiskManagerImpl
         				
         				if ( comps.isEmpty()){
         				
-        					String prefix = Base32.encode( new SHA1Simple().calculateHash( relative_file.toString().getBytes(StandardCharsets.UTF_8))).substring( 0, 4 );
+        					String prefix = Base32.encode( new SHA1Hasher().calculateHash( relative_file.toString().getBytes(StandardCharsets.UTF_8))).substring( 0, 4 );
         					
         					comp = prefix + "_" + comp;
         				}

@@ -28,7 +28,7 @@ import java.util.*;
 
 import org.gudy.azureus2.core3.util.BEncoder;
 import org.gudy.azureus2.core3.util.Debug;
-import org.gudy.azureus2.core3.util.SHA1Simple;
+import org.gudy.azureus2.core3.util.SHA1Hasher;
 
 import com.aelitis.azureus.core.security.CryptoECCUtils;
 import com.aelitis.azureus.core.subs.Subscription;
@@ -113,7 +113,7 @@ SubscriptionBodyImpl
 							
 		}else{
 		
-			byte[]	hash = new SHA1Simple().calculateHash( public_key );
+			byte[]	hash = new SHA1Hasher().calculateHash( public_key );
 
 			byte[]	short_id = new byte[SIMPLE_ID_LENGTH];
 
@@ -129,7 +129,7 @@ SubscriptionBodyImpl
   	{
   		byte[]	short_id = new byte[SIMPLE_ID_LENGTH];
 
-  		byte[] 	explicit_sid = new SHA1Simple().calculateHash((byte[])singleton_details.get( "key" ));
+  		byte[] 	explicit_sid = new SHA1Hasher().calculateHash((byte[])singleton_details.get( "key" ));
   			
   		System.arraycopy( explicit_sid, 0, short_id, 0, SIMPLE_ID_LENGTH );
   		
@@ -240,7 +240,7 @@ SubscriptionBodyImpl
 			
 			byte[] contents = BEncoder.encode( details );
 			
-			byte[] actual_hash = new SHA1Simple().calculateHash( contents );
+			byte[] actual_hash = new SHA1Hasher().calculateHash( contents );
 	
 			if ( !Arrays.equals( actual_hash, hash )){
 				
@@ -252,7 +252,7 @@ SubscriptionBodyImpl
 				
 				contents = BEncoder.encode( details_copy );
 				
-				actual_hash = new SHA1Simple().calculateHash( contents );
+				actual_hash = new SHA1Hasher().calculateHash( contents );
 			}
 			
 			if ( !Arrays.equals( actual_hash, hash )){
@@ -462,7 +462,7 @@ SubscriptionBodyImpl
 			
 			byte[] contents = BEncoder.encode( details );
 					
-			byte[] new_hash = new SHA1Simple().calculateHash( contents );
+			byte[] new_hash = new SHA1Hasher().calculateHash( contents );
 			
 			byte[] old_hash	= (byte[])map.get( "hash" );
 			
@@ -476,7 +476,7 @@ SubscriptionBodyImpl
 				
 				contents = BEncoder.encode( details_copy );
 				
-				new_hash = new SHA1Simple().calculateHash( contents );
+				new_hash = new SHA1Hasher().calculateHash( contents );
 			}
 			
 			if ( old_hash == null || !Arrays.equals( old_hash, new_hash )){

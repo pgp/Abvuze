@@ -28,7 +28,7 @@ import org.gudy.azureus2.core3.config.COConfigurationManager;
 import org.gudy.azureus2.core3.util.Base32;
 import org.gudy.azureus2.core3.util.Debug;
 import org.gudy.azureus2.core3.util.DisplayFormatters;
-import org.gudy.azureus2.core3.util.SHA1Simple;
+import org.gudy.azureus2.core3.util.SHA1Hasher;
 import org.gudy.azureus2.core3.util.SystemTime;
 import org.gudy.azureus2.plugins.utils.search.SearchResult;
 
@@ -81,7 +81,7 @@ SubscriptionResultImpl
 		String	key1_str =  result.getEngine().getId() + ":" + result.getName();
 		
 		try{
-			byte[] sha1 = new SHA1Simple().calculateHash( key1_str.getBytes(StandardCharsets.UTF_8));
+			byte[] sha1 = new SHA1Hasher().calculateHash( key1_str.getBytes(StandardCharsets.UTF_8));
 			
 			key1 = new byte[10];
 			
@@ -99,7 +99,7 @@ SubscriptionResultImpl
 			String	key2_str = result.getEngine().getId() + ":" + uid;
 			
 			try{
-				byte[] sha1 = new SHA1Simple().calculateHash( key2_str.getBytes(StandardCharsets.UTF_8));
+				byte[] sha1 = new SHA1Hasher().calculateHash( key2_str.getBytes(StandardCharsets.UTF_8));
 				
 				key2 = new byte[10];
 				

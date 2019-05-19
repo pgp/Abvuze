@@ -2060,7 +2060,7 @@ DHTPluginStorageManager
 		byte[]			key_in,
 		int				offset )
 	{
-		return(new SHA1Simple().calculateHash( diversifyKeyLocal( key_in, offset )));
+		return(new SHA1Hasher().calculateHash( diversifyKeyLocal( key_in, offset )));
 	}
 	
 	public static byte[]

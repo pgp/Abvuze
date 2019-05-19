@@ -27,18 +27,12 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.gudy.azureus2.core3.util.Debug;
-import org.spongycastle.crypto.CipherParameters;
-import org.spongycastle.crypto.engines.RC4Engine;
-import org.spongycastle.crypto.params.KeyParameter;
 
 public class 
 TransportCipher 
 {
-	private static boolean	internal_rc4	= true;	// force internal as we want 160 bit and JCE no supports it
-	
 	private Cipher		cipher;
-	private RC4Engine	rc4_engine;
-	
+
 	public
 	TransportCipher(
 		String					algorithm,
@@ -52,51 +46,25 @@ TransportCipher
     
     	cipher.init( mode, key_spec, params );
 	}
-	
-	TransportCipher(
-		String					algorithm,
-		int						mode,
-		SecretKeySpec			key_spec )
-		
-		throws Exception
-	{
-	    if ( algorithm.equals( "RC4" )){
-	    	
-	    	if ( !internal_rc4 ){
-	    		
-	    		try{
-	    	    	cipher = Cipher.getInstance( algorithm );
-	    		    
-	    	    	cipher.init( mode, key_spec );
-	    	    	
-	    		}catch( Throwable e ){
-	    			
-	    			internal_rc4	= true;
-	    		}
-	    	}
-	    	
-	    	if ( internal_rc4 ){
-	    		    		
-	    		rc4_engine	= new RC4Engine();
-	    		
-	    		CipherParameters	params = new KeyParameter(key_spec.getEncoded());
-	    		
-	    		rc4_engine.init( mode == Cipher.ENCRYPT_MODE, params ); 
-	    	}
-	    	
-	    	//System.out.println( "RC4 key: " + ByteFormatter.encodeString( key_spec.getEncoded()));
-	    	
-    			// skip first 1024 bytes of stream to protected against a Fluhrer, Mantin and Shamir attack
-    	
-	    	byte[]	temp = new byte[1024];
-    	
-	    	temp = update( temp );
-	    	
-	    	//System.out.println( "RC4: first discard = " + ByteFormatter.encodeString( temp, 0, 4 ));
-	    }else{
-	    	
+
+	TransportCipher(String algorithm, int mode, SecretKeySpec key_spec ) throws Exception {
+		if (algorithm.equals("RC4")){
+			try{
+				cipher = Cipher.getInstance( algorithm );
+				cipher.init( mode, key_spec );
+			}
+			catch( Exception e ){
+				throw new RuntimeException(e);
+			}
+
+			//System.out.println( "RC4 key: " + ByteFormatter.encodeString( key_spec.getEncoded()));
+			// skip first 1024 bytes of stream to protected against a Fluhrer, Mantin and Shamir attack
+			update(new byte[1024]);
+
+			//System.out.println( "RC4: first discard = " + ByteFormatter.encodeString( temp, 0, 4 ));
+		}
+		else {
 	    	cipher = Cipher.getInstance( algorithm );
-	    
 	    	cipher.init( mode, key_spec );
 	    }
 	}
@@ -113,27 +81,17 @@ TransportCipher
    		byte[]	data,
    		int		offset,
    		int		length )
-   	{
+	{
 		byte[]	result;
-	
-		if ( length == 0 ){
-			
-				// watch out, cipher.update returns NULL with 0 length input
-			
+		if(length == 0){
+			// watch out, cipher.update returns null with 0 length input
 			result = new byte[0];
-			
-		}else if ( cipher != null ){
-						
-			result = cipher.update( data, offset, length );
-			
-		}else{
-						
-			result = new byte[length];
-			
-			rc4_engine.processBytes( data, offset, length, result, 0 );
 		}
-	
-		return( result );
+		else if ( cipher != null ){
+			result = cipher.update( data, offset, length );
+		}
+		else throw new RuntimeException("No RC4 implementation available");
+		return result;
    	}
 	           	
 	protected void

@@ -49,7 +49,7 @@ import org.gudy.azureus2.core3.util.ByteFormatter;
 import org.gudy.azureus2.core3.util.Debug;
 import org.gudy.azureus2.core3.util.FileUtil;
 import org.gudy.azureus2.core3.util.RandomUtils;
-import org.gudy.azureus2.core3.util.SHA1Simple;
+import org.gudy.azureus2.core3.util.SHA1Hasher;
 import org.gudy.azureus2.core3.util.SimpleTimer;
 import org.gudy.azureus2.core3.util.StringInterner;
 import org.gudy.azureus2.core3.util.SystemTime;
@@ -2217,7 +2217,7 @@ RelatedContentManager
 
 				// we need something to use
 			
-			final byte[] from_hash = new SHA1Simple().calculateHash( key_bytes );
+			final byte[] from_hash = new SHA1Hasher().calculateHash( key_bytes );
 			
 			String op_str = "Content rel read: size=" + file_size;
 
@@ -4346,7 +4346,7 @@ RelatedContentManager
 		if ( bytes == null ){
 			
 			try{
-				bytes = new SHA1Simple().calculateHash( getPrivateInfoKey(info).getBytes(StandardCharsets.ISO_8859_1));
+				bytes = new SHA1Hasher().calculateHash( getPrivateInfoKey(info).getBytes(StandardCharsets.ISO_8859_1));
 				
 			}catch( Throwable e ){
 				

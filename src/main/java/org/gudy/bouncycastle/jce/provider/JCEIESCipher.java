@@ -14,10 +14,8 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.interfaces.DHPrivateKey;
 
-//import org.gudy.bouncycastle.crypto.agreement.DHBasicAgreement;
 import org.spongycastle.jce.provider.BouncyCastleProvider;
 import org.spongycastle.jce.provider.DHUtil;
-import org.gudy.bouncycastle.jce.provider.ECUtil;
 import org.spongycastle.jce.provider.JCEECPublicKey;
 import org.spongycastle.crypto.CipherParameters;
 import org.spongycastle.crypto.InvalidCipherTextException;

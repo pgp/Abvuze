@@ -618,7 +618,7 @@ ProtocolDecoderPHE
 		    
 		    System.arraycopy( secret_bytes_64, 0, secret_bytes, 0, 32 );
 		    
-		    sha1_secret_bytes	= new SHA1Simple().calculateHash( secret_bytes );
+		    sha1_secret_bytes	= new SHA1Hasher().calculateHash( secret_bytes );
 		    		    	
 		    SecretKeySpec	secret_key_spec_a = new SecretKeySpec( secret_bytes, 0, RC4_STREAM_KEY_SIZE_BYTES, RC4_STREAM_ALG );
 		        

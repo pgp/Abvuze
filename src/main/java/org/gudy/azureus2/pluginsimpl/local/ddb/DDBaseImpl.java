@@ -26,7 +26,7 @@ import org.gudy.azureus2.core3.util.AEMonitor;
 import org.gudy.azureus2.core3.util.AENetworkClassifier;
 import org.gudy.azureus2.core3.util.Debug;
 import org.gudy.azureus2.core3.util.HashWrapper;
-import org.gudy.azureus2.core3.util.SHA1Simple;
+import org.gudy.azureus2.core3.util.SHA1Hasher;
 import org.gudy.azureus2.core3.util.SystemTime;
 import org.gudy.azureus2.plugins.PluginInterface;
 import org.gudy.azureus2.plugins.ddb.*;
@@ -647,7 +647,7 @@ DDBaseImpl
 					
 					payload_length	= 1;
 					
-					current_key = new SHA1Simple().calculateHash( current_key );
+					current_key = new SHA1Hasher().calculateHash( current_key );
 				}
 			}
 			
@@ -1237,7 +1237,7 @@ DDBaseImpl
 						
 							// continuation exists
 						
-						final	byte[]	next_key_bytes = new SHA1Simple().calculateHash( key_bytes );
+						final	byte[]	next_key_bytes = new SHA1Hasher().calculateHash( key_bytes );
 						
 						complete_disabled	= true;
 		

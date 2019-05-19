@@ -27,19 +27,7 @@ import java.util.*;
 import org.gudy.azureus2.core3.global.GlobalManager;
 import org.gudy.azureus2.core3.global.GlobalManagerAdapter;
 import org.gudy.azureus2.core3.peer.PEPeerManager;
-import org.gudy.azureus2.core3.util.AENetworkClassifier;
-import org.gudy.azureus2.core3.util.AddressUtils;
-import org.gudy.azureus2.core3.util.Average;
-import org.gudy.azureus2.core3.util.Constants;
-import org.gudy.azureus2.core3.util.Debug;
-import org.gudy.azureus2.core3.util.HashWrapper;
-import org.gudy.azureus2.core3.util.LightHashMap;
-import org.gudy.azureus2.core3.util.SHA1;
-import org.gudy.azureus2.core3.util.SimpleTimer;
-import org.gudy.azureus2.core3.util.SystemTime;
-import org.gudy.azureus2.core3.util.TimerEvent;
-import org.gudy.azureus2.core3.util.TimerEventPerformer;
-import org.gudy.azureus2.core3.util.TimerEventPeriodic;
+import org.gudy.azureus2.core3.util.*;
 import org.gudy.azureus2.plugins.PluginInterface;
 import org.gudy.azureus2.plugins.download.Download;
 import org.gudy.azureus2.plugins.download.DownloadAnnounceResult;
@@ -2408,12 +2396,12 @@ for (Object ip1 : ips) {
 				
 				byte[]	hash = t.getHash();
 				
-				SHA1	sha1 = new SHA1();
+				SHA1Hasher sha1 = new SHA1Hasher();
 			
-				sha1.update( ByteBuffer.wrap( IV ));
-				sha1.update( ByteBuffer.wrap( hash ));
+				sha1.update(IV);
+				sha1.update(hash);
 				
-				id = new HashWrapper( sha1.digest() );
+				id = new HashWrapper( sha1.getDigest() );
 			}
 		}
 		

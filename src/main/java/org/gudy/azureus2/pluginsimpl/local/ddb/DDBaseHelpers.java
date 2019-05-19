@@ -26,7 +26,7 @@ import java.io.ObjectOutputStream;
 import java.nio.charset.StandardCharsets;
 
 import org.gudy.azureus2.core3.util.HashWrapper;
-import org.gudy.azureus2.core3.util.SHA1Simple;
+import org.gudy.azureus2.core3.util.SHA1Hasher;
 import org.gudy.azureus2.plugins.ddb.DistributedDatabaseException;
 
 /**
@@ -144,6 +144,6 @@ DDBaseHelpers
 			throw( new DistributedDatabaseException( "name doesn't exist for '" + c.getName() + "'" ));
 		}
 			
-		return( new HashWrapper(new SHA1Simple().calculateHash(name.getBytes())));
+		return( new HashWrapper(new SHA1Hasher().calculateHash(name.getBytes())));
 	}
 }

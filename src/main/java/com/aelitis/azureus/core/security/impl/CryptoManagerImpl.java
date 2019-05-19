@@ -22,28 +22,17 @@ package com.aelitis.azureus.core.security.impl;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.math.BigInteger;
-import java.nio.ByteBuffer;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
 import org.gudy.azureus2.core3.security.SESecurityManager;
-import org.gudy.azureus2.core3.util.ByteFormatter;
-import org.gudy.azureus2.core3.util.Debug;
-import org.gudy.azureus2.core3.util.RandomUtils;
-import org.gudy.azureus2.core3.util.SHA1;
-import org.gudy.azureus2.core3.util.SHA1Simple;
-import org.gudy.azureus2.core3.util.SimpleTimer;
-import org.gudy.azureus2.core3.util.SystemTime;
-import org.gudy.azureus2.core3.util.TimerEvent;
-import org.gudy.azureus2.core3.util.TimerEventPerformer;
-import org.spongycastle.crypto.CipherParameters;
-import org.spongycastle.crypto.engines.RC4Engine;
-import org.spongycastle.crypto.params.KeyParameter;
+import org.gudy.azureus2.core3.util.*;
 
 import com.aelitis.azureus.core.security.CryptoHandler;
 import com.aelitis.azureus.core.security.CryptoManager;
@@ -51,7 +40,6 @@ import com.aelitis.azureus.core.security.CryptoManagerException;
 import com.aelitis.azureus.core.security.CryptoManagerKeyListener;
 import com.aelitis.azureus.core.security.CryptoManagerPasswordException;
 import com.aelitis.azureus.core.security.CryptoManagerPasswordHandler;
-import com.aelitis.azureus.core.security.CryptoManager.SRPParameters;
 import com.aelitis.azureus.core.util.CopyOnWriteList;
 
 public class 
@@ -188,33 +176,27 @@ CryptoManagerImpl
 		
 		return( obs_id );
 	}
-	
-	public byte[]
-	obfuscate(
-		byte[]		data )
-	{
-		RC4Engine	engine = new RC4Engine();
-        
-		CipherParameters	params = new KeyParameter( new SHA1Simple().calculateHash( getOBSID()));
-		
-		engine.init( true, params ); 
 
-		byte[]	temp = new byte[1024];
-		
-		engine.processBytes( temp, 0, 1024, temp, 0 );
-		
-		final byte[] obs_value = new byte[ data.length ];
-		
-		engine.processBytes( data, 0, data.length, obs_value, 0 );
-		
-		return( obs_value );
+	public static byte[] obfuscateGeneric(byte[] data, byte[] keyToHash) {
+		Cipher engine;
+		try {
+			engine = Cipher.getInstance("RC4");
+			SecretKeySpec rc4Key = new SecretKeySpec(new SHA1Hasher().calculateHash(keyToHash), "RC4");
+			engine.init(Cipher.ENCRYPT_MODE, rc4Key);
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		engine.update(new byte[1024]); // discard first 1024 bytes by supplying empty vector as input
+		return engine.update(data);
+	}
+
+	public byte[] obfuscate(byte[] data) {
+		return obfuscateGeneric(data,getOBSID());
 	}
 	
-	public byte[]
-	deobfuscate(
-		byte[]		data )
-	{
-		return( obfuscate( data ));
+	public byte[] deobfuscate(byte[] data) {
+		return obfuscate(data);
 	}
 	
 	public CryptoHandler
@@ -361,12 +343,12 @@ CryptoManagerImpl
 			byte[]	salt		= getPasswordSalt();
 			byte[]	pw_bytes	= new String( pw_chars ).getBytes(StandardCharsets.UTF_8);
 			
-			SHA1 sha1 = new SHA1();
+			SHA1Hasher sha1 = new SHA1Hasher();
 			
-			sha1.update( ByteBuffer.wrap( salt ));
-			sha1.update( ByteBuffer.wrap( pw_bytes ));
+			sha1.update(salt);
+			sha1.update(pw_bytes);
 			
-			String	encoded_pw = ByteFormatter.encodeString( sha1.digest());
+			String	encoded_pw = ByteFormatter.encodeString( sha1.getDigest());
 
 			COConfigurationManager.setParameter( persist_timeout_key, timeout );
 			COConfigurationManager.setParameter( persist_pw_key_type, pw_type );
@@ -471,12 +453,12 @@ CryptoManagerImpl
                     byte[] salt = getPasswordSalt();
                     byte[] pw_bytes = new String(pw_chars).getBytes(StandardCharsets.UTF_8);
 
-                    SHA1 sha1 = new SHA1();
+                    SHA1Hasher sha1 = new SHA1Hasher();
 
-                    sha1.update(ByteBuffer.wrap(salt));
-                    sha1.update(ByteBuffer.wrap(pw_bytes));
+                    sha1.update(salt);
+                    sha1.update(pw_bytes);
 
-                    String encoded_pw = ByteFormatter.encodeString(sha1.digest());
+                    String encoded_pw = ByteFormatter.encodeString(sha1.getDigest());
 
                     if (tester != null && !tester.testPassword(encoded_pw.toCharArray())) {
 

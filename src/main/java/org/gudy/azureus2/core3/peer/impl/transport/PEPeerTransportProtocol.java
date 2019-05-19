@@ -5522,7 +5522,7 @@ implements PEPeerTransport
 					
 					while( res.size() < num_required ){
 						
-						bytes = new SHA1Simple().calculateHash( bytes );
+						bytes = new SHA1Hasher().calculateHash( bytes );
 						
 						int	pos = 0;
 					

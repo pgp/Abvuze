@@ -24,7 +24,7 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 
 import org.gudy.azureus2.core3.util.Debug;
-import org.gudy.azureus2.core3.util.SHA1Simple;
+import org.gudy.azureus2.core3.util.SHA1Hasher;
 import org.gudy.azureus2.plugins.disk.DiskManagerChannel;
 import org.gudy.azureus2.plugins.disk.DiskManagerEvent;
 import org.gudy.azureus2.plugins.disk.DiskManagerFileInfo;
@@ -53,7 +53,7 @@ DiskManagerFileInfoFile
 		file		= _file;
 		
 		try{
-			hash		= new SHA1Simple().calculateHash( file.getAbsolutePath().getBytes(StandardCharsets.UTF_8));
+			hash		= new SHA1Hasher().calculateHash( file.getAbsolutePath().getBytes(StandardCharsets.UTF_8));
 			
 		}catch( Throwable e ){
 			

@@ -2832,7 +2832,7 @@ BuddyPlugin
 			
 			final byte[] encrypted = ecc_handler.encrypt( Base32.decode(pk), BEncoder.encode( content ), "Encrypting message for " + forWho);
 			
-			final byte[] sha1_hash = new SHA1Simple().calculateHash( hash );
+			final byte[] sha1_hash = new SHA1Hasher().calculateHash( hash );
 			
 			return( 
 				new cryptoResult()

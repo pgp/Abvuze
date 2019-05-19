@@ -35,7 +35,7 @@ import org.gudy.azureus2.core3.util.AESemaphore;
 import org.gudy.azureus2.core3.util.AEThread2;
 import org.gudy.azureus2.core3.util.BDecoder;
 import org.gudy.azureus2.core3.util.Debug;
-import org.gudy.azureus2.core3.util.SHA1Simple;
+import org.gudy.azureus2.core3.util.SHA1Hasher;
 import org.gudy.azureus2.core3.util.SimpleTimer;
 import org.gudy.azureus2.core3.util.SystemTime;
 import org.gudy.azureus2.core3.util.TimerEvent;
@@ -86,7 +86,7 @@ DHTNATPuncherImpl
 	private static final int	RESP_NOT_OK		= 1;
 	private static final int	RESP_FAILED		= 2;
 	
-	private static final byte[]		transfer_handler_key = new SHA1Simple().calculateHash("Aelitis:NATPuncher:TransferHandlerKey".getBytes());
+	private static final byte[]		transfer_handler_key = new SHA1Hasher().calculateHash("Aelitis:NATPuncher:TransferHandlerKey".getBytes());
 	
 	private boolean				started;
 	
