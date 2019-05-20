@@ -21,6 +21,7 @@
 package org.gudy.azureus2.core3.util;
 
 import java.util.LinkedList;
+import java.util.concurrent.Semaphore;
 
 
 public abstract class 
@@ -245,7 +246,7 @@ AEThread2
 	threadWrapper
 		extends Thread
 	{
-		private AESemaphore2	sem;
+		private Semaphore sem;
 		private AEThread2		target;
 		private JoinLock		currentLock;
 		
@@ -357,7 +358,7 @@ AEThread2
 						// System.out.println( "AEThread2: queue=" + daemon_threads.size() + ",creates=" + total_creates + ",starts=" + total_starts );
 					}
 					
-					sem.reserve();
+					sem.acquireUninterruptibly();
 					
 					if ( target == null ){
 						
@@ -367,25 +368,14 @@ AEThread2
 			}
 		}
 		
-		protected void
-		start(
-			AEThread2	_target,
-			String		_name )
-		{
+		protected void start(AEThread2 _target, String _name) {
 			target	= _target;
-			
 			setName( _name );
-			
 			if ( sem == null ){
-				
-				 sem = new AESemaphore2( "AEThread2" );
-				 
+				 sem = new Semaphore(0); // "AEThread2"
 				 super.start();
-				 
-			}else{
-				
-				sem.release();
 			}
+			else sem.release();
 		}
 		
 		protected void
