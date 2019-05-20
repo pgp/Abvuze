@@ -24,11 +24,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
+import it.pgp.misc.Utils;
 import org.gudy.azureus2.core3.util.Constants;
 import org.gudy.azureus2.core3.util.FileUtil;
 
@@ -37,47 +35,37 @@ public class HTTPUtils {
 
 	private static final String	default_type	= "application/octet-stream";
 
-	private static final Map	file_types		= new HashMap();
-	private static final Set	compression		= new HashSet();
-
-	static {
-		file_types.put("html", "text/html");
-		file_types.put("htm", "text/html");
-		file_types.put("css", "text/css");
-		file_types.put("js", "text/javascript");
-		file_types.put("xml", "text/xml");
-		file_types.put("xsl", "text/xml");
-		file_types.put("jpg", "image/jpeg");
-		file_types.put("jpeg", "image/jpeg");
-		file_types.put("gif", "image/gif");
-		file_types.put("tiff", "image/tiff");
-		file_types.put("bmp", "image/bmp");
-		file_types.put("png", "image/png");
-		file_types.put("torrent", "application/x-bittorrent");
-		file_types.put("tor", "application/x-bittorrent");
-		file_types.put("vuze", "application/x-vuze");
-		file_types.put("vuz", "application/x-vuze");
-		file_types.put("zip", "application/zip");
-		file_types.put("txt", "text/plain");
-		file_types.put("jar", "application/java-archive");
-		file_types.put("jnlp", "application/x-java-jnlp-file");
-		file_types.put("mp3", "audio/x-mpeg");
-		
-		file_types.put("flv", "video/x-flv");
-		file_types.put("swf", "application/x-shockwave-flash");
-		file_types.put("mkv", "video/x-matroska");
-		file_types.put("mp4", "video/mp4");
-		file_types.put("mov", "video/quicktime");
-		file_types.put("avi", "video/avi");
-		
-		file_types.put("xap", "application/x-silverlight-app");
-
-		compression.add("text/html");
-		compression.add("text/css");
-		compression.add("text/xml");
-		compression.add("text/plain");
-		compression.add("text/javascript");
-	}
+	private static final Map	file_types		= Utils.mapOf(
+			"html", "text/html",
+			"htm", "text/html",
+			"css", "text/css",
+			"js", "text/javascript",
+			"xml", "text/xml",
+			"xsl", "text/xml",
+			"jpg", "image/jpeg",
+			"jpeg", "image/jpeg",
+			"gif", "image/gif",
+			"tiff", "image/tiff",
+			"bmp", "image/bmp",
+			"png", "image/png",
+			"torrent", "application/x-bittorrent",
+			"tor", "application/x-bittorrent",
+			"vuze", "application/x-vuze",
+			"vuz", "application/x-vuze",
+			"zip", "application/zip",
+			"txt", "text/plain",
+			"jar", "application/java-archive",
+			"jnlp", "application/x-java-jnlp-file",
+			"mp3", "audio/x-mpeg",
+			"flv", "video/x-flv",
+			"swf", "application/x-shockwave-flash",
+			"mkv", "video/x-matroska",
+			"mp4", "video/mp4",
+			"mov", "video/quicktime",
+			"avi", "video/avi",
+			"xap", "application/x-silverlight-app"
+	);
+	private static final Set compression = new HashSet(Arrays.asList("text/html","text/css","text/xml","text/plain","text/javascript"));
 
 	/**
 	 * @param file_type file extension

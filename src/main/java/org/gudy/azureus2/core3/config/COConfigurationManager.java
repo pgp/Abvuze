@@ -460,12 +460,7 @@ COConfigurationManager
 		return ConfigurationManager.getInstance().setParameter( parameter, value );
 	}
 	
-	public static boolean
-	setParameter(String parameter,StringList value) {
-		return ConfigurationManager.getInstance().setParameter( parameter, value );
-	}
-	
-	public static StringList
+	public static List<String>
 	getStringListParameter(String parameter)
 	{
 		return( ConfigurationManager.getInstance().getStringListParameter( parameter ));

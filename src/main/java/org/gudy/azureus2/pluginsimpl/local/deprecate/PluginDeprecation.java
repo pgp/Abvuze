@@ -20,7 +20,7 @@ package org.gudy.azureus2.pluginsimpl.local.deprecate;
 import java.util.*;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
-import org.gudy.azureus2.core3.config.impl.StringListImpl;
+import org.gudy.azureus2.core3.config.impl.ConfigurationManager;
 import org.gudy.azureus2.core3.internat.MessageText;
 import org.gudy.azureus2.core3.util.Constants;
 import org.gudy.azureus2.core3.util.Debug;
@@ -86,8 +86,7 @@ public class PluginDeprecation {
 		register("isUnloadable", IGNORE, NOTIFY_ONCE);
 		
 		// Load up any values stored in the config.
-		persistent_warnings.addAll(Arrays.asList(
-			COConfigurationManager.getStringListParameter(CONFIG_KEY).toArray()));
+		persistent_warnings.addAll(COConfigurationManager.getStringListParameter(CONFIG_KEY));
 	}
 	
 	public static void call(String identifier, Object context) {
@@ -126,7 +125,7 @@ public class PluginDeprecation {
 			// warnings list (in case it used to be a persistent warning and has
 			// been "upgraded" in the meantime).
 			if (!persistent_notify && persistent_warnings.remove(persistent_id)) {
-				COConfigurationManager.setParameter(CONFIG_KEY, new StringListImpl(persistent_warnings));
+				COConfigurationManager.setParameter(CONFIG_KEY, ConfigurationManager.buildStringList(persistent_warnings));
 			}
 			
 			
@@ -182,7 +181,7 @@ public class PluginDeprecation {
 			
 			if (persistent_notify) {
 				persistent_warnings.add(persistent_id);
-				COConfigurationManager.setParameter(CONFIG_KEY, new StringListImpl(persistent_warnings)); 
+				COConfigurationManager.setParameter(CONFIG_KEY, ConfigurationManager.buildStringList(persistent_warnings));
 			}
 		}
 		

@@ -923,12 +923,12 @@ PluginConfigImpl
     
     public String[] getPluginStringListParameter(String key) {
     	notifyParamExists(this.key + key);
-    	return COConfigurationManager.getStringListParameter(this.key + key).toArray();
+    	return COConfigurationManager.getStringListParameter(this.key + key).toArray(new String[0]);
     }
 
 	 public void setPluginStringListParameter(String key, String[] value) {
 		 notifyParamExists(this.key + key);
-		 StringListImpl list_obj = new StringListImpl(Arrays.asList(value));
+		 List<String> list_obj = ConfigurationManager.buildStringList(Arrays.asList(value));
 		 COConfigurationManager.setParameter(this.key+key, list_obj);
 	 }
     

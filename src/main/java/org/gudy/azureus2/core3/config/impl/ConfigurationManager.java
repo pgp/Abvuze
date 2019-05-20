@@ -158,8 +158,22 @@ ConfigurationManager
 	  
 	  propertiesMap	= new ConcurrentHashMapWrapper<String,Object>( data );
   }
-  
-  protected void
+
+    public static List<String> buildStringList(Collection _list) {
+        List<String> list = new ArrayList<>();
+        //Attempt to convert list to String List
+        for (Object obj : _list) {
+            if (obj instanceof String)
+                list.add((String)obj);
+            else if (obj instanceof byte[])
+                list.add(bytesToString((byte[]) obj));
+            else if (obj != null)
+                list.add(obj.toString());
+        }
+        return list;
+    }
+
+    protected void
   initialise()
   {
 		
@@ -431,48 +445,24 @@ ConfigurationManager
     return result;
   }
   
-  public StringList getStringListParameter(String parameter) {
+  public List<String> getStringListParameter(String parameter) {
   	try {  		
   		List rawList = (List) propertiesMap.get(parameter);
   		if(rawList == null)
-  			return new StringListImpl();  		
-  		return new StringListImpl(rawList);  	
+  			return new ArrayList<>();
+  		return buildStringList(rawList);
   	} catch(Exception e) {
   		Debug.out( "Parameter '" + parameter + "' has incorrect type", e );
-  		return new StringListImpl();
+  		return new ArrayList<>();
   	}
-  }
-	  
-
-  
-  public boolean setParameter(String parameter,StringList value) {
-  	try {
-  		List	encoded = new ArrayList();
-  		
-  		List	l = ((StringListImpl)value).getList();
-
-		for (Object o : l) {
-
-			encoded.add(stringToBytes((String) o));
-		}
-  		propertiesMap.put(parameter,encoded);
-  		notifyParameterListeners(parameter);
-  	} catch(Exception e) {
-  		Debug.printStackTrace(e);
-  		return false;
-  	}
-  	return true;
   }
    
-  public List 
-  getListParameter(String parameter, List def) 
-  {
+  public List getListParameter(String parameter, List def) {
   	try {  		
   		List rawList = (List) propertiesMap.get(parameter);
-  		if(rawList == null)
-  			return def;
-  		return rawList;	
-  	} catch(Exception e) {
+  		return (rawList == null)?def:rawList;
+  	}
+  	catch(Exception e) {
   		Debug.out( "Parameter '" + parameter + "' has incorrect type", e );
   		return def;
   	}
@@ -1465,7 +1455,7 @@ ConfigurationManager
 		}
 	}
 		
-	protected static String
+	public static String
 	bytesToString(
 		byte[]	bytes )
 	{
