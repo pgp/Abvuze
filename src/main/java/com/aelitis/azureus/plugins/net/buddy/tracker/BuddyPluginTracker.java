@@ -21,7 +21,6 @@
 package com.aelitis.azureus.plugins.net.buddy.tracker;
 
 import java.net.InetAddress;
-import java.nio.ByteBuffer;
 import java.util.*;
 
 import org.gudy.azureus2.core3.global.GlobalManager;

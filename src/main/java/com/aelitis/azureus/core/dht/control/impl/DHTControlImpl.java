@@ -30,8 +30,6 @@ import java.util.Map.Entry;
 
 import com.aelitis.azureus.core.security.impl.CryptoManagerImpl;
 import org.gudy.azureus2.core3.util.*;
-import org.spongycastle.crypto.CipherParameters;
-import org.spongycastle.crypto.params.KeyParameter;
 
 import com.aelitis.azureus.core.dht.*;
 import com.aelitis.azureus.core.dht.control.*;
@@ -50,9 +48,6 @@ import com.aelitis.azureus.core.dht.router.DHTRouterFactory;
 import com.aelitis.azureus.core.dht.router.DHTRouterStats;
 import com.aelitis.azureus.core.dht.transport.*;
 import com.aelitis.azureus.core.dht.transport.udp.DHTTransportUDP;
-
-import javax.crypto.Cipher;
-import javax.crypto.spec.SecretKeySpec;
 
 /**
  * @author parg
