@@ -22,6 +22,7 @@ package com.aelitis.azureus.core.peer.cache;
 
 import java.net.InetAddress;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.gudy.azureus2.core3.ipfilter.BannedIp;
 import org.gudy.azureus2.core3.ipfilter.IPFilterListener;
@@ -50,7 +51,7 @@ CacheDiscovery
 		// No longer supported: new CLCacheDiscovery(),
 	};
 	
-	private static Set<String>	cache_ips = Collections.synchronizedSet(new HashSet<>());
+	private static Set<String>	cache_ips = Collections.newSetFromMap(new ConcurrentHashMap<>());
 	
 	public static void
 	initialise(

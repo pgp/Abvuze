@@ -22,6 +22,7 @@ package com.aelitis.azureus.core.cnetwork.impl;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
 import org.gudy.azureus2.core3.util.BEncoder;
@@ -70,7 +71,7 @@ ContentNetworkImpl
 	
 	private Map<String,Object>	pprop_defaults;
 	
-	private Map<Object,Object>	transient_properties = Collections.synchronizedMap(new HashMap<>());
+	private Map<Object,Object>	transient_properties = new ConcurrentHashMap<>();
 	
 	private CopyOnWriteList		persistent_listeners = new CopyOnWriteList();
 	

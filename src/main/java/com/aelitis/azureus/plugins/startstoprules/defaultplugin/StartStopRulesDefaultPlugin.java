@@ -23,6 +23,7 @@
 package com.aelitis.azureus.plugins.startstoprules.defaultplugin;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.gudy.azureus2.core3.config.COConfigurationListener;
 import org.gudy.azureus2.core3.config.COConfigurationManager;
@@ -135,7 +136,7 @@ public class StartStopRulesDefaultPlugin implements Plugin,
 	private RecalcSeedingRanksTask recalcSeedingRanksTask;
 
 	/** Map to relate downloadData to a Download */
-	private static Map<Download, DefaultRankCalculator> downloadDataMap = Collections.synchronizedMap(new HashMap<>());
+	private static Map<Download, DefaultRankCalculator> downloadDataMap = new ConcurrentHashMap<>();
 
 	/**
 	 * this is used to reduce the number of comperator invocations
@@ -727,12 +728,9 @@ public class StartStopRulesDefaultPlugin implements Plugin,
 		}
 
 		public void downloadAdded(Download download) {
-			DefaultRankCalculator dlData = null;
-			if (downloadDataMap.containsKey(download)) {
-				dlData = downloadDataMap.get(download);
-			} else {
-				dlData = new DefaultRankCalculator(StartStopRulesDefaultPlugin.this,
-						download);
+			DefaultRankCalculator dlData = downloadDataMap.get(download);
+			if (dlData == null) {
+				dlData = new DefaultRankCalculator(StartStopRulesDefaultPlugin.this, download);
 				sortedArrayCache = null;
 				downloadDataMap.put(download, dlData);
 				download.addListener(download_listener);
@@ -740,13 +738,12 @@ public class StartStopRulesDefaultPlugin implements Plugin,
 				download.addActivationListener(download_activation_listener);
 			}
 
-			if (dlData != null) {
-				requestProcessCycle(dlData);
-				if (bDebugLog)
-					log.log(download.getTorrent(), LoggerChannel.LT_INFORMATION,
-							"somethingChanged: downloadAdded, state: "
-									+ sStates.charAt(download.getState()));
-			}
+			requestProcessCycle(dlData);
+			if (bDebugLog)
+				log.log(download.getTorrent(), LoggerChannel.LT_INFORMATION,
+						"somethingChanged: downloadAdded, state: "
+								+ sStates.charAt(download.getState()));
+
 		}
 
 		public void downloadRemoved(Download download) {
@@ -794,11 +791,7 @@ public class StartStopRulesDefaultPlugin implements Plugin,
 
 				lLastRunTime = now;
 
-				DefaultRankCalculator[] dlDataArray;
-				synchronized (downloadDataMap) {
-					dlDataArray = downloadDataMap.values().toArray(
-							new DefaultRankCalculator[0]);
-				}
+				DefaultRankCalculator[] dlDataArray = downloadDataMap.values().toArray(new DefaultRankCalculator[0]);
 
 				int iNumDLing = 0;
 				int iNumCDing = 0;
@@ -958,11 +951,7 @@ public class StartStopRulesDefaultPlugin implements Plugin,
             }
 			try {
 				ranksToRecalc_mon.enter();
-
-				synchronized (downloadDataMap) {
-					ranksToRecalc.addAll(allDownloads);
-				}
-				
+				ranksToRecalc.addAll(allDownloads);
 			} finally {
 				ranksToRecalc_mon.exit();
 			}
@@ -1389,11 +1378,9 @@ public class StartStopRulesDefaultPlugin implements Plugin,
 			DefaultRankCalculator[] dlDataArray;			
 			if(sortedArrayCache != null && sortedArrayCache.length == downloadDataMap.size()) {
 				dlDataArray = sortedArrayCache;
-			} else {
-				synchronized (downloadDataMap) {
-					dlDataArray = sortedArrayCache = downloadDataMap.values().toArray(
-                            new DefaultRankCalculator[0]);
-				}
+			}
+			else {
+				dlDataArray = sortedArrayCache = downloadDataMap.values().toArray(new DefaultRankCalculator[0]);
 			}
 
 			TotalsStats totals = new TotalsStats(dlDataArray);

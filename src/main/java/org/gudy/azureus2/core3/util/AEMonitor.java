@@ -285,11 +285,4 @@ AEMonitor
 			return( waiting > 0 );
 		}
 	}
-	
-	public static Map
-	getSynchronisedMap(
-		Map	m )
-	{
-		return( Collections.synchronizedMap(m));
-	}
 }

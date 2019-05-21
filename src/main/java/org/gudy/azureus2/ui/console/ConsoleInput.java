@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Vector;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.log4j.Appender;
 import org.apache.log4j.ConsoleAppender;
@@ -287,7 +288,7 @@ public class ConsoleInput extends Thread {
 	registerAlertHandler()
 	{
 		org.gudy.azureus2.core3.logging.Logger.addListener(new ILogAlertListener() {
-			private java.util.Set	history = Collections.synchronizedSet( new HashSet());
+			private java.util.Set	history = Collections.newSetFromMap(new ConcurrentHashMap<>());
 			
 			public void alertRaised(LogAlert alert) {
 				if (!alert.repeatable) {

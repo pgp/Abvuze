@@ -18,6 +18,7 @@
 package org.gudy.azureus2.pluginsimpl.local.deprecate;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
 import org.gudy.azureus2.core3.config.impl.ConfigurationManager;
@@ -58,8 +59,8 @@ public class PluginDeprecation {
 	private static BasicPluginViewModel model = null;
 	private static LoggerChannel channel = null;
 	private static Map behaviour_mapping = new HashMap();
-	private static Set persistent_warnings = Collections.synchronizedSet(new HashSet());
-	private static Set instance_warnings = Collections.synchronizedSet(new HashSet());
+	private static Set persistent_warnings = Collections.newSetFromMap(new ConcurrentHashMap<>());
+	private static Set instance_warnings = Collections.newSetFromMap(new ConcurrentHashMap<>());
 	private static void register(String identifier, int stable_behaviour, int beta_behaviour) {
 		behaviour_mapping.put(identifier, Constants.isCVSVersion() ? beta_behaviour : stable_behaviour);
 	}

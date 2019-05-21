@@ -21,8 +21,8 @@ package com.aelitis.azureus.core.peermanager.utils;
 
 import java.net.InetAddress;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.gudy.azureus2.core3.util.Constants;
 import org.gudy.azureus2.core3.util.HostNameToIPResolver;
@@ -82,7 +82,7 @@ public class PeerClassifier {
 	  return( res );
   }
   
-	private static final Set	platform_ips = Collections.synchronizedSet(new HashSet());
+	private static final Set	platform_ips = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
 	
 		/**

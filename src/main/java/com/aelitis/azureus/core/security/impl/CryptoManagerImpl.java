@@ -22,6 +22,7 @@ package com.aelitis.azureus.core.security.impl;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.math.BigInteger;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -68,7 +69,7 @@ CryptoManagerImpl
 	private final CopyOnWriteList		password_handlers	= new CopyOnWriteList();
 	private final CopyOnWriteList		keychange_listeners	= new CopyOnWriteList();
 	
-	private final Map	session_passwords =	Collections.synchronizedMap( new HashMap());
+	private final Map session_passwords = new ConcurrentHashMap();
 	
 	protected
 	CryptoManagerImpl()

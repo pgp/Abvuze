@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
 import org.gudy.azureus2.core3.config.ParameterListener;
@@ -181,7 +182,7 @@ DeviceManagerImpl
 	private DeviceManagerUPnPImpl	upnp_manager;
 	private DeviceDriveManager		drive_manager;
 		
-	private Set<Device>				disable_events	= Collections.synchronizedSet(new HashSet<>());
+	private Set<Device>				disable_events	= Collections.newSetFromMap(new ConcurrentHashMap<>());
 	
 		// have to go async on this as there are situations where we end up firing listeners
 		// while holding monitors and this can result in deadlock if sync
