@@ -17,16 +17,13 @@
  *
  */
 
-
 package org.gudy.azureus2.core3.util;
 
 import java.util.LinkedList;
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.locks.LockSupport;
 
 
-public abstract class 
-AEThread2 
-{
+public abstract class AEThread2 {
 	public static final boolean TRACE_TIMES = false;
 	
 	private static final int MIN_RETAINED	= Math.max(Runtime.getRuntime().availableProcessors(),2);
@@ -36,7 +33,9 @@ AEThread2
 	private static final int THREAD_TIMEOUT					= 60*1000;
 	
 	private static final LinkedList	daemon_threads = new LinkedList();
-	
+
+	private static final AEThread2 EMPTY = new AEThread2("EMPTY"){public void run(){}};
+
 	private static final class JoinLock {
 		volatile boolean released = false;
 	}
@@ -54,20 +53,13 @@ AEThread2
 	private int					priority	= Thread.NORM_PRIORITY;
 	private volatile JoinLock	lock		= new JoinLock();
 	
-	public
-	AEThread2(
-		String		_name )
-	{
-		this( _name, true );
+	public AEThread2(String _name) {
+		this(_name,true);
 	}
 	
-	public
-	AEThread2(
-		String		_name,
-		boolean		_daemon )
-	{
-		name		= _name;
-		daemon		= _daemon;
+	public AEThread2(String _name, boolean _daemon) {
+		name = _name;
+		daemon = _daemon;
 	}
 	
 	/**
@@ -189,27 +181,18 @@ AEThread2
 		}
 	}
 	
-	public abstract void
-	run();
+	public abstract void run();
 	
-	public static boolean
-	isOurThread(
-		Thread	thread )
-	{
-		return( AEThread.isOurThread( thread ));
+	public static boolean isOurThread(Thread thread) {
+		return AEThread.isOurThread(thread);
 	}
 	
-	public static void
-	setOurThread()
-	{
+	public static void setOurThread() {
 		AEThread.setOurThread();
 	}
 	
-	public static void
-	setOurThread(
-		Thread	thread )
-	{
-		AEThread.setOurThread( thread );
+	public static void setOurThread(Thread	thread) {
+		AEThread.setOurThread(thread);
 	}
 	
 	public static void
@@ -242,46 +225,31 @@ AEThread2
 		return( null );
 	}
 	
-	protected static class
-	threadWrapper
-		extends Thread
-	{
-		private Semaphore sem;
-		private AEThread2		target;
-		private JoinLock		currentLock;
+	protected static class threadWrapper extends Thread {
+		private volatile AEThread2 target = null;
+		private JoinLock currentLock;
 		
-		private long		last_active_time;
+		private long last_active_time;
 		
-		private Object[]		debug;
+		private Object[] debug;
 		
-		protected
-		threadWrapper(
-			String		name,
-			boolean		daemon )
-		{
-			super( name );
-			
-			setDaemon( daemon );
+		protected threadWrapper(String name, boolean daemon) {
+			super(name);
+			setDaemon(daemon);
 		}
 		
-		public void
-		run()
-		{
-			while( true ){
-				
-				synchronized( currentLock ){
-					try{
-						if ( TRACE_TIMES ){
-
+		public void run() {
+			for(;;) {
+				synchronized(currentLock) {
+					try {
+						if(TRACE_TIMES) {
 							long 	start_time 	= SystemTime.getHighPrecisionCounter();
 							long	start_cpu 	= AEJavaManagement.getThreadCPUTime();
 
-							try{
-
+							try {
 								target.run();
-
-							}finally{
-								
+							}
+							finally {
 								long	time_diff 	= ( SystemTime.getHighPrecisionCounter() - start_time )/1000000;
 								long	cpu_diff	= ( AEJavaManagement.getThreadCPUTime() - start_cpu ) / 1000000;
 								
@@ -290,23 +258,18 @@ AEThread2
 									System.out.println( TimeFormatter.milliStamp() + ": Thread: " + target.getName() + ": " + cpu_diff + "/" + time_diff );
 								}
 							}
-						}else{
-
+						}
+						else {
 							target.run();
 						}
-												
-					}catch( Throwable e ){
-						
+					}
+					catch(Throwable e) {
 						DebugLight.printStackTrace(e);
-						
-					}finally{
-						
-						target = null;
-
+					}
+					finally {
+						target = EMPTY;
 						debug	= null;
-						
 						currentLock.released = true;
-						
 						currentLock.notifyAll();						
 					}
 				}
@@ -357,65 +320,49 @@ AEThread2
 						
 						// System.out.println( "AEThread2: queue=" + daemon_threads.size() + ",creates=" + total_creates + ",starts=" + total_starts );
 					}
+
+					while(target == EMPTY)
+						LockSupport.park(this);
 					
-					sem.acquireUninterruptibly();
-					
-					if ( target == null ){
-						
-						break;
-					}
+					if (target == null) break;
+
 				}
 			}
 		}
 		
 		protected void start(AEThread2 _target, String _name) {
-			target	= _target;
 			setName( _name );
-			if ( sem == null ){
-				 sem = new Semaphore(0); // "AEThread2"
+			if (target == null) {
+				 target = _target;
 				 super.start();
 			}
-			else sem.release();
+			else {
+				target = _target;
+				LockSupport.unpark( this );
+			}
 		}
 		
-		protected void
-		retire()
-		{			
-			sem.release();
+		protected void retire() {
+			target = null;
+			LockSupport.unpark( this );
 		}
 		
-		protected void
-		setDebug(
-			Object	d )
-		{
-			debug	= new Object[]{ d, SystemTime.getMonotonousTime() };
+		protected void setDebug(Object d) {
+			debug = new Object[]{d, SystemTime.getMonotonousTime()};
 		}
 		
-		protected Object[]
-		getDebug()
-		{
-			return( debug );
+		protected Object[] getDebug() {
+			return debug;
 		}
 	}
 	
-	public void 
-	join()
-	{
+	public void join() {
 		JoinLock currentLock = lock;
-
-			// sync lock will be blocked by the thread
-		
-		synchronized( currentLock ){
-			
-				// wait in case the thread is not running yet
-			
+		// sync lock will be blocked by the thread
+		synchronized( currentLock ) {
+			// wait in case the thread is not running yet
 			while (!currentLock.released ){
-				
-				try{
-					currentLock.wait();
-					
-				}catch( InterruptedException e ){ 
-				}
+				try {currentLock.wait();} catch (InterruptedException ignored) {}
 			}
 		}
 	}
