@@ -24,6 +24,7 @@ package com.aelitis.azureus.plugins.startstoprules.defaultplugin;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.config.COConfigurationListener;
 import org.gudy.azureus2.core3.config.COConfigurationManager;
@@ -49,7 +50,6 @@ import org.gudy.azureus2.plugins.ui.tables.TableManager;
 import org.gudy.azureus2.plugins.ui.tables.TableRow;
 import org.gudy.azureus2.pluginsimpl.local.PluginCoreUtils;
 
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.core.util.average.AverageFactory;
 
 /** Handles Starting and Stopping of torrents.
@@ -218,7 +218,7 @@ public class StartStopRulesDefaultPlugin implements Plugin,
 
 	private UIAdapter	swt_ui;
 	
-	private CopyOnWriteList listenersFP = new CopyOnWriteList();
+	private List listenersFP = new CopyOnWriteArrayList();
 
 	public static boolean pauseChangeFlagChecker = false;
 	
@@ -2669,7 +2669,7 @@ public class StartStopRulesDefaultPlugin implements Plugin,
 	}
 	
 	public List getFPListeners() {
-		return listenersFP.getList();
+		return listenersFP;
 	}
 	
 	public interface

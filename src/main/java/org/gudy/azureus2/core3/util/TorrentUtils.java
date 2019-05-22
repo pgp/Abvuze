@@ -31,6 +31,7 @@ import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,7 +40,6 @@ import java.util.zip.GZIPInputStream;
 import com.aelitis.azureus.core.*;
 import com.aelitis.azureus.core.proxy.AEProxyFactory;
 import com.aelitis.azureus.core.proxy.AEProxyFactory.PluginProxy;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.core.util.DNSUtils;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
@@ -150,8 +150,8 @@ TorrentUtils
 	
 	private static boolean bSaveTorrentBackup;
 	
-	private static final CopyOnWriteList<torrentAttributeListener>			torrent_attribute_listeners 	= new CopyOnWriteList<>();
-	static final CopyOnWriteList<TorrentAnnounceURLChangeListener>	torrent_url_changed_listeners 	= new CopyOnWriteList<>();
+	private static final List<torrentAttributeListener>			torrent_attribute_listeners 	= new CopyOnWriteArrayList<>();
+	static final List<TorrentAnnounceURLChangeListener>	torrent_url_changed_listeners 	= new CopyOnWriteArrayList<>();
 	
 	private static final AsyncDispatcher	dispatcher = new AsyncDispatcher();
 	

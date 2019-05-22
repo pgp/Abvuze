@@ -24,6 +24,7 @@ import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.security.spec.AlgorithmParameterSpec;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
@@ -56,7 +57,6 @@ import org.gudy.azureus2.pluginsimpl.local.utils.PooledByteBufferImpl;
 import com.aelitis.azureus.core.AzureusCore;
 import com.aelitis.azureus.core.security.CryptoManagerException;
 import com.aelitis.azureus.core.security.CryptoSTSEngine;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.core.util.bloom.BloomFilter;
 import com.aelitis.azureus.core.util.bloom.BloomFilterFactory;
 
@@ -151,7 +151,7 @@ SESTSConnectionImpl
 	
 	private CryptoSTSEngine	sts_engine;
 	
-	private CopyOnWriteList	listeners = new CopyOnWriteList();
+	private List listeners = new CopyOnWriteArrayList();
 	
 	private boolean		sent_keys;
 	private boolean		sent_auth;
@@ -819,7 +819,7 @@ SESTSConnectionImpl
 				throw( new MessageException( "Crypto isn't setup" ));
 			}
 			
-			List listeners_ref = listeners.getList();
+			List listeners_ref = listeners;
 			
 			MessageException	last_error = null;
 			
@@ -903,7 +903,7 @@ SESTSConnectionImpl
 			public void
 			run()
 			{
-				List listeners_ref = listeners.getList();
+				List listeners_ref = listeners;
 
                 for (Object o : listeners_ref) {
 
@@ -932,7 +932,7 @@ SESTSConnectionImpl
 			run()
 			{
 				try{
-					List listeners_ref = listeners.getList();
+					List listeners_ref = listeners;
 
                     for (Object o : listeners_ref) {
 

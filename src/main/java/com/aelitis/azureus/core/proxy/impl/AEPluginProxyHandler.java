@@ -26,6 +26,7 @@ import java.net.Proxy;
 import java.net.SocketAddress;
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
 import org.gudy.azureus2.core3.config.ParameterListener;
@@ -47,14 +48,13 @@ import com.aelitis.azureus.core.AzureusCoreFactory;
 import com.aelitis.azureus.core.proxy.AEProxySelectorFactory;
 import com.aelitis.azureus.core.proxy.AEProxyFactory.PluginHTTPProxy;
 import com.aelitis.azureus.core.proxy.AEProxyFactory.PluginProxy;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.core.util.CopyOnWriteSet;
 import com.aelitis.azureus.plugins.dht.DHTPluginInterface;
 
 public class 
 AEPluginProxyHandler 
 {
-	private static final CopyOnWriteList<PluginInterface>		plugins = new CopyOnWriteList<>();
+	private static final List<PluginInterface>		plugins = new CopyOnWriteArrayList<>();
 	
 	private static final int			plugin_init_max_wait	= 30*1000;
 	private static final AESemaphore 	plugin_init_complete 	= new AESemaphore( "init:waiter" );

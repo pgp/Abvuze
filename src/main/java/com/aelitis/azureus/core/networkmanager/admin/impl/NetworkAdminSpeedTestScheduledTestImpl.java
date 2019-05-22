@@ -32,7 +32,9 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
 import org.gudy.azureus2.core3.config.ParameterListener;
@@ -60,7 +62,6 @@ import com.aelitis.azureus.core.networkmanager.admin.NetworkAdminSpeedTestSchedu
 import com.aelitis.azureus.core.networkmanager.admin.NetworkAdminSpeedTester;
 import com.aelitis.azureus.core.networkmanager.admin.NetworkAdminSpeedTesterListener;
 import com.aelitis.azureus.core.networkmanager.admin.NetworkAdminSpeedTesterResult;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.plugins.upnp.UPnPPlugin;
 
 public class 
@@ -89,7 +90,7 @@ NetworkAdminSpeedTestScheduledTestImpl
 	
 	private volatile boolean	aborted;
 	
-	private final CopyOnWriteList		listeners = new CopyOnWriteList();
+	private final List listeners = new CopyOnWriteArrayList();
 	
 	protected
 	NetworkAdminSpeedTestScheduledTestImpl(

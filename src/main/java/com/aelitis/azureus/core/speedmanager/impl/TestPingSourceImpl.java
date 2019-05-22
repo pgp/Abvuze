@@ -22,6 +22,7 @@ package com.aelitis.azureus.core.speedmanager.impl;
 
 import java.net.InetSocketAddress;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.util.SimpleTimer;
 import org.gudy.azureus2.core3.util.TimerEvent;
@@ -31,7 +32,6 @@ import com.aelitis.azureus.core.dht.speed.DHTSpeedTester;
 import com.aelitis.azureus.core.dht.speed.DHTSpeedTesterContact;
 import com.aelitis.azureus.core.dht.speed.DHTSpeedTesterContactListener;
 import com.aelitis.azureus.core.dht.speed.DHTSpeedTesterListener;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 
 public abstract class 
 TestPingSourceImpl 
@@ -43,7 +43,7 @@ TestPingSourceImpl
 	
 	private final List	listeners 	= new ArrayList();
 	
-	final CopyOnWriteList	sources		= new CopyOnWriteList();
+	final List	sources		= new CopyOnWriteArrayList();
 	
 	private int		period;
 	
@@ -75,7 +75,7 @@ TestPingSourceImpl
 							addContact( new testSource());
 						}
 						
-						sources_to_update = sources.getList();
+						sources_to_update = sources;
 					}
 					
 					if ( period > 0 ){

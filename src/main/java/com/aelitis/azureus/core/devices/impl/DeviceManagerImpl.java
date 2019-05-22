@@ -26,6 +26,7 @@ import java.net.InetAddress;
 import java.net.URL;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
 import org.gudy.azureus2.core3.config.ParameterListener;
@@ -68,7 +69,6 @@ import com.aelitis.azureus.core.AzureusCoreFactory;
 import com.aelitis.azureus.core.AzureusCoreLifecycleAdapter;
 import com.aelitis.azureus.core.devices.*;
 import com.aelitis.azureus.core.messenger.config.PlatformDevicesMessenger;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.core.vuzefile.VuzeFile;
 import com.aelitis.azureus.core.vuzefile.VuzeFileComponent;
 import com.aelitis.azureus.core.vuzefile.VuzeFileHandler;
@@ -280,7 +280,7 @@ DeviceManagerImpl
 	
 	private volatile TranscodeManagerImpl	transcode_manager;
 	
-	private CopyOnWriteList<DeviceManagerDiscoveryListener>	discovery_listeners = new CopyOnWriteList<>();
+	private List<DeviceManagerDiscoveryListener>	discovery_listeners = new CopyOnWriteArrayList<>();
 	
 	private int						getMimeType_fails;
 	

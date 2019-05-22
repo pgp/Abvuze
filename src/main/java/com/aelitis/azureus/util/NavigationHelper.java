@@ -23,10 +23,10 @@ package com.aelitis.azureus.util;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.util.Debug;
 
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.core.vuzefile.VuzeFile;
 import com.aelitis.azureus.core.vuzefile.VuzeFileComponent;
 import com.aelitis.azureus.core.vuzefile.VuzeFileHandler;
@@ -39,8 +39,8 @@ NavigationHelper
 	public static final int COMMAND_CONDITION_CHECK	= 2;
 	
 		
-	private static CopyOnWriteList	listeners = new CopyOnWriteList();
-	private static List				command_queue;
+	private static List listeners = new CopyOnWriteArrayList();
+	private static List command_queue;
 	
 	protected static void
 	initialise()

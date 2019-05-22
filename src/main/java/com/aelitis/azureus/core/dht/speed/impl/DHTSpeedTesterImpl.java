@@ -21,6 +21,7 @@ package com.aelitis.azureus.core.dht.speed.impl;
 
 import java.net.InetSocketAddress;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.util.Debug;
 import org.gudy.azureus2.plugins.PluginInterface;
@@ -36,7 +37,6 @@ import com.aelitis.azureus.core.dht.speed.DHTSpeedTesterContactListener;
 import com.aelitis.azureus.core.dht.speed.DHTSpeedTesterListener;
 import com.aelitis.azureus.core.dht.transport.DHTTransportContact;
 import com.aelitis.azureus.core.dht.transport.DHTTransportReplyHandlerAdapter;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.core.util.bloom.BloomFilter;
 import com.aelitis.azureus.core.util.bloom.BloomFilterFactory;
 
@@ -56,7 +56,7 @@ DHTSpeedTesterImpl
 	private final List				active_pings		= new ArrayList();
 	
 	private final List<DHTSpeedTesterListener>			new_listeners	= new ArrayList<>();
-	private final CopyOnWriteList<DHTSpeedTesterListener>	listeners 		= new CopyOnWriteList<>();
+	private final List<DHTSpeedTesterListener>	listeners 		= new CopyOnWriteArrayList<>();
 	
 	public 
 	DHTSpeedTesterImpl(
@@ -401,7 +401,7 @@ DHTSpeedTesterImpl
 		private int					total_fails;
 		
 		private int					period	= 5;
-		final CopyOnWriteList		listeners = new CopyOnWriteList();
+		final List		listeners = new CopyOnWriteArrayList();
 		
 		protected
 		activePing(

@@ -24,6 +24,9 @@ import org.gudy.azureus2.core3.disk.DiskManagerFileInfo;
 import org.gudy.azureus2.core3.download.DownloadManager;
 import org.gudy.azureus2.core3.util.AEThread2;
 
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 public class 
 LaunchManager 
 {
@@ -35,7 +38,7 @@ LaunchManager
 		return( singleton );
 	}
 	
-	final CopyOnWriteList<LaunchController>	controllers	= new CopyOnWriteList<>();
+	final List<LaunchController> controllers	= new CopyOnWriteArrayList<>();
 	
 	public void
 	launchRequest(

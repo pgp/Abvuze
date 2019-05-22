@@ -27,6 +27,8 @@ package org.gudy.azureus2.core3.disk.impl;
  */
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.disk.*;
 import org.gudy.azureus2.core3.download.DownloadManager;
@@ -38,7 +40,6 @@ import com.aelitis.azureus.core.diskmanager.cache.CacheFile;
 import com.aelitis.azureus.core.diskmanager.cache.CacheFileManagerException;
 import com.aelitis.azureus.core.diskmanager.cache.CacheFileManagerFactory;
 import com.aelitis.azureus.core.diskmanager.cache.CacheFileOwner;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.core.util.average.AverageFactory;
 import com.aelitis.azureus.core.util.average.AverageFactory.LazyMovingImmediateAverageAdapter;
 import com.aelitis.azureus.core.util.average.AverageFactory.LazyMovingImmediateAverageState;
@@ -68,7 +69,7 @@ DiskManagerFileInfoImpl
   
   protected boolean 	skipped_internal 	= false;
   
-  private volatile CopyOnWriteList<DiskManagerFileInfoListener>	listeners;	// save mem and allocate if needed later
+  private volatile CopyOnWriteArrayList<DiskManagerFileInfoListener> listeners;	// save mem and allocate if needed later
   
   public
   DiskManagerFileInfoImpl(
@@ -559,7 +560,7 @@ DiskManagerFileInfoImpl
   		long		offset,
   		long		size )
   	{
-  		CopyOnWriteList<DiskManagerFileInfoListener>	l_ref = listeners;
+  		List<DiskManagerFileInfoListener>	l_ref = listeners;
   				
   		if ( l_ref != null ){
   			
@@ -581,7 +582,7 @@ DiskManagerFileInfoImpl
   		long		offset,
   		long		size )
   	{
- 		CopyOnWriteList<DiskManagerFileInfoListener>	l_ref = listeners;
+ 		List<DiskManagerFileInfoListener>	l_ref = listeners;
 
  		if ( l_ref != null ){
   			
@@ -767,15 +768,12 @@ DiskManagerFileInfoImpl
 
 			if ( listeners == null ){
 			
-				listeners = new CopyOnWriteList<>();
+				listeners = new CopyOnWriteArrayList<>();
 			}
 		}
 		
-		if ( !listeners.addIfNotPresent( listener )){
-			
-			return;
-		}
-		
+		if (!listeners.addIfAbsent(listener)) return;
+
 		new Runnable()
 		{
 			private long	file_start;

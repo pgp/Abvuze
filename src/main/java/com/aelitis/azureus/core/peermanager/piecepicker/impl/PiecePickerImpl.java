@@ -20,6 +20,7 @@
 package com.aelitis.azureus.core.peermanager.piecepicker.impl;
 
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.config.*;
 import org.gudy.azureus2.core3.disk.*;
@@ -36,7 +37,6 @@ import com.aelitis.azureus.core.peermanager.control.PeerControlSchedulerFactory;
 import com.aelitis.azureus.core.peermanager.control.SpeedTokenDispenser;
 import com.aelitis.azureus.core.peermanager.piecepicker.*;
 import com.aelitis.azureus.core.peermanager.piecepicker.util.BitFlags;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.core.util.CopyOnWriteSet;
 
 /**
@@ -194,9 +194,9 @@ implements PiecePicker
 	private List 				endGameModeChunks;
 
 	private long				lastProviderRecalcTime;
-	private final CopyOnWriteList		rta_providers = new CopyOnWriteList();
+	private final List 			rta_providers = new CopyOnWriteArrayList();
 	private long[]				provider_piece_rtas;
-	private final CopyOnWriteList		priority_providers = new CopyOnWriteList();
+	private final List			priority_providers = new CopyOnWriteArrayList();
 	private long[]				provider_piece_priorities;
 
 	private int					allocate_request_loop_count;
@@ -210,7 +210,7 @@ implements PiecePicker
 	private static boolean		enable_request_hints;
 	private static boolean		includeLanPeersInReqLimiting;
 	
-	private final CopyOnWriteList		listeners = new CopyOnWriteList();
+	private final List			listeners = new CopyOnWriteArrayList();
 
 	private volatile float[]	fileAvailabilities;
 	private volatile long		fileAvailabilitiesCalcTime;
@@ -2648,7 +2648,7 @@ implements PiecePicker
 	private boolean
 	computeProviderPriorities()
 	{
-		List	p_ps = priority_providers.getList();
+		List p_ps = priority_providers;
 
 		if ( p_ps.size() == 0 ){
 
@@ -2687,7 +2687,7 @@ implements PiecePicker
             }
 		}
 
-		List	rta_ps = rta_providers.getList();
+		List	rta_ps = rta_providers;
 
 		if ( rta_ps.size() == 0 ){
 
@@ -2797,7 +2797,7 @@ implements PiecePicker
 	public List
 	getRTAProviders()
 	{
-		return( rta_providers.getList());
+		return rta_providers;
 	}
 
 	public void 
@@ -2839,7 +2839,7 @@ implements PiecePicker
 	public List
 	getPriorityProviders()
 	{
-		return( rta_providers.getList());
+		return rta_providers;
 	}
 
 	public void 

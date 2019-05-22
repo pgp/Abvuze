@@ -27,12 +27,12 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.util.Debug;
 
 import com.aelitis.azureus.core.dht.DHTStorageAdapter;
 import com.aelitis.azureus.core.dht.impl.DHTLog;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 
 public class 
 DHTNetworkPositionManager 
@@ -42,8 +42,8 @@ DHTNetworkPositionManager
 	
 	private static DHTStorageAdapter	storage_adapter = null;
 	
-	private static final CopyOnWriteList<DHTNetworkPositionProviderListener>		provider_listeners = new CopyOnWriteList<>();
-	private static volatile CopyOnWriteList<DHTNetworkPositionListener>		position_listeners;
+	private static final List<DHTNetworkPositionProviderListener>		provider_listeners = new CopyOnWriteArrayList<>();
+	private static volatile List<DHTNetworkPositionListener>		position_listeners;
 	
 	private static final DHTNetworkPosition[] NP_EMPTY_ARRAY = {};
 	
@@ -523,7 +523,7 @@ DHTNetworkPositionManager
                 try {
                     DHTNetworkPosition np = provider.deserialisePosition(is);
 
-                    CopyOnWriteList<DHTNetworkPositionListener> listeners = position_listeners;
+                    List<DHTNetworkPositionListener> listeners = position_listeners;
 
                     if (listeners != null) {
 
@@ -563,7 +563,7 @@ DHTNetworkPositionManager
 		
 			if ( position_listeners == null ){
 				
-				position_listeners = new CopyOnWriteList<>();
+				position_listeners = new CopyOnWriteArrayList<>();
 			}
 			
 			position_listeners.add( listener );

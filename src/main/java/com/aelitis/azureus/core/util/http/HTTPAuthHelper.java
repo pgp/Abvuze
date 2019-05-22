@@ -24,6 +24,7 @@ import java.net.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.InflaterInputStream;
 import java.io.*;
@@ -35,8 +36,6 @@ import javax.net.ssl.TrustManager;
 
 import org.gudy.azureus2.core3.security.SESecurityManager;
 import org.gudy.azureus2.core3.util.*;
-
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 
 public class 
 HTTPAuthHelper 
@@ -58,9 +57,9 @@ HTTPAuthHelper
 	
 	private Proxy	delegate_to_proxy;
 	
-	private final CopyOnWriteList			listeners = new CopyOnWriteList();
+	private final List listeners = new CopyOnWriteArrayList();
 	
-	private int		port;
+	private int port;
 	
 	private ServerSocket	server_socket;	
 	

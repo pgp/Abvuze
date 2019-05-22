@@ -26,13 +26,12 @@ package org.gudy.azureus2.pluginsimpl.local.update;
 
 import java.io.InputStream;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.util.Debug;
 import org.gudy.azureus2.plugins.update.*;
 
 import org.gudy.azureus2.plugins.utils.resourcedownloader.*;
-
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 
 public class 
 UpdateImpl 
@@ -52,7 +51,7 @@ UpdateImpl
 
 	private Object					user_object;
 	
-	private CopyOnWriteList			listeners = new CopyOnWriteList();
+	private List					listeners = new CopyOnWriteArrayList();
 	private volatile boolean		cancelled;
 	private volatile boolean		complete;
 	private volatile boolean		succeeded;
@@ -234,16 +233,12 @@ UpdateImpl
 	{
 		complete	= true;
 		succeeded	= success;
-		
-		Iterator it = listeners.iterator();
-		
-		for (int i=0;i<listeners.size();i++){
-			
+
+		for (Object o : listeners) {
 			try{
-				((UpdateListener)it.next()).complete( this );
-				
-			}catch( Throwable e ){
-				
+				((UpdateListener)o).complete(this);
+			}
+			catch( Throwable e ) {
 				Debug.printStackTrace(e);
 			}
 		}

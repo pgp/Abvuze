@@ -21,10 +21,10 @@
 package org.gudy.azureus2.core3.util;
 
 import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
-
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 
 public class 
 AERunStateHandler 
@@ -55,7 +55,7 @@ AERunStateHandler
 	
 	private static final AsyncDispatcher	dispatcher = new AsyncDispatcher(2500);
 	
-	private static final CopyOnWriteList<RunStateChangeListener>	listeners = new CopyOnWriteList<>();
+	private static final List<RunStateChangeListener> listeners = new CopyOnWriteArrayList<>();
 	
 	public static boolean
 	isDelayedUI()

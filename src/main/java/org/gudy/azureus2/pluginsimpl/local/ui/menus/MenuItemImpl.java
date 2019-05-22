@@ -20,14 +20,15 @@ package org.gudy.azureus2.pluginsimpl.local.ui.menus;
 import org.gudy.azureus2.core3.internat.MessageText;
 import org.gudy.azureus2.core3.util.Debug;
 
-import com.aelitis.azureus.core.util.CopyOnWriteList;
-
 import org.gudy.azureus2.plugins.PluginInterface;
 import org.gudy.azureus2.plugins.ui.Graphic;
 import org.gudy.azureus2.plugins.ui.UIManagerEvent;
 import org.gudy.azureus2.plugins.ui.menus.*;
 import org.gudy.azureus2.pluginsimpl.local.PluginInitializer;
 import org.gudy.azureus2.pluginsimpl.local.ui.UIManagerImpl;
+
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * amc1: This class was largely derived from TableContextMenuImpl.
@@ -48,12 +49,12 @@ public class MenuItemImpl implements MenuItem {
 
 	private Graphic graphic;
 
-	private CopyOnWriteList listeners = new CopyOnWriteList(1);
-	private CopyOnWriteList m_listeners = new CopyOnWriteList(1);
+	private List listeners = new CopyOnWriteArrayList();
+	private List m_listeners = new CopyOnWriteArrayList();
 
-	private CopyOnWriteList fill_listeners = new CopyOnWriteList(1);
+	private List fill_listeners = new CopyOnWriteArrayList();
 
-	private CopyOnWriteList children = new CopyOnWriteList();
+	private List<MenuItem> children = new CopyOnWriteArrayList();
 
 	private MenuItemImpl parent = null;
 
@@ -186,22 +187,17 @@ public class MenuItemImpl implements MenuItem {
 		if (this.style != MenuItem.STYLE_MENU) {
 			return null;
 		}
-		return (MenuItem[]) this.children.toArray(new MenuItem[this.children
-				.size()]);
+		return children.toArray(new MenuItem[0]);
 	}
 
 	public MenuItem getItem(String key) {
 		if (this.style != MenuItem.STYLE_MENU) {
 			return null;
 		}
-		java.util.Iterator itr = this.children.iterator();
-		MenuItem result = null;
-		while (itr.hasNext()) {
-			result = (MenuItem) itr.next();
-			if (key.equals(result.getResourceKey())) {
-				return result;
-			}
-		}
+
+		for (MenuItem result : children)
+			if (key.equals(result.getResourceKey())) return result;
+
 		return null;
 	}
 
@@ -223,8 +219,7 @@ public class MenuItemImpl implements MenuItem {
 		this.display_text = text;
 	}
 
-	protected void invokeListenersOnList(CopyOnWriteList listeners_to_notify,
-			Object target) {
+	protected void invokeListenersOnList(List listeners_to_notify, Object target) {
         for (Object o : listeners_to_notify) {
             try {
                 MenuItemListener l = (MenuItemListener) o;

@@ -26,6 +26,7 @@ import java.net.PasswordAuthentication;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -51,7 +52,6 @@ import org.gudy.azureus2.plugins.download.DownloadException;
 import org.gudy.azureus2.plugins.utils.PooledByteBuffer;
 import org.gudy.azureus2.pluginsimpl.local.utils.PooledByteBufferImpl;
 
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.plugins.extseed.ExternalSeedException;
 
 public class 
@@ -496,7 +496,7 @@ DiskManagerFileInfoURL
 
             private volatile boolean	request_cancelled;
 			
-			private CopyOnWriteList<DiskManagerListener>		listeners = new CopyOnWriteList<>();
+			private List<DiskManagerListener>		listeners = new CopyOnWriteArrayList<>();
 			
 			public void
 			setType(

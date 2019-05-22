@@ -29,6 +29,7 @@ package org.gudy.azureus2.core3.tracker.host.impl;
 import java.util.*;
 import java.io.*;
 import java.net.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.logging.*;
 import org.gudy.azureus2.core3.config.*;
@@ -38,8 +39,6 @@ import org.gudy.azureus2.core3.tracker.server.*;
 import org.gudy.azureus2.core3.tracker.util.TRTrackerUtils;
 import org.gudy.azureus2.core3.tracker.client.*;
 import org.gudy.azureus2.core3.torrent.*;
-
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 
 public class 
 TRHostImpl
@@ -100,7 +99,7 @@ TRHostImpl
 			}
 		});	
 	
-	private final CopyOnWriteList<TRHostListener2>	listeners2 = new CopyOnWriteList<>();
+	private final List<TRHostListener2> listeners2 = new CopyOnWriteArrayList<>();
 	
 	private static boolean host_add_announce_urls;
 	

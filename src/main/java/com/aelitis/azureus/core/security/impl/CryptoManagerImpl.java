@@ -23,6 +23,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.math.BigInteger;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -41,7 +42,6 @@ import com.aelitis.azureus.core.security.CryptoManagerException;
 import com.aelitis.azureus.core.security.CryptoManagerKeyListener;
 import com.aelitis.azureus.core.security.CryptoManagerPasswordException;
 import com.aelitis.azureus.core.security.CryptoManagerPasswordHandler;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 
 public class 
 CryptoManagerImpl 
@@ -66,8 +66,8 @@ CryptoManagerImpl
 	
 	private byte[]				secure_id;
 	private final CryptoHandler		ecc_handler;
-	private final CopyOnWriteList		password_handlers	= new CopyOnWriteList();
-	private final CopyOnWriteList		keychange_listeners	= new CopyOnWriteList();
+	private final List		password_handlers	= new CopyOnWriteArrayList();
+	private final List		keychange_listeners	= new CopyOnWriteArrayList();
 	
 	private final Map session_passwords = new ConcurrentHashMap();
 	

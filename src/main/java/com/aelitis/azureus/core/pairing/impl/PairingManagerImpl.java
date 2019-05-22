@@ -35,6 +35,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
 import org.gudy.azureus2.core3.internat.MessageText;
@@ -96,7 +97,6 @@ import com.aelitis.azureus.core.networkmanager.admin.NetworkAdminSocksProxy;
 import com.aelitis.azureus.core.pairing.*;
 import com.aelitis.azureus.core.security.CryptoManager;
 import com.aelitis.azureus.core.security.CryptoManagerFactory;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.plugins.upnp.UPnPPlugin;
 import com.aelitis.azureus.plugins.upnp.UPnPPluginService;
 import com.aelitis.azureus.util.JSONUtils;
@@ -200,7 +200,7 @@ PairingManagerImpl
 	
 	final Map<String,Object[]>	local_address_checks = new HashMap<>();
 
-	private final CopyOnWriteList<PairingManagerListener>	listeners = new CopyOnWriteList<>();
+	private final List<PairingManagerListener> listeners = new CopyOnWriteArrayList<>();
 	
 	private UIAdapter		ui;
 	

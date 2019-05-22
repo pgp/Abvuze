@@ -19,6 +19,7 @@ package org.gudy.azureus2.core3.torrent.impl;
 
 import java.io.File;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
 import org.gudy.azureus2.core3.download.DownloadManager;
@@ -35,7 +36,6 @@ import org.gudy.azureus2.core3.util.TorrentUtils;
 
 import com.aelitis.azureus.core.AzureusCoreFactory;
 import com.aelitis.azureus.core.tag.Tag;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.plugins.I2PHelpers;
 
 
@@ -105,7 +105,7 @@ public class TorrentOpenOptions
 
 	private Map<Integer, File> initial_linkage_map = null;
 
-	private final CopyOnWriteList<FileListener> fileListeners = new CopyOnWriteList<>(1);
+	private final List<FileListener> fileListeners = new CopyOnWriteArrayList<>();
 
 	public Map<String, Boolean> peerSource 		= new HashMap<>();
 	

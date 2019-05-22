@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.internat.MessageText;
 import org.gudy.azureus2.core3.logging.*;
@@ -56,7 +57,6 @@ import org.gudy.azureus2.pluginsimpl.local.update.UpdateManagerImpl;
 import org.gudy.azureus2.pluginsimpl.update.sf.*;
 import org.gudy.azureus2.pluginsimpl.update.PluginUpdatePlugin;
 
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.core.vuzefile.VuzeFile;
 import com.aelitis.azureus.core.vuzefile.VuzeFileComponent;
 import com.aelitis.azureus.core.vuzefile.VuzeFileHandler;
@@ -80,11 +80,11 @@ PluginInstallerImpl
 		return( singleton );
 	}
 	
-	private PluginManager	manager;
+	private PluginManager manager;
 	
-	private CopyOnWriteList<PluginInstallerListener>			listeners	 = new CopyOnWriteList<>();
+	private List<PluginInstallerListener> listeners = new CopyOnWriteArrayList<>();
 	
-	private AsyncDispatcher		add_file_install_dispatcher;
+	private AsyncDispatcher add_file_install_dispatcher;
 	
 	protected
 	PluginInstallerImpl(

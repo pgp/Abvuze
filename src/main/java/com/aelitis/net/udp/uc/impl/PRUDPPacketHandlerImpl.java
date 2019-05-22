@@ -31,6 +31,7 @@ import java.io.*;
 import java.net.*;
 import java.nio.channels.UnsupportedAddressTypeException;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
 import org.gudy.azureus2.core3.config.ParameterListener;
@@ -44,7 +45,6 @@ import org.spongycastle.util.encoders.Base64;
 import com.aelitis.azureus.core.networkmanager.admin.NetworkAdmin;
 import com.aelitis.azureus.core.networkmanager.admin.NetworkAdminPropertyChangeListener;
 import com.aelitis.azureus.core.util.AEPriorityMixin;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.net.udp.uc.*;
 
 public class 
@@ -100,7 +100,7 @@ PRUDPPacketHandlerImpl
 	private int				port;
 	private DatagramSocket	socket;
 	
-	private CopyOnWriteList<PRUDPPrimordialHandler>	primordial_handlers = new CopyOnWriteList<>();
+	private List<PRUDPPrimordialHandler>	primordial_handlers = new CopyOnWriteArrayList<>();
 	private PRUDPRequestHandler				request_handler;
 	
 	private PRUDPPacketHandlerStatsImpl	stats = new PRUDPPacketHandlerStatsImpl( this );
@@ -200,14 +200,9 @@ PRUDPPacketHandlerImpl
 		
 		init_sem.reserve();
 	}
-	
-	public boolean
-	hasPrimordialHandler()
-	{
-		synchronized( primordial_handlers ){
 
-			return( primordial_handlers.size() > 0 );
-		}
+	public boolean hasPrimordialHandler() {
+		return primordial_handlers.size() > 0;
 	}
 	
 	public void
@@ -234,7 +229,7 @@ PRUDPPacketHandlerImpl
 				priority = AEPriorityMixin.PRIORITY_NORMAL;
 			}
 			
-			List<PRUDPPrimordialHandler> existing = primordial_handlers.getList();
+			List<PRUDPPrimordialHandler> existing = primordial_handlers;
 			
 			int	insert_at = -1;
 			
@@ -274,22 +269,8 @@ PRUDPPacketHandlerImpl
 			// if we have an altProtocolDelegate then this shares the list of handlers so no need to add
 	}
 	
-	public void
-	removePrimordialHandler(
-		PRUDPPrimordialHandler	handler )
-	{
-		synchronized( primordial_handlers ){
-			
-			if ( !primordial_handlers.contains( handler )){
-				
-				Debug.out( "Primordial handler not found!" );
-				
-				return;
-			}
-			
+	public void removePrimordialHandler(PRUDPPrimordialHandler handler) {
 			primordial_handlers.remove( handler );
-		}
-		
 			// if we have an altProtocolDelegate then this shares the list of handlers so no need to remove
 	}
 	

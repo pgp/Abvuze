@@ -18,6 +18,7 @@
 package com.aelitis.azureus.core.messenger.config;
 
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Pattern;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
@@ -30,7 +31,6 @@ import org.gudy.azureus2.platform.PlatformManagerFactory;
 import com.aelitis.azureus.core.messenger.PlatformMessage;
 import com.aelitis.azureus.core.messenger.PlatformMessenger;
 import com.aelitis.azureus.core.messenger.PlatformMessengerListener;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.util.*;
 
 /**
@@ -38,8 +38,7 @@ import com.aelitis.azureus.util.*;
  * @created Sep 26, 2006
  *
  */
-public class PlatformConfigMessenger
-{
+public class PlatformConfigMessenger {
 	public static final String LISTENER_ID = "config";
 	
 	private static final String OP_LOG_PLUGIN = "log-plugin";
@@ -52,7 +51,7 @@ public class PlatformConfigMessenger
 
 	protected static List platformLoginCompleteListeners = Collections.EMPTY_LIST;
 
-	private static CopyOnWriteList<String> externalLinks = new CopyOnWriteList<>();
+	private static List<String> externalLinks = new CopyOnWriteArrayList<>();
 	
 	public static void login(long maxDelayMS) {
 		PlatformManager pm = PlatformManagerFactory.getPlatformManager();

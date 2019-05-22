@@ -28,6 +28,7 @@ import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
 import org.gudy.azureus2.core3.disk.DiskManager;
@@ -80,7 +81,6 @@ import com.aelitis.azureus.core.AzureusCoreFactory;
 import com.aelitis.azureus.core.AzureusCoreLifecycleAdapter;
 import com.aelitis.azureus.core.rssgen.RSSGeneratorPlugin;
 import com.aelitis.azureus.core.tag.*;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.core.util.IdentityHashSet;
 import com.aelitis.azureus.core.util.PlatformTorrentUtils;
 import com.aelitis.azureus.util.MapUtils;
@@ -115,7 +115,7 @@ TagManagerImpl
 		return( singleton );
 	}
 	
-	final CopyOnWriteList<TagTypeBase>	tag_types = new CopyOnWriteList<>();
+	final List<TagTypeBase>	tag_types = new CopyOnWriteArrayList<>();
 	
 	private final Map<Integer,TagType>	tag_type_map = new HashMap<>();
 	
@@ -704,9 +704,9 @@ TagManagerImpl
 	private final List<Object[]>		config_change_queue = new ArrayList<>();
 	
 	
-	private final CopyOnWriteList<TagManagerListener>		listeners = new CopyOnWriteList<>();
+	private final List<TagManagerListener>		listeners = new CopyOnWriteArrayList<>();
 	
-	private final CopyOnWriteList<Object[]>				feature_listeners = new CopyOnWriteList<>();
+	private final List<Object[]>				feature_listeners = new CopyOnWriteArrayList<>();
 	
 	private final Map<Long,LifecycleHandlerImpl>			lifecycle_handlers = new HashMap<>();
 	
@@ -1387,7 +1387,7 @@ TagManagerImpl
 	public List<TagType>
 	getTagTypes()
 	{
-		return((List<TagType>)(Object)tag_types.getList());
+		return((List<TagType>)(Object)tag_types);
 	}
 	
 	public void
@@ -2394,7 +2394,7 @@ TagManagerImpl
 		private TaggableResolver		resolver;
 		private boolean					initialised;
 		
-		private final CopyOnWriteList<TaggableLifecycleListener>	listeners = new CopyOnWriteList<>();
+		private final List<TaggableLifecycleListener>	listeners = new CopyOnWriteArrayList<>();
 		
 		private
 		LifecycleHandlerImpl()
@@ -2459,7 +2459,7 @@ TagManagerImpl
 				
 				if ( listeners.size() > 0 ){
 																
-					final List<TaggableLifecycleListener> listeners_ref = listeners.getList();
+					final List<TaggableLifecycleListener> listeners_ref = listeners;
 					 
 					async_dispatcher.dispatch(
 						new AERunnable()
@@ -2486,7 +2486,7 @@ TagManagerImpl
 				
 				if ( initialised ){
 					
-					final List<TaggableLifecycleListener> listeners_ref = listeners.getList();
+					final List<TaggableLifecycleListener> listeners_ref = listeners;
 					 
 					async_dispatcher.dispatch(
 						new AERunnable()
@@ -2521,7 +2521,7 @@ TagManagerImpl
 				
 				if ( initialised ){
 					
-					final List<TaggableLifecycleListener> listeners_ref = listeners.getList();
+					final List<TaggableLifecycleListener> listeners_ref = listeners;
 					 
 					async_dispatcher.dispatch(
 						new AERunnable()
@@ -2556,7 +2556,7 @@ TagManagerImpl
 				
 				if ( initialised ){
 					
-					final List<TaggableLifecycleListener> listeners_ref = listeners.getList();
+					final List<TaggableLifecycleListener> listeners_ref = listeners;
 					 
 					async_dispatcher.dispatch(
 						new AERunnable()
@@ -2591,7 +2591,7 @@ TagManagerImpl
 				
 				if ( initialised ){
 					
-					final List<TaggableLifecycleListener> listeners_ref = listeners.getList();
+					final List<TaggableLifecycleListener> listeners_ref = listeners;
 					 
 					async_dispatcher.dispatch(
 						new AERunnable()

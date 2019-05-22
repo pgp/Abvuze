@@ -26,6 +26,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -81,7 +82,6 @@ import com.aelitis.azureus.core.subs.SubscriptionUtils.SubscriptionDownloadDetai
 import com.aelitis.azureus.core.tag.Tag;
 import com.aelitis.azureus.core.tag.TagManagerFactory;
 import com.aelitis.azureus.core.torrent.PlatformTorrentUtils;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.core.vuzefile.*;
 import com.aelitis.azureus.plugins.dht.*;
 import com.aelitis.azureus.plugins.magnet.MagnetPlugin;
@@ -273,7 +273,7 @@ SubscriptionManagerImpl
 	private boolean					periodic_lookup_in_progress;
 	private int						priority_lookup_pending;
 	
-	private CopyOnWriteList<SubscriptionManagerListener>			listeners = new CopyOnWriteList<>();
+	private List<SubscriptionManagerListener> listeners = new CopyOnWriteArrayList<>();
 	
 	private SubscriptionSchedulerImpl	scheduler;
 	

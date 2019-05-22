@@ -22,6 +22,8 @@ package com.aelitis.azureus.core.download;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.util.Debug;
 import org.gudy.azureus2.core3.util.SHA1Hasher;
@@ -36,7 +38,6 @@ import org.gudy.azureus2.plugins.download.DownloadException;
 import org.gudy.azureus2.plugins.utils.PooledByteBuffer;
 import org.gudy.azureus2.pluginsimpl.local.utils.PooledByteBufferImpl;
 
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.core.util.QTFastStartRAF;
 
 public class 
@@ -273,7 +274,7 @@ DiskManagerFileInfoFile
 			
 			private String		user_agent;
 			
-			private CopyOnWriteList<DiskManagerListener>		listeners = new CopyOnWriteList<>();
+			private List<DiskManagerListener> listeners = new CopyOnWriteArrayList<>();
 			
 			public void
 			setType(

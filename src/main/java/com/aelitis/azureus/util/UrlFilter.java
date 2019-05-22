@@ -26,7 +26,9 @@ import org.gudy.azureus2.core3.util.Debug;
 
 import com.aelitis.azureus.core.cnetwork.*;
 import com.aelitis.azureus.core.messenger.PlatformMessenger;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
+
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author TuxPaper
@@ -44,9 +46,9 @@ public class UrlFilter
 	private String DEFAULT_RPC_WHITELIST = "https?://"
 			+ default_site_host.replaceAll("\\.", "\\\\.") + ":?[0-9]*/" + ".*";
 
-	private CopyOnWriteList<String>  	listUrlBlacklist = new CopyOnWriteList<>();
+	private List<String> listUrlBlacklist = new CopyOnWriteArrayList<>();
 
-	private CopyOnWriteList<String> 	listUrlWhitelist = new CopyOnWriteList<>();
+	private List<String> listUrlWhitelist = new CopyOnWriteArrayList<>();
 
 	private AEMonitor mon = new AEMonitor("UrlFilter");
 

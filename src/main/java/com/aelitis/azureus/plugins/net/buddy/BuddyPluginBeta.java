@@ -34,6 +34,7 @@ import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -84,7 +85,6 @@ import com.aelitis.azureus.core.tag.Tag;
 import com.aelitis.azureus.core.tag.TagManagerFactory;
 import com.aelitis.azureus.core.tag.TagType;
 import com.aelitis.azureus.core.util.AZ3Functions;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.plugins.I2PHelpers;
 
 public class
@@ -125,7 +125,7 @@ BuddyPluginBeta
 	private AsyncDispatcher		dispatcher = new AsyncDispatcher( "BuddyPluginBeta" );
 	
 	private Map<String,ChatInstance>		chat_instances_map 	= new HashMap<>();
-	private CopyOnWriteList<ChatInstance>	chat_instances_list	= new CopyOnWriteList<>();
+	private List<ChatInstance>	chat_instances_list	= new CopyOnWriteArrayList<>();
 	
 	private PluginInterface azmsgsync_pi;
 
@@ -147,11 +147,11 @@ BuddyPluginBeta
 		
 	private Map<String,Map<String,Object>>		opts_map;
 	
-	private CopyOnWriteList<FTUXStateChangeListener>		ftux_listeners = new CopyOnWriteList<>();
+	private List<FTUXStateChangeListener>		ftux_listeners = new CopyOnWriteArrayList<>();
 	
 	private boolean	ftux_accepted = false;
 	
-	private CopyOnWriteList<ChatManagerListener>		listeners = new CopyOnWriteList<>();
+	private List<ChatManagerListener>		listeners = new CopyOnWriteArrayList<>();
 	
 	private AtomicInteger		private_chat_id = new AtomicInteger();
 	
@@ -2430,7 +2430,7 @@ BuddyPluginBeta
 	public List<ChatInstance>
 	getChats()
 	{
-		return( chat_instances_list.getList());
+		return chat_instances_list;
 	}
 	
 	private void
@@ -2577,7 +2577,7 @@ BuddyPluginBeta
 		
 		private Map<String,List<ChatParticipant>>	nick_clash_map = new HashMap<>();
 		
-		private CopyOnWriteList<ChatListener>		listeners = new CopyOnWriteList<>();
+		private List<ChatListener>		listeners = new CopyOnWriteArrayList<>();
 		
 		private Map<Object,Object>					user_data = new HashMap<>();
 		

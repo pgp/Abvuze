@@ -21,6 +21,7 @@ package org.gudy.azureus2.pluginsimpl.local.ddb;
 
 import java.net.InetSocketAddress;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.util.AEMonitor;
 import org.gudy.azureus2.core3.util.AENetworkClassifier;
@@ -37,7 +38,6 @@ import com.aelitis.azureus.core.AzureusCore;
 import com.aelitis.azureus.core.AzureusCoreFactory;
 import com.aelitis.azureus.core.dht.DHT;
 import com.aelitis.azureus.core.proxy.AEProxyFactory;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.plugins.dht.DHTPlugin;
 import com.aelitis.azureus.plugins.dht.DHTPluginInterface;
 import com.aelitis.azureus.plugins.dht.DHTPluginContact;
@@ -210,7 +210,7 @@ DDBaseImpl
 	private DHTPluginInterface				dht_use_accessor;
 		
 
-	private CopyOnWriteList<DistributedDatabaseListener>	listeners = new CopyOnWriteList<>();
+	private List<DistributedDatabaseListener>	listeners = new CopyOnWriteArrayList<>();
 	
 	protected
 	DDBaseImpl(
@@ -285,7 +285,7 @@ DDBaseImpl
 								localAddressChanged(
 									DHTPluginContact	local_contact )
 								{
-									List<DistributedDatabaseListener> list = listeners.getList();
+									List<DistributedDatabaseListener> list = listeners;
 									
 									dbEvent ev = new dbEvent( DistributedDatabaseEvent.ET_LOCAL_CONTACT_CHANGED );
 									

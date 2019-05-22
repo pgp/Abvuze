@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
 import org.gudy.azureus2.core3.util.AEMonitor;
@@ -46,7 +47,6 @@ import com.aelitis.azureus.core.dht.router.DHTRouterContact;
 import com.aelitis.azureus.core.dht.router.DHTRouterContactAttachment;
 import com.aelitis.azureus.core.dht.router.DHTRouterObserver;
 import com.aelitis.azureus.core.dht.router.DHTRouterStats;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.core.util.bloom.BloomFilter;
 import com.aelitis.azureus.core.util.bloom.BloomFilterFactory;
 
@@ -93,7 +93,7 @@ DHTRouterImpl
 
 	private static final AEMonitor	class_mon	= new AEMonitor( "DHTRouter:class" );
 	
-	private final CopyOnWriteList<DHTRouterObserver>	observers = new CopyOnWriteList<>();
+	private final List<DHTRouterObserver>	observers = new CopyOnWriteArrayList<>();
 
 	private boolean	sleeping;
 	private boolean	suspended;

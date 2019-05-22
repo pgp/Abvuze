@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.category.Category;
 import org.gudy.azureus2.core3.category.CategoryListener;
@@ -54,7 +55,6 @@ import com.aelitis.azureus.core.tag.TagManager;
 import com.aelitis.azureus.core.tag.TagManagerFactory;
 import com.aelitis.azureus.core.tag.TagType;
 import com.aelitis.azureus.core.tag.Taggable;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 
 public class 
 TranscodeManagerImpl
@@ -65,7 +65,7 @@ TranscodeManagerImpl
 	
 	private volatile TranscodeProviderVuze	vuzexcode_provider;
 	
-	private CopyOnWriteList<TranscodeManagerListener>	listeners = new CopyOnWriteList<>();
+	private List<TranscodeManagerListener>	listeners = new CopyOnWriteArrayList<>();
 	
 	private TranscodeQueueImpl		queue = new TranscodeQueueImpl( this );
 	

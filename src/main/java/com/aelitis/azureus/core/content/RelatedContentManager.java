@@ -27,6 +27,7 @@ import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -82,7 +83,6 @@ import com.aelitis.azureus.core.tag.TagManager;
 import com.aelitis.azureus.core.tag.TagManagerFactory;
 import com.aelitis.azureus.core.tag.TagType;
 import com.aelitis.azureus.core.torrent.PlatformTorrentUtils;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.core.util.FeatureAvailability;
 import com.aelitis.azureus.core.util.bloom.BloomFilter;
 import com.aelitis.azureus.core.util.bloom.BloomFilterFactory;
@@ -228,7 +228,7 @@ RelatedContentManager
 	
 	private int publishing_count = 0;
 	
-	private CopyOnWriteList<RelatedContentManagerListener>	listeners = new CopyOnWriteList<>();
+	private List<RelatedContentManagerListener>	listeners = new CopyOnWriteArrayList<>();
 	
 	private AESemaphore initialisation_complete_sem = new AESemaphore( "RCM:init" );
 	
@@ -252,7 +252,7 @@ RelatedContentManager
 	
 	private RCMSearchXFer			transfer_type = new RCMSearchXFer();
 
-	private final 	CopyOnWriteList<RelatedContentSearcher>	searchers = new CopyOnWriteList<>();
+	private final 	List<RelatedContentSearcher>	searchers = new CopyOnWriteArrayList<>();
 	private boolean	added_i2p_searcher;
 	
 	private static final int MAX_TRANSIENT_CACHE	= 256;

@@ -30,6 +30,7 @@ package org.gudy.azureus2.pluginsimpl.local.download;
 import java.io.File;
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.category.Category;
 import org.gudy.azureus2.core3.category.CategoryManager;
@@ -74,7 +75,6 @@ import com.aelitis.azureus.core.peermanager.messaging.bittorrent.BTHandshake;
 import com.aelitis.azureus.core.tag.TagManagerFactory;
 import com.aelitis.azureus.core.tracker.TrackerPeerSource;
 import com.aelitis.azureus.core.tracker.TrackerPeerSourceAdapter;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.core.util.CopyOnWriteMap;
 
 public class 
@@ -108,12 +108,12 @@ DownloadImpl
 	private Map			peer_listeners			= new HashMap();
 	private AEMonitor	peer_listeners_mon		= new AEMonitor( "Download:PL");
 	
-	private CopyOnWriteList completion_listeners     = new CopyOnWriteList();
+	private List<DownloadCompletionListener> completion_listeners     = new CopyOnWriteArrayList();
 	
 	private CopyOnWriteMap read_attribute_listeners_map_cow  = new CopyOnWriteMap();
 	private CopyOnWriteMap write_attribute_listeners_map_cow = new CopyOnWriteMap();
 	
-	private CopyOnWriteList	activation_listeners = new CopyOnWriteList();
+	private List	activation_listeners = new CopyOnWriteArrayList();
 	private DownloadActivationEvent	activation_state;
 	
 	
@@ -892,14 +892,8 @@ DownloadImpl
 		}
 	}
 	
-	public void
-	downloadComplete(DownloadManager manager)
-	{	
-		if (this.completion_listeners.isEmpty()) {return;}
-		Iterator itr = this.completion_listeners.iterator();
-		DownloadCompletionListener dcl;
-		while (itr.hasNext()) {
-			dcl = (DownloadCompletionListener)itr.next();
+	public void downloadComplete(DownloadManager manager) {
+		for (DownloadCompletionListener dcl : completion_listeners) {
 			long startTime = SystemTime.getCurrentTime();
 			try {dcl.onCompletion(this);}
 			catch (Throwable t) {Debug.printStackTrace(t);}
@@ -989,11 +983,11 @@ DownloadImpl
 		if (attribute == null) {return;}
 		
 		CopyOnWriteMap attr_map = this.getAttributeMapForType(event_type);
-		CopyOnWriteList listener_list = (CopyOnWriteList)attr_map.get(attribute);
+		List listener_list = (List)attr_map.get(attribute);
 		boolean add_self = false;
 		
 		if (listener_list == null) {
-			listener_list = new CopyOnWriteList();
+			listener_list = new CopyOnWriteArrayList();
 			attr_map.put(attribute, listener_list);
 		}
 		add_self = listener_list.isEmpty();
@@ -1009,7 +1003,7 @@ DownloadImpl
 		if (attribute == null) {return;}
 		
 		CopyOnWriteMap attr_map = this.getAttributeMapForType(event_type);
-		CopyOnWriteList listener_list = (CopyOnWriteList)attr_map.get(attribute);
+		List listener_list = (List)attr_map.get(attribute);
 		boolean remove_self = false;
 			
 		if (listener_list != null) {
@@ -2261,12 +2255,10 @@ DownloadImpl
 		CopyOnWriteMap attr_listener_map = getAttributeMapForType(event_type);
 
 		TorrentAttribute attr = convertAttribute(attribute);
-		if (attr == null) {return;}
+		if (attr == null) return;
 		
-		List listeners = null;
-		listeners = ((CopyOnWriteList)attr_listener_map.get(attribute)).getList();
-
-		if (listeners == null) {return;}
+		List listeners = (List)attr_listener_map.get(attribute);
+		if (listeners == null) return;
 
         for (Object listener : listeners) {
             DownloadAttributeListener dal = (DownloadAttributeListener) listener;

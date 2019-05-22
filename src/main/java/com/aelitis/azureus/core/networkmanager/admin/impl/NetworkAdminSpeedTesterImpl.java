@@ -25,13 +25,15 @@ import org.gudy.azureus2.core3.util.Debug;
 import com.aelitis.azureus.core.networkmanager.admin.NetworkAdminSpeedTester;
 import com.aelitis.azureus.core.networkmanager.admin.NetworkAdminSpeedTesterListener;
 import com.aelitis.azureus.core.networkmanager.admin.NetworkAdminSpeedTesterResult;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
+
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public abstract class 
 NetworkAdminSpeedTesterImpl 
 	implements NetworkAdminSpeedTester
 {
-    private final CopyOnWriteList	listeners = new CopyOnWriteList();
+    private final List listeners = new CopyOnWriteArrayList();
 
     private boolean	result_reported;
     

@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
 import org.gudy.azureus2.core3.util.AEDiagnostics;
@@ -46,7 +47,6 @@ import com.aelitis.azureus.core.custom.Customization;
 import com.aelitis.azureus.core.custom.CustomizationManager;
 import com.aelitis.azureus.core.custom.CustomizationManagerFactory;
 
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.core.vuzefile.VuzeFile;
 import com.aelitis.azureus.core.vuzefile.VuzeFileComponent;
 import com.aelitis.azureus.core.vuzefile.VuzeFileHandler;
@@ -106,9 +106,9 @@ ContentNetworkManagerImpl
 		return( singleton );
 	}
 	
-	private List<ContentNetworkImpl>	networks = new ArrayList<>();
+	private List<ContentNetworkImpl> networks = new ArrayList<>();
 	
-	private CopyOnWriteList<ContentNetworkListener>	listeners = new CopyOnWriteList<>();
+	private List<ContentNetworkListener> listeners = new CopyOnWriteArrayList<>();
 	
 	protected
 	ContentNetworkManagerImpl()

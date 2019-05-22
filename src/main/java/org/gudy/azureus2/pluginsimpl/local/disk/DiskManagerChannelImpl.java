@@ -21,6 +21,7 @@ package org.gudy.azureus2.pluginsimpl.local.disk;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
 import org.gudy.azureus2.core3.config.ParameterListener;
@@ -49,7 +50,6 @@ import org.gudy.azureus2.pluginsimpl.local.utils.PooledByteBufferImpl;
 
 import com.aelitis.azureus.core.peermanager.piecepicker.PiecePicker;
 import com.aelitis.azureus.core.peermanager.piecepicker.PieceRTAProvider;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 
 public class 
 DiskManagerChannelImpl 
@@ -124,7 +124,7 @@ DiskManagerChannelImpl
 	
 		// hack to allow other components to be informed when channels are created
 	
-	private static CopyOnWriteList<channelCreateListener>	listeners = new CopyOnWriteList<>();
+	private static List<channelCreateListener>	listeners = new CopyOnWriteArrayList<>();
 	
 	public static void 
 	addListener(

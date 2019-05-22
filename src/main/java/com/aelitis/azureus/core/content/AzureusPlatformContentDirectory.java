@@ -25,6 +25,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.torrent.TOTorrent;
 import org.gudy.azureus2.core3.torrent.TOTorrentFactory;
@@ -47,7 +48,6 @@ import com.aelitis.azureus.core.tag.TagManagerFactory;
 import com.aelitis.azureus.core.tag.TagType;
 import com.aelitis.azureus.core.tag.Taggable;
 import com.aelitis.azureus.core.torrent.PlatformTorrentUtils;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.util.ConstantsVuze;
 
 /**
@@ -75,7 +75,7 @@ AzureusPlatformContentDirectory
 		}
 	}
 	
-	private static CopyOnWriteList<AzureusContentDirectoryListener>	listeners = new CopyOnWriteList<>();
+	private static List<AzureusContentDirectoryListener>	listeners = new CopyOnWriteArrayList<>();
 	
 	public AzureusContent
 	lookupContent(

@@ -23,6 +23,7 @@ package com.aelitis.azureus.core.download;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.util.AESemaphore;
 import org.gudy.azureus2.core3.util.AEThread2;
@@ -38,8 +39,6 @@ import org.gudy.azureus2.plugins.download.Download;
 import org.gudy.azureus2.plugins.download.DownloadException;
 import org.gudy.azureus2.plugins.utils.PooledByteBuffer;
 import org.gudy.azureus2.pluginsimpl.local.utils.PooledByteBufferImpl;
-
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 
 public class 
 DiskManagerFileInfoStream
@@ -592,7 +591,7 @@ DiskManagerFileInfoStream
 
                 private volatile boolean	request_cancelled;
 				
-				private CopyOnWriteList<DiskManagerListener>		listeners = new CopyOnWriteList<>();
+				private List<DiskManagerListener>		listeners = new CopyOnWriteArrayList<>();
 				
 				public void
 				setType(

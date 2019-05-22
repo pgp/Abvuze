@@ -23,13 +23,13 @@ package com.aelitis.azureus.core.cnetwork.impl;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
 import org.gudy.azureus2.core3.util.BEncoder;
 import org.gudy.azureus2.core3.util.Debug;
 
 import com.aelitis.azureus.core.cnetwork.*;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.core.vuzefile.VuzeFile;
 import com.aelitis.azureus.core.vuzefile.VuzeFileComponent;
 import com.aelitis.azureus.core.vuzefile.VuzeFileHandler;
@@ -73,7 +73,7 @@ ContentNetworkImpl
 	
 	private Map<Object,Object>	transient_properties = new ConcurrentHashMap<>();
 	
-	private CopyOnWriteList		persistent_listeners = new CopyOnWriteList();
+	private List		persistent_listeners = new CopyOnWriteArrayList();
 	
 	protected
 	ContentNetworkImpl(

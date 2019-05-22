@@ -23,6 +23,7 @@ package com.aelitis.azureus.plugins.net.netstatus;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.util.AERunnable;
 import org.gudy.azureus2.core3.util.AESemaphore;
@@ -52,7 +53,6 @@ import com.aelitis.azureus.core.peermanager.messaging.bittorrent.BTMessage;
 import com.aelitis.azureus.core.peermanager.messaging.bittorrent.BTMessageDecoder;
 import com.aelitis.azureus.core.peermanager.messaging.bittorrent.BTMessageEncoder;
 import com.aelitis.azureus.core.peermanager.messaging.bittorrent.BTMessageFactory;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 
 public class 
 NetStatusProtocolTesterBT 
@@ -62,7 +62,7 @@ NetStatusProtocolTesterBT
 	private NetStatusProtocolTester			tester;
 	private boolean							test_initiator;
 	
-	private CopyOnWriteList					listeners	= new CopyOnWriteList();
+	private List listeners = new CopyOnWriteArrayList();
 	
 	
 	private byte[]		my_hash;

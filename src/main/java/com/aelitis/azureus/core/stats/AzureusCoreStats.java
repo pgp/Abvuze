@@ -21,6 +21,7 @@
 package com.aelitis.azureus.core.stats;
 
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Pattern;
 
 import org.gudy.azureus2.core3.util.AEDiagnostics;
@@ -31,7 +32,6 @@ import org.gudy.azureus2.core3.util.Timer;
 import org.gudy.azureus2.core3.util.TimerEvent;
 import org.gudy.azureus2.core3.util.TimerEventPerformer;
 
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.core.util.average.Average;
 import com.aelitis.azureus.core.util.average.AverageFactory;
 
@@ -286,15 +286,15 @@ AzureusCoreStats
 			});
 	}
 	
-	private static final CopyOnWriteList	providers 	= new CopyOnWriteList();
+	private static final List	providers 	= new CopyOnWriteArrayList();
 	
 	private static  Map	averages	= new HashMap();
 	
 	private static boolean 	enable_averages;
 	private static Timer	average_timer;
 	
-	private static final CopyOnWriteList provider_listeners = new CopyOnWriteList();
-	private static final CopyOnWriteList derived_generators = new CopyOnWriteList();
+	private static final List provider_listeners = new CopyOnWriteArrayList();
+	private static final List derived_generators = new CopyOnWriteArrayList();
 	
 	public static void
 	addStatsDefinitions(
@@ -479,11 +479,7 @@ AzureusCoreStats
 		Set							types,
 		AzureusCoreStatsProvider	provider )
 	{
-		synchronized( providers ){
-			
-			providers.add( new Object[]{ types, provider });
-		}
-		
+		providers.add( new Object[]{ types, provider });
 		fireProvidersChangeListeners();
 	}
 

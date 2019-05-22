@@ -28,6 +28,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,7 +45,6 @@ import com.aelitis.azureus.core.devices.TranscodeProfile;
 import com.aelitis.azureus.core.devices.TranscodeProvider;
 import com.aelitis.azureus.core.devices.TranscodeTarget;
 import com.aelitis.azureus.core.devices.TranscodeTargetListener;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.core.vuzefile.VuzeFile;
 import com.aelitis.azureus.util.ImportExportUtils;
 import com.aelitis.azureus.util.StringCompareUtils;
@@ -256,12 +256,12 @@ DeviceImpl
 	
 	private WeakReference<Map<String,Map<String,?>>> device_files_ref;
 	
-	private CopyOnWriteList<TranscodeTargetListener>	listeners = new CopyOnWriteList<>();
+	private List<TranscodeTargetListener>	listeners = new CopyOnWriteArrayList<>();
 	
 	private Map<Object,String>	errors 	= new HashMap<>();
 	private Map<Object,String>	infos	= new HashMap<>();
 	
-	private CopyOnWriteList<DeviceListener>		device_listeners;
+	private List<DeviceListener>		device_listeners;
 
 	private String image_id;
 
@@ -2425,7 +2425,7 @@ DeviceImpl
 			
 			if ( device_listeners != null ){
 				
-				l = device_listeners.getList();
+				l = device_listeners;
 				
 			}else{
 				
@@ -2453,7 +2453,7 @@ DeviceImpl
 			
 			if ( device_listeners == null ){
 				
-				device_listeners = new CopyOnWriteList<>();
+				device_listeners = new CopyOnWriteArrayList<>();
 			}
 			
 			device_listeners.add( listener );

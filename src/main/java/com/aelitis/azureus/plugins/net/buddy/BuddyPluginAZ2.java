@@ -22,6 +22,7 @@ package com.aelitis.azureus.plugins.net.buddy;
 
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.util.AEThread2;
 import org.gudy.azureus2.core3.util.Base32;
@@ -30,8 +31,6 @@ import org.gudy.azureus2.core3.util.RandomUtils;
 import org.gudy.azureus2.plugins.PluginInterface;
 import org.gudy.azureus2.plugins.torrent.Torrent;
 import org.gudy.azureus2.plugins.ui.UIManagerEvent;
-
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 
 public class 
 BuddyPluginAZ2 
@@ -62,9 +61,9 @@ BuddyPluginAZ2
 	
 	private Map				chats 		= new HashMap();
 	
-	private CopyOnWriteList	listeners = new CopyOnWriteList();
+	private List	listeners = new CopyOnWriteArrayList();
 	
-	private CopyOnWriteList	track_listeners = new CopyOnWriteList();
+	private List	track_listeners = new CopyOnWriteArrayList();
 	
 	protected 
 	BuddyPluginAZ2(
@@ -587,7 +586,7 @@ BuddyPluginAZ2
 		private String		id;
 		
 		private Map				participants 	= new HashMap();
-		private CopyOnWriteList	listeners 		= new CopyOnWriteList();
+		private List	listeners 		= new CopyOnWriteArrayList();
 		
 		private List			history			= new ArrayList();
 		

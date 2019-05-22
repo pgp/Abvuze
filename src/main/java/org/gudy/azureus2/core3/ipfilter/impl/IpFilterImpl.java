@@ -32,6 +32,7 @@ import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
 import org.gudy.azureus2.core3.config.ParameterListener;
@@ -69,11 +70,10 @@ IpFilterImpl
 	private int num_ips_blocked_loggable	= 0;
 
 	private long	last_update_time;
-    
-  
+
 	final CopyOnWriteList<IPFilterListener>	listenerz = new CopyOnWriteList<>(true);
 	
-	private final CopyOnWriteList<IpFilterExternalHandler>	external_handlers = new CopyOnWriteList<>();
+	private final List<IpFilterExternalHandler>	external_handlers = new CopyOnWriteArrayList<>();
 	
 	final FrequencyLimitedDispatcher blockedListChangedDispatcher;
 

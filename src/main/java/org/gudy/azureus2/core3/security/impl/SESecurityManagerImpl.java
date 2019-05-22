@@ -44,6 +44,7 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.net.ssl.*;
 
@@ -65,7 +66,6 @@ import org.gudy.azureus2.core3.util.FileUtil;
 import org.gudy.azureus2.core3.util.RandomUtils;
 
 import com.aelitis.azureus.core.networkmanager.admin.NetworkAdmin;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 
 public class 
 SESecurityManagerImpl 
@@ -120,9 +120,9 @@ SESecurityManagerImpl
 	protected String	keystore_name;
 	protected String	truststore_name;
 	
-	protected final List<SECertificateListener>		certificate_listeners 	= new ArrayList<>();
+	protected final List<SECertificateListener> certificate_listeners = new ArrayList<>();
 	
-	protected final CopyOnWriteList	password_listeners 		= new CopyOnWriteList();
+	protected final List password_listeners = new CopyOnWriteArrayList();
 	
 	
 	private static final ThreadLocal		tls	=

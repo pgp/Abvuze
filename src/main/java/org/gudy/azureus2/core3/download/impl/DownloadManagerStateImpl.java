@@ -24,6 +24,7 @@ import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -45,7 +46,6 @@ import org.gudy.azureus2.core3.tracker.client.TRTrackerAnnouncer;
 import org.gudy.azureus2.core3.util.*;
 
 import com.aelitis.azureus.core.AzureusCoreFactory;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.core.util.CopyOnWriteMap;
 import com.aelitis.azureus.core.util.LinkFileMap;
 
@@ -153,8 +153,8 @@ DownloadManagerStateImpl
 	private static final Map					global_state_cache			= new HashMap();
 	private static final ArrayList			global_state_cache_wrappers	= new ArrayList();
 	
-	private static final CopyOnWriteMap<String,CopyOnWriteList<DownloadManagerStateAttributeListener>> global_listeners_read_map_cow  = new CopyOnWriteMap<>();
-	private static final CopyOnWriteMap<String,CopyOnWriteList<DownloadManagerStateAttributeListener>> global_listeners_write_map_cow = new CopyOnWriteMap<>();
+	private static final CopyOnWriteMap<String,List<DownloadManagerStateAttributeListener>> global_listeners_read_map_cow  = new CopyOnWriteMap<>();
+	private static final CopyOnWriteMap<String,List<DownloadManagerStateAttributeListener>> global_listeners_write_map_cow = new CopyOnWriteMap<>();
 
 	
 	private DownloadManagerImpl			download_manager;
@@ -165,10 +165,10 @@ DownloadManagerStateImpl
 	
 	private Category 	category;
 
-	private final CopyOnWriteList<DownloadManagerStateListener>		listeners_cow	= new CopyOnWriteList<>();
+	private final List<DownloadManagerStateListener>		listeners_cow	= new CopyOnWriteArrayList<>();
 	
-	private final CopyOnWriteMap<String,CopyOnWriteList<DownloadManagerStateAttributeListener>> listeners_read_map_cow  = new CopyOnWriteMap<>();
-	private final CopyOnWriteMap<String,CopyOnWriteList<DownloadManagerStateAttributeListener>> listeners_write_map_cow = new CopyOnWriteMap<>();
+	private final CopyOnWriteMap<String,List<DownloadManagerStateAttributeListener>> listeners_read_map_cow  = new CopyOnWriteMap<>();
+	private final CopyOnWriteMap<String,List<DownloadManagerStateAttributeListener>> listeners_write_map_cow = new CopyOnWriteMap<>();
 	
 	
 	private Map			parameters;
@@ -2509,7 +2509,7 @@ DownloadManagerStateImpl
 			// don't make any of this async as the link management code for cache files etc
 			// relies on callbacks here being synchronous...
 				
-		for ( DownloadManagerStateListener l: listeners_cow.getList()){
+		for ( DownloadManagerStateListener l: listeners_cow){
 			
 			try{
 				l.stateChanged(
@@ -2534,11 +2534,11 @@ DownloadManagerStateImpl
 			}
 		}
 		
-		CopyOnWriteList<DownloadManagerStateAttributeListener> write_listeners = global_listeners_write_map_cow.get(attribute_name);
+		List<DownloadManagerStateAttributeListener> write_listeners = global_listeners_write_map_cow.get(attribute_name);
 		
 		if ( write_listeners != null){
 					
-			for ( DownloadManagerStateAttributeListener l: write_listeners.getList()){
+			for ( DownloadManagerStateAttributeListener l: write_listeners){
 				
 				try{
 					
@@ -2555,7 +2555,7 @@ DownloadManagerStateImpl
 		
 		if ( write_listeners != null){
 					
-			for ( DownloadManagerStateAttributeListener l: write_listeners.getList()){
+			for ( DownloadManagerStateAttributeListener l: write_listeners){
 				
 				try{
 					
@@ -2584,7 +2584,7 @@ DownloadManagerStateImpl
 
 			try{
 				
-				for (DownloadManagerStateListener l: listeners_cow.getList()){
+				for (DownloadManagerStateListener l: listeners_cow){
 					
 					try{
 						l.stateChanged(
@@ -2609,11 +2609,11 @@ DownloadManagerStateImpl
 					}
 				}
 				
-				CopyOnWriteList<DownloadManagerStateAttributeListener> read_listeners = global_listeners_read_map_cow.get(attribute_name);
+				List<DownloadManagerStateAttributeListener> read_listeners = global_listeners_read_map_cow.get(attribute_name);
 				
 				if ( read_listeners != null ){
 								
-					for ( DownloadManagerStateAttributeListener l: read_listeners.getList()){
+					for ( DownloadManagerStateAttributeListener l: read_listeners){
 						
 						try{
 							l.attributeEventOccurred(download_manager, attribute_name, DownloadManagerStateAttributeListener.WILL_BE_READ);
@@ -2629,7 +2629,7 @@ DownloadManagerStateImpl
 				
 				if ( read_listeners != null ){
 								
-					for ( DownloadManagerStateAttributeListener l: read_listeners.getList()){
+					for ( DownloadManagerStateAttributeListener l: read_listeners){
 						
 						try{
 							l.attributeEventOccurred(download_manager, attribute_name, DownloadManagerStateAttributeListener.WILL_BE_READ);
@@ -2662,18 +2662,18 @@ DownloadManagerStateImpl
 	}
 	
 	public void addListener(DownloadManagerStateAttributeListener l, String attribute, int event_type) {
-		CopyOnWriteMap<String,CopyOnWriteList<DownloadManagerStateAttributeListener>> map_to_use = (event_type == DownloadManagerStateAttributeListener.WILL_BE_READ) ? this.listeners_read_map_cow : this.listeners_write_map_cow;
-		CopyOnWriteList<DownloadManagerStateAttributeListener> lst = map_to_use.get(attribute);
+		CopyOnWriteMap<String,List<DownloadManagerStateAttributeListener>> map_to_use = (event_type == DownloadManagerStateAttributeListener.WILL_BE_READ) ? this.listeners_read_map_cow : this.listeners_write_map_cow;
+		List<DownloadManagerStateAttributeListener> lst = map_to_use.get(attribute);
 		if (lst == null) {
-			lst = new CopyOnWriteList<>();
+			lst = new CopyOnWriteArrayList<>();
 			map_to_use.put(attribute, lst);
 		}
 		lst.add(l);
 	}
 
 	public void removeListener(DownloadManagerStateAttributeListener l, String attribute, int event_type) {
-		CopyOnWriteMap<String,CopyOnWriteList<DownloadManagerStateAttributeListener>> map_to_use = (event_type == DownloadManagerStateAttributeListener.WILL_BE_READ) ? this.listeners_read_map_cow : this.listeners_write_map_cow;
-		CopyOnWriteList<DownloadManagerStateAttributeListener> lst = map_to_use.get(attribute);
+		CopyOnWriteMap<String,List<DownloadManagerStateAttributeListener>> map_to_use = (event_type == DownloadManagerStateAttributeListener.WILL_BE_READ) ? this.listeners_read_map_cow : this.listeners_write_map_cow;
+		List<DownloadManagerStateAttributeListener> lst = map_to_use.get(attribute);
 		if (lst != null) {lst.remove(l);}
 	}
 	
@@ -2681,10 +2681,10 @@ DownloadManagerStateImpl
 	addGlobalListener(
 		DownloadManagerStateAttributeListener l, String attribute, int event_type)
 	{
-		CopyOnWriteMap<String,CopyOnWriteList<DownloadManagerStateAttributeListener>> map_to_use = (event_type == DownloadManagerStateAttributeListener.WILL_BE_READ) ? global_listeners_read_map_cow : global_listeners_write_map_cow;
-		CopyOnWriteList<DownloadManagerStateAttributeListener> lst = map_to_use.get(attribute);
+		CopyOnWriteMap<String,List<DownloadManagerStateAttributeListener>> map_to_use = (event_type == DownloadManagerStateAttributeListener.WILL_BE_READ) ? global_listeners_read_map_cow : global_listeners_write_map_cow;
+		List<DownloadManagerStateAttributeListener> lst = map_to_use.get(attribute);
 		if (lst == null) {
-			lst = new CopyOnWriteList<>();
+			lst = new CopyOnWriteArrayList<>();
 			map_to_use.put(attribute, lst);
 		}
 		lst.add(l);
@@ -2694,8 +2694,8 @@ DownloadManagerStateImpl
 	removeGlobalListener(
 		DownloadManagerStateAttributeListener l, String attribute, int event_type)
 	{
-		CopyOnWriteMap<String,CopyOnWriteList<DownloadManagerStateAttributeListener>> map_to_use = (event_type == DownloadManagerStateAttributeListener.WILL_BE_READ) ? global_listeners_read_map_cow : global_listeners_write_map_cow;
-		CopyOnWriteList<DownloadManagerStateAttributeListener> lst = map_to_use.get(attribute);
+		CopyOnWriteMap<String,List<DownloadManagerStateAttributeListener>> map_to_use = (event_type == DownloadManagerStateAttributeListener.WILL_BE_READ) ? global_listeners_read_map_cow : global_listeners_write_map_cow;
+		List<DownloadManagerStateAttributeListener> lst = map_to_use.get(attribute);
 		if (lst != null) {lst.remove(l);}
 	}
 	

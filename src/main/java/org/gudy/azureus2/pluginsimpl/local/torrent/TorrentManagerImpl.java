@@ -35,6 +35,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.plugins.PluginInterface;
 import org.gudy.azureus2.plugins.tag.Tag;
@@ -44,8 +45,6 @@ import org.gudy.azureus2.core3.util.*;
 import org.gudy.azureus2.core3.internat.*;
 import org.gudy.azureus2.core3.torrent.*;
 import org.gudy.azureus2.core3.torrent.impl.TorrentOpenOptions;
-
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 
 public class
 TorrentManagerImpl
@@ -97,7 +96,7 @@ TorrentManagerImpl
 		}
 	}
 
-	protected static CopyOnWriteList<TorrentManagerListener>		listeners = new CopyOnWriteList<>();
+	protected static List<TorrentManagerListener>		listeners = new CopyOnWriteArrayList<>();
 
 	protected PluginInterface	plugin_interface;
 
@@ -262,7 +261,7 @@ TorrentManagerImpl
 			return(
 				new TorrentCreator()
 				{
-					private CopyOnWriteList<TorrentCreatorListener>	listeners = new CopyOnWriteList<>();
+					private List<TorrentCreatorListener>	listeners = new CopyOnWriteArrayList<>();
 
 					public void
 					start()

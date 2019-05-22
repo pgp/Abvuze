@@ -23,6 +23,7 @@ import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
 import org.gudy.azureus2.core3.internat.MessageText;
@@ -32,7 +33,6 @@ import org.gudy.azureus2.core3.logging.Logger;
 import org.gudy.azureus2.core3.util.*;
 import org.spongycastle.util.encoders.Base64;
 
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.core.util.HTTPUtils;
 import com.aelitis.azureus.core.util.png.PNG;
 import com.aelitis.net.magneturi.MagnetURIHandler;
@@ -82,7 +82,7 @@ MagnetURIHandlerImpl
 	
 	private int		port;
 	
-	private CopyOnWriteList<MagnetURIHandlerListener>	listeners	= new CopyOnWriteList<>();
+	private List<MagnetURIHandlerListener>	listeners	= new CopyOnWriteArrayList<>();
 	
 	private Map		info_map 	= new HashMap();
 	

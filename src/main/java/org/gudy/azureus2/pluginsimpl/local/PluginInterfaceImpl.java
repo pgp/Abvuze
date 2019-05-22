@@ -24,7 +24,8 @@ package org.gudy.azureus2.pluginsimpl.local;
 
 import java.util.*;
 import java.io.File;
-import java.net.URL; 
+import java.net.URL;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.platform.PlatformManagerFactory;
 import org.gudy.azureus2.plugins.*;
@@ -68,7 +69,6 @@ import org.gudy.azureus2.core3.util.*;
 import org.gudy.azureus2.core3.logging.*;
 
 import com.aelitis.azureus.core.AzureusCoreComponent;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 
 
 
@@ -87,10 +87,10 @@ PluginInterfaceImpl
   private Object				initialiser_key;
   protected ClassLoader			class_loader;
   
-  private CopyOnWriteList<PluginListener>		listeners 				= new CopyOnWriteList<>();
-  private Set<PluginListener>					init_complete_fired_set	= new HashSet<>();
+  private List<PluginListener>	listeners = new CopyOnWriteArrayList<>();
+  private Set<PluginListener>	init_complete_fired_set	= new HashSet<>();
   
-  private CopyOnWriteList<PluginEventListener>		event_listeners	= new CopyOnWriteList<>();
+  private List<PluginEventListener> event_listeners = new CopyOnWriteArrayList<>();
   private String				key;
   private String 				pluginConfigKey;
   private Properties 			props;

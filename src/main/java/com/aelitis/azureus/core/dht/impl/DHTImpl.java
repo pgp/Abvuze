@@ -22,6 +22,7 @@ package com.aelitis.azureus.core.dht.impl;
 import java.io.*;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.util.AERunStateHandler;
 import org.gudy.azureus2.core3.util.Debug;
@@ -41,7 +42,6 @@ import com.aelitis.azureus.core.dht.router.DHTRouter;
 import com.aelitis.azureus.core.dht.speed.DHTSpeedTester;
 import com.aelitis.azureus.core.dht.speed.DHTSpeedTesterFactory;
 import com.aelitis.azureus.core.dht.transport.*;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 
 /**
  * @author parg
@@ -60,7 +60,7 @@ DHTImpl
 	private final Properties				properties;
 	private final DHTLogger				logger;
 	
-	private final CopyOnWriteList<DHTListener>	listeners = new CopyOnWriteList<>();
+	private final List<DHTListener>	listeners = new CopyOnWriteArrayList<>();
 	
 	private boolean	runstate_startup 	= true;
 	private boolean	sleeping			= false;

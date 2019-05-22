@@ -25,8 +25,10 @@ import org.gudy.azureus2.core3.util.Debug;
 import org.gudy.azureus2.plugins.download.Download;
 import org.gudy.azureus2.pluginsimpl.local.PluginCoreUtils;
 
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.ui.common.table.TableView;
+
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Manages the currently selected content in the visible display
@@ -37,7 +39,7 @@ import com.aelitis.azureus.ui.common.table.TableView;
  */
 public class SelectedContentManager
 {
-	private static CopyOnWriteList<SelectedContentListener> listeners = new CopyOnWriteList<>();
+	private static List<SelectedContentListener> listeners = new CopyOnWriteArrayList<>();
 
 	private static volatile ISelectedContent[] currentlySelectedContent = new ISelectedContent[0];
 

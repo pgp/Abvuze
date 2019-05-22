@@ -30,6 +30,7 @@ import java.net.InetSocketAddress;
 import java.security.*;
 import java.security.spec.RSAPublicKeySpec;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.util.AESemaphore;
 import org.gudy.azureus2.core3.util.AEThread2;
@@ -50,7 +51,6 @@ import com.aelitis.azureus.core.dht.DHTOperationListener;
 import com.aelitis.azureus.core.dht.nat.*;
 import com.aelitis.azureus.core.dht.transport.*;
 import com.aelitis.azureus.core.dht.transport.udp.*;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 
 public class 
 DHTNATPuncherImpl
@@ -112,7 +112,7 @@ DHTNATPuncherImpl
 	final Monitor						server_mon;
 	final Map<String,BindingData> 	rendezvous_bindings = new HashMap<>();
 	
-	final CopyOnWriteList<DHTNATPuncherImpl>		secondaries	 = new CopyOnWriteList<>();
+	final List<DHTNATPuncherImpl>		secondaries	 = new CopyOnWriteArrayList<>();
 	
 	private boolean	force_active;
 	
@@ -162,7 +162,7 @@ DHTNATPuncherImpl
 	private volatile byte[]							last_publish_key;
 	private volatile List<DHTTransportContact>		last_write_set;
 	
-	private final CopyOnWriteList<DHTNATPuncherListener>		listeners = new CopyOnWriteList<>();
+	private final List<DHTNATPuncherListener>		listeners = new CopyOnWriteArrayList<>();
 	
 	private boolean	suspended;
 	
@@ -209,23 +209,11 @@ DHTNATPuncherImpl
 		DHTNATPuncherImpl res = new DHTNATPuncherImpl( adapter, dht, true );
 		
 		boolean	start_it = false;
-		
-		synchronized( secondaries ){
-			
-			if ( started ){
-				
-				start_it = true;
-				
-			}	
-			
-			secondaries.add( res );
-			
-			if ( suspended ){
-				
-				res.setSuspended( true );
-			}
-		}
-		
+
+		if (started) start_it = true;
+		if (suspended) res.setSuspended(true);
+		secondaries.add( res );
+
 		if ( start_it ){
 		
 			res.start();
@@ -238,31 +226,14 @@ DHTNATPuncherImpl
 	start()
 	{
 		List<DHTNATPuncherImpl>	to_start = new ArrayList<>();
+
+		if (started) return;
+		started	= true;
+		for(DHTNATPuncherImpl x: secondaries ) if(!x.started) to_start.add(x);
+
+		for(DHTNATPuncherImpl x: to_start) x.start();
 		
-		synchronized( secondaries ){
-			
-			if ( started ){
-				
-				return;
-			}
-			
-			started	= true;
-			
-			for ( DHTNATPuncherImpl x: secondaries ){
-				
-				if ( !x.started ){
-					
-					to_start.add( x );
-				}
-			}
-		}
-		
-		for ( DHTNATPuncherImpl x: to_start ){
-			
-			x.start();
-		}
-		
-		DHTTransport	transport = dht.getTransport();
+		DHTTransport transport = dht.getTransport();
 		
 		transport.addListener(
 			new DHTTransportListener()

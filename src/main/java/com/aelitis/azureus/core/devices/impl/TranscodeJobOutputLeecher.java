@@ -22,6 +22,8 @@ package com.aelitis.azureus.core.devices.impl;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.util.Debug;
 import org.gudy.azureus2.core3.util.SHA1Hasher;
@@ -38,7 +40,6 @@ import org.gudy.azureus2.pluginsimpl.local.utils.PooledByteBufferImpl;
 
 import com.aelitis.azureus.core.devices.TranscodeException;
 import com.aelitis.azureus.core.devices.TranscodeJob;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 
 public class 
 TranscodeJobOutputLeecher
@@ -383,7 +384,7 @@ TranscodeJobOutputLeecher
 
             private volatile boolean	request_cancelled;
 			
-			private CopyOnWriteList<DiskManagerListener>		listeners = new CopyOnWriteList<>();
+			private List<DiskManagerListener> listeners = new CopyOnWriteArrayList<>();
 			
 			public void
 			setType(

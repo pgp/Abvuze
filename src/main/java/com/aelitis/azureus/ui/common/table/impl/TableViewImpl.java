@@ -19,6 +19,7 @@
 package com.aelitis.azureus.ui.common.table.impl;
 
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.config.impl.ConfigurationManager;
 import org.gudy.azureus2.core3.logging.LogEvent;
@@ -28,7 +29,6 @@ import org.gudy.azureus2.core3.util.*;
 import org.gudy.azureus2.plugins.ui.tables.TableRow;
 import org.gudy.azureus2.plugins.ui.tables.TableRowRefreshListener;
 
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.ui.common.table.*;
 import com.aelitis.azureus.ui.selectedcontent.SelectedContentManager;
 
@@ -90,17 +90,17 @@ public abstract class TableViewImpl<DATASOURCETYPE>
 	private ArrayList<TableRowRefreshListener> rowRefreshListeners;
 
 	// List of DataSourceChangedListener
-	private CopyOnWriteList<TableDataSourceChangedListener> listenersDataSourceChanged = new CopyOnWriteList<>();
+	private List<TableDataSourceChangedListener> listenersDataSourceChanged = new CopyOnWriteArrayList<>();
 
-	private CopyOnWriteList<TableSelectionListener> listenersSelection = new CopyOnWriteList<>();
+	private List<TableSelectionListener> listenersSelection = new CopyOnWriteArrayList<>();
 
-	private CopyOnWriteList<TableLifeCycleListener> listenersLifeCycle = new CopyOnWriteList<>();
+	private List<TableLifeCycleListener> listenersLifeCycle = new CopyOnWriteArrayList<>();
 
-	private CopyOnWriteList<TableRefreshListener> listenersRefresh = new CopyOnWriteList<>();
+	private List<TableRefreshListener> listenersRefresh = new CopyOnWriteArrayList<>();
 
-	private CopyOnWriteList<TableCountChangeListener> listenersCountChange = new CopyOnWriteList<>(1);
+	private List<TableCountChangeListener> listenersCountChange = new CopyOnWriteArrayList<>();
 
-	private CopyOnWriteList<TableExpansionChangeListener> listenersExpansionChange = new CopyOnWriteList<>(1);
+	private List<TableExpansionChangeListener> listenersExpansionChange = new CopyOnWriteArrayList<>();
 
 	private Object parentDataSource;
 
@@ -246,9 +246,7 @@ public abstract class TableViewImpl<DATASOURCETYPE>
 	public void setParentDataSource(Object newDataSource) {
 		//System.out.println(getTableID()  + "] setParentDataSource " + newDataSource);
 		parentDataSource = newDataSource;
-		Object[] listeners = listenersDataSourceChanged.toArray();
-		for (Object listener : listeners) {
-			TableDataSourceChangedListener l = (TableDataSourceChangedListener) listener;
+		for (TableDataSourceChangedListener l: listenersDataSourceChanged.toArray(new TableDataSourceChangedListener[0])) {
 			l.tableDataSourceChanged(newDataSource);
 		}
 	}
@@ -297,9 +295,7 @@ public abstract class TableViewImpl<DATASOURCETYPE>
 		if (rows == null || rows.length == 0) {
 			return;
 		}
-		Object[] listeners = listenersSelection.toArray();
-		for (Object listener : listeners) {
-			TableSelectionListener l = (TableSelectionListener) listener;
+		for (TableSelectionListener l : listenersSelection.toArray(new TableSelectionListener[0])) {
 			l.selected(rows);
 		}
 	}
@@ -320,35 +316,22 @@ public abstract class TableViewImpl<DATASOURCETYPE>
 	}
 
 	protected void triggerMouseEnterExitRow(TableRowCore row, boolean enter) {
-		if (row == null) {
-			return;
-		}
-		Object[] listeners = listenersSelection.toArray();
-		for (Object listener : listeners) {
-			TableSelectionListener l = (TableSelectionListener) listener;
-			if (enter) {
-				l.mouseEnter(row);
-			} else {
-				l.mouseExit(row);
-			}
+		if (row == null) return;
+
+		for (TableSelectionListener l: listenersSelection.toArray(new TableSelectionListener[0])) {
+			if (enter) l.mouseEnter(row);
+			else l.mouseExit(row);
 		}
 	}
 
 	protected void triggerFocusChangedListeners(TableRowCore row) {
-		Object[] listeners = listenersSelection.toArray();
-		for (Object listener : listeners) {
-			TableSelectionListener l = (TableSelectionListener) listener;
+		for (TableSelectionListener l : listenersSelection.toArray(new TableSelectionListener[0])) {
 			l.focusChanged(row);
 		}
 	}
 
-	/**
-	 * 
-	 */
 	protected void triggerTableRefreshListeners() {
-		Object[] listeners = listenersRefresh.toArray();
-		for (Object listener : listeners) {
-			TableRefreshListener l = (TableRefreshListener) listener;
+		for (TableRefreshListener l : listenersRefresh.toArray(new TableRefreshListener[0])) {
 			l.tableRefresh();
 		}
 	}
@@ -467,24 +450,22 @@ public abstract class TableViewImpl<DATASOURCETYPE>
 	}
 
 	public void invokeRefreshListeners(TableRowCore row) {
-		Object[] listeners;
+		TableRowRefreshListener[] listeners;
 		try {
 			listeners_mon.enter();
 			if (rowRefreshListeners == null) {
 				return;
 			}
-			listeners = rowRefreshListeners.toArray();
+			listeners = rowRefreshListeners.toArray(new TableRowRefreshListener[0]);
 
-		} finally {
+		}
+		finally {
 			listeners_mon.exit();
 		}
 
-		for (Object listener : listeners) {
+		for (TableRowRefreshListener l : listeners) {
 			try {
-				TableRowRefreshListener l = (TableRowRefreshListener) listener;
-
 				l.rowRefresh(row);
-
 			} catch (Throwable e) {
 				Debug.printStackTrace(e);
 			}

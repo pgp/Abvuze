@@ -22,6 +22,7 @@ package com.aelitis.azureus.core.networkmanager.impl.http;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
 import org.gudy.azureus2.core3.config.ParameterListener;
@@ -53,7 +54,6 @@ import com.aelitis.azureus.core.peermanager.messaging.bittorrent.BTHave;
 import com.aelitis.azureus.core.peermanager.messaging.bittorrent.BTInterested;
 import com.aelitis.azureus.core.peermanager.messaging.bittorrent.BTPiece;
 import com.aelitis.azureus.core.peermanager.messaging.bittorrent.BTRequest;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.core.util.HTTPUtils;
 
 public abstract class 
@@ -231,7 +231,7 @@ HTTPNetworkConnection
 	private final String	last_modified_date;
 	private String	content_type	= DEFAULT_CONTENT_TYPE;
 	
-	private CopyOnWriteList<requestListener>	request_listeners = null;
+	private List<requestListener>	request_listeners = null;
 	
 	protected
 	HTTPNetworkConnection(
@@ -905,7 +905,7 @@ HTTPNetworkConnection
 				
 				if ( request_listeners == null ){
 					
-					request_listeners = new CopyOnWriteList<>();
+					request_listeners = new CopyOnWriteArrayList<>();
 				}
 				
 				request_listeners.add(

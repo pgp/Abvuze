@@ -26,6 +26,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.internat.MessageText;
 import org.gudy.azureus2.core3.torrent.TOTorrent;
@@ -63,7 +64,6 @@ import com.aelitis.azureus.core.subs.SubscriptionManager;
 import com.aelitis.azureus.core.subs.SubscriptionPopularityListener;
 import com.aelitis.azureus.core.subs.SubscriptionResult;
 import com.aelitis.azureus.core.subs.SubscriptionResultFilter;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.core.vuzefile.VuzeFile;
 import com.aelitis.azureus.core.vuzefile.VuzeFileHandler;
 import com.aelitis.azureus.util.ImportExportUtils;
@@ -168,7 +168,7 @@ SubscriptionImpl
 	
 	private String			referer;
 	
-	private CopyOnWriteList	listeners = new CopyOnWriteList();
+	private List			listeners = new CopyOnWriteArrayList();
 	
 	private Map				verify_cache_details;
 	private boolean			verify_cache_result;

@@ -24,6 +24,7 @@ import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
 import org.gudy.azureus2.core3.download.DownloadManager;
@@ -69,7 +70,6 @@ import com.aelitis.azureus.core.security.*;
 import com.aelitis.azureus.core.tag.Tag;
 import com.aelitis.azureus.core.tag.TagManagerFactory;
 import com.aelitis.azureus.core.tag.TagType;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.core.util.bloom.BloomFilter;
 import com.aelitis.azureus.core.util.bloom.BloomFilterFactory;
 import com.aelitis.azureus.core.vuzefile.VuzeFileHandler;
@@ -201,8 +201,8 @@ BuddyPlugin
 	
 	private Map<String,BuddyPluginBuddy>		buddies_map	= new HashMap<>();
 	
-	private CopyOnWriteList<BuddyPluginListener>				listeners 			= new CopyOnWriteList<>();
-	private CopyOnWriteList<BuddyPluginBuddyRequestListener>	request_listeners	= new CopyOnWriteList<>();
+	private List<BuddyPluginListener>				listeners 			= new CopyOnWriteArrayList<>();
+	private List<BuddyPluginBuddyRequestListener>	request_listeners	= new CopyOnWriteArrayList<>();
 		
 	private SESecurityManager	sec_man;
 
@@ -3269,7 +3269,7 @@ BuddyPlugin
 			buddy_tracker.initialise();
 		}
 		
-		List	 listeners_ref = listeners.getList();
+		List	 listeners_ref = listeners;
 
 		for (Object o : listeners_ref) {
 
@@ -3314,7 +3314,7 @@ BuddyPlugin
 	
 		throws BuddyPluginException
 	{
-		List	 listeners_ref = request_listeners.getList();
+		List	 listeners_ref = request_listeners;
 
 		for (Object o : listeners_ref) {
 
@@ -3348,7 +3348,7 @@ BuddyPlugin
 
 			buddy.setLocalAuthorisedRSSTagsOrCategories( public_tags_or_categories );
 			
-	   		List	 listeners_ref = listeners.getList();
+	   		List	 listeners_ref = listeners;
 
 			for (Object o : listeners_ref) {
 
@@ -3369,7 +3369,7 @@ BuddyPlugin
    	{
 		if ( buddy.isAuthorised()){
 			
-	   		List	 listeners_ref = listeners.getList();
+	   		List	 listeners_ref = listeners;
 
 			for (Object o : listeners_ref) {
 
@@ -3390,7 +3390,7 @@ BuddyPlugin
    	{
 		if ( buddy.isAuthorised()){
 			
-	   		List	 listeners_ref = listeners.getList();
+	   		List	 listeners_ref = listeners;
 
 			for (Object o : listeners_ref) {
 
@@ -3409,7 +3409,7 @@ BuddyPlugin
    	fireYGM(
    		BuddyPluginBuddy[]		from_buddies )
    	{
-   		List	 listeners_ref = request_listeners.getList();
+   		List	 listeners_ref = request_listeners;
 
 		for (Object o : listeners_ref) {
 
@@ -3428,7 +3428,7 @@ BuddyPlugin
  	{
 		final boolean enabled = !plugin_interface.getPluginState().isDisabled() && isClassicEnabled();
 
- 		List	 listeners_ref = listeners.getList();
+ 		List	 listeners_ref = listeners;
 
 		for (Object o : listeners_ref) {
 

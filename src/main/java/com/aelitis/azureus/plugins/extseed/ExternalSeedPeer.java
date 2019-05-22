@@ -21,6 +21,7 @@ package com.aelitis.azureus.plugins.extseed;
 
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.util.Debug;
 import org.gudy.azureus2.plugins.download.Download;
@@ -38,8 +39,6 @@ import org.gudy.azureus2.plugins.network.Transport;
 import org.gudy.azureus2.plugins.peers.*;
 import org.gudy.azureus2.plugins.torrent.Torrent;
 import org.gudy.azureus2.plugins.utils.*;
-
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 
 
 public class 
@@ -69,7 +68,7 @@ ExternalSeedPeer
 	
 	private List<PeerReadRequest>					request_list = new ArrayList<>();
 	
-	private CopyOnWriteList			listeners;
+	private List					listeners;
 	private Monitor					listeners_mon;
 		
 	private boolean					doing_allocations;
@@ -104,7 +103,7 @@ ExternalSeedPeer
 		peer_id[2]='t';
 		peer_id[3]=' ';
 		
-		listeners = new CopyOnWriteList();
+		listeners = new CopyOnWriteArrayList();
 		listeners_mon	= plugin.getPluginInterface().getUtilities().getMonitor();
 		
 		_reader.addListener( this );
@@ -778,7 +777,7 @@ ExternalSeedPeer
 		try{
 			listeners_mon.enter();
 
-			List	ref = listeners.getList();
+			List	ref = listeners;
 
             for (Object o : ref) {
 

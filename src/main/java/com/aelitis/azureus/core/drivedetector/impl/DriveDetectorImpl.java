@@ -18,11 +18,11 @@ package com.aelitis.azureus.core.drivedetector.impl;
 
 import java.io.File;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.util.*;
 
 import com.aelitis.azureus.core.drivedetector.*;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 
 /**
  * @author TuxPaper
@@ -35,7 +35,7 @@ public class DriveDetectorImpl
 {
 	final AEMonitor2 mon_driveDetector = new AEMonitor2("driveDetector");
 
-	final CopyOnWriteList<DriveDetectedListener> listListeners = new CopyOnWriteList<>(1);
+	final List<DriveDetectedListener> listListeners = new CopyOnWriteArrayList<>();
 	
 	final Map<File, Map> mapDrives = new HashMap<>(1);
 	

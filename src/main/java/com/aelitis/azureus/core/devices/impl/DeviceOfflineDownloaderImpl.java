@@ -25,6 +25,7 @@ import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.disk.DiskManager;
 import org.gudy.azureus2.core3.disk.DiskManagerFileInfo;
@@ -47,7 +48,6 @@ import com.aelitis.azureus.core.AzureusCore;
 import com.aelitis.azureus.core.devices.*;
 import com.aelitis.azureus.core.security.CryptoManagerFactory;
 import com.aelitis.azureus.core.torrent.PlatformTorrentUtils;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.util.DownloadUtils;
 import com.aelitis.net.upnp.UPnPDevice;
 import com.aelitis.net.upnp.UPnPException;
@@ -104,7 +104,7 @@ DeviceOfflineDownloaderImpl
 	private boolean								is_transferring;
 	
 	
-	private CopyOnWriteList<DeviceOfflineDownloaderListener>	listeners = new CopyOnWriteList<>();
+	private List<DeviceOfflineDownloaderListener>	listeners = new CopyOnWriteArrayList<>();
 	
 	protected
 	DeviceOfflineDownloaderImpl(

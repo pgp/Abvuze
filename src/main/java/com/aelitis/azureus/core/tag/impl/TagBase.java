@@ -22,6 +22,7 @@ package com.aelitis.azureus.core.tag.impl;
 
 import java.io.File;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.download.DownloadManager;
 import org.gudy.azureus2.core3.internat.MessageText;
@@ -45,7 +46,6 @@ import com.aelitis.azureus.core.tag.TagListener;
 import com.aelitis.azureus.core.tag.Taggable;
 import com.aelitis.azureus.core.tag.TagFeatureProperties.TagProperty;
 import com.aelitis.azureus.core.tag.TagFeatureProperties.TagPropertyListener;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 
 public abstract class 
 TagBase
@@ -1838,7 +1838,7 @@ TagBase
  		private final String		name;
  		private final int			type;
  		
- 		private final CopyOnWriteList<TagPropertyListener>	listeners = new CopyOnWriteList<>();
+ 		private final List<TagPropertyListener>	listeners = new CopyOnWriteArrayList<>();
  		
  		private
  		TagPropertyImpl(

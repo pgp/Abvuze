@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.net.InetSocketAddress;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
 import org.gudy.azureus2.core3.torrent.TOTorrent;
@@ -94,7 +95,6 @@ import com.aelitis.azureus.core.proxy.AEProxyFactory.PluginProxy;
 import com.aelitis.azureus.core.tag.Tag;
 import com.aelitis.azureus.core.tag.TagManagerFactory;
 import com.aelitis.azureus.core.tag.TagType;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.core.util.FeatureAvailability;
 import com.aelitis.net.magneturi.*;
 
@@ -122,7 +122,7 @@ MagnetPlugin
 
 	private PluginInterface		plugin_interface;
 		
-	private CopyOnWriteList		listeners = new CopyOnWriteList();
+	private List listeners = new CopyOnWriteArrayList();
 	
 	private boolean			first_download	= true;
 	
@@ -475,7 +475,7 @@ MagnetPlugin
 					String		name,
 					Map		values )
 				{
-					List	l = listeners.getList();
+					List	l = listeners;
 
                     for (Object o : l) {
 
@@ -493,7 +493,7 @@ MagnetPlugin
 					String		name,
 					Map			values )
 				{
-					List	l = listeners.getList();
+					List	l = listeners;
 
                     for (Object o : l) {
 

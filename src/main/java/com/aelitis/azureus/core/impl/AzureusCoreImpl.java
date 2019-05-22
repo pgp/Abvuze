@@ -25,6 +25,7 @@ import java.net.URL;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
 import org.gudy.azureus2.core3.config.ParameterListener;
@@ -96,7 +97,6 @@ import com.aelitis.azureus.core.speedmanager.SpeedManager;
 import com.aelitis.azureus.core.speedmanager.SpeedManagerAdapter;
 import com.aelitis.azureus.core.speedmanager.SpeedManagerFactory;
 import com.aelitis.azureus.core.update.AzureusRestarterFactory;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.core.versioncheck.VersionCheckClient;
 import com.aelitis.azureus.core.vuzefile.VuzeFile;
 import com.aelitis.azureus.core.vuzefile.VuzeFileComponent;
@@ -204,10 +204,10 @@ AzureusCoreImpl
 	private volatile boolean				stopped;
 	private volatile boolean				restarting;
 	
-	final CopyOnWriteList		lifecycle_listeners		= new CopyOnWriteList();
+	final List		lifecycle_listeners		= new CopyOnWriteArrayList();
 	private final List				operation_listeners		= new ArrayList();
 	
-	private final CopyOnWriteList<PowerManagementListener>	power_listeners = new CopyOnWriteList<>();
+	private final List<PowerManagementListener>	power_listeners = new CopyOnWriteArrayList<>();
 	
 	final AESemaphore			stopping_sem	= new AESemaphore( "AzureusCore::stopping" );
 	

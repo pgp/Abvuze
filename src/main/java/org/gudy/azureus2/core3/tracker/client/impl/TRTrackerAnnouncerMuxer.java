@@ -22,6 +22,7 @@ package org.gudy.azureus2.core3.tracker.client.impl;
 
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.logging.LogEvent;
 import org.gudy.azureus2.core3.logging.Logger;
@@ -47,7 +48,6 @@ import org.gudy.azureus2.core3.util.TorrentUtils;
 import org.gudy.azureus2.plugins.download.DownloadAnnounceResult;
 
 import com.aelitis.azureus.core.tracker.TrackerPeerSource;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 
 public class 
 TRTrackerAnnouncerMuxer
@@ -65,7 +65,7 @@ TRTrackerAnnouncerMuxer
 	
 	private final long				create_time = SystemTime.getMonotonousTime();
 	
-	private final CopyOnWriteList<TRTrackerAnnouncerHelper>	announcers 	= new CopyOnWriteList<>();
+	private final List<TRTrackerAnnouncerHelper>	announcers 	= new CopyOnWriteArrayList<>();
 	private final Set<TRTrackerAnnouncerHelper>				activated	= new HashSet<>();
 	private long										last_activation_time;
 	private final Set<String>									failed_urls	= new HashSet<>();
@@ -311,7 +311,7 @@ TRTrackerAnnouncerMuxer
 			
 				// need to copy list as we modify it and returned list ain't thread safe
 			
-			List<TRTrackerAnnouncerHelper> existing_announcers 	= new ArrayList<>(announcers.getList());
+			List<TRTrackerAnnouncerHelper> existing_announcers 	= new ArrayList<>(announcers);
 			
 			List<TRTrackerAnnouncerHelper> new_announcers 		= new ArrayList<>();
 			
@@ -961,7 +961,7 @@ TRTrackerAnnouncerMuxer
 			
 			provider	= _provider;
 			
-			to_set = announcers.getList();
+			to_set = announcers;
 		}
 		
 		for ( TRTrackerAnnouncer announcer: to_set ){
@@ -990,7 +990,7 @@ TRTrackerAnnouncerMuxer
 	protected TRTrackerAnnouncerHelper
 	getBestActiveSupport()
 	{
-		List<TRTrackerAnnouncerHelper> x = announcers.getList();
+		List<TRTrackerAnnouncerHelper> x = announcers;
 		
 		TRTrackerAnnouncerHelper error_resp = null;
 		
@@ -1082,7 +1082,7 @@ TRTrackerAnnouncerMuxer
 		
 		synchronized( this ){
 			
-			to_set	= announcers.getList();
+			to_set	= announcers;
 			
 			ip_override	= override;
 		}
@@ -1100,7 +1100,7 @@ TRTrackerAnnouncerMuxer
 		
 		synchronized( this ){
 			
-			to_clear	= announcers.getList();
+			to_clear	= announcers;
 			
 			ip_override	= null;
 		}
@@ -1155,7 +1155,7 @@ TRTrackerAnnouncerMuxer
 		
 		synchronized( this ){
 						
-			to_update = is_manual?announcers.getList(): new ArrayList<>(activated);
+			to_update = is_manual?announcers: new ArrayList<>(activated);
 		}
 		
 		for ( TRTrackerAnnouncer announcer: to_update ){
@@ -1174,7 +1174,7 @@ TRTrackerAnnouncerMuxer
 			
 			complete	= true;
 			
-			to_complete = is_manual?announcers.getList(): new ArrayList<>(activated);
+			to_complete = is_manual?announcers: new ArrayList<>(activated);
 		}
 		
 		for ( TRTrackerAnnouncer announcer: to_complete ){
@@ -1193,7 +1193,7 @@ TRTrackerAnnouncerMuxer
 			
 			stopped	= true;
 			
-			to_stop = is_manual?announcers.getList(): new ArrayList<>(activated);
+			to_stop = is_manual?announcers: new ArrayList<>(activated);
 			
 			activated.clear();
 		}
@@ -1215,7 +1215,7 @@ TRTrackerAnnouncerMuxer
 			
 			destroyed = true;
 			
-			to_destroy = announcers.getList();
+			to_destroy = announcers;
 		}
 		
 		for ( TRTrackerAnnouncer announcer: to_destroy ){
@@ -1293,7 +1293,7 @@ TRTrackerAnnouncerMuxer
 			// TODO: we should always create a DHT entry and have it denote DHT tracking for all circustances
 			// have the DHT plugin set it to offline if disabled
 		
-		List<TRTrackerAnnouncerHelper> x = announcers.getList();
+		List<TRTrackerAnnouncerHelper> x = announcers;
 		
 		if ( x.size() > 0 ){
 			

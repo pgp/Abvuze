@@ -28,6 +28,7 @@ import java.io.LineNumberReader;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
 import org.gudy.azureus2.core3.config.ParameterListener;
@@ -43,17 +44,9 @@ import org.gudy.azureus2.core3.util.TimerEvent;
 import org.gudy.azureus2.core3.util.TimerEventPerformer;
 import org.gudy.azureus2.core3.util.TimerEventPeriodic;
 
-
-
-
-
-
-
-
 import com.aelitis.azureus.core.AzureusCore;
 import com.aelitis.azureus.core.AzureusCoreFactory;
 import com.aelitis.azureus.core.AzureusCoreLifecycleAdapter;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.core.util.average.Average;
 import com.aelitis.azureus.core.util.average.AverageFactory;
 
@@ -121,7 +114,7 @@ LongTermStatsGenericImpl
 	
 	private long	session_total;
 	
-	private final CopyOnWriteList<Object[]>	listeners = new CopyOnWriteList<>();
+	private final List<Object[]>	listeners = new CopyOnWriteArrayList<>();
 	
 	private final AsyncDispatcher	dispatcher = new AsyncDispatcher( "lts", 5000 );
 	

@@ -25,6 +25,7 @@ package com.aelitis.azureus.plugins.upnp;
  */
 
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.config.*;
 import org.gudy.azureus2.core3.util.AERunnable;
@@ -33,7 +34,6 @@ import org.gudy.azureus2.core3.util.Debug;
 import org.gudy.azureus2.core3.util.RandomUtils;
 import org.gudy.azureus2.plugins.logging.LoggerChannel;
 
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.net.upnp.services.UPnPWANConnection;
 
 public class 
@@ -57,7 +57,7 @@ UPnPMappingManager
 	
 	private List<UPnPMapping>	mappings	= new ArrayList<>();
 	
-	private CopyOnWriteList<UPnPMappingManagerListener>			listeners	= new CopyOnWriteList<>();
+	private List<UPnPMappingManagerListener>			listeners	= new CopyOnWriteArrayList<>();
 	
 	private AsyncDispatcher	async_dispatcher = new AsyncDispatcher();
 	

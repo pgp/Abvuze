@@ -29,6 +29,7 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
 import org.gudy.azureus2.core3.config.ParameterListener;
@@ -57,7 +58,6 @@ import org.gudy.azureus2.pluginsimpl.local.utils.UtilitiesImpl;
 
 import com.aelitis.azureus.core.devices.*;
 import com.aelitis.azureus.core.download.DiskManagerFileInfoURL;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.core.util.average.Average;
 import com.aelitis.azureus.core.util.average.AverageFactory;
 
@@ -79,8 +79,8 @@ TranscodeQueueImpl
 	
 	private AsyncDispatcher	anaylsis_dispatcher = new AsyncDispatcher();
 	
-	private CopyOnWriteList<TranscodeQueueListener>			listeners = new CopyOnWriteList<>();
-	private CopyOnWriteList<TranscodeQueueActionListener>	action_listeners = new CopyOnWriteList<>();
+	private List<TranscodeQueueListener>			listeners = new CopyOnWriteArrayList<>();
+	private List<TranscodeQueueActionListener>	action_listeners = new CopyOnWriteArrayList<>();
 	
 	private volatile boolean 	paused;
 	private volatile int		max_bytes_per_sec;

@@ -29,14 +29,13 @@ import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.util.BDecoder;
 import org.gudy.azureus2.core3.util.Debug;
 import org.gudy.azureus2.core3.util.FileUtil;
 import org.gudy.azureus2.plugins.utils.StaticUtilities;
 import org.gudy.azureus2.plugins.utils.resourcedownloader.ResourceDownloader;
-
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 
 
 public class 
@@ -50,7 +49,7 @@ VuzeFileHandler
 		return( singleton );
 	}
 	
-	private final CopyOnWriteList<VuzeFileProcessor>	processors = new CopyOnWriteList<>();
+	private final List<VuzeFileProcessor>	processors = new CopyOnWriteArrayList<>();
 	
 	
 	protected

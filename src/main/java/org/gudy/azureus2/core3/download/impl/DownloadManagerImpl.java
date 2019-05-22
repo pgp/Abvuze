@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
 import org.gudy.azureus2.core3.config.ParameterListener;
@@ -81,7 +82,6 @@ import com.aelitis.azureus.core.tag.Taggable;
 import com.aelitis.azureus.core.tag.TaggableResolver;
 import com.aelitis.azureus.core.tracker.TrackerPeerSource;
 import com.aelitis.azureus.core.tracker.TrackerPeerSourceAdapter;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.core.util.LinkFileMap;
 import com.aelitis.azureus.core.util.PlatformTorrentUtils;
 import com.aelitis.azureus.plugins.extseed.ExternalSeedPlugin;
@@ -177,7 +177,7 @@ DownloadManagerImpl
 				}
 			});		
 	
-	static final CopyOnWriteList<DownloadManagerListener>	global_dm_listeners = new CopyOnWriteList<>();
+	static final List<DownloadManagerListener>	global_dm_listeners = new CopyOnWriteArrayList<>();
 
     private static final DownloadManagerListener global_dm_listener =
 		new DownloadManagerListener() {
@@ -627,7 +627,7 @@ DownloadManagerImpl
 		};
 		
 		
-	private final CopyOnWriteList	activation_listeners = new CopyOnWriteList();
+	private final List	activation_listeners = new CopyOnWriteArrayList();
 	
 	private final long						scrape_random_seed	= SystemTime.getCurrentTime();
 

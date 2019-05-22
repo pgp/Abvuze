@@ -27,6 +27,7 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.UnsupportedAddressTypeException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Pattern;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
@@ -68,7 +69,6 @@ import com.aelitis.azureus.core.networkmanager.impl.udp.UDPNetworkManager;
 import com.aelitis.azureus.core.proxy.AEProxySelectorFactory;
 import com.aelitis.azureus.core.proxy.socks.AESocksProxy;
 import com.aelitis.azureus.core.proxy.socks.AESocksProxyFactory;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.core.util.NetUtils;
 import com.aelitis.azureus.plugins.upnp.UPnPPlugin;
 import com.aelitis.azureus.plugins.upnp.UPnPPluginService;
@@ -150,7 +150,7 @@ NetworkAdminImpl
 	
 	private boolean logged_bind_force_issue;
 	
-	private final CopyOnWriteList	listeners = new CopyOnWriteList();
+	private final List	listeners = new CopyOnWriteArrayList();
 	
 	
 	final NetworkAdminRouteListener
@@ -701,7 +701,7 @@ for (String token : tokens) {
 			}
 		}
 		
-		if(addrs.size() < 1){
+		if(addrs.size() < 1) {
 			return new InetAddress[] {enforceBind ? localhostV4 : (hasIPV6Potential() ? anyLocalAddressIPv6 : anyLocalAddressIPv4)};
 		}
 		

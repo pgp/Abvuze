@@ -25,11 +25,8 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.logging.LogEvent;
 import org.gudy.azureus2.core3.logging.LogIDs;
@@ -52,7 +49,6 @@ import com.aelitis.azureus.core.peermanager.messaging.MessageStreamEncoder;
 import com.aelitis.azureus.core.peermanager.messaging.MessageStreamFactory;
 import com.aelitis.azureus.core.stats.AzureusCoreStats;
 import com.aelitis.azureus.core.stats.AzureusCoreStatsProvider;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 
 public class 
 HTTPNetworkManager 
@@ -74,7 +70,7 @@ HTTPNetworkManager
 	private long	total_invalid_requests;
 	private long	total_ok_requests;
 	
-	final CopyOnWriteList<URLHandler>	url_handlers = new CopyOnWriteList<>();
+	final List<URLHandler> url_handlers = new CopyOnWriteArrayList<>();
 	
 	private 
 	HTTPNetworkManager()

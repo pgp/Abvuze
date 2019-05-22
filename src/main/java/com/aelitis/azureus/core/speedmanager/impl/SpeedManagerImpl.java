@@ -22,6 +22,7 @@ package com.aelitis.azureus.core.speedmanager.impl;
 import java.io.File;
 import java.net.InetSocketAddress;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
 import org.gudy.azureus2.core3.config.ParameterListener;
@@ -58,7 +59,6 @@ import com.aelitis.azureus.core.speedmanager.SpeedManagerPingSource;
 import com.aelitis.azureus.core.speedmanager.impl.v1.SpeedManagerAlgorithmProviderV1;
 import com.aelitis.azureus.core.speedmanager.impl.v2.SpeedManagerAlgorithmProviderV2;
 import com.aelitis.azureus.core.speedmanager.impl.v3.SpeedManagerAlgorithmProviderV3;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 
 
 public class 
@@ -149,13 +149,13 @@ SpeedManagerImpl
 
 	final SpeedManagerPingMapperImpl[] 	ping_mappers;
 	
-	private final CopyOnWriteList		transient_mappers = new CopyOnWriteList();
+	private final List transient_mappers = new CopyOnWriteArrayList();
 
 	private final AEDiagnosticsLogger	logger;
 	
 	private String		asn;
 	
-	private final CopyOnWriteList	listeners = new CopyOnWriteList();
+	private final List listeners = new CopyOnWriteArrayList();
 	
 	public
 	SpeedManagerImpl(

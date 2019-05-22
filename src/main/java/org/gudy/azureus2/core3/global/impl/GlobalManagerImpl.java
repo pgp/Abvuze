@@ -34,6 +34,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.category.Category;
 import org.gudy.azureus2.core3.category.CategoryManager;
@@ -74,7 +75,6 @@ import com.aelitis.azureus.core.tag.Taggable;
 import com.aelitis.azureus.core.tag.TaggableLifecycleHandler;
 import com.aelitis.azureus.core.tag.impl.TagDownloadWithState;
 import com.aelitis.azureus.core.tag.impl.TagTypeWithState;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 
 import org.gudy.azureus2.plugins.network.ConnectionManager;
 import org.gudy.azureus2.plugins.dht.mainline.MainlineDHTProvider;
@@ -267,7 +267,7 @@ public class GlobalManagerImpl
 	private long	nat_status_last_good	= -1;
 	private boolean	nat_status_probably_ok;
 		
-   private final CopyOnWriteList	dm_adapters = new CopyOnWriteList();
+   private final List	dm_adapters = new CopyOnWriteArrayList();
 
    /** delay loading of torrents */
    DelayedEvent loadTorrentsDelay = null;
@@ -3394,7 +3394,7 @@ public class GlobalManagerImpl
 	getDMAdapter(
 		DownloadManagerInitialisationAdapter	adapter )
 	{
-		List<DownloadManagerInitialisationAdapter>	adapters = dm_adapters.getList();
+		List<DownloadManagerInitialisationAdapter>	adapters = dm_adapters;
 		
 		adapters = new ArrayList( adapters );
 

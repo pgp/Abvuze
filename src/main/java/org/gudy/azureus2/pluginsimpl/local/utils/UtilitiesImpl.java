@@ -36,7 +36,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
+import com.aelitis.azureus.core.util.CopyOnWriteList;
 import org.gudy.azureus2.platform.PlatformManager;
 import org.gudy.azureus2.platform.PlatformManagerCapabilities;
 import org.gudy.azureus2.platform.PlatformManagerFactory;
@@ -104,7 +106,6 @@ import com.aelitis.azureus.core.proxy.AEProxyFactory;
 import com.aelitis.azureus.core.proxy.AEProxyFactory.PluginProxy;
 import com.aelitis.azureus.core.tag.TagManagerFactory;
 import com.aelitis.azureus.core.tag.TagType;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.core.versioncheck.VersionCheckClient;
 
 public class 
@@ -140,8 +141,8 @@ UtilitiesImpl
 	private static List<searchManager>		search_managers 	= new ArrayList<>();
 	private static List<Object[]>			search_providers	= new ArrayList<>();
 	
-	private static CopyOnWriteList<Object[]>				feature_enablers 	= new CopyOnWriteList<>();
-	private static CopyOnWriteList<FeatureManagerListener>	feature_listeners	= new CopyOnWriteList<>();
+	private static CopyOnWriteList<Object[]> feature_enablers 	= new CopyOnWriteList<>();
+	private static List<FeatureManagerListener>	feature_listeners	= new CopyOnWriteArrayList<>();
 
 	private static FeatureManagerListener 
 		feature_listener = new FeatureManagerListener()
@@ -206,11 +207,11 @@ UtilitiesImpl
 	private static WeakHashMap<RateLimiter,PluginLimitedRateGroup>	limiter_map = new WeakHashMap<>();
 
 	
-	private static CopyOnWriteList<LocationProviderListener>	lp_listeners 		= new CopyOnWriteList<>();
-	private static CopyOnWriteList<LocationProvider>			location_providers 	= new CopyOnWriteList<>();
+	private static List<LocationProviderListener>	lp_listeners 		= new CopyOnWriteArrayList<>();
+	private static List<LocationProvider>			location_providers 	= new CopyOnWriteArrayList<>();
 	
-	private static CopyOnWriteList<ScriptProviderListener>	sp_listeners 		= new CopyOnWriteList<>();
-	private static CopyOnWriteList<ScriptProvider>			script_providers 	= new CopyOnWriteList<>();
+	private static List<ScriptProviderListener>	sp_listeners 		= new CopyOnWriteArrayList<>();
+	private static List<ScriptProvider>			script_providers 	= new CopyOnWriteArrayList<>();
 
 	
 	public static PluginLimitedRateGroup
@@ -1905,7 +1906,7 @@ UtilitiesImpl
 	public List<LocationProvider>	
 	getLocationProviders()
 	{
-		return( location_providers.getList());
+		return location_providers;
 	}
 	
 	public void
@@ -1969,7 +1970,7 @@ UtilitiesImpl
 	public List<ScriptProvider>	
 	getScriptProviders()
 	{
-		return( script_providers.getList());
+		return script_providers;
 	}
 	
 	public void

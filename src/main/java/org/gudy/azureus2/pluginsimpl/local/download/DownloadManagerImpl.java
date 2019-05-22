@@ -31,6 +31,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
 import org.gudy.azureus2.core3.disk.DiskManager;
@@ -63,7 +64,6 @@ import com.aelitis.azureus.core.tag.Tag;
 import com.aelitis.azureus.core.tag.TagManager;
 import com.aelitis.azureus.core.tag.TagManagerFactory;
 import com.aelitis.azureus.core.tag.TagType;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 
 
 public class 
@@ -100,7 +100,7 @@ DownloadManagerImpl
 	private final TagManager					tag_manager;
 	
 	private List<DownloadManagerListener>					listeners		= new ArrayList<>();
-	private CopyOnWriteList<DownloadWillBeAddedListener>	dwba_listeners	= new CopyOnWriteList<>();
+	private List<DownloadWillBeAddedListener>	dwba_listeners	= new CopyOnWriteArrayList<>();
 	private AEMonitor		listeners_mon	= new AEMonitor( "DownloadManager:L");
 	
 	private List<Download>						downloads		= new ArrayList<>();
@@ -1108,7 +1108,7 @@ DownloadManagerImpl
 	private List<DownloadStubImpl>				download_stubs 		= new ArrayList<>();
 	private ByteArrayHashMap<DownloadStubImpl>	download_stub_map 	= new ByteArrayHashMap<>();
 	
-	private CopyOnWriteList<DownloadStubListener>	download_stub_listeners = new CopyOnWriteList<>();
+	private List<DownloadStubListener>	download_stub_listeners = new CopyOnWriteArrayList<>();
 	
 	private FrequencyLimitedDispatcher dirty_stub_dispatcher = 
 			new FrequencyLimitedDispatcher(

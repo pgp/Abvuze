@@ -23,12 +23,12 @@
 package com.aelitis.azureus.ui.common.table;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.util.AEMonitor;
 import org.gudy.azureus2.core3.util.Debug;
-
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 
 /**
  * @author Olivier
@@ -43,7 +43,7 @@ public class TableStructureEventDispatcher implements
 	private static AEMonitor class_mon = new AEMonitor(
 			"TableStructureEventDispatcher:class");
 
-	private CopyOnWriteList listeners;
+	private List listeners;
 
 	private AEMonitor listeners_mon = new AEMonitor(
 			"TableStructureEventDispatcher:L");
@@ -52,7 +52,7 @@ public class TableStructureEventDispatcher implements
 	 * 
 	 */
 	private TableStructureEventDispatcher() {
-		listeners = new CopyOnWriteList(2);
+		listeners = new CopyOnWriteArrayList();
 	}
 
 	public static TableStructureEventDispatcher getInstance(String tableID) {

@@ -22,7 +22,7 @@ package com.aelitis.azureus.ui.common.viewtitleinfo;
 
 import org.gudy.azureus2.core3.util.Debug;
 
-import com.aelitis.azureus.core.util.CopyOnWriteList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author TuxPaper
@@ -31,10 +31,10 @@ import com.aelitis.azureus.core.util.CopyOnWriteList;
  */
 public class ViewTitleInfoManager
 {
-	public static CopyOnWriteList<ViewTitleInfoListener> listeners = new CopyOnWriteList<>();
+	public static CopyOnWriteArrayList<ViewTitleInfoListener> listeners = new CopyOnWriteArrayList<>();
 	
 	public static void addListener(ViewTitleInfoListener l) {
-		listeners.addIfNotPresent(l);
+		listeners.addIfAbsent(l);
 	}
 	
 	public static void removeListener(ViewTitleInfoListener l) {

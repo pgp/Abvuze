@@ -21,17 +21,17 @@
 package com.aelitis.azureus.core.tag.impl;
 
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.aelitis.azureus.core.tag.Tag;
 import com.aelitis.azureus.core.tag.Taggable;
 import com.aelitis.azureus.core.tag.TaggableResolver;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 
 public class 
 TagTypeWithState
 	extends TagTypeBase
 {
-	private final CopyOnWriteList<Tag>	tags = new CopyOnWriteList<>();
+	private final List<Tag>	tags = new CopyOnWriteArrayList<>();
 
 	private TaggableResolver		resolver;
 	
@@ -118,9 +118,7 @@ TagTypeWithState
 		super.removeTag( t );		
 	}
 	
-	public List<Tag>
-	getTags()
-	{
-		return( tags.getList());
+	public List<Tag> getTags() {
+		return tags;
 	}
 }

@@ -22,6 +22,7 @@ package com.aelitis.azureus.plugins.net.buddy.tracker;
 
 import java.net.InetAddress;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.gudy.azureus2.core3.global.GlobalManager;
 import org.gudy.azureus2.core3.global.GlobalManagerAdapter;
@@ -51,7 +52,6 @@ import org.gudy.azureus2.plugins.ui.config.ParameterListener;
 import org.gudy.azureus2.pluginsimpl.local.PluginCoreUtils;
 
 import com.aelitis.azureus.core.AzureusCoreFactory;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
 import com.aelitis.azureus.core.util.CopyOnWriteSet;
 import com.aelitis.azureus.plugins.net.buddy.*;
 
@@ -130,7 +130,7 @@ BuddyPluginTracker
 		
 	private CopyOnWriteSet<Peer>	buddy_peers	= new CopyOnWriteSet<>(true);
 	
-	private CopyOnWriteList<BuddyPluginTrackerListener>	listeners = new CopyOnWriteList<>();
+	private List<BuddyPluginTrackerListener>	listeners = new CopyOnWriteArrayList<>();
 	
 	private TimerEventPeriodic	buddy_stats_timer;
 	

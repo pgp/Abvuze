@@ -24,7 +24,9 @@ import org.gudy.azureus2.core3.util.Debug;
 import com.aelitis.azureus.core.networkmanager.impl.NetworkConnectionImpl;
 import com.aelitis.azureus.core.peermanager.messaging.MessageStreamDecoder;
 import com.aelitis.azureus.core.peermanager.messaging.MessageStreamEncoder;
-import com.aelitis.azureus.core.util.CopyOnWriteList;
+
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  *
@@ -32,7 +34,7 @@ import com.aelitis.azureus.core.util.CopyOnWriteList;
 public class 
 NetworkConnectionFactory 
 {
-	private static final CopyOnWriteList<NetworkConnectionFactoryListener>	listeners = new CopyOnWriteList<>();
+	private static final List<NetworkConnectionFactoryListener> listeners = new CopyOnWriteArrayList<>();
 	
 	/**
 	 * Create an OUTGOING connection.
