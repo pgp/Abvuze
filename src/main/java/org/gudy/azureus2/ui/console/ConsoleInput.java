@@ -30,6 +30,7 @@ import java.util.Properties;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
+import it.pgp.misc.ExitHandler;
 import org.apache.log4j.Appender;
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Logger;
@@ -503,6 +504,7 @@ public class ConsoleInput extends Thread {
 					ci.out.println( "OK" );
 				}
 			}
+			ExitHandler.defaultHandler.exit(0);
 		}
 	}
 
