@@ -17,8 +17,6 @@
 
 package org.gudy.azureus2.ui.common;
 
-import org.gudy.azureus2.ui.common.IUserInterface;
-import org.gudy.azureus2.ui.common.UITemplate;
 import org.gudy.azureus2.ui.common.util.LGLogger2Log4j;
 
 /**

@@ -23,8 +23,6 @@ import java.util.List;
 
 import org.gudy.azureus2.core3.util.*;
 
-import com.aelitis.azureus.ui.common.table.impl.TableViewImpl;
-
 public class DataSourceCallBackUtil
 {
 	public static final long IMMEDIATE_ADDREMOVE_DELAY = 150;

@@ -20,13 +20,7 @@ package com.aelitis.azureus.core.clientmessageservice.impl;
 
 import java.util.Map;
 
-import com.aelitis.azureus.core.clientmessageservice.impl.ClientConnection;
 
-
-
-/**
- * 
- */
 public class ClientMessage {
 	private final String message_id;
 	private final ClientConnection client;

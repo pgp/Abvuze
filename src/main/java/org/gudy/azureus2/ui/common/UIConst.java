@@ -24,8 +24,6 @@ import com.aelitis.azureus.core.*;
 
 import org.apache.log4j.Logger;
 import org.gudy.azureus2.core3.global.GlobalManager;
-import org.gudy.azureus2.ui.common.IUserInterface;
-import org.gudy.azureus2.ui.common.UserInterfaceFactory;
 
 /**
  * @author tobi

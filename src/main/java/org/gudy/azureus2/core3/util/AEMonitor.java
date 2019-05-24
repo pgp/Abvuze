@@ -24,7 +24,6 @@ package org.gudy.azureus2.core3.util;
  *
  */
 
-import java.util.*;
 
 public class 
 AEMonitor 

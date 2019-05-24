@@ -79,7 +79,6 @@ import com.aelitis.azureus.plugins.dht.DHTPluginProgressListener;
 import com.aelitis.azureus.plugins.dht.DHTPluginTransferHandler;
 import com.aelitis.azureus.plugins.dht.DHTPluginValue;
 import com.aelitis.azureus.plugins.dht.DHTPluginInterface.DHTInterface;
-import com.aelitis.azureus.plugins.dht.impl.DHTPluginStorageManager;
 
 
 /**

@@ -21,7 +21,6 @@
 package com.aelitis.azureus.ui.selectedcontent;
 
 import com.aelitis.azureus.core.cnetwork.ContentNetwork;
-import com.aelitis.azureus.ui.selectedcontent.DownloadUrlInfo;
 
 /**
  * @author TuxPaper

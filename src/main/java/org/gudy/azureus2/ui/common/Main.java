@@ -50,8 +50,7 @@ import com.aelitis.azureus.core.impl.AzureusCoreSingleInstanceClient;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
 import org.gudy.azureus2.core3.util.Constants;
-import org.gudy.azureus2.ui.common.IUserInterface;
-import org.gudy.azureus2.ui.common.UserInterfaceFactory;
+
 /**
  *
  * @author  Tobias Minich

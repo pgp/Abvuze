@@ -17,8 +17,6 @@
 
 package com.aelitis.azureus.core.dht.router;
 
-import com.aelitis.azureus.core.dht.router.DHTRouterContact;
-
 /**
  * Observer interface to allow monitoring of contacts in the routing table.
  * 
