@@ -20,6 +20,7 @@
 package org.gudy.azureus2.core3.util;
 
 import java.util.LinkedList;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.LockSupport;
 
 
@@ -40,7 +41,7 @@ public abstract class AEThread2 {
 		volatile boolean released = false;
 	}
 	
-	private static long	last_timeout_check;
+	private static final AtomicLong last_timeout_check = new AtomicLong(0);
 	
 	private static long	total_starts;
 	private static long	total_creates;
@@ -273,53 +274,60 @@ public abstract class AEThread2 {
 						currentLock.notifyAll();						
 					}
 				}
-								
+
 				if ( isInterrupted() || !Thread.currentThread().isDaemon()){
-					
+
 					break;
-					
+
 				}else{
-					
-					synchronized( daemon_threads ){
-						
-						last_active_time	= SystemTime.getCurrentTime();
-						
-						if ( 	last_active_time < last_timeout_check ||
-								last_active_time - last_timeout_check > THREAD_TIMEOUT_CHECK_PERIOD ){
-							
-							last_timeout_check	= last_active_time;
-							
-							while( daemon_threads.size() > 0 && daemon_threads.size() > MIN_RETAINED ){
-								
-								threadWrapper thread = (threadWrapper)daemon_threads.getFirst();
-								
-								long	thread_time = thread.last_active_time;
-								
-								if ( 	last_active_time < thread_time ||
-										last_active_time - thread_time > THREAD_TIMEOUT ){
-									
+
+
+					/////////////////////////////////////////////////////////// BEGIN old sync block
+					// @@@ LOTS OF ACCESSES HERE
+					last_active_time = SystemTime.getCurrentTime();
+
+					long ltc = last_timeout_check.get();
+					if (last_active_time < ltc || last_active_time - ltc > THREAD_TIMEOUT_CHECK_PERIOD) {
+						synchronized( daemon_threads ) {
+							last_timeout_check.set(last_active_time);
+
+//							System.out.println(Thread.currentThread().getId());
+//							System.out.flush();
+
+							while (daemon_threads.size() > 0 && daemon_threads.size() > MIN_RETAINED) {
+//								System.err.println(Thread.currentThread().getId() + ":it");
+//								System.err.flush();
+
+								threadWrapper thread = (threadWrapper) daemon_threads.getFirst();
+
+								long thread_time = thread.last_active_time;
+
+								if (last_active_time < thread_time ||
+										last_active_time - thread_time > THREAD_TIMEOUT) {
+
 									daemon_threads.removeFirst();
-									
+
 									thread.retire();
-									
-								}else{
-									
+
+								} else {
+
 									break;
 								}
 							}
 						}
-						
-						if ( daemon_threads.size() >= MAX_RETAINED ){
-							
-							return;
-						}
-
-						daemon_threads.addLast( this );
-
-						setName( "AEThread2:parked[" + daemon_threads.size() + "]" );
-						
-						// System.out.println( "AEThread2: queue=" + daemon_threads.size() + ",creates=" + total_creates + ",starts=" + total_starts );
 					}
+					///////////////////////////////////////////////////// END old sync block
+					// bit of approximation here, two or more threads can return on condition unsatisfied by concurrent sampling performed by size() method
+					if ( daemon_threads.size() >= MAX_RETAINED ) return;
+
+					synchronized (daemon_threads) { // bit of approximation here as well, even if access is serialized, upper limit should be MAX_RETAINED + NCPUS
+						daemon_threads.addLast(this);
+					}
+
+					setName( "AEThread2:parked[" + daemon_threads.size() + "]" );
+
+					// System.out.println( "AEThread2: queue=" + daemon_threads.size() + ",creates=" + total_creates + ",starts=" + total_starts );
+
 
 					while(target == EMPTY)
 						LockSupport.park(this);
