@@ -85,8 +85,8 @@ GenericMessageConnectionIndirect
 	private static long	connection_id_next	= RandomUtils.nextLong();
 	
 	
-	private static Map	local_connections 	= new HashMap();
-	private static Map	remote_connections 	= new HashMap();
+	private static final Map	local_connections 	= new HashMap();
+	private static final Map	remote_connections 	= new HashMap();
 	
 	private static ThreadPool	keep_alive_pool = new ThreadPool( "GenericMessageConnectionIndirect:keepAlive", 8, true );
 	
@@ -430,7 +430,7 @@ GenericMessageConnectionIndirect
 	private boolean					incoming;
 	private boolean					closed;
 	
-	private LinkedList<byte[]>	send_queue		= new LinkedList<>();
+	private final LinkedList<byte[]>	send_queue		= new LinkedList<>();
 	
 	private AESemaphore	send_queue_sem	= new AESemaphore( "GenericMessageConnectionIndirect:sendq" );
 	

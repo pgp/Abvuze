@@ -124,8 +124,8 @@ BuddyPluginBeta
 	
 	private AsyncDispatcher		dispatcher = new AsyncDispatcher( "BuddyPluginBeta" );
 	
-	private Map<String,ChatInstance>		chat_instances_map 	= new HashMap<>();
-	private List<ChatInstance>	chat_instances_list	= new CopyOnWriteArrayList<>();
+	private final Map<String,ChatInstance> chat_instances_map = new HashMap<>();
+	private final List<ChatInstance> chat_instances_list = new CopyOnWriteArrayList<>();
 	
 	private PluginInterface azmsgsync_pi;
 
@@ -145,7 +145,7 @@ BuddyPluginBeta
 	private boolean					sound_enabled;
 	private String					sound_file;
 		
-	private Map<String,Map<String,Object>>		opts_map;
+	private final Map<String,Map<String,Object>>		opts_map;
 	
 	private List<FTUXStateChangeListener>		ftux_listeners = new CopyOnWriteArrayList<>();
 	
@@ -2552,7 +2552,7 @@ BuddyPluginBeta
 		
 		private final ChatParticipant		private_target;
 		
-		private Object		binding_lock = new Object();
+		private final Object binding_lock = new Object();
 		private AESemaphore	binding_sem;
 		
 		private volatile PluginInterface		msgsync_pi;
@@ -2565,7 +2565,7 @@ BuddyPluginBeta
 		
 		private InetSocketAddress				my_address;
 		
-		private Object	chat_lock = this;
+		private final Object chat_lock = this;
 		
 		private AtomicInteger						message_uid_next = new AtomicInteger();
 		
@@ -2579,7 +2579,7 @@ BuddyPluginBeta
 		
 		private List<ChatListener>		listeners = new CopyOnWriteArrayList<>();
 		
-		private Map<Object,Object>					user_data = new HashMap<>();
+		private final Map<Object,Object> user_data = new HashMap<>();
 		
 		private LinkedHashMap<String,String>							auto_dup_set = 
 			new LinkedHashMap<String,String>(500,0.75f,true)

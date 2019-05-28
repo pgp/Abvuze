@@ -324,7 +324,7 @@ class BTPeerIDByteDecoderUtils {
                 BTPeerIDByteDecoderDefinitions.VER_BYTE_BLOCK_DOTTED_CHAR.equals(version_scheme)) {
 			int inc_size = (BTPeerIDByteDecoderDefinitions.VER_DOTTED_BLOCK.equals(version_scheme)) ? 2 : 1;
 			String result = version_data.substring(0, 1);
-			for (int i=0+inc_size; i<version_data.length(); i+=inc_size) {
+			for (int i = inc_size; i<version_data.length(); i+=inc_size) {
 				result = joinAsDotted(result, String.valueOf(version_data.charAt(i)));
 			}
 			return result;

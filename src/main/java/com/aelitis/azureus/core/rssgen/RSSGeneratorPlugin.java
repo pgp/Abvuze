@@ -82,7 +82,7 @@ RSSGeneratorPlugin
 			root_dir.mkdir();
 		}
 		
-		Integer	rss_port;
+		int rss_port;
 		String	rss_access;
 		
 		if ( COConfigurationManager.getBooleanParameter( "rss.internal.migrated", false )){

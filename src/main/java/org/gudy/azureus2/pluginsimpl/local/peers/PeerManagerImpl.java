@@ -83,12 +83,12 @@ PeerManagerImpl
 		}
 	}
 	
-	private Map		foreign_map		= new HashMap();
+	private final Map foreign_map = new HashMap();
 	
-	private Map<PeerManagerListener,PEPeerManagerListener>	listener_map1 	= new HashMap<>();
-	private Map<PeerManagerListener2,CoreListener>	listener_map2 	= new HashMap<>();
+	private final Map<PeerManagerListener,PEPeerManagerListener> listener_map1 = new HashMap<>();
+	private final Map<PeerManagerListener2,CoreListener> listener_map2 = new HashMap<>();
 	
-	protected AEMonitor	this_mon	= new AEMonitor( "PeerManager" );
+	protected final AEMonitor this_mon = new AEMonitor( "PeerManager" );
 
 	private final DiskManagerPiece[]	dm_pieces;
 	private final PEPiece[]				pe_pieces;

@@ -137,7 +137,7 @@ DirectByteBufferPoolReal
  
 	private static final long COMPACTION_CHECK_PERIOD = 2*60*1000; //2 min
 	private static final long MAX_FREE_BYTES = 10*1024*1024; //10 MB
-	private static final long MIN_FREE_BYTES = 1*1024*1024; // 1 MB
+	private static final long MIN_FREE_BYTES = 1024 * 1024; // 1 MB
   
 	private long bytesIn = 0;
 	private long bytesOut = 0;

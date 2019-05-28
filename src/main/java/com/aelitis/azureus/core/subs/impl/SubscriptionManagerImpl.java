@@ -255,7 +255,7 @@ SubscriptionManagerImpl
 	
 	private volatile DHTPluginInterface	dht_plugin_public;
 	
-	private List<SubscriptionImpl>		subscriptions	= new ArrayList<>();
+	private final List<SubscriptionImpl> subscriptions = new ArrayList<>();
 	
 	private boolean	config_dirty;
 		
@@ -273,23 +273,23 @@ SubscriptionManagerImpl
 	private boolean					periodic_lookup_in_progress;
 	private int						priority_lookup_pending;
 	
-	private List<SubscriptionManagerListener> listeners = new CopyOnWriteArrayList<>();
+	private final List<SubscriptionManagerListener> listeners = new CopyOnWriteArrayList<>();
 	
 	private SubscriptionSchedulerImpl	scheduler;
 	
-	private List<Object[]>					potential_associations	= new ArrayList<>();
-	private Map<HashWrapper,Object[]>		potential_associations2	= new HashMap<>();
-	private Map<HashWrapper,Object[]>		potential_associations3	= new HashMap<>();
+	private final List<Object[]>				potential_associations	= new ArrayList<>();
+	private final Map<HashWrapper,Object[]>		potential_associations2	= new HashMap<>();
+	private final Map<HashWrapper,Object[]>		potential_associations3	= new HashMap<>();
 	
 	private boolean					meta_search_listener_added;
 	
-	private Pattern					exclusion_pattern = Pattern.compile( "azdev[0-9]+\\.azureus\\.com" );
+	private final  Pattern			exclusion_pattern = Pattern.compile( "azdev[0-9]+\\.azureus\\.com" );
 	
 	private SubscriptionRSSFeed		rss_publisher;
 	
 	private AEDiagnosticsLogger		logger;
 	
-	private Map<SubscriptionImpl,Object[]>		result_cache = new HashMap<>();
+	private final Map<SubscriptionImpl,Object[]> result_cache = new HashMap<>();
 		
 	
 	protected
@@ -3681,9 +3681,9 @@ SubscriptionManagerImpl
 			true,
 			new DHTPluginOperationListener()
 			{
-				private Map<HashWrapper,Integer>	hits 					= new HashMap<>();
-				private AESemaphore					hits_sem				= new AESemaphore( "Subs:lookup" );
-				private List<Subscription>			found_subscriptions 	= new ArrayList<>();
+				private final Map<HashWrapper,Integer>	hits 					= new HashMap<>();
+				private final AESemaphore				hits_sem				= new AESemaphore( "Subs:lookup" );
+				private final List<Subscription>		found_subscriptions 	= new ArrayList<>();
 				
 				private boolean	complete;
 				
@@ -5205,9 +5205,9 @@ SubscriptionManagerImpl
 		return( download_found );
 	}
 	
-	private AsyncDispatcher				chat_write_dispatcher 	= new AsyncDispatcher( "Subscriptions:cwd" );
-	private Set<String>					chat_st_done = new HashSet<>();
-	private LinkedList<ChatInstance>	chat_assoc_done	= new LinkedList<>();
+	private final AsyncDispatcher				chat_write_dispatcher 	= new AsyncDispatcher( "Subscriptions:cwd" );
+	private final Set<String>					chat_st_done = new HashSet<>();
+	private final LinkedList<ChatInstance>		chat_assoc_done	= new LinkedList<>();
 	
 	private void
 	searchTemplateOK(

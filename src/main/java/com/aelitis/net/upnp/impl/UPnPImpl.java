@@ -87,28 +87,28 @@ UPnPImpl
 	private UPnPAdapter				adapter;
 	private SSDPIGD					ssdp;
 	
-	private Map<String,UPnPRootDeviceImpl>			root_locations	= new HashMap<>();
+	private final Map<String,UPnPRootDeviceImpl>			root_locations	= new HashMap<>();
 	
-	private List		log_listeners		= new ArrayList();
-	private List		log_history			= new ArrayList();
-	private List		log_alert_history	= new ArrayList();
+	private final List		log_listeners		= new ArrayList();
+	private final List		log_history			= new ArrayList();
+	private final List		log_alert_history	= new ArrayList();
 	
-	private List<UPnPListener>	rd_listeners		= new ArrayList<>();
-	private AEMonitor			rd_listeners_mon 	= new AEMonitor( "UPnP:L" );
+	private final List<UPnPListener> rd_listeners = new ArrayList<>();
+	private final AEMonitor rd_listeners_mon = new AEMonitor( "UPnP:L" );
 
 	private int		http_calls_ok	= 0;
 	private int		direct_calls_ok	= 0;
 	
 	private int		trace_index		= 0;
 	
-	private AsyncDispatcher		async_dispatcher = new AsyncDispatcher();
+	private final AsyncDispatcher async_dispatcher = new AsyncDispatcher();
 			
-	private ThreadPool	device_dispatcher	 = new ThreadPool("UPnPDispatcher", 1, true );
-	private Set			device_dispatcher_pending	= new HashSet();
+	private final ThreadPool device_dispatcher = new ThreadPool("UPnPDispatcher", 1, true );
+	private final Set device_dispatcher_pending	= new HashSet();
 	
-	private Map<String,long[]>	failed_urls = new HashMap<>();
+	private final Map<String,long[]> failed_urls = new HashMap<>();
 	
-	protected AEMonitor	this_mon 	= new AEMonitor( "UPnP" );
+	protected final AEMonitor this_mon = new AEMonitor( "UPnP" );
 
 	protected
 	UPnPImpl(

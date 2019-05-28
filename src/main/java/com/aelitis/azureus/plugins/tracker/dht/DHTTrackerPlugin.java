@@ -105,7 +105,7 @@ DHTTrackerPlugin
 	private static final int	INTERESTING_INIT_RAND_OTHERS	=   30*60*1000;
 	private static final int	INTERESTING_INIT_MIN_OTHERS		=    5*60*1000;
 
-	private static final int	INTERESTING_DHT_CHECK_PERIOD	= 1*60*60*1000;
+	private static final int	INTERESTING_DHT_CHECK_PERIOD	= 60 * 60 * 1000;
 	private static final int	INTERESTING_DHT_INIT_RAND		=    5*60*1000;
 	private static final int	INTERESTING_DHT_INIT_MIN		=    2*60*1000;
 	
@@ -178,7 +178,7 @@ DHTTrackerPlugin
 	
 	private LoggerChannel		log;
 	
-	private Map<Download,int[]>					scrape_injection_map = new WeakHashMap<>();
+	private final Map<Download,int[]> scrape_injection_map = new WeakHashMap<>();
 	
 	private Random				random = new Random();
 	private boolean				is_running;				
@@ -1106,7 +1106,7 @@ DHTTrackerPlugin
 						
 					}else{
 						
-						Integer	existing_type = run_data[0];
+						int existing_type = run_data[0];
 
 						if (existing_type == REG_TYPE_DERIVED &&
 								register_type == REG_TYPE_FULL ){

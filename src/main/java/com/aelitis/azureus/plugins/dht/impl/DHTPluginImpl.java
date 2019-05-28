@@ -228,7 +228,7 @@ DHTPluginImpl
 				
 				//System.out.println( "CVS DHT cache republish interval modified" );
 
-				props.put( DHT.PR_CACHE_REPUBLISH_INTERVAL, 1 * 60 * 60 * 1000);
+				props.put( DHT.PR_CACHE_REPUBLISH_INTERVAL, 60 * 60 * 1000);
 			}
 			
 			dht = DHTFactory.create( 
@@ -1213,7 +1213,7 @@ for (Download download : downloads) {
 	
 		// direct read/write support
 	
-	private Map<DHTPluginTransferHandler,DHTTransportTransferHandler>	handler_map = new HashMap<>();
+	private final Map<DHTPluginTransferHandler,DHTTransportTransferHandler> handler_map = new HashMap<>();
 
 	public void
 	registerHandler(

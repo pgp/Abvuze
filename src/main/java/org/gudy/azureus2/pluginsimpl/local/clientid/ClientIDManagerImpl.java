@@ -93,7 +93,7 @@ ClientIDManagerImpl
 	private boolean					filter_override;
 	private ThreadPool				thread_pool;
 	
-	private Object					filter_lock = new Object();
+	private final Object			filter_lock = new Object();
 	private int						filter_port;
 	
 	public void

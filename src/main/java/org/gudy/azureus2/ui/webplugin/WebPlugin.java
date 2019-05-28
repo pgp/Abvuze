@@ -210,7 +210,7 @@ WebPlugin
 	private static final int	LOGOUT_GRACE_MILLIS	= 5*1000;
 	private static final String	GRACE_PERIOD_MARKER	= "<grace_period>";
 	
-	private Map<String,Long>	logout_timer 		= new HashMap<>();
+	private final Map<String,Long> logout_timer = new HashMap<>();
 	
 	private boolean	unloaded;
 	
@@ -1467,7 +1467,7 @@ WebPlugin
 					
 					private final int DELAY = 10*1000;
 					
-					private Map<String,Object[]>	fail_map = new HashMap<>();
+					private final Map<String,Object[]> fail_map = new HashMap<>();
 					
 					public boolean
 					authenticate(

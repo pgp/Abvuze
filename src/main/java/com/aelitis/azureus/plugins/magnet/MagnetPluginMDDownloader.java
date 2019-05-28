@@ -431,7 +431,7 @@ MagnetPluginMDDownloader
 						peer_manager.addListener(
 							new PeerManagerListener2()
 							{
-								private PeerManagerListener2	pm_listener = this;
+								private final PeerManagerListener2	pm_listener = this;
 								
 								private int	md_size;
 								
@@ -657,7 +657,7 @@ MagnetPluginMDDownloader
 			DownloadManagerListener dl_listener = 
 				new DownloadManagerListener()
 				{
-					private Object				lock  = this;
+					private final Object lock = this;
 					
 					private TimerEventPeriodic	timer_event;
 					private boolean				removed;

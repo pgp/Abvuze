@@ -312,8 +312,8 @@ AddressUtils
 		return is_lan_local;
 	}
 	
-	private static Set<InetAddress>	pending_addresses = new HashSet<>();
-	private static TimerEventPeriodic	pa_timer;
+	private static final Set<InetAddress> pending_addresses = new HashSet<>();
+	private static TimerEventPeriodic pa_timer;
 	
 	public static void
 	addLANRateLimitAddress(

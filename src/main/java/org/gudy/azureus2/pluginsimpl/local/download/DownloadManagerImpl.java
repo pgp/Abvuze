@@ -1105,8 +1105,8 @@ DownloadManagerImpl
 		}
 	}
 	
-	private List<DownloadStubImpl>				download_stubs 		= new ArrayList<>();
-	private ByteArrayHashMap<DownloadStubImpl>	download_stub_map 	= new ByteArrayHashMap<>();
+	private final List<DownloadStubImpl> download_stubs = new ArrayList<>();
+	private final ByteArrayHashMap<DownloadStubImpl> download_stub_map = new ByteArrayHashMap<>();
 	
 	private List<DownloadStubListener>	download_stub_listeners = new CopyOnWriteArrayList<>();
 	
@@ -1540,7 +1540,7 @@ DownloadManagerImpl
 		}
 	}
 	
-	private Set<DownloadStub>	informing_of_add = new HashSet<>();
+	private final Set<DownloadStub> informing_of_add = new HashSet<>();
 	
 	private void
 	informAdded(

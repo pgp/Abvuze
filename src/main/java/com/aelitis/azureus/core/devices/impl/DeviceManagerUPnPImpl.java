@@ -74,9 +74,9 @@ DeviceManagerUPnPImpl
 	
 	private volatile IPCInterface			upnpav_ipc;
 	
-	private Map<InetAddress,String>		unassociated_devices = new HashMap<>();
+	private final Map<InetAddress,String> unassociated_devices = new HashMap<>();
 	
-	private Set<String>					access_logs	= new HashSet<>();
+	private final Set<String> access_logs = new HashSet<>();
 	
 	protected
 	DeviceManagerUPnPImpl(
@@ -231,7 +231,7 @@ DeviceManagerUPnPImpl
 			upnp.getSSDP().addListener(
 				new UPnPSSDPListener()
 				{
-					private Map<InetAddress,Boolean>	liveness_map = new HashMap<>();
+					private final Map<InetAddress,Boolean>	liveness_map = new HashMap<>();
 					
 					public void
 					receivedResult(

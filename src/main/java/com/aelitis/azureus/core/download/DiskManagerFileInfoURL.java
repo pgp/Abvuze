@@ -63,7 +63,7 @@ DiskManagerFileInfoURL
 	
 	private File				file;
 	
-	private Object	lock = new Object();
+	private final Object lock = new Object();
 	
 	private URL			redirected_url;
 	private int			consec_redirect_fails;

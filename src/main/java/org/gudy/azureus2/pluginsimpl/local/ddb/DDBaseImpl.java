@@ -82,7 +82,7 @@ DDBaseImpl
 		return( singleton );
 	}
 	
-	private static Map<DHTPluginInterface,DistributedDatabase> dht_pi_map = new HashMap<>();
+	private static final Map<DHTPluginInterface,DistributedDatabase> dht_pi_map = new HashMap<>();
 	
 	public static List<DistributedDatabase>
 	getDDBs(

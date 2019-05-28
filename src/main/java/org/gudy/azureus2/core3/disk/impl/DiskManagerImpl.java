@@ -2616,7 +2616,7 @@ DiskManagerImpl
 	        			
 	        			private long	last_update_processed;
 	        			
-	        			private long	estimated_speed = 1*1024*1024;	// 1MB/sec default
+	        			private long	estimated_speed = 1024 * 1024;	// 1MB/sec default
 	        				
 	        			{
 	        				if ( average_config_key != null ){

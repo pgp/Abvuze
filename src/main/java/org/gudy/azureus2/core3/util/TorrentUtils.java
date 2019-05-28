@@ -4074,7 +4074,7 @@ TorrentUtils
 						while( matcher.find()){
 							
 							boolean is_tcp	= matcher.group(1).startsWith( "T" );
-							Integer	port	= Integer.parseInt( matcher.group(2));
+							int port	= Integer.parseInt( matcher.group(2));
 							
 							txt_entry.addPort( is_tcp, port );
 						}

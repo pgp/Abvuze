@@ -74,7 +74,7 @@ TranscodeFileImpl
 
 	private DeviceImpl					device;
 	private String						key;
-	private Map<String,Map<String,?>>	files_map;
+	private final Map<String,Map<String,?>>	files_map;
 
 		// don't store any local state here, store it in the map as this is just a wrapper
 		// for the underlying map and there can be multiple such wrappers concurrent

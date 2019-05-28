@@ -72,7 +72,7 @@ PRUDPPacketHandlerImpl
 	}
 	
 	private static final long	MAX_SEND_QUEUE_DATA_SIZE	= 2*1024*1024;
-	private static final long	MAX_RECV_QUEUE_DATA_SIZE	= 1*1024*1024;
+	private static final long	MAX_RECV_QUEUE_DATA_SIZE	= 1024 * 1024;
 	
 	private static boolean	use_socks;
 

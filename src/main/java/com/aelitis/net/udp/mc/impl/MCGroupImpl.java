@@ -168,7 +168,7 @@ MCGroupImpl
 	private volatile boolean		instance_suspended;
 	private List<Object[]>			suspended_threads = new ArrayList<>();
 	
-	private Map<String,MulticastSocket>		socket_cache = new HashMap<>();
+	private final Map<String,MulticastSocket> socket_cache = new HashMap<>();
 	
 	private
 	MCGroupImpl(

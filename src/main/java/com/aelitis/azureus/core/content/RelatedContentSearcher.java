@@ -111,7 +111,7 @@ RelatedContentSearcher
 	private static final int	HARVEST_BLOOM_DISCARD_MILLIS	= 60*60*1000;
 	private static final int 	HARVEST_BLOOM_OP_RESET_MILLIS	= 5*60*1000;
 	private static final int 	HARVEST_BLOOM_OP_RESET_TICKS	= HARVEST_BLOOM_OP_RESET_MILLIS/RelatedContentManager.TIMER_PERIOD;
-	private static final int 	HARVEST_BLOOM_SE_RESET_MILLIS	= 1*60*1000;
+	private static final int 	HARVEST_BLOOM_SE_RESET_MILLIS	= 60 * 1000;
 	private static final int 	HARVEST_BLOOM_SE_RESET_TICKS	= HARVEST_BLOOM_SE_RESET_MILLIS/RelatedContentManager.TIMER_PERIOD;
 
 	private static final int KEY_BLOOM_LOAD_FACTOR			= 8;
@@ -143,8 +143,8 @@ RelatedContentSearcher
 	
 	
 	
-	private ByteArrayHashMap<ForeignBloom>		harvested_blooms 	= new ByteArrayHashMap<>();
-	private ByteArrayHashMap<String>			harvested_fails 	= new ByteArrayHashMap<>();
+	private final ByteArrayHashMap<ForeignBloom>	harvested_blooms 	= new ByteArrayHashMap<>();
+	private final ByteArrayHashMap<String>			harvested_fails 	= new ByteArrayHashMap<>();
 	
 	private volatile BloomFilter harvest_op_requester_bloom = BloomFilterFactory.createAddOnly( 2048 );
 	private volatile BloomFilter harvest_se_requester_bloom = BloomFilterFactory.createAddRemove4Bit( 512 );

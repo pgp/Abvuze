@@ -69,7 +69,7 @@ DDBaseTTTorrent
 	
 	private List				external_downloads;
 	
-	private Map	data_cache = 
+	private final Map	data_cache =
 		new LinkedHashMap(5,0.75f,true)
 		{
 			protected boolean 

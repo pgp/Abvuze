@@ -28,7 +28,7 @@ public class SystemTime {
 	
 	private static final int	STEPS_PER_SECOND	= (int) (1000 / TIME_GRANULARITY_MILLIS);
 
-	private static SystemTimeProvider	instance;
+	private static final SystemTimeProvider	instance;
 	
 	// can't do that without some safeguarding code.
 	// monotime does guarantee that time neither goes backwards nor performs leaps into the future.
@@ -42,33 +42,31 @@ public class SystemTime {
 	//private static long					hpc_last_time;
 	//private static boolean				no_hcp_logged;
 
-	static
-	{
-		try
-		{
-			if (System.getProperty("azureus.time.use.raw.provider", "0").equals("1"))
-			{
+	static {
+		SystemTimeProvider inst;
+		try {
+			if (System.getProperty("azureus.time.use.raw.provider", "0").equals("1")) {
 				System.out.println("Warning: Using Raw Provider");
-				instance = new RawProvider();
-			} else
-			{
-				instance = new SteppedProvider();
+				inst = new RawProvider();
 			}
-		} catch (Throwable e)
-		{
-			// might be in applet...
-			instance = new SteppedProvider();
+			else inst = new SteppedProvider();
 		}
+		catch (Throwable e) {
+			// might be in applet...
+			inst = new SteppedProvider();
+		}
+
+		instance = inst;
 	}
 
-	public static void useRawProvider() {
-		if (!(instance instanceof RawProvider))
-		{
-			Debug.out( "Whoa, someone already created a non-raw provider!" );
-			
-			instance = new RawProvider();
-		}
-	}
+//	public static void useRawProvider() {
+//		if (!(instance instanceof RawProvider))
+//		{
+//			Debug.out( "Whoa, someone already created a non-raw provider!" );
+//
+//			instance = new RawProvider();
+//		}
+//	}
 
 	protected interface SystemTimeProvider {
 		long getTime();

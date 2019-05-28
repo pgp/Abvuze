@@ -48,7 +48,7 @@ CacheFileManagerImpl
 	
 	public static final int	CACHE_CLEANER_TICKS		= 60;	// every 60 seconds
 	
-	public static final int		STATS_UPDATE_FREQUENCY		= 1*1000;	// 1 sec
+	public static final int		STATS_UPDATE_FREQUENCY		= 1000;	// 1 sec
 	public static final long	DIRTY_CACHE_WRITE_MAX_AGE	= 120*1000;	// 2 mins
 		
 	static{

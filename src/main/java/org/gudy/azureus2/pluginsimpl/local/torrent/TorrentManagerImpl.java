@@ -570,7 +570,7 @@ TorrentManagerImpl
 		}
 	}
 
-	private Map<TorrentOpenOptions,TorrentOptionsImpl>	too_state = new HashMap<>();
+	private final Map<TorrentOpenOptions,TorrentOptionsImpl> too_state = new HashMap<>();
 	
 	private void
 	fireEvent(

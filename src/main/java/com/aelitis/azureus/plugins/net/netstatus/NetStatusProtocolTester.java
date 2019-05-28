@@ -82,7 +82,7 @@ NetStatusProtocolTester
 
 	private testXferType transfer_type = new testXferType();
 
-	private Map	request_history =  
+	private final Map request_history =
 		new LinkedHashMap(REQUEST_HISTORY_MAX,0.75f,true)
 		{
 			protected boolean 
@@ -93,7 +93,7 @@ NetStatusProtocolTester
 			}
 		};
 		
-	private List active_tests 		= new ArrayList();
+	private final List active_tests = new ArrayList();
 	
 	private TimerEventPeriodic	timer_event	= null;
 		

@@ -211,15 +211,15 @@ PluginInitializer
   				"multi-ports", 		"Mutli-Port Trackers",	"1.0" },
   };
   
-  private static PluginInitializer	singleton;
-  private static AEMonitor			class_mon	= new AEMonitor( "PluginInitializer");
+  private static PluginInitializer singleton;
+  private static final AEMonitor class_mon = new AEMonitor( "PluginInitializer");
 
-  private static List		registration_queue 	= new ArrayList();
+  private static final List registration_queue = new ArrayList();
   
-  private static List		initThreads = new ArrayList(1);
+  private static final List initThreads = new ArrayList(1);
   
-  private static AsyncDispatcher	async_dispatcher = new AsyncDispatcher();
-  private static List<PluginEvent>	plugin_event_history = new ArrayList<>();
+  private static final AsyncDispatcher	async_dispatcher = new AsyncDispatcher();
+  private static final List<PluginEvent>	plugin_event_history = new ArrayList<>();
   
   
   
@@ -230,18 +230,18 @@ PluginInitializer
   
   private ClassLoader			root_class_loader	= getClass().getClassLoader();
   
-  private List		loaded_pi_list		= new ArrayList();
+  private final List loaded_pi_list = new ArrayList();
   
-  private static boolean	loading_builtin;
+  private static boolean loading_builtin;
   
-  private List<Plugin>					s_plugins				= new ArrayList<>();
-  private List<PluginInterfaceImpl>		s_plugin_interfaces		= new ArrayList<>();
+  private final List<Plugin>					s_plugins				= new ArrayList<>();
+  private final List<PluginInterfaceImpl>		s_plugin_interfaces		= new ArrayList<>();
   
-  private boolean	initialisation_complete;
+  private boolean initialisation_complete;
   
-  private volatile boolean	plugins_initialised;
+  private volatile boolean plugins_initialised;
   
-  private Set<String>	vc_disabled_plugins = VersionCheckClient.getSingleton().getDisabledPluginIDs();
+  private final Set<String> vc_disabled_plugins = VersionCheckClient.getSingleton().getDisabledPluginIDs();
     
   public static PluginInitializer
   getSingleton(
@@ -2435,9 +2435,9 @@ PluginInitializer
 		
 		private volatile boolean initialised;
 		
-		private AESemaphore	request_sem = new AESemaphore( "ValueHolder" );
+		private final AESemaphore request_sem = new AESemaphore( "ValueHolder" );
 		
-		private List<Object[]>	request_queue = new ArrayList<>();
+		private final List<Object[]> request_queue = new ArrayList<>();
 				
 		private
 		VerifiedPluginHolder()

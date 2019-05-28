@@ -203,7 +203,7 @@ RelatedContentManager
 	private TorrentAttribute 				ta_category;
 	private DHTPluginInterface				public_dht_plugin;
 				
-	private volatile Map<Byte,DHTPluginInterface>		i2p_dht_plugin_map = new HashMap<>();
+	private final Map<Byte,DHTPluginInterface> i2p_dht_plugin_map = new HashMap<>();
 
 	private TagManager						tag_manager;
 	
@@ -1861,7 +1861,7 @@ RelatedContentManager
 					true,
 					new DHTPluginOperationListener()
 					{
-						private Set<String>	tags = new HashSet<>();
+						private final Set<String> tags = new HashSet<>();
 						
 						public void
 						starts(
@@ -2319,7 +2319,7 @@ RelatedContentManager
 						private RelatedContentManagerListener manager_listener = 
 							new RelatedContentManagerListener()
 							{
-							private Set<RelatedContent>	content_list = new HashSet<>();
+							private final Set<RelatedContent> content_list = new HashSet<>();
 							
 								public void
 								contentFound(

@@ -3847,7 +3847,7 @@ DownloadManagerImpl
 		}
 	}
   
-	private static Object	TTP_KEY = new Object();
+	private static final Object TTP_KEY = new Object();
 	
 	@Override
 	public Object 

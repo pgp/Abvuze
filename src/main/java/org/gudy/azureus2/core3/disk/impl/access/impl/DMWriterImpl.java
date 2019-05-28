@@ -47,7 +47,7 @@ DMWriterImpl
 {
 	static final LogIDs LOGID = LogIDs.DISK;
 	
-	private static final int		MIN_ZERO_BLOCK	= 1*1024*1024;	// must be mult of 1024 (see init below)
+	private static final int		MIN_ZERO_BLOCK	= 1024 * 1024;	// must be mult of 1024 (see init below)
 	
 	final DiskManagerHelper		disk_manager;
 	final DiskAccessController	disk_access;

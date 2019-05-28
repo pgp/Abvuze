@@ -122,7 +122,7 @@ public class StartStopRulesDefaultPlugin implements Plugin,
 	private com.aelitis.azureus.core.util.average.Average globalDownloadSpeedAverage = AverageFactory.MovingImmediateAverage(SMOOTHING_PERIOD/PROCESS_CHECK_PERIOD );
 	
 	// Core/Plugin classes
-	private AEMonitor this_mon = new AEMonitor("StartStopRules");
+	private final AEMonitor this_mon = new AEMonitor("StartStopRules");
 
 	private PluginInterface pi;
 
@@ -136,7 +136,7 @@ public class StartStopRulesDefaultPlugin implements Plugin,
 	private RecalcSeedingRanksTask recalcSeedingRanksTask;
 
 	/** Map to relate downloadData to a Download */
-	private static Map<Download, DefaultRankCalculator> downloadDataMap = new ConcurrentHashMap<>();
+	private static final Map<Download, DefaultRankCalculator> downloadDataMap = new ConcurrentHashMap<>();
 
 	/**
 	 * this is used to reduce the number of comperator invocations
@@ -148,9 +148,9 @@ public class StartStopRulesDefaultPlugin implements Plugin,
 
 	private volatile boolean somethingChanged;
 
-	private Set ranksToRecalc = new LightHashSet();
+	private final Set ranksToRecalc = new LightHashSet();
 	
-	private AEMonitor ranksToRecalc_mon = new AEMonitor("ranksToRecalc");
+	private final AEMonitor ranksToRecalc_mon = new AEMonitor("ranksToRecalc");
 
 	/** When rules class started.  Used for initial waiting logic */
 	private long monoStartedOn;
@@ -218,7 +218,7 @@ public class StartStopRulesDefaultPlugin implements Plugin,
 
 	private UIAdapter	swt_ui;
 	
-	private List listenersFP = new CopyOnWriteArrayList();
+	private final List listenersFP = new CopyOnWriteArrayList();
 
 	public static boolean pauseChangeFlagChecker = false;
 	

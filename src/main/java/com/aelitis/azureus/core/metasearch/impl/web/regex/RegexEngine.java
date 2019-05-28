@@ -366,41 +366,48 @@ RegexEngine
                                                     if (keys.length > 1) {
                                                         String[] commands = keys[1].split("\\+");
                                                         int keyPos = 2;
-                                                        for (String command : commands) {
-                                                            try {
-                                                                if (DEBUG_MAPPINGS) {
-                                                                    System.out.println("command " + command);
-                                                                }
-                                                                if (command.equals("replace")) {
-                                                                    if (keyPos + 2 > keys.length) {
-                                                                        if (DEBUG_MAPPINGS) {
-                                                                            System.out.println("not enough keys. have " + keys.length + "; need " + (keyPos + 3));
-                                                                        }
-                                                                        break;
-                                                                    }
-                                                                    String simpleReplace = keys[keyPos];
-                                                                    keyPos++;
-                                                                    String simpleReplacement = keys[keyPos];
-                                                                    keyPos++;
+														label:
+														for (String command : commands) {
+															try {
+																if (DEBUG_MAPPINGS) {
+																	System.out.println("command " + command);
+																}
+																switch (command) {
+																	case "replace":
+																		if (keyPos + 2 > keys.length) {
+																			if (DEBUG_MAPPINGS) {
+																				System.out.println("not enough keys. have " + keys.length + "; need " + (keyPos + 3));
+																			}
+																			break label;
+																		}
+																		String simpleReplace = keys[keyPos];
+																		keyPos++;
+																		String simpleReplacement = keys[keyPos];
+																		keyPos++;
 
-                                                                    replaceWith = replaceWith.replaceAll(simpleReplace, simpleReplacement);
-                                                                } else if (command.equals("ucase")) {
-                                                                    replaceWith = replaceWith.toUpperCase();
-                                                                } else if (command.equals("lcase")) {
-                                                                    replaceWith = replaceWith.toLowerCase();
-                                                                } else if (command.equals("urldecode")) {
-                                                                    replaceWith = UrlUtils.decode(replaceWith);
-                                                                }
-                                                                if (DEBUG_MAPPINGS) {
-                                                                    System.out.println("replaceWith now " + replaceWith);
-                                                                }
-                                                            } catch (Exception e) {
-                                                                if (DEBUG_MAPPINGS) {
-                                                                    System.out.println(e.toString());
-                                                                }
-                                                            }
-                                                        }
-                                                    }
+																		replaceWith = replaceWith.replaceAll(simpleReplace, simpleReplacement);
+																		break;
+																	case "ucase":
+																		replaceWith = replaceWith.toUpperCase();
+																		break;
+																	case "lcase":
+																		replaceWith = replaceWith.toLowerCase();
+																		break;
+																	case "urldecode":
+																		replaceWith = UrlUtils.decode(replaceWith);
+																		break;
+																}
+
+																if (DEBUG_MAPPINGS) {
+																	System.out.println("replaceWith now " + replaceWith);
+																}
+															} catch (Exception e) {
+																if (DEBUG_MAPPINGS) {
+																	System.out.println(e.toString());
+																}
+															}
+														}
+													}
 
                                                     fieldContent = fieldContent.replaceFirst(variablePattern,
                                                             replaceWith);

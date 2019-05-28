@@ -163,10 +163,10 @@ TagPropertyConstraintHandler
 			});
 	}
 	
-	private static Object	process_lock = new Object();
+	private static final Object	process_lock = new Object();
 	private static int		processing_disabled_count;
 	
-	private static List<Object[]>	processing_queue = new ArrayList<>();
+	private static final List<Object[]>	processing_queue = new ArrayList<>();
 	
 	public void
 	setProcessingEnabled(

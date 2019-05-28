@@ -48,7 +48,7 @@ TranscodeProviderVuze
 	private PluginInterface			plugin_interface;
 	
 	private volatile TranscodeProfile[]		profiles;
-	private Map<String,TranscodeProfile[]>	profile_classification_map = new HashMap<>();
+	private final Map<String,TranscodeProfile[]> profile_classification_map = new HashMap<>();
 	
 	protected
 	TranscodeProviderVuze(

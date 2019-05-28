@@ -91,17 +91,17 @@ SSDPCore
 	private String				group_address_str;
 	private int					group_port;
 
-	private boolean		first_response			= true;
+	private boolean			first_response			= true;
 	
-	private List			listeners	= new ArrayList();
+	private final List		listeners	= new ArrayList();
 
 	private UTTimer			timer;
-	private List			timer_queue = new ArrayList();
+	private final List		timer_queue = new ArrayList();
 	private long			time_event_next;
 	
-	protected AEMonitor		this_mon	= new AEMonitor( "SSDP" );
+	protected final AEMonitor		this_mon	= new AEMonitor( "SSDP" );
 
-	private Set<String>		ignore_mx	= new HashSet();
+	private final Set<String> ignore_mx = new HashSet();
 	
 	private
 	SSDPCore(

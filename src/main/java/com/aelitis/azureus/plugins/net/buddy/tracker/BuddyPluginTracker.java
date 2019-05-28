@@ -77,7 +77,7 @@ BuddyPluginTracker
 	private static final int	PEER_RECHECK_PERIOD		= 120*1000;
 	private static final int	PEER_RECHECK_TICKS		= PEER_RECHECK_PERIOD/BuddyPlugin.TIMER_PERIOD;
 
-	private static final int	PEER_CHECK_INTERVAL		= 1*60*1000;
+	private static final int	PEER_CHECK_INTERVAL		= 60*1000;
 	
 	private static final int	SHORT_ID_SIZE			= 4;
 	private static final int	FULL_ID_SIZE			= 20;
@@ -114,23 +114,23 @@ BuddyPluginTracker
 	
 	private int				network_status = BUDDY_NETWORK_IDLE;
 	
-	private Set<BuddyPluginBuddy>				online_buddies 			= new HashSet<>();
-	private Map<String,List<BuddyPluginBuddy>>	online_buddy_ips		= new HashMap<>();
+	private final Set<BuddyPluginBuddy> online_buddies = new HashSet<>();
+	private final Map<String,List<BuddyPluginBuddy>> online_buddy_ips = new HashMap<>();
 	
-	private Set<Download>	tracked_downloads		= new HashSet<>();
+	private final Set<Download>	tracked_downloads		= new HashSet<>();
 	private int				download_set_id;
 	
 	private Set<Download>	last_processed_download_set;
 	private int				last_processed_download_set_id;
 	
-	private Map<HashWrapper,List<Download>>	short_id_map	= new HashMap<>();
-	private Map<HashWrapper,Download>		full_id_map		= new HashMap<>();
+	private final Map<HashWrapper,List<Download>> short_id_map = new HashMap<>();
+	private final Map<HashWrapper,Download> full_id_map = new HashMap<>();
 	
-	private Set<Download>				actively_tracking	= new HashSet<>();
+	private final Set<Download> actively_tracking = new HashSet<>();
 		
-	private CopyOnWriteSet<Peer>	buddy_peers	= new CopyOnWriteSet<>(true);
+	private final CopyOnWriteSet<Peer> buddy_peers = new CopyOnWriteSet<>(true);
 	
-	private List<BuddyPluginTrackerListener>	listeners = new CopyOnWriteArrayList<>();
+	private final List<BuddyPluginTrackerListener> listeners = new CopyOnWriteArrayList<>();
 	
 	private TimerEventPeriodic	buddy_stats_timer;
 	

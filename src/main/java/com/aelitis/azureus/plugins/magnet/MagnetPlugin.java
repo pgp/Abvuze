@@ -859,7 +859,7 @@ MagnetPlugin
 		return( torrent_data );
 	}
 	
-	private static ByteArrayHashMap<DownloadActivity>	download_activities = new ByteArrayHashMap<>();
+	private static final ByteArrayHashMap<DownloadActivity>	download_activities = new ByteArrayHashMap<>();
 	
 	private static class
 	DownloadActivity
@@ -1327,7 +1327,7 @@ MagnetPlugin
 						DistributedDatabaseListener	ddb_listener = 
 							new DistributedDatabaseListener()
 							{
-								private Set	found_set = new HashSet();
+								private final Set found_set = new HashSet();
 								
 								public void
 								event(

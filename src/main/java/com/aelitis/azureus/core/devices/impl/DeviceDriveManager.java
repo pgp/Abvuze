@@ -39,9 +39,9 @@ public class
 DeviceDriveManager 
 	implements DriveDetectedListener
 {
-	private DeviceManagerImpl		manager;
+	private DeviceManagerImpl manager;
 	
-	private Map<String,DeviceMediaRendererManual>	device_map = new HashMap<>();
+	private final Map<String,DeviceMediaRendererManual>	device_map = new HashMap<>();
 	
 	private AsyncDispatcher	async_dispatcher = new AsyncDispatcher();
 	

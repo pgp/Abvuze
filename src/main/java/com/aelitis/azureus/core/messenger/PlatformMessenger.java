@@ -89,7 +89,7 @@ public class PlatformMessenger
 
 	private static AsyncDispatcher	dispatcher = new AsyncDispatcher(5000);
 
-	private static Map<String, Object> mapExtra = new HashMap<>();
+	private static final Map<String, Object> mapExtra = new HashMap<>();
 	
 	public static synchronized void init() {
 		if (initialized) {

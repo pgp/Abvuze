@@ -57,13 +57,13 @@ BuddyPluginAZ2
 
 	private static final int SEND_TIMEOUT = 2*60*1000;
 	
-	private BuddyPlugin		plugin;
+	private BuddyPlugin plugin;
 	
-	private Map				chats 		= new HashMap();
+	private final Map chats = new HashMap();
+
+	private final List listeners = new CopyOnWriteArrayList();
 	
-	private List	listeners = new CopyOnWriteArrayList();
-	
-	private List	track_listeners = new CopyOnWriteArrayList();
+	private final List track_listeners = new CopyOnWriteArrayList();
 	
 	protected 
 	BuddyPluginAZ2(
@@ -583,12 +583,12 @@ BuddyPluginAZ2
 	chatInstance
 		extends BuddyPluginAdapter
 	{
-		private String		id;
-		
-		private Map				participants 	= new HashMap();
-		private List	listeners 		= new CopyOnWriteArrayList();
-		
-		private List			history			= new ArrayList();
+		private String id;
+
+		private final Map participants = new HashMap();
+		private final List listeners = new CopyOnWriteArrayList();
+
+		private final List history = new ArrayList();
 		
 		protected
 		chatInstance(

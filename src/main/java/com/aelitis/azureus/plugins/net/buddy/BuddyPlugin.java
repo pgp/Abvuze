@@ -133,7 +133,7 @@ BuddyPlugin
 	public static final int	TIMER_PERIOD	= 10*1000;
 	
 	private static final int	BUDDY_STATUS_CHECK_PERIOD_MIN	= 3*60*1000;
-	private static final int	BUDDY_STATUS_CHECK_PERIOD_INC	= 1*60*1000;
+	private static final int	BUDDY_STATUS_CHECK_PERIOD_INC	= 60*1000;
 	
 	protected static final int	STATUS_REPUBLISH_PERIOD		= 10*60*1000;
 	private static final int	STATUS_REPUBLISH_TICKS		= STATUS_REPUBLISH_PERIOD/TIMER_PERIOD;
@@ -204,23 +204,23 @@ BuddyPlugin
 	private List<BuddyPluginListener>				listeners 			= new CopyOnWriteArrayList<>();
 	private List<BuddyPluginBuddyRequestListener>	request_listeners	= new CopyOnWriteArrayList<>();
 		
-	private SESecurityManager	sec_man;
+	private SESecurityManager sec_man;
 
-	private GenericMessageRegistration	msg_registration;
+	private GenericMessageRegistration msg_registration;
 			
-	private RateLimiter	inbound_limiter; 
+	private RateLimiter inbound_limiter;
 		
-	private RateLimiter	outbound_limiter; 
+	private RateLimiter outbound_limiter;
 	
-	private boolean		config_dirty;
+	private boolean config_dirty;
 	
-	private Random	random = RandomUtils.SECURE_RANDOM;
+	private Random random = RandomUtils.SECURE_RANDOM;
 	
-	private BuddyPluginAZ2		az2_handler;
+	private BuddyPluginAZ2 az2_handler;
 	
-	private List<DistributedDatabaseContact>	publish_write_contacts = new ArrayList<>();
+	private final List<DistributedDatabaseContact> publish_write_contacts = new ArrayList<>();
 	
-	private int		status_seq;
+	private int status_seq;
 	
 	{
 		while( status_seq == 0 ){
@@ -231,7 +231,7 @@ BuddyPlugin
 		
 	private Set<BuddyPluginBuddy>			pd_preinit		= new HashSet<>();
 	
-	private List<BuddyPluginBuddy>			pd_queue 		= new ArrayList<>();
+	private final List<BuddyPluginBuddy>	pd_queue 		= new ArrayList<>();
 	private AESemaphore						pd_queue_sem	= new AESemaphore( "BuddyPlugin:persistDispatch");
 	private AEThread2						pd_thread;
 	

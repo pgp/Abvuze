@@ -72,7 +72,7 @@ NetStatusProtocolTesterBT
 
 	private long		start_time	= SystemTime.getCurrentTime();
 	
-	private List		sessions	= new ArrayList();
+	private final List	sessions	= new ArrayList();
 	private int			session_id_next;
 	
 	private int			outbound_attempts	= 0;

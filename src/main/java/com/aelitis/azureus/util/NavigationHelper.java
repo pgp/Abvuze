@@ -39,7 +39,7 @@ NavigationHelper
 	public static final int COMMAND_CONDITION_CHECK	= 2;
 	
 		
-	private static List listeners = new CopyOnWriteArrayList();
+	private static final List listeners = new CopyOnWriteArrayList();
 	private static List command_queue;
 	
 	protected static void

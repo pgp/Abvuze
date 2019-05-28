@@ -69,7 +69,7 @@ DHTPluginStorageManager
 	private static final int		DIV_WIDTH				= 10;
 	private static final int		DIV_FRAG_GET_SIZE		= 2;
 	private static final long		DIV_EXPIRY_MIN			= 2*24*60*60*1000L;
-	private static final long		DIV_EXPIRY_RAND			= 1*24*60*60*1000L;
+	private static final long		DIV_EXPIRY_RAND			= 24 * 60 * 60 * 1000L;
 	private static final long		KEY_BLOCK_TIMEOUT_SECS	= 7*24*60*60;
 	
 	public static final int			LOCAL_DIVERSIFICATION_SIZE_LIMIT			= 32*1024;

@@ -86,7 +86,7 @@ MagnetURIHandlerImpl
 	
 	private Map		info_map 	= new HashMap();
 	
-	private Map<String,ResourceProvider>	resources = new HashMap<>();
+	private final Map<String,ResourceProvider> resources = new HashMap<>();
 	
 	protected
 	MagnetURIHandlerImpl()

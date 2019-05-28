@@ -56,7 +56,7 @@ COConfigurationManager
 	
 	static{
 		long max_mem_bytes 	= Runtime.getRuntime().maxMemory();
-	    long mb_1			= 1*1024*1024;
+	    long mb_1			= 1024*1024;
 	    long mb_32			= 32*mb_1;
 	    int size = (int)(( max_mem_bytes - mb_32 )/mb_1);	    
 	    if( size > 2000 )  size = 2000;  //safety check

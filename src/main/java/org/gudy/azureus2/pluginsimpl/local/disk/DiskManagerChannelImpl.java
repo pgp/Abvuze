@@ -165,12 +165,12 @@ DiskManagerChannelImpl
                 DiskManagerChannel channel);
 	}
 	
-	private DownloadImpl	download;
+	private final DownloadImpl	download;
 	
 	private org.gudy.azureus2.pluginsimpl.local.disk.DiskManagerFileInfoImpl	plugin_file;
 	private org.gudy.azureus2.core3.disk.DiskManagerFileInfo					core_file;
 	
-	private Set<dataEntry>	data_written = new TreeSet<>(comparator);
+	private final Set<dataEntry>	data_written = new TreeSet<>(comparator);
 	
 	private int compact_delay	= COMPACT_DELAY;
 	

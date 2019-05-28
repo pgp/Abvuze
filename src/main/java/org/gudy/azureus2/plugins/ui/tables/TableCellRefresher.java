@@ -45,7 +45,7 @@ public class TableCellRefresher {
 	
 	private  AEThread2 refresher;
 	
-	private Map<TableCell, TableColumn> mapCellsToColumn = new HashMap<>();
+	private final Map<TableCell, TableColumn> mapCellsToColumn = new HashMap<>();
 	
 	private  long iterationNumber;
 	

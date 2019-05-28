@@ -39,11 +39,11 @@ RPObject
         //      object_id refers to RPObject
         // so neither weak map is cleared down
 
-    protected transient static Map  	object_registry     	= new WeakHashMap();
+    protected transient static final Map  	object_registry     	= new WeakHashMap();
 
-    protected transient static Map    	object_registry_reverse = new WeakHashMap();
+    protected transient static final Map    object_registry_reverse = new WeakHashMap();
 
-    protected transient static long   	next_key        		= new Random().nextLong();
+    protected transient static long   	    next_key        		= new Random().nextLong();
 
     public Long _object_id;
 

@@ -275,7 +275,7 @@ QTFastStartRAF
 			int currentOffset = (int)bytesToLong(copyOfRange(ah.buffer, idx + 12 + j * 4, (idx + 12 + j * 4)+4));
 			currentOffset += ah.size;
 			int offsetIdx = idx + 12 + j * 4;
-			ah.buffer[offsetIdx + 0] = (byte)((currentOffset >> 24) & 0xFF);
+			ah.buffer[offsetIdx] = (byte)((currentOffset >> 24) & 0xFF);
 			ah.buffer[offsetIdx + 1] = (byte)((currentOffset >> 16) & 0xFF);
 			ah.buffer[offsetIdx + 2] = (byte)((currentOffset >>  8) & 0xFF);
 			ah.buffer[offsetIdx + 3] = (byte)((currentOffset >>  0) & 0xFF);
@@ -292,7 +292,7 @@ QTFastStartRAF
 			long currentOffset = bytesToLong(copyOfRange(ah.buffer, idx + 12 + j * 8, (idx + 12 + j * 8)+8));
 			currentOffset += ah.size;
 			int offsetIdx = idx + 12 + j * 8;
-			ah.buffer[offsetIdx + 0] = (byte)((currentOffset >> 56) & 0xFF);
+			ah.buffer[offsetIdx] = (byte)((currentOffset >> 56) & 0xFF);
 			ah.buffer[offsetIdx + 1] = (byte)((currentOffset >> 48) & 0xFF);
 			ah.buffer[offsetIdx + 2] = (byte)((currentOffset >> 40) & 0xFF);
 			ah.buffer[offsetIdx + 3] = (byte)((currentOffset >> 32) & 0xFF);

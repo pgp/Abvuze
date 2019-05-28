@@ -65,7 +65,7 @@ LocalTrackerPlugin
 	private static final String PLUGIN_CONFIGSECTION_ID = "Plugin.localtracker.name";
 	
 	private static final long	ANNOUNCE_PERIOD		= 5*60*1000;
-	private static final long	RE_ANNOUNCE_PERIOD	= 1*60*1000;
+	private static final long	RE_ANNOUNCE_PERIOD	= 60 * 1000;
 	
 	private PluginInterface		plugin_interface;
 	private AZInstanceManager	instance_manager;

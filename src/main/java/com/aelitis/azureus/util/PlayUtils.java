@@ -519,7 +519,7 @@ public class PlayUtils
 
 	private static AtomicInteger dm_uid = new AtomicInteger();
 	
-	private static Map<String,Object[]>	ext_play_cache = 
+	private static final Map<String,Object[]> ext_play_cache =
 		new LinkedHashMap<String,Object[]>(100,0.75f,true)
 		{
 			protected boolean 

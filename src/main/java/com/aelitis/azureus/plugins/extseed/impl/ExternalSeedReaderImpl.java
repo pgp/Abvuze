@@ -127,7 +127,7 @@ ExternalSeedReaderImpl
 
 	private List	listeners	= new ArrayList();
 	
-	private AESemaphore			rate_sem = new AESemaphore( "ExternalSeedReaderRequest" );
+	private final AESemaphore	rate_sem = new AESemaphore( "ExternalSeedReaderRequest" );
 	private int					rate_bytes_read;
 	private int					rate_bytes_permitted;
 

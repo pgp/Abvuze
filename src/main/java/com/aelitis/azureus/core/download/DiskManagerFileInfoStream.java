@@ -50,7 +50,7 @@ DiskManagerFileInfoStream
 	
 	private context				current_context;
 	
-	private Object	lock = this;
+	private final Object lock = this;
 	
 	public
 	DiskManagerFileInfoStream(

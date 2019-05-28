@@ -81,7 +81,7 @@ SESTSConnectionImpl
 	
 	private static long					last_incoming_sts_create;
 	
-	private static List					connections	= new ArrayList();
+	private static final List			connections	= new ArrayList();
 	
 	static{
 		

@@ -55,11 +55,11 @@ UPnPMappingManager
 	
 	private UPnPPlugin	plugin;
 	
-	private List<UPnPMapping>	mappings	= new ArrayList<>();
+	private final List<UPnPMapping> mappings = new ArrayList<>();
 	
-	private List<UPnPMappingManagerListener>			listeners	= new CopyOnWriteArrayList<>();
+	private final List<UPnPMappingManagerListener> listeners = new CopyOnWriteArrayList<>();
 	
-	private AsyncDispatcher	async_dispatcher = new AsyncDispatcher();
+	private final AsyncDispatcher async_dispatcher = new AsyncDispatcher();
 	
 	protected
 	UPnPMappingManager(

@@ -76,11 +76,11 @@ DHTTrackerPluginAlt
 	private DatagramSocket	current_server;
 	private Throwable		last_server_error;
 	
-	private ByteArrayHashMap<Object[]>	tid_map = new ByteArrayHashMap<>();
+	private final ByteArrayHashMap<Object[]> tid_map = new ByteArrayHashMap<>();
 
 	private TimerEventPeriodic	timer_event;
 	
-	private AsyncDispatcher		dispatcher = new AsyncDispatcher();
+	private final AsyncDispatcher		dispatcher = new AsyncDispatcher();
 	
 	private volatile long	lookup_count;
 	private volatile long	hit_count;

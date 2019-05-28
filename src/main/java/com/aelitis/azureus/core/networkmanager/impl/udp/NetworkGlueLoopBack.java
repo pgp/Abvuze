@@ -100,7 +100,7 @@ NetworkGlueLoopBack
 	
 		throws IOException
 	{	
-		Long	expires = SystemTime.getCurrentTime() + latency;
+		long expires = SystemTime.getCurrentTime() + latency;
 			
 		InetSocketAddress local_address = new InetSocketAddress( target.getAddress(), local_port );
 			

@@ -133,7 +133,7 @@ SpeedManagerAlgorithmProviderV1
 	
 	private final Average choke_speed_average			= AverageFactory.MovingImmediateAverage( 3 );
 
-	private Map							ping_sources;
+	private final Map ping_sources = new HashMap();
 	private volatile int				replacement_contacts;
 
 	private int					mode;
@@ -195,7 +195,7 @@ SpeedManagerAlgorithmProviderV1
 		max_ping				= 0;
 		replacement_contacts	= 0;
 		
-		ping_sources			= new HashMap();
+		ping_sources.clear();
 		
 		choke_speed_average.reset();
 		upload_average.reset();

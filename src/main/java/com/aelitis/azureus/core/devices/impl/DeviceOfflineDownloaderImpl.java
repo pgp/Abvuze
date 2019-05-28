@@ -98,8 +98,8 @@ DeviceOfflineDownloaderImpl
 	private int									consec_errors	= 0;
 	private int									consec_success	= 0;
 	
-	private Map<String,OfflineDownload>			offline_downloads	= new HashMap<>();
-	private Map<String,TransferableDownload>	transferable 		= new LinkedHashMap<>();
+	private final Map<String,OfflineDownload>			offline_downloads	= new HashMap<>();
+	private final Map<String,TransferableDownload>	transferable 		= new LinkedHashMap<>();
 	private TransferableDownload				current_transfer;
 	private boolean								is_transferring;
 	

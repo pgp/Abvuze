@@ -284,7 +284,7 @@ DeviceManagerImpl
 	
 	private int						getMimeType_fails;
 	
-	private Object					logger_lock = new Object();
+	private final Object logger_lock = new Object();
 	private AEDiagnosticsLogger		logger;
 	
 	private AsyncDispatcher	async_dispatcher = new AsyncDispatcher( 10*1000 );
@@ -293,8 +293,8 @@ DeviceManagerImpl
 	
 	private volatile boolean initialized = false;
 	
-	private Object		lsn_lock			= new Object();
-	private String		local_service_name;
+	private final Object lsn_lock = new Object();
+	private String local_service_name;
 	
 	protected
 	DeviceManagerImpl()

@@ -246,9 +246,9 @@ DeviceImpl
 	
 	private boolean			transcoding;
 	
-	private Map<String,Object>	persistent_properties 	= new LightHashMap<>(1);
+	private final Map<String,Object> persistent_properties;
 
-	private Map<Object,Object>	transient_properties 	= new LightHashMap<>(1);
+	private final Map<Object,Object> transient_properties = new LightHashMap<>(1);
 	
 	private long						device_files_last_mod;
 	private boolean						device_files_dirty;
@@ -256,10 +256,10 @@ DeviceImpl
 	
 	private WeakReference<Map<String,Map<String,?>>> device_files_ref;
 	
-	private List<TranscodeTargetListener>	listeners = new CopyOnWriteArrayList<>();
+	private final List<TranscodeTargetListener>	listeners = new CopyOnWriteArrayList<>();
 	
-	private Map<Object,String>	errors 	= new HashMap<>();
-	private Map<Object,String>	infos	= new HashMap<>();
+	private final Map<Object,String>	errors 	= new HashMap<>();
+	private final Map<Object,String>	infos	= new HashMap<>();
 	
 	private List<DeviceListener>		device_listeners;
 
@@ -294,6 +294,7 @@ DeviceImpl
 		name			= modifyDeviceDisplayName( _name );
 		manual			= _manual;
 		isNameAutomatic = true;
+		persistent_properties = new LightHashMap<>(1);
 	}
 	
 	protected
@@ -332,10 +333,7 @@ DeviceImpl
 		manual			= ImportExportUtils.importBoolean( map, "_man" );
 		tagged			= ImportExportUtils.importBoolean( map, "_tag", false );	
 
-		if ( map.containsKey( "_pprops" )){
-			
-			persistent_properties = (Map<String,Object>)map.get( "_pprops" );
-		}
+		persistent_properties = (map.containsKey("_pprops"))?(Map<String,Object>)map.get("_pprops"):new LightHashMap<>(1);
 	}
 	
 	protected void

@@ -165,7 +165,7 @@ implements PEPeerTransport
 	private int[] reserved_pieces = null;
 
 	//Spread time (0 secs , fake default)
-	private int spreadTimeHint = 0 * 1000;
+	private int spreadTimeHint = 0;
 
 	private long last_message_sent_time = 0;
 	private long last_message_received_time = 0;

@@ -59,7 +59,7 @@ BuddyPluginBuddy
 	private static final boolean TRACE = BuddyPlugin.TRACE;
 	
 	private static final int CONNECTION_IDLE_TIMEOUT	= 5*60*1000;
-	private static final int CONNECTION_KEEP_ALIVE		= 1*60*1000;
+	private static final int CONNECTION_KEEP_ALIVE		= 60*1000;
 	
 	private static final int MAX_ACTIVE_CONNECTIONS		= 5;
 	private static final int MAX_QUEUED_MESSAGES		= 256;
@@ -120,7 +120,7 @@ BuddyPluginBuddy
 	
 	private BuddyPluginBuddyMessageHandler		persistent_msg_handler;
 
-	private Map<Object,Object>		user_data = new LightHashMap<>();
+	private final Map<Object,Object> user_data = new LightHashMap<>();
 	
 	private boolean	keep_alive_outstanding;
 	private volatile long	last_connect_attempt	= SystemTime.getCurrentTime();
@@ -128,7 +128,7 @@ BuddyPluginBuddy
 	
 	private long last_auto_reconnect	= -1;
 	
-	private Object				rss_lock = new Object();
+	private final Object rss_lock = new Object();
 	
 	private Set<String>			rss_local_cats;
 	private Set<String>			rss_remote_cats;

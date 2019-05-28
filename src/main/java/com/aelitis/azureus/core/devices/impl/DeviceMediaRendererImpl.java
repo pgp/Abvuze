@@ -211,8 +211,8 @@ DeviceMediaRendererImpl
 	}
 	
 	private static TorrentAttribute	share_ta;
-	private static List<Object[]>	share_requests		= new ArrayList<>();
-	private static AsyncDispatcher	share_dispatcher 	= new AsyncDispatcher();
+	private static final List<Object[]>	share_requests		= new ArrayList<>();
+	private static final AsyncDispatcher	share_dispatcher 	= new AsyncDispatcher();
 	
 	protected void
 	updateStatus(

@@ -411,8 +411,6 @@ DownloadManagerStateImpl
 					}
 				}
 
-				is.close();
-
 			} catch (IOException e) {
 
 				Debug.printStackTrace(e);

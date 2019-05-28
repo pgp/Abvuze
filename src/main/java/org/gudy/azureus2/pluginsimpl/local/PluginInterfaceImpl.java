@@ -87,10 +87,10 @@ PluginInterfaceImpl
   private Object				initialiser_key;
   protected ClassLoader			class_loader;
   
-  private List<PluginListener>	listeners = new CopyOnWriteArrayList<>();
-  private Set<PluginListener>	init_complete_fired_set	= new HashSet<>();
+  private final List<PluginListener>	listeners = new CopyOnWriteArrayList<>();
+  private final Set<PluginListener>	init_complete_fired_set	= new HashSet<>();
   
-  private List<PluginEventListener> event_listeners = new CopyOnWriteArrayList<>();
+  private final List<PluginEventListener> event_listeners = new CopyOnWriteArrayList<>();
   private String				key;
   private String 				pluginConfigKey;
   private Properties 			props;
@@ -99,7 +99,7 @@ PluginInterfaceImpl
   private String				plugin_version;
   private Logger				logger;
   private IPCInterfaceImpl		ipc_interface;
-  protected List				children		= new ArrayList();
+  protected final List				children		= new ArrayList();
   private PluginStateImpl       state;
   
   /**

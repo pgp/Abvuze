@@ -65,22 +65,22 @@ TranscodeManagerImpl
 	
 	private volatile TranscodeProviderVuze	vuzexcode_provider;
 	
-	private List<TranscodeManagerListener>	listeners = new CopyOnWriteArrayList<>();
+	private final List<TranscodeManagerListener> listeners = new CopyOnWriteArrayList<>();
 	
-	private TranscodeQueueImpl		queue = new TranscodeQueueImpl( this );
+	private final TranscodeQueueImpl queue = new TranscodeQueueImpl( this );
 	
-	private AESemaphore	init_sem 	= new AESemaphore( "TM:init" );
+	private final AESemaphore init_sem = new AESemaphore( "TM:init" );
 
 	private boolean hooked_categories;
 	
-	private Map<Category,Object[]> 	category_map = new HashMap<>();
+	private final Map<Category,Object[]> category_map = new HashMap<>();
 	private CategoryListener		category_listener;
 	private GlobalManagerListener	category_dl_listener;
 	private TorrentAttribute		category_ta;
 	
 	private boolean 				hooked_tags;
 
-	private Map<Tag,Object[]> 		tag_map = new HashMap<>();
+	private final Map<Tag,Object[]>	tag_map = new HashMap<>();
 	private TagListener				tag_listener;
 
 	private TorrentAttribute		tag_ta;

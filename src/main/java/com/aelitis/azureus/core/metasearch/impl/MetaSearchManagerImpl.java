@@ -176,13 +176,13 @@ MetaSearchManagerImpl
 	
 	private boolean	checked_customization;
 	
-	private AsyncDispatcher					op_dispatcher 	= new AsyncDispatcher(5*1000);
-	private List<MetaSearchManagerListener>	listeners 		= new ArrayList<>();
-	private List<Map>						operations		= new ArrayList<>();
+	private final AsyncDispatcher					op_dispatcher 	= new AsyncDispatcher(5*1000);
+	private final List<MetaSearchManagerListener>	listeners 		= new ArrayList<>();
+	private final List<Map>							operations		= new ArrayList<>();
 	
 	private String		extension_key;
 	
-	private Map<String,EngineImpl>	potential_associations = 
+	private final Map<String,EngineImpl> potential_associations =
 		new LinkedHashMap<String,EngineImpl>(32,0.75f,true)
 		{
 			protected boolean 
@@ -1140,7 +1140,7 @@ MetaSearchManagerImpl
 		return( false );
 	}
 	
-	private static Object import_lock = new Object();
+	private static final Object import_lock = new Object();
 	
 	public Engine
 	importEngine(
@@ -1628,7 +1628,7 @@ MetaSearchManagerImpl
 	{
 		private SearchListener		listener;
 		
-		private Map<Long,engineInfo>	engine_map = new HashMap<>();
+		private final Map<Long,engineInfo> engine_map = new HashMap<>();
 		private boolean					engines_set;
 		
 		private List<SearchProviderResults>	pending_results = new ArrayList<>();

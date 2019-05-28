@@ -29,7 +29,7 @@ public class DataSourceCallBackUtil
 
 	private static final long IMMEDIATE_ADDREMOVE_MAXDELAY = 2000;
 
-	private static Timer timerProcessDataSources = new Timer("Process Data Sources");
+	private static final Timer timerProcessDataSources = new Timer("Process Data Sources");
 
 	private static TimerEvent timerEventProcessDS;
 

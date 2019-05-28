@@ -80,14 +80,14 @@ SubscriptionSchedulerImpl
 	
 	private SubscriptionManagerImpl		manager;
 	
-	private Map	active_subscription_downloaders = new HashMap();
+	private final Map active_subscription_downloaders = new HashMap();
 	private boolean active_subs_download_is_auto;
 	
-	private Map<String,Long>	rate_limit_map = new HashMap<>();
+	private final Map<String,Long>	rate_limit_map = new HashMap<>();
 	
-	private Set	active_result_downloaders		= new HashSet();
+	private final Set	active_result_downloaders		= new HashSet();
 	
-	private ThreadPool	result_downloader = new ThreadPool( "SubscriptionDownloader", 5, true );
+	private final ThreadPool	result_downloader = new ThreadPool( "SubscriptionDownloader", 5, true );
 
 	private boolean		schedulng_permitted;
 	

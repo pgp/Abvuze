@@ -74,7 +74,7 @@ UPnPPlugin
 	private PluginInterface		plugin_interface;
 	private LoggerChannel 		log;
 	
-	private UPnPMappingManager	mapping_manager	= UPnPMappingManager.getSingleton( this );
+	private final UPnPMappingManager mapping_manager = UPnPMappingManager.getSingleton( this );
 	
 	private UPnP				upnp;
 	private UPnPLogListener		upnp_log_listener;
@@ -99,13 +99,13 @@ UPnPPlugin
 	private BooleanParameter	ignore_bad_devices;
 	private LabelParameter		ignored_devices_list;
 	
-	private List<UPnPMapping>		mappings	= new ArrayList<>();
-	private List<UPnPPluginService>	services	= new ArrayList<>();
+	private final List<UPnPMapping>			mappings		= new ArrayList<>();
+	private final List<UPnPPluginService>	services		= new ArrayList<>();
 	
-	private Map<URL,String> 	root_info_map		= new HashMap<>();
-	private Map<String,String> log_no_repeat_map	= new HashMap<>();
+	private final Map<URL,String>		root_info_map		= new HashMap<>();
+	private final Map<String,String>	log_no_repeat_map	= new HashMap<>();
 	
-	protected AEMonitor	this_mon 	= new AEMonitor( "UPnPPlugin" );
+	protected final AEMonitor this_mon = new AEMonitor( "UPnPPlugin" );
 	   
 	public static void
 	load(
@@ -207,7 +207,7 @@ UPnPPlugin
 
 		// Auto-refresh mappings every minute when enabled.
 		final BooleanParameter auto_refresh_on_bad_nat_param = upnp_config.addBooleanParameter2( "upnp.refresh_on_bad_nat", "upnp.refresh_mappings_on_bad_nat", false);
-		plugin_interface.getUtilities().createTimer("upnp mapping auto-refresh", true).addPeriodicEvent(1*60*1000, new UTTimerEventPerformer() {
+		plugin_interface.getUtilities().createTimer("upnp mapping auto-refresh", true).addPeriodicEvent(60 * 1000, new UTTimerEventPerformer() {
 			private long last_bad_nat = 0;
 			public void perform(UTTimerEvent event) {
 				if (upnp == null) {return;}

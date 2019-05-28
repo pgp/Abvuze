@@ -124,7 +124,7 @@ public class MessageManagerImpl implements MessageManager, NATTraversalHandler {
   
   private AzureusCore	core;
   
-  private Map			message_handlers = new HashMap();
+  private final Map message_handlers = new HashMap();
   
   private MessageManagerImpl(AzureusCore _core ) {
   

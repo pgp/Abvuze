@@ -150,7 +150,7 @@ public class Utils {
     public enum NumberOutType {
         INT,
         LONG,
-        DOUBLE;
+        DOUBLE
     }
 
     public static Number parseNumber(Object number, NumberOutType... targetType) {

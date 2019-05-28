@@ -138,11 +138,11 @@ UtilitiesImpl
 			}
 		};
 			
-	private static List<searchManager>		search_managers 	= new ArrayList<>();
-	private static List<Object[]>			search_providers	= new ArrayList<>();
+	private static final List<searchManager> search_managers = new ArrayList<>();
+	private static final List<Object[]> search_providers = new ArrayList<>();
 	
-	private static CopyOnWriteList<Object[]> feature_enablers 	= new CopyOnWriteList<>();
-	private static List<FeatureManagerListener>	feature_listeners	= new CopyOnWriteArrayList<>();
+	private static final CopyOnWriteList<Object[]> feature_enablers = new CopyOnWriteList<>();
+	private static final List<FeatureManagerListener> feature_listeners = new CopyOnWriteArrayList<>();
 
 	private static FeatureManagerListener 
 		feature_listener = new FeatureManagerListener()
@@ -204,14 +204,14 @@ UtilitiesImpl
 	
 			// need to use a consistent wrapped group as its object identity drives byte allocs...
 		
-	private static WeakHashMap<RateLimiter,PluginLimitedRateGroup>	limiter_map = new WeakHashMap<>();
+	private static final WeakHashMap<RateLimiter,PluginLimitedRateGroup> limiter_map = new WeakHashMap<>();
 
 	
-	private static List<LocationProviderListener>	lp_listeners 		= new CopyOnWriteArrayList<>();
-	private static List<LocationProvider>			location_providers 	= new CopyOnWriteArrayList<>();
+	private static final List<LocationProviderListener>	lp_listeners 		= new CopyOnWriteArrayList<>();
+	private static final List<LocationProvider>			location_providers 	= new CopyOnWriteArrayList<>();
 	
-	private static List<ScriptProviderListener>	sp_listeners 		= new CopyOnWriteArrayList<>();
-	private static List<ScriptProvider>			script_providers 	= new CopyOnWriteArrayList<>();
+	private static final List<ScriptProviderListener>	sp_listeners 		= new CopyOnWriteArrayList<>();
+	private static final List<ScriptProvider>			script_providers 	= new CopyOnWriteArrayList<>();
 
 	
 	public static PluginLimitedRateGroup
@@ -1215,8 +1215,8 @@ UtilitiesImpl
 		return addDelayedTask(pi.getPluginName(), target); 
 	}
 	
-	private static List			delayed_tasks = new ArrayList();
-	private static AESemaphore	delayed_tasks_sem	= new AESemaphore( "Utilities:delayedTask" );
+	private static final List			delayed_tasks = new ArrayList();
+	private static final AESemaphore	delayed_tasks_sem	= new AESemaphore( "Utilities:delayedTask" );
 	private static AEThread2	delayed_task_thread;
 	
 	public static DelayedTask addDelayedTask(String	name, Runnable r) {
@@ -2456,8 +2456,8 @@ UtilitiesImpl
 
 	}
 		
-	private static Map<String,JSONServer>	json_servers = new HashMap<>();
-	private static  Map<String,JSONClient>	json_clients = new HashMap<>();
+	private static final Map<String,JSONServer>	json_servers = new HashMap<>();
+	private static final Map<String,JSONClient>	json_clients = new HashMap<>();
 	
 	public void
 	registerJSONRPCServer(

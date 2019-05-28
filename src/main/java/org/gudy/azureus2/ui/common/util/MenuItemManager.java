@@ -56,7 +56,7 @@ public class MenuItemManager {
 
 	private AEMonitor items_mon = new AEMonitor("MenuManager:items");
 	
-	private ArrayList<MenuItemManagerListener> listeners = new ArrayList<>(0);
+	private final ArrayList<MenuItemManagerListener> listeners = new ArrayList<>(0);
 
 	private MenuItemManager() {
 		items_map = new HashMap<>();

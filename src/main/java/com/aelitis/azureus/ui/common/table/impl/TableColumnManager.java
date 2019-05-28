@@ -93,8 +93,8 @@ public class TableColumnManager {
 	private long lastTableConfigAccess;
 	private static Comparator<TableColumn> orderComparator;
 	
-	private Map<String, TableColumnCreationListener> mapColumnIDsToListener = new LightHashMap<>();
-	private Map<Class, List> mapDataSourceTypeToColumnIDs = new LightHashMap<>();
+	private final Map<String, TableColumnCreationListener> mapColumnIDsToListener = new LightHashMap<>();
+	private final Map<Class, List> mapDataSourceTypeToColumnIDs = new LightHashMap<>();
 
 	/**
 	 * key = TableID; value = table column ids

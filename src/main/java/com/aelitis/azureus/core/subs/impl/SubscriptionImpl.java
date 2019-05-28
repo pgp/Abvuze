@@ -139,7 +139,7 @@ SubscriptionImpl
 
 	private String			id;
 
-	private List<association>			associations = new ArrayList<>();
+	private final List<association> associations = new ArrayList<>();
 	
 	private int				fixed_random;
 	
@@ -162,13 +162,13 @@ SubscriptionImpl
 	private Map				history_map;
 	private Map				schedule_map;
 	
-	private Map				user_data = new LightHashMap();
+	private final Map		user_data = new LightHashMap();
 	
 	private final 			SubscriptionHistoryImpl	history;
 	
 	private String			referer;
 	
-	private List			listeners = new CopyOnWriteArrayList();
+	private final List		listeners = new CopyOnWriteArrayList();
 	
 	private Map				verify_cache_details;
 	private boolean			verify_cache_result;

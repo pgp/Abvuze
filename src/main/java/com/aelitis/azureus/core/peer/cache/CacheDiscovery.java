@@ -46,10 +46,10 @@ CacheDiscovery
 {
 	private static final IpFilter ip_filter = IpFilterManagerFactory.getSingleton().getIPFilter();
 
-	private static final CacheDiscoverer[] discoverers = {
-		
-		// No longer supported: new CLCacheDiscovery(),
-	};
+//	private static final CacheDiscoverer[] discoverers = {
+//
+//		// No longer supported: new CLCacheDiscovery(),
+//	};
 	
 	private static Set<String>	cache_ips = Collections.newSetFromMap(new ConcurrentHashMap<>());
 	
@@ -182,39 +182,39 @@ CacheDiscovery
 	{
 		CachePeer[]	res;
 		
-		if ( discoverers.length == 0 ){
+//		if ( discoverers.length == 0 ){
 			
 			res = new CachePeer[0];
 			
-		}else if ( discoverers.length == 1 ){
-			
-			res = discoverers[0].lookup( torrent );
-			
-		}else{
-		
-			List<CachePeer>	result = new ArrayList<>();
-			
-			for (int i=0;i<discoverers.length;i++){
-				
-				CachePeer[] peers = discoverers[i].lookup( torrent );
-				
-				for (int j=0;j<peers.length;j++){
-					
-					result.add( peers[i] );
-				}
-			}
-			
-			res = result.toArray(new CachePeer[0]);
-		}
+//		}else if ( discoverers.length == 1 ){
+//
+//			res = discoverers[0].lookup( torrent );
+//
+//		}else{
+//
+//			List<CachePeer>	result = new ArrayList<>();
+//
+//			for (int i=0;i<discoverers.length;i++){
+//
+//				CachePeer[] peers = discoverers[i].lookup( torrent );
+//
+//				for (int j=0;j<peers.length;j++){
+//
+//					result.add( peers[i] );
+//				}
+//			}
+//
+//			res = result.toArray(new CachePeer[0]);
+//		}
 
-        for (CachePeer re : res) {
-
-            String ip = re.getAddress().getHostAddress();
-
-            cache_ips.add(ip);
-
-            ip_filter.unban(ip);
-        }
+//        for (CachePeer re : res) {
+//
+//            String ip = re.getAddress().getHostAddress();
+//
+//            cache_ips.add(ip);
+//
+//            ip_filter.unban(ip);
+//        }
 		
 		return( res );
 	}
@@ -225,15 +225,15 @@ CacheDiscovery
 		final InetAddress		ip,
 		final int				port )
 	{
-        for (CacheDiscoverer discoverer : discoverers) {
-
-            CachePeer cp = discoverer.lookup(peer_id, ip, port);
-
-            if (cp != null) {
-
-                return (cp);
-            }
-        }
+//        for (CacheDiscoverer discoverer : discoverers) {
+//
+//            CachePeer cp = discoverer.lookup(peer_id, ip, port);
+//
+//            if (cp != null) {
+//
+//                return (cp);
+//            }
+//        }
 		
 		return( new CachePeerImpl( CachePeer.PT_NONE, ip, port ));
 	}
