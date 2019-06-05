@@ -138,11 +138,7 @@ public class PlayUtils
 			return false;
 		}
 
-		if (canPlayViaExternalEMP(torrent, file_index, complete_only)) {
-			return true;
-		}
-		
-		return false;
+		return canPlayViaExternalEMP(torrent, file_index, complete_only);
 	}
 
 	private static boolean canPlay(DownloadManager dm, int file_index) {
@@ -702,11 +698,8 @@ public class PlayUtils
 			}
 			
 			ext = ext.toLowerCase();
-			
-			if (getPlayableFileExtensions().contains(ext)){
-				
-				return true;
-			}
+
+			return getPlayableFileExtensions().contains(ext);
 		}
 		
 		return false;
@@ -773,13 +766,8 @@ public class PlayUtils
 	isEMPAvailable()
 	{
 		PluginInterface pi = AzureusCoreFactory.getSingleton().getPluginManager().getPluginInterfaceByID( "azemp");
-		
-		if ( pi == null || pi.getPluginState().isDisabled()){
-			
-			return( false );
-		}
-		
-		return( true );
+
+		return pi != null && !pi.getPluginState().isDisabled();
 	}
 
 	

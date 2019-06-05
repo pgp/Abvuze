@@ -1719,14 +1719,7 @@ DHTControlImpl
 			DHTLog.log( "getLocalValue for " + DHTLog.getString( encoded_key ));
 		}
 
-		DHTDBValue	res = database.get( new HashWrapper( encoded_key ));
-	
-		if ( res == null ){
-			
-			return( null );
-		}
-		
-		return( res );
+		return database.get(new HashWrapper(encoded_key));
 	}
 	
 	public List<DHTTransportValue>

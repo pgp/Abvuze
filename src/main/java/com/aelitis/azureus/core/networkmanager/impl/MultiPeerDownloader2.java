@@ -143,14 +143,10 @@ public class MultiPeerDownloader2 implements RateControlledEntity {
 		EventWaiter waiter ) 
 	{
 		int[] allowed = main_handler.getCurrentNumBytesAllowed();
-		
-		if ( allowed[0] < 1 ){ // Not yet fully supporting free-protocol for downloading && allowed[1] == 0 ){
-			
-			return false;
-		}
 
-		return true;
-	}
+        // Not yet fully supporting free-protocol for downloading && allowed[1] == 0 ){
+        return allowed[0] >= 1;
+    }
 
 	public long
 	getBytesReadyToWrite()

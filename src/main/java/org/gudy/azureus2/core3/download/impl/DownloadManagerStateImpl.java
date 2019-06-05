@@ -1590,11 +1590,8 @@ DownloadManagerStateImpl
 		List	values = getListAttributeSupport( AT_PEER_SOURCES_DENIED );
 
 		if ( values != null ){
-			
-			if ( values.contains( peerSource )){
-				
-				return( false );
-			}
+
+			return !values.contains(peerSource);
 		}
 		
 		return( true );

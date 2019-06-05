@@ -342,14 +342,7 @@ public class NetworkManager {
 	    
 		  return( REQUIRE_CRYPTO_HANDSHAKE );
 		  
-	  }else if ( override_level == CRYPTO_OVERRIDE_REQUIRED ){
-	    		
-		  return( true );
-		  
-	  }else{
-		  
-		  return( false );
-	  }
+	  }else return override_level == CRYPTO_OVERRIDE_REQUIRED;
   }
   
   public void initialize(AzureusCore core) {

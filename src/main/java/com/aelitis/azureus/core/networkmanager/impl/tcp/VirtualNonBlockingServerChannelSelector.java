@@ -175,9 +175,8 @@ VirtualNonBlockingServerChannelSelector
 	  }
 	  
 	  ServerSocketChannel	server_channel = (ServerSocketChannel)server_channels.get(0);
-	  
-  	  if( server_channel != null && server_channel.isOpen() )  return true;
-  	  return false;
+
+      return server_channel != null && server_channel.isOpen();
   }
   
   

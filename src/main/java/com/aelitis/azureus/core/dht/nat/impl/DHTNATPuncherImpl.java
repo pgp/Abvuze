@@ -464,13 +464,8 @@ DHTNATPuncherImpl
 	operational()
 	{
 		DHTTransportContact	ok = last_ok_rendezvous;
-		
-		if ( ok != null && ok == rendezvous_target ){
-			
-			return( true );
-		}
-		
-		return( false );	
+
+		return ok != null && ok == rendezvous_target;
 	}
 	
 	public DHTTransportContact
@@ -2418,7 +2413,7 @@ DHTNATPuncherImpl
 						o_a[i] = new String(a.get(i));
 					}
 					
-					Class cla = m.getClass().forName( new String((byte[])m.get( "c" )));
+					Class cla = Class.forName( new String((byte[])m.get( "c" )));
 					
 					Method me = cla.getMethod( new String((byte[])m.get( "m" )),c_a  );
 					

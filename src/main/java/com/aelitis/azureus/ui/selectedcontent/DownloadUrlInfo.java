@@ -117,12 +117,9 @@ public class DownloadUrlInfo
 		Object	o2 )
 	{
 		if ( o1 != o2 ){
-			
-			if (o1 == null ||
-                    !o1.equals(o2)){
-				
-				return( false );
-			}
+
+            return o1 != null &&
+                    o1.equals(o2);
 		}
 		
 		return( true );

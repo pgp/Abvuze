@@ -701,9 +701,7 @@ public class StartStopRulesDefaultPlugin implements Plugin,
 				// there's a (good?) chance we'll start in the next process cycle 
 				DownloadScrapeResult sr = event.getDownload().getAggregatedScrapeResult();
 				int numPeers = sr.getNonSeedCount();
-				if (numPeers <= 0) {
-					return true;
-				}
+				return numPeers <= 0;
 			}
 
 			return false;

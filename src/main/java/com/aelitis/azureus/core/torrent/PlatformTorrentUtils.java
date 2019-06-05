@@ -717,11 +717,7 @@ public class PlatformTorrentUtils
 			return true;
 		}
 		boolean opened = getContentMapLong(torrent, TOR_AZ_PROP_OPENED, -1) > 0;
-		if (opened || isAdvancedViewOnly(dm)) {
-			return true;
-		}
-
-		return false;
+		return opened || isAdvancedViewOnly(dm);
 	}
 
 	public static void addHasBeenOpenedListener(HasBeenOpenedListener l) {

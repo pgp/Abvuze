@@ -54,13 +54,9 @@ public class SinglePeerDownloader implements RateControlledEntity {
     }
     
     int[] allowed = rate_handler.getCurrentNumBytesAllowed();
-    
-    if ( allowed[0] < 1 ){ // Not yet fully supporting free-protocol for downloading  && allowed[1] == 0 ) {
-    	
-      return false;  //not allowed to receive any bytes
-    }
-    
-    return true;
+
+      // Not yet fully supporting free-protocol for downloading  && allowed[1] == 0 ) {
+      return allowed[0] >= 1;  //not allowed to receive any bytes
   }
     
   public int doProcessing( EventWaiter waiter, int max_bytes ) {

@@ -580,15 +580,8 @@ CategoryImpl
 	  		DownloadManager dm = (DownloadManager)t;
 	  		
 	  		Category cat = dm.getDownloadState().getCategory();
-	  		
-	  		if ( cat == null || cat.getType() == Category.TYPE_UNCATEGORIZED ){
-	  			
-	  			return( true );
-	  			
-	  		}else{
-	  			
-	  			return( false );
-	  		}
+
+			return cat == null || cat.getType() == Category.TYPE_UNCATEGORIZED;
 	  	}
 	}
 	

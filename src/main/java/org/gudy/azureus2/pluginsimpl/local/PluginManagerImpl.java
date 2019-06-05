@@ -158,7 +158,7 @@ PluginManagerImpl
 			
 			try{
 				Class.forName( "org.gudy.azureus2.ui.swt.Main" ).getMethod(
-					"main", new Class[]{ String[].class } ).invoke(
+					"main", String[].class).invoke(
 						null, new Object[]{ new String[0] });
 				
 			}catch( Throwable e ){

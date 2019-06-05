@@ -96,9 +96,7 @@ public class Launcher {
 	 */
 	public static boolean isBootStrapped()
 	{
-		if(!LOADER_ENABLED || ClassLoaderWitness.class.getClassLoader() instanceof PeeringClassloader)
-			return true;
-		return false;
+		return !LOADER_ENABLED || ClassLoaderWitness.class.getClassLoader() instanceof PeeringClassloader;
 	}
 	
 	public static SecondaryClassLoader getComponentLoader(URL[] urls)

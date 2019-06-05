@@ -67,15 +67,8 @@ public class SinglePeerUploader implements RateControlledEntity {
     	if ( protocol_is_free ){
     		
     		Message first = connection.getOutgoingMessageQueue().peekFirstMessage();
-    		
-    		if ( first != null && first.getType() == Message.TYPE_PROTOCOL_PAYLOAD ){
-    			
-    			return( true );
-    			
-    		}else{
-    			
-    			return( false );
-    		}
+
+            return first != null && first.getType() == Message.TYPE_PROTOCOL_PAYLOAD;
     	}else{
     		
     		return( false );

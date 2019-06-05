@@ -1707,11 +1707,8 @@ DeviceManagerImpl
 		Object	data )
 	{
 		if ( getDisableSleep()){
-			
-			if ( getTranscodeManager().getQueue().isTranscoding()){
-				
-				return( false );
-			}
+
+            return !getTranscodeManager().getQueue().isTranscoding();
 		}
 		
 		return( true );

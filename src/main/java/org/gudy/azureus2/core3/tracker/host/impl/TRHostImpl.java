@@ -957,11 +957,8 @@ TRHostImpl
 			if ( ht != null ){
 			
 				if ( !explicit ){
-					
-					if ( ht.getStatus() != TRHostTorrent.TS_STARTED ){
-						
-						return( false );
-					}
+
+					return ht.getStatus() == TRHostTorrent.TS_STARTED;
 				}
 				
 				return( true );

@@ -122,10 +122,7 @@ public class SpeedLimitConfidence
      */
     public boolean isGreater(SpeedLimitConfidence limitConf)
     {
-        if( this.compareTo(limitConf)>0 ){
-            return true;
-        }
-        return false;
+        return this.compareTo(limitConf) > 0;
     }
 
     /**

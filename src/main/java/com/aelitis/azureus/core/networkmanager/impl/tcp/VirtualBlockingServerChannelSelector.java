@@ -151,8 +151,7 @@ public class VirtualBlockingServerChannelSelector
    * @return true if enabled, false if not running
    */
   public boolean isRunning() {
-  	if( server_channel != null && server_channel.isOpen() )  return true;
-  	return false;
+      return server_channel != null && server_channel.isOpen();
   }
   
   

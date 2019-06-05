@@ -1200,14 +1200,9 @@ DownloadManagerImpl
 			
 			return( false );
 		}
-		
-		if ( !download.isComplete( false )){
-			
-			return( false );
-		}
-		
-		return( true );
-	}
+
+        return download.isComplete(false);
+    }
 
 	protected DownloadStub
 	stubbify(

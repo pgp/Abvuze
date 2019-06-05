@@ -884,11 +884,8 @@ RSSEngine
 			if ( content_type != null ){
 				
 				log( "Testing link " + url + " to see if torrent link -> content type=" + content_type );
-				
-				if ( content_type.equalsIgnoreCase( "application/x-bittorrent" )){
-					
-					return( true );
-				}
+
+                return content_type.equalsIgnoreCase("application/x-bittorrent");
 			}
 			
 			return( false );

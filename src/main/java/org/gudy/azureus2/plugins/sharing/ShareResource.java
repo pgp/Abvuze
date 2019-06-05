@@ -46,13 +46,13 @@ ShareResource
 	void
 	delete()
 	
-		throws ShareException, ShareResourceDeletionVetoException;
+		throws ShareException;
 	
 	void
 	delete(
             boolean force)
 	
-		throws ShareException, ShareResourceDeletionVetoException;
+		throws ShareException;
 
 	void
 	setAttribute(

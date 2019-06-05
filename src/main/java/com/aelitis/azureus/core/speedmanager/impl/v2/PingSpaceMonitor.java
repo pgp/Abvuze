@@ -163,11 +163,7 @@ public class PingSpaceMonitor
 
         float percentBad = (float)nBadPings/(float)totalPings;
 
-        if(percentBad>0.15f){
-            return true;
-        }else{
-            return false;
-        }
+        return percentBad > 0.15f;
 
     }
 

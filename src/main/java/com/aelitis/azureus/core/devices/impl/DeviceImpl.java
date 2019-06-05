@@ -1330,14 +1330,9 @@ DeviceImpl
 		TranscodeManagerImpl tm = dm.getTranscodeManager();
 
 		TranscodeProfile profile = tm.getProfileFromUID( uid );
-		
-		if ( profile != null ){
-			
-			return( profile );
-		}
-	
-		return( null );
-	}
+
+        return profile;
+    }
 	
 	public void
 	setDefaultTranscodeProfile(

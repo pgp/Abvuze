@@ -658,16 +658,9 @@ DownloadManagerRateController
 							// we are close to it
 						
 						int limit = manager.getUploadRateLimitBytesPerSecond();
-						
-						if ( 	limit > 0 &&
-								( stats.getDataSendRate() + stats.getProtocolSendRate() ) >= ( limit - (5*1024))){
-							
-							interesting = false;
-							
-						}else{
-							
-							interesting = true;
-						}
+
+                        interesting = limit <= 0 ||
+                                (stats.getDataSendRate() + stats.getProtocolSendRate()) < (limit - (5 * 1024));
 					}
 				}
 			}

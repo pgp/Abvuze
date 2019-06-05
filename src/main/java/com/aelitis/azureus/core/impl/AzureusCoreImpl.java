@@ -353,7 +353,7 @@ AzureusCoreImpl
 								public long
 								getCacheTime()
 								{
-									return( vcc.getSingleton().getCacheTime( false ));
+									return( VersionCheckClient.getSingleton().getCacheTime( false ));
 								}
 							});
 					}
@@ -1667,7 +1667,7 @@ AzureusCoreImpl
 				Class c = Class.forName( "sun.awt.AWTAutoShutdown" );
 	      
 				if (c != null) {
-					c.getMethod( "notifyToolkitThreadFree", new Class[]{} ).invoke( null);
+					c.getMethod( "notifyToolkitThreadFree").invoke( null);
 				}
 			} catch (Throwable t) {
 			}

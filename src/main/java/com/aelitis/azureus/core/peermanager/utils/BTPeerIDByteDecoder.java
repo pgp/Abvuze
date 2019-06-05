@@ -252,8 +252,7 @@ public class BTPeerIDByteDecoder {
 		}
 
 		client = identifyAwkwardClient(peer_id_bytes);
-		if (client != null) {return client;}
-		return null;
+		return client;
 	}
 
 	/**

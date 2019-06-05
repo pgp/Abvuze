@@ -550,7 +550,7 @@ DHTRouterImpl
                     part_of_smallest_subtree = true;
                 }
 
-                boolean bit = ((b >> j) & 0x01) == 1 ? true : false;
+                boolean bit = ((b >> j) & 0x01) == 1;
 
                 DHTRouterNodeImpl next_node;
 
@@ -830,7 +830,7 @@ DHTRouterImpl
 
                 while (j >= 0) {
 
-                    boolean bit = ((b >> j) & 0x01) == 1 ? true : false;
+                    boolean bit = ((b >> j) & 0x01) == 1;
 
                     if (current_node.getBuckets() != null) {
 

@@ -180,11 +180,7 @@ public class MultiPeerUploader implements RateControlledEntity {
       }
       
       //look for the connection in the ready list
-      if( ready_connections.remove( peer_connection ) ) {
-        return true;
-      }
-      
-      return false;
+        return ready_connections.remove(peer_connection);
     }
     finally {
       lists_lock.exit();
@@ -533,9 +529,8 @@ public class MultiPeerUploader implements RateControlledEntity {
     if( ready_connections.isEmpty() )  return false;  //no data to send
     
     int[] allowed = rate_handler.getCurrentNumBytesAllowed();
-    
-    if( allowed[0] < 1 && allowed[1] == 0 )  return false;
-    return true;
+
+      return allowed[0] >= 1 || allowed[1] != 0;
   }
   
   public int doProcessing( EventWaiter waiter, int max_bytes ) {

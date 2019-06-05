@@ -587,14 +587,9 @@ public class GlobalManagerImpl
     			
     				// hack atm rather than recording 'has ever been started' state just look at data
     				// might have been added for seeding etc so don't just use bytes downloaded
-    			
-    			if ( stats.getTotalDataBytesReceived() == 0 && stats.getPercentDoneExcludingDND() == 0 ){
-    				
-    				return( false );
-    			}
-    			
-    			return( true );
-    		}
+
+				return stats.getTotalDataBytesReceived() != 0 || stats.getPercentDoneExcludingDND() != 0;
+			}
     		
     		public boolean
 			isNetworkEnabled(
@@ -1856,16 +1851,11 @@ public class GlobalManagerImpl
       }
       
       int state = manager.getState();
-      
-      if( state != DownloadManager.STATE_STOPPED &&
-          state != DownloadManager.STATE_ERROR &&
-          state != DownloadManager.STATE_STOPPING ) {
-        
-        return( true );
-      }
 
-      return false;
-  	}
+		return state != DownloadManager.STATE_STOPPED &&
+				state != DownloadManager.STATE_ERROR &&
+				state != DownloadManager.STATE_STOPPING;
+	}
   
 	public boolean
 	isPaused(

@@ -54,14 +54,7 @@ AEMonitor2
 		int	max_millis )
 	{
 		try{
-			if ( lock.tryLock( max_millis, TimeUnit.MILLISECONDS )){
-								
-				return( true );
-				
-			}else{
-				
-				return( false );
-			}
+            return lock.tryLock(max_millis, TimeUnit.MILLISECONDS);
 		}catch( Throwable e ){
 			
 			Debug.out( e );

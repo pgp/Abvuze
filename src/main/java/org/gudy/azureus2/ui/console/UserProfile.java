@@ -156,11 +156,9 @@ public class UserProfile
 		if( getEncryptedPassword() != null )
 			return getEncryptedPassword().equals(other.getEncryptedPassword());
 		else
-			if( other.getEncryptedPassword() != null )
-				return false;
-			
-		return true;
-	}
+            return other.getEncryptedPassword() == null;
+
+    }
 	/**
 	 * @return Returns the encryptedPassword.
 	 */

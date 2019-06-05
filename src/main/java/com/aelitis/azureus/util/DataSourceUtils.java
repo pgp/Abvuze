@@ -264,11 +264,7 @@ public class DataSourceUtils
 		if (torrent != null) {
 			return PlatformTorrentUtils.isContent(torrent, true);
 		}
-		if (ds instanceof VuzeActivitiesEntry) {
-			return true;
-		}
-
-		return false;
+		return ds instanceof VuzeActivitiesEntry;
 	}
 
 	public static String getHash(Object ds) {

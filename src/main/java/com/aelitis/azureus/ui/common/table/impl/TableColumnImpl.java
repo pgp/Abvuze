@@ -199,7 +199,7 @@ public class TableColumnImpl
 		iMinWidth = adjustPXForDPI(16);
 		iPosition = POSITION_INVISIBLE;
 		int iSortDirection = COConfigurationManager.getIntParameter(CFG_SORTDIRECTION);
-		bSortAscending = iSortDirection == 1 ? false : true;
+		bSortAscending = iSortDirection != 1;
 	}
 	
 	public void initialize(int iAlignment, int iPosition, int iWidth,

@@ -81,10 +81,7 @@ public class SaturatedMode implements Comparable {
      */
     public boolean isGreater( SaturatedMode mode )
     {
-        if( this.compareTo(mode)>0 ){
-            return true;
-        }
-        return false;
+        return this.compareTo(mode) > 0;
     }
     /**
      * @param satMode the SaturatedMode to be compared.

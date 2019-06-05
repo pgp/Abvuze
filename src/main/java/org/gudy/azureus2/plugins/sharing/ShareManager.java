@@ -64,34 +64,34 @@ ShareManager
 	addFile(
             File file)
 	
-		throws ShareException, ShareResourceDeletionVetoException;
+		throws ShareException;
 	
 	ShareResourceFile
 	addFile(
             File file,
             Map<String, String> properties)
 	
-		throws ShareException, ShareResourceDeletionVetoException;
+		throws ShareException;
 
 	ShareResourceDir
 	addDir(
             File dir)
 	
-		throws ShareException, ShareResourceDeletionVetoException;
+		throws ShareException;
 	
 	ShareResourceDir
 	addDir(
             File dir,
             Map<String, String> properties)
 	
-		throws ShareException, ShareResourceDeletionVetoException;
+		throws ShareException;
 	
 	ShareResourceDirContents
 	addDirContents(
             File dir,
             boolean recursive)
 	
-		throws ShareException, ShareResourceDeletionVetoException;
+		throws ShareException;
 	
 	ShareResourceDirContents
 	addDirContents(
@@ -99,7 +99,7 @@ ShareManager
             boolean recursive,
             Map<String, String> properties)
 	
-		throws ShareException, ShareResourceDeletionVetoException;
+		throws ShareException;
 	
 	/**
 	 * adding shares can take a long time due to the torrent creation process. The current

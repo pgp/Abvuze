@@ -2969,12 +2969,7 @@ SubscriptionManagerImpl
 	downloadIsIgnored(
 		Download		download )
 	{
-		if ( download.getTorrent() == null || !download.isPersistent()){
-			
-			return( true );
-		}
-		
-		return( false );
+		return download.getTorrent() == null || !download.isPersistent();
 	}
 	
 	protected boolean
@@ -7136,14 +7131,9 @@ SubscriptionManagerImpl
 				
 				return( false );
 			}
-			
-			if ( max > 0 && size > max ){
-				
-				return( false );
-			}
-			
-			return( true );
-			
+
+			return max <= 0 || size <= max;
+
 		}else{
 			
 			return( false );

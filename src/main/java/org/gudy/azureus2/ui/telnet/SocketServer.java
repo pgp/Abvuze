@@ -168,10 +168,7 @@ final class SocketServer implements Runnable
 		InetAddress address = addr.getAddress();
 		if( checkHost(address.getHostAddress()) )
 			return true;
-		else if( checkHost(address.getHostName()))
-			return true;
-		else
-			return false;
+		else return checkHost(address.getHostName());
 	}
 	/**
 	 * compare the specified host (might be a hostname or an IP - dont really care) 

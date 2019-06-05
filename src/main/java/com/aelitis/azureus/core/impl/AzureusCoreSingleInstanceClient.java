@@ -89,14 +89,9 @@ AzureusCoreSingleInstanceClient
 
 				pw.flush();
 
-				if (!receiveReply(sock)) {
+                return receiveReply(sock);
 
-					return (false);
-				}
-
-				return (true);
-
-			} catch (Throwable e) {
+            } catch (Throwable e) {
 
 				long connect_end = System.currentTimeMillis();
 

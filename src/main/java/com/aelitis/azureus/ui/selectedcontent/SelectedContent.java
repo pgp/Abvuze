@@ -182,13 +182,10 @@ public class SelectedContent implements ISelectedContent
 			}
 			
 			if ( downloadInfo != other.downloadInfo ){
-				
-				if ( 	downloadInfo == null ||
-						other.downloadInfo == null ||
-						!downloadInfo.sameAs( other.downloadInfo )){
-					
-					return( false );
-				}
+
+                return downloadInfo != null &&
+                        other.downloadInfo != null &&
+                        downloadInfo.sameAs(other.downloadInfo);
 			}
 			
 			return( true );

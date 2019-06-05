@@ -1496,10 +1496,10 @@ public class VersionCheckClient {
 		try {
 			Class c = Class.forName( "org.eclipse.swt.SWT" );
 
-			String swt_platform = (String)c.getMethod( "getPlatform", new Class[]{} ).invoke( null, new Object[]{} );
+			String swt_platform = (String)c.getMethod( "getPlatform").invoke( null, new Object[]{} );
 			message.put( "swt_platform", swt_platform );
 
-			Integer swt_version = (Integer)c.getMethod( "getVersion", new Class[]{} ).invoke( null, new Object[]{} );
+			Integer swt_version = (Integer)c.getMethod( "getVersion").invoke( null, new Object[]{} );
 			message.put( "swt_version", swt_version.longValue());
 		}
 		catch( ClassNotFoundException | InvocationTargetException | NoClassDefFoundError e ) {  /* ignore */ } catch( Throwable t ) {  t.printStackTrace();  }

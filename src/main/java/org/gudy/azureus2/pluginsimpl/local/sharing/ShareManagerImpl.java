@@ -536,8 +536,7 @@ ShareManagerImpl
 	addFile(
 		File	file )
 	
-		throws ShareException, ShareResourceDeletionVetoException
-	{
+		throws ShareException {
 		return( addFile( file, null ));
 	}
 	
@@ -546,8 +545,7 @@ ShareManagerImpl
 		File				file,
 		Map<String,String>	properties )
 	
-		throws ShareException, ShareResourceDeletionVetoException
-	{
+		throws ShareException {
 		return( addFile( null, file, getBooleanProperty( properties, PR_PERSONAL ), properties ));
 	}
 	
@@ -558,8 +556,7 @@ ShareManagerImpl
 		boolean							personal,
 		Map<String,String>				properties )
 
-		throws ShareException, ShareResourceDeletionVetoException
-	{
+		throws ShareException {
 		if (Logger.isEnabled())
 			Logger.log(new LogEvent(LOGID, "ShareManager: addFile '"
 					+ file.toString() + "'"));
@@ -588,8 +585,7 @@ ShareManagerImpl
 	addDir(
 		File				dir )
 	
-		throws ShareException, ShareResourceDeletionVetoException
-	{
+		throws ShareException {
 		return( addDir( dir, null ));
 	}
 	
@@ -598,8 +594,7 @@ ShareManagerImpl
 		File				dir,
 		Map<String,String>	properties )
 	
-		throws ShareException, ShareResourceDeletionVetoException
-	{
+		throws ShareException {
 		return( addDir( null, dir, getBooleanProperty( properties, PR_PERSONAL ), properties ));
 	}
 	
@@ -610,8 +605,7 @@ ShareManagerImpl
 		boolean							personal,
 		Map<String,String>				properties )
 	
-		throws ShareException, ShareResourceDeletionVetoException
-	{
+		throws ShareException {
 		if (Logger.isEnabled())
 			Logger.log(new LogEvent(LOGID, "ShareManager: addDir '" + dir.toString()
 					+ "'"));
@@ -650,8 +644,7 @@ ShareManagerImpl
 		boolean							personal,
 		Map<String,String>				properties )
 	
-		throws ShareException, ShareResourceDeletionVetoException
-	{
+		throws ShareException {
 		properties = setPropertyDefaults( properties );
 		
 		try{
@@ -727,8 +720,7 @@ ShareManagerImpl
 		File				dir,
 		boolean				recursive )
 	
-		throws ShareException, ShareResourceDeletionVetoException
-	{
+		throws ShareException {
 		return( addDirContents( dir, recursive, null ));
 	}
 	
@@ -738,8 +730,7 @@ ShareManagerImpl
 		boolean				recursive,
 		Map<String,String>	properties )
 	
-		throws ShareException, ShareResourceDeletionVetoException
-	{
+		throws ShareException {
 		if (Logger.isEnabled())
 			Logger.log(new LogEvent(LOGID, "ShareManager: addDirContents '"
 					+ dir.toString() + "'"));

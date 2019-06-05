@@ -652,13 +652,9 @@ AEWin32AccessImpl
   	long busType = MapUtils.getMapLong(driveInfo, "BusType", 0);
   	// MEDIA_TYPE: http://msdn.microsoft.com/en-us/library/aa365231%28VS.85%29.aspx
   	long mediaType = MapUtils.getMapLong(driveInfo, "MediaType", -1);
-  
-  	if (removeable && driveType == 2 && busType == 7
-  			&& (mediaType == 11 || mediaType == -1)) {
-  		return true;
-  	}
-  	
-  	return false;
+
+      return removeable && driveType == 2 && busType == 7
+              && (mediaType == 11 || mediaType == -1);
   }
   
 	public void

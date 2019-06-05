@@ -1937,14 +1937,9 @@ MetaSearchManagerImpl
      				
      				return( false );
      			}
-     			
-     			if ( pending_results.size() > 0 ){
-     				
-     				return( false );
-     			}
-     			
-     			return( true );
-     		}
+
+				return pending_results.size() <= 0;
+			}
      	}
      	
      	protected static class

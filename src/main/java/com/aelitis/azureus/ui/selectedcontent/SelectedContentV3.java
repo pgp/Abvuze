@@ -223,13 +223,10 @@ public class SelectedContentV3
 			}
 			
 			if ( downloadInfo != other.downloadInfo ){
-				
-				if ( 	downloadInfo == null ||
-						other.downloadInfo == null ||
-						!downloadInfo.sameAs( other.downloadInfo )){
-					
-					return( false );
-				}
+
+                return downloadInfo != null &&
+                        other.downloadInfo != null &&
+                        downloadInfo.sameAs(other.downloadInfo);
 			}
 			
 			return( true );

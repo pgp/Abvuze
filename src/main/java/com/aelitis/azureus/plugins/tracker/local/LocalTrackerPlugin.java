@@ -882,14 +882,9 @@ LocalTrackerPlugin
 				isUpdating()
 				{
 					int	su = getSecondsToUpdate();
-					
-					if ( su == Integer.MIN_VALUE || su >= 0 ){
-						
-						return( false );
-					}
-					
-					return( true );
-				}
+
+                    return su != Integer.MIN_VALUE && su < 0;
+                }
 			});
 	}
 	

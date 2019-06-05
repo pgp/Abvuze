@@ -43,7 +43,7 @@ AEVerifier
 	verifyData(
 		File		file )
 	
-		throws AEVerifierException, Exception
+		throws Exception
 	{
 		KeyFactory key_factory = KeyFactory.getInstance("RSA");
 		
@@ -60,7 +60,7 @@ AEVerifier
 		File			file,
 		RSAPublicKey	key )
 	
-		throws AEVerifierException, Exception
+		throws Exception
 	{
 
 		try (ZipInputStream zis = new ZipInputStream(
@@ -139,7 +139,7 @@ AEVerifier
 		String			data,
 		byte[]			signature )
 	
-		throws AEVerifierException, Exception
+		throws Exception
 	{
 		KeyFactory key_factory = KeyFactory.getInstance("RSA");
 		

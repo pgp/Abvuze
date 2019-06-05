@@ -360,15 +360,8 @@ DownloadHistoryManagerImpl
 		if ( dm.isPersistent()){
 		
 			long	flags = dm.getDownloadState().getFlags();
-		
-			if (( flags & ( DownloadManagerState.FLAG_LOW_NOISE | DownloadManagerState.FLAG_METADATA_DOWNLOAD )) != 0 ){
-			
-				return( false );
-				
-			}else{
-				
-				return( true );
-			}
+
+			return (flags & (DownloadManagerState.FLAG_LOW_NOISE | DownloadManagerState.FLAG_METADATA_DOWNLOAD)) == 0;
 		}
 		
 		return( false );

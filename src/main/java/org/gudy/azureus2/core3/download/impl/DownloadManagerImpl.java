@@ -4469,22 +4469,16 @@ DownloadManagerImpl
 			TRTrackerAnnouncerResponse resp = announcer.getLastResponse();
 			
 			if ( resp != null ){
-				
-				if ( resp.getStatus() == TRTrackerAnnouncerResponse.ST_REPORTED_ERROR ){
-					
-					return( true );
-				}
+
+				return resp.getStatus() == TRTrackerAnnouncerResponse.ST_REPORTED_ERROR;
 			}
 		}else{
 			
 			TRTrackerScraperResponse resp = getTrackerScrapeResponse();
 			
 			if ( resp != null ){
-				
-				if ( resp.getStatus() == TRTrackerScraperResponse.ST_ERROR ){
-					
-					return( true );
-				}
+
+				return resp.getStatus() == TRTrackerScraperResponse.ST_ERROR;
 			}
 		}  
 		
@@ -4525,12 +4519,9 @@ DownloadManagerImpl
 		if ( status_str != null ){
 			
 			status_str = status_str.toLowerCase();
-			
-			if ( 	status_str.contains( "not authorised" ) ||
-					status_str.contains( "not authorized" )){
-				
-				return( true );
-			}
+
+			return status_str.contains("not authorised") ||
+					status_str.contains("not authorized");
 		}
 		
 		return( false );
@@ -5660,8 +5651,7 @@ DownloadManagerImpl
 	}
 	
 	public boolean canMoveDataFiles() {
-		if (!isPersistent()) {return false;}
-		return true;
+		return isPersistent();
 	}
 	
 	public void rename(String name) throws DownloadManagerException {

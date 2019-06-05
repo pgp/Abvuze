@@ -164,8 +164,8 @@ AEJarSigner2
 			
 			try{
 				JarSigner_class.getMethod(
-						"run", 
-						new Class[]{ String[].class }).invoke( jar_signer, new Object[]{ args });
+						"run",
+						String[].class).invoke( jar_signer, new Object[]{ args });
 				
 			}catch( Throwable e ){
 				

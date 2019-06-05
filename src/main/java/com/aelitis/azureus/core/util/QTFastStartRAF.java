@@ -232,12 +232,8 @@ QTFastStartRAF
 	private boolean isCompressedMoovAtom(Atom moovAtom) {
 		
 		byte[] cmovBuffer = copyOfRange(moovAtom.buffer, 12, 15);
-		
-		if (new String(cmovBuffer).equalsIgnoreCase(ATOM_CMOV)) {
-			return true;
-		}
-		
-		return false;
+
+		return new String(cmovBuffer).equalsIgnoreCase(ATOM_CMOV);
 	}
 
 	private boolean isValidTopLevelAtom(Atom ah) {

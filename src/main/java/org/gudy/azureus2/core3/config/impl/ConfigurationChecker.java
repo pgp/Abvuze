@@ -172,7 +172,7 @@ ConfigurationChecker
 			  		  		System.setProperty( "java.net.preferIPv4Stack", prefer_ipv4?"true":"false" );
 			  		  		
 			  		  		try{
-			  		  			Class<?> plainSocketImpl = getClass().forName( "java.net.PlainSocketImpl");
+			  		  			Class<?> plainSocketImpl = Class.forName( "java.net.PlainSocketImpl");
 
 			  		  			Field pref_field = plainSocketImpl.getDeclaredField( "preferIPv4Stack" );
 			  		  			
@@ -717,10 +717,7 @@ ConfigurationChecker
         File user_dir = new File( SystemProperties.getUserPath() );
         File[] files = user_dir.listFiles( new FilenameFilter() {
           public boolean accept(File dir, String name) {
-            if( name.startsWith( "MessagesBundle" ) && name.endsWith( ".properties" ) ) {
-              return true;
-            }
-            return false;
+              return name.startsWith("MessagesBundle") && name.endsWith(".properties");
           }
         });
         

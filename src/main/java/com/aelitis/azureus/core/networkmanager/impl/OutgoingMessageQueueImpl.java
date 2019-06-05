@@ -179,7 +179,7 @@ OutgoingMessageQueueImpl
    * Whether or not an urgent message (one that needs an immediate send, i.e. a no-delay message) is queued.
    * @return true if there's a message tagged for immediate write
    */
-  public boolean hasUrgentMessage() {  return urgent_message == null ? false : true;  }
+  public boolean hasUrgentMessage() {  return urgent_message != null;  }
   
   
   public Message 

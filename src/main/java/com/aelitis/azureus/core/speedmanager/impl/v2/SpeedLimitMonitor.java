@@ -292,11 +292,7 @@ public class SpeedLimitMonitor implements PSMonitorListener
         }
 
         //start the search in unlimited mode.
-        if( rate==0 && type==SpeedManagerLimitEstimate.TYPE_UNKNOWN){
-            return true;
-        }
-
-        return false;
+        return rate == 0 && type == SpeedManagerLimitEstimate.TYPE_UNKNOWN;
     }
 
     //SpeedLimitMonitorStatus
@@ -381,15 +377,10 @@ public class SpeedLimitMonitor implements PSMonitorListener
      */
     public boolean bandwidthUsageLow(){
 
-        if( uploadBandwidthStatus.compareTo(SaturatedMode.LOW)<=0 &&
-                downloadBandwidthStatus.compareTo(SaturatedMode.LOW)<=0){
-
-            return true;
-
-        }
+        return uploadBandwidthStatus.compareTo(SaturatedMode.LOW) <= 0 &&
+                downloadBandwidthStatus.compareTo(SaturatedMode.LOW) <= 0;
 
         //Either upload or download is at MEDIUM or above.
-        return false;
     }
 
     /**
@@ -397,13 +388,10 @@ public class SpeedLimitMonitor implements PSMonitorListener
      * @return -
      */
     public boolean bandwidthUsageMedium(){
-        if( uploadBandwidthStatus.compareTo(SaturatedMode.MED)<=0 &&
-                downloadBandwidthStatus.compareTo(SaturatedMode.MED)<=0){
-            return true;
-        }
+        return uploadBandwidthStatus.compareTo(SaturatedMode.MED) <= 0 &&
+                downloadBandwidthStatus.compareTo(SaturatedMode.MED) <= 0;
 
         //Either upload or download is at MEDIUM or above.
-        return false;
     }
 
     /**
@@ -411,11 +399,8 @@ public class SpeedLimitMonitor implements PSMonitorListener
      * @return - true only if both the upload and download usages are at the limits.
      */
     public boolean bandwidthUsageAtLimit(){
-        if( uploadBandwidthStatus.compareTo(SaturatedMode.AT_LIMIT)==0 &&
-                downloadBandwidthStatus.compareTo(SaturatedMode.AT_LIMIT)==0){
-            return true;
-        }
-        return false;
+        return uploadBandwidthStatus.compareTo(SaturatedMode.AT_LIMIT) == 0 &&
+                downloadBandwidthStatus.compareTo(SaturatedMode.AT_LIMIT) == 0;
     }
 
     /**
@@ -423,11 +408,8 @@ public class SpeedLimitMonitor implements PSMonitorListener
      * @return -
      */
     public boolean isUploadBandwidthUsageHigh(){
-        if( uploadBandwidthStatus.compareTo(SaturatedMode.AT_LIMIT)==0 ||
-                uploadBandwidthStatus.compareTo(SaturatedMode.HIGH)==0){
-            return true;
-        }
-        return false;
+        return uploadBandwidthStatus.compareTo(SaturatedMode.AT_LIMIT) == 0 ||
+                uploadBandwidthStatus.compareTo(SaturatedMode.HIGH) == 0;
     }
 
     public boolean isEitherLimitUnpinned(){

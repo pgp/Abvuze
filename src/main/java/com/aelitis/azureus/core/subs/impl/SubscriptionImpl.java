@@ -1398,13 +1398,8 @@ SubscriptionImpl
 			
 			return( false );
 		}
-		
-		if ( isSingleton() && add_type != ADD_TYPE_CREATE ){
-			
-			return( false );
-		}
-		
-		return( true );
+
+		return !isSingleton() || add_type == ADD_TYPE_CREATE;
 	}
 	
 	public boolean

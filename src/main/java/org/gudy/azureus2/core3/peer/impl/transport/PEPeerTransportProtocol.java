@@ -1276,8 +1276,7 @@ implements PEPeerTransport
 				checkInterested();
 				lastNeededUndonePieceChange =piecePicker.getNeededUndonePieceChange();
 			}
-			if (interested_in_other_peer &&current_peer_state ==PEPeer.TRANSFERING)
-				return true;
+			return interested_in_other_peer && current_peer_state == PEPeer.TRANSFERING;
 		}
 		return false;
 	}

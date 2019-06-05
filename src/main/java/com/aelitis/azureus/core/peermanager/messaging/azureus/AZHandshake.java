@@ -304,7 +304,7 @@ public class AZHandshake implements AZMessage {
       }
     
     Long ulOnly = (Long)root.get("upload_only");
-    boolean uploadOnly = ulOnly != null && ulOnly > 0L ? true : false;
+    boolean uploadOnly = ulOnly != null && ulOnly > 0L;
 
     if ( name.equals( Constants.AZUREUS_PROTOCOL_NAME_PRE_4813 )){
     	name = Constants.AZUREUS_PROTOCOL_NAME;

@@ -261,8 +261,7 @@ ShareResourceImpl
 	public void
 	delete()
 	
-		throws ShareException, ShareResourceDeletionVetoException
-	{
+		throws ShareException {
 		if ( getParent() != null ){
 			
 		
@@ -276,8 +275,7 @@ ShareResourceImpl
 	delete(
 		boolean	force )
 	
-		throws ShareException, ShareResourceDeletionVetoException
-	{
+		throws ShareException {
 		delete( force, true );
 	}
 	
@@ -286,8 +284,7 @@ ShareResourceImpl
 		boolean	force,
 		boolean	fire_listeners )
 	
-		throws ShareException, ShareResourceDeletionVetoException
-	{
+		throws ShareException {
 		if ( !force ){
 	
 			canBeDeleted();

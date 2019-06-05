@@ -469,8 +469,7 @@ ShareResourceDirContentsImpl
 		delete(
 			boolean	force )
 		
-			throws ShareException, ShareResourceDeletionVetoException
-		{
+			throws ShareException {
             for (Object o : node_children) {
 
                 if (o instanceof ShareResourceImpl) {

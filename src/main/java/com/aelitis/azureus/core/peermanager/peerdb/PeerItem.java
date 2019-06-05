@@ -159,10 +159,10 @@ public class PeerItem implements PeerDescriptor {
     if( this == obj )  return true;
     if(obj instanceof PeerItem) {
       PeerItem other = (PeerItem)obj;
-      if( 	this.tcp_port == other.tcp_port &&
-    		this.udp_port == other.udp_port &&
-    		this.handshake == other.handshake &&
-    		Arrays.equals( this.address, other.address ) )  return true;
+        return this.tcp_port == other.tcp_port &&
+                this.udp_port == other.udp_port &&
+                this.handshake == other.handshake &&
+                Arrays.equals(this.address, other.address);
     }
     return false;
   }

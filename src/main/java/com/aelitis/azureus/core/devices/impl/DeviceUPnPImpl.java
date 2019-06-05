@@ -1017,13 +1017,9 @@ DeviceUPnPImpl
 				
 				return( true );
 				
-			}else if ( PlayUtils.canUseEMP( fileInfo )){
-			
-				return( true );
 			}
+			else return PlayUtils.canUseEMP(fileInfo);
 		}
-		
-		return( false );
 	}
 	
 	public void
@@ -1599,13 +1595,8 @@ DeviceUPnPImpl
 						// might have completed and then been removed
 					
 					TranscodeFile tf = job.getTranscodeFile();
-					
-					if ( tf != null && tf.isComplete()){
-						
-						return( false );
-					}
-					
-					return( true );
+
+					return tf == null || !tf.isComplete();
 				}
 			}
 		}

@@ -120,12 +120,8 @@ public class Set extends IConsoleCommand {
 				else if( type.equalsIgnoreCase("bool") || type.equalsIgnoreCase("boolean") ) {
 					
 					boolean	value;
-					
-					if ( setto.equalsIgnoreCase("true") || setto.equalsIgnoreCase("y") || setto.equals("1" )){
-						value = true;
-					}else{
-						value = false;
-					}
+
+					value = setto.equalsIgnoreCase("true") || setto.equalsIgnoreCase("y") || setto.equals("1");
 						
 					COConfigurationManager.setParameter( internal_name, value );
 					success = true;

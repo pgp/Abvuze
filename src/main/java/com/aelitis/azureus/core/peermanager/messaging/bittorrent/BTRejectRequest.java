@@ -130,9 +130,9 @@ public class BTRejectRequest implements BTMessage {
     if( this == obj )  return true;
     if(obj instanceof BTRejectRequest) {
       BTRejectRequest other = (BTRejectRequest)obj;
-      if( other.piece_number == this.piece_number &&
-          other.piece_offset == this.piece_offset &&
-          other.length == this.length )  return true;
+        return other.piece_number == this.piece_number &&
+                other.piece_offset == this.piece_offset &&
+                other.length == this.length;
     }
     return false;
   }

@@ -172,10 +172,7 @@ DiskManagerReadRequestImpl
       return false;
     if(otherRequest.offset != this.offset)
       return false;
-    if(otherRequest.length != this.length)
-      return false;
-      
-    return true;
+      return otherRequest.length == this.length;
   }
 
   public int hashCode() {

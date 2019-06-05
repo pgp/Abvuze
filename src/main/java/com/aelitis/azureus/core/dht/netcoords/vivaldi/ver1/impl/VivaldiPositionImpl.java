@@ -178,8 +178,7 @@ public class VivaldiPositionImpl implements VivaldiPosition{
    if(arg0 instanceof VivaldiPositionImpl) {
      VivaldiPositionImpl other = (VivaldiPositionImpl) arg0;
      if(other.error != error) return false;
-     if(! other.coordinates.equals(coordinates)) return false;
-     return true;
+       return other.coordinates.equals(coordinates);
    }
    return false;
   }

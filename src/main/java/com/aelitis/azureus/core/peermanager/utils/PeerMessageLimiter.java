@@ -74,10 +74,9 @@ public class PeerMessageLimiter {
           break;
         }
       }
-      
-      if( data.counts.size() > data.max_counts ) {   //too many counts within the time limit
-        return false;   //return error
-      }
+
+        //too many counts within the time limit
+        return data.counts.size() <= data.max_counts;   //return error
     }
     
     return true;

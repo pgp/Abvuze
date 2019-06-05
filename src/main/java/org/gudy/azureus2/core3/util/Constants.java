@@ -643,15 +643,10 @@ Constants
 				return( false) ;
 			}
 		}
-	
-		if ( version.startsWith( "." ) || version.endsWith( "." ) ||
-			version.contains("..")){
-				
-			return( false );
-		}
-		
-		return( true );
-	}
+
+        return !version.startsWith(".") && !version.endsWith(".") &&
+                !version.contains("..");
+    }
 	
 	public static boolean
 	isAzureusDomain(

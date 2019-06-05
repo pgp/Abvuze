@@ -129,15 +129,10 @@ AETemporaryFileHandler
 				
 				return( false );
 			}
-			
-			if ( !name.endsWith( SUFFIX )){
-				
-				return( false );
-			}
-			
-			return( true );
-			
-		}catch( Throwable e ){
+
+            return name.endsWith(SUFFIX);
+
+        }catch( Throwable e ){
 			
 			Debug.out( e );
 			

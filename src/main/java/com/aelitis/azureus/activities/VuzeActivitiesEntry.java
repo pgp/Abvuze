@@ -299,7 +299,7 @@ public class VuzeActivitiesEntry
 		String		action )
 	{
 		try{
-			Class<? extends AZ3Functions.provider.LocalActivityCallback> cb = (Class<? extends AZ3Functions.provider.LocalActivityCallback>)getClass().forName( callback_class );
+			Class<? extends AZ3Functions.provider.LocalActivityCallback> cb = (Class<? extends AZ3Functions.provider.LocalActivityCallback>) Class.forName( callback_class );
 			
 			cb.newInstance().actionSelected( action, callback_data );
 			

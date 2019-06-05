@@ -173,12 +173,7 @@ NetworkAdminImpl
 			timeout(
 				int					distance )
 			{
-				if ( distance == 3 && node_count == 0 ){
-					
-					return( false );
-				}
-				
-				return( true );
+				return distance != 3 || node_count != 0;
 			}
 		};
 		

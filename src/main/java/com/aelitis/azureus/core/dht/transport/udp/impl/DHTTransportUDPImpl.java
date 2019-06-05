@@ -511,14 +511,8 @@ DHTTransportUDPImpl
 					
 					reachable	= true;
 					
-				}else if ( alien_average.getAverage() > 3 ){
-					
-					reachable	= true;
-					
-				}else{
-					
-					reachable	= false;
 				}
+				else reachable = alien_average.getAverage() > 3;
 				
 				if ( old_reachable != reachable ){
 

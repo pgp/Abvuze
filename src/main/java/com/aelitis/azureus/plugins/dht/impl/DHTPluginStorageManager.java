@@ -1563,13 +1563,8 @@ DHTPluginStorageManager
 			
 			verifier.update( request );
 
-			if ( !verifier.verify( signature )){
-			
-				return( false );
-			}
-			
-			return( true );
-			
+			return verifier.verify(signature);
+
 		}catch( Throwable e ){
 			
 			return( false );

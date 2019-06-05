@@ -131,9 +131,9 @@ public class BTRequest implements BTMessage {
     if( this == obj )  return true;
     if(obj instanceof BTRequest) {
       BTRequest other = (BTRequest)obj;
-      if( other.piece_number == this.piece_number &&
-          other.piece_offset == this.piece_offset &&
-          other.length == this.length )  return true;
+        return other.piece_number == this.piece_number &&
+                other.piece_offset == this.piece_offset &&
+                other.length == this.length;
     }
     return false;
   }

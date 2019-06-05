@@ -252,10 +252,7 @@ SpeedLimitHandler
 		}
 		
 		List<Map> list = (List<Map>)map.get( "profiles" );
-		if (list == null || list.size() == 0) {
-			return false;
-		}
-		return true;
+		return list != null && list.size() != 0;
 	}
 
 	private synchronized Map
@@ -4867,15 +4864,8 @@ SpeedLimitHandler
 					nl.setEnabled( enable );
 				}
 			}else if ( tag == null ){
-				
-				if ( extension_type == ET_ENABLE_PRIORITY ){
-					
-					prioritiser_enabled	= true;
-					
-				}else{
-					
-					prioritiser_enabled = false;
-				}
+
+				prioritiser_enabled	= extension_type == ET_ENABLE_PRIORITY;
 			}else{
 				Set<DownloadManager> downloads = tag.getTaggedDownloads();
 				

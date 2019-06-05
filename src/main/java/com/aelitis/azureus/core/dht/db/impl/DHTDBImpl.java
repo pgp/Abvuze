@@ -2259,15 +2259,12 @@ DHTDBImpl
 				}
 				
 				survey_mapping_times.put( hw, new_next_time );
-				
-				if ( next_time == null ){
-					
-					return( false );
-				}
+
+				return next_time != null;
 			}
 		}
 		
-		return( true );
+		return true;
 	}
 	
 	protected void

@@ -69,7 +69,7 @@ SubscriptionRSSFeed
 		
 		if ( generator != null ){
 			
-			generator.registerProvider( PROVIDER, this );
+			RSSGeneratorPlugin.registerProvider( PROVIDER, this );
 		}
 	}
 		
