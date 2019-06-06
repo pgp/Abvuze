@@ -43,6 +43,7 @@ FMFileAccessCompact
 	private final File				controlFileDir;
 	private final String				controlFileName;
 	private final FMFileAccess		delegate;
+	private final FMFileAccess.FMFileAccessIO delegateRead, delegateWrite;
 	
 	private volatile long		current_length;
 	private static final long				version				= 0;
@@ -67,6 +68,18 @@ FMFileAccessCompact
 		controlFileDir	= _controlFileDir;
 		controlFileName = _controlFileName;
 		delegate		= _delegate;
+		delegateRead = new FMFileAccessIO() {
+			@Override
+			public void io(RandomAccessFile raf, DirectByteBuffer[] buffers, long offset) throws FMFileManagerException {
+				delegate.read(raf,buffers,offset);
+			}
+		};
+		delegateWrite = new FMFileAccessIO() {
+			@Override
+			public void io(RandomAccessFile raf, DirectByteBuffer[] buffers, long offset) throws FMFileManagerException {
+				delegate.write(raf,buffers,offset);
+			}
+		};
 
 		try{
 			piece_size = (int)torrent_file.getTorrent().getPieceLength();
@@ -191,105 +204,111 @@ FMFileAccessCompact
 			write_required = true;
 		}
 	}
-	
+
 	protected void
-	read(
-		RandomAccessFile	raf,
-		DirectByteBuffer	buffer,
-		long				position )
-	
-		throws FMFileManagerException
+	io(
+			RandomAccessFile	raf,
+			DirectByteBuffer	buffer,
+			long				position,
+			FMFileAccessIO delegateIO)
+
+			throws FMFileManagerException
 	{
 		int	original_limit	= buffer.limit(SS);
 
-		try{			
+		try{
 			int	len = original_limit - buffer.position(SS);
-			
-			// System.out.println( "compact: read - " + position + "/" + len );
-	
-				// deal with any read access to the first piece
-			
+
+			// System.out.println( "compact: IO - " + position + "/" + len );
+
+			// deal with any IO access to the first piece
+
 			if ( position < first_piece_start + first_piece_length ){
-				
+
 				int	available = (int)( first_piece_start + first_piece_length - position );
-				
+
 				if ( available >= len ){
-					
-						// all they require is in the first piece
-					
+
+					// all they require is in the first piece
+
 					// System.out.println( "    all in first piece" );
 
-					delegate.read( raf, new DirectByteBuffer[]{ buffer }, position );
-					
+					delegateIO.io( raf, new DirectByteBuffer[]{ buffer }, position );
+
 					position	+= len;
 					len			= 0;
 				}else{
-				
-						// read goes past end of first piece
-					
-					// System.out.println( "    part in first piece" );
+
+					// io goes past end of first piece
+
+					// System.out.println( "    part -- first piece" );
 
 					buffer.limit( SS, buffer.position(SS) + available );
-					
-					delegate.read( raf, new DirectByteBuffer[]{ buffer }, position );
-				
+
+					delegateIO.io( raf, new DirectByteBuffer[]{ buffer }, position );
+
 					buffer.limit( SS, original_limit );
-					
+
 					position	+= available;
 					len			-= available;
 				}
 			}
-			
+
 			if ( len == 0 ){
-				
+
 				return;
 			}
-	
-				// position is at start of gap between start and end - work out how much,
-				// if any, space has been requested
-			
+
+			// position is at start of gap between start and end - work out how much,
+			// if any, space has been requested
+
 			long	space = last_piece_start - position;
-			
+
 			if ( space > 0 ){
-			
+
 				if ( space >= len ){
-					
-						// all they require is space
-					
+
 					// System.out.println( "    all in space" );
 
+					// all they require is space
+
 					buffer.position( SS, original_limit );
-					
+
 					position	+= len;
 					len			= 0;
 				}else{
-				
-						// read goes past end of space
-					
+
+					// io goes past end of space
+
 					// System.out.println( "    part in space" );
 
 					buffer.position( SS, buffer.position(SS) + (int)space );
-					
+
 					position	+= space;
 					len			-= space;
 				}
 			}
-			
+
 			if ( len == 0 ){
-				
+
 				return;
 			}
-			
-				// lastly read from last piece
-			
+
+			// lastly IO last piece
+
 			// System.out.println( "    some in last piece" );
 
-			delegate.read( raf, new DirectByteBuffer[]{ buffer }, ( position - last_piece_start ) + first_piece_length );
-			
+			delegateIO.io( raf, new DirectByteBuffer[]{buffer}, ( position - last_piece_start ) + first_piece_length );
+
 		}finally{
-			
+
 			buffer.limit(SS,original_limit);
 		}
+	}
+
+
+	protected void read(RandomAccessFile raf, DirectByteBuffer buffer, long position) throws FMFileManagerException {
+		io(raf,buffer,position,delegateRead);
 	}
 	
 	public void
@@ -322,104 +341,8 @@ FMFileAccessCompact
 		}
 	}
 	
-	protected void
-	write(
-		RandomAccessFile	raf,
-		DirectByteBuffer	buffer,
-		long				position )
-	
-		throws FMFileManagerException
-	{
-		int	original_limit	= buffer.limit(SS);
-
-		try{			
-			int	len = original_limit - buffer.position(SS);
-			
-			// System.out.println( "compact: write - " + position + "/" + len );
-	
-				// deal with any write access to the first piece
-			
-			if ( position < first_piece_start + first_piece_length ){
-				
-				int	available = (int)( first_piece_start + first_piece_length - position );
-				
-				if ( available >= len ){
-					
-						// all they require is in the first piece
-					
-					// System.out.println( "    all in first piece" );
-					
-					delegate.write( raf, new DirectByteBuffer[]{buffer}, position );
-					
-					position	+= len;
-					len			= 0;
-				}else{
-				
-						// write goes past end of first piece
-					
-					// System.out.println( "    part of first piece" );
-
-					buffer.limit( SS, buffer.position(SS) + available );
-					
-					delegate.write( raf, new DirectByteBuffer[]{buffer}, position );
-				
-					buffer.limit( SS, original_limit );
-					
-					position	+= available;
-					len			-= available;
-				}
-			}
-			
-			if ( len == 0 ){
-				
-				return;
-			}
-	
-				// position is at start of gap between start and end - work out how much,
-				// if any, space has been requested
-			
-			long	space = last_piece_start - position;
-			
-			if ( space > 0 ){
-			
-				if ( space >= len ){
-					
-					// System.out.println( "    all in space" );
-
-						// all they require is space
-					
-					buffer.position( SS, original_limit );
-					
-					position	+= len;
-					len			= 0;
-				}else{
-				
-						// write goes past end of space
-					
-					// System.out.println( "    part in space" );
-
-					buffer.position( SS, buffer.position(SS) + (int)space );
-					
-					position	+= space;
-					len			-= space;
-				}
-			}
-			
-			if ( len == 0 ){
-				
-				return;
-			}
-			
-				// lastly write to last piece
-			
-			// System.out.println( "    some in last piece" );
-
-			delegate.write( raf, new DirectByteBuffer[]{buffer}, ( position - last_piece_start ) + first_piece_length );
-			
-		}finally{
-			
-			buffer.limit(SS,original_limit);
-		}
+	protected void write(RandomAccessFile raf, DirectByteBuffer buffer, long position) throws FMFileManagerException {
+		io(raf,buffer,position,delegateWrite);
 	}
 	
 	

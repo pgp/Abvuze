@@ -28,6 +28,13 @@ import com.aelitis.azureus.core.diskmanager.file.FMFileManagerException;
 public interface 
 FMFileAccess 
 {
+	interface FMFileAccessIO {
+		void io(RandomAccessFile raf,
+				DirectByteBuffer[] buffers,
+				long offset)
+				throws FMFileManagerException;
+	}
+
 	void
 	aboutToOpen()
 	
