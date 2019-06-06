@@ -1229,22 +1229,6 @@ implements PEPeerTransport
 		
 		String peer_name = Constants.AZUREUS_PROTOCOL_NAME;
 		
-		if (	peer_id[0] == '-' && 
-				peer_id[1] == 'A' &&
-				peer_id[2] == 'Z' &&
-				peer_id[7] == '-' ){
-		
-			try{
-				int version = Integer.parseInt( new String( peer_id, 3, 4 ));
-				
-				if ( version < 4813 ){
-					
-					peer_name = Constants.AZUREUS_PROTOCOL_NAME_PRE_4813;
-				}
-			}catch( Throwable e ){
-			}
-		}
-		
 		AZHandshake az_handshake = new AZHandshake(
 				AZPeerIdentityManager.getAZPeerIdentity(),
 				mySessionID,

@@ -23,10 +23,10 @@ package com.aelitis.azureus.core.cnetwork.impl;
 import java.io.IOException;
 import java.util.*;
 
+import com.aelitis.azureus.util.ConstantsVuze;
 import org.gudy.azureus2.core3.config.COConfigurationManager;
 import org.gudy.azureus2.core3.config.ParameterListener;
 import org.gudy.azureus2.core3.internat.MessageText;
-import org.gudy.azureus2.core3.util.Base32;
 import org.gudy.azureus2.core3.util.Constants;
 import org.gudy.azureus2.core3.util.SystemTime;
 import org.gudy.azureus2.core3.util.UrlUtils;
@@ -34,7 +34,6 @@ import org.gudy.azureus2.plugins.utils.FeatureManager;
 import org.gudy.azureus2.plugins.utils.FeatureManager.FeatureDetails;
 import org.gudy.azureus2.pluginsimpl.local.PluginInitializer;
 
-import com.aelitis.azureus.core.crypto.VuzeCryptoManager;
 import com.aelitis.azureus.core.metasearch.MetaSearchManagerFactory;
 import com.aelitis.azureus.util.ImportExportUtils;
 
@@ -57,7 +56,7 @@ ContentNetworkVuzeGeneric
 
 				URL_SUFFIX = "azid="
 						+ (send_info
-								? Base32.encode(VuzeCryptoManager.getSingleton().getPlatformAZID())
+								? ConstantsVuze.AZID
 								: "anonymous") + "&azv=" + Constants.AZUREUS_VERSION
 						+ "&locale=" + MessageText.getCurrentLocale().toString() + "&os.name="
 						+ UrlUtils.encode(System.getProperty("os.name")) + "&vzemb=1";
