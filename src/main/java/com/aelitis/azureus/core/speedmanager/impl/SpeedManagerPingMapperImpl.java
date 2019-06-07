@@ -71,13 +71,13 @@ SpeedManagerPingMapperImpl
 			
 	private int	ping_count;
 	
-	private pingValue[]	pings;
-	private final int			max_pings;
+	private pingValue[] pings;
+	private final int max_pings;
 	
-	private pingValue	prev_ping;
+	private pingValue prev_ping;
 	
-	private final int[]		x_speeds = new int[ SPEED_HISTORY_COUNT ];
-	private final int[]		y_speeds = new int[ SPEED_HISTORY_COUNT ];
+	private final int[] x_speeds = new int[ SPEED_HISTORY_COUNT ];
+	private final int[] y_speeds = new int[ SPEED_HISTORY_COUNT ];
 	
 	private int speeds_next;
 	
@@ -88,28 +88,22 @@ SpeedManagerPingMapperImpl
 	
 	private final int[]	recent_metrics = new int[3];
 	private int		recent_metrics_next;
-	
-	private limitEstimate	up_estimate;
-	private limitEstimate	down_estimate;
-	
-	private LinkedList	last_bad_ups;
-	private LinkedList	last_bad_downs;
-	
-	private static final int BAD_PROGRESS_COUNTDOWN	= 5;
-	
-	private limitEstimate	last_bad_up;
-	private int				bad_up_in_progress_count;
-	
-	private limitEstimate	last_bad_down;
-	private int				bad_down_in_progress_count;
 
-	private limitEstimate	best_good_up;
-	private limitEstimate	best_good_down;
-	
-	private limitEstimate	up_capacity		= getNullLimit();
-	private limitEstimate	down_capacity	= getNullLimit();
-	
-	private File	history_file;
+	private final limitEstimate[] UD_estimate = new limitEstimate[2]; // up/down estimates
+
+	private final LinkedList[] last_bad_UDs = new LinkedList[2]; // last bad ups/downs
+
+	private static final int BAD_PROGRESS_COUNTDOWN	= 5;
+
+	private final limitEstimate[] last_bad_UD = new limitEstimate[2]; // last bad up/down
+
+	private final int[] bad_UD_in_progress_count = {0,0};
+
+	private final limitEstimate[] best_good_UD = new limitEstimate[2];
+
+	private final limitEstimate[] UD_capacity = new limitEstimate[]{getNullLimit(),getNullLimit()};
+
+	private File history_file;
 	
 	protected
 	SpeedManagerPingMapperImpl(
@@ -135,24 +129,24 @@ SpeedManagerPingMapperImpl
 		ping_count	= 0;
 		
 		regions	= new LinkedList();
-		
-		up_estimate		= getNullLimit();
-		down_estimate	= getNullLimit();
 
-		last_bad_ups		= new LinkedList();
-		last_bad_downs		= new LinkedList();
+		UD_estimate[0]		= getNullLimit();
+		UD_estimate[1]		= getNullLimit();
+
+		last_bad_UDs[0]		= new LinkedList();
+		last_bad_UDs[1]		= new LinkedList();
+
+		last_bad_UD[0]				= null;
+		bad_UD_in_progress_count[0]	= 0;
+
+		last_bad_UD[1]				= null;
+		bad_UD_in_progress_count[1]	= 0;
+
+		best_good_UD[0] = null;
+		best_good_UD[1] = null;
 		
-		last_bad_up					= null;
-		bad_up_in_progress_count	= 0;
-		
-		last_bad_down				= null;
-		bad_down_in_progress_count	= 0;
-		
-		best_good_up 	= null;
-		best_good_down	= null;
-		
-		up_capacity 	= getNullLimit();
-		down_capacity 	= getNullLimit();
+		UD_capacity[0]	= getNullLimit();
+		UD_capacity[1]	= getNullLimit();
 
 		prev_ping 			= null;
 		recent_metrics_next	= 0;
@@ -219,26 +213,23 @@ SpeedManagerPingMapperImpl
 					}
 				}
 								
-				last_bad_ups 	= loadLimits( map, "lbus" );
-				last_bad_downs 	= loadLimits( map, "lbds" );
+				last_bad_UDs[0] = loadLimits( map, "lbus" );
+				last_bad_UDs[1] = loadLimits( map, "lbds" );
 				
-				if ( last_bad_ups.size() > 0 ){
-					
-					last_bad_up	= (limitEstimate)last_bad_ups.get(last_bad_ups.size()-1);
-				}
+				if (last_bad_UDs[0].size() > 0)
+					last_bad_UD[0]	= (limitEstimate)last_bad_UDs[0].get(last_bad_UDs[0].size()-1);
 				
-				if ( last_bad_downs.size() > 0 ){
-					
-					last_bad_down	= (limitEstimate)last_bad_downs.get(last_bad_downs.size()-1);
-				}
+				if (last_bad_UDs[1].size() > 0)
+					last_bad_UD[1] = (limitEstimate)last_bad_UDs[1].get(last_bad_UDs[1].size()-1);
 
-				best_good_up	= loadLimit((Map)map.get( "bgu" ));
-				best_good_down	= loadLimit((Map)map.get( "bgd" ));
+
+				best_good_UD[0]	= loadLimit((Map)map.get( "bgu" ));
+				best_good_UD[1]	= loadLimit((Map)map.get( "bgd" ));
+
+				UD_capacity[0]	= loadLimit((Map)map.get( "upcap" ));
+				UD_capacity[1]	= loadLimit((Map)map.get( "downcap" ));
 				
-				up_capacity 	= loadLimit((Map)map.get( "upcap" ));
-				down_capacity 	= loadLimit((Map)map.get( "downcap" ));
-				
-				log( "Loaded " + ping_count + " entries from " + history_file + ": bad_up=" + getLimitString(last_bad_ups) + ", bad_down=" + getLimitString(last_bad_downs));
+				log( "Loaded " + ping_count + " entries from " + history_file + ": bad_up=" + getLimitString(last_bad_UDs[0]) + ", bad_down=" + getLimitString(last_bad_UDs[1]));
 				
 			}else{
 				
@@ -289,21 +280,17 @@ SpeedManagerPingMapperImpl
 				m.put( "m", (long) ping.getMetric());
 			}
 			
-			saveLimits( map, "lbus", last_bad_ups );
-			saveLimits( map, "lbds", last_bad_downs );
+			saveLimits( map, "lbus", last_bad_UDs[0]);
+			saveLimits( map, "lbds", last_bad_UDs[1]);
 
-			if ( best_good_up != null ){
-				
-				map.put( "bgu", saveLimit( best_good_up ));
-			}
+			if ( best_good_UD[0] != null )
+				map.put("bgu", saveLimit(best_good_UD[0]));
 			
-			if ( best_good_down != null ){
-				
-				map.put( "bgd", saveLimit( best_good_down ));
-			}
+			if ( best_good_UD[1] != null )
+				map.put("bgd", saveLimit(best_good_UD[1]));
 
-			map.put( "upcap", 	saveLimit( up_capacity ));
-			map.put( "downcap", saveLimit( down_capacity ));
+			map.put( "upcap", 	saveLimit(UD_capacity[0]));
+			map.put( "downcap", saveLimit(UD_capacity[1]));
 
 			FileUtil.writeResilientFile( history_file, map );
 			
@@ -482,31 +469,24 @@ SpeedManagerPingMapperImpl
 		
 		min_x *= SPEED_DIVISOR;
 		min_y *= SPEED_DIVISOR;
-				
-		if ( up_capacity.getEstimateType() != SpeedManagerLimitEstimate.TYPE_MANUAL){
-			
-			if ( min_x > up_capacity.getBytesPerSec()){
-				
-				up_capacity.setBytesPerSec( min_x );
-				
-				up_capacity.setMetricRating( 0 );
-				
-				up_capacity.setEstimateType( SpeedManagerLimitEstimate.TYPE_ESTIMATED);
-				
+
+		limitEstimate uE = UD_capacity[0];
+		limitEstimate dE = UD_capacity[1];
+
+		if ( uE.getEstimateType() != SpeedManagerLimitEstimate.TYPE_MANUAL){
+			if ( min_x > uE.getBytesPerSec()){
+				uE.setBytesPerSec(min_x);
+				uE.setMetricRating(0);
+				uE.setEstimateType( SpeedManagerLimitEstimate.TYPE_ESTIMATED);
 				speed_manager.informUpCapChanged();
 			}
 		}
-		
-		if ( down_capacity.getEstimateType() != SpeedManagerLimitEstimate.TYPE_MANUAL){
-			
-			if ( min_y > down_capacity.getBytesPerSec()){
-				
-				down_capacity.setBytesPerSec( min_y );
-				
-				down_capacity.setMetricRating( 0 );
-				
-				down_capacity.setEstimateType( SpeedManagerLimitEstimate.TYPE_ESTIMATED);
 
+		if ( dE.getEstimateType() != SpeedManagerLimitEstimate.TYPE_MANUAL){
+			if (min_y > dE.getBytesPerSec()){
+				dE.setBytesPerSec(min_y);
+				dE.setMetricRating(0);
+				dE.setEstimateType( SpeedManagerLimitEstimate.TYPE_ESTIMATED);
 				speed_manager.informDownCapChanged();
 			}
 		}
@@ -642,9 +622,9 @@ SpeedManagerPingMapperImpl
 			log( "Ping: rtt="+rtt+",x="+x+",y="+y+",m="+metric + 
 					(new_region==null?"":(",region=" + new_region.getString())) + 
 					",mr=" + getCurrentMetricRating() + 
-					",up=[" + up_e + (best_good_up==null?"":(":"+getShortString(best_good_up))) + 
-						"],down=[" + down_e + (best_good_down==null?"":(":"+getShortString(best_good_down))) + "]" +
-					",bu="+getLimitStr(last_bad_ups,true)+",bd="+getLimitStr(last_bad_downs,true));
+					",up=[" + up_e + (best_good_UD[0]==null?"":(":"+getShortString(best_good_UD[0]))) +
+						"],down=[" + down_e + (best_good_UD[1]==null?"":(":"+getShortString(best_good_UD[1]))) + "]" +
+					",bu="+getLimitStr(last_bad_UDs[0],true)+",bd="+getLimitStr(last_bad_UDs[1],true));
 		}
 	}
 	
@@ -719,38 +699,38 @@ SpeedManagerPingMapperImpl
 	getEstimatedUploadLimit(
 		boolean	persistent )
 	{
-		return( adjustForPersistence( up_estimate, best_good_up, last_bad_up, persistent ));
+		return( adjustForPersistence( UD_estimate[0], best_good_UD[0], last_bad_UD[0], persistent ));
 	}
 	
 	public synchronized SpeedManagerLimitEstimate
 	getEstimatedDownloadLimit(
 		boolean	persistent )
 	{
-		return( adjustForPersistence( down_estimate, best_good_down, last_bad_down, persistent ));
+		return( adjustForPersistence( UD_estimate[1], best_good_UD[1], last_bad_UD[1], persistent ));
 	}
 
 	public SpeedManagerLimitEstimate
 	getLastBadUploadLimit()
 	{
-		return( last_bad_up );
+		return last_bad_UD[0];
 	}
 	
 	public SpeedManagerLimitEstimate
 	getLastBadDownloadLimit()
 	{
-		return( last_bad_down );
+		return last_bad_UD[1];
 	}
 	
 	public synchronized SpeedManagerLimitEstimate[]
 	getBadUploadHistory()
 	{
-		return((SpeedManagerLimitEstimate[])last_bad_ups.toArray(new SpeedManagerLimitEstimate[0]));
+		return((SpeedManagerLimitEstimate[])last_bad_UDs[0].toArray(new SpeedManagerLimitEstimate[0]));
 	}
 
 	public synchronized SpeedManagerLimitEstimate[]
 	getBadDownloadHistory()
 	{
-		return((SpeedManagerLimitEstimate[])last_bad_downs.toArray(new SpeedManagerLimitEstimate[0]));
+		return((SpeedManagerLimitEstimate[])last_bad_UDs[1].toArray(new SpeedManagerLimitEstimate[0]));
 	}
 	                             	
 	protected SpeedManagerLimitEstimate
@@ -829,125 +809,55 @@ SpeedManagerPingMapperImpl
 			return( estimate );
 		}
 	}
-		
-	protected void
-	updateLimitEstimates()
-	{
+
+	// up_estimate, last_bad_up, up_estimate, last_bad_ups, up_capacity
+	// bad_up_in_progress_count
+
+	protected void updateUDSingleLimitEstimates(int upOrDown, double cm) { // 0: up, 1: down
+		UD_estimate[upOrDown] 	= getEstimatedLimit( true );
+		if (UD_estimate[upOrDown] != null){
+			double metric = UD_estimate[upOrDown].getMetricRating();
+			if ( metric == -1 ){
+				if ( bad_UD_in_progress_count[upOrDown] == 0 ){
+
+					// don't count the duplicates we naturally get when sitting here with a bad limit
+					// and nothing going on to change this situation
+
+					if ( last_bad_UD[upOrDown] == null || last_bad_UD[upOrDown].getBytesPerSec() != UD_estimate[upOrDown].getBytesPerSec()){
+						bad_UD_in_progress_count[upOrDown] = BAD_PROGRESS_COUNTDOWN;
+						last_bad_UDs[upOrDown].addLast(UD_estimate[upOrDown]);
+						if ( last_bad_UDs[upOrDown].size() > MAX_BAD_LIMIT_HISTORY ){
+							last_bad_UDs[upOrDown].removeFirst();
+						}
+						checkCapacityDecrease( true, UD_capacity[upOrDown], last_bad_UDs[upOrDown]);
+					}
+				}
+				last_bad_UD[upOrDown] = UD_estimate[upOrDown];
+			}else if ( metric == 1 ){
+				if ( best_good_UD[upOrDown] == null ){
+					best_good_UD[upOrDown] = UD_estimate[upOrDown];
+				}else{
+					if ( best_good_UD[upOrDown].getBytesPerSec() < UD_estimate[upOrDown].getBytesPerSec()){
+						best_good_UD[upOrDown] = UD_estimate[upOrDown];
+					}
+				}
+			}
+
+			if ( bad_UD_in_progress_count[upOrDown] > 0 ){
+				if ( cm == -1 ){
+					bad_UD_in_progress_count[upOrDown] = BAD_PROGRESS_COUNTDOWN;
+				}
+				else if ( cm == 1 ){
+					bad_UD_in_progress_count[upOrDown]--;
+				}
+			}
+		}
+	}
+
+	protected void updateLimitEstimates() {
 		double cm = getCurrentMetricRating();
-		
-		up_estimate 	= getEstimatedLimit( true );
-				
-		if ( up_estimate != null ){
-			
-			double metric = up_estimate.getMetricRating();
-			
-			if ( metric == -1 ){
-			
-				if ( bad_up_in_progress_count == 0 ){
-					
-						// don't count the duplicates we naturally get when sitting here with a bad limit
-						// and nothing going on to change this situation
-					
-					if ( last_bad_up == null || last_bad_up.getBytesPerSec() != up_estimate.getBytesPerSec()){
-						
-						bad_up_in_progress_count = BAD_PROGRESS_COUNTDOWN;
-						
-						last_bad_ups.addLast( up_estimate );
-						
-						if ( last_bad_ups.size() > MAX_BAD_LIMIT_HISTORY ){
-							
-							last_bad_ups.removeFirst();
-						}
-						
-						checkCapacityDecrease( true, up_capacity, last_bad_ups );
-					}
-				}
-								
-				last_bad_up = up_estimate;
-				
-			}else if ( metric == 1 ){
-				
-				if ( best_good_up == null ){
-					
-					best_good_up = up_estimate;
-					
-				}else{
-					
-					if ( best_good_up.getBytesPerSec() < up_estimate.getBytesPerSec()){
-						
-						best_good_up = up_estimate;
-					}
-				}
-			}
-			
-			if ( bad_up_in_progress_count > 0 ){
-				
-				if ( cm == -1 ){ 
-					
-					bad_up_in_progress_count = BAD_PROGRESS_COUNTDOWN;
-					
-				}else if ( cm == 1 ){
-				
-					bad_up_in_progress_count--;
-				}
-			}
-		}
-	
-		
-		down_estimate 	= getEstimatedLimit( false );
-				
-		if ( down_estimate != null ){
-			
-			double metric = down_estimate.getMetricRating();
-			
-			if ( metric == -1 ){
-			
-				if ( bad_down_in_progress_count == 0 ){
-					
-					if ( last_bad_down == null || last_bad_down.getBytesPerSec() != down_estimate.getBytesPerSec()){
-
-						bad_down_in_progress_count = BAD_PROGRESS_COUNTDOWN;
-
-						last_bad_downs.addLast( down_estimate );
-						
-						if ( last_bad_downs.size() > MAX_BAD_LIMIT_HISTORY ){
-							
-							last_bad_downs.removeFirst();
-						}
-						
-						checkCapacityDecrease( false, down_capacity, last_bad_downs );
-					}
-				}
-								
-				last_bad_down = down_estimate;
-				
-			}else if ( metric == 1 ){
-				
-				if ( best_good_down == null ){
-					
-					best_good_down = down_estimate;
-					
-				}else{
-					
-					if ( best_good_down.getBytesPerSec() < down_estimate.getBytesPerSec()){
-						
-						best_good_down = down_estimate;
-					}
-				}
-			}
-			
-			if ( bad_down_in_progress_count > 0 ){
-				
-				if ( cm == -1 ){ 
-			
-					bad_down_in_progress_count = BAD_PROGRESS_COUNTDOWN;
-					
-				}else if ( cm == 1 ){
-				
-					bad_down_in_progress_count--;
-				}
-			}
-		}
+		updateUDSingleLimitEstimates(0,cm); // up
+		updateUDSingleLimitEstimates(1,cm); // down
 	}
 	
 	protected void
@@ -1347,7 +1257,7 @@ SpeedManagerPingMapperImpl
 	public SpeedManagerLimitEstimate
 	getEstimatedUploadCapacityBytesPerSec()
 	{
-		return( up_capacity );
+		return UD_capacity[0];
 	}
 	
 	public void
@@ -1355,10 +1265,10 @@ SpeedManagerPingMapperImpl
 		int		bytes_per_sec,
 		float	estimate_type )
 	{
-		if ( down_capacity.getBytesPerSec() != bytes_per_sec || down_capacity.getEstimateType() != estimate_type ){
-			
-			down_capacity.setBytesPerSec( bytes_per_sec );
-			down_capacity.setEstimateType( estimate_type );
+		if ( UD_capacity[1].getBytesPerSec() != bytes_per_sec || UD_capacity[1].getEstimateType() != estimate_type ){
+
+			UD_capacity[1].setBytesPerSec( bytes_per_sec );
+			UD_capacity[1].setEstimateType( estimate_type );
 			
 			speed_manager.informDownCapChanged();
 		}
@@ -1367,7 +1277,7 @@ SpeedManagerPingMapperImpl
 	public SpeedManagerLimitEstimate
 	getEstimatedDownloadCapacityBytesPerSec()
 	{
-		return( down_capacity );
+		return UD_capacity[1];
 	}
 	
 	public void
@@ -1375,10 +1285,10 @@ SpeedManagerPingMapperImpl
 		int		bytes_per_sec,
 		float	estimate_type )
 	{
-		if ( up_capacity.getBytesPerSec() != bytes_per_sec || up_capacity.getEstimateType() != estimate_type ){
+		if ( UD_capacity[0].getBytesPerSec() != bytes_per_sec || UD_capacity[0].getEstimateType() != estimate_type ){
 
-			up_capacity.setBytesPerSec( bytes_per_sec );
-			up_capacity.setEstimateType( estimate_type );
+			UD_capacity[0].setBytesPerSec( bytes_per_sec );
+			UD_capacity[0].setEstimateType( estimate_type );
 			
 			speed_manager.informUpCapChanged();
 		}
@@ -1392,12 +1302,12 @@ SpeedManagerPingMapperImpl
 		
 		ping_count	= 0;
 		regions.clear();
-		
-		last_bad_down	= null;
-		last_bad_downs.clear();
-		
-		last_bad_up		= null;
-		last_bad_ups.clear();
+
+		last_bad_UD[1]	= null;
+		last_bad_UDs[1].clear();
+
+		last_bad_UD[0]		= null;
+		last_bad_UDs[0].clear();
 		
 		saveHistory();
 	}
@@ -1470,17 +1380,17 @@ SpeedManagerPingMapperImpl
 	generateEvidence(
 		IndentWriter writer ) 
 	{
-		writer.println( "up_cap=" + up_capacity.getString());
-		writer.println( "down_cap=" + down_capacity.getString());
+		writer.println( "up_cap=" + UD_capacity[0].getString());
+		writer.println( "down_cap=" + UD_capacity[1].getString());
 				
-		writer.println( "bad_up=" + getLimitStr( last_bad_ups, false ));			
-		writer.println( "bad_down=" + getLimitStr( last_bad_downs, false ));
+		writer.println( "bad_up=" + getLimitStr( last_bad_UDs[0], false ));
+		writer.println( "bad_down=" + getLimitStr( last_bad_UDs[1], false ));
 		
-		if ( best_good_up != null ){
-			writer.println( "best_up=" + best_good_up.getString());
+		if ( best_good_UD[0] != null ){
+			writer.println( "best_up=" + best_good_UD[0].getString());
 		}
-		if ( best_good_down != null ){
-			writer.println( "best_down=" + best_good_down.getString());
+		if ( best_good_UD[1] != null ){
+			writer.println( "best_down=" + best_good_UD[1].getString());
 		}
 	}
 	

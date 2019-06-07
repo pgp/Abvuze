@@ -182,66 +182,14 @@ public class DateParserRegex extends DateParser {
 				//System.out.println("DL : " + s);
 				matcher = timeBasedDateWithLettersPattern.matcher(s);
 				if(matcher.find()) {
-					int day = Integer.parseInt(matcher.group(1));
-					calendar.set(Calendar.DAY_OF_MONTH,day);
-					
-					String monthStr = " " + matcher.group(2).toLowerCase();
-					int month = -1;
-					for(int i = 0 ; i < MONTHS_LIST.length ; i++) {
-						if(MONTHS_LIST[i].contains(monthStr)) {
-							month = i;
-						}
-					}
-					if(month > -1) {
-						calendar.set(Calendar.MONTH,month);
-					}
-					
-					boolean hasYear = matcher.group(3) != null;
-					if(hasYear) {
-						int year = Integer.parseInt(matcher.group(3));
-						if(year < 100) {
-							year += 2000;
-						}
-						calendar.set(Calendar.YEAR,year);
-					}
-					
-					calendar.set(Calendar.HOUR_OF_DAY,0);
-					calendar.set(Calendar.MINUTE,0);
-					calendar.set(Calendar.SECOND,0);
-					calendar.set(Calendar.MILLISECOND,0);
+					onMatcherFind(calendar, matcher, 1, 2);
 
 					//System.out.println(input + " > " + calendar.getTime() + "( " + calendar.getTimeZone() + " )");
 					
 				} else {
 					matcher = timeBasedDateWithLettersPatternMonthFirst.matcher(s);
 					if(matcher.find()) {
-						int day = Integer.parseInt(matcher.group(2));
-						calendar.set(Calendar.DAY_OF_MONTH,day);
-						
-						String monthStr = " " + matcher.group(1).toLowerCase();
-						int month = -1;
-						for(int i = 0 ; i < MONTHS_LIST.length ; i++) {
-							if(MONTHS_LIST[i].contains(monthStr)) {
-								month = i;
-							}
-						}
-						if(month > -1) {
-							calendar.set(Calendar.MONTH,month);
-						}
-						
-						boolean hasYear = matcher.group(3) != null;
-						if(hasYear) {
-							int year = Integer.parseInt(matcher.group(3));
-							if(year < 100) {
-								year += 2000;
-							}
-							calendar.set(Calendar.YEAR,year);
-						}
-						
-						calendar.set(Calendar.HOUR_OF_DAY,0);
-						calendar.set(Calendar.MINUTE,0);
-						calendar.set(Calendar.SECOND,0);
-						calendar.set(Calendar.MILLISECOND,0);
+						onMatcherFind(calendar, matcher, 2, 1);
 
 						//System.out.println(input + " > " + calendar.getTime() + "( " + calendar.getTimeZone() + " )");
 						
@@ -403,8 +351,38 @@ public class DateParserRegex extends DateParser {
 		//calendar.setTimeZone(TimeZone.getDefault());
 		return calendar.getTime();
 	}
-	
-	
+
+	protected void onMatcherFind(Calendar calendar, Matcher matcher, int i4, int i5) {
+		int day = Integer.parseInt(matcher.group(i4));
+		calendar.set(Calendar.DAY_OF_MONTH, day);
+
+		String monthStr = " " + matcher.group(i5).toLowerCase();
+		int month = -1;
+		for (int i = 0; i < MONTHS_LIST.length; i++) {
+			if (MONTHS_LIST[i].contains(monthStr)) {
+				month = i;
+			}
+		}
+		if (month > -1) {
+			calendar.set(Calendar.MONTH, month);
+		}
+
+		boolean hasYear = matcher.group(3) != null;
+		if (hasYear) {
+			int year = Integer.parseInt(matcher.group(3));
+			if (year < 100) {
+				year += 2000;
+			}
+			calendar.set(Calendar.YEAR, year);
+		}
+
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+	}
+
+
 	private void adjustDate(Calendar calendar, String unit, float value, int intValue, boolean seenHoursAsLowerCaseH) {
 		String lUnit = unit.toLowerCase();
 		if(lUnit.startsWith("sec")) {

@@ -49,8 +49,7 @@ public class BTMessageDecoder implements MessageStreamDecoder {
   private boolean reading_handshake_message = false;
   
   private int message_length;
-  private int pre_read_start_buffer;
-  private int pre_read_start_position;
+  private final int[] pre_read_start_buffer_and_pos = {0,0}; // buffer, position
   
   private boolean last_received_was_keepalive = false;
 
@@ -90,7 +89,12 @@ public class BTMessageDecoder implements MessageStreamDecoder {
 	        break;
 	      }
 	      
-	      int bytes_possible = preReadProcess( bytes_remaining );
+	      int bytes_possible = MessageStreamDecoder.preReadProcess(bytes_remaining,
+                  decode_array,
+                  payload_buffer,
+                  reading_length_mode,
+                  destroyed,
+                  pre_read_start_buffer_and_pos);
 	      
 	      if( bytes_possible < 1 ) {
 	        Debug.out( "ERROR BT: bytes_possible < 1" );
@@ -219,61 +223,6 @@ public class BTMessageDecoder implements MessageStreamDecoder {
     return unused;
   }
   
-  
-
-  private int preReadProcess( int allowed ) {
-    if( allowed < 1 ) {
-      Debug.out( "allowed < 1" );
-    }
-    
-    decode_array[ 0 ] = payload_buffer == null ? null : payload_buffer.getBuffer( SS );  //ensure the decode array has the latest payload pointer
-    
-    int bytes_available = 0;
-    boolean shrink_remaining_buffers = false;
-    int start_buff = reading_length_mode ? 1 : 0;
-    boolean marked = false;    
-    
-    for( int i = start_buff; i < 2; i++ ) {  //set buffer limits according to bytes allowed
-      ByteBuffer bb = decode_array[ i ];
-      
-      if( bb == null ) {
-        Debug.out( "preReadProcess:: bb["+i+"] == null, decoder destroyed=" +destroyed );
-        
-        throw( new RuntimeException( "decoder destroyed" ));
-      }
-      
-      if( shrink_remaining_buffers ) {
-        bb.limit( 0 );  //ensure no read into this next buffer is possible
-      }
-      else {
-        int remaining = bb.remaining();
-        
-        if( remaining < 1 )  continue;  //skip full buffer
-
-        if( !marked ) {
-          pre_read_start_buffer = i;
-          pre_read_start_position = bb.position();
-          marked = true;
-        }
-
-        if( remaining > allowed ) {  //read only part of this buffer
-          bb.limit( bb.position() + allowed );  //limit current buffer
-          bytes_available += bb.remaining();
-          shrink_remaining_buffers = true;  //shrink any tail buffers
-        }
-        else {  //full buffer is allowed to be read
-          bytes_available += remaining;
-          allowed -= remaining;  //count this buffer toward allowed and move on to the next
-        }
-      }
-    }
-    
-    return bytes_available;
-  }
-  
-  
-
-  
   private int postReadProcess() throws IOException {
     int prot_bytes_read = 0;
     int data_bytes_read = 0;
@@ -283,7 +232,7 @@ public class BTMessageDecoder implements MessageStreamDecoder {
       payload_buffer.limit( SS, message_length );
       length_buffer.limit( SS, 4 );
       
-      int read = payload_buffer.position( SS ) - pre_read_start_position;
+      int read = payload_buffer.position( SS ) - pre_read_start_buffer_and_pos[1];
       
       if( payload_buffer.position( SS ) > 0 ) {  //need to have read the message id first byte
       	if( BTMessageFactory.getMessageType( payload_buffer) == Message.TYPE_DATA_PAYLOAD ) {
@@ -353,7 +302,7 @@ public class BTMessageDecoder implements MessageStreamDecoder {
     if( reading_length_mode && !destroyed ) {
       length_buffer.limit( SS, 4 );  //ensure proper buffer limit
       
-      prot_bytes_read += (pre_read_start_buffer == 1) ? length_buffer.position( SS ) - pre_read_start_position : length_buffer.position( SS );
+      prot_bytes_read += (pre_read_start_buffer_and_pos[0] == 1) ? length_buffer.position( SS ) - pre_read_start_buffer_and_pos[1] : length_buffer.position( SS );
       
       if( !length_buffer.hasRemaining( SS ) ) {  //done reading the length
         reading_length_mode = false;

@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 import com.aelitis.azureus.core.networkmanager.Transport;
+import org.gudy.azureus2.core3.util.Debug;
+import org.gudy.azureus2.core3.util.DirectByteBuffer;
 
 /**
  * Decodes a message stream into separate messages.
@@ -78,5 +80,61 @@ public interface MessageStreamDecoder {
    * @return any bytes already-read and still remaining within the decoder
    */
   ByteBuffer destroy();
+
+  static int preReadProcess(int allowed,
+                            ByteBuffer[] decode_array,
+                            DirectByteBuffer payload_buffer,
+                            boolean reading_length_mode,
+                            boolean destroyed,
+                            int[] pre_read_start_buffer_and_pos) {
+    if( allowed < 1 ) {
+      Debug.out( "allowed < 1" );
+    }
+
+    decode_array[ 0 ] = payload_buffer == null ? null : payload_buffer.getBuffer( DirectByteBuffer.SS_MSG );  //ensure the decode array has the latest payload pointer
+
+    int bytes_available = 0;
+    boolean shrink_remaining_buffers = false;
+    int start_buff = reading_length_mode ? 1 : 0;
+    boolean marked = false;
+
+    for( int i = start_buff; i < 2; i++ ) {  //set buffer limits according to bytes allowed
+      ByteBuffer bb = decode_array[ i ];
+
+      if( bb == null ) {
+        Debug.out( "preReadProcess:: bb["+i+"] == null, decoder destroyed=" +destroyed );
+
+        throw( new RuntimeException( "decoder destroyed" ));
+      }
+
+
+      if( shrink_remaining_buffers ) {
+        bb.limit( 0 );  //ensure no read into this next buffer is possible
+      }
+      else {
+        int remaining = bb.remaining();
+
+        if( remaining < 1 )  continue;  //skip full buffer
+
+        if( !marked ) {
+          pre_read_start_buffer_and_pos[0] = i;
+          pre_read_start_buffer_and_pos[1] = bb.position();
+          marked = true;
+        }
+
+        if( remaining > allowed ) {  //read only part of this buffer
+          bb.limit( bb.position() + allowed );  //limit current buffer
+          bytes_available += bb.remaining();
+          shrink_remaining_buffers = true;  //shrink any tail buffers
+        }
+        else {  //full buffer is allowed to be read
+          bytes_available += remaining;
+          allowed -= remaining;  //count this buffer toward allowed and move on to the next
+        }
+      }
+    }
+
+    return bytes_available;
+  }
     
 }

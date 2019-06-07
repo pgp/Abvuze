@@ -1326,42 +1326,7 @@ ConfigurationManager
 						}
 					}
 
-					if (value instanceof Long) {
-
-						writer.println(key + "=" + value);
-
-					} else if (value instanceof List) {
-
-						writer.println(key + "=" + BDecoder.decodeStrings((List) BEncoder.clone(value)) + "[list]");
-
-					} else if (value instanceof Map) {
-
-						writer.println(key + "=" + BDecoder.decodeStrings((Map) BEncoder.clone(value)) + "[map]");
-
-					} else if (value instanceof byte[]) {
-
-						byte[] b = (byte[]) value;
-
-						boolean hex = false;
-
-						for (byte b1 : b) {
-
-							char c = (char) b1;
-
-							if (!(Character.isLetterOrDigit(c) ||
-									"\\ `¬\"£$%^&*()-_=+[{]};:'@#~,<.>/?'".indexOf(c) != -1)) {
-
-								hex = true;
-
-								break;
-							}
-						}
-						writer.println(key + "=" + (hex ? ByteFormatter.nicePrint(b) : bytesToString((byte[]) value)));
-
-					} else {
-
-						writer.println(key + "=" + value + "[unknown]");
-					}
+					dumpChangesOnDifferentObjects(writer, key, value);
 				}
 			}finally{
 				
@@ -1406,55 +1371,54 @@ ConfigurationManager
 			boolean bParamExists = defaults.doesParameterDefaultExist(key);
 
 			if (bParamExists) {
-
 				Object def = defaults.getParameter(key);
 
-				if (def != null && value != null) {
-
-					if (!BEncoder.objectsAreIdentical(def, value)) {
-
-						if (value instanceof Long) {
-
-							writer.println(key + "=" + value);
-
-						} else if (value instanceof List) {
-
-							writer.println(key + "=" + BDecoder.decodeStrings((List) BEncoder.clone(value)) + "[list]");
-
-						} else if (value instanceof Map) {
-
-							writer.println(key + "=" + BDecoder.decodeStrings((Map) BEncoder.clone(value)) + "[map]");
-
-						} else if (value instanceof byte[]) {
-
-							byte[] b = (byte[]) value;
-
-							boolean hex = false;
-
-							for (byte b1 : b) {
-
-								char c = (char) b1;
-
-								if (!(Character.isLetterOrDigit(c) ||
-										"\\ `¬\"£$%^&*()-_=+[{]};:'@#~,<.>/?'".indexOf(c) != -1)) {
-
-									hex = true;
-
-									break;
-								}
-							}
-							writer.println(key + "=" + (hex ? ByteFormatter.nicePrint(b) : bytesToString((byte[]) value)));
-
-						} else {
-
-							writer.println(key + "=" + value + "[unknown]");
-						}
-					}
-				}
+				if (def != null && value != null)
+					if (!BEncoder.objectsAreIdentical(def, value))
+						dumpChangesOnDifferentObjects(writer, key, value);
 			}
 		}
 	}
-		
+
+	private void dumpChangesOnDifferentObjects(IndentWriter writer, String key, Object value) {
+		if (value instanceof Long) {
+
+			writer.println(key + "=" + value);
+
+		} else if (value instanceof List) {
+
+			writer.println(key + "=" + BDecoder.decodeStrings((List) BEncoder.clone(value)) + "[list]");
+
+		} else if (value instanceof Map) {
+
+			writer.println(key + "=" + BDecoder.decodeStrings((Map) BEncoder.clone(value)) + "[map]");
+
+		} else if (value instanceof byte[]) {
+
+			byte[] b = (byte[]) value;
+
+			boolean hex = false;
+
+			for (byte b1 : b) {
+
+				char c = (char) b1;
+
+				if (!(Character.isLetterOrDigit(c) ||
+						"\\ `¬\"£$%^&*()-_=+[{]};:'@#~,<.>/?'".indexOf(c) != -1)) {
+
+					hex = true;
+
+					break;
+				}
+			}
+			writer.println(key + "=" + (hex ? ByteFormatter.nicePrint(b) : bytesToString((byte[]) value)));
+
+		} else {
+
+			writer.println(key + "=" + value + "[unknown]");
+		}
+	}
+
 	public static String
 	bytesToString(
 		byte[]	bytes )

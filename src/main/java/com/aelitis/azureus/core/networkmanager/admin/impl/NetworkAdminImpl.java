@@ -3425,63 +3425,10 @@ for (String token : tokens) {
 			}finally{
 				
 				writer.exdent();
-			}		
-				
-			NetworkAdminHTTPProxy	proxy = getHTTPProxy();
-			
-			if ( proxy == null ){
-				
-				writer.println( "HTTP proxy: none" );
-				
-			}else{
-				
-				writer.println( "HTTP proxy: " + proxy.getName());
-				
-				try{
-					
-					NetworkAdminHTTPProxy.Details details = proxy.getDetails();
-					
-					writer.println( "    name: " + details.getServerName());
-					writer.println( "    resp: " + details.getResponse());
-					writer.println( "    auth: " + details.getAuthenticationType());
-					
-				}catch( NetworkAdminException e ){
-					
-					writer.println( "    failed: " + e.getLocalizedMessage());
-				}
 			}
-			
-			NetworkAdminSocksProxy[]	socks = getSocksProxies();
-			
-			if ( socks.length == 0 ){
-				
-				writer.println( "Socks proxy: none" );
-				
-			}else{
 
-				for (NetworkAdminSocksProxy sock : socks) {
+			printProxyInfo(writer);
 
-					writer.println("Socks proxy: " + sock.getName());
-
-					try {
-						String[] versions = sock.getVersionsSupported();
-
-						String str = "";
-
-						for (int j = 0; j < versions.length; j++) {
-
-							str += (j == 0 ? "" : ",") + versions[j];
-						}
-
-						writer.println("   version: " + str);
-
-					} catch (NetworkAdminException e) {
-
-						writer.println("    failed: " + e.getLocalizedMessage());
-					}
-				}
-			}
-			
 			try {
 				NetworkAdminNATDevice[]	nat_devices = getNATDevices(AzureusCoreFactory.getSingleton());
 
@@ -3505,7 +3452,64 @@ for (String token : tokens) {
 			writer.exdent();
 		}
 	}
-	
+
+	private void printProxyInfo(IndentWriter writer) {
+		NetworkAdminHTTPProxy proxy = getHTTPProxy();
+
+		if (proxy == null) {
+
+			writer.println("HTTP proxy: none");
+
+		} else {
+
+			writer.println("HTTP proxy: " + proxy.getName());
+
+			try {
+
+				NetworkAdminHTTPProxy.Details details = proxy.getDetails();
+
+				writer.println("    name: " + details.getServerName());
+				writer.println("    resp: " + details.getResponse());
+				writer.println("    auth: " + details.getAuthenticationType());
+
+			} catch (NetworkAdminException e) {
+
+				writer.println("    failed: " + e.getLocalizedMessage());
+			}
+		}
+
+		NetworkAdminSocksProxy[] socks = getSocksProxies();
+
+		if (socks.length == 0) {
+
+			writer.println("Socks proxy: none");
+
+		} else {
+
+			for (NetworkAdminSocksProxy sock : socks) {
+
+				writer.println("Socks proxy: " + sock.getName());
+
+				try {
+					String[] versions = sock.getVersionsSupported();
+
+					String str = "";
+
+					for (int j = 0; j < versions.length; j++) {
+
+						str += (j == 0 ? "" : ",") + versions[j];
+					}
+
+					writer.println("   version: " + str);
+
+				} catch (NetworkAdminException e) {
+
+					writer.println("    failed: " + e.getLocalizedMessage());
+				}
+			}
+		}
+	}
+
 	private String
 	getString(
 		InetAddress[]	addresses )
@@ -3525,62 +3529,9 @@ for (String token : tokens) {
 		final IndentWriter iw )
 	{
 		Set	public_addresses = new HashSet();
-		
-		NetworkAdminHTTPProxy	proxy = getHTTPProxy();
-		
-		if ( proxy == null ){
-			
-			iw.println( "HTTP proxy: none" );
-			
-		}else{
-			
-			iw.println( "HTTP proxy: " + proxy.getName());
-			
-			try{
-				
-				NetworkAdminHTTPProxy.Details details = proxy.getDetails();
-				
-				iw.println( "    name: " + details.getServerName());
-				iw.println( "    resp: " + details.getResponse());
-				iw.println( "    auth: " + details.getAuthenticationType());
-				
-			}catch( NetworkAdminException e ){
-				
-				iw.println( "    failed: " + e.getLocalizedMessage());
-			}
-		}
-		
-		NetworkAdminSocksProxy[]	socks = getSocksProxies();
-		
-		if ( socks.length == 0 ){
-			
-			iw.println( "Socks proxy: none" );
-			
-		}else{
 
-			for (NetworkAdminSocksProxy sock : socks) {
+		printProxyInfo(iw);
 
-				iw.println("Socks proxy: " + sock.getName());
-
-				try {
-					String[] versions = sock.getVersionsSupported();
-
-					String str = "";
-
-					for (int j = 0; j < versions.length; j++) {
-
-						str += (j == 0 ? "" : ",") + versions[j];
-					}
-
-					iw.println("   version: " + str);
-
-				} catch (NetworkAdminException e) {
-
-					iw.println("    failed: " + e.getLocalizedMessage());
-				}
-			}
-		}
-		
 		try {
 			NetworkAdminNATDevice[]	nat_devices = getNATDevices(AzureusCoreFactory.getSingleton());
 
