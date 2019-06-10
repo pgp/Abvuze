@@ -923,7 +923,7 @@ public class FileUtil {
   				decoder.setRecoveryMode( true );
   			}
   			
-	    	Map	res = decoder.decodeStream(bin, !skip_key_intern);
+	    	Map	res = decoder.decode(bin, !skip_key_intern);
 	    	
 	    	if ( using_backup && !recovery_mode ){
   		

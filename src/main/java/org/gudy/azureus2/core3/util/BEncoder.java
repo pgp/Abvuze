@@ -320,27 +320,31 @@ BEncoder
        		
     		new_buffer[ 0 ] = (byte)c;
 
-    		if ( old_buffers == null ){
-    			
-    			old_buffers = new byte[][]{ current_buffer };
-    			
-    		}else{
-    			
-    			byte[][] new_old_buffers = new byte[old_buffers.length+1][];
-    			
-    			System.arraycopy( old_buffers, 0, new_old_buffers, 0, old_buffers.length );
-    			
-    			new_old_buffers[ old_buffers.length ] = current_buffer;
-    			
-    			old_buffers = new_old_buffers;
-    		}
-    		
-    		current_buffer		= new_buffer;
-    		current_buffer_pos 	= 1;
+			buffersRefact(new_buffer);
+			current_buffer_pos 	= 1;
      	}
    	}
-   	
-    private void
+
+	private void buffersRefact(byte[] new_buffer) {
+		if (old_buffers == null) {
+
+			old_buffers = new byte[][]{current_buffer};
+
+		} else {
+
+			byte[][] new_old_buffers = new byte[old_buffers.length + 1][];
+
+			System.arraycopy(old_buffers, 0, new_old_buffers, 0, old_buffers.length);
+
+			new_old_buffers[old_buffers.length] = current_buffer;
+
+			old_buffers = new_old_buffers;
+		}
+
+		current_buffer = new_buffer;
+	}
+
+	private void
     writeInt(
     	int		i )
     {
@@ -408,23 +412,8 @@ BEncoder
        		   		
     		System.arraycopy( bytes, offset + rem, new_buffer, 0, length );
 
-    		if ( old_buffers == null ){
-    			
-    			old_buffers = new byte[][]{ current_buffer };
-    			
-    		}else{
-    			
-    			byte[][] new_old_buffers = new byte[old_buffers.length+1][];
-    			
-    			System.arraycopy( old_buffers, 0, new_old_buffers, 0, old_buffers.length );
-    			
-    			new_old_buffers[ old_buffers.length ] = current_buffer;
-    			
-    			old_buffers = new_old_buffers;
-    		}
-    		
-    		current_buffer		= new_buffer;
-    		current_buffer_pos 	= length;
+			buffersRefact(new_buffer);
+			current_buffer_pos 	= length;
      	}   
     }
     

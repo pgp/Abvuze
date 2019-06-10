@@ -219,7 +219,15 @@ AzureusCoreStats
 		{ ST_XFER_DOWNLOADED_PROTOCOL_BYTES,		CUMULATIVE },
 		{ ST_XFER_DOWNLOADED_DATA_BYTES,			CUMULATIVE },	
 	};
-	
+
+	public static List coreStatsRefact(Map<Object,Object> reply) {
+		List lines = new ArrayList();
+		for(Map.Entry entry : reply.entrySet())
+			lines.add(entry.getKey() + " -> " + entry.getValue());
+		Collections.sort(lines);
+		return lines;
+	}
+
 	static{
 		
 		addStatsDefinitions( _ST_ALL );
@@ -235,7 +243,7 @@ AzureusCoreStats
 						
 					boolean	turn_on_averages = !getEnableAverages();
 
-					try{
+					try {
 						writer.indent();	
 						
 						if ( turn_on_averages ){
@@ -252,21 +260,8 @@ AzureusCoreStats
 						Set	types = new HashSet();
 						
 						types.add( ST_ALL );
-						
-						Map	reply = getStats( types );
-						
-						Iterator	it = reply.entrySet().iterator();
-						
-						List	lines = new ArrayList();
-						
-						while( it.hasNext()){
-							
-							Map.Entry	entry = (Map.Entry)it.next();
-							
-							lines.add( entry.getKey() + " -> " + entry.getValue());
-						}
-						
-						Collections.sort( lines );
+
+						List lines = coreStatsRefact(getStats(types));
 
                         for (Object line : lines) {
 
@@ -285,7 +280,7 @@ AzureusCoreStats
 	    		}
 			});
 	}
-	
+
 	private static final List	providers 	= new CopyOnWriteArrayList();
 	
 	private static  Map	averages	= new HashMap();

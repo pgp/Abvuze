@@ -564,19 +564,6 @@ BloomFilterImpl
 	{
 		return( start_time );
 	}
-	
-	protected static byte[] 
-	getSerialization(
-		byte[]	address,
-	    int		port )
-	{
-		//combine address and port bytes into one
-		byte[] full_address = new byte[ address.length +2 ];
-		System.arraycopy( address, 0, full_address, 0, address.length );
-		full_address[ address.length ] = (byte)(port >> 8);
-		full_address[ address.length +1 ] = (byte)(port & 0xff);
-		return full_address;
-	}
 	 
 	public String
 	getString()

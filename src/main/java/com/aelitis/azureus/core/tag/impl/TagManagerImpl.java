@@ -1159,6 +1159,24 @@ TagManagerImpl
 			}
 		}
 	}
+
+	public static String[] detectAndEscapeJavascript(String script) {
+		String script_type = "";
+		if ( script.length() >=10 && script.substring(0,10).toLowerCase( Locale.US ).startsWith( "javascript" )){
+			int	p1 = script.indexOf( '(' );
+			int	p2 = script.lastIndexOf( ')' );
+			if ( p1 != -1 && p2 != -1 ){
+				script = script.substring( p1+1, p2 ).trim();
+				if ( script.startsWith( "\"" ) && script.endsWith( "\"" )){
+					script = script.substring( 1, script.length()-1 );
+				}
+				// allow people to escape " if it makes them feel better
+				script = script.replaceAll( "\\\\\"", "\"" );
+				script_type = ScriptProvider.ST_JAVASCRIPT;
+			}
+		}
+		return new String[]{script_type,script};
+	}
 	
 	protected Object
 	evalScript(
@@ -1167,30 +1185,9 @@ TagManagerImpl
 		DownloadManager		dm,
 		String				intent_key )
 	{
-		String script_type = "";
-		
-		if ( script.length() >=10 && script.substring(0,10).toLowerCase( Locale.US ).startsWith( "javascript" )){
-			
-			int	p1 = script.indexOf( '(' );
-			
-			int	p2 = script.lastIndexOf( ')' );
-			
-			if ( p1 != -1 && p2 != -1 ){
-				
-				script = script.substring( p1+1, p2 ).trim();
-				
-				if ( script.startsWith( "\"" ) && script.endsWith( "\"" )){
-					
-					script = script.substring( 1, script.length()-1 );
-				}
-				
-					// allow people to escape " if it makes them feel better
-				
-				script = script.replaceAll( "\\\\\"", "\"" );
-				
-				script_type = ScriptProvider.ST_JAVASCRIPT;	
-			}
-		}
+		String[] scriptType_and_script = detectAndEscapeJavascript(script);
+		String script_type = scriptType_and_script[0];
+		script = scriptType_and_script[1];
 		
 		if ("".equals(script_type)){
 			

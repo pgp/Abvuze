@@ -300,19 +300,8 @@ public class Show extends IConsoleCommand {
 			types.add( pattern );
 			
 			Map	reply = AzureusCoreStats.getStats( types );
-			
-			Iterator	it = reply.entrySet().iterator();
-			
-			List	lines = new ArrayList();
-			
-			while( it.hasNext()){
-				
-				Map.Entry	entry = (Map.Entry)it.next();
-				
-				lines.add( entry.getKey() + " -> " + entry.getValue());
-			}
-			
-			Collections.sort( lines );
+
+			List lines = AzureusCoreStats.coreStatsRefact(reply);
 
             for (Object line : lines) {
 

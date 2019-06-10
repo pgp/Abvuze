@@ -95,7 +95,7 @@ public class BDecoder
 
 		throws IOException
 	{
-		return( new BDecoder().decodeStream( is ));
+		return new BDecoder().decode(is,true);
 	}
 
 
@@ -143,42 +143,12 @@ public class BDecoder
 		buffer.position(buffer.limit()-is.available());
 		return result;
 	}
-	
-	public Map<String, Object> 
-	decodeStream(
-		BufferedInputStream data )  
 
-		throws IOException 
-	{
-		return decodeStream(data, true);
-	}
-
-	public Map<String, Object> 
-	decodeStream(
-		BufferedInputStream data,
-		boolean internKeys)  
-
-		throws IOException 
-	{
-		Object	res = decodeInputStream(data, "", 0, internKeys);
-
-		if ( res == null ){
-
-			throw( new BEncodingException( "BDecoder: zero length file" ));
-
-		}else if ( !(res instanceof Map )){
-
-			throw( new BEncodingException( "BDecoder: top level isn't a Map" ));
-		}
-
-		return((Map<String,Object>)res );
-	}
-
-	private Map<String, Object> 
+	public Map<String, Object>
 	decode(
-		InputStream data, boolean internKeys ) 
-
-		throws IOException 
+			InputStream data,
+			boolean internKeys)
+			throws IOException
 	{
 		Object res = decodeInputStream(data, "", 0, internKeys);
 
@@ -191,7 +161,7 @@ public class BDecoder
 			throw( new BEncodingException( "BDecoder: top level isn't a Map" ));
 		}
 
-		return((Map<String, Object>)res );
+		return((Map<String,Object>)res );
 	}
 	
 	// reuseable objects for key decoding
@@ -1071,7 +1041,7 @@ public class BDecoder
 
 			PrintWriter	pw = new PrintWriter( new FileWriter( output ));
 
-			print( pw, decoder.decodeStream( new BufferedInputStream( new FileInputStream( f ))));
+			print( pw, decoder.decode(new BufferedInputStream( new FileInputStream( f )), true));
 
 			pw.flush();
 

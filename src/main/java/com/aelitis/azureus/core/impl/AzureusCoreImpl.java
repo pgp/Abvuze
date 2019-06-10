@@ -27,6 +27,7 @@ import java.nio.channels.FileLock;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import com.aelitis.azureus.core.tag.impl.TagManagerImpl;
 import org.gudy.azureus2.core3.config.COConfigurationManager;
 import org.gudy.azureus2.core3.config.ParameterListener;
 import org.gudy.azureus2.core3.config.impl.TransferSpeedValidator;
@@ -1519,29 +1520,9 @@ AzureusCoreImpl
 								AzureusRestarterFactory.create( AzureusCoreImpl.this ).restart( true );
 							}
 						}
-						
-						if ( ca_shutdown_computer_after_stop ){
-							
-							if ( apply_updates ){
-								
-									// best we can do here is wait a while for updates to be applied
-								try{
-									Thread.sleep( 10*1000 );
-									
-								}catch( Throwable e ){
-									
-								}
-							}
-							
-							try{
-								PlatformManagerFactory.getPlatformManager().shutdown( PlatformManager.SD_SHUTDOWN );
-								
-							}catch( Throwable e ){
-								
-								Debug.out( "PlatformManager: shutdown failed", e );
-							}
-						}
-						
+
+						shutdownAfterStopIfEnabled(apply_updates);
+
 						SESecurityManager.exitVM(0);
 					}
 					
@@ -1671,29 +1652,9 @@ AzureusCoreImpl
 				}
 			} catch (Throwable t) {
 			}
-			
-			if ( ca_shutdown_computer_after_stop ){
-				
-				if ( apply_updates ){
-					
-						// best we can do here is wait a while for updates to be applied
-					try{
-						Thread.sleep( 10*1000 );
-						
-					}catch( Throwable e ){
-						
-					}
-				}
-				
-				try{
-					PlatformManagerFactory.getPlatformManager().shutdown( PlatformManager.SD_SHUTDOWN );
-					
-				}catch( Throwable e ){
-					
-					Debug.out( "PlatformManager: shutdown failed", e );
-				}
-			}
-		
+
+			shutdownAfterStopIfEnabled(apply_updates);
+
 			try{
 				ThreadGroup	tg = Thread.currentThread().getThreadGroup();
 				
@@ -1780,8 +1741,32 @@ AzureusCoreImpl
 			stopping_sem.releaseForever();
 		}
 	}
-	
-	
+
+	private void shutdownAfterStopIfEnabled(boolean apply_updates) {
+		if (ca_shutdown_computer_after_stop) {
+
+			if (apply_updates) {
+
+				// best we can do here is wait a while for updates to be applied
+				try {
+					Thread.sleep(10 * 1000);
+
+				} catch (Throwable e) {
+
+				}
+			}
+
+			try {
+				PlatformManagerFactory.getPlatformManager().shutdown(PlatformManager.SD_SHUTDOWN);
+
+			} catch (Throwable e) {
+
+				Debug.out("PlatformManager: shutdown failed", e);
+			}
+		}
+	}
+
+
 	public void
 	requestStop()
 	
@@ -2669,33 +2654,12 @@ AzureusCoreImpl
 		String		action,
 		boolean		download_trigger )
 	{
-		String script_type = "";
-		
-		if ( script.length() >=10 && script.substring(0,10).toLowerCase( Locale.US ).startsWith( "javascript" )){
-			
-			int	p1 = script.indexOf( '(' );
-			
-			int	p2 = script.lastIndexOf( ')' );
-			
-			if ( p1 != -1 && p2 != -1 ){
-				
-				script = script.substring( p1+1, p2 ).trim();
-				
-				if ( script.startsWith( "\"" ) && script.endsWith( "\"" )){
-					
-					script = script.substring( 1, script.length()-1 );
-				}
-				
-					// allow people to escape " if it makes them feel better
-				
-				script = script.replaceAll( "\\\\\"", "\"" );
-				
-				script_type = ScriptProvider.ST_JAVASCRIPT;	
-			}
-		}
-		
+		String[] scriptType_and_script = TagManagerImpl.detectAndEscapeJavascript(script);
+		String script_type = scriptType_and_script[0];
+		script = scriptType_and_script[1];
+
 		File script_file	= null;
-		
+
 		if ("".equals(script_type)){
 			
 			script_file = new File( script.trim());

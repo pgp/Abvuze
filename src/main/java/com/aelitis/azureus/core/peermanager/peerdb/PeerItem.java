@@ -108,7 +108,7 @@ public class PeerItem implements PeerDescriptor {
     
   
   
-  public byte[] getSerialization() {
+  public byte[] getSerialization() { // was duplicated as static method in BloomFilterImpl
     //combine address and port bytes into one
     byte[] full_address = new byte[ address.length +2 ];
     System.arraycopy( address, 0, full_address, 0, address.length );
