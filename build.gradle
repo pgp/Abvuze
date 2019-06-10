@@ -1,13 +1,22 @@
-apply plugin: 'java'
-apply plugin: 'maven'
+plugins {
+    id 'com.github.johnrengelman.shadow' version '5.0.0'
+    id 'java'
+    id 'maven'
+}
 
 group = 'com.github.pgp'
-version '1.2-SNAPSHOT'
+version '1.3-SNAPSHOT'
 
 sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'org.gudy.azureus2.ui.common.Main'
+    }
 }
 
 dependencies {
@@ -26,6 +35,7 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 
 artifacts {
     archives sourcesJar
+    archives shadowJar
 }
 
 wrapper {
