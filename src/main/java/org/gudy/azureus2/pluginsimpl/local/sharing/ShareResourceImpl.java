@@ -46,7 +46,7 @@ ShareResourceImpl
 	protected int							type;
 	protected ShareResourceDirContents		parent;
 	
-	protected Map	attributes			= new HashMap();
+	protected Map<TorrentAttribute,Object> attributes = new HashMap<>();
 	
 	protected List	change_listeners 	= new ArrayList();
 	protected List	deletion_listeners 	= new ArrayList();
@@ -101,30 +101,17 @@ ShareResourceImpl
 		}
 	}
 	
-	protected void
-	serialiseResource(
-		Map		map )
-	{
-		Iterator	it = attributes.keySet().iterator();
-		
+	protected void serialiseResource(Map map) {
 		Map	attrs = new HashMap();
-		
-		map.put( "attributes", attrs );
-		
-		while( it.hasNext()){
-			
-			TorrentAttribute	ta = (TorrentAttribute)it.next();
-			
+		map.put("attributes", attrs);
+
+		for(TorrentAttribute ta : attributes.keySet()) {
 			String	value = (String)attributes.get(ta);
-			
-			try{
-				if ( value != null ){
-					
-					attrs.put( ta.getName(), value.getBytes( Constants.DEFAULT_ENCODING ));
-					
-				}
-			}catch( Throwable e ){
-				
+			try {
+				if (value != null)
+					attrs.put(ta.getName(), value.getBytes(Constants.DEFAULT_ENCODING));
+			}
+			catch(Throwable e) {
 				Debug.printStackTrace(e);
 			}
 		}
