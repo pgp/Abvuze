@@ -64,7 +64,58 @@ DHTImpl
 	
 	private boolean	runstate_startup 	= true;
 	private boolean	sleeping			= false;
-	
+
+
+	private DHTControlAdapter defaultDHTControlAdapter() {
+		return new DHTControlAdapter() {
+			public DHTStorageAdapter getStorageAdapter() {
+				return storage_adapter;
+			}
+
+			public boolean isDiversified(byte[] key) {
+				if (storage_adapter == null) return false;
+				return( storage_adapter.isDiversified( key ));
+			}
+
+			public byte[][] diversify(
+					String				description,
+					DHTTransportContact	cause,
+					boolean				put_operation,
+					boolean				existing,
+					byte[]				key,
+					byte				type,
+					boolean				exhaustive,
+					int					max_depth ) {
+				boolean	valid;
+				if ( existing ){
+					valid = type == DHT.DT_FREQUENCY ||
+							type == DHT.DT_SIZE ||
+							type == DHT.DT_NONE;
+				}else{
+					valid = type == DHT.DT_FREQUENCY ||
+							type == DHT.DT_SIZE;
+				}
+
+				if ( storage_adapter != null && valid ){
+					if ( existing ){
+						return( storage_adapter.getExistingDiversification( key, put_operation, exhaustive, max_depth ));
+					}else{
+						return( storage_adapter.createNewDiversification( description, cause, key, put_operation, type, exhaustive, max_depth ));
+					}
+				}else{
+					if ( !valid ){
+						Debug.out( "Invalid diversification received: type = " + type );
+					}
+					if ( existing ){
+						return new byte[][]{ key };
+					}else{
+						return new byte[0][];
+					}
+				}
+			}
+		};
+	}
+
 	public 
 	DHTImpl(
 		DHTTransport			_transport,
@@ -94,78 +145,7 @@ DHTImpl
 		boolean	r_p 	= getProp( PR_ENABLE_RANDOM_LOOKUP, 		DHTControl.ENABLE_RANDOM_DEFAULT ) == 1;
 		
 		control = DHTControlFactory.create( 
-				new DHTControlAdapter()
-				{
-					public DHTStorageAdapter
-					getStorageAdapter()
-					{
-						return( storage_adapter );
-					}
-					
-					public boolean
-					isDiversified(
-						byte[]		key )
-					{
-						if ( storage_adapter == null ){
-							
-							return( false );
-						}
-						
-						return( storage_adapter.isDiversified( key ));
-					}
-					
-					public byte[][]
-					diversify(
-						String				description,
-						DHTTransportContact	cause,
-						boolean				put_operation,
-						boolean				existing,
-						byte[]				key,
-						byte				type,
-						boolean				exhaustive,
-						int					max_depth )
-					{
-						boolean	valid;
-						
-						if ( existing ){
-							
-							valid =	 	type == DHT.DT_FREQUENCY ||
-										type == DHT.DT_SIZE ||
-										type == DHT.DT_NONE;
-						}else{
-							
-							valid = 	type == DHT.DT_FREQUENCY ||
-										type == DHT.DT_SIZE;
-						}
-						
-						if ( storage_adapter != null && valid ){
-							
-							if ( existing ){
-								
-								return( storage_adapter.getExistingDiversification( key, put_operation, exhaustive, max_depth ));
-								
-							}else{
-								
-								return( storage_adapter.createNewDiversification( description, cause, key, put_operation, type, exhaustive, max_depth ));
-							}
-						}else{
-							
-							if ( !valid ){
-								
-								Debug.out( "Invalid diversification received: type = " + type );
-							}
-							
-							if ( existing ){
-								
-								return( new byte[][]{ key });
-								
-							}else{
-								
-								return( new byte[0][] );
-							}
-						}
-					}
-				},
+				defaultDHTControlAdapter(),
 				_transport, 
 				K, B, max_r,
 				s_conc, l_conc, 
@@ -209,78 +189,7 @@ DHTImpl
 		boolean	r_p 	= getProp( PR_ENABLE_RANDOM_LOOKUP, 		DHTControl.ENABLE_RANDOM_DEFAULT ) == 1;
 		
 		control = DHTControlFactory.create( 
-				new DHTControlAdapter()
-				{
-					public DHTStorageAdapter
-					getStorageAdapter()
-					{
-						return( storage_adapter );
-					}
-					
-					public boolean
-					isDiversified(
-						byte[]		key )
-					{
-						if ( storage_adapter == null ){
-							
-							return( false );
-						}
-						
-						return( storage_adapter.isDiversified( key ));
-					}
-					
-					public byte[][]
-					diversify(
-						String				description,
-						DHTTransportContact	cause,
-						boolean				put_operation,
-						boolean				existing,
-						byte[]				key,
-						byte				type,
-						boolean				exhaustive,
-						int					max_depth )
-					{
-						boolean	valid;
-						
-						if ( existing ){
-							
-							valid =	 	type == DHT.DT_FREQUENCY ||
-										type == DHT.DT_SIZE ||
-										type == DHT.DT_NONE;
-						}else{
-							
-							valid = 	type == DHT.DT_FREQUENCY ||
-										type == DHT.DT_SIZE;
-						}
-						
-						if ( storage_adapter != null && valid ){
-							
-							if ( existing ){
-								
-								return( storage_adapter.getExistingDiversification( key, put_operation, exhaustive, max_depth ));
-								
-							}else{
-								
-								return( storage_adapter.createNewDiversification( description, cause, key, put_operation, type, exhaustive, max_depth ));
-							}
-						}else{
-							
-							if ( !valid ){
-								
-								Debug.out( "Invalid diversification received: type = " + type );
-							}
-							
-							if ( existing ){
-								
-								return( new byte[][]{ key });
-								
-							}else{
-								
-								return( new byte[0][] );
-							}
-						}
-					}
-				},
+				defaultDHTControlAdapter(),
 				_transport, 
 				_router,
 				_database,

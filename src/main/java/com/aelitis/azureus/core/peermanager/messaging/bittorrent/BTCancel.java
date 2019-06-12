@@ -87,35 +87,11 @@ public class BTCancel implements BTMessage {
     
     return new DirectByteBuffer[]{ buffer };
   }
-  
-  
+
+
   public Message deserialize( DirectByteBuffer data, byte version ) throws MessageException {
-    if( data == null ) {
-      throw new MessageException( "[" +getID() +"] decode error: data == null" );
-    }
-    
-    if( data.remaining( DirectByteBuffer.SS_MSG ) != 12 ) {
-      throw new MessageException( "[" +getID() +  "] decode error: payload.remaining[" +data.remaining( DirectByteBuffer.SS_MSG )+ "] != 12" );
-    }
-    
-    int num = data.getInt( DirectByteBuffer.SS_MSG );
-    if( num < 0 ) {
-      throw new MessageException( "[" +getID() + "] decode error: num < 0" );
-    }
-    
-    int offset = data.getInt( DirectByteBuffer.SS_MSG );
-    if( offset < 0 ) {
-      throw new MessageException( "[" +getID()+ "] decode error: offset < 0" );
-    }
-    
-    int length = data.getInt( DirectByteBuffer.SS_MSG );
-    if( length < 0 ) {
-      throw new MessageException( "[" +getID() + "] decode error: lngth < 0" );
-    }
-    
-    data.returnToPool();
-    
-    return new BTCancel( num, offset, length, version );
+    int[] x = BTCommon.deserializeRefact(data,getID());
+    return new BTCancel( x[0], x[1], x[2], version );
   }
 
   

@@ -56,13 +56,17 @@ DHTTransportStatsImpl
 	
 	private long[]	aliens		= new long[7];
 
-	private long	incoming_requests;
-	private long	outgoing_requests;
-	
-	private long	incoming_version_requests;
-	private final long[]	incoming_request_versions;
-	private long	outgoing_version_requests;
-	private final long[]	outgoing_request_versions;
+	private final long[] inOut_requests = new long[2]; // incoming and outgoing
+//	private long	incoming_requests;
+//	private long	outgoing_requests;
+
+	private final long[] inOut_version_requests = new long[2];
+	private final long[][] inOut_request_versions;
+
+//	private long	incoming_version_requests;
+//	private final long[]	incoming_request_versions;
+//	private long	outgoing_version_requests;
+//	private final long[]	outgoing_request_versions;
 	
 	private static final int SKEW_VALUE_MAX	= 256;
 	private final int[]	skew_values = new int[SKEW_VALUE_MAX];
@@ -83,9 +87,10 @@ DHTTransportStatsImpl
 		byte	_protocol_version )
 	{
 		protocol_version	= _protocol_version;
-		
-		incoming_request_versions = new long[protocol_version+1];
-		outgoing_request_versions = new long[protocol_version+1];
+
+		inOut_request_versions = new long[][]{new long[protocol_version+1],new long[protocol_version+1]};
+//		incoming_request_versions = new long[protocol_version+1];
+//		outgoing_request_versions = new long[protocol_version+1];
 		
 		Arrays.fill( skew_values, Integer.MAX_VALUE );
 	}
@@ -136,8 +141,8 @@ DHTTransportStatsImpl
 		add( store_queries, other.store_queries );
 		add( aliens, other.aliens );
 		
-		incoming_requests += other.incoming_requests;
-		outgoing_requests += other.outgoing_requests;
+		inOut_requests[0] += other.inOut_requests[0];
+		inOut_requests[1] += other.inOut_requests[1];
 	}
 	
 	private void
@@ -163,8 +168,8 @@ DHTTransportStatsImpl
 		clone.store_queries	= store_queries.clone();
 		clone.aliens		= aliens.clone();
 		
-		clone.incoming_requests	= incoming_requests;
-		clone.outgoing_requests	= outgoing_requests;
+		clone.inOut_requests[0]	= inOut_requests[0];
+		clone.inOut_requests[1]	= inOut_requests[1];
 	}
 		// ping
 	
@@ -420,61 +425,65 @@ DHTTransportStatsImpl
 	{
 		return( data );
 	}
+
+
+	public void inOutReqsRefact(DHTUDPPacketRequest request, int inOrOut) { // in: 0, out: 1
+		byte protocol_version = request.getProtocolVersion();
+
+		if ( protocol_version >= 0 && protocol_version < inOut_request_versions[inOrOut].length ){
+
+			inOut_request_versions[inOrOut][ protocol_version ]++;
+
+			inOut_version_requests[inOrOut]++;
+
+			if ( inOut_version_requests[inOrOut]%100 == 0 ){
+
+				String	str= "";
+
+				for (int i=0;i<inOut_request_versions[inOrOut].length;i++){
+
+					long	count = inOut_request_versions[inOrOut][i];
+
+					if ( count > 0 ){
+
+						str += (str.length()==0?"":", ") + i + "=" +  count + "[" +
+								((inOut_request_versions[inOrOut][i]*100)/inOut_version_requests[inOrOut]) + "]";
+					}
+				}
+
+				System.out.println( "net " + request.getTransport().getNetwork() + ": "+(inOrOut==0?"Incoming":"Outgoing")+" versions: tot = " + inOut_requests[1] +"/" + inOut_version_requests[inOrOut] + ": " + str );
+			}
+
+			if ( inOut_version_requests[inOrOut]%1000 == 0 ){
+
+				for (int i=0;i<inOut_request_versions[inOrOut].length;i++){
+
+					inOut_request_versions[inOrOut][i] = 0;
+				}
+
+				inOut_version_requests[inOrOut]	= 0;
+			}
+		}
+	}
 	
 	protected void
 	outgoingRequestSent(
 		DHTUDPPacketRequest	request )
 	{
-		outgoing_requests++;		
+		inOut_requests[1]++;
 
 		if ( DHTLog.TRACE_VERSIONS && request != null ){
-			
-			byte protocol_version = request.getProtocolVersion();
-			
-			if ( protocol_version >= 0 && protocol_version < outgoing_request_versions.length ){
-				
-				outgoing_request_versions[ protocol_version ]++;
-				
-				outgoing_version_requests++;
-				
-				if ( outgoing_version_requests%100 == 0 ){
-					
-					String	str= "";
-					
-					for (int i=0;i<outgoing_request_versions.length;i++){
-						
-						long	count = outgoing_request_versions[i];
-						
-						if ( count > 0 ){
-							
-							str += (str.length()==0?"":", ") + i + "=" +  count + "[" +
-										((outgoing_request_versions[i]*100)/outgoing_version_requests) + "]";
-						}
-					}
-					
-					System.out.println( "net " + request.getTransport().getNetwork() + ": Outgoing versions: tot = " + outgoing_requests +"/" + outgoing_version_requests + ": " + str );
-				}
-				
-				if ( outgoing_version_requests%1000 == 0 ){
-					
-					for (int i=0;i<outgoing_request_versions.length;i++){
-						
-						outgoing_request_versions[i] = 0;
-					}
-	
-					outgoing_version_requests	= 0;
-				}
-			}
+			inOutReqsRefact(request,1);
 		}
 	}
-	
+
 	public void
 	incomingRequestReceived(
 		DHTUDPPacketRequest	request,
 		boolean				alien )
 	{
-		incoming_requests++;
-		
+		inOut_requests[0]++;
+
 		if ( alien && request != null ){
 			
 			// System.out.println( "Alien on net " + request.getNetwork() + " - sender=" + request.getAddress());
@@ -510,48 +519,12 @@ DHTTransportStatsImpl
 				aliens[AT_QUERY_STORE]++;
 			}
 		}
-		
+
 		if ( DHTLog.TRACE_VERSIONS && request != null ){
-			
-			byte protocol_version = request.getProtocolVersion();
-			
-			if ( protocol_version >= 0 && protocol_version < incoming_request_versions.length ){
-				
-				incoming_request_versions[ protocol_version ]++;
-				
-				incoming_version_requests++;
-				
-				if ( incoming_version_requests%100 == 0 ){
-					
-					String	str= "";
-					
-					for (int i=0;i<incoming_request_versions.length;i++){
-						
-						long	count = incoming_request_versions[i];
-						
-						if ( count > 0 ){
-							
-							str += (str.length()==0?"":", ") + i + "=" +  count + "[" +
-										((incoming_request_versions[i]*100)/incoming_version_requests) + "]";
-						}
-					}
-					
-					System.out.println( "net " + request.getTransport().getNetwork() + ": Incoming versions: tot = " + incoming_requests +"/" + incoming_version_requests + ": " + str );
-				}
-				
-				if ( incoming_version_requests%1000 == 0 ){
-					
-					for (int i=0;i<incoming_request_versions.length;i++){
-						
-						incoming_request_versions[i] = 0;
-					}
-	
-					incoming_version_requests	= 0;
-				}
-			}
+			inOutReqsRefact(request,0);
 		}
 	}
-	
+
 	public long[]
 	getAliens()
 	{
@@ -561,7 +534,7 @@ DHTTransportStatsImpl
 	public long
 	getIncomingRequests()
 	{
-		return( incoming_requests );
+		return inOut_requests[0];
 	}
 	
 	public void
@@ -661,7 +634,7 @@ DHTTransportStatsImpl
 				"stats:" + getString( stats ) + "," +
 				"data:" + getString( data ) + "," +
 				"kb:" + getString( key_blocks ) + "," +
-				"incoming:" + incoming_requests +"," +
+				"incoming:" + inOut_requests[0] +"," +
 				"alien:" + getString( aliens ));
 	}
 	

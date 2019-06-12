@@ -515,6 +515,31 @@ SpeedLimitHandler
 		
 		return( lines );
 	}
+
+	private String assembleLimitsString(long[] limits, String lim_str, long total_up, long total_do) {
+		long total_lim 	= limits[0];
+		long up_lim		= limits[1];
+		long down_lim	= limits[2];
+
+		if ( total_lim > 0 ){
+
+			lim_str += "Total=" + DisplayFormatters.formatByteCountToKiBEtc( total_lim ) + " " + (100*(total_up+total_do)/total_lim) + "%";
+		}
+		if ( up_lim > 0 ){
+
+			lim_str += (lim_str.length()==0?"":", ") + "Up=" + DisplayFormatters.formatByteCountToKiBEtc( up_lim ) + " " + (100*(total_up)/up_lim) + "%";
+		}
+		if ( down_lim > 0 ){
+
+			lim_str += (lim_str.length()==0?"":", ") + "Down=" + DisplayFormatters.formatByteCountToKiBEtc( down_lim ) + " " + (100*(total_do)/down_lim) + "%";
+		}
+
+		if ( lim_str.length() > 0 ){
+
+			lim_str = "\t[ Limits: " + lim_str + "]";
+		}
+		return lim_str;
+	}
 	
 	private String
 	getString(
@@ -552,27 +577,7 @@ SpeedLimitHandler
 				
 				long[] limits = net_limit.getLimits();
 				
-				long total_lim 	= limits[0];
-				long up_lim		= limits[1];
-				long down_lim	= limits[2];
-				
-				if ( total_lim > 0 ){
-					
-					lim_str += "Total=" + DisplayFormatters.formatByteCountToKiBEtc( total_lim ) + " " + (100*(total_up+total_do)/total_lim) + "%";
-				}
-				if ( up_lim > 0 ){
-					
-					lim_str += (lim_str.length()==0?"":", ") + "Up=" + DisplayFormatters.formatByteCountToKiBEtc( up_lim ) + " " + (100*(total_up)/up_lim) + "%";
-				}
-				if ( down_lim > 0 ){
-					
-					lim_str += (lim_str.length()==0?"":", ") + "Down=" + DisplayFormatters.formatByteCountToKiBEtc( down_lim ) + " " + (100*(total_do)/down_lim) + "%";
-				}
-	
-				if ( lim_str.length() > 0 ){
-					
-					lim_str = "\t[ Limits: " + lim_str + "]";
-				}
+				lim_str = assembleLimitsString(limits, lim_str, total_up, total_do);
 			}
 			
 			if ( net_limits.size() > 1 ){
@@ -630,29 +635,8 @@ SpeedLimitHandler
 		
 		String	lim_str = "";
 		
-		if ( limits != null ){
-			
-			long total_lim 	= limits[0];
-			long up_lim		= limits[1];
-			long down_lim	= limits[2];
-			
-			if ( total_lim > 0 ){
-				
-				lim_str += "Total=" + DisplayFormatters.formatByteCountToKiBEtc( total_lim ) + " " + (100*(total_up+total_do)/total_lim) + "%";
-			}
-			if ( up_lim > 0 ){
-				
-				lim_str += (lim_str.length()==0?"":", ") + "Up=" + DisplayFormatters.formatByteCountToKiBEtc( up_lim ) + " " + (100*(total_up)/up_lim) + "%";
-			}
-			if ( down_lim > 0 ){
-				
-				lim_str += (lim_str.length()==0?"":", ") + "Down=" + DisplayFormatters.formatByteCountToKiBEtc( down_lim ) + " " + (100*(total_do)/down_lim) + "%";
-			}
-
-			if ( lim_str.length() > 0 ){
-				
-				lim_str = "\t[ Limits: " + lim_str + "]";
-			}
+		if(limits != null) {
+			lim_str = assembleLimitsString(limits, lim_str, total_up, total_do);
 		}
 		
 		if ( is_rate ){
