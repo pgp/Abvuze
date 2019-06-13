@@ -30,6 +30,7 @@ import java.util.zip.GZIPOutputStream;
 import org.gudy.azureus2.core3.internat.MessageText;
 import org.gudy.azureus2.core3.torrent.*;
 import org.gudy.azureus2.core3.util.*;
+import org.gudy.azureus2.pluginsimpl.local.utils.FormattersImpl;
 
 public class 
 TOTorrentCreateImpl
@@ -39,94 +40,16 @@ TOTorrentCreateImpl
 	private static final Comparator<File> file_comparator;
 	
 	static{
-		if ( System.getProperty( "az.create.torrent.alphanumeric.sort", "0" ).equals( "1" )){
+		if(System.getProperty( "az.create.torrent.alphanumeric.sort", "0" ).equals( "1" )) {
 	
 			file_comparator = 
-				new Comparator<File>()
-				{
-					public int
-					compare(
-						File	f1,
-						File	f2 )
-					{
-						String	s1 = f1.getName();
-						String	s2 = f2.getName();
-						
-						int	l1 = s1.length();
-						int	l2 = s2.length();
-								
-						int	c1_pos	= 0;
-						int c2_pos	= 0;
-						
-						while( c1_pos < l1 && c2_pos < l2 ){
-							
-							char	c1 = s1.charAt( c1_pos++ );
-							char	c2 = s2.charAt( c2_pos++ );
-														
-							if ( Character.isDigit(c1) && Character.isDigit(c2)){
-								
-								int	n1_pos = c1_pos-1;
-								int n2_pos = c2_pos-1;
-								
-								while( c1_pos < l1 ){
-								
-									if ( !Character.isDigit( s1.charAt( c1_pos ))){
-										
-										break;
-									}
-									
-									c1_pos++;
-								}
-								
-								while(c2_pos<l2){
-								
-									if ( !Character.isDigit( s2.charAt( c2_pos ))){
-										
-										break;
-									}
-									
-									c2_pos++;
-								}
-							
-								int	n1_length = c1_pos - n1_pos;
-								int n2_length = c2_pos - n2_pos;
-																
-								if ( n1_length != n2_length ){
-									
-									return( n1_length - n2_length );
-								}
-		
-								for (int i=0;i<n1_length;i++){
-									
-									char	nc1 = s1.charAt( n1_pos++ );
-									char	nc2 = s2.charAt( n2_pos++ );
-									
-									if ( nc1 != nc2 ){
-										
-										return( nc1 - nc2 );
-									}
-								}
-							}else{
-							
-								if ( true ){
-									
-									 c1 = Character.toLowerCase( c1 );
-									 
-									 c2 = Character.toLowerCase( c2 );
-								}
-		
-								if ( c1 != c2 ){
-									
-									return( c1 - c2 );
-								}
-							}
-						}
-						
-						return( l1 - l2);
+				new Comparator<File>() {
+					public int compare(File f1, File f2 ) {
+						return FormattersImpl.compareRefact(f1.getName(),f2.getName(),true);
 					}
 				};
-		}else{
-			
+		}
+		else {
 			file_comparator = null;
 		}
 	}

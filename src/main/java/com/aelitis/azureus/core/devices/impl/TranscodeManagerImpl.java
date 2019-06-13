@@ -338,6 +338,58 @@ TranscodeManagerImpl
 			}
 		}
 	}
+
+	private void checkTagCategoryRefact(Map active_map, String target, Object tagOrCategory) {
+		String device_id = null;
+
+		if ( target.endsWith( "/blank" )){
+
+			device_id = target.substring( 0, target.length() - 6 );
+		}
+
+		DeviceMediaRenderer		target_dmr			= null;
+		TranscodeProfile		target_profile 		= null;
+
+		for ( DeviceImpl device: device_manager.getDevices()){
+
+			if ( !( device instanceof DeviceMediaRenderer )){
+
+				continue;
+			}
+
+			DeviceMediaRenderer dmr = (DeviceMediaRenderer)device;
+
+			if ( device_id != null ){
+
+				if ( device.getID().equals( device_id )){
+
+					target_dmr		 	= dmr;
+					target_profile		= device.getBlankProfile();
+
+					break;
+				}
+			}else{
+
+				TranscodeProfile[] profs = device.getTranscodeProfiles();
+
+				for ( TranscodeProfile prof: profs ){
+
+					if ( prof.getUID().equals( target )){
+
+						target_dmr	= dmr;
+						target_profile	= prof;
+
+						break;
+					}
+				}
+			}
+		}
+
+		if ( target_dmr != null ){
+
+			active_map.put( tagOrCategory, new Object[]{ target_dmr, target_profile });
+		}
+	}
 	
 	private void
 	checkCategories()
@@ -346,62 +398,9 @@ TranscodeManagerImpl
 		
 		Map<Category,Object[]> active_map = new HashMap<>();
 		
-		for ( Category cat: cats ){
-			
+		for (Category cat: cats) {
 			String target = cat.getStringAttribute( Category.AT_AUTO_TRANSCODE_TARGET );
-			
-			if ( target != null ){
-				
-				String device_id = null;
-				
-				if ( target.endsWith( "/blank" )){
-					
-					device_id = target.substring( 0, target.length() - 6 );
-				}
-				
-				DeviceMediaRenderer		target_dmr			= null;
-				TranscodeProfile		target_profile 		= null;
-				
-				for ( DeviceImpl device: device_manager.getDevices()){
-				
-					if ( !( device instanceof DeviceMediaRenderer )){
-						
-						continue;
-					}
-					
-					DeviceMediaRenderer dmr = (DeviceMediaRenderer)device;
-					
-					if ( device_id != null ){
-						
-						if ( device.getID().equals( device_id )){
-							
-							target_dmr		 	= dmr;
-							target_profile		= device.getBlankProfile();
-							
-							break;
-						}
-					}else{
-						
-						TranscodeProfile[] profs = device.getTranscodeProfiles();
-						
-						for ( TranscodeProfile prof: profs ){
-							
-							if ( prof.getUID().equals( target )){
-								
-								target_dmr	= dmr;
-								target_profile	= prof;
-								
-								break;
-							}
-						}
-					}
-				}
-			
-				if ( target_dmr != null ){
-					
-					active_map.put( cat, new Object[]{ target_dmr, target_profile });					
-				}
-			}
+			if ( target != null ) checkTagCategoryRefact(active_map,target,cat);
 		}
 		
 		Map<Category,Object[]> to_process = new HashMap<>();
@@ -644,60 +643,8 @@ TranscodeManagerImpl
 				
 				String[] target_details = tfx.getTagTranscodeTarget();
 				
-				if ( target_details != null ){
-					
-					String	target = target_details[0];
-					
-					String device_id = null;
-					
-					if ( target.endsWith( "/blank" )){
-						
-						device_id = target.substring( 0, target.length() - 6 );
-					}
-					
-					DeviceMediaRenderer		target_dmr			= null;
-					TranscodeProfile		target_profile 		= null;
-					
-					for ( DeviceImpl device: device_manager.getDevices()){
-					
-						if ( !( device instanceof DeviceMediaRenderer )){
-							
-							continue;
-						}
-						
-						DeviceMediaRenderer dmr = (DeviceMediaRenderer)device;
-						
-						if ( device_id != null ){
-							
-							if ( device.getID().equals( device_id )){
-								
-								target_dmr		 	= dmr;
-								target_profile		= device.getBlankProfile();
-								
-								break;
-							}
-						}else{
-							
-							TranscodeProfile[] profs = device.getTranscodeProfiles();
-							
-							for ( TranscodeProfile prof: profs ){
-								
-								if ( prof.getUID().equals( target )){
-									
-									target_dmr	= dmr;
-									target_profile	= prof;
-									
-									break;
-								}
-							}
-						}
-					}
-				
-					if ( target_dmr != null ){
-						
-						active_map.put( tag, new Object[]{ target_dmr, target_profile });					
-					}
-				}
+				if (target_details != null)
+				    checkTagCategoryRefact(active_map, target_details[0], tag);
 			}
 		}
 		

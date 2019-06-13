@@ -316,7 +316,44 @@ DiskManagerUtil
 		setSkippedInternal( boolean skipped );
 	}
 
-		
+	public static boolean diskManagerLinearReorderRefact(boolean[] toChange,
+														 String[] types,
+														 boolean[] toLinear,
+														 boolean[] toReorder,
+														 boolean[] linearStorageTypes,
+														 boolean[] reorderStorageTypes) {
+
+		int	num_linear 	= 0;
+		int num_reorder	= 0;
+
+		for (int i=0;i<toChange.length;i++) {
+			if ( toChange[i] ){
+				int old_type = DiskManagerUtil.convertDMStorageTypeFromString( types[i] );
+				if ( old_type == DiskManagerFileInfo.ST_COMPACT ) {
+					toLinear[i] = true;
+					num_linear++;
+				}
+				else if ( old_type == DiskManagerFileInfo.ST_REORDER_COMPACT ){
+					toReorder[i] = true;
+					num_reorder++;
+				}
+			}
+		}
+
+		if (num_linear > 0) {
+			if (!Arrays.equals(toLinear, linearStorageTypes)) {
+				return false;
+			}
+		}
+
+		if (num_reorder > 0) {
+			if (!Arrays.equals(toReorder, reorderStorageTypes)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public static DiskManagerFileInfoSet
 	getFileInfoSkeleton(
 	    final DownloadManager       download_manager,
@@ -391,49 +428,16 @@ DiskManagerUtil
 						
 		        		if (!setSkipped ){
 		    				String[] types = DiskManagerImpl.getStorageTypes(download_manager);
-	
-		    				boolean[]	toLinear 	= new boolean[toChange.length];
-		    				boolean[]	toReorder 	= new boolean[toChange.length];
-		    				
-		    				int	num_linear 	= 0;
-		    				int num_reorder	= 0;
-		    				
-		    				for ( int i=0;i<toChange.length;i++){
-		    					
-		    					if ( toChange[i] ){
-		    						
-		    						int old_type = DiskManagerUtil.convertDMStorageTypeFromString( types[i] );
-		    						
-		    						if ( old_type == DiskManagerFileInfo.ST_COMPACT ){
-		    							
-		    							toLinear[i] = true;
-		    							
-		    							num_linear++;
-		    							
-		    						}else if ( old_type == DiskManagerFileInfo.ST_REORDER_COMPACT ){
-		    							
-		    							toReorder[i] = true;
-		    							
-		    							num_reorder++;
-		    						}
-		    					}	
-		    				}
-		    				
-		    				if ( num_linear > 0 ){
-		    					
-		    					if (!Arrays.equals(toLinear, setStorageTypes(toLinear, DiskManagerFileInfo.ST_LINEAR))){
-		    						
-		    						return;
-		    					}
-		    				}
-		    			
-		    				if ( num_reorder > 0 ){
-		    					
-		    					if (!Arrays.equals(toReorder, setStorageTypes(toReorder, DiskManagerFileInfo.ST_REORDER ))){
-		    						
-		    						return;
-		    					}
-		    				}
+
+							boolean[]	toLinear 	= new boolean[toChange.length];
+							boolean[]	toReorder 	= new boolean[toChange.length];
+
+							if(!diskManagerLinearReorderRefact(toChange,
+									types,
+									toLinear,
+									toReorder,
+									setStorageTypes(toLinear, DiskManagerFileInfo.ST_LINEAR),
+									setStorageTypes(toReorder, DiskManagerFileInfo.ST_REORDER))) return;
 		        		}
 		        		
 		        		File[]	to_link = new File[res.length];

@@ -488,86 +488,36 @@ public class VersionCheckClient {
 		return( result );
 	}
 
-	public Set<String>
-	getDisabledPluginIDs()
-	{  
-		Set<String>	result = new HashSet<>();
-
-		Map m = getMostRecentVersionCheckData();
-
-		if ( m != null ){
-
-			byte[]	x = (byte[])m.get( "disabled_pids" );
-
-			if ( x != null ){
-
-				String str = new String( x );
-
-				String latest = COConfigurationManager.getStringParameter( "vc.disabled_pids.latest", "" );
-
-				if ( !str.equals( latest )){
-
-					byte[]	sig = (byte[])m.get( "disabled_pids_sig" );
-
-					if ( sig == null ){
-
-						Debug.out( "disabled plugins sig missing" );
-
-						return( result );
-					}
-
-					try{
-						AEVerifier.verifyData( str, sig );
-
-						COConfigurationManager.setParameter( "vc.disabled_pids.latest", str );
-
-					}catch( Throwable e ){
-
-						return( result );
-					}
-				}
-
-				String[] bits = str.split( "," );
-
-				for ( String b: bits ){
-
-					b = b.trim();
-
-					if ( b.length() > 0 ){
-
-						result.add( b );
-					}
-				}
-			}
-		}
-
-		return( result );
+	public Set<String> getDisabledPluginIDs() {
+		return getDisabledOrAutoinstallPluginIDs("disabled");
 	}
 
-	public Set<String>
-	getAutoInstallPluginIDs()
-	{  
+	public Set<String> getAutoInstallPluginIDs() {
+		return getDisabledOrAutoinstallPluginIDs("autoinstall");
+	}
+
+	public Set<String> getDisabledOrAutoinstallPluginIDs(String prefix) {
 		Set<String>	result = new HashSet<>();
 
 		Map m = getMostRecentVersionCheckData();
 
 		if ( m != null ){
 
-			byte[]	x = (byte[])m.get( "autoinstall_pids" );
+			byte[]	x = (byte[])m.get( prefix+"_pids" );
 
 			if ( x != null ){
 
 				String str = new String( x );
 
-				String latest = COConfigurationManager.getStringParameter( "vc.autoinstall_pids.latest", "" );
+				String latest = COConfigurationManager.getStringParameter( "vc."+prefix+"_pids.latest", "" );
 
 				if ( !str.equals( latest )){
 
-					byte[]	sig = (byte[])m.get( "autoinstall_pids_sig" );
+					byte[]	sig = (byte[])m.get( prefix+"_pids_sig" );
 
 					if ( sig == null ){
 
-						Debug.out( "autoinstall plugins sig missing" );
+						Debug.out( prefix+" plugins sig missing" );
 
 						return( result );
 					}
@@ -575,7 +525,7 @@ public class VersionCheckClient {
 					try{
 						AEVerifier.verifyData( str, sig );
 
-						COConfigurationManager.setParameter( "vc.autoinstall_pids.latest", str );
+						COConfigurationManager.setParameter( "vc."+prefix+"_pids.latest", str );
 
 					}catch( Throwable e ){
 
@@ -597,7 +547,7 @@ public class VersionCheckClient {
 			}
 		}
 
-		return( result );
+		return result;
 	}
 
 	/**
