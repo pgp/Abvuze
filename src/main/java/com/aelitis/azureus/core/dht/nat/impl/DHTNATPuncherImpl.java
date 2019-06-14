@@ -765,6 +765,61 @@ DHTNATPuncherImpl
 			pub_mon.exit();
 		}
 	}
+
+	class IntermediateDHTOpsListener implements DHTOperationListener {
+		public final byte[] publish_key;
+		private final List<DHTTransportContact>	written_to = new ArrayList<>();
+		public IntermediateDHTOpsListener(byte[] publish_key) {
+			this.publish_key = publish_key;
+		}
+
+		public void
+		searching(
+				DHTTransportContact	contact,
+				int					level,
+				int					active_searches )
+		{}
+
+		public void
+		found(
+				DHTTransportContact	contact,
+				boolean				is_closest )
+		{}
+
+		public boolean
+		diversified(
+				String		desc )
+		{
+			return( true );
+		}
+
+		public void
+		read(
+				DHTTransportContact	contact,
+				DHTTransportValue	value )
+		{}
+
+		public void
+		wrote(
+				DHTTransportContact	contact,
+				DHTTransportValue	value )
+		{
+			synchronized( written_to ){
+
+				written_to.add( contact );
+			}
+		}
+
+		public void
+		complete(
+				boolean				timeout )
+		{
+			synchronized( written_to ){
+				last_publish_key	= publish_key;
+				last_write_set		= written_to;
+			}
+		}
+	}
 		
 	protected void
 	runRendezvousSupport()
@@ -853,61 +908,11 @@ DHTNATPuncherImpl
   							final byte[] publish_key = getPublishKey( latest_local );
   							
   							dht.put(
-  									publish_key,
-  									"NAT Traversal: rendezvous publish",
-  									encodePublishValue( latest_target ),
-  									DHT.FLAG_SINGLE_VALUE,
-  									new DHTOperationListener()
-  									{
-  										private final List<DHTTransportContact>	written_to = new ArrayList<>();
-  										
-  										public void
-  										searching(
-  											DHTTransportContact	contact,
-  											int					level,
-  											int					active_searches )
-  										{}
-  										
-  										public void
-  										found(
-  											DHTTransportContact	contact,
-  											boolean				is_closest )
-  										{}
-  										
-  										public boolean
-  										diversified(
-  											String		desc )
-  										{
-  											return( true );
-  										}
-  										
-  										public void
-  										read(
-  											DHTTransportContact	contact,
-  											DHTTransportValue	value )
-  										{}
-  										
-  										public void
-  										wrote(
-  											DHTTransportContact	contact,
-  											DHTTransportValue	value )
-  										{
-  											synchronized( written_to ){
-  											
-  												written_to.add( contact );
-  											}
-  										}
-  										
-  										public void
-  										complete(
-  											boolean				timeout )
-  										{
-  											synchronized( written_to ){
-  												last_publish_key	= publish_key;
-  												last_write_set		= written_to;
-  											}
-  										}
-  									});
+									publish_key,
+									"NAT Traversal: rendezvous publish",
+									encodePublishValue(latest_target),
+									DHT.FLAG_SINGLE_VALUE,
+									new IntermediateDHTOpsListener(publish_key));
 						}
 					}
 				}else if ( current_target != latest_target ){
@@ -923,63 +928,13 @@ DHTNATPuncherImpl
  						log( "Updating publish for " + latest_local.getString() + " -> " + latest_target.getString());
 
   						final byte[] publish_key = getPublishKey( latest_local );
-  						
-  						dht.put(
-							publish_key,
-							"DHTNatPuncher: update publish",
-							encodePublishValue( latest_target ),
-							DHT.FLAG_SINGLE_VALUE,
-							new DHTOperationListener()
-							{
-								private final List<DHTTransportContact>	written_to = new ArrayList<>();
 
-								public void
-								searching(
-									DHTTransportContact	contact,
-									int					level,
-									int					active_searches )
-								{}
-								
-								public void
-								found(
-									DHTTransportContact	contact,
-									boolean				is_closest )
-								{}
-								
-								public boolean
-								diversified(
-									String		desc )
-								{
-									return( true );
-								}
-								
-								public void
-								read(
-									DHTTransportContact	contact,
-									DHTTransportValue	value )
-								{}
-								
-								public void
-								wrote(
-									DHTTransportContact	contact,
-									DHTTransportValue	value )
-								{
-									synchronized( written_to ){
-										
-										written_to.add( contact );
-									}
-								}
-								
-								public void
-								complete(
-									boolean				timeout )
-								{
-									synchronized( written_to ){
-										last_publish_key	= publish_key;
-										last_write_set		= written_to;
-									}
-								}
-							});
+						dht.put(
+								publish_key,
+								"DHTNatPuncher: update publish",
+								encodePublishValue( latest_target ),
+								DHT.FLAG_SINGLE_VALUE,
+								new IntermediateDHTOpsListener(publish_key));
 					}
 				}
 			}
