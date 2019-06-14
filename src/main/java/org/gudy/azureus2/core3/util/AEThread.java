@@ -32,7 +32,16 @@ AEThread
 	extends Thread
 {
 	private static final WeakHashMap	our_thread_map = new WeakHashMap();
-		
+
+	public static AEThread fromAERunnable(String name, boolean daemon, AERunnable r) {
+		return new AEThread(name,daemon) {
+			@Override
+			public void runSupport() {
+				r.runSupport();
+			}
+		};
+	}
+
 	public
 	AEThread(
 		String	name )

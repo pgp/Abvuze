@@ -2484,6 +2484,49 @@ DHTTrackerPlugin
 		
 		return( is_complete );
 	}
+
+	public class IntermediateDHTPluginOperationListener implements DHTPluginOperationListener {
+
+		final DHTTrackerPlugin.trackerTarget target;
+		final Download download;
+		long start;
+
+		public IntermediateDHTPluginOperationListener(DHTTrackerPlugin.trackerTarget target, Download download, long start) {
+			this.target = target;
+			this.download = download;
+			this.start = start;
+		}
+
+			public boolean diversified() {
+			return true;
+		}
+
+			public void starts(byte[] key) {}
+
+			public void
+			valueRead(
+					DHTPluginContact originator,
+					DHTPluginValue value) {}
+
+			public void
+			valueWritten(
+					DHTPluginContact target,
+					DHTPluginValue value) {}
+
+			public void
+			complete(
+			byte[] key,
+			boolean timeout_occurred) {
+			if (target.getType() == REG_TYPE_FULL) {
+
+				log(download,
+						"Unregistration of '" + target.getDesc() + "' completed (elapsed="
+								+ TimeFormatter.formatColonMillis(SystemTime.getCurrentTime() - start) + ")");
+			}
+
+			decreaseActive(download);
+		}
+	}
 	
 	protected void
 	trackerRemove(
@@ -2500,57 +2543,15 @@ DHTTrackerPlugin
 			return;
 		}
 		
-		final 	long	start = SystemTime.getCurrentTime();
-		
-		trackerTarget[] targets = details.getTargets( true );
+		final long start = SystemTime.getCurrentTime();
 
-        for (final trackerTarget target : targets) {
-
-            if (dht.hasLocalKey(target.getHash())) {
-
-                increaseActive(download);
-
-                dht.remove(
-                        target.getHash(),
-                        "Tracker dereg of '" + download.getName() + "'" + target.getDesc(),
-                        new DHTPluginOperationListener() {
-                            public boolean
-                            diversified() {
-                                return (true);
-                            }
-
-                            public void
-                            starts(
-                                    byte[] key) {
-                            }
-
-                            public void
-                            valueRead(
-                                    DHTPluginContact originator,
-                                    DHTPluginValue value) {
-                            }
-
-                            public void
-                            valueWritten(
-                                    DHTPluginContact target,
-                                    DHTPluginValue value) {
-                            }
-
-                            public void
-                            complete(
-                                    byte[] key,
-                                    boolean timeout_occurred) {
-                                if (target.getType() == REG_TYPE_FULL) {
-
-                                    log(download,
-                                            "Unregistration of '" + target.getDesc() + "' completed (elapsed="
-                                                    + TimeFormatter.formatColonMillis(SystemTime.getCurrentTime() - start) + ")");
-                                }
-
-                                decreaseActive(download);
-                            }
-                        });
-            }
+		for (trackerTarget target : details.getTargets(true)) {
+			if (dht.hasLocalKey(target.getHash())) {
+				increaseActive(download);
+				dht.remove(target.getHash(),
+						"Tracker dereg of '" + download.getName() + "'" + target.getDesc(),
+						new IntermediateDHTPluginOperationListener(target, download, start));
+			}
         }
 	}
 
@@ -2568,59 +2569,14 @@ DHTTrackerPlugin
 			
 			return;
 		}
-		
-		final 	long	start = SystemTime.getCurrentTime();
-		
-		if ( dht.hasLocalKey( target.getHash())){
-			
-			increaseActive( download );
-			
-			dht.remove( 
-					target.getHash(),
-					"Tracker dereg of '" + download.getName() + "'" + target.getDesc(),
-					new DHTPluginOperationListener()
-					{
-						public boolean
-						diversified()
-						{
-							return( true );
-						}
-						
-						public void 
-						starts(
-							byte[] 				key ) 
-						{
-						}
-						
-						public void
-						valueRead(
-							DHTPluginContact	originator,
-							DHTPluginValue		value )
-						{								
-						}
-						
-						public void
-						valueWritten(
-							DHTPluginContact	target,
-							DHTPluginValue		value )
-						{
-						}	
-	
-						public void
-						complete(
-							byte[]	key,
-							boolean	timeout_occurred )
-						{
-							if ( target.getType() == REG_TYPE_FULL ){
 
-								log( 	download,
-										"Unregistration of '" + target.getDesc() + "' completed (elapsed="
-										+ TimeFormatter.formatColonMillis(SystemTime.getCurrentTime() - start) + ")");
-							}
-							
-							decreaseActive( download );
-						}
-					});
+		final long start = SystemTime.getCurrentTime();
+
+		if (dht.hasLocalKey(target.getHash())){
+			increaseActive(download);
+			dht.remove(target.getHash(),
+					"Tracker dereg of '" + download.getName() + "'" + target.getDesc(),
+					new IntermediateDHTPluginOperationListener(target,download,start));
 		}
 	}
 	

@@ -272,6 +272,39 @@ public final class CocoaJavaBridge extends NativeInvocationBridge
         }
     }
 
+    private AERunnable getAERunnableRefact(String scriptFormat, final Object[] params) {
+        return new AERunnable() {
+            public void runSupport() {
+                try {
+                    int pool = NSAutoreleasePool_push();
+                    long start = System.currentTimeMillis();
+
+                    String src;
+                    if (params == null || params.length == 0) {
+                        src = scriptFormat;
+                    } else {
+                        src = MessageFormat.format(scriptFormat, params);
+                    }
+
+                    Debug.outNoStack("Executing: \n" + src);
+
+                    Object /*NSMutableDictionary*/ errorInfo = new_NSMutableDictionary();
+                    if (NSAppleScript_execute(new_NSAppleScript(src), errorInfo) == null) {
+                        Debug.out(String.valueOf(NSMutableDictionary_objectForKey(errorInfo, NSAppleScript_AppleScriptErrorMessage)));
+                        //logWarning(String.valueOf(errorInfo.objectForKey(NSAppleScript.AppleScriptErrorBriefMessage)));
+                    }
+
+                    Debug.outNoStack(MessageFormat.format("Elapsed time: {0}ms\n",
+                            System.currentTimeMillis() - start));
+                    NSAutoreleasePool_pop(pool);
+                } catch (Throwable t) {
+                    Debug.out(t);
+                }
+            }
+        };
+
+    }
+
     /**
      * <p>Executes a new instance of NSAppleScript in a forked AEThread</p>
      * <p>This method always returns a "true" event descriptor. Callbacks are currently unsupported
@@ -290,39 +323,9 @@ public final class CocoaJavaBridge extends NativeInvocationBridge
   protected final Object /*NSAppleEventDescriptor*/ executeScriptWithNewThread(
 		final String scriptFormat, final Object[] params) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException
   {
-		Thread worker = new AEThread("ScriptObject", true) {
-			public void runSupport() {
-				try {
-					int pool = NSAutoreleasePool_push();
-					long start = System.currentTimeMillis();
-
-					String src;
-					if (params == null || params.length == 0) {
-						src = scriptFormat;
-					} else {
-						src = MessageFormat.format(scriptFormat, params);
-					}		
-
-					Debug.outNoStack("Executing: \n" + src);
-
-					Object /*NSMutableDictionary*/ errorInfo = new_NSMutableDictionary();
-					if (NSAppleScript_execute(new_NSAppleScript(src), errorInfo) == null) {
-						Debug.out(String.valueOf(NSMutableDictionary_objectForKey(errorInfo, NSAppleScript_AppleScriptErrorMessage)));
-						//logWarning(String.valueOf(errorInfo.objectForKey(NSAppleScript.AppleScriptErrorBriefMessage)));
-					}
-
-					Debug.outNoStack(MessageFormat.format("Elapsed time: {0}ms\n",
-                            System.currentTimeMillis() - start));
-					NSAutoreleasePool_pop(pool);
-				} catch (Throwable e) {
-					Debug.out(e);
-				}
-			}
-		};
-
+        Thread worker = AEThread.fromAERunnable("ScriptObject", true,getAERunnableRefact(scriptFormat,params));
 		worker.setPriority(Thread.NORM_PRIORITY - 1);
 		worker.start();
-
 		return methNSAppleEventDescriptor_descriptorWithBoolean.invoke(null, true);
 		//return NSAppleEventDescriptor.descriptorWithBoolean(true);
 	}
@@ -344,36 +347,7 @@ public final class CocoaJavaBridge extends NativeInvocationBridge
      */
     protected final Object /*NSAppleEventDescriptor*/ executeScriptWithAsync(final String scriptFormat, final Object[] params) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException
     {
-        final AERunnable worker = new AERunnable()
-        {
-			public void runSupport() {
-				try {
-					int pool = NSAutoreleasePool_push();
-					long start = System.currentTimeMillis();
-
-					String src;
-					if (params == null || params.length == 0) {
-						src = scriptFormat;
-					} else {
-						src = MessageFormat.format(scriptFormat, params);
-					}
-
-					Debug.outNoStack("Executing: \n" + src);
-
-					Object /*NSMutableDictionary*/ errorInfo = new_NSMutableDictionary();
-					if (NSAppleScript_execute(new_NSAppleScript(src), errorInfo) == null) {
-						Debug.out(String.valueOf(NSMutableDictionary_objectForKey(errorInfo, NSAppleScript_AppleScriptErrorMessage)));
-						//logWarning(String.valueOf(errorInfo.objectForKey(NSAppleScript.AppleScriptErrorBriefMessage)));
-					}
-
-					Debug.outNoStack(MessageFormat.format("Elapsed time: {0}ms\n",
-                            System.currentTimeMillis() - start));
-					NSAutoreleasePool_pop(pool);
-				} catch (Throwable t) {
-					Debug.out(t);
-				}
-			}
-		};
+        final AERunnable worker = getAERunnableRefact(scriptFormat,params);
 
         AEThread t = new AEThread("ScriptObject", true)
         {
@@ -385,8 +359,8 @@ public final class CocoaJavaBridge extends NativeInvocationBridge
         t.setPriority(Thread.NORM_PRIORITY - 1);
         t.start();
 
-    		return methNSAppleEventDescriptor_descriptorWithBoolean.invoke(null, true);
-    		//return NSAppleEventDescriptor.descriptorWithBoolean(true);
+    	return methNSAppleEventDescriptor_descriptorWithBoolean.invoke(null, true);
+    	//return NSAppleEventDescriptor.descriptorWithBoolean(true);
     }
 
     /**

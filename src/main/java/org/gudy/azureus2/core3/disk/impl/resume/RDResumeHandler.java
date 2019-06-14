@@ -139,7 +139,64 @@ RDResumeHandler
 		
 		stopped				= true;
 	}
-	
+
+	class IntermediateDiskManagerCheckRequestListener implements DiskManagerCheckRequestListener {
+
+		final List failed_pieces;
+		final AESemaphore run_sem, pending_checks_sem;
+
+		public IntermediateDiskManagerCheckRequestListener(List failed_pieces, AESemaphore run_sem, AESemaphore pending_checks_sem) {
+			this.failed_pieces = failed_pieces;
+			this.run_sem = run_sem;
+			this.pending_checks_sem = pending_checks_sem;
+		}
+
+		public void
+		checkCompleted(
+				DiskManagerCheckRequest 	request,
+				boolean						passed )
+		{
+			if ( TEST_RECHECK_FAILURE_HANDLING && (int)(Math.random()*10) == 0 ){
+
+				disk_manager.getPiece(request.getPieceNumber()).setDone(false);
+
+				passed  = false;
+			}
+
+			if ( !passed ){
+
+				synchronized( failed_pieces ){
+
+					failed_pieces.add( request );
+				}
+			}
+
+			complete();
+		}
+
+		public void
+		checkCancelled(
+				DiskManagerCheckRequest		request )
+		{
+			complete();
+		}
+
+		public void
+		checkFailed(
+				DiskManagerCheckRequest 	request,
+				Throwable		 			cause )
+		{
+			complete();
+		}
+
+		protected void
+		complete()
+		{
+			run_sem.release();
+			pending_checks_sem.release();
+		}
+	}
+
 	public void 
 	checkAllPieces(
 		boolean newfiles ) 
@@ -407,56 +464,8 @@ RDResumeHandler
 										
 										request.setLowPriority( true );
 										
-										checker.enqueueCheckRequest(
-											request,
-											new DiskManagerCheckRequestListener()
-											{
-												public void 
-												checkCompleted( 
-													DiskManagerCheckRequest 	request,
-													boolean						passed )
-												{
-													if ( TEST_RECHECK_FAILURE_HANDLING && (int)(Math.random()*10) == 0 ){
-														
-														disk_manager.getPiece(request.getPieceNumber()).setDone(false);
-														
-														passed  = false;
-													}
-													
-													if ( !passed ){
-														
-														synchronized( failed_pieces ){
-														
-															failed_pieces.add( request );
-														}
-													}
-													
-													complete();
-												}
-												 
-												public void
-												checkCancelled(
-													DiskManagerCheckRequest		request )
-												{
-													complete();
-												}
-												
-												public void 
-												checkFailed( 
-													DiskManagerCheckRequest 	request, 
-													Throwable		 			cause )
-												{
-													complete();
-												}
-												
-												protected void
-												complete()
-												{
-													run_sem.release();
-													
-													pending_checks_sem.release();
-												}
-											});
+										checker.enqueueCheckRequest(request,
+												new IntermediateDiskManagerCheckRequestListener(failed_pieces,run_sem,pending_checks_sem));
 										
 										pending_check_num++;
 										
@@ -552,64 +561,12 @@ RDResumeHandler
 							
 						try{
 							DiskManagerCheckRequest	request = disk_manager.createCheckRequest( i, null );
-							
 							request.setLowPriority( true );
-	
-							checker.enqueueCheckRequest(
-									request, 
-									new DiskManagerCheckRequestListener()
-									{
-										public void 
-										checkCompleted( 
-											DiskManagerCheckRequest 	request,
-											boolean						passed )
-										{
-											if ( TEST_RECHECK_FAILURE_HANDLING && (int)(Math.random()*10) == 0 ){
-												
-												disk_manager.getPiece(request.getPieceNumber()).setDone(false);
-												
-												passed  = false;
-											}
-											
-											if ( !passed ){
-												
-												synchronized( failed_pieces ){
-													
-													failed_pieces.add( request );
-												}
-											}
-											
-											complete();
-										}
-										 
-										public void
-										checkCancelled(
-											DiskManagerCheckRequest		request )
-										{
-											complete();
-										}
-										
-										public void 
-										checkFailed( 
-											DiskManagerCheckRequest 	request, 
-											Throwable		 			cause )
-										{
-											complete();
-										}
-										
-										protected void
-										complete()
-										{
-											run_sem.release();
-	
-											pending_checks_sem.release();
-										}
-									});
-							
+							checker.enqueueCheckRequest(request,
+									new IntermediateDiskManagerCheckRequestListener(failed_pieces,run_sem,pending_checks_sem));
 							pending_check_num++;
-							
-						}catch( Throwable e ){
-						
+						}
+						catch( Throwable e ){
 							Debug.printStackTrace(e);
 						}
 					}
