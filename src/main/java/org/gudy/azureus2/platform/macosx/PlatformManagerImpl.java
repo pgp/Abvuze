@@ -27,10 +27,10 @@ import java.util.*;
 
 import org.gudy.azureus2.core3.config.COConfigurationManager;
 import org.gudy.azureus2.core3.config.ParameterListener;
-import org.gudy.azureus2.core3.internat.MessageText;
 import org.gudy.azureus2.core3.logging.*;
 import org.gudy.azureus2.core3.util.*;
 import org.gudy.azureus2.platform.*;
+import org.gudy.azureus2.platform.common.PlatformManagerBaseImpl;
 import org.gudy.azureus2.platform.macosx.access.jnilib.OSXAccess;
 import org.gudy.azureus2.plugins.platform.PlatformManagerException;
 
@@ -45,7 +45,7 @@ import com.aelitis.azureus.core.AzureusCoreLifecycleAdapter;
  * @version 1.0 Initial Version
  * @see PlatformManager
  */
-public class PlatformManagerImpl implements PlatformManager, AEDiagnosticsEvidenceGenerator
+public class PlatformManagerImpl extends PlatformManagerBaseImpl implements AEDiagnosticsEvidenceGenerator
 {
 	private static final LogIDs LOGID = LogIDs.CORE;
 
@@ -79,9 +79,6 @@ public class PlatformManagerImpl implements PlatformManager, AEDiagnosticsEviden
     protected static AEMonitor class_mon = new AEMonitor("PlatformManager");
     
     private static String fileBrowserName = "Finder";
-
-    //T: PlatformManagerCapabilities
-    private final HashSet capabilitySet = new HashSet();
 
     private volatile String		computer_name;
     private volatile boolean	computer_name_tried;
@@ -334,204 +331,21 @@ public class PlatformManagerImpl implements PlatformManager, AEDiagnosticsEviden
        		e.printStackTrace();
     	}
     }
-    
-	public File 
-	getVMOptionFile() 
-	
-		throws PlatformManagerException 
-	{
-		checkCapability( PlatformManagerCapabilities.AccessExplicitVMOptions );
-		
-		File local_options = checkAndGetLocalVMOptionFile();
 
-		if ( !local_options.exists()){
-			
-			try{
-				local_options.createNewFile();
-				
-			}catch( Throwable e ){
-			}
-		}
-		
-		return( local_options );
-	}
-
-  private void
-  checkCapability(
-  	PlatformManagerCapabilities capability )
-  
-  	throws PlatformManagerException
-  {
-  	if ( !hasCapability(capability)){
-  		
-  		throw( new PlatformManagerException( "Capability " + capability + " not supported" ));
-  	}
-  }
-
-	public String[]
-   	getExplicitVMOptions()
-  	          	
-     	throws PlatformManagerException
-  {
-  	checkCapability( PlatformManagerCapabilities.AccessExplicitVMOptions );
-  		
-  	
-  	File local_options = checkAndGetLocalVMOptionFile();
-  
-  	try{
-  				
-  		List<String>	list = new ArrayList<>();
-  		
-  		if ( local_options.exists()){
-
-            try (LineNumberReader lnr = new LineNumberReader(new InputStreamReader(new FileInputStream(local_options), StandardCharsets.UTF_8))) {
-                while (true) {
-
-                    String line = lnr.readLine();
-
-                    if (line == null) {
-
-                        break;
-                    }
-
-                    line = line.trim();
-
-                    if (line.length() > 0) {
-
-                        list.add(line);
-                    }
-                }
-
-            }
-  		}
-  		
-  		return( list.toArray(new String[0]));
-  				
-  	}catch( Throwable e ){
-  		
-  		throw( new PlatformManagerException( MessageText.getString( "platform.jvmopt.accesserror", new String[]{ Debug.getNestedExceptionMessage(e) } )));
-  	}
-  }
-  	 
-  public void
-  	setExplicitVMOptions(
-  		String[]		options )
-  	          	
-  		throws PlatformManagerException
- 	{
-
-  	checkCapability( PlatformManagerCapabilities.AccessExplicitVMOptions );
-
-		File local_options = checkAndGetLocalVMOptionFile();
-
-		try{							
-			if ( local_options.exists()){
-				
-				File backup = new File( local_options.getParentFile(), local_options.getName() + ".bak" );
-				
-				if ( backup.exists()){
-					
-					backup.delete();
-				}
-				
-				if ( !local_options.renameTo( backup )){
-				
-					throw( new Exception( "Failed to move " + local_options + " to " + backup ));
-				}
-				
-				boolean	ok = false;
-				
-				try{
-
-                    try (PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(local_options), StandardCharsets.UTF_8))) {
-                        for (String option : options) {
-
-                            pw.println(option);
-                        }
-
-                        ok = true;
-
-                    }
-				}finally{
-					
-					if ( !ok ){
-						
-						local_options.delete();
-						
-						backup.renameTo( local_options );
-					}
-				}
-			}					
-		}catch( Throwable e ){
-			
-			throw( new PlatformManagerException( MessageText.getString( "platform.jvmopt.accesserror", new String[]{ Debug.getNestedExceptionMessage(e) } )));
-		}
-  }
-
-	private File
-	checkAndGetLocalVMOptionFile()
-	
-		throws PlatformManagerException
-	{
-		String vendor = System.getProperty( "java.vendor", "<unknown>" );
-		
-		if ( !vendor.toLowerCase().startsWith( "sun " ) && !vendor.toLowerCase().startsWith( "oracle " )){
-			
-			throw( new PlatformManagerException( 
-						MessageText.getString( 
-							"platform.jvmopt.sunonly",
-							new String[]{ vendor })));
-		}
-		
-		File[] option_files = getJVMOptionFiles();
-		
-		if ( option_files.length != 2 ){
-			
-			throw( new PlatformManagerException( 
-					MessageText.getString( "platform.jvmopt.configerror" )));
-		}
-		
-		File shared_options = option_files[0];
-		
-		if ( shared_options.exists()){
-
-			try{
-				String s_options = FileUtil.readFileAsString( shared_options, -1 );
-	
-				if ( s_options.contains( getJVMOptionRedirect() )){
-									
-					File local_options = option_files[1];
-					
-					return( local_options );
-					
-				}else{
-					
-					throw( new PlatformManagerException( MessageText.getString( "platform.jvmopt.nolink" )));
-				}
-			}catch( Throwable e ){
-				
-				throw( new PlatformManagerException( MessageText.getString( "platform.jvmopt.accesserror", new String[]{ Debug.getNestedExceptionMessage(e) } )));
-			}
-		}else{
-			
-			throw( new PlatformManagerException( MessageText.getString( "platform.jvmopt.nolinkfile" )));
-		}			
-  }
-
-	private String
-	getJVMOptionRedirect()
+	@Override
+	protected String getJVMOptionRedirect()
 	{
 		return ("-include-options ${HOME}/Library/Application Support/"
 				+ SystemProperties.getApplicationName() + "/java.vmoptions");
 	}
 	
   private boolean hasVMOptions() {
-		File fileVMOption = FileUtil.getApplicationFile("java.vmoptions");
-		return fileVMOption.exists();
+		return FileUtil.getApplicationFile("java.vmoptions").exists();
 	}
 
-	private File[]
-	getJVMOptionFiles()
+
+	@Override
+	protected File[] getJVMOptionFiles()
 	{
 		try{
 	
@@ -1522,14 +1336,6 @@ public class PlatformManagerImpl implements PlatformManager, AEDiagnosticsEviden
     /**
      * {@inheritDoc}
      */
-    public boolean hasCapability(PlatformManagerCapabilities capability)
-    {
-        return capabilitySet.contains(capability);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public void dispose()
     {
     	try {
@@ -2068,22 +1874,6 @@ public class PlatformManagerImpl implements PlatformManager, AEDiagnosticsEviden
 			throw new PlatformManagerException("Failed to request user attention", e);
 		}
 
-	}
-
-	public Class<?>
-	loadClass(
-		ClassLoader	loader,
-		String		class_name )
-		
-		throws PlatformManagerException
-	{
-		try{
-			return( loader.loadClass( class_name ));
-			
-		}catch( Throwable e ){
-			
-			throw( new PlatformManagerException( "load of '" + class_name + "' failed", e ));
-		}
 	}
 	
 	public static void
