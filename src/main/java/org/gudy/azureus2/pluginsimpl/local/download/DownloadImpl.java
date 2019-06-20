@@ -1461,6 +1461,36 @@ DownloadImpl
 		
 		return( name );
 	}
+
+	public int[] announceResponseRefact(String class_name, int seeds, int leechers) {
+		peer_listeners_mon.enter();
+
+		if ( announce_response_map == null ){
+
+			announce_response_map = new HashMap<>();
+
+		}else{
+
+			if ( announce_response_map.size() > 32 ){
+
+				Debug.out( "eh?" );
+
+				announce_response_map.clear();
+			}
+		}
+
+		int[] data = announce_response_map.get( class_name );
+
+		if (data == null) {
+			data = new int[4];
+			announce_response_map.put( class_name, data );
+		}
+
+		data[0]	= seeds;
+		data[1]	= leechers;
+
+		return data;
+	}
 	
 	public void
 	setAnnounceResult(
@@ -1478,33 +1508,7 @@ DownloadImpl
 			int	peer_count = peers==null?0:peers.length;
 			
 			try{
-				peer_listeners_mon.enter();
-				
-				if ( announce_response_map == null ){
-					
-					announce_response_map = new HashMap<>();
-					
-				}else{
-					
-					if ( announce_response_map.size() > 32 ){
-						
-						Debug.out( "eh?" );
-						
-						announce_response_map.clear();
-					}
-				}
-				
-				int[]	data = announce_response_map.get( class_name );
-				
-				if ( data == null ){
-					
-					data = new int[4];
-					
-					announce_response_map.put( class_name, data );
-				}
-				
-				data[0]	= seeds;
-				data[1]	= leechers;
+				int[] data = announceResponseRefact(class_name, seeds, leechers);
 				data[2]	= peer_count;
 				data[3] = (int)(SystemTime.getCurrentTime()/1000);
 				
@@ -1529,33 +1533,7 @@ DownloadImpl
 			int	leechers 	= result.getNonSeedCount();
 					
 			try{
-				peer_listeners_mon.enter();
-				
-				if ( announce_response_map == null ){
-					
-					announce_response_map = new HashMap<>();
-					
-				}else{
-					
-					if ( announce_response_map.size() > 32 ){
-						
-						Debug.out( "eh?" );
-						
-						announce_response_map.clear();
-					}
-				}
-				
-				int[]	data = announce_response_map.get( class_name );
-				
-				if ( data == null ){
-					
-					data = new int[4];
-					
-					announce_response_map.put( class_name, data );
-				}
-				
-				data[0]	= seeds;
-				data[1]	= leechers;
+				int[] data = announceResponseRefact(class_name,seeds,leechers);
 				data[3] = (int)(SystemTime.getCurrentTime()/1000);
 			}finally{
 				

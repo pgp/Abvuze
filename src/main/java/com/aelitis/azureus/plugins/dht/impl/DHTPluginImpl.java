@@ -985,6 +985,80 @@ for (Download download : downloads) {
 						}
 					});
 	}
+
+	public DHTOperationListener getDefaultDHTOpsListener(DHTPluginOperationListener listener, byte[] key) {
+		return new DHTOperationListener() {
+			private boolean started;
+
+			public void
+			searching(
+					DHTTransportContact	contact,
+					int					level,
+					int					active_searches )
+			{
+				if ( listener != null ){
+
+					synchronized( this ){
+
+						if ( started ){
+
+							return;
+						}
+
+						started = true;
+					}
+
+					listener.starts( key );
+				}
+			}
+
+			public void
+			found(
+					DHTTransportContact	contact,
+					boolean				is_closest )
+			{
+			}
+
+			public boolean
+			diversified(
+					String		desc )
+			{
+				return( true );
+			}
+
+			public void
+			read(
+					DHTTransportContact	contact,
+					DHTTransportValue	value )
+			{
+				// log.log( "Remove: read " + value.getString() + " from " + contact.getString());
+			}
+
+			public void
+			wrote(
+					DHTTransportContact	contact,
+					DHTTransportValue	value )
+			{
+				// log.log( "Remove: wrote " + value.getString() + " to " + contact.getString());
+				if ( listener != null ){
+
+					listener.valueWritten( new DHTPluginContactImpl( DHTPluginImpl.this, contact ), mapValue( value ));
+				}
+			}
+
+			public void
+			complete(
+					boolean				timeout )
+			{
+				// log.log( "Remove: complete, timeout = " + timeout );
+
+				if ( listener != null ){
+
+					listener.complete( key, timeout );
+				}
+			}
+		};
+	}
 	
 	public void
 	remove(
@@ -992,80 +1066,7 @@ for (Download download : downloads) {
 		final String						description,
 		final DHTPluginOperationListener	listener )
 	{
-		dht.remove( 	key,
-						description,
-						new DHTOperationListener()
-						{
-							private boolean started;
-							
-							public void
-							searching(
-								DHTTransportContact	contact,
-								int					level,
-								int					active_searches )
-							{
-								if ( listener != null ){
-									
-									synchronized( this ){
-										
-										if ( started ){
-											
-											return;
-										}
-										
-										started = true;
-									}
-									
-									listener.starts( key );
-								}							
-							}
-		
-							public void
-							found(
-								DHTTransportContact	contact,
-								boolean				is_closest )
-							{
-							}
-
-							public boolean
-							diversified(
-								String		desc )
-							{
-								return( true );
-							}
-							
-							public void
-							read(
-								DHTTransportContact	contact,
-								DHTTransportValue	value )
-							{
-								// log.log( "Remove: read " + value.getString() + " from " + contact.getString());
-							}
-							
-							public void
-							wrote(
-								DHTTransportContact	contact,
-								DHTTransportValue	value )
-							{
-								// log.log( "Remove: wrote " + value.getString() + " to " + contact.getString());
-								if ( listener != null ){
-									
-									listener.valueWritten( new DHTPluginContactImpl( DHTPluginImpl.this, contact ), mapValue( value ));
-								}
-							}
-							
-							public void
-							complete(
-								boolean				timeout )
-							{
-								// log.log( "Remove: complete, timeout = " + timeout );
-							
-								if ( listener != null ){
-								
-									listener.complete( key, timeout );
-								}
-							}			
-						});
+		dht.remove(key,description,getDefaultDHTOpsListener(listener, key));
 	}
 	
 	public void
@@ -1082,81 +1083,7 @@ for (Download download : downloads) {
 			t_contacts[i] = ((DHTPluginContactImpl)targets[i]).getContact();
 		}
 		
-		dht.remove( 	t_contacts,
-						key,
-						description,
-						new DHTOperationListener()
-						{
-							private boolean started;
-							
-							public void
-							searching(
-								DHTTransportContact	contact,
-								int					level,
-								int					active_searches )
-							{
-								if ( listener != null ){
-									
-									synchronized( this ){
-										
-										if ( started ){
-											
-											return;
-										}
-										
-										started = true;
-									}
-									
-									listener.starts( key );
-								}
-							}
-							
-							public void
-							found(
-								DHTTransportContact	contact,
-								boolean				is_closest )
-							{
-							}
-
-							public boolean
-							diversified(
-								String		desc )
-							{
-								return( true );
-							}
-							
-							public void
-							read(
-								DHTTransportContact	contact,
-								DHTTransportValue	value )
-							{
-								// log.log( "Remove: read " + value.getString() + " from " + contact.getString());
-							}
-							
-							public void
-							wrote(
-								DHTTransportContact	contact,
-								DHTTransportValue	value )
-							{
-								// log.log( "Remove: wrote " + value.getString() + " to " + contact.getString());
-								if ( listener != null ){
-									
-									listener.valueWritten( new DHTPluginContactImpl( DHTPluginImpl.this, contact ), mapValue( value ));
-								}
-							}
-							
-							public void
-							complete(
-								boolean				timeout )
-							{
-								// log.log( "Remove: complete, timeout = " + timeout );
-							
-								if ( listener != null ){
-								
-									listener.complete( key, timeout );
-								}
-							}			
-						});
+		dht.remove(t_contacts, key, description, getDefaultDHTOpsListener(listener, key));
 	}
 	
 	public DHTPluginContact

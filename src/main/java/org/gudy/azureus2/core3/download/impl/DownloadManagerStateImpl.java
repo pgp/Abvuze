@@ -1499,25 +1499,29 @@ DownloadManagerStateImpl
 		
 		setListAttribute( AT_NETWORKS, l );
 	}
+
+	private void setItemEnabled(String itemType, String itemContent, boolean enabled) {
+		List values = getListAttributeSupport( itemType );
+		boolean alreadyEnabled = values.contains(itemContent);
+		List l = new ArrayList();
+
+		if(enabled && !alreadyEnabled) {
+			l.addAll(values);
+			l.add(itemContent);
+			setListAttribute( itemType, l );
+		}
+		if(!enabled && alreadyEnabled) {
+			l.addAll(values);
+			l.remove(itemContent);
+			setListAttribute( itemType, l );
+		}
+	}
 	
 	  public void 
 	  setNetworkEnabled(
 	      String network,
 	      boolean enabled) {
-	    List	values = getListAttributeSupport( AT_NETWORKS );
-	    boolean alreadyEnabled = values.contains(network);
-	    List	l = new ArrayList();
-	    	  
-	    if(enabled && !alreadyEnabled) {
-            l.addAll(values);
-	        l.add(network);
-	        setListAttribute( AT_NETWORKS, l );
-	    }
-	    if(!enabled && alreadyEnabled) {
-	        l.addAll(values);
-	      	l.remove(network);
-	        setListAttribute( AT_NETWORKS, l );
-	    }
+		setItemEnabled(AT_NETWORKS,network,enabled);
 	  }
 	
 		// peer sources
@@ -1672,27 +1676,9 @@ DownloadManagerStateImpl
 	      String source,
 	      boolean enabled ) 
 	  {
-		  if ( enabled && !isPeerSourcePermitted( source )){
-			  
+		  if ( enabled && !isPeerSourcePermitted( source ))
 			  return;
-		  }
-		  
-		  List	values = getListAttributeSupport( AT_PEER_SOURCES );
-		  
-		  boolean alreadyEnabled = values.contains(source);
-		  
-		  List	l = new ArrayList();
-  	  
-		  if(enabled && !alreadyEnabled) {
-		  	l.addAll(values);
-		    l.add(source);
-		    setListAttribute( AT_PEER_SOURCES, l );
-		  }
-		  if(!enabled && alreadyEnabled) {
-		  	l.addAll(values);
-		    l.remove(source);
-		    setListAttribute( AT_PEER_SOURCES, l );
-		  }
+		  setItemEnabled(AT_PEER_SOURCES,source,enabled);
 	  }
 			
 	  
