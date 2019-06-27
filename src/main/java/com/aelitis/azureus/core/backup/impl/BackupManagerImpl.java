@@ -826,64 +826,60 @@ BackupManagerImpl
 					
 					throw( new Exception( "Failed to create '" + backup_folder.getAbsolutePath() + "'" ));
 				}
-				
-				listener.reportProgress( "Syncing current state" );
-							
-				core.saveState();
-								
-				try{					
-					listener.reportProgress( "Reading configuration data from " + user_dir.getAbsolutePath());
-					
-					File[] user_files = user_dir.listFiles();
-					
-					for ( File f: user_files ){
-						
-						checkClosing();
 
-						String	name = f.getName();
-						
-						if ( f.isDirectory()){
-						
-							if ( 	name.equals( "cache" ) ||
-									name.equals( "tmp" ) ||
-									name.equals( "logs" ) ||
-									name.equals( "updates" ) ||
-									name.equals( "debug")){
-								
-								continue;
-							}
-						}else if ( 	name.equals( ".lock" ) ||
-									name.equals( ".azlock" ) ||
-									name.equals( "update.properties" ) ||								
-									name.endsWith( ".log" )){
-							
+				listener.reportProgress( "Syncing current state" );
+
+				core.saveState();
+
+
+				listener.reportProgress( "Reading configuration data from " + user_dir.getAbsolutePath());
+
+				File[] user_files = user_dir.listFiles();
+
+				for ( File f: user_files ){
+
+					checkClosing();
+
+					String	name = f.getName();
+
+					if ( f.isDirectory()){
+
+						if ( 	name.equals( "cache" ) ||
+								name.equals( "tmp" ) ||
+								name.equals( "logs" ) ||
+								name.equals( "updates" ) ||
+								name.equals( "debug")){
+
 							continue;
 						}
-						
-						File	dest_file = new File( backup_folder, name );
-						
-						listener.reportProgress( "Copying '" + name  + "' ..." );
-						
-						long[]	result = copyFiles( f, dest_file );
-						
-						String	result_str = DisplayFormatters.formatByteCountToKiBEtc( result[1] );
-						
-						if ( result[0] > 1 ){
-							
-							result_str = result[0] + " files, " + result_str;
-						}
-						
-						listener.reportProgress( result_str );
-					}
-										
-					listener.reportComplete();
-					
-					ok	= true;
+					}else if ( 	name.equals( ".lock" ) ||
+							name.equals( ".azlock" ) ||
+							name.equals( "update.properties" ) ||
+							name.endsWith( ".log" )){
 
-				}catch( Throwable e ){
-					
-					throw( e );
+						continue;
+					}
+
+					File	dest_file = new File( backup_folder, name );
+
+					listener.reportProgress( "Copying '" + name  + "' ..." );
+
+					long[]	result = copyFiles( f, dest_file );
+
+					String	result_str = DisplayFormatters.formatByteCountToKiBEtc( result[1] );
+
+					if ( result[0] > 1 ){
+
+						result_str = result[0] + " files, " + result_str;
+					}
+
+					listener.reportProgress( result_str );
 				}
+
+				listener.reportComplete();
+
+				ok	= true;
+
 			}finally{
 				
 				if ( !ok ){
