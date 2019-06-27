@@ -2,6 +2,7 @@ package com.aelitis.azureus.core.util.dns;
 
 import com.aelitis.azureus.core.util.DNSUtils;
 import it.pgp.misc.Utils;
+import org.gudy.azureus2.core3.util.Constants;
 import org.xbill.DNS.*;
 
 import java.net.Inet6Address;
@@ -11,6 +12,14 @@ import java.util.*;
 
 // TODO check special characters against DNSUtilsImpl, find domain with suitable TXT records
 public class DNSJavaImpl implements DNSUtils.DNSUtilsIntf {
+
+    public static final String dnsServer = Constants.isAndroid?"8.8.8.8":null;
+
+    public static Lookup getLookup(String name, int type) throws UnknownHostException, TextParseException {
+        Lookup l = new Lookup(name,type);
+        l.setResolver(new SimpleResolver(dnsServer));
+        return l;
+    }
 
     private static final Map<String, String> test_records = Utils.typedMapOf(
             "test1.test.null", "BITTORRENT DENY ALL",
@@ -32,13 +41,13 @@ public class DNSJavaImpl implements DNSUtils.DNSUtilsIntf {
     public List<Inet6Address> getAllIPV6ByName(String host) throws UnknownHostException{
         List<Inet6Address> ret = new ArrayList<>();
         try {
-            Record[] recordsV6 = new Lookup(host, Type.AAAA).run();
+            Record[] recordsV6 = getLookup(host, Type.AAAA).run();
             if(recordsV6!=null)
                 for (Record record : recordsV6) {
                     AAAARecord a = (AAAARecord) record;
                     ret.add((Inet6Address) a.getAddress());
                 }
-        } catch (TextParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         if(ret.size()==0) throw new UnknownHostException(host);
@@ -55,8 +64,8 @@ public class DNSJavaImpl implements DNSUtils.DNSUtilsIntf {
     public List<InetAddress> getAllByName(String host) throws UnknownHostException {
         List<InetAddress> ret = new ArrayList<>();
         try {
-            Record[] records = new Lookup(host, Type.A).run();
-            Record[] recordsV6 = new Lookup(host, Type.AAAA).run();
+            Record[] records = getLookup(host, Type.A).run();
+            Record[] recordsV6 = getLookup(host, Type.AAAA).run();
             if(records!=null)
                 for (Record record : records) {
                     ARecord a = (ARecord) record;
@@ -67,7 +76,7 @@ public class DNSJavaImpl implements DNSUtils.DNSUtilsIntf {
                     AAAARecord a = (AAAARecord) record;
                     ret.add(a.getAddress());
                 }
-        } catch (TextParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         if(ret.size()==0) throw new UnknownHostException(host);
@@ -88,14 +97,14 @@ public class DNSJavaImpl implements DNSUtils.DNSUtilsIntf {
 
         List<String> ret = new ArrayList<>();
         try {
-            Record[] records = new Lookup(query, Type.TXT).run();
+            Record[] records = getLookup(query, Type.TXT).run();
             if(records!=null)
                 for (Record record : records) {
                     TXTRecord txt = (TXTRecord) record;
                     ret.addAll(txt.getStrings());
                 }
         }
-        catch (TextParseException e) {
+        catch (Exception e) {
             e.printStackTrace();
         }
         return ret;
