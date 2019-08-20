@@ -70,8 +70,9 @@ LocalActivityManager
 				public void vuzeNewsEntriesAdded(VuzeActivitiesEntry[] entries) {
 					boolean	local_added = false;
 					for ( VuzeActivitiesEntry entry: entries ){
-						if ( entry.getTypeID().equals( VuzeActivitiesConstants.TYPEID_LOCALNEWS )){
+						if (entry.getTypeID().equals(VuzeActivitiesConstants.TYPEID_LOCALNEWS)) {
 							local_added = true;
+							break;
 						}
 					}
 					// EDITED BY PGP

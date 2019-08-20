@@ -16,8 +16,6 @@
  */
 package org.gudy.azureus2.core3.disk.impl;
 
-import java.util.Arrays;
-
 import org.gudy.azureus2.core3.disk.DiskManagerFileInfo;
 import org.gudy.azureus2.core3.disk.DiskManagerFileInfoSet;
 import org.gudy.azureus2.core3.download.DownloadManagerState;

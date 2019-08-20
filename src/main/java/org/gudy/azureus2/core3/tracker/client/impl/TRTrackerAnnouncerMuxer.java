@@ -145,10 +145,9 @@ TRTrackerAnnouncerMuxer
 							boolean	match = false;
 							
 							for ( String net2: networks ){
-								
-								if (Objects.equals(net1,net2)){
-									
+								if (Objects.equals(net1, net2)) {
 									match = true;
+									break;
 								}
 							}
 							

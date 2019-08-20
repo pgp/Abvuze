@@ -587,7 +587,7 @@ PairingManagerImpl
 				
 				for ( Map m: list ){
 					
-					PairedNodeImpl node = new PairedNodeImpl( m );
+					PairedNodeImpl node = new PairedNodeImpl(m);
 							
 					if ( my_ac == null || !my_ac.equals( node.getAccessCode())){
 					
@@ -2251,10 +2251,7 @@ PairingManagerImpl
 		}
 	}
 	
-	private class
-	PairedNodeImpl
-		implements PairedNode
-	{
+	private static class PairedNodeImpl implements PairedNode {
 		private final Map		map;
 		
 		protected

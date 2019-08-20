@@ -190,11 +190,11 @@ PluginInterfaceImpl
 	    		  if ( jar != null ){
 	    			  
 	    			  for ( File file: _verified_files ){
-	    				  
-	    				  if ( file.equals( jar )){
-	    					
-	    					  verified = true;
-	    				  }
+
+						  if (file.equals(jar)) {
+							  verified = true;
+							  break;
+						  }
 	    			  }
 	    		  }
 		      }

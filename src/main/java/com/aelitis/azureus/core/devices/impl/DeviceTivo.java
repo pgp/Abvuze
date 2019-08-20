@@ -440,14 +440,13 @@ DeviceTivo
 
 						String[]	cats 	= file.getCategories();
 						String[]	tags	= file.getTags( true );
-						
-						for ( String[] strs: new String[][]{ cats,tags }){
-						
-							for ( String c: strs ){
-								
-								if ( c.equals( category_or_tag )){
-									
+
+						outerLoop:
+						for ( String[] strs: new String[][]{ cats,tags }) {
+							for ( String c: strs ) {
+								if ( c.equals( category_or_tag )) {
 									hit = true;
+									break outerLoop;
 								}
 							}
 						}

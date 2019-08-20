@@ -1520,10 +1520,9 @@ for (Object ip1 : ips) {
 		boolean	ok = false;
 		
 		for ( String net: networks ){
-			
-			if (AENetworkClassifier.AT_PUBLIC.equals(net)){
-				
+			if (AENetworkClassifier.AT_PUBLIC.equals(net)) {
 				ok = true;
+				break;
 			}
 		}
 		

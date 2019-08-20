@@ -1215,9 +1215,7 @@ DHTTransferHandler
 	 * @created Jan 13, 2017
 	 *
 	 */
-	private final class DHTTransportProgressListenerTRACE
-		implements DHTTransportProgressListener
-	{
+	private static final class DHTTransportProgressListenerTRACE implements DHTTransportProgressListener {
 		private String prefix;
 
 		public DHTTransportProgressListenerTRACE(String prefix) {

@@ -205,9 +205,9 @@ TransportHelperFilterStream
 				
 				for (int j=i+1;j<array_offset+length;j++){
 
-					if ( buffers[j].hasRemaining()){
-						
+					if (buffers[j].hasRemaining()) {
 						partial_write = true;
+						break;
 					}
 				}
 				

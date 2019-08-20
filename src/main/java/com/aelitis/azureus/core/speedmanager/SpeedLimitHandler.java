@@ -2979,16 +2979,15 @@ SpeedLimitHandler
 					
 					continue;
 				}
-				
-				if (	rule.from_mins <= min_of_day &&
-						rule.to_mins >= min_of_day ){
-					
+
+				if (rule.from_mins <= min_of_day && rule.to_mins >= min_of_day) {
 					latest_match = main_rule;
+					break;
 				}
 			}
 		}
 		
-		return( latest_match );
+		return latest_match;
 	}
 	
 	private void
