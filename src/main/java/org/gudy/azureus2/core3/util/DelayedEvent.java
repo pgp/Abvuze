@@ -43,11 +43,8 @@ DelayedEvent
 							perform(
 								TimerEvent	event )
 							{
-								try{
-									target.run();
-								}finally{									
-								}
-							}					
+								target.run();
+							}
 						});
 	}
 	

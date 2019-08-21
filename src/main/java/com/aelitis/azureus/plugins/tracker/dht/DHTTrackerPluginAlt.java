@@ -707,9 +707,6 @@ DHTTrackerPluginAlt
 				
 					setFailed();
 				}
-			}finally{
-				
-				// log();
 			}
 		}
 		

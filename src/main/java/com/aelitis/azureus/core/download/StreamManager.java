@@ -673,8 +673,6 @@ StreamManager
 						
 						throw( new Exception( "Media analysis failed", e ));
 						
-					}finally{
-						
 					}
 				}else{
 						

@@ -66,12 +66,7 @@ AEMonitor2
 	public void
 	exit()
 	{
-		try{			
-			lock.unlock();
-			
-		}finally{
-
-		}
+		lock.unlock();
 	}
 	
 	public boolean
