@@ -274,7 +274,7 @@ QTFastStartRAF
 			ah.buffer[offsetIdx] = (byte)((currentOffset >> 24) & 0xFF);
 			ah.buffer[offsetIdx + 1] = (byte)((currentOffset >> 16) & 0xFF);
 			ah.buffer[offsetIdx + 2] = (byte)((currentOffset >>  8) & 0xFF);
-			ah.buffer[offsetIdx + 3] = (byte)((currentOffset >>  0) & 0xFF);
+			ah.buffer[offsetIdx + 3] = (byte)(currentOffset & 0xFF);
 		}
 		
 		return stcoSize;
@@ -295,7 +295,7 @@ QTFastStartRAF
 			ah.buffer[offsetIdx + 4] = (byte)((currentOffset >> 24) & 0xFF);
 			ah.buffer[offsetIdx + 5] = (byte)((currentOffset >> 16) & 0xFF);
 			ah.buffer[offsetIdx + 6] = (byte)((currentOffset >>  8) & 0xFF);
-			ah.buffer[offsetIdx + 7] = (byte)((currentOffset >>  0) & 0xFF);
+			ah.buffer[offsetIdx + 7] = (byte)(currentOffset & 0xFF);
 		}
 		
 		return co64Size;

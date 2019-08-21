@@ -733,7 +733,7 @@ DiskManagerFileInfoDelegate
 						return ((readBuffer[0] << 24) + 
 								((readBuffer[1]&0xff) << 16) + 
 								((readBuffer[2]&0xff) << 8) + 
-								((readBuffer[3]&0xff) << 0));
+								((readBuffer[3] & 0xff)));
 					}
 					
 					public long
@@ -752,7 +752,7 @@ DiskManagerFileInfoDelegate
 					                ((long)(readBuffer[4]&0xff) << 24) +
 					                ((readBuffer[5]&0xff) << 16) +
 					                ((readBuffer[6]&0xff) <<  8) +
-					                ((readBuffer[7]&0xff) <<  0));					
+					                ((readBuffer[7] & 0xff)));
 					}
 					
 					public void

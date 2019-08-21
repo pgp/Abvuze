@@ -47,10 +47,10 @@ public class PingSourceStats
     }
 
     public void addPingTime(int ping){
-        currPing = (double) ping;
-        shortTerm.update( (double)ping );
-        medTerm.update( (double)ping );
-        longTerm.update( (double)ping );
+        currPing = ping;
+        shortTerm.update(ping);
+        medTerm.update(ping);
+        longTerm.update(ping);
     }
 
     /**

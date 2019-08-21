@@ -185,7 +185,7 @@ XUXmlWriter
 		
 		for ( int i=0;i<chars.length;i++){
 			
-			int	c = (int)chars[i];
+			int	c = chars[i];
 			
 			if (	( c <= 31 ) ||
 					( c >= 127 && c <= 159 ) ||

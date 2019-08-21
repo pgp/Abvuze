@@ -456,7 +456,7 @@ public class NatPMPDeviceImpl implements NatPMPDevice
     public byte[] shortToByteArray(short v) {
         byte[] b = new byte[2];
         b[0] = (byte) ( 0xFF & (v >> 8) );
-        b[1] = (byte) ( 0xFF & (v >> 0) );
+        b[1] = (byte) ( 0xFF & v );
         
         return b;
     }

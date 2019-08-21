@@ -218,11 +218,9 @@ RandomUtils
         return RANDOM.nextLong();
     }
        
-    public static long nextLong( long n )
-    {
-    	if ( n > Integer.MAX_VALUE ){
-    		    		
-    		while( true ){
+    public static long nextLong( long n ) {
+    	if (n > Integer.MAX_VALUE) {
+    		for(;;) {
     			
     			long rand 	= nextAbsoluteLong();
     			
@@ -237,7 +235,7 @@ RandomUtils
     		}
     	}
     	
-        return((long)RANDOM.nextInt((int)n));
+        return RANDOM.nextInt((int)n);
     }
        
     

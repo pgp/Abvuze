@@ -894,7 +894,7 @@ DiskManagerImpl
         			
         			for ( char c: chars ){
         				
-        				int	i_c = (int)c;
+        				int	i_c = c;
         				
         				if ( i_c >= 0 && i_c < 32 ){
         					

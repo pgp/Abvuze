@@ -72,7 +72,7 @@ public abstract class CRCedChunk extends Chunk{
 	     int n, k;
 	   
 	     for (n = 0; n < 256; n++) {
-	       c = (long) n;
+	       c = n;
 	       for (k = 0; k < 8; k++) {
 	         if ((c & 1) != 0)
 	           c = 0x0edb88320L ^ ((c >> 1) & 0x0FFFFFFFF);

@@ -251,7 +251,7 @@ public class ByteFormatter
       (byte)(v >>> 24),
       (byte)(v >>> 16),
       (byte)(v >>>  8),
-      (byte)(v >>>  0)});  
+      (byte) v });
   }
   
   public static byte[]
@@ -266,6 +266,6 @@ public class ByteFormatter
 		  (byte)(v >>> 24),
 		  (byte)(v >>> 16),
 		  (byte)(v >>>  8),
-		  (byte)(v >>>  0)});  
+		  (byte) v });
   }
 }

@@ -608,14 +608,11 @@ DHTTransportStatsImpl
 				
 			}else{
 				
-				long	total = 0;
+				long total = 0;
 				
-				for (int i=start;i<end;i++){
-					
-					total += (long)values[i];
-				}
+				for (int i=start;i<end;i++) total += values[i];
 				
-				last_skew_average 		= total / entries;
+				last_skew_average = total / entries;
 			}
 			
 			last_skew_average_time	= now;

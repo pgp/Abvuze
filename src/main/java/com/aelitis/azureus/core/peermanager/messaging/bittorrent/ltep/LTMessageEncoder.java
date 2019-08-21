@@ -95,7 +95,7 @@ public class LTMessageEncoder implements MessageStreamEncoder {
                 } else if (ext_value_obj instanceof byte[]) {
                     byte[] ext_value_bytes = (byte[]) ext_value_obj;
                     if (ext_value_bytes.length == 1) {
-                        ext_value = (int) ext_value_bytes[0];
+                        ext_value = ext_value_bytes[0];
                     } else {
                         throw new RuntimeException("extension id byte array format length != 1: " + ext_value_bytes.length);
                     }
