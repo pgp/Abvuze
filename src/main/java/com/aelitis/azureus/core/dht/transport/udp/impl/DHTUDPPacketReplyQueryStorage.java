@@ -72,7 +72,7 @@ DHTUDPPacketReplyQueryStorage
 
 			header_length = is.readByte()&0xff;
 			
-			byte[]	bitmap = new byte[size+7/8];
+			byte[]	bitmap = new byte[size];
 
 			is.read( bitmap );
 			
@@ -121,7 +121,7 @@ DHTUDPPacketReplyQueryStorage
 			
 			os.writeByte( header_length );
 			
-			byte[]	bitmap = new byte[size+7/8];
+			byte[] bitmap = new byte[size];
 			
 			int	bitmap_pos		= 0;
 			int	current_byte	= 0;
