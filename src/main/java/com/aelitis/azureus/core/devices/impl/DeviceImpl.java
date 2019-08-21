@@ -162,24 +162,15 @@ DeviceImpl
 	modifyDeviceDisplayName(
 		String		name )
 	{
-		for ( Pattern p: device_renames ){
-		
+		for(Pattern p: device_renames) {
 			Matcher m = p.matcher( name );
-		
-			if ( m.find()){
-			
-				String	new_name = m.group(1);
-								
-				return( new_name );
-			}
+			if(m.find()) return m.group(1);
 		}
 	
-		if ( name.startsWith( "WDTVLIVE")){
-			
+		if(name.startsWith( "WDTVLIVE"))
 			name = "WD TV Live";
-		}
 		
-		return( name );
+		return name;
 	}
 	
 	private static final String PP_REND_WORK_DIR		= "tt_work_dir"; 
@@ -1329,9 +1320,7 @@ DeviceImpl
 		
 		TranscodeManagerImpl tm = dm.getTranscodeManager();
 
-		TranscodeProfile profile = tm.getProfileFromUID( uid );
-
-        return profile;
+		return tm.getProfileFromUID(uid);
     }
 	
 	public void

@@ -312,12 +312,10 @@ public class DownloadManagerDefaultPaths extends DownloadManagerMoveHandlerUtils
 	
 			TransferSpecification trans = new TransferSpecification();
 
-			MovementInformation tag_mi = new MovementInformation(source, dest, trans, "Tag Move on Completion");
-			
-	    	return( tag_mi );
+			return new MovementInformation(source, dest, trans, "Tag Move on Completion");
 		}
 		
-		return( def_mi );
+		return def_mi;
     }
     
     private interface ContextDescriptor {

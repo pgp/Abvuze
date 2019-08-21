@@ -877,10 +877,8 @@ DirectByteBufferPoolReal
 
 				}
 			}
-			
-			sliceDBB dbb = new sliceDBB( _allocator, sb );
 
-			return( dbb );
+			return new sliceDBB(_allocator, sb);
 		}
 	}
 	

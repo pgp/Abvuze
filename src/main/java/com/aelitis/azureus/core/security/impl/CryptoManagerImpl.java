@@ -355,9 +355,7 @@ CryptoManagerImpl
 			COConfigurationManager.setParameter( persist_pw_key_type, pw_type );
 			COConfigurationManager.setParameter( persist_pw_key, encoded_pw );
 
-			passwordDetails	result = new passwordDetails( encoded_pw.toCharArray(), pw_type );
-
-			return( result );
+			return new passwordDetails(encoded_pw.toCharArray(), pw_type);
 			
 		}catch( Throwable e ){
 		

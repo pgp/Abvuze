@@ -1760,13 +1760,11 @@ DHTPluginStorageManager
 		protected int
 		getCreated()
 		{
-			int	created = 
-					(request[4]<<24)&0xff000000 | 
-					(request[5]<<16)&0x00ff0000 | 
-					(request[6]<< 8)&0x0000ff00 | 
-					 request[7]     &0x000000ff;
-						
-			return( created );
+
+			return (request[4]<<24)&0xff000000 |
+					(request[5]<<16)&0x00ff0000 |
+					(request[6]<< 8)&0x0000ff00 |
+					request[7]     &0x000000ff;
 		}
 		
 		protected int

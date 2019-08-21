@@ -564,14 +564,12 @@ DHTTransportUDPImpl
 		}
 		
 		if ( reachable_accurate ){
-			
-			int	status = reachable?DHTTransportUDPContactImpl.NODE_STATUS_ROUTABLE:0;
-			
-			return( status );
+
+			return reachable?DHTTransportUDPContactImpl.NODE_STATUS_ROUTABLE:0;
 			
 		}else{
 			
-			return( DHTTransportUDPContactImpl.NODE_STATUS_UNKNOWN );
+			return DHTTransportUDPContactImpl.NODE_STATUS_UNKNOWN;
 		}
 	}
 	

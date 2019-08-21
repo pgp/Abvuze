@@ -459,10 +459,8 @@ DHTDBMapping
 		}
 		
 		HashWrapper originator_id = new HashWrapper( originator.getID());
-		
-		DHTDBValueImpl	res = direct_originator_map_may_be_null.get( originator_id );
-		
-		return( res );
+
+		return direct_originator_map_may_be_null.get(originator_id);
 	}
 	
 	protected DHTDBValueImpl
@@ -543,13 +541,9 @@ DHTDBMapping
 	remove(
 		DHTTransportContact 	originator )
 	{
-			// local remove
-		
-		HashWrapper originator_id = new HashWrapper( originator.getID());
-		
-		DHTDBValueImpl	res = removeDirectValue( originator_id );
-		
-		return( res );
+		// local remove
+
+		return removeDirectValue(new HashWrapper( originator.getID()));
 	}
 		
 	

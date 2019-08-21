@@ -1441,13 +1441,10 @@ DeviceUPnPImpl
 		
 		if ( presentation != null ){
 			
-			try{
-				URL url = new URL( presentation );
-				
-				return( url );
-
-			}catch( Throwable e ){				
+			try {
+				return new URL(presentation);
 			}
+			catch(Throwable ignored) {}
 		}
 		
 		return( null );

@@ -3012,9 +3012,7 @@ DHTTrackerPlugin
 											public URL
 											getURL()
 											{
-												URL	url_to_report = torrent.isDecentralised()?torrent.getAnnounceURL():DEFAULT_URL;
-
-												return( url_to_report );
+												return torrent.isDecentralised()?torrent.getAnnounceURL():DEFAULT_URL;
 											}
 										});
 								}

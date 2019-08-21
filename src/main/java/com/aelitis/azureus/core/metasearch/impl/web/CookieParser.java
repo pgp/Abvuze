@@ -57,10 +57,8 @@ public class CookieParser {
 				names.add(cookie.substring(0,separator));
 			}
 		}
-		
-		String[] result = (String[]) names.toArray(new String[0]);
-		
-		return result;
+
+		return (String[]) names.toArray(new String[0]);
 	
 	}
 

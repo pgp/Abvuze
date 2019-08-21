@@ -1664,11 +1664,7 @@ DHTControlImpl
 			getEstimatedDHTSize();
 		}
 		
-		int max = Math.max( 2, combined_dht_estimate_mag );
-		
-		// System.out.println( "net:" + transport.getNetwork() + " - max_div_depth=" + max );
-		
-		return( max );
+		return(Math.max( 2, combined_dht_estimate_mag ));
 	}
 	
 	protected void
@@ -4362,10 +4358,8 @@ DHTControlImpl
 
             str_key.append(hex);
         }
-				
-		BigInteger	res		= new BigInteger( str_key.toString(), 16 );	
-		
-		return( res );
+
+		return new BigInteger(str_key.toString(),16);
 	}
 	
 	private int

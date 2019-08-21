@@ -2115,16 +2115,14 @@ DHTNATPuncherImpl
 
 			DHTTransportUDPContact rend_contact 	= transport.importContact( rendezvous, transport.getMinimumProtocolVersion(), false);
 			DHTTransportUDPContact target_contact 	= transport.importContact( target, transport.getMinimumProtocolVersion(), false);
-						
-			Map	result = sendPunch( rend_contact, target_contact, message, true );
 
-			return( result );
+			return sendPunch(rend_contact, target_contact, message, true );
 			
 		}catch( Throwable e ){
 			
 			Debug.printStackTrace(e);
 			
-			return( null );
+			return null;
 		}
 	}
 	

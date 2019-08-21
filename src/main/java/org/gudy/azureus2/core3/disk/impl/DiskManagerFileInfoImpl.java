@@ -811,14 +811,9 @@ DiskManagerFileInfoImpl
 					
 					DiskManagerPiece	piece = pieces[i];
 					
-					if ( piece.isDone()){
-						
-						long	bit_start 	= piece_offset;
-						long	bit_end		= bit_start + piece.getLength();
-						
-						bitWritten( bit_start, bit_end, true );
-						
-					}else{
+					if(piece.isDone())
+						bitWritten(piece_offset, piece_offset + piece.getLength(), true);
+					else {
 						
 						int	block_offset = 0;
 						

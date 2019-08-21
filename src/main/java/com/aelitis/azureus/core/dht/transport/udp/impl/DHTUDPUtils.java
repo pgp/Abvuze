@@ -651,7 +651,7 @@ DHTUDPUtils
 				}
 			};
 			
-		return( value );
+		return value;
 	}
 	
 	public static final int DHTTRANSPORTVALUE_SIZE_WITHOUT_VALUE	= 17 + DHTTRANSPORTCONTACT_SIZE;
@@ -1327,7 +1327,7 @@ DHTUDPUtils
 			};
 	
 		
-		return( res );
+		return res;
 	}
 	
 	private static final List<DHTTransportUDPImpl>			transports 		= new ArrayList<>();

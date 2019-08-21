@@ -528,14 +528,12 @@ DownloadHistoryManagerImpl
 			if ( Arrays.equals( hash, dh.getTorrentHash())){
 				
 				Long rdl = redownload_cache.remove( dh.getUID());
-				
-				long[] result = { dh.getAddTime(), dh.getCompleteTime(), dh.getRemoveTime(), rdl==null?0:rdl };
-				
-				return( result );
+
+				return new long[]{ dh.getAddTime(), dh.getCompleteTime(), dh.getRemoveTime(), rdl==null?0:rdl };
 			}
 		}
 		
-		return( null );
+		return null;
 	}
 	
 	private void

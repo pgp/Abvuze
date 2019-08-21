@@ -226,9 +226,7 @@ DirectByteBuffer
 	public ReferenceCountedDirectByteBuffer
 	getReferenceCountedBuffer()
 	{
-		ReferenceCountedDirectByteBuffer res = new ReferenceCountedDirectByteBuffer( this );
-				
-		return( res );
+		return new ReferenceCountedDirectByteBuffer(this);
 	}
 	
 	public void

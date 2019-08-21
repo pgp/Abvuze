@@ -411,20 +411,17 @@ DHTDBImpl
 				this_mon.exit();
 			}
 		}else{
-			
-			DHTDBValueImpl res =	
-				new DHTDBValueImpl( 
-						SystemTime.getCurrentTime(), 
-						value, 
-						getNextValueVersion(),
-						local_contact, 
-						local_contact,
-						true,
-						flags,
-						life_hours,
-						replication_control );
-			
-			return( res );
+
+			return new DHTDBValueImpl(
+					SystemTime.getCurrentTime(),
+					value,
+					getNextValueVersion(),
+					local_contact,
+					local_contact,
+					true,
+					flags,
+					life_hours,
+					replication_control);
 		}
 	}
 	
@@ -3599,12 +3596,10 @@ DHTDBImpl
 			}
 			
 			next_value_version_left--;
-			
-			int	res = next_value_version++;
-			
+
 			//System.out.println( "next value version = " + res );
 			
-			return( res  );
+			return next_value_version++;
 			
 		}finally{
 			

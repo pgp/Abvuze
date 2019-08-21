@@ -257,9 +257,8 @@ DisplayFormatters
 	getUnit(
 		String	key )
 	{
-		String res = " " + getResourceString( "Formats.units." + key, key );
-		  	  
-		return( res );
+
+		return " " + getResourceString("Formats.units." + key, key);
 	}
 	
 	private static String	PeerManager_status_finished;
@@ -741,10 +740,8 @@ DisplayFormatters
 					// size can exceed int so ensure longs used in multiplication
 	
 			long count = bad / torrent.getPieceLength();
-	
-			String result = count + " ( " + formatByteCountToKiBEtc(bad) + " )";
-	
-			return result;
+
+			return count + " ( " + formatByteCountToKiBEtc(bad) + " )";
 	  	}
 
   		return "";
