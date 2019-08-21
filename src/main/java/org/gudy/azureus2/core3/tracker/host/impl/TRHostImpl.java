@@ -82,19 +82,18 @@ TRHostImpl
 				int				type,
 				Object			value )
 			{
-				TRHostListener	target = _listener;
 		
 				if ( type == LDT_TORRENT_ADDED ){
-					
-					target.torrentAdded((TRHostTorrent)value);
+
+					_listener.torrentAdded((TRHostTorrent)value);
 					
 				}else if ( type == LDT_TORRENT_REMOVED ){
-						
-					target.torrentRemoved((TRHostTorrent)value);
+
+					_listener.torrentRemoved((TRHostTorrent)value);
 						
 				}else if ( type == LDT_TORRENT_CHANGED ){
-					
-					target.torrentChanged((TRHostTorrent)value);
+
+					_listener.torrentChanged((TRHostTorrent)value);
 				}
 			}
 		});	

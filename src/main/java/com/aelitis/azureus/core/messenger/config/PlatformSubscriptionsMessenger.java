@@ -127,15 +127,11 @@ PlatformSubscriptionsMessenger
 
             Map map = (Map) reply.get(o);
 
-            if (map != null) {
-
-                subscriptionDetails details = new subscriptionDetails(map);
-
-                return (details);
-            }
+            if (map != null)
+				return new subscriptionDetails(map);
         }
 		
-		throw( new PlatformMessengerException( "Unknown sid '" + ByteFormatter.encodeString(sid) + "'" ));
+		throw new PlatformMessengerException( "Unknown sid '" + ByteFormatter.encodeString(sid) + "'" );
 	}                       	
 	
 	public static long

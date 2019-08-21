@@ -956,10 +956,7 @@ public class TableColumnImpl
 
         for (TableCellVisibilityListener cellVisibilityListener : cellVisibilityListeners) {
             try {
-                TableCellVisibilityListener l = cellVisibilityListener;
-
-                l.cellVisibilityChanged(cell, visibility);
-
+				cellVisibilityListener.cellVisibilityChanged(cell, visibility);
             } catch (Throwable e) {
                 Debug.printStackTrace(e);
             }

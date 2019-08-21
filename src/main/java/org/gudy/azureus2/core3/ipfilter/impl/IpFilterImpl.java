@@ -356,9 +356,8 @@ IpFilterImpl
 
                     String ip = new String((byte[]) entry.get("ip"));
                     String desc = new String((byte[]) entry.get("desc"), StandardCharsets.UTF_8);
-                    Long ltime = (Long) entry.get("time");
 
-                    long time = ltime;
+					long time = (Long) entry.get("time");
 
                     boolean drop = false;
 
@@ -802,12 +801,10 @@ IpFilterImpl
 	{
 	  try{
 	  	class_mon.enter();
-	  
+
 		int	address = range_manager.addressToInt( ipAddress );
 		
-		Integer	i_address = address;
-		
-	    return( bannedIps.get(i_address) != null );
+	    return bannedIps.get(address) != null;
 	    
 	  }finally{
 	  	
@@ -824,9 +821,7 @@ IpFilterImpl
 	  
 		int	address = range_manager.addressToInt( ipAddress );
 		
-		Integer	i_address = address;
-		
-	    return( bannedIps.get(i_address) != null );
+	    return bannedIps.get(address) != null;
 	    
 	  }finally{
 	  	
@@ -1270,11 +1265,9 @@ IpFilterImpl
 		try{
 			class_mon.enter();
 		
-			int	address = range_manager.addressToInt( ipAddress );
+			int	address = range_manager.addressToInt(ipAddress);
 			
-			Integer	i_address = address;
-			
-			BannedIpImpl entry = bannedIps.remove(i_address);
+			BannedIpImpl entry = bannedIps.remove(address);
 			
 			if ( entry != null ){
 			
@@ -1293,11 +1286,8 @@ IpFilterImpl
 	public void
 	unban(String ipAddress, boolean block)
 	{
-		if ( block ){
-	
-			int	address = range_manager.addressToInt( ipAddress );	
-				
-			long	l_address = address;
+		if(block) {
+			long l_address = range_manager.addressToInt(ipAddress);
 			
 	    	if ( l_address < 0 ){
 	     		
@@ -1336,11 +1326,9 @@ IpFilterImpl
 			try{
 				class_mon.enter();
 			
-				int	address = range_manager.addressToInt( ipAddress );
-				
-				Integer	i_address = address;
-				
-				if ( bannedIps.remove(i_address) != null ){
+				int	address = range_manager.addressToInt(ipAddress);
+
+				if ( bannedIps.remove(address) != null ){
 				
 					saveBannedIPs();
 				}

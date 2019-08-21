@@ -562,10 +562,8 @@ TRTrackerBTAnnouncerImpl
 				
 				return( getErrorRetryInterval() );
 			}
-					
-			int rem = (int)((current_timer_event.getWhen() - SystemTime.getCurrentTime())/1000);
-					
-			return( rem );
+
+			return (int)((current_timer_event.getWhen() - SystemTime.getCurrentTime())/1000);
 			
 		}finally{
 			
@@ -3748,19 +3746,17 @@ TRTrackerBTAnnouncerImpl
                 if (ps_enabled || !ps.equals(PEPeerSource.PS_BT_TRACKER)) {
 
                     int http_port = 0;
-                    byte az_version = TRTrackerAnnouncer.AZ_TRACKER_VERSION_1;
 
-                    TRTrackerAnnouncerResponsePeerImpl p =
-                            new TRTrackerAnnouncerResponsePeerImpl(
-                                    ext_peer.getSource(),
-                                    ext_peer.getPeerID(),
-                                    ext_peer.getAddress(),
-                                    ext_peer.getPort(),
-                                    ext_peer.getUDPPort(),
-                                    http_port,
-                                    ext_peer.getProtocol(),
-                                    az_version,
-                                    (short) 0);
+					TRTrackerAnnouncerResponsePeerImpl p = new TRTrackerAnnouncerResponsePeerImpl(
+							ext_peer.getSource(),
+							ext_peer.getPeerID(),
+							ext_peer.getAddress(),
+							ext_peer.getPort(),
+							ext_peer.getUDPPort(),
+							http_port,
+							ext_peer.getProtocol(),
+							TRTrackerAnnouncer.AZ_TRACKER_VERSION_1,
+							0);
 
                     l_peers.add(p);
 

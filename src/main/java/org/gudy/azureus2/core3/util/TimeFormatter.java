@@ -221,10 +221,8 @@ public class TimeFormatter {
 		while (vals[start] == 0 && start > 0) {
 			start--;
 		}
-		
-		String result = vals[start] + " " + TIME_SUFFIXES_2[start];
-		
-		return result;
+
+		return vals[start] + " " + TIME_SUFFIXES_2[start];
 	}
 	
 	public static String format100ths(long time_millis) {

@@ -128,12 +128,11 @@ RandomUtils
 		int	existing_tcp	= COConfigurationManager.getIntParameter( "TCP.Listen.Port" );
 		int existing_udp	= COConfigurationManager.getIntParameter( "UDP.Listen.Port" );
 		int existing_udp2	= COConfigurationManager.getIntParameter( "UDP.NonData.Listen.Port" );
-		
+
 		int port = min_port;
 		
-		for ( int i=0;i<100;i++ ){
-			int min 	= min_port;
-			port 		= min + RANDOM.nextInt( max_port + 1 - min );
+		for(int i=0;i<100;i++) {
+			port = min_port + RANDOM.nextInt( max_port + 1 - min_port);
 			
 				// skip magnet ports
 			
@@ -148,7 +147,7 @@ RandomUtils
 			}
 		}
 		
-		return( port );
+		return port;
 	}
 
 	/**

@@ -152,20 +152,19 @@ SecureMessageServiceClientHelper
 		
 		byte[]	encrypted_message	= (byte[])secure_payload.get( "content" );
 		
-		try{
+		try {
 			Cipher cipher = Cipher.getInstance("DESede/ECB/PKCS5Padding");
 			
 			cipher.init(Cipher.DECRYPT_MODE, session_key ); 
 	
 			byte[]	message_bytes = cipher.doFinal( encrypted_message );
-	
-			Map plain_payload = StaticUtilities.getFormatters().bDecode( message_bytes );
 
-			return( plain_payload );
+			return StaticUtilities.getFormatters().bDecode(message_bytes);
 			
-		}catch( Throwable e ){
+		}
+		catch(Throwable e) {
 			
-			throw( new IOException( "send message failed - " + Debug.getNestedExceptionMessage(e)));
+			throw new IOException( "send message failed - " + Debug.getNestedExceptionMessage(e));
 		}	
 	}
 	

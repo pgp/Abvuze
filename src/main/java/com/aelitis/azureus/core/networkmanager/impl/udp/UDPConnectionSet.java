@@ -2316,20 +2316,7 @@ UDPConnectionSet
 			}
 		}
 		
-		boolean	space =  transmit_unack_packets.size() < MAX_TRANSMIT_UNACK_DATA_PACKETS;
-		
-		/*
-		boolean	old_log = LOG;
-		
-		LOG = !space;
-		
-		if ( manager.trace() != old_log ){
-			
-			System.out.println( "Log: " + (LOG?"On":"Off"));
-		}
-		*/
-		
-		return( space );
+		return transmit_unack_packets.size() < MAX_TRANSMIT_UNACK_DATA_PACKETS;
 	}
 	
 	public void
@@ -2458,21 +2445,17 @@ UDPConnectionSet
 		byte[]	bytes,
 		int		offset )
 	{
-		int 	res = 	(bytes[offset++]<<24)&0xff000000 | 
-						(bytes[offset++]<<16)&0x00ff0000 | 
-						(bytes[offset++]<<8)&0x0000ff00 | 
-						bytes[offset++]&0x000000ff;
-				
-		return( res );
+		return (bytes[offset++]<<24)&0xff000000 |
+				(bytes[offset++]<<16)&0x00ff0000 |
+				(bytes[offset++]<<8)&0x0000ff00 |
+				bytes[offset++]&0x000000ff;
 	}
 	
 	protected byte[]
 	intToBytes(
 		int		i )
 	{
-		byte[] res = new byte[]{ (byte)(i>>24), (byte)(i>>16), (byte)(i>>8), (byte)i };
-		
-		return( res );
+		return new byte[]{ (byte)(i>>24), (byte)(i>>16), (byte)(i>>8), (byte)i };
 	}
 	
 	protected long
@@ -2495,11 +2478,9 @@ UDPConnectionSet
 		long 	i2 = 	(bytes[offset++]<<24)&0xff000000L | 
 						(bytes[offset++]<<16)&0x00ff0000L | 
 						(bytes[offset++]<<8)&0x0000ff00L | 
-						bytes[offset++]&0x000000ffL;				
+						bytes[offset++]&0x000000ffL;
 
-		long	res = ( i1 << 32 ) | i2;
-				
-		return( res );
+		return (i1 << 32) | i2;
 	}
 	
 	protected String

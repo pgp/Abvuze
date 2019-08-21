@@ -314,9 +314,7 @@ RegexEngine
                                     break;
                                 }
 
-                                Pattern pattern = pattern1;
-
-                                Matcher m = pattern.matcher(page);
+                                Matcher m = pattern1.matcher(page);
 
                                 while (m.find()) {
 

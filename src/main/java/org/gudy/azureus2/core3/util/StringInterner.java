@@ -123,11 +123,8 @@ StringInterner
 	intern(
 		byte[]	bytes )
 	{
-		String res = (String)byte_map.get( bytes );
-		
 		// System.out.println( new String( bytes ) + " -> " + res );
-		
-		return( res );
+		return (String)byte_map.get(bytes);
 	}
 	
 	/**

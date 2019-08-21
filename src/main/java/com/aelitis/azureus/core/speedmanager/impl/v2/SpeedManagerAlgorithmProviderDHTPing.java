@@ -418,9 +418,7 @@ public class SpeedManagerAlgorithmProviderDHTPing
             lastMetricValue =10000;  //This is a high value to force an adjusment down.
         }else{
             int medianIndex = pingTimeList.size()/2;
-
-            Integer medianPingTime = (Integer) pingTimeList.get(medianIndex);
-            lastMetricValue = medianPingTime;
+            lastMetricValue = (Integer) pingTimeList.get(medianIndex);
         }
 
         //we have now consumed this data. reset the counters.

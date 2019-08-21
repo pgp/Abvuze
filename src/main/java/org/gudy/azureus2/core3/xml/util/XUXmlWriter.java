@@ -476,13 +476,8 @@ XUXmlWriter
 					(use_bytes?encodeBytes( content ):escapeXML(utf_string)) + "</" + tag + ">" );	
 	}
 	
-	protected String
-	encodeBytes(
-		byte[]	bytes )
-	{
-		String data = ByteFormatter.nicePrint( bytes, true );
-			
-		return( data );
+	protected String encodeBytes(byte[]	bytes) {
+		return ByteFormatter.nicePrint(bytes,true);
 
 		/*
 		try{

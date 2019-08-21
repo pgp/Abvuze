@@ -1573,14 +1573,11 @@ for (String token : tokens) {
  	getOutboundProtocols(
  			AzureusCore azureus_core)
 	{
-		NetworkAdminProtocol[]	res = 
-			{
+		return new NetworkAdminProtocol[]{
 				new NetworkAdminProtocolImpl( azureus_core, NetworkAdminProtocol.PT_HTTP ),
 				new NetworkAdminProtocolImpl( azureus_core, NetworkAdminProtocol.PT_TCP ),
 				new NetworkAdminProtocolImpl( azureus_core, NetworkAdminProtocol.PT_UDP ),
-			};
-		      
-		return( res );
+		};
 	}
  	
 	public NetworkAdminProtocol

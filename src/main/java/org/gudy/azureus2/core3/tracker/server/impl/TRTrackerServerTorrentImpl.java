@@ -1828,9 +1828,7 @@ TRTrackerServerTorrentImpl
 
 					num_want--;
 
-					TRTrackerServerSimplePeer peer = explicit_limited_peer;
-
-					exportPeer(rep_peers, peer, send_peer_ids, compact_mode, crypto_level, network_position);
+					exportPeer(rep_peers, explicit_limited_peer, send_peer_ids, compact_mode, crypto_level, network_position);
 				}
 			}
 			
@@ -1840,9 +1838,7 @@ TRTrackerServerTorrentImpl
 
 					num_want--;
 
-					TRTrackerServerSimplePeer peer = explicit_biased_peer;
-
-					exportPeer(rep_peers, peer, send_peer_ids, compact_mode, crypto_level, network_position);
+					exportPeer(rep_peers, explicit_biased_peer, send_peer_ids, compact_mode, crypto_level, network_position);
 				}
 			}
 		

@@ -60,9 +60,7 @@ public class UIFunctionsManager
 	public static UIFunctions 
 	getUIFunctions() 
 	{
-		UIFunctions result = instance;
-		
-		return( result );
+		return instance;
 	}
 	
 	public static void 

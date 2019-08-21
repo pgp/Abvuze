@@ -930,10 +930,8 @@ PairingManagerImpl
 		throws PairingException
 	{
 		waitForInitialisation();
-		
-		String new_code = allocateAccessCode( false );
-		
-		return( new_code );
+
+		return allocateAccessCode(false);
 	}
 	
 	public PairedService
@@ -967,11 +965,8 @@ PairingManagerImpl
 	getService(
 		String		sid )
 	{
-		synchronized( this ){
-			
-			PairedServiceImpl	result = services.get( sid );
-			
-			return( result );
+		synchronized(this) {
+			return services.get(sid);
 		}
 	}
 	

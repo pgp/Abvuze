@@ -463,10 +463,8 @@ EnhancedDownloadManager
 			
 			return( Long.MAX_VALUE );
 		}
-		
-		long	eta = stats.getETA();
-				
-		return( eta );
+
+		return stats.getETA();
 	}
 	
 	protected progressiveStats
@@ -1453,10 +1451,9 @@ EnhancedDownloadManager
 
 		public long
 		getBufferBytes()
-		{			
-			long	min_dl = minimum_initial_buffer_secs_for_eta * getStreamBytesPerSecondMax();
-			
-			return( min_dl );
+		{
+
+			return minimum_initial_buffer_secs_for_eta * getStreamBytesPerSecondMax();
 		}
 			
 		protected EnhancedDownloadManagerFile 

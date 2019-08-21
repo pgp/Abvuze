@@ -548,20 +548,15 @@ SubscriptionHistoryImpl
 		
 		Map	schedule = subs.getScheduleConfig();
 		
-		if ( schedule.size() == 0  ){
-			
-			return( DEFAULT_CHECK_INTERVAL_MINS );
-			
-		}else{
-			
-			try{		
-				int	interval_min = ((Long)schedule.get( "interval" )).intValue();
-				
-				return( interval_min );
-				
-			}catch( Throwable e ){
-								
-				return( DEFAULT_CHECK_INTERVAL_MINS );
+		if(schedule.size() == 0) {
+			return DEFAULT_CHECK_INTERVAL_MINS;
+		}
+		else {
+			try {
+				return ((Long)schedule.get( "interval" )).intValue();
+			}
+			catch(Throwable e) {
+				return DEFAULT_CHECK_INTERVAL_MINS;
 			}
 		}
 	}

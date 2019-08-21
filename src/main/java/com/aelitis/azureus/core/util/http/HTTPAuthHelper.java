@@ -189,10 +189,7 @@ HTTPAuthHelper
 		URL		url )
 	{
 		int child_port = url.getPort()==-1?url.getDefaultPort():url.getPort();
-		
-		String	key = url.getProtocol() + ":" + url.getHost() + ":" + child_port;
-
-		return( key );
+		return url.getProtocol() + ":" + url.getHost() + ":" + child_port;
 	}
 	
 	private HTTPAuthHelper
@@ -1417,9 +1414,7 @@ HTTPAuthHelper
 		splitHeader(
 			String		str )
 		{
-			String[] bits = str.split( NL );
-			
-			return( bits );
+			return str.split(NL);
 		}
 			
 		private void

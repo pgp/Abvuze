@@ -103,13 +103,10 @@ HashWrapper2
 			
 			return( false );
 		}
-		
-		byte[]	other_hash 		= other.hash;
-		int		other_offset	= other.offset;
-		
+
 		for ( int i=0;i<length;i++){
 			
-			if ( hash[offset+i] != other_hash[other_offset+i] ){
+			if ( hash[offset+i] != other.hash[(int) other.offset +i] ){
 				
 				return( false );
 			}

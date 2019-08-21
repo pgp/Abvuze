@@ -1123,22 +1123,16 @@ DownloadManagerStateImpl
 						}
 						
 					}else if (PARAM_MAX_UPLOADS_WHEN_SEEDING.equals(name)){
-						
-						int	def = COConfigurationManager.getIntParameter( "Max Uploads Seeding" );
-						
-						value = def;
+
+						value = COConfigurationManager.getIntParameter( "Max Uploads Seeding" );
 											
 					}else if (PARAM_MAX_UPLOADS.equals(name)){
-						
-						int	def = COConfigurationManager.getIntParameter("Max Uploads" );
-						
-						value = def;
+
+						value = COConfigurationManager.getIntParameter("Max Uploads" );
 						
 					}else if (PARAM_MAX_PEERS.equals(name)){
-						
-						int	def = COConfigurationManager.getIntParameter( "Max.Peer.Connections.Per.Torrent" );
-						
-						value = def;
+
+						value = COConfigurationManager.getIntParameter( "Max.Peer.Connections.Per.Torrent" );
 						
 					}else if (PARAM_MAX_PEERS_WHEN_SEEDING_ENABLED.equals(name)){
 						
@@ -1148,10 +1142,8 @@ DownloadManagerStateImpl
 						}
 
 					}else if (PARAM_MAX_PEERS_WHEN_SEEDING.equals(name)){
-						
-						int	def = COConfigurationManager.getIntParameter( "Max.Peer.Connections.Per.Torrent.When.Seeding" );
-						
-						value = def;
+
+						value = COConfigurationManager.getIntParameter( "Max.Peer.Connections.Per.Torrent.When.Seeding" );
 						
 					}else if (PARAM_MAX_SEEDS.equals(name)){
 					
@@ -1867,12 +1859,10 @@ DownloadManagerStateImpl
 				file_link_cache = new WeakReference<>(map);
 			}
 		}
-		
-		File res = map.get( source_index, link_source );
-		
+
 		//System.out.println( "getFileLink: " + link_source + " -> " + res );
 		
-		return( res );
+		return map.get(source_index, link_source);
 	}
 		
 	public LinkFileMap
@@ -2349,10 +2339,8 @@ DownloadManagerStateImpl
 		
 		try{
 			this_mon.enter();
-		
-			Map	value = (Map)attributes.get( attribute_name );
-			
-			return( value );
+
+			return (Map)attributes.get(attribute_name);
 			
 		}finally{
 			

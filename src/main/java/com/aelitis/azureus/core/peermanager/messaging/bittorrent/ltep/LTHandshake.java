@@ -53,9 +53,8 @@ public class LTHandshake implements LTMessage {
 		
 		// Try decoding the data now.
 		Map res_data_dict = MessagingUtil.convertBencodedByteStreamToPayload(data, 1, getID());
-		
-		LTHandshake result = new LTHandshake(res_data_dict, this.version);
-		return result;
+
+		return new LTHandshake(res_data_dict, this.version);
 	}
 
 	public DirectByteBuffer[] getData() {

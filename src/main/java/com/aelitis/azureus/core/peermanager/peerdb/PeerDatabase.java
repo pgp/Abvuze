@@ -320,8 +320,6 @@ public class PeerDatabase {
    */
   public PeerItem getNextOptimisticConnectPeer( boolean non_public ) {
 	  
-	  PeerItem item = getNextOptimisticConnectPeer(non_public,0);
-	  
 	  /*
 	  if ( item != null ){
 		  
@@ -329,7 +327,7 @@ public class PeerDatabase {
 	  }
 	  */
 	  
-	  return( item );
+	  return getNextOptimisticConnectPeer(non_public,0);
   }
   
   private PeerItem getNextOptimisticConnectPeer( boolean non_public, final int recursion_count ) {

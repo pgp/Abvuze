@@ -64,10 +64,8 @@ GlobalManagerHostSupport
 				return( torrent );
 			}
 		}
-		
-		TOTorrent torrent = DownloadManagerImpl.getStubTorrent( hash );
-			
-		return( torrent );
+
+		return DownloadManagerImpl.getStubTorrent(hash);
 	}
 	
 	protected void

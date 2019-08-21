@@ -232,10 +232,7 @@ TRTrackerServerTCP
 	checkDOSRemove(
 		Map.Entry		eldest )
 	{
-		boolean res = 	DOS_map.size() > MAX_DOS_ENTRIES || 
-						last_dos_check - ((DOSEntry)eldest.getValue()).last_time > 	MAX_DOS_RETENTION;
-				
-		return( res );
+		return DOS_map.size() > MAX_DOS_ENTRIES || last_dos_check - ((DOSEntry)eldest.getValue()).last_time > 	MAX_DOS_RETENTION;
 	}
 	
 	protected class

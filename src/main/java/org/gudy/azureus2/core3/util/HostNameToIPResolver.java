@@ -223,9 +223,7 @@ HostNameToIPResolver
 	hostAddressToBytes(
 		String		host )
 	{
-		byte[] res = textToNumericFormat( host );
-		
-		return( res );
+		return textToNumericFormat(host);
 	}
 		
 	final static int INADDRSZ	= 4;

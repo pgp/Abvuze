@@ -939,16 +939,8 @@ RDResumeHandler
 	{
 		Map resume_map = download_manager_state.getResumeData();
 		
-		if ( resume_map != null ){
-						
-			Map	resume_data = (Map)resume_map.get( "data" );
-			
-			return( resume_data );
-			
-		}else{
-			
-			return( null );
-		}
+		if(resume_map != null) return (Map)resume_map.get("data");
+		else return null;
 	}
 
 	protected void

@@ -842,10 +842,7 @@ NetworkAdminSpeedTestScheduledTestImpl
             if(!param.equals(TORRENT_UPLOAD_LIMIT) && !param.equals(TORRENT_DOWNLOAD_LIMIT))
                 throw new IllegalArgumentException("invalid param. param="+param);
 
-            Map out = (Map) torrentLimits.get(d);
-            Integer limit = (Integer) out.get(param);
-
-            return limit;
+			return (Integer)((Map)torrentLimits.get(d)).get(param);
         }
 
         /**

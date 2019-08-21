@@ -1282,16 +1282,13 @@ DiskManagerCheckRequestListener, IPFilterListener
 		if(mainloop_loop_count % MAINLOOP_FIVE_SECOND_INTERVAL != 0)
 			return;
 
-		final int				nbPieces	=_nbPieces;
-		final PEPieceImpl[] pieces =pePieces;
 		//for every piece
-		for (int i =0; i <nbPieces; i++)
+		for (int i =0; i <_nbPieces; i++)
 		{
 			// placed before null-check in case it really removes a piece
 			checkEmptyPiece(i);
 
-
-			final PEPieceImpl pePiece =pieces[i];
+			final PEPieceImpl pePiece =pePieces[i];
 			// these checks are only against pieces being downloaded
 			// yet needing requests still/again
 			if (pePiece !=null)
@@ -4317,12 +4314,10 @@ DiskManagerCheckRequestListener, IPFilterListener
 		
 		int pos 	= potential - lower_limit;
 		int	scale 	= max - lower_limit;
-			
-		int res =  MIN_CT + ( ct_def - MIN_CT )*(scale - pos )/scale;
-		
+
 		// System.out.println( "scaled->" + res );
 		
-		return( res );
+		return MIN_CT + (ct_def - MIN_CT)*(scale - pos)/scale;
 	}
 	
 	private void doConnectionChecks() 
@@ -5327,10 +5322,8 @@ DiskManagerCheckRequestListener, IPFilterListener
 			
 			dl_max += max_con[1];
 		}
-		
-		int	allowed_peers = PeerUtils.numNewConnectionsAllowed(getPeerIdentityDataID(), dl_max );
 
-		return( allowed_peers );
+		return PeerUtils.numNewConnectionsAllowed(getPeerIdentityDataID(), dl_max);
 	}
 	
 	/**

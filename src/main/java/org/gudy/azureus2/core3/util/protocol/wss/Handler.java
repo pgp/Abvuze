@@ -74,11 +74,8 @@ Handler
 		
 		IPCInterface ipc = pi.getIPC();
 		
-		try{		
-			URL url = (URL)ipc.invoke( "getProxyURL", new Object[]{ u });
-
-			return( url );
-			
+		try {
+			return (URL)ipc.invoke("getProxyURL", new Object[]{u});
 		}catch( IPCException ipce ){
 			
 			Throwable e = ipce;

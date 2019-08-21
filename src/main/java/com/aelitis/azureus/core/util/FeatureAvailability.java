@@ -53,96 +53,82 @@ FeatureAvailability
 	public static boolean
 	areInternalFeaturesEnabled()
 	{
-		final boolean result = ( vcc.getFeatureFlags() & FT_ENABLE_INTERNAL_FEATURES ) != 0;
-				
-		return( result );
+
+		return(vcc.getFeatureFlags() & FT_ENABLE_INTERNAL_FEATURES) != 0;
 	}
 	
 	public static boolean
 	isRequestLimitingEnabled()
 	{
-		final boolean result = ( vcc.getFeatureFlags() & FT_DISABLE_REQUEST_LIMITING ) == 0;
-				
-		return( result );
+
+		return (vcc.getFeatureFlags() & FT_DISABLE_REQUEST_LIMITING) == 0;
 	}
 	
 	public static boolean
 	isGeneralPeerReconnectEnabled()
 	{
-		final boolean result = ( vcc.getFeatureFlags() & FT_DISABLE_PEER_GENERAL_RECONNECT ) == 0;
-				
-		return( result );
+
+		return (vcc.getFeatureFlags() & FT_DISABLE_PEER_GENERAL_RECONNECT) == 0;
 	}
 	
 	public static boolean
 	isUDPPeerReconnectEnabled()
 	{
-		final boolean result = ( vcc.getFeatureFlags() & FT_DISABLE_PEER_UDP_RECONNECT ) == 0;
-				
-		return( result );
+
+		return (vcc.getFeatureFlags() & FT_DISABLE_PEER_UDP_RECONNECT) == 0;
 	}
 	
 	public static boolean
 	isAutoSpeedDefaultClassic()
 	{
-		final boolean result = ( vcc.getFeatureFlags() & FT_AUTO_SPEED_DEFAULT_CLASSIC ) != 0;
-				
-		return( result );
+
+		return (vcc.getFeatureFlags() & FT_AUTO_SPEED_DEFAULT_CLASSIC) != 0;
 	}
 	
 	public static boolean
 	isRCMEnabled()
 	{
-		final boolean result = ( vcc.getFeatureFlags() & FT_DISABLE_RCM ) == 0;
-				
-		return( result );
+
+		return (vcc.getFeatureFlags() & FT_DISABLE_RCM) == 0;
 	}
 	
 	public static boolean
 	isDHTRepV2Enabled()
 	{
-		final boolean result = ( vcc.getFeatureFlags() & FT_DISABLE_DHT_REP_V2 ) == 0;
-				
-		return( result );
+
+		return (vcc.getFeatureFlags() & FT_DISABLE_DHT_REP_V2) == 0;
 	}
 	
 	public static boolean
 	isMagnetSLEnabled()
 	{
-		final boolean result = ( vcc.getFeatureFlags() & FT_DISABLE_MAGNET_SL ) == 0;
-				
-		return( result );
+
+		return (vcc.getFeatureFlags() & FT_DISABLE_MAGNET_SL) == 0;
 	}
 	
 	public static boolean
 	isMagnetMDEnabled()
 	{
-		final boolean result = ( vcc.getFeatureFlags() & FT_DISABLE_MAGNET_MD ) == 0;
-				
-		return( result );
+
+		return (vcc.getFeatureFlags() & FT_DISABLE_MAGNET_MD) == 0;
 	}
 	
 	public static boolean
 	allowAllFEClients()
 	{
-		final boolean result = ( vcc.getFeatureFlags() & FT_ENABLE_ALL_FE_CLIENTS ) != 0;
-		
-		return( result );
+
+		return (vcc.getFeatureFlags() & FT_ENABLE_ALL_FE_CLIENTS) != 0;
 	}
 	
 	public static boolean
 	triggerSpeedTestV1()
 	{
-		final boolean result = ( vcc.getFeatureFlags() & FT_TRIGGER_SPEED_TEST_V1 ) != 0;
-		
-		return( result );
+		return (vcc.getFeatureFlags() & FT_TRIGGER_SPEED_TEST_V1) != 0;
 	}
 
 	public static boolean
 	isGamesEnabled()
 	{
-		final boolean result = ( vcc.getFeatureFlags() & FT_DISABLE_GAMES ) == 0;
-		
-		return( result );
+		return (vcc.getFeatureFlags() & FT_DISABLE_GAMES) == 0;
 	}
 }

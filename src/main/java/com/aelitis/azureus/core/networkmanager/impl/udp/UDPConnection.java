@@ -178,11 +178,8 @@ UDPConnection
 	
 		throws IOException
 	{
-		int	written = set.write( this, buffers, offset, length );
-		
 		// System.out.println( "Connection(" + getID() + ") - write -> " + written );
-		
-		return( written );
+		return set.write(this, buffers, offset, length);
 	}
 	
 	protected int

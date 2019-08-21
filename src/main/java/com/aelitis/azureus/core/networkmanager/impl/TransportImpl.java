@@ -219,12 +219,10 @@ TransportImpl
 			
 			last_ready_for_read = now;
 			
-			return( 0 );
+			return 0;
 		}
-				
-		long	diff = now - last_ready_for_read + 1;	// make sure > 0
-					
-		return( diff );
+
+		return now - last_ready_for_read + 1; // make sure > 0
 	}
 	    
 	protected boolean

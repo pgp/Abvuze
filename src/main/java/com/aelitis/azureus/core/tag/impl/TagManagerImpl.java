@@ -1231,16 +1231,12 @@ TagManagerImpl
 				
 				bindings.put( "tag", tag );
 										
-				try{
-					Object result = p.eval( script, bindings );
-					
-					return( result );
-					
-				}catch( Throwable e ){
-					
-					Debug.out( e );
-					
-					return( null );
+				try {
+					return p.eval(script, bindings);
+				}
+				catch(Throwable e) {
+					Debug.out(e);
+					return null;
 				}
 			}
 		}
@@ -2447,30 +2443,22 @@ TagManagerImpl
 		public void 
 		initialized(
 			final	List<Taggable>	initial_taggables )
-		{				
+		{
 			resolverInitialized( resolver );
-			
+
 			synchronized( this ){
-				
+
 				initialised = true;
-				
-				if ( listeners.size() > 0 ){
-																
-					final List<TaggableLifecycleListener> listeners_ref = listeners;
-					 
+
+				if (listeners.size() > 0) {
 					async_dispatcher.dispatch(
-						new AERunnable()
-						{
-							@Override
-							public void 
-							runSupport() 
-							{
-								for ( TaggableLifecycleListener listener: listeners_ref ){
-									
-									listener.initialised( initial_taggables );
+							new AERunnable() {
+								@Override
+								public void runSupport() {
+									for (TaggableLifecycleListener listener: listeners)
+										listener.initialised(initial_taggables);
 								}
-							}
-						});
+							});
 				}
 			}
 		}
@@ -2482,8 +2470,6 @@ TagManagerImpl
 			synchronized( this ){
 				
 				if ( initialised ){
-					
-					final List<TaggableLifecycleListener> listeners_ref = listeners;
 					 
 					async_dispatcher.dispatch(
 						new AERunnable()
@@ -2492,7 +2478,7 @@ TagManagerImpl
 							public void 
 							runSupport() 
 							{
-								for ( TaggableLifecycleListener listener: listeners_ref ){
+								for (TaggableLifecycleListener listener: listeners){
 									
 									try{
 										listener.taggableCreated( t );
@@ -2517,8 +2503,6 @@ TagManagerImpl
 			synchronized( this ){
 				
 				if ( initialised ){
-					
-					final List<TaggableLifecycleListener> listeners_ref = listeners;
 					 
 					async_dispatcher.dispatch(
 						new AERunnable()
@@ -2527,7 +2511,7 @@ TagManagerImpl
 							public void 
 							runSupport() 
 							{
-								for ( TaggableLifecycleListener listener: listeners_ref ){
+								for (TaggableLifecycleListener listener: listeners){
 									
 									try{
 										listener.taggableDestroyed( t );
@@ -2552,8 +2536,6 @@ TagManagerImpl
 			synchronized( this ){
 				
 				if ( initialised ){
-					
-					final List<TaggableLifecycleListener> listeners_ref = listeners;
 					 
 					async_dispatcher.dispatch(
 						new AERunnable()
@@ -2562,7 +2544,7 @@ TagManagerImpl
 							public void 
 							runSupport() 
 							{
-								for ( TaggableLifecycleListener listener: listeners_ref ){
+								for (TaggableLifecycleListener listener: listeners){
 									
 									try{
 										listener.taggableTagged( tag_type, tag, taggable);
@@ -2587,8 +2569,6 @@ TagManagerImpl
 			synchronized( this ){
 				
 				if ( initialised ){
-					
-					final List<TaggableLifecycleListener> listeners_ref = listeners;
 					 
 					async_dispatcher.dispatch(
 						new AERunnable()
@@ -2597,7 +2577,7 @@ TagManagerImpl
 							public void 
 							runSupport() 
 							{
-								for ( TaggableLifecycleListener listener: listeners_ref ){
+								for (TaggableLifecycleListener listener: listeners){
 									
 									try{
 										listener.taggableUntagged( tag_type, tag, taggable );

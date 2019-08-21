@@ -59,14 +59,6 @@ PausableAverage
 		super.addValue( value );
 	}
 	
-	public long
-	getAverage()
-	{
-		long	average = super.getAverage();
-		
-		return( average );
-	}
-	
 	protected long
 	getEffectiveTime()
 	{

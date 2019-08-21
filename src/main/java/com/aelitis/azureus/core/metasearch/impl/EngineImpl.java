@@ -1328,16 +1328,13 @@ EngineImpl
 			boolean is_anon = isAnonymous();
 			
 			SubscriptionManager sub_man = SubscriptionManagerFactory.getSingleton();
-			
-			Subscription subs =
-				sub_man.createSingletonRSS(
+
+			return sub_man.createSingletonRSS(
 					vf.getName() + ": " + getName() + " (v" + getVersion() + ")",
-					new URL( url_str ),
+					new URL(url_str),
 					Integer.MAX_VALUE,
-					is_anon );
-		
-			return( subs );
-			
+					is_anon);
+
 		}catch( Throwable e ){
 			
 			Debug.out( e );

@@ -318,18 +318,17 @@ TRTrackerDHTAnnouncerImpl
                 }
 
                 int http_port = 0;
-                byte az_version = TRTrackerAnnouncer.AZ_TRACKER_VERSION_1;
 
-                peers_list.add(new TRTrackerAnnouncerResponsePeerImpl(
-                        ext_peer.getSource(),
-                        ext_peer.getPeerID(),
-                        ext_peer.getAddress(),
-                        ext_peer.getPort(),
-                        ext_peer.getUDPPort(),
-                        http_port,
-                        ext_peer.getProtocol(),
-                        az_version,
-                        (short) 0));
+				peers_list.add(new TRTrackerAnnouncerResponsePeerImpl(
+						ext_peer.getSource(),
+						ext_peer.getPeerID(),
+						ext_peer.getAddress(),
+						ext_peer.getPort(),
+						ext_peer.getUDPPort(),
+						http_port,
+						ext_peer.getProtocol(),
+						TRTrackerAnnouncer.AZ_TRACKER_VERSION_1,
+						0));
             }
 			
 			TRTrackerAnnouncerResponsePeerImpl[]	peers = peers_list.toArray(new TRTrackerAnnouncerResponsePeerImpl[0]);

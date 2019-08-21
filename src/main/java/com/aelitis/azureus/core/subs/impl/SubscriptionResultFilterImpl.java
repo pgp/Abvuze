@@ -349,9 +349,7 @@ SubscriptionResultFilterImpl
             filteredResults.add(result);
 
         }
-		
-		Result[] fResults = filteredResults.toArray(new Result[0]);
-		
-		return fResults;
+
+		return filteredResults.toArray(new Result[0]);
 	}
 }

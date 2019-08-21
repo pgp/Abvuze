@@ -453,13 +453,6 @@ SESecurityManagerImpl
 						try{
 							auth_mon.enter();
 						
-							PasswordAuthentication	res =  
-								getAuthentication( 
-										getRequestingPrompt(),
-										getRequestingProtocol(),
-										getRequestingHost(),
-										getRequestingPort());
-							
 							/*
 							System.out.println( "Authenticator:getPasswordAuth: res = " + res );
 							
@@ -469,7 +462,11 @@ SESecurityManagerImpl
 							}
 							*/
 							
-							return( res );
+							return getAuthentication(
+									getRequestingPrompt(),
+									getRequestingProtocol(),
+									getRequestingHost(),
+									getRequestingPort());
 							
 						}finally{
 							
@@ -754,10 +751,8 @@ SESecurityManagerImpl
 				keyManagerFactory.getKeyManagers(), 
 				null,
 				RandomUtils.SECURE_RANDOM);
-		
-		SSLServerSocketFactory factory = context.getServerSocketFactory();
-		
-		return( factory );
+
+		return context.getServerSocketFactory();
 	}
 	
 	public SEKeyDetails
@@ -859,10 +854,8 @@ SESecurityManagerImpl
 			SSLContext ctx = SSLContext.getInstance("SSL");
 			
 			ctx.init(null, tmf.getTrustManagers(), null);
-						
-			SSLSocketFactory	factory = ctx.getSocketFactory();
-	
-			return( factory );
+
+			return ctx.getSocketFactory();
 			
 		}catch( Throwable e ){
 				

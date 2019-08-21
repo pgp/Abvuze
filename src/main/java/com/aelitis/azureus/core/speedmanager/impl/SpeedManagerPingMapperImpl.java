@@ -1221,17 +1221,14 @@ SpeedManagerPingMapperImpl
 				estimate_speed = 1;
 			}
 		}
-		
-		limitEstimate result = 
-			new limitEstimate(
-					estimate_speed,
-					SpeedManagerLimitEstimate.TYPE_ESTIMATED,
-					convertMetricToRating( estimate_var ),
-					estimate_hits, 
-					SystemTime.getCurrentTime(),
-					(int[][])segments.toArray(new int[segments.size()][]));
-		
-		return( result );
+
+		return new limitEstimate(
+				estimate_speed,
+				SpeedManagerLimitEstimate.TYPE_ESTIMATED,
+				convertMetricToRating(estimate_var),
+				estimate_hits,
+				SystemTime.getCurrentTime(),
+				(int[][])segments.toArray(new int[segments.size()][]));
 	}
 	
 	public synchronized double

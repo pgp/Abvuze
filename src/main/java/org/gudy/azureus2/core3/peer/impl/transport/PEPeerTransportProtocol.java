@@ -4787,21 +4787,18 @@ implements PEPeerTransport
 	private boolean
 	canBePeerExchanged()
 	{
-		if ( client_peer_id != null ){
+		if (client_peer_id != null){
+			// disable the exchange of location targetted peers
 
-				// disable the exchange of location targetted peers
-			
-			boolean ok = !client_peer_id.startsWith( PeerClassifier.CACHE_LOGIC );
-			
 			// System.out.println( "canPEX: " + client_peer_id + " -> " + ok );
-			
-			return( ok );
-			
-		}else{
+
+			return !client_peer_id.startsWith(PeerClassifier.CACHE_LOGIC);
+		}
+		else {
 			
 			Debug.out( "No client peer id!" );
 			
-			return( false );
+			return false;
 		}
 	}
 

@@ -711,11 +711,8 @@ TRTrackerAnnouncerMuxer
 		TOTorrentAnnounceURLSet[]	s1,
 		TOTorrentAnnounceURLSet[]	s2 )
 	{
-		boolean	res = sameSupport( s1, s2 );
-		
 		// System.out.println( "same->" + res + ": " + getString(s1) + "/" + getString(s2));
-		
-		return( res );
+		return sameSupport(s1, s2);
 	}
 	
 	private boolean

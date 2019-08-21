@@ -311,8 +311,7 @@ DownloadManagerStatsImpl
 		}
 	    	
     long total = download_manager.getSize();
-		int computed_completion = total == 0 ? 0 : (int) (1000 * getDownloadCompletedBytes() / total);
-		return computed_completion;
+		return total == 0 ? 0 : (int) (1000 * getDownloadCompletedBytes() / total);
 	}
   
 	public void setDownloadCompletedBytes(long completedBytes) {
@@ -769,10 +768,8 @@ DownloadManagerStatsImpl
 	getTotalAveragePerPeer()
 	{
 		int div = download_manager.getNbPeers() + (download_manager.isDownloadComplete(false) ? 0 : 1);  //since total speed includes our own speed when downloading
-	    
-	    long average = div < 1 ? 0 : getTotalAverage() / div;
 
-	    return( average );
+		return div < 1 ? 0 : getTotalAverage() / div;
 	}
 	
 	public int 

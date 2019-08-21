@@ -88,9 +88,7 @@ SimpleTimer
 		long				when,
 		TimerEventPerformer	performer )
 	{
-		TimerEvent	res = timer.addEvent( name, when, performer );
-				
-		return( res );
+		return timer.addEvent(name, when, performer);
 	}
 	
 	public static TimerEvent
@@ -100,9 +98,7 @@ SimpleTimer
 		boolean				absolute,
 		TimerEventPerformer	performer )
 	{
-		TimerEvent	res = timer.addEvent( name, when, absolute, performer );
-				
-		return( res );
+		return timer.addEvent(name, when, absolute, performer);
 	}
 	
 	public static TimerEventPeriodic
@@ -111,9 +107,7 @@ SimpleTimer
 		long				frequency,
 		TimerEventPerformer	performer )
 	{
-		TimerEventPeriodic	res = timer.addPeriodicEvent( name, frequency, performer );
-				
-		return( res );
+		return timer.addPeriodicEvent(name, frequency, performer);
 	}
 	
 	public static TimerEventPeriodic
@@ -123,9 +117,7 @@ SimpleTimer
 		boolean				absolute,
 		TimerEventPerformer	performer )
 	{
-		TimerEventPeriodic	res = timer.addPeriodicEvent( name, frequency, absolute, performer );
-				
-		return( res );
+		return timer.addPeriodicEvent(name, frequency, absolute, performer);
 	}
 	
 	public static void

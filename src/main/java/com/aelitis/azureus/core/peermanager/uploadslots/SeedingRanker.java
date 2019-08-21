@@ -65,18 +65,11 @@ public class SeedingRanker {
   	}
   	
   	Debug.out( "no optimistic-able seeding peers found" );
-  	return null;  	
+  	return null;
   }
-  
-  
-  public PEPeerTransport getNextOptimisticPeer( ArrayList all_peers ) {
-  	PEPeerTransport picked = getNextOptimisticPeerExec( all_peers );
-  	
-  	//TODO test to see if peers really are picked evenly
-  	
-  	return picked;  	
+
+  public PEPeerTransport getNextOptimisticPeer(ArrayList all_peers) {
+	//TODO test to see if peers really are picked evenly
+	return getNextOptimisticPeerExec(all_peers);
   }
-  
-  
-  
 }

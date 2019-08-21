@@ -274,14 +274,11 @@ public class TableColumnManager {
 			Class forDataSourceType, String tableID)
 	{
   	Map mTypes = getAllTableColumnCore(forDataSourceType, tableID);
-  	TableColumnCore[] columns = (TableColumnCore[]) mTypes.values().toArray(
-            new TableColumnCore[0]);
-  	return columns;
+		return (TableColumnCore[])mTypes.values().toArray(new TableColumnCore[0]);
 	}
   
   public String[] getDefaultColumnNames(String tableID) {
-  	String[] columnNames = mapTableDefaultColumns.get(tableID);
-  	return columnNames;
+	  return mapTableDefaultColumns.get(tableID);
   }
   
   public void setDefaultColumnNames(String tableID, TableColumn[] columns) {

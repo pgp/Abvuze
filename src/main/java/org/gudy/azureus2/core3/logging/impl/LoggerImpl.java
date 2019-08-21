@@ -217,9 +217,8 @@ public class LoggerImpl {
 			}
 		}
 		if (bEventLoggingEnabled)
-            for (Object logListener : logListeners) {
+            for (Object listener : logListeners) {
                 try {
-                    Object listener = logListener;
                     if (listener instanceof ILogEventListener)
                         ((ILogEventListener) listener).log(event);
                 } catch (Throwable e) {
@@ -286,9 +285,8 @@ public class LoggerImpl {
 		if (alertHistory.size() > MAXHISTORY)
 			alertHistory.remove(0);
 
-        for (Object alertListener : alertListeners) {
+        for (Object listener : alertListeners) {
             try {
-                Object listener = alertListener;
                 if (listener instanceof ILogAlertListener)
                     ((ILogAlertListener) listener).alertRaised(alert);
             } catch (Throwable f) {

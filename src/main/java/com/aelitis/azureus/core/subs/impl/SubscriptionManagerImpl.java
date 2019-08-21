@@ -1720,10 +1720,8 @@ SubscriptionManagerImpl
 			boolean	is_anon = ImportExportUtils.importLong( singleton_details, "a", 0 ) != 0;
 			
 				// only defined type is singleton rss
-			
-			SubscriptionImpl s = (SubscriptionImpl)createSingletonRSSSupport( name, url, true, check_interval_mins, is_anon, add_type, subscribe );
-			
-			return( s );
+
+			return (SubscriptionImpl)createSingletonRSSSupport(name, url, true, check_interval_mins, is_anon, add_type, subscribe);
 			
 		}catch( Throwable e ){
 			
@@ -7507,10 +7505,8 @@ SubscriptionManagerImpl
 					}
 				}
 			}
-			
-			boolean res = match && at_least_one;
-				
-			return( res );
+
+			return match && at_least_one;
 		}
 	}
 	

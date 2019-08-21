@@ -54,17 +54,11 @@ TOTorrentXMLDeserialiser
 		
 		throws TOTorrentException
 	{
-		try{
-			
-			SimpleXMLParserDocument	doc = SimpleXMLParserDocumentFactory.create( file );
-			
-			TOTorrent res = decodeRoot( doc );
-					
-			return( res );
-						
-		}catch( SimpleXMLParserDocumentException e ){
-					
-			throw( new TOTorrentException( "XML Parse Fails: " + e.getMessage(), TOTorrentException.RT_DECODE_FAILS ));
+		try {
+			return decodeRoot(SimpleXMLParserDocumentFactory.create(file));
+		}
+		catch(SimpleXMLParserDocumentException e) {
+			throw new TOTorrentException("XML Parse Fails: " + e.getMessage(), TOTorrentException.RT_DECODE_FAILS);
 		}
 	}
 	

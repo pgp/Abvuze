@@ -406,10 +406,8 @@ FMFileAccessCompact
 			if ( data != null && data.size() > 0 ){
 				
 				Long	version = (Long)data.get( "version" );
-				
-				Long	length = (Long)data.get( "length" );
-				
-				current_length	= length;
+
+				current_length	= (Long)data.get( "length" );
 			}
 		}catch( Throwable e ){
 			

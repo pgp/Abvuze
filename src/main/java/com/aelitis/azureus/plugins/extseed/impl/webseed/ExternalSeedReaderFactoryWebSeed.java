@@ -151,9 +151,7 @@ ExternalSeedReaderFactoryWebSeed
                         }
                     } catch (Throwable e) {
 
-                        Object o = url1;
-
-                        String str = (o instanceof byte[]) ? new String((byte[]) o) : String.valueOf(o);
+                        String str = (url1 instanceof byte[]) ? new String((byte[]) url1) : String.valueOf(url1);
 
                         Debug.out("WS seed invalid: " + str, e);
                     }

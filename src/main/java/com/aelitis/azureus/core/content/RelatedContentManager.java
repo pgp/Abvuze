@@ -3323,27 +3323,23 @@ RelatedContentManager
 				
 				went_async[0] = true;
 			}
-			
-			SearchInstance	result = 
-				new SearchInstance()
-				{
-					@Override
-					public void 
-					cancel() 
-					{
-						synchronized( cancelled ){
-							
-							if ( si[0] != null ){
-								
-								si[0].cancel();
-							}
-							
-							cancelled[0] = true;
-						}
-					}
-				};
 
-			return( result );
+			return new SearchInstance() {
+				@Override
+				public void
+				cancel()
+				{
+					synchronized( cancelled ){
+
+						if ( si[0] != null ){
+
+							si[0].cancel();
+						}
+
+						cancelled[0] = true;
+					}
+				}
+			};
 			
 		}else{
 			

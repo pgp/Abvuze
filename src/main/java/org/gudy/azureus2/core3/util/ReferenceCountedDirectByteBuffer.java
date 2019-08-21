@@ -56,10 +56,8 @@ ReferenceCountedDirectByteBuffer
 		duplicate.position( duplicate.position() + offset );
 		
 		duplicate.limit(  duplicate.position() + length );
-		
-		ReferenceCountedDirectByteBuffer res = new ReferenceCountedDirectByteBufferDuplicate( duplicate );
-		
-		return( res );
+
+		return new ReferenceCountedDirectByteBufferDuplicate(duplicate);
 	}
 
 	public void

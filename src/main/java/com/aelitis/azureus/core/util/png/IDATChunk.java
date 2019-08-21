@@ -57,9 +57,8 @@ public class IDATChunk extends CRCedChunk {
 	    } catch(Exception e) {
 	    	e.printStackTrace();
 	    }
-	    byte[] compPayload = outBytes.toByteArray();
-	    		
-		return compPayload;
+
+		return outBytes.toByteArray();
 	}
 
 }

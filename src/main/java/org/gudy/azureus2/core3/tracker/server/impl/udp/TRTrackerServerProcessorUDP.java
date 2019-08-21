@@ -418,12 +418,10 @@ TRTrackerServerProcessorUDP
 					return( false );
 				}
 			}
-			
-			boolean	ok = data.getAddress().equals( client_address );
-			
+
 			// System.out.println( "TRTrackerServerProcessorUDP: tested:" + id + "/" + client_address + " -> " + ok );
 			
-			return( ok );
+			return data.getAddress().equals(client_address);
 			
 		}finally{
 			
@@ -436,11 +434,8 @@ TRTrackerServerProcessorUDP
 		String					client_ip_address,
 		PRUDPPacketRequest		request )
 	{
-		long	conn_id = allocateConnectionId( client_ip_address );
-		
-		PRUDPPacket reply = new PRUDPPacketReplyConnect(request.getTransactionId(), conn_id );
-		
-		return( reply );
+		long conn_id = allocateConnectionId(client_ip_address);
+		return new PRUDPPacketReplyConnect(request.getTransactionId(), conn_id);
 	}
 	
 		// returns reply packet and associated torrent if exists

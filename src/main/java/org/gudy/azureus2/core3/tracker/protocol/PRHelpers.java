@@ -40,15 +40,7 @@ PRHelpers
 	
 		throws UnknownHostException
 	{
-		InetAddress i_address = HostNameToIPResolver.syncResolve(address);
-		
-		byte[]	bytes = i_address.getAddress();
-		
-		int	resp = (bytes[0]<<24)&0xff000000 | (bytes[1] << 16)&0x00ff0000 | (bytes[2] << 8)&0x0000ff00 | bytes[3]&0x000000ff;
-	
-		// System.out.println( "addressToInt: " + address + " -> " + Integer.toHexString(resp));
-		
-		return( resp );
+		return addressToInt(HostNameToIPResolver.syncResolve(address));
 	}
 	
 	public static int
@@ -56,12 +48,10 @@ PRHelpers
 		InetAddress		i_address )
 	{
 		byte[]	bytes = i_address.getAddress();
-		
-		int	resp = (bytes[0]<<24)&0xff000000 | (bytes[1] << 16)&0x00ff0000 | (bytes[2] << 8)&0x0000ff00 | bytes[3]&0x000000ff;
-	
+
 		// System.out.println( "addressToInt: " + address + " -> " + Integer.toHexString(resp));
 		
-		return( resp );
+		return (bytes[0]<<24)&0xff000000 | (bytes[1] << 16)&0x00ff0000 | (bytes[2] << 8)&0x0000ff00 | bytes[3]&0x000000ff;
 	}
 	
 	public static long
@@ -78,11 +68,9 @@ PRHelpers
 		byte[]	bytes = { (byte)(value>>24), (byte)(value>>16),(byte)(value>>8),(byte)value };
 		
 		try{
-			String	res = InetAddress.getByAddress(bytes).getHostAddress();
-			
 			// System.out.println( "intToAddress: " + Integer.toHexString(value) + " -> " + res );
 			
-			return( res );
+			return InetAddress.getByAddress(bytes).getHostAddress();
 			
 		}catch( UnknownHostException e ){
 			

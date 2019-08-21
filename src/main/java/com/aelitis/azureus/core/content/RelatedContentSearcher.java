@@ -1292,10 +1292,8 @@ RelatedContentSearcher
 											}
 										}
 									}else if (  property_name == RelatedContentManager.RCM_SEARCH_PROPERTY_CONTENT_NETWORK ){
-										
-										long cnet = ImportExportUtils.importLong( map, "c", ContentNetwork.CONTENT_NETWORK_UNKNOWN );
-	
-										return( cnet );
+
+										return ImportExportUtils.importLong(map, "c", ContentNetwork.CONTENT_NETWORK_UNKNOWN);
 										
 									}else if ( property_name == RelatedContentManager.RCM_SEARCH_PROPERTY_TRACKER_KEYS ){
 										

@@ -76,10 +76,8 @@ public class PeerClassifier {
 	  }
 	  
 	  	// some clients don't ever offer any fast-allow pieces so we reciprocate
-	  
-	  boolean res = !(client_description.startsWith( "\u00B5" ) || client_description.startsWith( "Trans" ));
-	  	  
-	  return( res );
+
+	  return !(client_description.startsWith("\u00B5") || client_description.startsWith("Trans"));
   }
   
 	private static final Set	platform_ips = Collections.newSetFromMap(new ConcurrentHashMap<>());

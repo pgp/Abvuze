@@ -137,12 +137,9 @@ TRTrackerBTScraperImpl
 			
 			tracker_checker.syncUpdate( torrent, target_url );
 		}
-		
-		TRTrackerScraperResponse	res = tracker_checker.getHashData( torrent, target_url );
-		
+
 		// System.out.println( "scrape: " + torrent + " -> " + (res==null?"null":""+res.getSeeds()));
-		
-		return( res );
+		return tracker_checker.getHashData(torrent, target_url);
 	}
 	
 	public TRTrackerScraperResponse
@@ -155,20 +152,15 @@ TRTrackerBTScraperImpl
 			return null;
 		}
 
-		TRTrackerScraperResponse	res = tracker_checker.peekHashData( torrent, target_url );
-				
-		return( res );
+		return tracker_checker.peekHashData(torrent, target_url);
 	}
 	
 	public TRTrackerScraperResponse
 	scrape(
 		TRTrackerAnnouncer	tracker_client )
 	{
-		TRTrackerScraperResponse	res = tracker_checker.getHashData( tracker_client );
-		
 		// System.out.println( "scrape: " + tracker_client + " -> " + (res==null?"null":""+res.getSeeds()));
-		
-		return( res );
+		return tracker_checker.getHashData(tracker_client);
 	}
 	
 	public void

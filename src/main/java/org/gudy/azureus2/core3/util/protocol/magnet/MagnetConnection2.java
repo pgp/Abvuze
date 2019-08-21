@@ -124,14 +124,11 @@ MagnetConnection2
 	connect()
 	
 		throws IOException	
-	{						
-		MagnetOutputStream 	mos = new MagnetOutputStream();
-		MagnetInputStream 	mis = new MagnetInputStream( mos );
-					
-		input_stream	= mis;
-		output_stream 	= mos;
-		
-		handler.process( getURL(), mos );
+	{
+		output_stream = new MagnetOutputStream();
+		input_stream = new MagnetInputStream((MagnetOutputStream)output_stream);
+
+		handler.process(getURL(), output_stream);
 	}
 	
 	public InputStream

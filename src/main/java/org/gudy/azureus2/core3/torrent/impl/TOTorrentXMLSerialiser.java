@@ -215,9 +215,7 @@ TOTorrentXMLSerialiser
 
                             indent();
 
-                            TOTorrentFileImpl file = file1;
-
-                            writeTag("LENGTH", file.getLength());
+                            writeTag("LENGTH", file1.getLength());
 
                             writeLineRaw("<PATH>");
 
@@ -225,7 +223,7 @@ TOTorrentXMLSerialiser
 
                                 indent();
 
-                                byte[][] path_comps = file.getPathComponents();
+                                byte[][] path_comps = file1.getPathComponents();
 
                                 for (byte[] path_comp : path_comps) {
 
@@ -239,7 +237,7 @@ TOTorrentXMLSerialiser
 
                             writeLineRaw("</PATH>");
 
-                            Map additional_properties = file.getAdditionalProperties();
+                            Map additional_properties = file1.getAdditionalProperties();
 
                             if (additional_properties != null) {
 

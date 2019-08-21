@@ -4767,9 +4767,7 @@ SpeedLimitHandler
 		getTime(
 			int	mins )
 		{
-			String str = getTimeBit( mins/60 ) + ":" + getTimeBit( mins % 60 );
-		
-			return( str );
+			return getTimeBit(mins/60) + ":" + getTimeBit(mins % 60);
 		}
 		
 		private String
@@ -7815,14 +7813,9 @@ SpeedLimitHandler
 				return( pre_test_rate );
 			}
 			
-			private String
-			getString()
-			{
-				String str = getTagName() + "=" + formatRate( getRate(), false) + 
+			private String getString() {
+				return getTagName() + "=" + formatRate( getRate(), false) +
 				" (" + formatRate( getLimit(), true ) + ") {" + getStrength() + (probe_rate<=0?"":("/"+formatRate(probe_rate,false))) + "}";
-				
-				
-				return( str );
 			}
 		}
 	}

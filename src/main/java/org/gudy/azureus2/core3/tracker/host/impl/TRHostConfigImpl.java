@@ -281,11 +281,9 @@ TRHostConfigImpl
 			   	
 			   	Set	added = new HashSet();
 
-                for (TRHostTorrent torrent1 : torrents) {
+                for (TRHostTorrent torrent : torrents) {
 
                     try {
-
-                        TRHostTorrent torrent = torrent1;
 
                         added.add(torrent.getTorrent().getHashWrapper());
 

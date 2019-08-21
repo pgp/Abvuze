@@ -91,10 +91,8 @@ IpFilterManagerImpl
 			end = (int)rafDescriptions.getFilePointer();
 			
 			//System.out.println("add " + new String(description, 0, (end - start)) + "; " + start + " - " + end);
-			
-			int info = start + ((end - start) << 25);
-			
-			return info;
+
+			return start + ((end - start) << 25);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

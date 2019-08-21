@@ -504,7 +504,6 @@ public class NatPMPDeviceImpl implements NatPMPDevice
         // assume router is at xxx.xxx.xxx.1
         rawIP[3] = 1;
         // is there no printf in java?
-        String newIP = (rawIP[0]&0xff) +"."+(rawIP[1]&0xff)+"."+(rawIP[2]&0xff)+"."+(rawIP[3]&0xff);
-        return newIP;
+        return (rawIP[0]&0xff) +"."+(rawIP[1]&0xff)+"."+(rawIP[2]&0xff)+"."+(rawIP[3]&0xff);
     }
 }

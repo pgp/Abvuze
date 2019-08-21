@@ -276,12 +276,10 @@ public class Timer
 							long	freq = periodic_event.getFrequency();
 													
 							if ( new_when > current_time + freq + 5000 ){
-								
-								long	adjusted_when = current_time + freq;
-								
+
 								//Debug.outNoStack( periodic_event.getName() + ": clock change sanity check. Reduced schedule time from " + old_when + "/" + new_when + " to " +  adjusted_when );
 									
-								new_when = adjusted_when;
+								new_when = current_time + freq;
 							}
 						}
 						

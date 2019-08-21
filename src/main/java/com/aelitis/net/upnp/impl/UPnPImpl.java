@@ -511,11 +511,8 @@ UPnPImpl
 			
 			adapter.trace( "UPnP:Response:" + data_str );
 			
-			try{
-				SimpleXMLParserDocument doc = adapter.parseXML( data_str );
-			
-				return( doc );
-				
+			try {
+				return adapter.parseXML(data_str);
 			}catch( Throwable e ){
 				
 					// try some hacks for known errors
@@ -703,12 +700,9 @@ UPnPImpl
 		String	http_proxy 	= System.getProperty( "http.proxyHost" );
 		String	socks_proxy = System.getProperty( "socksProxyHost" );
 
-			// extremely unlikely we want to proxy upnp requests
-		
-		boolean force_direct = 	( http_proxy != null && http_proxy.trim().length() > 0 ) ||
-								( socks_proxy != null && socks_proxy.trim().length() > 0 );
-
-		return( force_direct );
+		// extremely unlikely we want to proxy upnp requests
+		return (http_proxy != null && http_proxy.trim().length() > 0) ||
+				(socks_proxy != null && socks_proxy.trim().length() > 0);
 	}
 	
 

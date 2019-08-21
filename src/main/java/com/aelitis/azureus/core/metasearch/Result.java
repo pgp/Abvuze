@@ -211,7 +211,6 @@ public abstract class Result {
 	applyRankBias(
 		float	_rank )
 	{
-		float rank = engine.applyRankBias( _rank );
 		
 		/*
 		if ( rank != _rank ){
@@ -220,7 +219,7 @@ public abstract class Result {
 		}
 		*/
 		
-		return( rank );
+		return engine.applyRankBias(_rank);
 	}
 	
 	public Map toJSONMap() {

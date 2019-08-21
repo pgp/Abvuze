@@ -1470,10 +1470,8 @@ public class FileUtil {
         		
         			uri = URI.create(jarName);
         		}
-        		
-        		File jar = new File(uri);
-        		
-        		return( jar );
+
+				return new File(uri);
         		
         	}catch( Throwable e ){
         	

@@ -1580,11 +1580,8 @@ public abstract class TableViewImpl<DATASOURCETYPE>
 			}
 			Collections.sort(listVisibleColumns, new Comparator<TableColumnCore>() {
 				public int compare(TableColumnCore o1, TableColumnCore o2) {
-					if (o1 == o2) {
-						return 0;
-					}
-					int diff = o1.getPosition() - o2.getPosition();
-					return diff;
+					if (o1 == o2) return 0;
+					return o1.getPosition() - o2.getPosition();
 				}
 			});
 			columnsOrdered = listVisibleColumns.toArray(new TableColumnCore[0]);

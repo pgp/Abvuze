@@ -826,9 +826,7 @@ TorrentUtils
 
 				List<String> s = new ArrayList<>();
 
-				TOTorrentAnnounceURLSet set = set1;
-
-				URL[] urls = set.getAnnounceURLs();
+				URL[] urls = set1.getAnnounceURLs();
 
 				for (URL url : urls) {
 
@@ -1923,10 +1921,8 @@ TorrentUtils
 			Long value = (Long)m.get( TORRENT_AZ_PROP_PEER_CACHE_VALID );
 			
 			if ( value != null && value == PC_MARKER ){
-			
-				Map	pc = (Map)m.get( TORRENT_AZ_PROP_PEER_CACHE );
-	
-				return( pc );
+
+				return (Map)m.get(TORRENT_AZ_PROP_PEER_CACHE);
 			}
 			
 		}catch( Throwable e ){
@@ -3057,12 +3053,10 @@ TorrentUtils
 					
 						try{
 							restoreState( false, true );
-							
-							Map res = delegate.getAdditionalMapProperty( name );
 
 							//System.out.println( "Restored fluff for " + new String(getName()) + " to " + res );
 
-							return( res );
+							return delegate.getAdditionalMapProperty(name);
 							
 						}catch( Throwable e ){
 							
@@ -3091,10 +3085,9 @@ TorrentUtils
 						try
 						{
 							restoreState(false, true);
-							Object res = delegate.getAdditionalProperty(name);
 							//System.out.println( "Restored fluff for " + new String(getName()) + " to " + res );
 							
-							return (res);
+							return delegate.getAdditionalProperty(name);
 							
 						} catch (Throwable e)
 						{

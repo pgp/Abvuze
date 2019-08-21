@@ -121,9 +121,8 @@ public class PingSpaceMon
             SMInstance pm = SMInstance.getInstance();
             SpeedManagerAlgorithmProviderAdapter adapter = pm.getAdapter();
             SpeedManagerPingMapper persistentMap = adapter.getPingMapper();
-            SpeedManagerLimitEstimate upEst = persistentMap.getEstimatedUploadLimit(true);
 
-            return upEst;
+            return persistentMap.getEstimatedUploadLimit(true);
             
         }catch(Throwable t){
             //log this event and
@@ -141,9 +140,8 @@ public class PingSpaceMon
             SMInstance pm = SMInstance.getInstance();
             SpeedManagerAlgorithmProviderAdapter adapter = pm.getAdapter();
             SpeedManager sm = adapter.getSpeedManager();
-            SpeedManagerLimitEstimate upEstCapacity = sm.getEstimatedUploadCapacityBytesPerSec();
 
-            return upEstCapacity;
+            return sm.getEstimatedUploadCapacityBytesPerSec();
 
         }catch(Throwable t){
             //log this event and
@@ -164,9 +162,8 @@ public class PingSpaceMon
             SMInstance pm = SMInstance.getInstance();
             SpeedManagerAlgorithmProviderAdapter adapter = pm.getAdapter();
             SpeedManagerPingMapper persistentMap = adapter.getPingMapper();
-            SpeedManagerLimitEstimate downEst = persistentMap.getEstimatedDownloadLimit(true);
 
-            return downEst;
+            return persistentMap.getEstimatedDownloadLimit(true);
 
         }catch(Throwable t){
             //log this event and
@@ -188,9 +185,8 @@ public class PingSpaceMon
             SMInstance pm = SMInstance.getInstance();
             SpeedManagerAlgorithmProviderAdapter adapter = pm.getAdapter();
             SpeedManager sm = adapter.getSpeedManager();
-            SpeedManagerLimitEstimate downEstCapacity = sm.getEstimatedDownloadCapacityBytesPerSec();
 
-            return downEstCapacity;
+            return sm.getEstimatedDownloadCapacityBytesPerSec();
 
         }catch(Throwable t){
             //log this event and

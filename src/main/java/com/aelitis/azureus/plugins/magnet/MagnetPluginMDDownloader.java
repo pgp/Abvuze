@@ -281,10 +281,8 @@ MagnetPluginMDDownloader
 					magnet_args.put( lhs, rhs );
 					
 					if ( lhs.equals( "tr" )){
-						
-						String tracker = rhs;
-						
-						trackers.add( tracker );
+
+						trackers.add(rhs);
 
 					}else if ( lhs.equals( "dn" )){
 						

@@ -353,9 +353,7 @@ public class TorrentOpenOptions
                             continue;
                         }
 
-                        String segment = s;
-
-                        if (dmName.contains(segment)) {
+						if (dmName.contains(s)) {
                             numMatches += l;
                         }
                     }

@@ -779,10 +779,9 @@ ExternalSeedPeer
 
 			List	ref = listeners;
 
-            for (Object o : ref) {
+            for (Object _listener : ref) {
 
                 try {
-                    Object _listener = o;
 
                     if (_listener instanceof PeerListener) {
 

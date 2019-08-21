@@ -1640,7 +1640,7 @@ public class UrlUtils
 				}
 			};
 			
-		return( hack );
+		return hack;
 	}
 	
 	public static void

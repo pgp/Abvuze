@@ -1932,9 +1932,7 @@ ProtocolDecoderPHE
    	getZeroPadding(
    		int	max_len )
    	{
-   		byte[]	bytes = new byte[ random.nextInt(max_len)];
-   		
-   		return( bytes );
+		return new byte[random.nextInt(max_len)];
    	}
 	
 	protected static KeyPair
@@ -2002,10 +2000,8 @@ ProtocolDecoderPHE
 				
 				last_dh_incoming_key_generate = now;
 			}
-			
-			KeyPair	res = dh_key_generator.generateKeyPair();
-			
-			return( res );
+
+			return dh_key_generator.generateKeyPair();
 		}
 	}
 	

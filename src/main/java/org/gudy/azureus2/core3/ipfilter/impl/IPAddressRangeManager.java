@@ -110,12 +110,10 @@ IPAddressRangeManager
 				
 				address_long += 0x100000000L;
 			}
-			
-			Object res = isInRange( address_long );
-			
+
 			// LGLogger.log( "IPAddressRangeManager: checking '" + ip + "' against " + entries.size() + "/" + merged_entries.length + " -> " + res );
 			
-			return( res );
+			return isInRange(address_long);
 						
 		}finally{
 			
@@ -143,12 +141,10 @@ IPAddressRangeManager
 				
 				address_long += 0x100000000L;
 			}
-			
-			Object res = isInRange( address_long );
-			
+
 			// LGLogger.log( "IPAddressRangeManager: checking '" + ip + "' against " + entries.size() + "/" + merged_entries.length + " -> " + res );
 			
-			return( res );
+			return isInRange(address_long);
 						
 		}finally{
 			

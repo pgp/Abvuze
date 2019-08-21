@@ -1313,8 +1313,7 @@ public class StringUtil
 
     if ( ( delimiters == null ) || ( delimiters.length() == 0 ) )
     {
-      String[] resultArray = { text } ;
-      return resultArray ;
+        return new String[]{ text };
     }
 
     if ( text.length() == 0 )
@@ -1402,9 +1401,8 @@ public class StringUtil
     {
 			if ( text.length() == 0 )
 				return new String[0] ;
-				
-      String[] resultArray = { text } ;
-      return resultArray ;
+
+        return new String[]{ text };
     }
 
 		if ( ! all )
