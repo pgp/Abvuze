@@ -123,7 +123,6 @@ public class SystemProperties {
 					File fileUserDir = new File(System.getProperty("user.dir", ""));
 					if (new File(fileUserDir, "Azureus2.jar").exists()) {
 						setApplicationName(fileUserDir.getName());
-						return;
 					}
 					
 					// probably console UI

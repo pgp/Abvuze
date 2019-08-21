@@ -141,7 +141,6 @@ public class SelectorGuard {
       
       consecutiveZeroSelects = 0;
       listener.failureDetected();
-      return;
     }
     
     //not yet over the count threshold

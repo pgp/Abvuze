@@ -1645,13 +1645,9 @@ TagManagerImpl
 					return;
 				}
 				
-				rss_tags.add( tag );
+				rss_tags.add(tag);
 				
-				if ( rss_tags.size() > 1 ){
-					
-					return;
-					
-				}else{
+				if (rss_tags.size() <= 1) {
 					
 					RSSGeneratorPlugin.registerProvider( RSS_PROVIDER, rss_generator  );
 				}

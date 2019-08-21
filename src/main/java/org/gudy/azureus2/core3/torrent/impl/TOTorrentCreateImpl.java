@@ -586,13 +586,9 @@ TOTorrentCreateImpl
 	protected void
 	setIgnoreList()
 	{
-		try{
+		try {
 			ignore_set = TorrentUtils.getIgnoreSet();
-			
-		}catch( NoClassDefFoundError e ){
-			
-			return;
-		}
+		}catch(NoClassDefFoundError ignored) {}
 	}
 	
 	private boolean

@@ -268,9 +268,7 @@ TranscodePipeFileSource
 					}catch( Throwable e ){				
 					}
 					
-					sockets.remove( socket );
-					
-					return;
+					sockets.remove(socket);
 				}
 			}			
 		}catch( Throwable e ){

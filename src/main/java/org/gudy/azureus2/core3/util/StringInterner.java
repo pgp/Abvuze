@@ -549,11 +549,11 @@ StringInterner
 					break aging;
 				Collections.sort(remaining, savingsComp);
 				// remove those objects that saved the least amount first
-				weightedRemove:
+				// weightedRemove:
 				for (Object o : remaining) {
 					currentSetSize = managedInterningSet.size();
 					if (currentSetSize < SCHEDULED_CLEANUP_GOAL && scheduled)
-						break weightedRemove;
+						break; /*weightedRemove;*/
 					if (currentSetSize < IMMEDIATE_CLEANUP_GOAL && !scheduled)
 						break aging;
 					WeakWeightedEntry entry = (WeakWeightedEntry) o;

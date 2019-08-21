@@ -343,8 +343,7 @@ public class Show extends IConsoleCommand {
 			}
 			catch (Exception e) {
 				ci.out.println("> Command 'show': Subcommand '" + subCommand + "' unknown.");
-				return;
-			}				
+			}
 		} 
 	}
 

@@ -175,9 +175,7 @@ Handler
 							installing = true;
 						}
 					}
-					
-					return;
-					
+
 				}finally{
 					
 					if ( !installing ){

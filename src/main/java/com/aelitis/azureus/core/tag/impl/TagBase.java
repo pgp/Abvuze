@@ -599,11 +599,7 @@ TagBase
 			
 			File	existing = getTagInitialSaveFolder();
 			
-			if ( existing == null && folder == null ){
-				
-				return;
-				
-			}else if (existing == null || !existing.equals(folder)){
+			if (existing == null || !existing.equals(folder)){
 				
 				writeStringAttribute( AT_FL_INIT_LOC, folder==null?null:folder.getAbsolutePath());
 				
@@ -675,12 +671,8 @@ TagBase
 		if ( tag_fl != null ){
 			
 			File	existing = getTagMoveOnCompleteFolder();
-			
-			if ( existing == null && folder == null ){
-				
-				return;
-				
-			}else if (existing == null || !existing.equals(folder)){
+
+			if (existing == null || !existing.equals(folder)){
 				
 				writeStringAttribute( AT_FL_MOVE_COMP, folder==null?null:folder.getAbsolutePath());
 				
@@ -753,11 +745,7 @@ TagBase
 			
 			File	existing = getTagCopyOnCompleteFolder();
 			
-			if ( existing == null && folder == null ){
-				
-				return;
-				
-			}else if (existing == null || !existing.equals(folder)){
+			if (existing == null || !existing.equals(folder)){
 				
 				writeStringAttribute( AT_FL_COPY_COMP, folder==null?null:folder.getAbsolutePath());
 				

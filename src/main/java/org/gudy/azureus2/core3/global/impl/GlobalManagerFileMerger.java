@@ -498,8 +498,7 @@ GlobalManagerFileMerger
 									if ( destroyed ){
 										
 										file.removeListener( this );
-										
-										return;
+
 									}
 								}
 							};

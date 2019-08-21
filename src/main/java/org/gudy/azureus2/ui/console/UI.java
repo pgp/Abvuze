@@ -111,7 +111,6 @@ public class UI
 	  }
 
       TorrentDownloaderFactory.downloadManaged(url);
-      return; 
   }
   
   public void openTorrent(String fileName) {

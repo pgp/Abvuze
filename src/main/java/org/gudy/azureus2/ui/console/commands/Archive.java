@@ -159,8 +159,7 @@ public class Archive extends IConsoleCommand {
 			}else{
 			
 				ci.out.println( "Unsupported sub-command: " + sub );
-				
-				return;
+
 			}
 		}else{
 			
