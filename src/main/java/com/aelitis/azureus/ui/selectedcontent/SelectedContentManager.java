@@ -28,6 +28,7 @@ import org.gudy.azureus2.pluginsimpl.local.PluginCoreUtils;
 import com.aelitis.azureus.ui.common.table.TableView;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -110,10 +111,7 @@ public class SelectedContentManager
 			
 			if ( same ){
 				
-				same =
-					SelectedContentManager.viewID == viewID ||
-					(SelectedContentManager.viewID != null &&
-							SelectedContentManager.viewID.equals(viewID));
+				same = Objects.equals(SelectedContentManager.viewID, viewID);
 				
 				if ( same ){
 					

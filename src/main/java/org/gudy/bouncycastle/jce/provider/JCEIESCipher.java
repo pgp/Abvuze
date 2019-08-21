@@ -221,17 +221,12 @@ public class JCEIESCipher //extends WrapCipherSpi
 
         if (params != null)
         {
-            for (int i = 0; i != availableSpecs.length; i++)
-            {
-                try
-                {
+            for(int i=0; i != availableSpecs.length; i++) {
+                try {
                     paramSpec = params.getParameterSpec(availableSpecs[i]);
                     break;
                 }
-                catch (Exception e)
-                {
-                    continue;
-                }
+                catch (Exception ignored) {}
             }
 
             if (paramSpec == null)

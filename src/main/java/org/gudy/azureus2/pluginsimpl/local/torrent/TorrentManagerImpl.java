@@ -432,10 +432,6 @@ TorrentManagerImpl
 			return new TorrentImpl(plugin_interface, preserveFields(torrent,preserve));
 		} catch (TOTorrentException e) {
 			throw new TorrentException ("Failed to read TorrentData", e);
-		} finally {
-			try {
-				bais.close();
-			} catch (IOException e) {}
 		}
 	}
 

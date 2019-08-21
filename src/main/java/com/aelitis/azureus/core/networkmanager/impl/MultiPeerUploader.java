@@ -391,8 +391,7 @@ public class MultiPeerUploader implements RateControlledEntity {
         else {  //we're not allowed enough to maximize the packet payload
           ready_connections.addLast( conn );  //re-add to end as currently unusable
           num_unusable_connections++;
-          
-          continue;  //move on to the next connection
+          //move on to the next connection
         }
       }
     }

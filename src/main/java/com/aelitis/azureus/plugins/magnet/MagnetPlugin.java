@@ -1597,8 +1597,6 @@ MagnetPlugin
 											}
 										}
 									}
-			
-									continue;
 								}
 							}
 							

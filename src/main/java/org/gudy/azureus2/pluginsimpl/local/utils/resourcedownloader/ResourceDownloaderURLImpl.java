@@ -1330,14 +1330,9 @@ redirect_label:
 		
 									throw( e );
 									
-								}catch( ZipException e ){
-									
-									if ( connect_loop == 0 ){
-										
+								}catch( ZipException e ) {
+									if ( connect_loop == 0 )
 										use_compression = false;
-										
-										continue;
-									}
 								}catch( IOException e ){
 									
 									if ( connect_loop == 0 ){

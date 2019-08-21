@@ -3745,11 +3745,7 @@ TRTrackerBTAnnouncerImpl
 
                 // filter out any disabled peers
 
-                if (!ps_enabled && ps.equals(PEPeerSource.PS_BT_TRACKER)) {
-
-                    continue;
-
-                } else {
+                if (ps_enabled || !ps.equals(PEPeerSource.PS_BT_TRACKER)) {
 
                     int http_port = 0;
                     byte az_version = TRTrackerAnnouncer.AZ_TRACKER_VERSION_1;

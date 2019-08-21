@@ -151,19 +151,10 @@ ResourceDownloaderTorrentImpl
 			
 				addReportListener( x );
 
-				InputStream	is = x.download();
-
-				try{
+				try(InputStream	is = x.download()) {
 					torrent_holder[0] = TOTorrentFactory.deserialiseFromBEncodedInputStream( is );
-
-				}finally{
-
-					try{
-						is.close();
-
-					}catch( IOException e ){
-					}
 				}
+				catch(IOException e) {}
 				
 				if( !torrent_holder[0].isSimpleTorrent()){
 					

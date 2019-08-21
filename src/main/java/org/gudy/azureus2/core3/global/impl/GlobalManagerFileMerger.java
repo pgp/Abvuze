@@ -1435,11 +1435,7 @@ GlobalManagerFileMerger
 															}
 														}
 														
-														if ( write_block.hasRemaining( SS )){
-															
-															continue;
-															
-														}else{
+														if(!write_block.hasRemaining(SS)) {
 															
 															write_block.flip( SS );
 																
