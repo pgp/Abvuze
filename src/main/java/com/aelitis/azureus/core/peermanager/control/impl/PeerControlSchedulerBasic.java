@@ -72,8 +72,8 @@ PeerControlSchedulerBasic
 		
 		long	tick_count		= 0;
 		long 	last_stats_time	= SystemTime.getMonotonousTime();
-		
-		while( true ){
+
+		for(;;) {
 			
 			if ( registrations_changed ){
 				

@@ -926,7 +926,7 @@ PRUDPPacketHandlerImpl
 										public void
 										runSupport()
 										{
-											while( true ){
+											for(;;) {
 												
 												try{
 													recv_queue_sem.reserve();
@@ -1291,8 +1291,8 @@ PRUDPPacketHandlerImpl
 										runSupport()
 										{
 											int[]		consecutive_sends = new int[send_queues.length];
-											
-											while( true ){
+
+											for(;;) {
 												
 												try{
 													send_queue_sem.reserve();

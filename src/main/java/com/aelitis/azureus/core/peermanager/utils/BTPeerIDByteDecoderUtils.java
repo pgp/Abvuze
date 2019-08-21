@@ -88,12 +88,16 @@ class BTPeerIDByteDecoderUtils {
 		 * 
 		 * KTorrent 3 appears to use a dash rather than a final character. 
 		 */
-		if (peer_id.substring(1, 3).equals("FG")) {return true;}
-		if (peer_id.substring(1, 3).equals("LH")) {return true;}
-		if (peer_id.substring(1, 3).equals("NE")) {return true;}
-		if (peer_id.substring(1, 3).equals("KT")) {return true;}
-		if (peer_id.substring(1, 3).equals("SP")) {return true;}
-		return false;
+		switch (peer_id.substring(1, 3)) {
+			case "FG":
+			case "LH":
+			case "NE":
+			case "KT":
+			case "SP":
+				return true;
+			default:
+				return false;
+		}
 	}
 	
 	/**

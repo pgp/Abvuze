@@ -109,9 +109,7 @@ public class UI
 		  console.downloadRemoteTorrent(url);
 		  return;
 	  }
-	  if ( console != null ){
-		  console.out.println( "Downloading torrent from url: " + url );
-	  }
+
       TorrentDownloaderFactory.downloadManaged(url);
       return; 
   }

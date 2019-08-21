@@ -392,7 +392,7 @@ FMFileManagerImpl
 	protected void
 	closeQueueDispatch()
 	{
-		while(true){
+		for(;;) {
 			
 			if ( DEBUG ){
 				

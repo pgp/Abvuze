@@ -122,7 +122,7 @@ TRTrackerServerNATChecker
 						public void
 						runSupport()
 						{
-							while(true){
+							for(;;) {
 								
 								check_queue_sem.reserve();
 								

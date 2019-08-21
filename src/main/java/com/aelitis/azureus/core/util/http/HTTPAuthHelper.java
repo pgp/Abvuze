@@ -1472,8 +1472,8 @@ HTTPAuthHelper
 			proxy.start();
 			
 			System.out.println( "port=" + proxy.getPort());
-			
-			while( true ){
+
+			for(;;) {
 				
 				Thread.sleep(1000);
 			}

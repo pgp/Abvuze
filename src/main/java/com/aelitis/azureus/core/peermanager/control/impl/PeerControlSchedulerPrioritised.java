@@ -76,8 +76,8 @@ PeerControlSchedulerPrioritised
 		int scheduledNext = 0;
 		long	currentScheduleStart = latest_time;
 		long 	last_stats_time	= latest_time;
-		
-		while( true ){
+
+		for(;;) {
 
 			if ( registrations_changed ){
 				try{

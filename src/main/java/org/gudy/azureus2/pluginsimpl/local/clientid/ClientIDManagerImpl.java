@@ -619,7 +619,7 @@ ClientIDManagerImpl
 
 					byte[] temp = new byte[1];
 
-					while (true) {
+					do {
 
 						int len = target_is.read(temp);
 
@@ -630,11 +630,7 @@ ClientIDManagerImpl
 
 						reply_header += new String(temp, StandardCharsets.ISO_8859_1);
 
-						if (temp[0] == '\n' && reply_header.endsWith("\r\n\r\n")) {
-
-							break;
-						}
-					}
+					} while (temp[0] != '\n' || !reply_header.endsWith("\r\n\r\n"));
 
 					String[] reply_lines = reply_header.trim().split("\r\n");
 

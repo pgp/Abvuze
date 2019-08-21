@@ -353,57 +353,53 @@ DeviceMediaRendererManual
 					}
 				});
 		}
-		
-		while( true ){
-			
-			if ( copy_sem.reserve( 10*1000 )){
-				
-				while( copy_sem.reserveIfAvailable());
-			}
-						
-			boolean	auto_copy = getAutoCopyToFolder();
-			
-			boolean	nothing_to_do = false;
-			
-			synchronized( this ){
 
-				if ( !auto_copy ){
-											
+		do {
+
+			if (copy_sem.reserve(10 * 1000)) {
+
+				while (copy_sem.reserveIfAvailable()) ;
+			}
+
+			boolean auto_copy = getAutoCopyToFolder();
+
+			boolean nothing_to_do = false;
+
+			synchronized (this) {
+
+				if (!auto_copy) {
+
 					copy_thread = null;
-						
+
 					nothing_to_do = true;
-					
-				}else{
+
+				} else {
 
 					copy_outstanding_set = false;
 				}
 			}
-			
-			if ( nothing_to_do ){
-				
-				setError( COPY_ERROR_KEY, null );
-				
+
+			if (nothing_to_do) {
+
+				setError(COPY_ERROR_KEY, null);
+
 				int pending = getCopyToFolderPending();
-				
-				if ( pending == 0 ){
-					
-					setInfo( COPY_PENDING_KEY, null );
-					
-				}else{
-					
-					String str = MessageText.getString( "devices.info.copypending", new String[]{ String.valueOf( pending ) });
-					
-					setInfo( COPY_PENDING_KEY, str );
+
+				if (pending == 0) {
+
+					setInfo(COPY_PENDING_KEY, null);
+
+				} else {
+
+					String str = MessageText.getString("devices.info.copypending", new String[]{String.valueOf(pending)});
+
+					setInfo(COPY_PENDING_KEY, str);
 				}
 				return;
 			}
-			
 
-			if ( doCopy()){
-				
-				break;
-			}
-		}
+
+		} while (!doCopy());
 	}
 	
 	protected boolean

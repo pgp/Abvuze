@@ -495,15 +495,9 @@ AEWin32AccessImpl
 				cb );
 	}
 	
-	private int
-	addressToInt(
-		InetAddress	address )
-	{
+	private int addressToInt(InetAddress address) {
 		byte[]	bytes = address.getAddress();
-		
-		int	resp = (bytes[0]<<24)&0xff000000 | (bytes[1] << 16)&0x00ff0000 | (bytes[2] << 8)&0x0000ff00 | bytes[3]&0x000000ff;
-			
-		return( resp );
+		return (bytes[0]<<24)&0xff000000 | (bytes[1] << 16)&0x00ff0000 | (bytes[2] << 8)&0x0000ff00 | bytes[3]&0x000000ff;
 	}
 	
 	private InetAddress
@@ -512,14 +506,11 @@ AEWin32AccessImpl
 	{
 		byte[]	bytes = { (byte)(address>>24), (byte)(address>>16),(byte)(address>>8),(byte)address };
 		
-		try{
-			InetAddress	res = InetAddress.getByAddress(bytes);
-						
-			return( res );
-			
-		}catch( UnknownHostException e ){
-				
-			return( null );
+		try {
+			return InetAddress.getByAddress(bytes);
+		}
+		catch(UnknownHostException e) {
+			return null;
 		}
 	}
 	

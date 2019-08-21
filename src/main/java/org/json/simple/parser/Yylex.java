@@ -279,7 +279,7 @@ private StringBuffer sb=new StringBuffer();
 			else yy_lookahead = yy_advance();
 			yy_next_state = YY_F;
 			yy_next_state = yy_nxt[yy_rmap[yy_state]][yy_cmap[yy_lookahead]];
-			if (YY_EOF == yy_lookahead && true == yy_initial) {
+			if (YY_EOF == yy_lookahead && yy_initial) {
 				return null;
 			}
 			if (YY_F != yy_next_state) {

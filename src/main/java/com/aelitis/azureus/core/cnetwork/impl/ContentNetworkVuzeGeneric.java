@@ -400,10 +400,8 @@ ContentNetworkVuzeGeneric
 			case SERVICE_PREPLAYBACK:{
 				
 				String	hash 		= (String)params[0];
-				
-				String url_str = base + hash + "?" + URL_SUFFIX;
-				
-				return( url_str );
+
+				return base + hash + "?" + URL_SUFFIX;
 			}
 			case SERVICE_COMMENT:{
 				

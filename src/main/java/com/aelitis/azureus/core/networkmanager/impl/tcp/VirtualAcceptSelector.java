@@ -56,13 +56,11 @@ VirtualAcceptSelector
 			public void 
 			runSupport() 
 			{
-				while( true ) {
-	        	
-					try{
+				for(;;) {
+					try {
 						accept_selector.select( 50 );
-	           
-					}catch( Throwable e ){
-	    			  
+					}
+					catch(Throwable e) {
 						Debug.printStackTrace(e);
 					}
 				}

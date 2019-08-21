@@ -172,7 +172,7 @@ public class HTTPUtils {
 		
 		String reply_header = "";
 
-		while (true) {
+		do {
 
 			byte[] buffer = new byte[1];
 
@@ -183,11 +183,7 @@ public class HTTPUtils {
 
 			reply_header += (char) buffer[0];
 
-			if (reply_header.endsWith(NL + NL)) {
-
-				break;
-			}
-		}
+		} while (!reply_header.endsWith(NL + NL));
 
 		int p1 = reply_header.indexOf(NL);
 

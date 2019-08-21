@@ -327,15 +327,13 @@ BasicPluginConfigModelImpl
 		String											_resource_name,
 		org.gudy.azureus2.plugins.ui.config.Parameter[]	_parameters )
 	{
-		ParameterGroupImpl	pg = new ParameterGroupImpl( _resource_name, _parameters );
-		
-		return( pg );
+		return new ParameterGroupImpl(_resource_name, _parameters);
 	}
 	
 	public ParameterTabFolder 
 	createTabFolder() 
 	{
-		return( new ParameterTabFolderImpl());
+		return new ParameterTabFolderImpl();
 	}
 	
 	public void

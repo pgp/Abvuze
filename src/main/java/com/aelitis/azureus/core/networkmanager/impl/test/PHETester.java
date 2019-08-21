@@ -79,7 +79,7 @@ PHETester
 			public void
 			run()
 			{
-				while( true ){
+				for(;;) {
 					try{
 						connect_selector.select( 100 );
 					}
@@ -168,7 +168,7 @@ PHETester
 	protected void
 	outgoings()
 	{
-		while( true ){
+		for(;;) {
 			
 			outgoing();
 			

@@ -143,18 +143,11 @@ AZHave
 			
 			pieces[i] = ((Long)l.get(i)).intValue();
 		}
-		
-		AZHave message =  new AZHave( pieces, version );
-				
-		return( message );
+
+		return new AZHave(pieces, version);
 	}
 
-	public void 
-	destroy() 
-	{	
-		if ( buffer != null ){
-			
-			buffer.returnToPool();
-		}
+	public void destroy() {
+		if (buffer != null) buffer.returnToPool();
 	}
 }

@@ -397,7 +397,7 @@ public class Debug {
 		   public void 
 		   runSupport()
 		   {	
-			   while(true){
+			   for(;;) {
 				   Debug.dumpThreads(name);
 				   
 				   try{

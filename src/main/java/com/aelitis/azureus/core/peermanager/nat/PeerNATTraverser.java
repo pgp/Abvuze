@@ -182,30 +182,25 @@ PeerNATTraverser
 						
 						// System.out.println( "usage = " + usage );
 
-						while( true ){
-						
-							if ( 	pending_requests.size() == 0 ||
-									active_requests.size() >= MAX_ACTIVE_REQUESTS ){
-								
-								break;
-							}
-								
-								// TODO: prioritisation based on initiator connections etc?
-							
-							PeerNATTraversal traversal = (PeerNATTraversal)pending_requests.removeFirst();
-							
-							active_requests.add( traversal );
-							
-							if ( to_run == null ){
-								
+						while (pending_requests.size() != 0 &&
+								active_requests.size() < MAX_ACTIVE_REQUESTS) {
+
+							// TODO: prioritisation based on initiator connections etc?
+
+							PeerNATTraversal traversal = (PeerNATTraversal) pending_requests.removeFirst();
+
+							active_requests.add(traversal);
+
+							if (to_run == null) {
+
 								to_run = new ArrayList();
 							}
-							
-							to_run.add( traversal );
-							
+
+							to_run.add(traversal);
+
 							attempted_count++;
 						}
-					}	
+					}
 					
 					if ( to_run != null ){
 

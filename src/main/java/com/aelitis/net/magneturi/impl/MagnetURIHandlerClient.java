@@ -71,22 +71,18 @@ outer:
 
                     byte[] buffer = new byte[1];
 
-                    while (true) {
+					do {
 
-                        int len = is.read(buffer);
+						int len = is.read(buffer);
 
-                        if (len <= 0) {
+						if (len <= 0) {
 
-                            break outer;
-                        }
+							break outer;
+						}
 
-                        header += new String(buffer, 0, len);
+						header += new String(buffer, 0, len);
 
-                        if (header.endsWith(NL + NL)) {
-
-                            break;
-                        }
-                    }
+					} while (!header.endsWith(NL + NL));
 
                     int pos = header.indexOf(NL);
 

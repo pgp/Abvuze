@@ -618,24 +618,20 @@ redirect_loop:
             try (InputStream is = socket.getInputStream()) {
                 String input_header = "";
 
-                while (true) {
+				do {
 
-                    byte[] buffer = new byte[1];
+					byte[] buffer = new byte[1];
 
-                    int len = is.read(buffer);
+					int len = is.read(buffer);
 
-                    if (len < 0) {
+					if (len < 0) {
 
-                        throw (new IOException("input too short reading header"));
-                    }
+						throw (new IOException("input too short reading header"));
+					}
 
-                    input_header += (char) buffer[0];
+					input_header += (char) buffer[0];
 
-                    if (input_header.endsWith(NL + NL)) {
-
-                        break;
-                    }
-                }
+				} while (!input_header.endsWith(NL + NL));
 
                 // HTTP/1.1 403 Forbidden
 

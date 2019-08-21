@@ -111,7 +111,7 @@ NetworkGlueUDP
 			public void
 			runSupport()
 			{
-				while( true ){
+				for(;;) {
 					
 			
 					InetSocketAddress	target_address 	= null;

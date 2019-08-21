@@ -93,7 +93,7 @@ SecureMessageServiceClientImpl
 			public void
 			runSupport()
 			{
-				while( true ){
+				for(;;) {
 					
 					long	time = retry_millis;
 					

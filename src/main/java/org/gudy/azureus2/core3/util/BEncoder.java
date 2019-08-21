@@ -915,13 +915,12 @@ BEncoder
 
         // Fall thru to fast mode for smaller numbers
         // assert(i <= 65536, i);
-        for (;;) { 
-            q = (i * 52429) >>> (16+3);
-            r = i - ((q << 3) + (q << 1));  // r = i-(q*10) ...
-            int_buffer [--charPos] = digits [r];
-            i = q;
-            if (i == 0) break;
-        }
+		do {
+			q = (i * 52429) >>> (16 + 3);
+			r = i - ((q << 3) + (q << 1));  // r = i-(q*10) ...
+			int_buffer[--charPos] = digits[r];
+			i = q;
+		} while (i != 0);
         if (sign != 0) {
         	int_buffer [--charPos] = sign;
         }

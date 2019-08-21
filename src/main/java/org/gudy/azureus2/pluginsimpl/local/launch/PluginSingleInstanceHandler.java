@@ -116,7 +116,7 @@ PluginSingleInstanceHandler
 		    		public void 
 		    		run()
 					{
-		    		    while ( true ){
+						for(;;) {
 		    		    	
 		    		    	Socket socket			= null;
 		    		    	ObjectInputStream	ois	= null;

@@ -221,8 +221,7 @@ public class BTPeerIDByteDecoder {
 			String client_ver = BTPeerIDByteDecoderUtils.getMainlineStyleVersionNumber(peer_id);
 			
 			if (client_ver != null) {
-				String result = client + " " + client_ver;
-				return result;
+				return client + " " + client_ver;
 			}
 		}
 

@@ -256,30 +256,23 @@ NonDaemonTaskRunner
 			
 			tasks_mon.exit();
 		}
-		
-		while( true ){
-			
-			if ( sem.reserve( 10000 )){
-				
-				break;
-			}
-			
-			if (Logger.isEnabled()){
 
-				try{
+		while (!sem.reserve(10000)) {
+			if (Logger.isEnabled()) {
+				try {
 					tasks_mon.enter();
 
-                    for (Object o : wait_until_idle_list) {
+					for (Object o : wait_until_idle_list) {
 
-                        AESemaphore pending = (AESemaphore) o;
+						AESemaphore pending = (AESemaphore) o;
 
-                        if (pending != sem) {
+						if (pending != sem) {
 
-                            Logger.log(new LogEvent(LogIDs.CORE, "Waiting for " + pending.getName() + " to complete"));
-                        }
-                    }
-				}finally{
-					
+							Logger.log(new LogEvent(LogIDs.CORE, "Waiting for " + pending.getName() + " to complete"));
+						}
+					}
+				}
+				finally {
 					tasks_mon.exit();
 				}
 			}

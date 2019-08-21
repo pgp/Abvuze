@@ -94,8 +94,8 @@ public class TableCellRefresher {
 					iterationNumber = 0;
 					
 					UIFunctions uif = UIFunctionsManager.getUIFunctions();
-					
-					while (true) {
+
+					for(;;) {
 
 						if ( uif != null ){
 							

@@ -232,7 +232,7 @@ public class WriteController implements AzureusCoreStatsProvider{
     
     net_man = NetworkManager.getSingleton();
 
-    while( true ) {
+	  for(;;) {
       
       process_loop_time = SystemTime.getMonotonousTime();
 

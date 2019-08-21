@@ -190,8 +190,7 @@ public class AEClientService implements ClientMessageService {
 		read_block.reserve();  //block until receive completes
 
 		if( !received_messages.isEmpty() ) {  //there were still read messages left from the previous read call
-			Map recv_msg = (Map)received_messages.remove( 0 );
-			return recv_msg;
+			return (Map)received_messages.remove( 0 );
 		}
 		
 		//receive op finished	

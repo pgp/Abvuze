@@ -366,10 +366,8 @@ BuddyPluginUtils
 			
 			torrent_name = torrent.getName();
 		}
-		
-		String key = "Download: " + torrent_name + " {" + ByteFormatter.encodeString( torrent.getHash()) + "}";
 
-		return( key );
+		return "Download: " + torrent_name + " {" + ByteFormatter.encodeString( torrent.getHash()) + "}";
 	}
 	
 

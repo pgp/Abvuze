@@ -2463,8 +2463,8 @@ PluginInitializer
 					run()
 					{
 						Map<Object,Object> values = new IdentityHashMap<>();
-												
-						while( true ){
+
+						for(;;) {
 														
 							request_sem.reserve();
 							

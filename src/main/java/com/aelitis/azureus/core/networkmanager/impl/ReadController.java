@@ -202,8 +202,8 @@ public class ReadController implements AzureusCoreStatsProvider{
   
   private void readProcessorLoop() {
     boolean check_high_first = true;
-    
-    while( true ) {
+
+      for(;;) {
       loop_count++;
       try {
         if( check_high_first ) {

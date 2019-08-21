@@ -116,20 +116,12 @@ AZBadPiece
 	{
 		Map payload = MessagingUtil.convertBencodedByteStreamToPayload( data, 1, getID() );
 					
-		int	piece_number	= ((Long)payload.get( "piece")).intValue();
+		int	piece_number = ((Long)payload.get( "piece")).intValue();
 
-		
-		AZBadPiece message =  new AZBadPiece( piece_number, version );
-				
-		return( message );
+		return new AZBadPiece(piece_number, version);
 	}
 
-	public void 
-	destroy() 
-	{	
-		if ( buffer != null ){
-			
-			buffer.returnToPool();
-		}
+	public void destroy() {
+		if (buffer != null) buffer.returnToPool();
 	}
 }

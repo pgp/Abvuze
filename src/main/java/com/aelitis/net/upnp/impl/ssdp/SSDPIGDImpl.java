@@ -126,7 +126,7 @@ SSDPIGDImpl
 	protected void
 	queryLoop()
 	{
-		while(true){
+		for(;;) {
 			
 			try{
 				search();

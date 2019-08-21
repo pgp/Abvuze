@@ -480,13 +480,10 @@ AEPluginProxyHandler
 			
 			waitForPlugins(0);
 		}
-		
-		List<PluginInterface> pis = 
-			AzureusCoreFactory.getSingleton().getPluginManager().getPluginsWithMethod(
-				"createHTTPPseudoProxy", 
-				new Class[]{ String.class, URL.class });
-		
-		return( pis );
+
+		return(AzureusCoreFactory.getSingleton().getPluginManager().getPluginsWithMethod(
+			"createHTTPPseudoProxy",
+			new Class[]{ String.class, URL.class }));
 	}
 	
 	public static Map<String,Object>
@@ -509,18 +506,12 @@ AEPluginProxyHandler
 		
 		options.put( "id", server_uid );
 		
-		try{
-			IPCInterface ipc = pi.getIPC();
-			
-			Map<String,Object> reply = (Map<String,Object>)ipc.invoke( "getProxyServer", new Object[]{ reason, options });
-			
-			return( reply );
-			
-		}catch( Throwable e ){
-			
+		try {
+			return (Map<String,Object>)pi.getIPC().invoke( "getProxyServer", new Object[]{ reason, options });
 		}
-		
-		return( null );
+		catch(Throwable e) {
+			return null;
+		}
 	}
 	
 	public static DHTPluginInterface
@@ -533,23 +524,14 @@ AEPluginProxyHandler
 		
 		PluginInterface pi = getPluginProxyForNetwork( network, false );
 		
-		if ( pi == null ){
-			
-			return( null );
+		if (pi == null) return null;
+
+		try {
+			return (DHTPluginInterface)pi.getIPC().invoke( "getProxyDHT", new Object[]{ reason, options });
 		}
-			
-		try{
-			IPCInterface ipc = pi.getIPC();
-			
-			DHTPluginInterface reply = (DHTPluginInterface)ipc.invoke( "getProxyDHT", new Object[]{ reason, options });
-			
-			return( reply );
-			
-		}catch( Throwable e ){
-			
+		catch(Throwable e) {
+			return null;
 		}
-		
-		return( null );		
 	}
 
 	private static class

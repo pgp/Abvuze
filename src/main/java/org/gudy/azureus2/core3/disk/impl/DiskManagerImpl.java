@@ -520,17 +520,10 @@ DiskManagerImpl
         int	newFiles 		= alloc_result[0];
         int	notNeededFiles	= alloc_result[1];
         
-        if ( getState() == FAULTY ){
+        if (getState() == FAULTY){
 
                 // bail out if broken in the meantime
                 // state will be "faulty" if the allocation process is interrupted by a stop
-
-            return;
-        }
-
-        if ( getState() == FAULTY  ){
-
-                // bail out if broken in the meantime
 
             return;
         }

@@ -184,10 +184,8 @@ public class Average {
 		 
 		  return( getPointValue());
 	  }
-	  
-	  long res = getSum(slots) / ( period * slots / ( nbElements - 2 ));
-	  
-	  return( res );
+
+      return getSum(slots) / ( period * slots / ( nbElements - 2 ));
   }
   
   public synchronized long

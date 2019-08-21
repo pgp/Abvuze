@@ -108,8 +108,7 @@ public class SystemTime {
 					long lastOffset = adjustedTimeOffset;
 					long lastSecond = -1000;
 					int tick_count = 0;
-					while (true)
-					{
+					for(;;) {
 						final long rawTime = System.currentTimeMillis();
 						/*
 						 * keep the monotone time in sync with the raw system
@@ -298,8 +297,7 @@ public class SystemTime {
 				long	last_time;
 
 				public void run() {
-					while (true)
-					{
+					for(;;) {
 						long current_time = getTime();
 						long change;
 						
@@ -563,8 +561,7 @@ public class SystemTime {
 					System.out.println("alter system clock to see differences between monotonous and current time");
 					long cLastRound = cstart;
 					long mLastRound = mstart;
-					while (true)
-					{
+					for(;;) {
 						long mnow = SystemTime.getMonotonousTime();
 						long cnow = SystemTime.getCurrentTime();
 						//if(mLastRound > mnow)

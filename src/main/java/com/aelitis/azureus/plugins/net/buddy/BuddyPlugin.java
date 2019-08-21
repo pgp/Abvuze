@@ -1994,10 +1994,8 @@ BuddyPlugin
 		
 		System.arraycopy( key_prefix, 0, key_bytes, 0, key_prefix.length );
 		System.arraycopy( public_key, 0, key_bytes, key_prefix.length, public_key.length );
-		
-		DistributedDatabaseKey key = ddb.createKey( key_bytes, reason );
-		
-		return( key );
+
+		return ddb.createKey( key_bytes, reason );
 	}
 
 	protected DistributedDatabaseKey
@@ -2013,10 +2011,8 @@ BuddyPlugin
 		
 		System.arraycopy( key_prefix, 0, key_bytes, 0, key_prefix.length );
 		System.arraycopy( public_key, 0, key_bytes, key_prefix.length, public_key.length );
-		
-		DistributedDatabaseKey key = ddb.createKey( key_bytes, reason );
-		
-		return( key );
+
+		return ddb.createKey( key_bytes, reason );
 	}
 	
 	protected void

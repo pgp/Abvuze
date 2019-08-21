@@ -952,8 +952,8 @@ DiskAccessControllerInstance
 				run()
 				{
 					int	count = 0;
-					
-					while( true ){
+
+					for(;;) {
 						
 						int	group =RandomUtils.generateRandomIntUpto( 10 );
 						

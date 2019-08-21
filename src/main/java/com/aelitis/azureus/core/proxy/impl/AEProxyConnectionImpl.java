@@ -74,12 +74,8 @@ AEProxyConnectionImpl
 		}
 	}
 	
-	public String
-	getName()
-	{
-		String	name = source_channel.socket().getInetAddress() + ":" + source_channel.socket().getPort() + " -> ";
-		
-		return( name );
+	public String getName() {
+		return source_channel.socket().getInetAddress() + ":" + source_channel.socket().getPort() + " -> ";
 	}
 	
 	public SocketChannel

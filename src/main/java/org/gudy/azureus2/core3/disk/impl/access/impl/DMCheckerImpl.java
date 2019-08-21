@@ -63,7 +63,7 @@ DMCheckerImpl
 				public void
 				run()
 				{
-					while( true ){
+					for(;;) {
 						
 						async_check_queue_sem.reserve();
 						

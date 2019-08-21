@@ -166,7 +166,7 @@ TCPNetworkManager
 		    	public void 
 		    	run() 
 		    	{
-		    		while( true ) {
+					for(;;) {
 		    	
 		    			try{
 		    				if ( READ_SELECT_MIN_LOOP_TIME > 0 ){
@@ -220,7 +220,7 @@ TCPNetworkManager
 		    	public void 
 		    	run() 
 		    	{
-		    	    while( true ){
+					for(;;) {
 		    	    	
 		    	    	try{
 		    	    		if ( WRITE_SELECT_MIN_LOOP_TIME > 0 ){

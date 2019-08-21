@@ -272,10 +272,8 @@ ConfigurationChecker
 
 				  for (Map.Entry<Object, Object> objectObjectEntry : props.entrySet()) {
 
-					  Map.Entry entry = objectObjectEntry;
-
-					  String key = (String) entry.getKey();
-					  String value = (String) entry.getValue();
+					  String key = (String) objectObjectEntry.getKey();
+					  String value = (String) objectObjectEntry.getValue();
 
 					  Logger.log(new LogEvent(LOGID, "    " + key + "=" + value));
 

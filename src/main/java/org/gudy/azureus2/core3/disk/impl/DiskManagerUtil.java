@@ -346,11 +346,8 @@ DiskManagerUtil
 			}
 		}
 
-		if (num_reorder > 0) {
-			if (!Arrays.equals(toReorder, reorderStorageTypes)) {
-				return false;
-			}
-		}
+		if (num_reorder > 0)
+			return Arrays.equals(toReorder, reorderStorageTypes);
 		return true;
 	}
 

@@ -111,9 +111,8 @@ public class TorrentFolderWatcher {
 			public void 
 			runSupport() 
 			{
-				while( true ){
-					
-					while( true ){
+				for(;;) {
+					for(;;) {
 						
 						long	now = SystemTime.getMonotonousTime();
 						
@@ -126,21 +125,16 @@ public class TorrentFolderWatcher {
 						
 						int sleep_ms	= sleep_secs*1000;
 						
-						long	remaining = last_run + sleep_ms - now;
+						long remaining = last_run + sleep_ms - now;
 						
-						if ( remaining < 250 || last_run == 0 ){
+						if ( remaining < 250 || last_run == 0 ) {
 							
 							last_run = now;
 							
 							break;
 						}
-						
-						if ( remaining < 250 ){
-								
-							remaining = 250;
-						}
 														
-						wait_sem.reserve( remaining );
+						wait_sem.reserve(remaining);
 					}
 									
 					try{

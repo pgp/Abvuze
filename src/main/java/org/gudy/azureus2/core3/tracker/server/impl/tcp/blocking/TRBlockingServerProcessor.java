@@ -76,11 +76,11 @@ TRBlockingServerProcessor
 		try{
 			InputStream	is = new BufferedInputStream( socket.getInputStream());
 
-			while( true ){
+			for(;;) {
 				
 				setTaskState( "entry" );
 				
-				try{	
+				try{
 					if ( keep_alive ){
 						
 						socket.setSoTimeout( KEEP_ALIVE_SOCKET_TIMEOUT );

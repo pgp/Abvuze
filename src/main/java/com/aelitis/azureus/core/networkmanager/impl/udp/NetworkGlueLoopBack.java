@@ -51,7 +51,7 @@ NetworkGlueLoopBack
 			public void
 			runSupport()
 			{
-				while( true ){
+				for(;;) {
 					
 					try{
 						Thread.sleep(1);

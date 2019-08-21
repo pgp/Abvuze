@@ -534,10 +534,8 @@ BuddyPluginBeta
 				return( temp );
 			}
 		}
-		
-		String nick = getStringOption( net, key, "nick", "" );
-		
-		return( nick );
+
+		return getStringOption( net, key, "nick", "" );
 	}
 	
 	public void
@@ -2012,34 +2010,25 @@ BuddyPluginBeta
 				
 				if (AENetworkClassifier.AT_PUBLIC.equals(net)){
 					
-					try{
-						ChatInstance inst = getChat( net, key );
-						
-						return( inst );
-						
-					}catch( Throwable e ){
-						
+					try {
+						return getChat(net, key);
 					}
+					catch(Throwable ignored) {}
 				}else if (AENetworkClassifier.AT_I2P.equals(net)){
 					
 					has_i2p = true;
 				}
 			}
 			
-			if ( has_i2p ){
-				
-				try{
-					ChatInstance inst = getChat( AENetworkClassifier.AT_I2P, key );
-					
-					return( inst );
-										
-				}catch( Throwable e ){
-					
+			if (has_i2p) {
+				try {
+					return getChat( AENetworkClassifier.AT_I2P, key );
 				}
+				catch(Throwable ignored) {}
 			}
 		}
 		
-		return( null );
+		return null;
 	}
 	
 	public ChatInstance
@@ -2989,10 +2978,8 @@ BuddyPluginBeta
 			}
 			
 			String new_key = getKey() + "[pk=" + Base32.encode( getPublicKey()) + "]";
-			
-			ChatInstance inst = getChat( getNetwork(), new_key );
-			
-			return( inst );
+
+			return getChat(getNetwork(), new_key);
 		}
 		
 		public boolean
@@ -3019,10 +3006,8 @@ BuddyPluginBeta
 			}
 			
 			String new_key = getKey() + "[pk=" + Base32.encode( getPublicKey()) + "&ro=1]";
-			
-			ChatInstance inst = getChat( getNetwork(), new_key );
-			
-			return( inst );
+
+			return getChat(getNetwork(), new_key);
 		}
 		
 		public boolean

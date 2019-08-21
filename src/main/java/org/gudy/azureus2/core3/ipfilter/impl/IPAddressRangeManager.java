@@ -528,9 +528,9 @@ IPAddressRangeManager
 		
 		int	num 	= 0;
 		int	hits	= 0;
-		
-		
-		while(true){
+
+
+		for(;;) {
 			
 			if ( num % 1000 == 0 ){
 				

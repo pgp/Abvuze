@@ -142,7 +142,7 @@ DHTTrackerPluginAlt
 					run()
 					{
 						try{
-							while( true ){
+							for(;;) {
 								
 								byte[] buffer = new byte[5120];
 								

@@ -102,7 +102,7 @@ ConcurrentHasher
 			public void
 			run()
 			{
-				while(true){
+				for(;;) {
 					
 						// get a request to run
 					

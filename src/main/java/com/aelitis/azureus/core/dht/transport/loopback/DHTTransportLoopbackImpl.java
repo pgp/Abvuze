@@ -96,7 +96,7 @@ DHTTransportLoopbackImpl
 				public void
 				runSupport()
 				{
-					while(true){
+					for(;;) {
 						
 						dispatch_queue_sem.reserve();
 						

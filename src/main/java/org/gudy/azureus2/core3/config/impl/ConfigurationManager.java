@@ -846,7 +846,7 @@ ConfigurationManager
 			  
 			  if ( existing != value ){
 				  
-				  if ( existing == null || value == null || !existing.equals( value )){
+				  if (existing == null || !existing.equals(value)){
 					  
 					  entry[1] = value;
 					  

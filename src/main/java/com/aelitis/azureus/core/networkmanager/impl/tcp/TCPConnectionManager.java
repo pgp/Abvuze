@@ -272,7 +272,7 @@ public class TCPConnectionManager {
 		  public void 
 		  run() 
 		  {
-			  while( true ){
+			  for(;;) {
 				  
 				  addNewOutboundRequests();
 				  

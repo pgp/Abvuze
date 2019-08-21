@@ -747,10 +747,7 @@ public class ConfigurationDefaults {
   
   private void checkParameterExists(String p) throws ConfigurationParameterNotFoundException {
 	  if (!def.containsKey(p)) {
-		  ConfigurationParameterNotFoundException cpnfe = new ConfigurationParameterNotFoundException(p);
-		  //cpnfe.fillInStackTrace();
-		  //Debug.out(cpnfe);
-		  throw cpnfe;
+		  throw new ConfigurationParameterNotFoundException(p);
 	  }
   }
   
